@@ -184,6 +184,31 @@ function Get-ReplCompleteTurnPersistSessionId {
     return $ActiveSessionId
 }
 
+function Get-ReplSessionIdSourceTypePrefix {
+    # FR-MCP-XAGENT-001: session ids are <Agent>-<yyyyMMddTHHmmssZ>-<suffix>.
+    param([string]$SessionId)
+
+    if ([string]::IsNullOrWhiteSpace($SessionId)) { return '' }
+    if ($SessionId -match '^(?<prefix>[A-Za-z][A-Za-z0-9]*)-\d{8}T') {
+        return $Matches['prefix']
+    }
+    return ($SessionId -split '-', 2)[0]
+}
+
+function Test-ReplSessionSourceTypeCompatible {
+    param(
+        [string]$Left,
+        [string]$Right
+    )
+
+    $leftPrefix = Get-ReplSessionIdSourceTypePrefix -SessionId $Left
+    $rightPrefix = Get-ReplSessionIdSourceTypePrefix -SessionId $Right
+    if ([string]::IsNullOrWhiteSpace($leftPrefix) -or [string]::IsNullOrWhiteSpace($rightPrefix)) {
+        return $true
+    }
+    return $leftPrefix -eq $rightPrefix
+}
+
 function Test-ReplBeginTurnDegradedQueued {
     param([bool]$Persisted, [bool]$Degraded)
     return (-not $Persisted) -and $Degraded
@@ -593,7 +618,14 @@ function Invoke-ReplRaw {
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'MCP_UNTRUSTED: marker refresh failed before REPL request')
     }
 
-    if (-not (Get-Command mcpserver-repl -ErrorAction SilentlyContinue)) {
+    $replCommand = Get-Command mcpserver-repl -ErrorAction SilentlyContinue
+    $replExe = $null
+    if ($env:MCP_REPL_EXECUTABLE -and (Test-Path -LiteralPath $env:MCP_REPL_EXECUTABLE)) {
+        $replExe = $env:MCP_REPL_EXECUTABLE
+    } elseif ($replCommand) {
+        $replExe = [string]$replCommand.Source
+    }
+    if ([string]::IsNullOrWhiteSpace($replExe)) {
         Write-Error 'mcpserver-repl not found on PATH'
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'mcpserver-repl not found on PATH')
     }
@@ -612,7 +644,13 @@ function Invoke-ReplRaw {
 
     try {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
-        $psi.FileName = 'mcpserver-repl'
+        if ($replExe -match '\.(cmd|bat)$') {
+            $psi.FileName = $env:ComSpec
+            $psi.ArgumentList.Add('/c')
+            $psi.ArgumentList.Add($replExe)
+        } else {
+            $psi.FileName = $replExe
+        }
         $psi.ArgumentList.Add('--agent-stdio')
         $psi.ArgumentList.Add('--agent')
         $psi.ArgumentList.Add($script:AgentName)
@@ -648,12 +686,16 @@ function Invoke-ReplRaw {
         # stdout (which happens at process exit).
         $readTask = $proc.StandardOutput.ReadToEndAsync()
         if (-not $readTask.Wait($timeout * 1000)) {
-            $proc.Kill()
-            Write-Error "mcpserver-repl timed out after ${timeout}s"
+            try { $proc.Kill($true) } catch { }
+            try { [void]$proc.WaitForExit(2000) } catch { }
             return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
         }
         $output = $readTask.Result
-        $proc.WaitForExit()
+        if (-not $proc.WaitForExit($timeout * 1000)) {
+            try { $proc.Kill($true) } catch { }
+            try { [void]$proc.WaitForExit(2000) } catch { }
+            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+        }
 
         # mcpserver-repl writes a UTF-8 BOM before the YAML doc and may
         # interleave logger 'info:' lines on stdout — strip BOM and ignore
@@ -832,7 +874,10 @@ function Test-ReplFailsafeBackendUnreachable {
         'actively refused',
         'connection refused',
         'Connection refused',
-        'Unable to resolve the active workspace cache'
+        'Unable to resolve the active workspace cache',
+        'backend_unavailable',
+        'HTTP 503',
+        'http 503'
     )
     foreach ($marker in $markers) {
         if ($Detail -like "*$marker*") { return $true }
@@ -1045,10 +1090,15 @@ function Invoke-ReplFailsafeDrainOnFirstSuccess {
     if ($script:ReplFailsafeDraining) { return }
     if ($env:MCP_FAILSAFE_DRAIN_DISABLED -eq '1') { return }
 
-    # Latch before draining so a failed pass cannot retrigger on every later call.
-    $script:ReplFailsafeDrainCompleted = $true
+    # TR-MCP-FAILSAFE-001: do not latch completed on a backend-down abort.
+    # A 503/backend_unavailable pass must be retryable in this process after
+    # storage answers again.
     try {
         $summary = Invoke-ReplFailsafeDrain
+        if ($summary.aborted) {
+            return
+        }
+        $script:ReplFailsafeDrainCompleted = $true
         if ($summary.replayed -gt 0 -or $summary.quarantined -gt 0 -or $summary.failed -gt 0) {
             [Console]::Error.WriteLine(
                 "Failsafe queue drain: replayed=$($summary.replayed) failed=$($summary.failed) quarantined=$($summary.quarantined) skipped=$($summary.skipped) dir='$($summary.failsafeDir)'.")
@@ -1437,6 +1487,12 @@ function Assert-ReplCurrentTurnFresh {
     # session (below) instead of hard-rejecting every subsequent completeTurn (BUG-TRIAGE-071/075).
     # Marker drift (wrong-workspace) is still rejected separately.
     if ($staleReasons -contains 'sessionId') {
+        if (-not (Test-ReplSessionSourceTypeCompatible -Left $turnSessionId -Right $activeSessionId)) {
+            $turnPrefix = Get-ReplSessionIdSourceTypePrefix -SessionId $turnSessionId
+            $activePrefix = Get-ReplSessionIdSourceTypePrefix -SessionId $activeSessionId
+            [Console]::Error.WriteLine("$Method refused current-turn cache '$turnFile' because sourceType prefix '$turnPrefix' differs from active '$activePrefix'.")
+            return $false
+        }
         [Console]::Error.WriteLine("$Method re-binding current-turn cache '$turnFile' from rotated sessionId '$turnSessionId' to active sessionId '$activeSessionId'.")
     }
 
@@ -1787,8 +1843,14 @@ function Invoke-WorkflowUpdateTurn {
     $responseText = if ($state -and $state.Contains('response')) { [string]$state['response'] } else { '' }
     $interpretation = if ($state -and $state.Contains('interpretation')) { [string]$state['interpretation'] } else { '' }
     $tokenCount = if ($state -and $state.Contains('tokenCount')) { [int]$state['tokenCount'] } else { 0 }
-    $tags = if ($state -and $state.Contains('tags')) { @($state['tags'] | ForEach-Object { [string]$_ }) } else { @() }
-    $contextList = if ($state -and $state.Contains('contextList')) { @($state['contextList'] | ForEach-Object { [string]$_ }) } else { @() }
+    $tags = [string[]]@()
+    $contextList = [string[]]@()
+    if ($state -and $state.Contains('tags')) {
+        $tags = ConvertTo-McpPluginStringList -Value $state['tags']
+    }
+    if ($state -and $state.Contains('contextList')) {
+        $contextList = ConvertTo-McpPluginStringList -Value $state['contextList']
+    }
 
     if ($params) {
         $responseValue = Get-ReplObjectValue -InputObject $params -Name 'response'
@@ -1801,10 +1863,10 @@ function Invoke-WorkflowUpdateTurn {
         if ($null -ne $tokenValue) { [void][int]::TryParse([string]$tokenValue, [ref]$tokenCount) }
 
         $tagValue = Get-ReplObjectValue -InputObject $params -Name 'tags'
-        if ($null -ne $tagValue) { $tags = @($tagValue | ForEach-Object { [string]$_ } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) }
+        if ($null -ne $tagValue) { $tags = ConvertTo-McpPluginStringList -Value $tagValue }
 
         $contextValue = Get-ReplObjectValue -InputObject $params -Name 'contextList'
-        if ($null -ne $contextValue) { $contextList = @($contextValue | ForEach-Object { [string]$_ } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) }
+        if ($null -ne $contextValue) { $contextList = ConvertTo-McpPluginStringList -Value $contextValue }
 
         if ($state) {
             if (-not [string]::IsNullOrWhiteSpace($responseText)) { $state['response'] = $responseText }
@@ -1855,6 +1917,11 @@ function Invoke-WorkflowCompleteTurn {
     }
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+    $requestedId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
+    if (-not [string]::IsNullOrWhiteSpace($requestedId) -and -not [string]::IsNullOrWhiteSpace($reqId) -and $requestedId -ne $reqId) {
+        [Console]::Error.WriteLine("workflow.sessionlog.completeTurn refused to close '$requestedId' because the current turn is '$reqId'.")
+        return $false
+    }
     # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     $persisted = $false

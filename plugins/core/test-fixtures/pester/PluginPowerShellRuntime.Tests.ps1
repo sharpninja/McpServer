@@ -12,7 +12,9 @@ BeforeAll {
             [string[]]$Arguments = @(),
             [hashtable]$Environment = @{},
             [string]$InputText = '',
-            [bool]$RedirectStandardInput = $true
+            [bool]$RedirectStandardInput = $true,
+            [string]$WorkingDirectory = $script:RepoRoot,
+            [int]$TimeoutMs = 30000
         )
 
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
@@ -25,7 +27,7 @@ BeforeAll {
         foreach ($argument in $Arguments) {
             $psi.ArgumentList.Add($argument)
         }
-        $psi.WorkingDirectory = $script:RepoRoot
+        $psi.WorkingDirectory = $WorkingDirectory
         $psi.UseShellExecute = $false
         $psi.RedirectStandardInput = $RedirectStandardInput
         $psi.RedirectStandardOutput = $true
@@ -43,7 +45,7 @@ BeforeAll {
         }
         $stdout = $process.StandardOutput.ReadToEndAsync()
         $stderr = $process.StandardError.ReadToEndAsync()
-        $process.WaitForExit(30000) | Should -BeTrue
+        $process.WaitForExit($TimeoutMs) | Should -BeTrue
 
         [pscustomobject]@{
             ExitCode = $process.ExitCode
@@ -413,13 +415,21 @@ acceptanceCriteria:
                     [Parameter(Mandatory)][string]$Status,
                     [string]$ResponseText = '',
                     [string]$ActionsYaml = '',
-                    [object[]]$ProcessingDialog = @()
+                    [object[]]$ProcessingDialog = @(),
+                    [string]$Interpretation = '',
+                    [int]$TokenCount = 0,
+                    [string[]]$Tags = @(),
+                    [string[]]$ContextList = @(),
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:beginTurnPersistArgs = [ordered]@{
                     RequestId = $RequestId
                     Title = $Title
                     Status = $Status
                     ResponseText = $ResponseText
+                    PlanFile = $PlanFile
+                    TodoId = $TodoId
                 }
                 return $true
             }
@@ -3774,6 +3784,51 @@ Describe 'TEST-MCP-REPL-031 failsafe queue drain' {
             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
+
+    It 'TEST-MCP-FAILSAFE-001 HTTP 503 abort does not increment drainAttempts and a later drain in the same process can replay' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $recordPath = New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260819T191800Z' -RequestId 'req-20260819T191800Z-001-drain'
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drain503Calls = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drain503Calls++
+                if ($script:drain503Calls -eq 1) {
+                    return New-McpPluginReplResult -Success $false -Output "type: error`npayload:`n  code: backend_unavailable`n  retryable: true" -Error 'HTTP 503 backend_unavailable' -ExitCode 1
+                }
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+            Test-Path -LiteralPath $recordPath | Should -BeTrue
+            $retained = Read-McpYamlObject -Path $recordPath
+            $retained.Contains('drainAttempts') | Should -BeFalse
+
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+            Test-Path -LiteralPath $recordPath | Should -BeFalse
+            $script:drain503Calls | Should -BeGreaterThan 1
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drain503Calls -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
 }
 
 Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
@@ -4326,5 +4381,298 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             Remove-TurnShimState
             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
         }
+    }
+
+    It 'TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation' {
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+        $previousAgent = $env:MCP_AGENT_NAME
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            $env:MCP_AGENT_NAME = 'Codex'
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Initialize-TurnShimCapture -SessionId 'Codex-20260819T000000Z-plugin-session'
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260819T000000Z-plugin-session'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260819T000000Z-001-foreign'
+                queryTitle = 'foreign turn'
+                queryText = 'foreign turn prompt'
+                openedAt = '2026-08-19T00:00:01Z'
+                status = 'in_progress'
+                sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+            })
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: Done`n"
+            $script:LastInvokeReplMethodSuccess | Should -BeFalse
+            $script:t40Submits.Count | Should -Be 0
+
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260819T010000Z-rotated'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260819T000000Z-002-same'
+                queryTitle = 'same agent'
+                queryText = 'same agent prompt'
+                openedAt = '2026-08-19T00:00:01Z'
+                status = 'in_progress'
+                sessionId = 'Codex-20260819T000000Z-plugin-session'
+            })
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: Done`n"
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgent) { $env:MCP_AGENT_NAME = $previousAgent } else { Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle' {
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+        $previousFresh = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260819T000000Z-003-keep' -QueryTitle ''
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "requestId: req-20260819T000000Z-999-other`nresponse: hijack`n"
+            $script:LastInvokeReplMethodSuccess | Should -BeFalse
+            $script:t40Submits.Count | Should -Be 0
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: Done`n"
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') | Should -Be 'req-20260819T000000Z-003-keep'
+            $title = Get-ReplObjectValue -InputObject $turn -Name 'queryTitle'
+            [string]$title | Should -BeNullOrEmpty
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
+    It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout' {
+        $root = Join-Path $script:SmokeCache ('strictcount-' + [guid]::NewGuid().ToString('N'))
+        $cache = Join-Path $root 'cache'
+        $persistLog = Join-Path $root 'persist.jsonl'
+        [void][System.IO.Directory]::CreateDirectory($cache)
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+        Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+            agent = 'GrokCode'
+        })
+        Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
+            turnRequestId = 'req-20260819T000000Z-001-strictcount'
+            queryTitle = 'strictcount'
+            openedAt = '2026-08-19T00:00:01Z'
+            status = 'in_progress'
+            sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+        })
+
+        $cases = @(
+            @{ Name = 'omitted'; Yaml = "response: ok`n" },
+            @{ Name = 'empty'; Yaml = "response: ok`ntags: []`ncontextList: []`n" },
+            @{ Name = 'scalar'; Yaml = "response: ok`ntags: one-tag`ncontextList: one-context`n" }
+        )
+
+        try {
+            foreach ($case in $cases) {
+                $result = Invoke-PluginChildProcess `
+                    -ScriptPath (Join-Path $script:LibRoot 'repl-invoke.ps1') `
+                    -Arguments @('-Method', 'workflow.sessionlog.updateTurn', '-ParamsYaml', $case.Yaml) `
+                    -Environment @{
+                        MCP_PLUGIN_ROOT = $script:LibRoot
+                        MCP_PLUGIN_HOST = 'grok'
+                        MCP_AGENT_NAME = 'GrokCode'
+                        MCP_CACHE_DIR_OVERRIDE = $cache
+                        MCP_PLUGIN_PERSIST_LOG = $persistLog
+                        MCP_WORKSPACE_PATH = $script:RepoRoot
+                        MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+                    }
+
+                $result.ExitCode | Should -Be 0 -Because $case.Name
+                $result.Stdout | Should -Be '' -Because $case.Name
+                $result.Stderr | Should -Not -Match 'Count cannot be found' -Because $case.Name
+            }
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'TEST-MCP-SESSIONEND-001 SessionEnd unresolved cache is a silent no-op' {
+    It 'session-end without a resolvable workspace exits 0 and writes {}' {
+        $cwd = Join-Path $script:SmokeCache ('sessionend-empty-' + [guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cwd)
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-end', '-HostName', 'claude-code') `
+                -WorkingDirectory $cwd `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $script:LibRoot
+                    MCP_PLUGIN_HOST = 'claude-code'
+                    MCP_AGENT_NAME = 'ClaudeCode'
+                    MCP_CACHE_DIR_OVERRIDE = ''
+                    MCP_WORKSPACE_PATH = ''
+                    MCPSERVER_WORKSPACE_PATH = ''
+                    MCP_WORKSPACE_START_DIR = ''
+                    CLAUDE_PROJECT_DIR = ''
+                    CODEX_CWD = ''
+                    CODEX_WORKSPACE_PATH = ''
+                    CODEX_PROJECT_DIR = ''
+                    PLUGIN_ROOT_OVERRIDE = ''
+                }
+
+            $result.ExitCode | Should -Be 0
+            $result.Stdout | Should -Be '{}'
+            $result.Stderr | Should -Not -Match 'Unable to resolve the active workspace cache'
+        } finally {
+            Remove-Item -LiteralPath $cwd -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'session-end flushes pending YAML identified by CLAUDE_PROJECT_DIR' {
+        $root = Join-Path $script:SmokeCache ('sessionend-flush-' + [guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $cwd = Join-Path $root 'cwd'
+        $cacheDir = Join-Path $workspace '.mcpServer\claude'
+        $pendingDir = Join-Path $cacheDir 'pending'
+        $failsafeDir = Join-Path $cacheDir 'failsafe'
+        [void][System.IO.Directory]::CreateDirectory($pendingDir)
+        [void][System.IO.Directory]::CreateDirectory($failsafeDir)
+        [void][System.IO.Directory]::CreateDirectory($cwd)
+        Set-Content -LiteralPath (Join-Path $workspace 'AGENTS-README-FIRST.yaml') -Value "workspace: sessionend`n"
+        $pending = Join-Path $pendingDir '001-client-Health-GetAsync.yaml'
+        Set-Content -LiteralPath $pending -Value "id: `"001`"`ntimestamp: `"2026-08-19T00:00:00Z`"`nmethod: client.Health.GetAsync`nparams: {}`nretryCount: 0"
+        $failsafe = Join-Path $failsafeDir '20260819T000000Z-session_submit-aaaa.yaml'
+        Set-Content -LiteralPath $failsafe -Value "method: client.SessionLog.SubmitAsync`nlabel: session_submit`nparams:`n  sessionLog:`n    sessionId: ClaudeCode-20260819T000000Z-plugin-session`n"
+
+        $stub = Join-Path $root 'flush-repl.ps1'
+        Set-Content -LiteralPath $stub -Value "param([string]`$Method,[string]`$ParamsYaml='')`nexit 0`n"
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-end', '-HostName', 'claude-code') `
+                -WorkingDirectory $cwd `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $script:LibRoot
+                    MCP_PLUGIN_HOST = 'claude-code'
+                    MCP_AGENT_NAME = 'ClaudeCode'
+                    CLAUDE_PROJECT_DIR = $workspace
+                    MCP_WORKSPACE_PATH = ''
+                    MCPSERVER_WORKSPACE_PATH = ''
+                    MCP_CACHE_DIR_OVERRIDE = ''
+                    PLUGIN_ROOT_OVERRIDE = ''
+                    MCP_CACHE_FLUSH_REPL = $stub
+                    MCP_FAILSAFE_DRAIN_DISABLED = '1'
+                }
+
+            $result.ExitCode | Should -Be 0
+            $result.Stdout | Should -Be '{}'
+            Test-Path -LiteralPath $pending | Should -BeFalse
+            @(Get-ChildItem -LiteralPath $pendingDir -Filter '*.yaml' -File -ErrorAction SilentlyContinue).Count | Should -Be 0
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'session-end identified-workspace flush failure is not a silent {} success' {
+        $root = Join-Path $script:SmokeCache ('sessionend-flushfail-' + [guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $cwd = Join-Path $root 'cwd'
+        $cacheDir = Join-Path $workspace '.mcpServer\claude'
+        $pendingDir = Join-Path $cacheDir 'pending'
+        [void][System.IO.Directory]::CreateDirectory($pendingDir)
+        [void][System.IO.Directory]::CreateDirectory($cwd)
+        Set-Content -LiteralPath (Join-Path $workspace 'AGENTS-README-FIRST.yaml') -Value "workspace: sessionend`n"
+        $pending = Join-Path $pendingDir '001-client-DoesNotExist.yaml'
+        Set-Content -LiteralPath $pending -Value "id: `"001`"`ntimestamp: `"2026-08-19T00:00:00Z`"`nmethod: client.DoesNotExist.Nope`nparams: {}`nretryCount: 0"
+
+        $stub = Join-Path $root 'flush-repl-fail.ps1'
+        Set-Content -LiteralPath $stub -Value "param([string]`$Method,[string]`$ParamsYaml='')`nthrow 'flush-replay-failed'`n"
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-end', '-HostName', 'claude-code') `
+                -WorkingDirectory $cwd `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $script:LibRoot
+                    MCP_PLUGIN_HOST = 'claude-code'
+                    MCP_AGENT_NAME = 'ClaudeCode'
+                    CLAUDE_PROJECT_DIR = $workspace
+                    MCP_WORKSPACE_PATH = ''
+                    MCPSERVER_WORKSPACE_PATH = ''
+                    MCP_CACHE_DIR_OVERRIDE = ''
+                    PLUGIN_ROOT_OVERRIDE = ''
+                    MCP_CACHE_FLUSH_REPL = $stub
+                    MCP_FAILSAFE_DRAIN_DISABLED = '1'
+                }
+
+            $looksLikeUnresolvedSuccess = ($result.ExitCode -eq 0 -and $result.Stdout -eq '{}')
+            $looksLikeUnresolvedSuccess | Should -BeFalse
+            Test-Path -LiteralPath $pending | Should -BeTrue
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'TEST-MCP-VERIFYWRAP-001 code-verify disk-full and wrapper timeout' {
+    It 'wrapper template documents a hard timeout for code-verify' {
+        $template = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\hooks-templates\wrapper.ps1.template'))
+        $template | Should -Match 'MCP_CODE_VERIFY_TIMEOUT_SECONDS'
+        $template | Should -Match 'WaitForExit'
+        $hook = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+        $hook | Should -Match 'Test-PluginDiskFullException'
+        $hook | Should -Match 'Invoke-PluginBoundedProcess'
+    }
+}
+
+Describe 'TEST-MCP-TRIAGEPLUGIN-004 beginTurn wrapper timeout is classified' {
+    It 'Invoke-McpPlugin sessionlog timeout emits classified retryable command_timeout instead of unclassified throw' {
+        $invokeSource = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1'))
+        $invokeSource | Should -Not -Match 'throw "Plugin command timed out after \$\{boundedTimeout\}s\."'
+        $invokeSource | Should -Match 'command_timeout'
+        $invokeSource | Should -Match 'retryable'
     }
 }
