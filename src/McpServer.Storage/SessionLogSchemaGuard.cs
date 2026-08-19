@@ -4,13 +4,16 @@ namespace McpServer.Support.Mcp.Storage;
 
 /// <summary>
 /// FR-MCP-TRIAGESCHEMA-001 / TR-MCP-TRIAGESCHEMA-001: fail-closed probe for the four
-/// SessionLogs agent-header columns added by <c>20260722214500_AddAgentSessionHeaderFields</c>.
+/// SessionLogs agent-header columns added by provider migrations
+/// Sqlite <c>20260818205751_AddSessionLogTagsAndAgentSessionHeaders</c>,
+/// SqlServer <c>20260818205807_AddSessionLogTagsAndAgentSessionHeaders</c>, and
+/// Postgres <c>20260818205822_AddSessionLogTagsAndAgentSessionHeaders</c>.
 /// </summary>
 public static class SessionLogSchemaGuard
 {
     /// <summary>Named error text for a missing AgentSession header schema.</summary>
     public const string PendingMigrationMessage =
-        "SessionLogs schema is missing AgentSession header columns (pending-migration 20260722214500_AddAgentSessionHeaderFields).";
+        "SessionLogs schema is missing AgentSession header columns (pending-migration Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders).";
 
     private static readonly string[] RequiredColumns =
     [

@@ -130,4 +130,19 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
         Assert.False(classified.Retryable);
         Assert.Equal("pending_migration", classified.Details!["reason"]);
     }
+
+    /// <summary>
+    /// TR-MCP-TRIAGESCHEMA-001: named fail-closed text cites the real provider migrations,
+    /// not handwritten 20260722214500_AddAgentSessionHeaderFields.
+    /// </summary>
+    [Fact]
+    public void PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId()
+    {
+        Assert.Contains("pending-migration", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+        Assert.Contains("20260818205751", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+        Assert.Contains("20260818205807", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+        Assert.Contains("20260818205822", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+        Assert.DoesNotContain("20260722214500", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+        Assert.DoesNotContain("AddAgentSessionHeaderFields", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
+    }
 }
