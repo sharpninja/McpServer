@@ -158,3 +158,190 @@ function Get-McpFailsafeQuarantineDir {
 
     return (Join-Path (Get-McpFailsafeDir -StartPath $StartPath) 'quarantine')
 }
+
+function Get-McpPathVolumeRoot {
+    <#
+    .SYNOPSIS
+        FR-MCP-TEMPVOL-001: returns the volume root of a filesystem path.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
+
+    if ([string]::IsNullOrWhiteSpace($Path)) { return $null }
+
+    try {
+        $full = [System.IO.Path]::GetFullPath($Path)
+        $root = [System.IO.Path]::GetPathRoot($full)
+        if ([string]::IsNullOrWhiteSpace($root)) { return $null }
+        return $root
+    } catch {
+        return $null
+    }
+}
+
+function New-McpPluginTempAlignmentResult {
+    <#
+    .SYNOPSIS
+        FR-MCP-TEMPVOL-001: builds the TEMP alignment result object.
+    #>
+    [CmdletBinding()]
+    param(
+        [bool]$Succeeded,
+        [bool]$Changed,
+        [string]$TempPath,
+        [string]$ErrorMessage
+    )
+
+    return [pscustomobject]@{
+        Succeeded = [bool]$Succeeded
+        Changed = [bool]$Changed
+        TempPath = $TempPath
+        Error = $ErrorMessage
+    }
+}
+
+function Get-McpPluginWorkspaceTempDirectory {
+    <#
+    .SYNOPSIS
+        FR-MCP-TEMPVOL-001: prefers workspace .mcpServer/tmp on the target volume.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$TargetPath)
+
+    $dir = $TargetPath
+    $isLeaf = $false
+    try {
+        $isLeaf = Test-Path -LiteralPath $TargetPath -PathType Leaf
+    } catch {
+        $isLeaf = $false
+    }
+    if ($isLeaf) {
+        $dir = Split-Path -Parent $TargetPath
+    }
+
+    $cursor = $dir
+    for ($i = 0; $i -lt 20 -and -not [string]::IsNullOrWhiteSpace($cursor); $i++) {
+        $marker = Join-Path $cursor 'AGENTS-README-FIRST.yaml'
+        $markerExists = $false
+        try {
+            $markerExists = Test-Path -LiteralPath $marker -PathType Leaf
+        } catch {
+            $markerExists = $false
+        }
+        if ($markerExists) {
+            return (Join-Path (Join-Path $cursor '.mcpServer') 'tmp')
+        }
+
+        $parent = Split-Path -Parent $cursor
+        if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $cursor) { break }
+        $cursor = $parent
+    }
+
+    return (Join-Path (Join-Path $dir '.mcpServer') 'tmp')
+}
+
+function Set-McpPluginSameVolumeTemp {
+    <#
+    .SYNOPSIS
+        FR-MCP-TEMPVOL-001 / TR-MCP-TEMPVOL-001: align process TEMP and TMP to the target volume.
+    .DESCRIPTION
+        When TEMP/TMP are on a different volume than TargetPath, sets both to a writable
+        directory on the target volume. Same-volume TEMP is left unchanged. A failed
+        directory create does not mutate TEMP/TMP and returns Succeeded false with Error.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$TargetPath)
+
+    $currentTemp = if (-not [string]::IsNullOrWhiteSpace($env:TEMP)) {
+        $env:TEMP
+    } elseif (-not [string]::IsNullOrWhiteSpace($env:TMP)) {
+        $env:TMP
+    } else {
+        [System.IO.Path]::GetTempPath()
+    }
+
+    $targetRoot = Get-McpPathVolumeRoot -Path $TargetPath
+    $tempRoot = Get-McpPathVolumeRoot -Path $currentTemp
+    if ($targetRoot -and $tempRoot -and $targetRoot.Equals($tempRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return (New-McpPluginTempAlignmentResult -Succeeded $true -Changed $false -TempPath $currentTemp)
+    }
+
+    try {
+        $alignedDir = Get-McpPluginWorkspaceTempDirectory -TargetPath $TargetPath
+        [void][System.IO.Directory]::CreateDirectory($alignedDir)
+        $probe = Join-Path $alignedDir ('.write-probe-' + [guid]::NewGuid().ToString('N'))
+        [System.IO.File]::WriteAllText($probe, 'ok')
+        [System.IO.File]::Delete($probe)
+    } catch {
+        return (New-McpPluginTempAlignmentResult -Succeeded $false -Changed $false -TempPath $currentTemp -ErrorMessage ('Unable to create writable TEMP on the workspace volume: ' + $_.Exception.Message))
+    }
+
+    $resolved = [System.IO.Path]::GetFullPath($alignedDir)
+    $env:TEMP = $resolved
+    $env:TMP = $resolved
+    [Environment]::SetEnvironmentVariable('TEMP', $resolved, 'Process')
+    [Environment]::SetEnvironmentVariable('TMP', $resolved, 'Process')
+    return (New-McpPluginTempAlignmentResult -Succeeded $true -Changed $true -TempPath $resolved)
+}
+
+function Invoke-McpPluginReplacementMove {
+    <#
+    .SYNOPSIS
+        FR-MCP-TEMPVOL-001: replacement move that never reports success when the destination is unchanged.
+    .DESCRIPTION
+        Cross-volume File.Move is refused with a visible Error. Exceptions and missing
+        destinations also return Succeeded false. Preview-without-apply cannot look like success.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$SourcePath,
+        [Parameter(Mandatory)][string]$DestinationPath
+    )
+
+    $failed = {
+        param([string]$Message)
+        return [pscustomobject]@{
+            Succeeded = $false
+            Error = $Message
+            DestinationUnchanged = $true
+        }
+    }
+
+    $srcRoot = $null
+    $dstRoot = $null
+    try { $srcRoot = Get-McpPathVolumeRoot -Path $SourcePath } catch { $srcRoot = $null }
+    try { $dstRoot = Get-McpPathVolumeRoot -Path $DestinationPath } catch { $dstRoot = $null }
+
+    if ([string]::IsNullOrWhiteSpace($srcRoot) -or [string]::IsNullOrWhiteSpace($dstRoot)) {
+        return (& $failed 'replacement move refused: source or destination volume could not be resolved')
+    }
+
+    if (-not $srcRoot.Equals($dstRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return (& $failed 'cross-volume replacement move refused: TEMP/TMP must be on the destination volume')
+    }
+
+    try {
+        if (-not (Test-Path -LiteralPath $SourcePath -PathType Leaf)) {
+            return (& $failed 'replacement move failed: source file is missing')
+        }
+
+        $destDir = Split-Path -Parent $DestinationPath
+        if ($destDir -and -not (Test-Path -LiteralPath $destDir -PathType Container)) {
+            return (& $failed 'replacement move failed: destination directory is missing')
+        }
+
+        [System.IO.File]::Move($SourcePath, $DestinationPath, $true)
+    } catch {
+        return (& $failed ('replacement move failed: ' + $_.Exception.Message))
+    }
+
+    if (-not (Test-Path -LiteralPath $DestinationPath -PathType Leaf)) {
+        return (& $failed 'replacement move failed: destination is missing after move')
+    }
+
+    return [pscustomobject]@{
+        Succeeded = $true
+        Error = $null
+        DestinationUnchanged = $false
+    }
+}
