@@ -2503,7 +2503,7 @@ Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-
 
 ### TEST-MCP-TRIAGESCHEMA-001
 
-A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+A fixture database missing the four agent header columns fails closed with pending-migration. Apply proofs: Sqlite MigrateAsync of 20260818205751_AddSessionLogTagsAndAgentSessionHeaders on a legacy SessionLogs table; SqlServer 20260818205807 captured Up() SQL on disposable LocalDB; Postgres 20260818205822 captured Up() SQL on disposable local PostgreSQL. After apply, sessionlog query with and without a text filter succeeds.
 
 **Acceptance Criteria:**
 - [ ] A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.

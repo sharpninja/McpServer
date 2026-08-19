@@ -4,7 +4,9 @@ using System.Data.Common;
 using System.Text.Json;
 using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Storage.Entities;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace McpServer.Support.Mcp.Storage;
@@ -24,6 +26,18 @@ public sealed class McpDbContext : DbContext
         : base(options)
     {
         _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
+        RegisterSqliteSessionLogHeaderDdl();
+    }
+
+    /// <summary>TR-MCP-TRIAGESCHEMA-001: registers Sqlite header-column ADD helper used by 20260818205751.</summary>
+    private void RegisterSqliteSessionLogHeaderDdl()
+    {
+        var provider = Database.ProviderName ?? string.Empty;
+        if (!provider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            return;
+        if (Database.GetDbConnection() is not SqliteConnection sqlite)
+            return;
+        SqliteSessionLogHeaderDdl.Register(sqlite);
     }
 
     /// <summary>TR-MCP-MT-003: Gets the current workspace discriminator applied to this context instance.</summary>

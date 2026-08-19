@@ -11,47 +11,49 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "SessionLogTags",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    WorkspaceId = table.Column<string>(type: "TEXT", nullable: false),
-                    SessionLogId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Tag = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
-                    DeleteReason = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: true),
-                    DeletedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DeletedBy = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SessionLogTags", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SessionLogTags_SessionLogs_SessionLogId",
-                        column: x => x.SessionLogId,
-                        principalTable: "SessionLogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SessionLogTags_Workspaces_WorkspaceId",
-                        column: x => x.WorkspaceId,
-                        principalTable: "Workspaces",
-                        principalColumn: "WorkspaceId",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SessionLogTags_SessionLogId_Tag",
-                table: "SessionLogTags",
-                columns: new[] { "SessionLogId", "Tag" },
-                unique: true);
+            AddNullableTextColumnIfMissing(migrationBuilder, "AgentSessionId");
+            AddNullableTextColumnIfMissing(migrationBuilder, "AgentSessionTranscriptFile");
+            AddNullableTextColumnIfMissing(migrationBuilder, "AgentExecutablePath");
+            AddNullableTextColumnIfMissing(migrationBuilder, "AgentExecutableVersion");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SessionLogTags_WorkspaceId",
-                table: "SessionLogTags",
-                column: "WorkspaceId");
+            migrationBuilder.Sql("""
+                CREATE TABLE IF NOT EXISTS "SessionLogTags" (
+                    "Id" INTEGER NOT NULL CONSTRAINT "PK_SessionLogTags" PRIMARY KEY AUTOINCREMENT,
+                    "WorkspaceId" TEXT NOT NULL,
+                    "SessionLogId" INTEGER NOT NULL,
+                    "Tag" TEXT NOT NULL,
+                    "DeleteReason" TEXT NULL,
+                    "DeletedAtUtc" TEXT NULL,
+                    "DeletedBy" TEXT NULL,
+                    "IsDeleted" INTEGER NOT NULL DEFAULT 0,
+                    CONSTRAINT "FK_SessionLogTags_SessionLogs_SessionLogId" FOREIGN KEY ("SessionLogId") REFERENCES "SessionLogs" ("Id") ON DELETE RESTRICT,
+                    CONSTRAINT "FK_SessionLogTags_Workspaces_WorkspaceId" FOREIGN KEY ("WorkspaceId") REFERENCES "Workspaces" ("WorkspaceId") ON DELETE RESTRICT
+                );
+                """);
+            migrationBuilder.Sql("""CREATE UNIQUE INDEX IF NOT EXISTS "IX_SessionLogTags_SessionLogId_Tag" ON "SessionLogTags" ("SessionLogId", "Tag");""");
+            migrationBuilder.Sql("""CREATE INDEX IF NOT EXISTS "IX_SessionLogTags_WorkspaceId" ON "SessionLogTags" ("WorkspaceId");""");
+        }
+
+        /// <summary>
+        /// TR-MCP-TRIAGESCHEMA-001: add a nullable TEXT column on SessionLogs when missing.
+        /// </summary>
+        private static void AddNullableTextColumnIfMissing(MigrationBuilder migrationBuilder, string column)
+        {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+            ArgumentException.ThrowIfNullOrWhiteSpace(column);
+            if (column.AsSpan().IndexOfAny("\"';[]") >= 0)
+                throw new ArgumentException("Column name must be a simple identifier.", nameof(column));
+
+            // Microsoft.Data.Sqlite runs one statement per Sql(). Skip ADD when pragma_table_info lists the column.
+            migrationBuilder.Sql(
+                $"""
+                SELECT mcp_add_sessionlog_text_column_if_missing('{column}')
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM pragma_table_info('SessionLogs') WHERE name = '{column}'
+                );
+                """);
         }
 
         /// <inheritdoc />

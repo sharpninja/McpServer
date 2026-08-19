@@ -1965,10 +1965,10 @@ Scope: layer-1+
 
 ## FR-MCP-TRIAGESCHEMA-001 SessionLogs missing AgentSession columns fail closed
 
-After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.
+After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.
+- [ ] After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.
 
 ## FR-MCP-TRIAGESTORE-001 Session-log persist is diagnosable and idempotent
 

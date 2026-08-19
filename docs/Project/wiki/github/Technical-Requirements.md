@@ -2846,12 +2846,12 @@ Scope: layer-1+
 
 ## TR-MCP-TRIAGESCHEMA-001
 
-**Startup probe for AgentSession header columns** — Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+**Startup probe for AgentSession header columns** - Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
 **Covered by:** FR: FR-MCP-TRIAGESCHEMA-001; TEST: TEST-MCP-TRIAGESCHEMA-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+- [ ] Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
 
 ## TR-MCP-TRIAGESTORE-001
 
