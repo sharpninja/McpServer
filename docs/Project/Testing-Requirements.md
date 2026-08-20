@@ -1115,10 +1115,12 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
-- TEST-MCP-TRIAGEPLUGIN-001: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+- TEST-MCP-TRIAGEPLUGIN-001: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe. Later UserPromptSubmit does not cancel a completed root turn (isolate-skip) and does not cancel an in_progress root work turn on a background prompt (reuse). Query filter turnStatus plus staleOlderThanHours lists stale in_progress turns without mass close.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+  - [ ] Later UserPromptSubmit does not cancel a completed root turn (isolate-skip) and does not cancel an in_progress root work turn on a background prompt (reuse).
+  - [ ] Query or documented operator filter lists in_progress turns older than N hours and does not mass-close them.
 - TEST-MCP-TRIAGEPLUGIN-002: ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
   Scope: layer-1+
   **Acceptance Criteria:**

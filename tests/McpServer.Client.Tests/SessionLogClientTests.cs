@@ -75,6 +75,26 @@ public sealed class SessionLogClientTests
         Assert.Contains("offset=5", handler.LastRequest.RequestUri.Query);
     }
 
+    /// <summary>
+    /// TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: client query request object
+    /// forwards turnStatus and staleOlderThanHours.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"totalCount":0,"limit":100,"offset":0,"items":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        await client.QueryAsync(new SessionLogQueryRequest
+        {
+            TurnStatus = "in_progress",
+            StaleOlderThanHours = 24,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Contains("turnStatus=in_progress", handler.LastRequest!.RequestUri!.Query);
+        Assert.Contains("staleOlderThanHours=24", handler.LastRequest.RequestUri.Query);
+    }
     [Fact]
     public async System.Threading.Tasks.Task RepairWorkspaceStampsAsync_PostsRepairEndpoint()
     {

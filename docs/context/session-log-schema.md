@@ -6,9 +6,21 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 ## Endpoints
 
 - `POST /mcpserver/sessionlog` — create or update a session log
-- `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist
+- `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` — first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog
+
+## Stale in_progress turns (BUG-TRIAGE-121)
+
+Forward-only. Do not mass-close historical `in_progress` turns. Recurrence of completed-then-canceled is the UserPromptSubmit isolation path: background briefs `reuse` an in-progress root work turn and `isolate-skip` a completed root turn.
+
+Operator listing of stale open turns (sessions that contain at least one matching turn; inspect `turns[].status` and `turns[].timestamp`; complete or fail individually):
+
+```
+GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=24
+```
+
+MCP tool `sessionlog_query` with the same fields: `turnStatus=in_progress`, `staleOlderThanHours=24` (any positive hour count). Omit either field to relax that half of the filter. Mass close is out of scope.
 
 ## Required turn context (normative)
 

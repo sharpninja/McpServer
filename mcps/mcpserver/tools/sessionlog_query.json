@@ -1,6 +1,6 @@
 {
   "name": "sessionlog_query",
-  "description": "Query session logs with optional filters: agent, model, text, from, to, limit.",
+  "description": "Query session logs with optional filters: agent, model, text, from, to, limit, turnStatus, staleOlderThanHours.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -50,6 +50,38 @@
       },
       "limit": {
         "description": "Max results (default 100)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "planFile": {
+        "description": "Exact planFile filter (None or path; ~/ is expanded)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "todoId": {
+        "description": "Exact todoId filter (None or canonical TODO id)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "turnStatus": {
+        "description": "Turn status filter (e.g. in_progress). BUG-TRIAGE-121 stale listing.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "staleOlderThanHours": {
+        "description": "Keep sessions with a matching turn older than this many hours. Does not close turns.",
         "type": [
           "integer",
           "null"

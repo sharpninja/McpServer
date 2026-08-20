@@ -78,6 +78,8 @@ public sealed class SessionLogClient : McpClientBase
         if (request.Offset != 0) parts.Add($"offset={request.Offset}");
         if (request.PlanFile is not null) parts.Add($"planFile={Uri.EscapeDataString(request.PlanFile)}");
         if (request.TodoId is not null) parts.Add($"todoId={Uri.EscapeDataString(request.TodoId)}");
+        if (request.TurnStatus is not null) parts.Add($"turnStatus={Uri.EscapeDataString(request.TurnStatus)}");
+        if (request.StaleOlderThanHours is not null) parts.Add($"staleOlderThanHours={request.StaleOlderThanHours.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
