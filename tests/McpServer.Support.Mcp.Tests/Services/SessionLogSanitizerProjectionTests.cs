@@ -44,6 +44,29 @@ public sealed class SessionLogSanitizerProjectionTests
         Assert.Contains(Secret, sourceJson, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-TRIAGESTORE-001: hosted GET uses SanitizeSessionLog. Session-level tags
+    /// must clone through the read projection. Dropping Tags made live GET return tags:null
+    /// while SessionLogService.GetAsync still returned the persisted rows.
+    /// </summary>
+    [Fact]
+    public void SanitizeSessionLog_CopiesSessionLevelTags()
+    {
+        ISessionLogSanitizer sanitizer = CreateSanitizer();
+        var source = CreateSessionLog();
+        source.Tags = ["hostile-113", "cluster-closeout", "after-updateservice"];
+
+        var sanitized = sanitizer.SanitizeSessionLog(source);
+
+        Assert.NotNull(sanitized);
+        Assert.NotNull(sanitized!.Tags);
+        Assert.Equal(3, sanitized.Tags!.Count);
+        Assert.Contains("hostile-113", sanitized.Tags);
+        Assert.Contains("cluster-closeout", sanitized.Tags);
+        Assert.Contains("after-updateservice", sanitized.Tags);
+        Assert.NotSame(source.Tags, sanitized.Tags);
+    }
+
     /// <summary>Query result projection preserves paging metadata while cloning and sanitizing page items.</summary>
     [Fact]
     public void SanitizeQueryResult_ClonesItemsAndPreservesPaginationMetadata()

@@ -71,6 +71,31 @@ public sealed class SessionLogControllerErrorTests
         Assert.Equal("validation", document.RootElement.GetProperty("details").GetProperty("reason").GetString());
     }
 
+    /// <summary>TEST-MCP-TRIAGESTORE-001: GET serializes session tags from GetAsync.</summary>
+    [Fact]
+    public async Task GetByIdAsync_SessionTags_SerializeInOkBody()
+    {
+        var service = Substitute.For<ISessionLogService>();
+        service.GetAsync("GrokCode", "GrokCode-20260820T071556Z-hv113tags", Arg.Any<CancellationToken>())
+            .Returns(new UnifiedSessionLogDto
+            {
+                SourceType = "GrokCode",
+                SessionId = "GrokCode-20260820T071556Z-hv113tags",
+                Tags = ["hostile-113", "cluster-closeout"],
+            });
+
+        var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
+        var result = await controller.GetByIdAsync(
+            "GrokCode",
+            "GrokCode-20260820T071556Z-hv113tags",
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var json = JsonSerializer.Serialize(ok.Value, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        Assert.Contains("hostile-113", json, StringComparison.Ordinal);
+        Assert.Contains("cluster-closeout", json, StringComparison.Ordinal);
+    }
+
     /// <summary>REST storage budget expiry returns backend_unavailable retryable true.</summary>
     [Fact]
     public async Task SubmitAsync_StorageBudgetExceeded_ReturnsBackendUnavailableEnvelope()

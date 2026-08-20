@@ -67,6 +67,10 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("turns")]
     public List<UnifiedRequestEntryDto>? Turns { get; set; }
 
+    /// <summary>FR-MCP-TRIAGESTORE-001: session-scoped tags persisted and returned on query.</summary>
+    [JsonPropertyName("tags")]
+    public List<string>? Tags { get; set; }
+
     /// <summary>Total tokens across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
