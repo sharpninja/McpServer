@@ -435,7 +435,6 @@ public sealed class SessionLogService : ISessionLogService
             .Take(limit)
             .ToList();
 
-        await PopulateSessionTagsAsync(sessions, cancellationToken).ConfigureAwait(false);
         var items = sessions.Select(MapEntityToDto).ToList();
 
         return new SessionLogQueryResult
@@ -582,11 +581,7 @@ public sealed class SessionLogService : ISessionLogService
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken)
             .ConfigureAwait(false);
 
-        if (entity is null)
-            return null;
-
-        await PopulateSessionTagsAsync(entity, cancellationToken).ConfigureAwait(false);
-        return MapEntityToDto(entity);
+        return entity is null ? null : MapEntityToDto(entity);
     }
 
     /// <inheritdoc />
@@ -1813,40 +1808,6 @@ public sealed class SessionLogService : ISessionLogService
                 Ordinal = ordinal++,
                 Value = value
             });
-        }
-    }
-
-    /// <summary>
-    /// FR-MCP-TRIAGESTORE-001: load session-scoped tags from <c>SessionLogTags</c> by
-    /// SessionLogId. Include(s =&gt; s.Tags) plus ThenInclude(turn.Tags) plus AsSplitQuery
-    /// can leave session.Tags empty on the hosted SQL Server GET path even when the
-    /// child rows exist (live GET tags:null while sqlcmd count=3).
-    /// </summary>
-    private async Task PopulateSessionTagsAsync(SessionLogEntity entity, CancellationToken cancellationToken)
-        => await PopulateSessionTagsAsync([entity], cancellationToken).ConfigureAwait(false);
-
-    /// <summary>
-    /// FR-MCP-TRIAGESTORE-001: batch-load session tags for a page of sessions.
-    /// </summary>
-    private async Task PopulateSessionTagsAsync(
-        IReadOnlyList<SessionLogEntity> sessions,
-        CancellationToken cancellationToken)
-    {
-        if (sessions.Count == 0)
-            return;
-
-        var ids = sessions.Select(session => session.Id).ToList();
-        var tags = await _db.SessionLogTags
-            .AsNoTracking()
-            .Where(tag => ids.Contains(tag.SessionLogId))
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-        var bySession = tags.ToLookup(tag => tag.SessionLogId);
-        foreach (var session in sessions)
-        {
-            session.Tags.Clear();
-            foreach (var tag in bySession[session.Id])
-                session.Tags.Add(tag);
         }
     }
 

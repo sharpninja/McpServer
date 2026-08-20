@@ -238,6 +238,29 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGESTORE-001 / leftover BUG-TRIAGE-113: POST session-level tags
+    /// then GET by id through the hosted sanitizing pipeline must return those tags.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingSessionTagsThenGetBySessionIdReturnsTags()
+    {
+        var sessionId = BuildSessionId("Cursor", $"get-tags-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        dto.Tags = ["hostile-113", "cluster-closeout"];
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var response = await _client.GetAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var fetched = await response.Content.ReadFromJsonAsync<UnifiedSessionLogDto>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(fetched);
+        Assert.NotNull(fetched!.Tags);
+        Assert.Contains("hostile-113", fetched.Tags!);
+        Assert.Contains("cluster-closeout", fetched.Tags);
+    }
+
+    /// <summary>
     /// FR-SUPPORT-013: <c>GET</c> by sessionId returns 404 when the session is
     /// not found.
     /// </summary>

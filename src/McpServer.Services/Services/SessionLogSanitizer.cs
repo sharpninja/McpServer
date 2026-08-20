@@ -103,6 +103,11 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// FR-MCP-TRIAGESTORE-001: session-level <c>Tags</c> must clone through this projection.
+    /// Hosted GET/query wrap <see cref="SessionLogService"/> in <c>SessionLogSanitizingService</c>;
+    /// omitting Tags produced live GET <c>tags:null</c> while the inner service still returned rows.
+    /// </remarks>
     public UnifiedSessionLogDto? SanitizeSessionLog(UnifiedSessionLogDto? sessionLog)
     {
         if (sessionLog is null)
@@ -125,6 +130,7 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
             TurnCount = sessionLog.TurnCount,
             Workspace = SanitizeWorkspace(sessionLog.Workspace),
             Turns = SanitizeTurns(sessionLog.Turns),
+            Tags = SanitizeStringCollection(sessionLog.Tags),
             TotalTokens = sessionLog.TotalTokens,
             CursorSessionLabel = SanitizeString(sessionLog.CursorSessionLabel),
             CopilotStatistics = SanitizeCopilotStatistics(sessionLog.CopilotStatistics),
