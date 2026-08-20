@@ -92,6 +92,8 @@ public sealed class SessionLogController : ControllerBase
     /// <param name="offset">Number of sessions to skip (default 0).</param>
     /// <param name="planFile">Exact planFile filter (None or a path; <c>~/</c> is expanded).</param>
     /// <param name="todoId">Exact todoId filter (None or a canonical TODO id).</param>
+    /// <param name="turnStatus">BUG-TRIAGE-121: exact turn status filter (for example in_progress).</param>
+    /// <param name="staleOlderThanHours">BUG-TRIAGE-121: keep sessions with a matching turn older than this many hours.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>200 OK with paginated session logs.</returns>
     [HttpGet]
@@ -107,6 +109,8 @@ public sealed class SessionLogController : ControllerBase
         [FromQuery] int offset = 0,
         [FromQuery] string? planFile = null,
         [FromQuery] string? todoId = null,
+        [FromQuery] string? turnStatus = null,
+        [FromQuery] int? staleOlderThanHours = null,
         CancellationToken cancellationToken = default)
     {
         var request = new SessionLogQueryRequest
@@ -120,7 +124,9 @@ public sealed class SessionLogController : ControllerBase
             Limit = limit,
             Offset = offset,
             PlanFile = planFile,
-            TodoId = todoId
+            TodoId = todoId,
+            TurnStatus = turnStatus,
+            StaleOlderThanHours = staleOlderThanHours
         };
 
         try

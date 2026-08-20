@@ -343,6 +343,14 @@ public sealed class SessionLogQueryRequest
     [JsonPropertyName("todoId")]
     public string? TodoId { get; set; }
 
+    /// <summary>BUG-TRIAGE-121: Exact turn status filter (for example <c>in_progress</c>).</summary>
+    [JsonPropertyName("turnStatus")]
+    public string? TurnStatus { get; set; }
+
+    /// <summary>BUG-TRIAGE-121: Keep sessions with a matching turn older than this many hours.</summary>
+    [JsonPropertyName("staleOlderThanHours")]
+    public int? StaleOlderThanHours { get; set; }
+
     /// <summary>Page offset.</summary>
     [JsonPropertyName("offset")]
     public int Offset { get; set; }

@@ -9,6 +9,97 @@ Describe 'TRIAGEPLUGIN identity and timeouts' {
         $script:ReplInvokeSource = Get-Content -LiteralPath (Join-Path $script:LibRoot 'repl-invoke.ps1') -Raw
         $script:PluginEnvSource = Get-Content -LiteralPath (Join-Path $script:LibRoot 'plugin-env.ps1') -Raw
         $script:PluginHookSource = Get-Content -LiteralPath (Join-Path $script:LibRoot 'plugin-hook.ps1') -Raw
+        $script:HookScript = Join-Path $script:LibRoot 'plugin-hook.ps1'
+
+        function Invoke-IsolationUserPromptSubmit {
+            param(
+                [switch]$CompletedRoot,
+                [switch]$InProgressRoot
+            )
+
+            $root = Join-Path $TestDrive ('iso-hook-' + [guid]::NewGuid().ToString('N'))
+            $workspace = Join-Path $root 'workspace'
+            $cache = Join-Path $root 'cache'
+            New-Item -ItemType Directory -Path $workspace, $cache | Out-Null
+            $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+            Set-Content -LiteralPath $marker -Value "workspace: isolation-test`n" -Encoding utf8
+            $markerUtc = (Get-Item -LiteralPath $marker).LastWriteTimeUtc.ToString('O')
+            $persistLog = Join-Path $root 'persist.jsonl'
+            $replLog = Join-Path $root 'repl.log'
+
+            $turnId = if ($CompletedRoot) {
+                'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
+            } else {
+                'req-20260819T153500Z-019-remediate-hook-cache-isolation'
+            }
+            $status = if ($CompletedRoot) { 'completed' } else { 'in_progress' }
+            $query = if ($CompletedRoot) { 'Complete resolve after hook canceled 017' } else { 'Please remediATE' }
+
+            . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+            Import-McpYamlSerializer
+            Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'ClaudeCode-20260819T000000Z-plugin-session'
+                agent = 'ClaudeCode'
+                timestamp = '2026-08-19T19:00:00Z'
+                markerFilePath = $marker
+                markerLastWriteUtc = $markerUtc
+            })
+            Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = $turnId
+                queryTitle = 'isolation root'
+                queryText = $query
+                openedAt = '2026-08-19T15:01:00Z'
+                status = $status
+                sessionId = 'ClaudeCode-20260819T000000Z-plugin-session'
+            })
+
+            $prompt = @'
+You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpServer.
+FIRST ACTION (mandatory, before any validation):
+Execute the add-profile skill now.
+'@
+            $psi = [System.Diagnostics.ProcessStartInfo]::new()
+            $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
+            foreach ($a in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $script:HookScript, '-HookName', 'user-prompt-submit', '-WorkspacePath', $workspace, '-HostName', 'claude-code')) {
+                $psi.ArgumentList.Add($a)
+            }
+            $psi.WorkingDirectory = $workspace
+            $psi.UseShellExecute = $false
+            $psi.RedirectStandardInput = $true
+            $psi.RedirectStandardOutput = $true
+            $psi.RedirectStandardError = $true
+            $psi.Environment['MCP_PLUGIN_HOST'] = 'claude-code'
+            $psi.Environment['MCP_AGENT_NAME'] = 'ClaudeCode'
+            $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $cache
+            $psi.Environment['MCP_PLUGIN_REPL_LOG'] = $replLog
+            $psi.Environment['MCP_PLUGIN_REPL_RESPONSE'] = 'ok'
+            $psi.Environment['MCP_PLUGIN_PERSIST_LOG'] = $persistLog
+            $psi.Environment['MCP_WORKSPACE_PATH'] = $workspace
+            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspace
+
+            $p = [System.Diagnostics.Process]::Start($psi)
+            $payload = (@{ prompt = $prompt } | ConvertTo-Json -Compress)
+            $p.StandardInput.Write($payload)
+            $p.StandardInput.Close()
+            $outTask = $p.StandardOutput.ReadToEndAsync()
+            $errTask = $p.StandardError.ReadToEndAsync()
+            $p.WaitForExit(60000) | Should -BeTrue
+            $turnAfter = Get-Content -LiteralPath (Join-Path $cache 'current-turn.yaml') -Raw
+            $persist = @()
+            if (Test-Path -LiteralPath $persistLog) {
+                $persist = @(Get-Content -LiteralPath $persistLog | ForEach-Object { $_ | ConvertFrom-Json })
+            }
+            [pscustomobject]@{
+                ExitCode = $p.ExitCode
+                Stdout = $outTask.Result
+                Stderr = $errTask.Result
+                ReplLog = if (Test-Path -LiteralPath $replLog) { Get-Content -LiteralPath $replLog -Raw } else { '' }
+                Persist = $persist
+                CurrentStatus = if ($turnAfter -match '(?m)^status:\s*(.+)$') { $Matches[1].Trim() } else { '' }
+                CurrentRequestId = if ($turnAfter -match '(?m)^turnRequestId:\s*(.+)$') { $Matches[1].Trim() } else { '' }
+            }
+        }
     }
 
     It 'Resolve-McpCacheDir uses hook workspace path when cwd is the user profile and env is empty' {
@@ -230,6 +321,131 @@ Execute the add-profile skill now.
         Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt $hostile | Should -Be 'isolate-skip'
 
         Get-PluginRootTurnIsolationDecision -OpenTurn $inProgress -IncomingPrompt 'Please remediATE the hostile FAIL list' | Should -Be 'open-new'
+    }
+
+    It 'UserPromptSubmit.LaterPrompt_DoesNotCancelCompletedRootTurn' {
+        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: a later UserPromptSubmit
+        # must not persist canceled on a completed root turn (isolate-skip for
+        # background; supersede skips non-in_progress for a distinct operator prompt).
+        $detectFn = [regex]::Match(
+            $script:PluginHookSource,
+            '(?ms)^function Test-PluginPromptIsBackgroundAgent \{.*?^\}').Value
+        $decisionFn = [regex]::Match(
+            $script:PluginHookSource,
+            '(?ms)^function Get-PluginRootTurnIsolationDecision \{.*?^\}').Value
+        $detectFn | Should -Not -BeNullOrEmpty
+        $decisionFn | Should -Not -BeNullOrEmpty
+        Invoke-Expression $detectFn
+        Invoke-Expression $decisionFn
+
+        $hostile = @'
+You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpServer.
+FIRST ACTION (mandatory, before any validation):
+Execute the add-profile skill now.
+'@
+        $completed = [ordered]@{
+            turnRequestId = 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
+            status = 'completed'
+            queryText = 'Complete resolve after hook canceled 017'
+        }
+        Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt $hostile | Should -Be 'isolate-skip'
+        Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt 'Please continue the next operator task' | Should -Be 'open-new'
+
+        $cache = Join-Path $TestDrive 'completed-no-cancel'
+        New-Item -ItemType Directory -Path $cache | Out-Null
+        $persistLog = Join-Path $TestDrive 'completed-no-cancel-persist.jsonl'
+        $savedCache = $env:MCP_CACHE_DIR_OVERRIDE
+        $savedPersist = $env:MCP_PLUGIN_PERSIST_LOG
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cache
+            $env:MCP_PLUGIN_PERSIST_LOG = $persistLog
+            . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+            Import-McpYamlSerializer
+            Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+                agent = 'GrokCode'
+            })
+            Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
+                queryTitle = 'completed root'
+                queryText = 'Complete resolve after hook canceled 017'
+                openedAt = '2026-08-19T15:01:00Z'
+                status = 'completed'
+                sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+            })
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            function Assert-ReplCurrentTurnFresh { param([string]$Method) return $true }
+
+            Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260820T002817Z-001-later-operator'
+            $afterSupersede = @()
+            if (Test-Path -LiteralPath $persistLog) {
+                $afterSupersede = @(Get-Content -LiteralPath $persistLog | ForEach-Object { $_ | ConvertFrom-Json })
+            }
+            @($afterSupersede | Where-Object { $_.status -eq 'canceled' }).Count | Should -Be 0
+
+            $beginYaml = @(
+                'requestId: req-20260820T002817Z-001-later-operator'
+                'queryTitle: later operator prompt'
+                'queryText: Please continue the next operator task'
+                'planFile: docs/plans/triage-cluster-002.md'
+                'todoId: BUG-TRIAGE-121'
+            ) -join "`n"
+            [void](Invoke-WorkflowBeginTurn -ParamsYaml $beginYaml)
+            $persisted = @()
+            if (Test-Path -LiteralPath $persistLog) {
+                $persisted = @(Get-Content -LiteralPath $persistLog | ForEach-Object { $_ | ConvertFrom-Json })
+            }
+            @($persisted | Where-Object {
+                $_.requestId -eq 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel' -and $_.status -eq 'canceled'
+            }).Count | Should -Be 0
+            @($persisted | Where-Object {
+                $_.requestId -eq 'req-20260820T002817Z-001-later-operator' -and $_.status -eq 'in_progress'
+            }).Count | Should -Be 1
+        } finally {
+            if ($null -ne $savedCache) { $env:MCP_CACHE_DIR_OVERRIDE = $savedCache } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $savedPersist) { $env:MCP_PLUGIN_PERSIST_LOG = $savedPersist } else { Remove-Item Env:\MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue }
+        }
+
+        $hook = Invoke-IsolationUserPromptSubmit -CompletedRoot
+        $hook.Stdout | Should -Match 'root-turn-isolated'
+        $hook.Stdout | Should -Match 'isolate-skip'
+        $hook.CurrentStatus | Should -Be 'completed'
+        $hook.CurrentRequestId | Should -Be 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
+        $hook.ReplLog | Should -Not -Match 'workflow\.sessionlog\.beginTurn'
+        @($hook.Persist | Where-Object { $_.status -eq 'canceled' }).Count | Should -Be 0
+    }
+
+    It 'UserPromptSubmit.BackgroundPrompt_DoesNotCancelInProgressRootWorkTurn' {
+        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: background UserPromptSubmit
+        # reuses the in_progress root work turn and does not persist canceled.
+        $detectFn = [regex]::Match(
+            $script:PluginHookSource,
+            '(?ms)^function Test-PluginPromptIsBackgroundAgent \{.*?^\}').Value
+        $decisionFn = [regex]::Match(
+            $script:PluginHookSource,
+            '(?ms)^function Get-PluginRootTurnIsolationDecision \{.*?^\}').Value
+        Invoke-Expression $detectFn
+        Invoke-Expression $decisionFn
+        $hostile = @'
+You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpServer.
+FIRST ACTION (mandatory, before any validation):
+Execute the add-profile skill now.
+'@
+        $inProgress = [ordered]@{
+            turnRequestId = 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
+            status = 'in_progress'
+            queryText = 'Please remediATE'
+        }
+        Get-PluginRootTurnIsolationDecision -OpenTurn $inProgress -IncomingPrompt $hostile | Should -Be 'reuse'
+
+        $hook = Invoke-IsolationUserPromptSubmit -InProgressRoot
+        $hook.Stdout | Should -Match 'turn-already-open'
+        $hook.Stdout | Should -Match 'reuse'
+        $hook.CurrentStatus | Should -Be 'in_progress'
+        $hook.CurrentRequestId | Should -Be 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
+        $hook.ReplLog | Should -Not -Match 'workflow\.sessionlog\.beginTurn'
+        @($hook.Persist | Where-Object { $_.status -eq 'canceled' }).Count | Should -Be 0
     }
 
     It 'TEST-MCP-STRICTCOUNT-001 New-McpPluginTurnUpsertRequest accepts omitted empty null and scalar tags under StrictMode' {

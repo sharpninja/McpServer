@@ -43,7 +43,7 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>TR-PLANNED-CORE-013: Query session logs.</summary>
-    [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit.")]
+    [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit, turnStatus, staleOlderThanHours.")]
     public async Task<string> SessionLogQuery(
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Agent filter (e.g. cursor, copilot)")] string? agent = null,
@@ -54,6 +54,8 @@ public sealed partial class FwhMcpTools
         [Description("Max results (default 100)")] int? limit = null,
         [Description("Exact planFile filter (None or path; ~/ is expanded)")] string? planFile = null,
         [Description("Exact todoId filter (None or canonical TODO id)")] string? todoId = null,
+        [Description("Turn status filter (e.g. in_progress). BUG-TRIAGE-121 stale listing.")] string? turnStatus = null,
+        [Description("Keep sessions with a matching turn older than this many hours. Does not close turns.")] int? staleOlderThanHours = null,
         CancellationToken cancellationToken = default)
     {
         using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
@@ -69,6 +71,8 @@ public sealed partial class FwhMcpTools
                 Limit = limit ?? 100,
                 PlanFile = planFile,
                 TodoId = todoId,
+                TurnStatus = turnStatus,
+                StaleOlderThanHours = staleOlderThanHours,
             };
             var result = await _sessionLogService.QueryAsync(req, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { totalCount = result.TotalCount, items = result.Items });

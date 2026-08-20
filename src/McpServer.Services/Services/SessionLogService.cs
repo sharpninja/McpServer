@@ -417,6 +417,15 @@ public sealed class SessionLogService : ISessionLogService
             filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.TodoId, todoFilter, StringComparison.Ordinal)));
         }
 
+        if (!string.IsNullOrWhiteSpace(request.TurnStatus) || request.StaleOlderThanHours is > 0)
+        {
+            var statusFilter = string.IsNullOrWhiteSpace(request.TurnStatus) ? null : request.TurnStatus.Trim();
+            DateTimeOffset? cutoff = request.StaleOlderThanHours is > 0
+                ? DateTimeOffset.UtcNow.AddHours(-request.StaleOlderThanHours.Value)
+                : null;
+            filtered = filtered.Where(s => s.Turns.Any(e => TurnMatchesStaleQuery(e, statusFilter, cutoff)));
+        }
+
         var filteredList = filtered.ToList();
         var totalCount = filteredList.Count;
 
@@ -435,6 +444,24 @@ public sealed class SessionLogService : ISessionLogService
             Offset = offset,
             Items = items
         };
+    }
+
+    /// <summary>
+    /// BUG-TRIAGE-121: true when a turn matches optional status and stale-age filters.
+    /// Query is read-only; matching turns stay <c>in_progress</c>.
+    /// </summary>
+    private static bool TurnMatchesStaleQuery(SessionLogTurnEntity turn, string? statusFilter, DateTimeOffset? cutoff)
+    {
+        if (!string.IsNullOrWhiteSpace(statusFilter) &&
+            !string.Equals(turn.Status, statusFilter, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (cutoff.HasValue && (!turn.Timestamp.HasValue || turn.Timestamp.Value > cutoff.Value))
+            return false;
+
+        return true;
     }
 
     /// <inheritdoc />

@@ -156,6 +156,47 @@ public sealed class SessionLogTriageStoreTests : IDisposable
         Assert.True(classified.Retryable);
     }
 
+    /// <summary>
+    /// TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: query filter
+    /// <c>turnStatus=in_progress</c> plus <c>staleOlderThanHours</c> lists only
+    /// sessions with stale in-progress turns and does not mass-close them.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_TurnStatusInProgressAndStaleOlderThanHours_ReturnsOnlyStaleOpenTurns()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var staleStamp = now.AddHours(-30).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+        var recentStamp = now.AddHours(-1).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+        await _sut.SubmitAsync(
+            CreateSession("Cursor-20260818T200000Z-stale-open", turnStatus: "in_progress", timestamp: staleStamp),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(
+            CreateSession("Cursor-20260818T200000Z-recent-open", turnStatus: "in_progress", timestamp: recentStamp),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(
+            CreateSession("Cursor-20260818T200000Z-stale-done", turnStatus: "completed", timestamp: staleStamp),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var queried = await _sut.QueryAsync(
+            new SessionLogQueryRequest
+            {
+                Agent = "Cursor",
+                TurnStatus = "in_progress",
+                StaleOlderThanHours = 24,
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var session = Assert.Single(queried.Items, item => item.SessionId is not null && item.SessionId.Contains("stale-open", StringComparison.Ordinal));
+        Assert.DoesNotContain(queried.Items, item => item.SessionId is not null && item.SessionId.Contains("recent-open", StringComparison.Ordinal));
+        Assert.DoesNotContain(queried.Items, item => item.SessionId is not null && item.SessionId.Contains("stale-done", StringComparison.Ordinal));
+        var turn = Assert.Single(session.Turns!);
+        Assert.Equal("in_progress", turn.Status);
+
+        var fetched = await _sut.GetAsync("Cursor", "Cursor-20260818T200000Z-stale-open", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("in_progress", fetched!.Turns!.First().Status);
+    }
+
     /// <summary>TEST-MCP-TRIAGESTORE-001: superseded persist with omitted context writes None sentinels and canceled.</summary>
     [Fact]
     public async Task UpsertTurnAsync_OmittedPlanFileTodoId_WritesNoneAndCanceled()
@@ -192,7 +233,10 @@ public sealed class SessionLogTriageStoreTests : IDisposable
         }
     }
 
-    private static UnifiedSessionLogDto CreateSession(string sessionId)
+    private static UnifiedSessionLogDto CreateSession(
+        string sessionId,
+        string turnStatus = "in_progress",
+        string timestamp = "2026-08-18T20:00:00Z")
     {
         return new UnifiedSessionLogDto
         {
@@ -206,9 +250,9 @@ public sealed class SessionLogTriageStoreTests : IDisposable
                 new UnifiedRequestEntryDto
                 {
                     RequestId = "req-20260818T200000Z-entry-001",
-                    Timestamp = "2026-08-18T20:00:00Z",
+                    Timestamp = timestamp,
                     QueryText = "triage store",
-                    Status = "in_progress",
+                    Status = turnStatus,
                     PlanFile = SessionLogTurnContextValidator.NoneSentinel,
                     TodoId = SessionLogTurnContextValidator.NoneSentinel,
                 },
