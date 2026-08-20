@@ -20,6 +20,26 @@ $pluginRoot = (Resolve-Path -LiteralPath (Join-Path $scriptDir '__DEPTH__')).Pro
 $env:MCP_PLUGIN_ROOT = $pluginRoot
 $env:MCP_PLUGIN_HOST = '__HOST__'
 
+$resolveCacheDir = Join-Path $pluginRoot 'lib\resolve-cache-dir.ps1'
+if (Test-Path -LiteralPath $resolveCacheDir -PathType Leaf) {
+    . $resolveCacheDir
+    $wrapperTempTarget = @(
+        $env:MCP_WORKSPACE_PATH,
+        $env:MCPSERVER_WORKSPACE_PATH,
+        $env:CLAUDE_PROJECT_DIR,
+        $env:CODEX_CWD,
+        $env:CODEX_WORKSPACE_PATH,
+        $env:GROK_WORKSPACE_PATH,
+        (Get-Location).ProviderPath
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ($wrapperTempTarget) {
+        $wrapperTempAlign = Set-McpPluginSameVolumeTemp -TargetPath $wrapperTempTarget
+        if ($wrapperTempAlign -and -not $wrapperTempAlign.Succeeded -and $wrapperTempAlign.Error) {
+            [Console]::Error.WriteLine([string]$wrapperTempAlign.Error)
+        }
+    }
+}
+
 $hookParams = $Params
 if (-not $hookParams -and $null -ne $InputObject) {
     if ($InputObject -is [string]) {

@@ -236,6 +236,13 @@ function Start-PluginSession {
     param([string]$StartPath)
 
     $start = Get-PluginStartPath -PreferredPath $StartPath
+    if (-not [string]::IsNullOrWhiteSpace($start)) {
+        $tempAlign = Set-McpPluginSameVolumeTemp -TargetPath $start
+        if ($tempAlign -and -not $tempAlign.Succeeded -and $tempAlign.Error) {
+            [Console]::Error.WriteLine([string]$tempAlign.Error)
+        }
+    }
+
     $cacheDir = Get-PluginCacheDir -StartPath $start
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     $markerSnapshot = $null
@@ -1410,6 +1417,14 @@ function Invoke-PlanModifiedHook {
     })
     Invoke-PluginRepl -Method 'client.Todo.UpdateAsync' -ParamsYaml $paramsYaml | Out-Null
     Write-PostToolUseOutput -Status 'updated'
+}
+
+$pluginTempTarget = Get-PluginStartPath -PreferredPath $WorkspacePath
+if (-not [string]::IsNullOrWhiteSpace($pluginTempTarget)) {
+    $pluginTempAlign = Set-McpPluginSameVolumeTemp -TargetPath $pluginTempTarget
+    if ($pluginTempAlign -and -not $pluginTempAlign.Succeeded -and $pluginTempAlign.Error) {
+        [Console]::Error.WriteLine([string]$pluginTempAlign.Error)
+    }
 }
 
 if (-not (Confirm-PowerShellMcpRuntime)) {
