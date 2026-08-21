@@ -598,6 +598,10 @@ function Get-ReplMethodTimeoutSeconds {
     $long = if ($env:REPL_LONG_TIMEOUT) { [int]$env:REPL_LONG_TIMEOUT } else { 300 }
     $helper = if ($env:REPL_HELPER_TIMEOUT) { [int]$env:REPL_HELPER_TIMEOUT } else { 120 }
 
+    if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
+        return 2
+    }
+
     switch -Wildcard ($Method) {
         'workflow.todo.analyzeRequirements'       { return $long }
         'workflow.requirements.generateDocument'  { return $long }
@@ -614,6 +618,24 @@ function Invoke-ReplRaw {
         [Parameter(Mandatory)][string]$Method,
         [string]$ParamsYaml = ''
     )
+    if ($script:ReplFailsafeDrainDeferred -and -not $script:ReplRawInFlight) {
+        $script:ReplFailsafeDrainDeferred = $false
+        Invoke-ReplFailsafeDrainOnFirstSuccessCore
+    }
+    $script:ReplRawInFlight = $true
+    try {
+        return (Invoke-ReplRawCore -Method $Method -ParamsYaml $ParamsYaml)
+    }
+    finally {
+        $script:ReplRawInFlight = $false
+    }
+}
+
+function Invoke-ReplRawCore {
+    param(
+        [Parameter(Mandatory)][string]$Method,
+        [string]$ParamsYaml = ''
+    )
     if (-not (Assert-ReplMarkerFresh)) {
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'MCP_UNTRUSTED: marker refresh failed before REPL request')
     }
@@ -626,7 +648,6 @@ function Invoke-ReplRaw {
         $replExe = [string]$replCommand.Source
     }
     if ([string]::IsNullOrWhiteSpace($replExe)) {
-        Write-Error 'mcpserver-repl not found on PATH'
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'mcpserver-repl not found on PATH')
     }
 
@@ -712,7 +733,6 @@ function Invoke-ReplRaw {
         return (New-McpPluginReplResult -Success $true -Output $output -ExitCode $proc.ExitCode)
     }
     catch {
-        Write-Error "mcpserver-repl invocation failed for method ${Method}: $_"
         $caughtOutput = ''
         if (Get-Variable -Name output -Scope Local -ErrorAction SilentlyContinue) {
             $caughtOutput = [string]$output
@@ -818,6 +838,10 @@ $script:ReplFailsafeDraining = $false
 # One drain attempt per process. A second pass in the same process would only
 # re-walk records the first pass already decided about.
 $script:ReplFailsafeDrainCompleted = $false
+# TR-MCP-PERSIST-003: while Invoke-ReplRaw is in flight, drain must not
+# block the successful caller (getFr/getTr) for a 30s SubmitAsync timeout.
+$script:ReplRawInFlight = $false
+$script:ReplFailsafeDrainDeferred = $false
 
 function Write-ReplFailsafe {
     # Capture the serialized request before the remote call so a crash cannot lose
@@ -1037,7 +1061,11 @@ function Invoke-ReplFailsafeDrain {
             }
 
             $paramsYaml = ConvertTo-Yaml -Data $recordParams -Options WithIndentedSequences
-            $result = Invoke-ReplRaw -Method $method -ParamsYaml $paramsYaml
+            try {
+                $result = Invoke-ReplRaw -Method $method -ParamsYaml $paramsYaml
+            } catch {
+                $result = New-McpPluginReplResult -Success $false -Output '' -Error $_.ToString() -ExitCode 1
+            }
             if ($result.Success) {
                 Clear-ReplFailsafe -Path $record.FullName
                 $summary.replayed++
@@ -1090,6 +1118,16 @@ function Invoke-ReplFailsafeDrainOnFirstSuccess {
     if ($script:ReplFailsafeDraining) { return }
     if ($env:MCP_FAILSAFE_DRAIN_DISABLED -eq '1') { return }
 
+    # TR-MCP-PERSIST-003: do not block getFr/getTr on a nested SubmitAsync drain.
+    if ($script:ReplRawInFlight) {
+        $script:ReplFailsafeDrainDeferred = $true
+        return
+    }
+
+    Invoke-ReplFailsafeDrainOnFirstSuccessCore
+}
+
+function Invoke-ReplFailsafeDrainOnFirstSuccessCore {
     # TR-MCP-FAILSAFE-001: do not latch completed on a backend-down abort.
     # A 503/backend_unavailable pass must be retryable in this process after
     # storage answers again.
@@ -1104,7 +1142,11 @@ function Invoke-ReplFailsafeDrainOnFirstSuccess {
                 "Failsafe queue drain: replayed=$($summary.replayed) failed=$($summary.failed) quarantined=$($summary.quarantined) skipped=$($summary.skipped) dir='$($summary.failsafeDir)'.")
         }
     } catch {
-        [Console]::Error.WriteLine("Failsafe queue drain failed: $($_.Exception.Message)")
+        $detail = $_.Exception.Message
+        if (Test-ReplFailsafeBackendUnreachable -Detail $detail) {
+            return
+        }
+        [Console]::Error.WriteLine("Failsafe queue drain failed: $detail")
     }
 }
 
@@ -1276,14 +1318,14 @@ function Invoke-ReplPersistTurn {
     $result = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml
     if (-not $result.Success) {
         $combined = "$($result.Output) $($result.Error)"
-        if ($combined -match 'timeout|timed out|command_timeout') {
+        if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
             $script:LastReplPersistenceDetails = [ordered]@{
                 persisted = $false
                 degraded = $true
                 queued = $true
                 persistenceStrategy = 'failsafe-queue'
                 failsafePath = $failsafePath
-                message = 'beginTurn persist timed out; failsafe retained and current-turn stays active.'
+                message = 'Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.'
             }
             return $false
         }
@@ -1816,14 +1858,47 @@ function Invoke-WorkflowAppendDialog {
         return $false
     }
 
-    $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
+    $null = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
     Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
-    $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
-    return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-        -Status 'in_progress' -ResponseText 'Dialog appended.' `
-        -ProcessingDialog $dialogItems)
+    $meta = Get-ReplSessionMeta
+    if (-not $meta -or [string]::IsNullOrWhiteSpace($reqId)) {
+        [Console]::Error.WriteLine("workflow.sessionlog.appendDialog requires cached session metadata and an active turn. $(Get-ReplRecoveryGuidance)")
+        return $false
+    }
+
+    # FR-MCP-170 / TR-MCP-PERSIST-001: incremental dialog POST, not a full-session SubmitAsync upsert.
+    $callParams = [ordered]@{
+        agent     = $meta.SourceType
+        sessionId = $meta.SessionId
+        requestId = $reqId
+        items     = @($dialogItems)
+    }
+    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
+    if ($result.Success) {
+        return $true
+    }
+
+    $combined = "$($result.Output) $($result.Error)"
+    if ($combined -match 'not_found|not found|HTTP 404|http 404') {
+        [Console]::Error.WriteLine("workflow.sessionlog.appendDialog turn not found (retryable false); failsafe not used. $($result.Error)$($result.Output)")
+        return $false
+    }
+    if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
+        $null = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
+        $script:LastReplPersistenceDetails = [ordered]@{
+            persisted = $false
+            degraded = $true
+            queued = $true
+            persistenceStrategy = 'failsafe-queue'
+            message = 'appendDialog persist timed out or returned HTTP 503; dialog failsafe retained.'
+        }
+        return $false
+    }
+
+    [Console]::Error.WriteLine("workflow.sessionlog.appendDialog server call failed: $($result.Error)$($result.Output)")
+    return $false
 }
 
 function Invoke-WorkflowUpdateTurn {

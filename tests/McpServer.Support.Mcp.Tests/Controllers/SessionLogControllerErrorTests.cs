@@ -178,4 +178,40 @@ public sealed class SessionLogControllerErrorTests
         Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
         Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
     }
+
+    /// <summary>
+    /// TEST-MCP-196 / FR-MCP-170: POST dialog for a missing turn is not_found, HTTP 404, retryable false.
+    /// </summary>
+    [Fact]
+    public async Task AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse()
+    {
+        var service = Substitute.For<ISessionLogService>();
+        service.AppendProcessingDialogAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(),
+                Arg.Any<CancellationToken>())
+            .Throws(new InvalidOperationException("Entry not found: Cursor/Cursor-20260821T000000Z-missing/req-20260821T000000Z-entry-001"));
+        var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
+        var items = new List<ProcessingDialogItemDto>
+        {
+            new() { Role = "model", Content = "incremental", Category = "observation" },
+        };
+
+        var result = await controller.AppendDialogAsync(
+            "Cursor",
+            "Cursor-20260821T000000Z-missing",
+            "req-20260821T000000Z-entry-001",
+            items,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(404, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("not_found", document.RootElement.GetProperty("code").GetString());
+        Assert.False(document.RootElement.GetProperty("retryable").GetBoolean());
+        Assert.Equal("not_found", document.RootElement.GetProperty("details").GetProperty("reason").GetString());
+    }
 }

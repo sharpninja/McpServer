@@ -54,6 +54,18 @@ public sealed class McpErrorClassifierTests
         Assert.Contains("locked", result.Details!["inner"]?.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// TEST-MCP-196 / TR-MCP-PERSIST-004: SQLITE_BUSY is persist contention, not storage-down.
+    /// </summary>
+    [Fact]
+    public void Classify_SqliteBusy_IsNotBackendUnavailable()
+    {
+        var result = McpErrorClassifier.Classify(new SqliteException("database is locked", 5));
+
+        Assert.NotEqual(McpErrorClassifier.BackendUnavailable, result.Code);
+        Assert.NotEqual(McpErrorClassifier.BackendUnavailableMessage, result.Message);
+    }
+
     /// <summary>ArgumentException is validation_error and not retryable.</summary>
     [Fact]
     public void Classify_ArgumentException_IsValidationError()

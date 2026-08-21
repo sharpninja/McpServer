@@ -651,7 +651,8 @@ Execute the add-profile skill now.
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             function Assert-ReplMarkerFresh { return $true }
 
-            $raw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction Stop
+            $raw = Get-Command Invoke-ReplRawCore -CommandType Function -ErrorAction SilentlyContinue
+            if (-not $raw) { $raw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction Stop }
             $raw.Definition | Should -Match 'client\.SessionLog\.SubmitAsync|Get-Command mcpserver-repl'
             $started = [DateTime]::UtcNow
             $persisted = $null
