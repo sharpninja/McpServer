@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20260820T125821Z-c5c4
+  result:
+    id: FR-HANDOFF-002
+    title: Extract structured MCP TODO drafts via one-shot agents
+    description: Use the existing one-shot agent system to extract a structured MCP TODO draft.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 extraction contract.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-002-prompt
+      text: Extraction uses a versioned prompt and strict JSON contract.
+      isSatisfied: false
+    - id: ac-fr-handoff-002-malformed
+      text: Malformed output produces diagnostics and never creates a TODO.
+      isSatisfied: false
+    - id: ac-fr-handoff-002-source
+      text: Unknown or missing source information is not silently discarded.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:22.4644356+00:00
+    updatedAt: 2026-08-20T12:58:22.4645390+00:00
+  deprecated: true
+
+---
+

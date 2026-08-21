@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260819T225957Z-8410
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-108
+      title: Session log turn attributes foreign-repo commits/filesModified to wrong workspace
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - "Completeness audit (claude-session-audit fleet, batch 76) found ClaudeCode session \"plugin-reload\" (started ~2026-06-12T15:00:46Z) under the FunWasHad workspace whose turn commit and filesModified entries reference the mcpserver-claude-code-plugin repository, not FunWasHad. Stored turn data therefore mixes another repo's artifacts into FunWasHad's session log. Likely cause: a multi-repo agent session wrote turn artifacts to the active workspace log without workspace-path validation or an explicit cross-workspace reference. Expected behavior is either (a) commit/filesModified recorded only under the workspace that owns those paths, or (b) a documented cross-workspace reference convention so audits can distinguish foreign artifacts from local work."
+      - 'Triage group: triage-group-023f1d4aef176329'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- A session log turn for workspace W never lists filesModified paths that resolve outside W's workspace root unless the turn explicitly marks them as cross-workspace (or equivalent convention)."
+      - '- A session log turn for workspace W never attributes a commit SHA/message/files set from repository R?W without an explicit cross-workspace or foreign-repo field (or equivalent convention).'
+      - '- Given a turn that only modified files under mcpserver-claude-code-plugin while the active session is FunWasHad, either the turn is rejected/redirected to the correct workspace log, or it is accepted only with an explicit foreign-workspace/repo marker that audits can filter on.'
+      - '- Completeness audit (or equivalent check) no longer flags FunWasHad session "plugin-reload" for foreign commit/filesModified once the fix or convention is in place and historical bad turns are corrected or annotated.'
+      - 'Implementation notes:'
+      - '- Primary defect is attribution integrity of session-log turn fields (commit, filesModified), not FunWasHad product logic; original workspace path F:\GitHub\FunWasHad, foreign repo mcpserver-claude-code-plugin.'
+      - '- Prefer server-side validation: when appending turn actions/fields, resolve filesModified (and commit-touched paths if available) against X-Workspace-Path / registered workspace root; reject or require crossWorkspace/foreignRepo metadata when paths fall outside.'
+      - '- If multi-repo sessions are intentional, add schema fields such as foreignWorkspacePath or repositoryRoot on commit/filesModified actions rather than silent co-mingling.'
+      - '- Agent/plugin path: ensure session-log clients bind turns to the workspace of the repo being modified (or open separate sessions per workspace) so cross-repo work does not default to the first workspace marker.'
+      - '- Evidence cited by report: TruckMate session scratchpad audit\results\batch-76.json (audit result only; do not treat as code fix location). Historical session data may need one-time annotation or leave-as-is with forward-only enforcement.'
+      - '- Severity medium: corrupts audit/traceability and confuses completeness audits; does not imply runtime failure of MCP tools for the foreign repo.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T225435Z.md. Merged triage/session-store as 90d6e474. Named tests 11/0/0. Session GrokCode-20260819T224825Z-hostile-g3s3-commit.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

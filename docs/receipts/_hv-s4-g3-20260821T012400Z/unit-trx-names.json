@@ -1,0 +1,74 @@
+[
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.McpStdio.SessionLogLifecycleToolErrorTests.SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ExactWindowsPlan_Succeeds"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_HomeRelativePlan_ExpandsAndSucceeds"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.McpStdio.SessionLogLifecycleToolErrorTests.SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_CanonicalTodoAndIssueId_Succeed"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_FrIdAsTodo_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.McpStdio.SessionLogLifecycleToolErrorTests.SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.McpStdio.SessionLogLifecycleToolErrorTests.SessionLogBeginTurn_NoneNone_ReturnsSuccess"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateIfSupplied_BothNull_Succeeds"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_LowercaseNone_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ParentSegmentPlan_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateIfSupplied_InvalidWhenPresent_Throws"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ValidPlanAndTodo_Succeeds_AndNormalizesSlashes"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException"
+  },
+  {
+    "outcome": "Passed",
+    "name": "McpServer.Support.Mcp.Tests.McpStdio.SessionLogLifecycleToolErrorTests.SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError"
+  }
+]

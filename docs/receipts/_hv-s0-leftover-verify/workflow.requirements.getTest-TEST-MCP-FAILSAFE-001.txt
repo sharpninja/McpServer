@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181646Z-973d
+  result:
+    id: TEST-MCP-FAILSAFE-001
+    title: Test TEST-MCP-FAILSAFE-001
+    description: Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-1
+      text: Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:16:47.5074869+00:00
+    updatedAt: 2026-08-19T18:16:47.5075919+00:00
+  deprecated: true
+
+---

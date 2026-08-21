@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181751Z-652a
+  result:
+    id: TR-MCP-STRICTCOUNT-001
+    title: Null-safe Count for updateTurn collection fields under StrictMode
+    description: New-McpPluginTurnUpsertRequest and Invoke-WorkflowUpdateTurn enumerate tags and contextList with @() or equivalent under Set-StrictMode Latest. Covered by FR-MCP-STRICTCOUNT-001 TEST-MCP-STRICTCOUNT-001.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: STRICTCOUNT
+    acceptanceCriteria:
+    - id: ac-1
+      text: updateTurn collection fields use null-safe enumeration under StrictMode
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:17:52.0706788+00:00
+    updatedAt: 2026-08-19T18:17:52.0707986+00:00
+  deprecated: true
+
+---

@@ -1,0 +1,12 @@
+[33m06200782[m docs(receipts): wrap-up push hostile AGREE 164408Z
+[33mcbae4dd6[m docs(receipts): record origin and wiki SHAs after wrap-up push
+[33mc81abaf0[m feat(triage): unified errors, session-log persist, hook isolation
+[33mf4060f03[m docs(receipts): wrap-up and hostile AGREE for refresh-docs push
+[33mbf000bb7[m feat(products,handoff): ship products + handoff; refresh docs and wiki
+[33m298c5fde[m docs(requirements): refresh wiki export
+[33m7c4821ca[m feat(sessionlog): require planFile and todoId on session turns
+[33mbd8a8d9e[m feat(usecase): UML domain, canvas graph, docs refresh
+[33m28f56515[m docs: refresh docs, remotes, git-usage, Octopus pipeline notes
+[33m1ffdcb5e[m docs: correct agent runtime header docs and capture header requirements
+[33m508b1690[m fix(plugin): close the cached-value recurrence vector for agent header fields
+[33md22a1548[m fix(plugin): stop agent runtime header fields fabricating values

@@ -1,0 +1,152 @@
+{
+  "TimestampUtc": "2026-08-19T20:34:57Z",
+  "Dump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01bb0-3a6a-7e33-b430-95bcd88e5f26\\mcp\\call-42e9fa50-836f-4f07-aada-ced8b88ded49-112.json",
+  "ItemCount": 293,
+  "Wanted": [
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-XAGENT-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-TRIAGEPLUGIN-001"
+  ],
+  "FoundIds": [
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-TRIAGEPLUGIN-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-XAGENT-001"
+  ],
+  "Missing": [],
+  "Found": [
+    {
+      "Id": "FR-MCP-FAILSAFE-001",
+      "Title": "Failsafe drain treats 503 backend_unavailable as backend-down and can retry",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Submit/append still returns retryable backend_unavailable and keeps failsafe YAML",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "Drain does not latch failed=1 as permanently completed in-process",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-SESSIONEND-001",
+      "Title": "SessionEnd emits empty object when cache cannot be resolved",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "identifiable workspace still flushes .mcpServer/<agent>",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "no pending cache is a silent no-op",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-STRICTCOUNT-001",
+      "Title": "updateTurn accepts omitted empty or scalar tags and contextList under StrictMode",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "omitted/empty/scalar tags and contextList persist",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "exit 0 and no Count cannot be found",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "appendActions/updateTurn emit no boolean on success",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGEPLUGIN-001",
+      "Title": "Plugin root session, cache, console, and persist identity",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-VERIFYWRAP-001",
+      "Title": "Code-verify reports disk-full and honors timeout without hanging",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "IOException disk full is typed and current-turn remains valid",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "wrapper returns or fails within documented timeout",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "no indefinite in-process hang after child dotnet exits",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-XAGENT-001",
+      "Title": "CompleteTurn refuses cross-sourceType current-turn rebind",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "cross-sourceType mismatch refused or restored to originating cache",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "same-agent rotation can complete without 500",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "CompleteTurn does not hijack a concurrent other requestId",
+          "isSatisfied": false
+        }
+      ]
+    }
+  ]
+}

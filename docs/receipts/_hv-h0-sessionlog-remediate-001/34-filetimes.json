@@ -1,0 +1,42 @@
+[
+  {
+    "path": "docs\\Project\\Functional-Requirements.md",
+    "lastWriteUtc": "2026-08-20T23:37:06.5272736Z",
+    "length": 188183
+  },
+  {
+    "path": "docs\\Project\\Technical-Requirements.md",
+    "lastWriteUtc": "2026-08-20T23:37:06.5272736Z",
+    "length": 294010
+  },
+  {
+    "path": "docs\\Project\\Testing-Requirements.md",
+    "lastWriteUtc": "2026-08-20T23:37:06.5272736Z",
+    "length": 184704
+  },
+  {
+    "path": "docs\\Project\\TR-per-FR-Mapping.md",
+    "lastWriteUtc": "2026-08-20T23:37:06.5272736Z",
+    "length": 24224
+  },
+  {
+    "path": "docs\\Project\\Requirements-Matrix.md",
+    "lastWriteUtc": "2026-08-20T23:37:06.5272736Z",
+    "length": 110584
+  },
+  {
+    "path": "docs\\plans\\sessionlog-remediate-001.md",
+    "lastWriteUtc": "2026-08-20T23:30:36.2853178Z",
+    "length": 16344
+  },
+  {
+    "path": "src\\McpServer.Support.Mcp\\Program.cs",
+    "lastWriteUtc": "2026-08-19T12:56:24.8658539Z",
+    "length": 61849
+  },
+  {
+    "path": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+    "lastWriteUtc": "2026-08-19T21:14:11.0965974Z",
+    "length": 96962
+  }
+]

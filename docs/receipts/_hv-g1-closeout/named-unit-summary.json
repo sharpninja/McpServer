@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "elapsedMs": 117368,
+  "log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g1-closeout\\named-unit.log",
+  "filter": "FullyQualifiedName~SessionLogTriageStoreTests|FullyQualifiedName~SessionLogServiceTurnContextTests|FullyQualifiedName~SessionLogTurnContextValidatorTests|FullyQualifiedName~SessionLogControllerErrorTests",
+  "trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g1-closeout\\named-unit.trx"
+}

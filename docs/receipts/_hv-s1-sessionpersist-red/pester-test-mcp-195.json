@@ -1,0 +1,22 @@
+{
+  "TimestampUtc": "2026-08-21T00:18:00Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-persist",
+  "Branch": "sessionpersist/s1-red",
+  "Head": "20db61aa",
+  "Filter": "*TEST-MCP-195*",
+  "ElapsedSec": 9.489,
+  "TotalCount": 118,
+  "Selected": 4,
+  "PassedCount": 0,
+  "FailedCount": 4,
+  "SkippedCount": 0,
+  "Result": "Failed",
+  "Failed": [
+    "TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists (got SubmitAsync)",
+    "TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe (threw=true)",
+    "TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays (stderr Failsafe queue drain failed)",
+    "TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s (elapsed 8.04s > 3s)"
+  ],
+  "CsharpFilter": "AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse|Classify_SqliteBusy_IsNotBackendUnavailable",
+  "Csharp": { "Failed": 0, "Passed": 2, "Skipped": 0 }
+}

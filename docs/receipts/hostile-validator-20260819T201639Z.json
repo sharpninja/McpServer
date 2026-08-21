@@ -1,0 +1,109 @@
+{
+  "TimestampUtc": "2026-08-19T20:16:39Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260819T200847Z-hostile-closeout-s2",
+  "RequestId": "req-20260819T200847Z-001-hostile-resume-claims",
+  "TurnId": 42096,
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "Branch": "triage/closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1",
+  "Plugin": {
+    "name": "mcpserver",
+    "version": "1.95.0"
+  },
+  "MarkerHmacValid": true,
+  "HealthNonce": {
+    "statusCode": 200,
+    "nonce": "hv-closeout-s2-fd32a84cbdd24dadb6eb7122442f9c4c",
+    "echoed": true
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 18,
+    "FAIL": 4,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "FailList": [
+    "Per-provider apply-on-legacy-table tests are still incomplete. Sqlite MigrateAsync exists for missing columns and for already-present columns. SqlServer and Postgres remain source-grep only (COL_LENGTH / ADD COLUMN IF NOT EXISTS; 1 ms; documented source-checked here instead). Source contains is not apply-on-legacy-table AC. SqlServer/Postgres SessionLogTags CreateTable is not IF NOT EXISTS.",
+    "Worktree markdown projections still name 20260722214500 (Functional-Requirements.md 2 hits, Technical-Requirements.md 2 hits) and do not name 20260818205751. Native FR/TR ac-1 is retargeted. Prior FAIL 2 required regenerate markdown projections.",
+    "G2 closeout cannot complete. Hostile AGREE is required before done:true. This receipt is DISAGREE."
+  ],
+  "ClosedFromPriorFailList": [
+    "Sqlite 20260818205751 header-column adds are skip-if-present via pragma_table_info WHERE NOT EXISTS plus a passing already-has-columns MigrateAsync test.",
+    "Structured FR/TR ac-1 no longer names 20260722214500."
+  ],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "title": "Sqlite Up SELECT helper WHERE NOT EXISTS pragma_table_info" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "title": "Combined path skips ALTER when column exists; helper body always ALTERs if invoked" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "title": "SqliteSessionLogHeaderDdl + McpDbContext.RegisterSqliteSessionLogHeaderDdl" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "title": "Already-has-columns MigrateAsync test; unit test does not call RepairLegacy" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "title": "SqlServer/Postgres tests are COL_LENGTH / IF NOT EXISTS string asserts; no Skip" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "title": "Filter Passed 11 Failed 0 notExecuted 0 Exit 0" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "title": "BUG-TRIAGE-116/118 and PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "title": "Prior FAIL 1 sqlite idempotent skip-if-present closed" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "title": "Native FR/TR ac-1 retargeted; no 20260722214500 in structured AC" },
+    { "id": "A10", "surface": "A", "verdict": "FAIL", "title": "Prior FAIL 3 per-provider live apply still source-grep only" },
+    { "id": "A11", "surface": "A", "verdict": "FAIL", "title": "G2 closeout cannot complete" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "title": "Receipts re-verified" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "title": "Byrd phase-order not failed from timestamps" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "title": "MCP-only storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "title": "pwsh collectors; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "title": "Implementer claims match artifacts as worded" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "title": "FR-MCP-TRIAGESCHEMA-001 exists with AC" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "title": "TEST-MCP-TRIAGESCHEMA-001 exists" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "title": "Mapping row present" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "title": "Structured AC does not name 20260722214500" },
+    { "id": "C5", "surface": "C", "verdict": "FAIL", "title": "Markdown projections still name 20260722214500" },
+    { "id": "D1", "surface": "D", "verdict": "FAIL", "title": "G2 cannot close; FAIL list not empty" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "title": "TODOs not flipped; no merge" }
+  ],
+  "Todos": {
+    "BUG-TRIAGE-116": { "Done": false, "CompletedDate": null, "DoneSummary": null },
+    "BUG-TRIAGE-118": { "Done": false, "CompletedDate": null, "DoneSummary": null },
+    "PLAN-TRIAGELEFTOVER-001": { "Done": false, "CompletedDate": null, "DoneSummary": null }
+  },
+  "NativeRequirements": {
+    "FrId": "FR-MCP-TRIAGESCHEMA-001",
+    "FrAc1Contains20260722214500": false,
+    "FrAc1Contains20260818205751": true,
+    "TrId": "TR-MCP-TRIAGESCHEMA-001",
+    "TrAc1Contains20260722214500": false,
+    "TrAc1Contains20260818205751": true,
+    "TestId": "TEST-MCP-TRIAGESCHEMA-001",
+    "MappingFrId": "FR-MCP-TRIAGESCHEMA-001",
+    "MappingTrIds": "TR-MCP-TRIAGESCHEMA-001",
+    "MappingTestIds": "TEST-MCP-TRIAGESCHEMA-001"
+  },
+  "Tests": {
+    "Filter": "FullyQualifiedName~SessionLogSchemaGuardTests|FullyQualifiedName~SessionLogAgentSessionHeaderMigrationTests",
+    "ExitCode": 0,
+    "TrxTotal": 11,
+    "TrxExecuted": 11,
+    "TrxPassed": 11,
+    "TrxFailed": 0,
+    "TrxNotExecuted": 0,
+    "Console": "Total tests: 11 Passed: 11"
+  },
+  "Helper": {
+    "FunctionName": "mcp_add_sessionlog_text_column_if_missing",
+    "CallerHasPragmaWhereNotExists": true,
+    "HelperFunctionAlwaysIssuesAlter": true,
+    "HelperFunctionHasMissingColumnBranch": false,
+    "AlreadyHasColumnsTestPassed": true
+  },
+  "Ratings": {
+    "Accuracy": 9,
+    "Completeness": 8
+  },
+  "ReceiptMd": "docs/receipts/hostile-validator-20260819T201639Z.md",
+  "CollectorsDir": "docs/receipts/_hv-closeout-s2"
+}

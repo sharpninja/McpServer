@@ -1,0 +1,19 @@
+{
+  "MCP-SESSIONLOG-002": {
+    "Done": false,
+    "FunctionalRequirements": [
+      "FR-MCP-SESSIONLOGCTX-001"
+    ],
+    "TechnicalRequirements": [
+      "TR-MCP-SESSIONLOG-006"
+    ]
+  },
+  "PLAN-SESSIONLOGREMEDIATE-001": {
+    "Done": false,
+    "FunctionalRequirements": [
+      "FR-MCP-170",
+      "FR-MCP-171",
+      "FR-MCP-172"
+    ]
+  }
+}

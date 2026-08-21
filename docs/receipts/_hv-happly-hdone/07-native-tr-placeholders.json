@@ -1,0 +1,89 @@
+{
+  "http": 200,
+  "hits": [
+    {
+      "id": "[]",
+      "status": "pending",
+      "hasAlignNote": false,
+      "bodyPreview": "Placeholder requirement backfilled for TODO link []."
+    },
+    {
+      "id": "TR-02",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub; deferred in audit notes; plugin updateTr rejects non-canonical id."
+    },
+    {
+      "id": "TR-03",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-04",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-05",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-06",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-07",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-08",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-09",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-10",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-11",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-12",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-13",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    },
+    {
+      "id": "TR-14",
+      "status": "pending",
+      "hasAlignNote": true,
+      "bodyPreview": "Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending."
+    }
+  ]
+}

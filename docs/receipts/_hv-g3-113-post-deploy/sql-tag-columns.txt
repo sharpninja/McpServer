@@ -1,0 +1,8 @@
+Id
+WorkspaceId
+SessionLogId
+Tag
+DeleteReason
+DeletedAtUtc
+DeletedBy
+IsDeleted

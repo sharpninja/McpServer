@@ -1,0 +1,12 @@
+{
+  "ExitCode": 0,
+  "Failed": 0,
+  "Skipped": 0,
+  "Passed": 3,
+  "Total": 3,
+  "Filter": "FullyQualifiedName~SyncAgentPluginsVendorNameTests",
+  "Project": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\Build.Tests.csproj",
+  "TrxFiles": [
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g11-out\\SyncAgentPluginsVendorNameTests.trx"
+  ]
+}

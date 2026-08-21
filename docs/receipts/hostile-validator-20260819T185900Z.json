@@ -1,0 +1,60 @@
+{
+  "TimestampUtc": "2026-08-19T18:59:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "WorkspacePath": "F:\\GitHub\\McpServer",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "develop",
+  "GitSha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "AddProfile": {
+    "Executed": true,
+    "ProfileFileCountRead": 18,
+    "Excluded": ["add-profile.grok.md"]
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T185507Z-hostile-g8-120",
+    "requestId": "req-20260819T185507Z-001-hostile-g8-120-closeout",
+    "persistenceQuery": "sessionlog_query planFile=docs/plans/triage-cluster-002.md",
+    "turnStatus": "completed",
+    "turnId": 42073
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 12,
+    "FAIL": 3,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Claims": [
+    { "Id": "A1", "Surface": "A", "Verdict": "PASS", "Claim": "Cluster 131 named tests Failed 0 Skipped 0; degraded/queued and retryable envelope exist" },
+    { "Id": "A2", "Surface": "A", "Verdict": "FAIL", "Claim": "Live plugin Status / short beginTurn completes or classified retryable" },
+    { "Id": "A3", "Surface": "A", "Verdict": "PASS", "Claim": "Grok failsafe pendingCount is not itself proof 120 is unfixed; 503 drain is 159" },
+    { "Id": "A4", "Surface": "A", "Verdict": "PASS", "Claim": "BUG-TRIAGE-120 and PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "Id": "B1", "Surface": "B", "Verdict": "PASS", "Claim": "Byrd phase-order scored at closeout gate, not timestamps" },
+    { "Id": "B2", "Surface": "B", "Verdict": "PASS", "Claim": "Receipts re-verified" },
+    { "Id": "B3", "Surface": "B", "Verdict": "PASS", "Claim": "MCP-only storage" },
+    { "Id": "B4", "Surface": "B", "Verdict": "PASS", "Claim": "PowerShell only, no Python" },
+    { "Id": "B5", "Surface": "B", "Verdict": "PASS", "Claim": "Test counts match artifacts" },
+    { "Id": "C1", "Surface": "C", "Verdict": "PASS", "Claim": "Applicable FR/TR/TEST identified" },
+    { "Id": "C2", "Surface": "C", "Verdict": "PASS", "Claim": "Structured AC exist" },
+    { "Id": "C3", "Surface": "C", "Verdict": "PASS", "Claim": "AC are testable" },
+    { "Id": "C4", "Surface": "C", "Verdict": "FAIL", "Claim": "Tests cover persist-timeout AC" },
+    { "Id": "C5", "Surface": "C", "Verdict": "PASS", "Claim": "Reuse TRIAGEPLUGIN; no invented leftover FR required" },
+    { "Id": "D1", "Surface": "D", "Verdict": "FAIL", "Claim": "G8 closeout original AC met on develop" }
+  ],
+  "FailList": [
+    "A2: plugin workflow.sessionlog.beginTurn with valid planFile/todoId threw Invoke-McpPlugin timeout after 40.809s; not completed; not classified retryable/degraded/queued. Evidence docs/receipts/_hv-g8-120-06.json.",
+    "C4: TEST-MCP-TRIAGEPLUGIN-004 persist-timeout AC is not covered by a real SubmitAsync timeout. Pester injects flags. Live plugin path is unclassified 40s timeout.",
+    "D1: G8 120 closeout original AC is not met on current develop. Do not mark BUG-TRIAGE-120 or PLAN-TRIAGELEFTOVER-001 done."
+  ],
+  "UnknownSurfaces": [],
+  "EvidenceFiles": [
+    "docs/receipts/_hv-g8-120-01.json",
+    "docs/receipts/_hv-g8-120-02.json",
+    "docs/receipts/_hv-g8-120-pester.xml",
+    "docs/receipts/_hv-g8-120-dotnet.trx",
+    "docs/receipts/_hv-g8-120-04.json",
+    "docs/receipts/_hv-g8-120-05.json",
+    "docs/receipts/_hv-g8-120-06.json"
+  ]
+}

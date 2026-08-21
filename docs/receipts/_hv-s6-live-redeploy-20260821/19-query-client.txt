@@ -1,0 +1,72 @@
+type: result
+payload:
+  requestId: req-20260821T103606Z-d9ae
+  result:
+    totalCount: 231
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T103450Z-plugin-session
+      agentSessionId: 01a023d7-b8d5-7c90-9492-8e948d165698
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile S6 Nuke UpdateService live redeploy
+      model: grok
+      started: 2026-08-21T10:34:53.0000000+00:00
+      lastUpdated: 2026-08-21T10:35:01.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T103448Z-001-hostile-s6-nuke-redeploy
+        timestamp: 2026-08-21T10:34:53.0000000+00:00
+        queryText: Class 2 operator-directed Nuke UpdateService redeploy. Attack A1-A6 HMAC service version health gsudo GitVersion. Do not mark TODOs done. Do not commit.
+        queryTitle: Hostile S6 Nuke UpdateService live redeploy
+        response: Hostile S6 live Nuke redeploy review. Independent re-verify of A1-A6. Receipt docs/receipts/hostile-validator-TIMESTAMP.md. Did not mark TODOs done. Did not commit.
+        status: completed
+        planFile: docs/plans/sessionlog-remediate-001.md
+        todoId: PLAN-SESSIONLOGREMEDIATE-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: 'Plugin HMAC only: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available. Did not construct HMACSHA256.'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\marker-resolver.ps1
+        - order: 3
+          description: Re-read UpdateService log EXIT=0 duration 3:19 WSHealth 38/38
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-s6-updateservice-20260821T101630Z/update-service.log
+        - order: 4
+          description: FileVersionInfo live exe 1.4.30+ee89cd63; hash matches deployment manifest
+          type: edit
+          status: completed
+          filePath: C:\ProgramData\McpServer\McpServer.Support.Mcp.exe
+        - order: 5
+          description: 'Class 2 ops: score C N/A; D does not require leftover S6 product persist proofs'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/sessionlog-remediate-001.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-21T10:34:55.1903399+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile markdown files. Class 2 user-directed ops. Surface C N/A.'
+          category: observation
+        - timestamp: 2026-08-21T10:34:55.1903399+00:00
+          role: model
+          content: 'Decision: score this as Class 2 operator-directed Nuke redeploy. Consequence: do not FAIL missing FR/TR or leftover-27/163. S6 extra persist proofs are out of scope unless implementer claimed plan-step complete. Alternatives rejected: treating this as Class 1 Byrd product work.'
+          category: decision
+        - timestamp: 2026-08-21T10:34:55.1903399+00:00
+          role: model
+          content: 'Independent re-verify: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available, Get-Service Running, ProductVersion 1.4.30+ee89cd63, health 200 Healthy storage reachable, GitVersion.yml staged 1.4.30, no new commit, live exe SHA matches manifest generatedBy Build.UpdateService.cs.'
+          category: observation
+
+---
+

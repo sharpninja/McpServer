@@ -1,0 +1,41 @@
+type: result
+payload:
+  requestId: req-20260821T020916Z-c831
+  result:
+    id: BUG-TRIAGE-164
+    title: beginTurn persist returns HTTP 503 backend_unavailable while other MCP queries succeed
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - During hostile re-verify of PLAN-TODOALIGN-001 in TruckMate, workflow.sessionlog.beginTurn persist failed via client.SessionLog.SubmitAsync with HTTP 503 backend_unavailable. The plugin wrote failsafe .mcpServer/grok/failsafe/20260820T120206Z-session_submit-5a2a.yaml and left the local turn in_progress (req-20260820T120157Z-001-hostile-todoalign-reverify). Live TODO and requirements queries continued in the same window, so storage was not fully down. The named 12:02:06Z failsafe is no longer on disk (likely drained). TruckMate session-state for that session is verified at 12:02:03Z. A later session_submit failsafe 20260820T121631Z-session_submit-8e14.yaml remains queued. Server SaveChanges used by beginTurn persist maps the 5s storage budget to retryable backend_unavailable. Plugin persist writes the failsafe first, then treats timeout as degraded-queued but throws on 503.
+    - 'Triage group: triage-group-89dc230bf6213f27'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- workflow.sessionlog.beginTurn persist returns success (or an explicit degraded queued result) for a new turn when /health storage is reachable and TODO/requirements queries succeed in the same process.'
+    - '- A concurrent TODO or requirements query during beginTurn persist does not cause SubmitAsync to return HTTP 503 backend_unavailable when SQLite/storage is reachable.'
+    - '- If persist cannot finish within the session-log SaveChanges budget, the plugin retains the failsafe, keeps current-turn.yaml in_progress, and reports degraded queued without throwing, matching the existing timeout path, because backend_unavailable is retryable.'
+    - '- Failsafe drain later replays client.SessionLog.SubmitAsync and the turn is then returned by session-log history for that sessionId and requestId.'
+    - '- The original failsafe stamp 20260820T120206Z-session_submit-5a2a.yaml is not required to still exist; reproduce with a new beginTurn under concurrent MCP reads/writes.'
+    - 'Implementation notes:'
+    - '- Server path: SessionLogController.SubmitAsync -> ISessionLogService.SubmitAsync. StorageCommandBudgetExceededException and connection-class failures map to HTTP 503 backend_unavailable (TR-MCP-HEALTH-003 / StorageBackendUnavailability).'
+    - '- Plugin path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplPersistTurn writes the session_submit failsafe then Invoke-ReplRaw client.SessionLog.SubmitAsync. Only timeout|timed out|command_timeout returns degraded queued; HTTP 503 throws after the failsafe is written.'
+    - '- Do not treat this as a PLAN-TODOALIGN-001 product defect. Original workspace was F:\GitHub\TruckMate; this is MCP session-log persist under concurrent plugin traffic.'
+    - '- Prefer fixing false unavailability (busy/locked reachable SQLite classified as backend down) and aligning 503 persist handling with the timeout degrade path. Failsafe drain already treats backend_unavailable as abort-and-retry (TEST-MCP-FAILSAFE-001).'
+    implementationTasks: []
+    remaining: 'PLAN-SESSIONLOGREMEDIATE-001 S0: linked FR-MCP-170..172 / TR-MCP-PERSIST-001..004. Do not store-close without H-done AGREE.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-170
+    - FR-MCP-171
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PERSIST-001
+    - TR-MCP-PERSIST-002
+    - TR-MCP-PERSIST-003
+    - TR-MCP-PERSIST-004
+  deprecated: true
+
+---
+

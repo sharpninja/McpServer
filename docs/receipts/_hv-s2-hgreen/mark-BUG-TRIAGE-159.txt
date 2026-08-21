@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20260819T211724Z-9ace
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-159
+      title: Session-log SubmitAsync 503 backend_unavailable is treated as a failsafe record failure
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - workflow.sessionlog.appendDialog persists through Invoke-ReplPersistTurn to SessionLogController.SubmitAsync. SessionLogService wraps SaveChanges in a 5-second StorageCommandBudget; budget expiry and SQL connection or transient faults classify as retryable HTTP 503 backend_unavailable even when a later /health probe reports storage reachable. The plugin wrote a failsafe YAML record, then Invoke-ReplFailsafeDrainOnFirstSuccess latched and ran one pass that reported replayed=0 failed=1. Test-ReplFailsafeBackendUnreachable only aborts on transport markers and does not treat backend_unavailable or HTTP 503 as backend-unreachable, so the drain burns drainAttempts and does not retry in-process after storage answers again.
+      - 'Triage group: triage-group-82bc42ce8932e51e'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- A workflow.sessionlog.appendDialog or client.SessionLog.SubmitAsync that cannot persist within the storage budget or due to a transient provider fault still returns retryable HTTP 503 with code backend_unavailable and leaves a failsafe YAML record on disk.'
+      - '- Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as backend-unreachable: the drain aborts that pass, does not increment drainAttempts, and does not quarantine the record.'
+      - '- After GET /health reports storage reachable, an automatic or explicit failsafe drain replays the captured submit and sessionlog query returns the appended dialog for that sessionId and requestId.'
+      - '- A drain pass that fails only because the backend returned backend_unavailable can run again in the same plugin process after the backend answers; it is not permanently latched as completed with replayed=0 failed=1.'
+      - 'Implementation notes:'
+      - '- Inspect src/McpServer.Services/Services/SessionLogService.cs SaveChangesBudgetedAsync and src/McpServer.Storage/StorageCommandBudget.cs: the 5-second intake budget maps slowness on an otherwise up SQL host to StorageCommandBudgetExceededException, then McpErrorClassifier and StorageBackendUnavailability emit 503 backend_unavailable.'
+      - '- Inspect plugins/core/lib-ps/repl-invoke.ps1 Test-ReplFailsafeBackendUnreachable: add backend_unavailable and HTTP 503 to the abort markers so they match TR-MCP-REPL-016 transport-or-backend-down behavior.'
+      - '- Inspect Invoke-ReplFailsafeDrainOnFirstSuccess: it sets ReplFailsafeDrainCompleted before the pass, so a failed=1 replay never retries until a new process or workflow.failsafe.drain.'
+      - '- Do not treat a later /health storage=reachable result as proof the original SaveChanges would have succeeded; health is a connectivity probe, not a write.'
+      - '- Original report originated in F:\GitHub\TruckMate during EXEC-TODO-005 continuation; the defect is in McpServer session-log submit and plugin failsafe drain, not in InstallTruckMate.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

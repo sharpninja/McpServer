@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260819T190042Z-fc84
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-152
+      title: SessionLog SubmitAsync 500 on hook superseded-turn persist
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - TruckMate hostile-review beginTurn tried to persist superseded in-progress turn req-20260818T125444Z-prompt-ea5b via the plugin hook. Invoke-ReplSupersedeCurrentTurnIfInProgress calls client.SessionLog.SubmitAsync with a one-turn canceled payload and omits planFile/todoId. SessionLogService.SubmitAsync treats any turn not already in the session graph as new and runs ApplyTurnContext -> ValidateForNewEntry, which throws ArgumentException when those fields are omitted. SessionLogController.SubmitAsync does not catch ArgumentException (unlike UpsertTurnAsync), so GlobalExceptionHandlerMiddleware maps it to HTTP 500 internal_server_error. The typed client surfaces that as McpServerException; the REPL wraps it as method_invocation_error. The hook writes a session_submit failsafe YAML, logs the persist failure, and still opens the new dedicated review session.
+      - 'Triage group: triage-group-269f31b77b902ff3'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- beginTurn that supersedes an in-progress turn persists the old turn as canceled without client.SessionLog.SubmitAsync returning 500 or method_invocation_error'
+      - '- A superseded persist that is new to the session graph includes a valid planFile and todoId (current-turn cache values, or the exact sentinel None)'
+      - '- SessionLogController.SubmitAsync maps ArgumentException from planFile/todoId or identifier validation to HTTP 400, not 500 internal_server_error'
+      - '- A successful superseded persist does not leave a session_submit failsafe YAML'
+      - '- The new beginTurn still opens after a successful superseded persist'
+      - 'Implementation notes:'
+      - '- Failing hook path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress. It calls Invoke-ReplPersistTurn with Status canceled and no PlanFile/TodoId. New-McpPluginTurnUpsertRequest omits empty planFile/todoId.'
+      - '- Pass -PlanFile and -TodoId from Read-ReplCurrentTurnState (fallback None) on the superseded persist. beginTurn already stores those keys on the current-turn cache.'
+      - '- Catch ArgumentException in SessionLogController.SubmitAsync the same way UpsertTurnAsync already does, so a missing or invalid planFile/todoId is 400 instead of an unhandled 500 McpServerException.'
+      - '- Prefer client.SessionLog.UpsertTurnAsync for this incremental canceled update instead of a one-turn whole-session SubmitAsync payload.'
+      - '- Same-day failsafe receipts already show this signature: SubmitAsync canceled turn without planFile/todoId, method_invocation_error, internal_server_error.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

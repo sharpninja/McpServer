@@ -1,0 +1,28 @@
+{
+  "TimestampUtc": "2026-08-19T20:02:50Z",
+  "SessionId": "GrokCode-20260819T200246Z-hostile-s2-120-to",
+  "RequestId": "req-20260819T200246Z-001-hostile-s2-120-to",
+  "OpenSession": {
+    "Method": "workflow.sessionlog.openSession",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 2.165,
+    "StdOut": "",
+    "StdErr": "",
+    "TimeoutSecondsPassed": 20
+  },
+  "BeginTurn": {
+    "Method": "workflow.sessionlog.beginTurn",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 1.918,
+    "StdOut": "type: error\r\npayload:\r\n  code: command_timeout\r\n  message: Plugin command timed out after 1s.\r\n  retryable: true\r\n  details:\r\n    degraded: true\r\n    queued: true\r\n",
+    "StdErr": "type: error\r\npayload:\r\n  code: command_timeout\r\n  message: Plugin command timed out after 1s.\r\n  retryable: true\r\n  details:\r\n    degraded: true\r\n    queued: true\r\n",
+    "TimeoutSecondsPassed": 1
+  },
+  "BeginClassified": "classified-command-timeout",
+  "BeginHasCommandTimeout": true,
+  "BeginHasRetryableTrue": true,
+  "BeginHasDegraded": true,
+  "BeginHasUnclassifiedThrow": false
+}

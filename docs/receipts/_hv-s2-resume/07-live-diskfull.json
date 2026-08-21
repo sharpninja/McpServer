@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-08-19T20:28:15Z",
+  "GuardCode": "disk_full",
+  "GuardStatus": "failed",
+  "AfterExists": true,
+  "ParseOk": true,
+  "BeforeHash": "D9F5D0B5515C2B79FB88B63F6D4CFC040E6842E635D0B3E57F461B7C03113840",
+  "AfterHash": "D9F5D0B5515C2B79FB88B63F6D4CFC040E6842E635D0B3E57F461B7C03113840",
+  "HashUnchanged": true,
+  "AuditActions": 2,
+  "LastBuildStatus": "unknown",
+  "AfterRaw": "turnRequestId: req-20260819T000000Z-001-diskfull\r\nstatus: in_progress\r\nauditActions: 2\r\nauditDialog: 1\r\nlastBuildStatus: unknown\r\n",
+  "BeforeRaw": "turnRequestId: req-20260819T000000Z-001-diskfull\r\nstatus: in_progress\r\nauditActions: 2\r\nauditDialog: 1\r\nlastBuildStatus: unknown\r\n",
+  "GuardFnMutatesFile": false
+}

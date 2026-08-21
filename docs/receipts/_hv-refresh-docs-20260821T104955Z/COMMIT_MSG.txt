@@ -1,0 +1,10 @@
+docs: refresh 1.4.30, wiki export, session-log persist/sanitizer
+
+Align README and operator docs with live 1.4.30+ee89cd63 and net10.
+Document outbound session-log sanitization and incremental dialog persist.
+Export wiki requirements ZIP. Include GitVersion next-version 1.4.30 from
+Nuke UpdateService. Hostile AGREE docs/receipts/hostile-validator-20260821T111310Z.md.
+
+Signed-off-by: GrokCode <grok-4.6-xhigh@grok-build>
+
+Model-Confidence: 85

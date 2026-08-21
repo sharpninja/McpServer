@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260819T185857Z-e2cf
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-147
+      title: beginTurn supersede SubmitAsync 500s without planFile/todoId
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - During new-session beginTurn, Invoke-ReplSupersedeCurrentTurnIfInProgress persists the leftover in_progress turn (req-20260817T220643Z-prompt-dd78) via client.SessionLog.SubmitAsync with status canceled and no planFile/todoId. After session rotation or when that requestId is not already on the target session, SessionLogService.SubmitAsync treats it as a new turn and ApplyTurnContext/ValidateForNewEntry throws ArgumentException. SessionLogController.SubmitAsync does not map that to 400, so GlobalExceptionHandlerMiddleware returns HTTP 500 internal_server_error; the REPL wraps it as method_invocation_error (McpServerException). The plugin writes a failsafe YAML and continues, leaving the new turn in_progress locally. A same-session update that omits those fields would succeed; the failing case is a new-turn insert without the required context sentinels that the later beginTurn persist already supplies as None.
+      - 'Triage group: triage-group-9eaea8587e93a7dc'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.beginTurn that supersedes an in_progress current-turn persists that prior requestId without client.SessionLog.SubmitAsync returning method_invocation_error or internal_server_error, including after a new-session/sessionId rotation when the prior requestId is not yet on the target session.'
+      - '- A superseded/canceled persist of a turn that the server treats as new includes valid planFile and todoId (from current-turn cache, or the exact sentinel None) so ValidateForNewEntry does not throw.'
+      - '- After that beginTurn, the prior requestId is stored as a terminal canceled or superseded turn on the intended session, and a failsafe YAML is not required for this path.'
+      - '- SessionLog.SubmitAsync rejects missing or empty planFile/todoId on a new turn with HTTP 400 validation, not HTTP 500 internal_server_error.'
+      - 'Implementation notes:'
+      - '- Failing call site: plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress, which calls Invoke-ReplPersistTurn without PlanFile/TodoId. New-McpPluginTurnUpsertRequest omits empty fields, so the turn DTO arrives with null planFile/todoId.'
+      - '- Server path: SessionLogService.SubmitAsync new-turn branch calls ApplyTurnContext then SessionLogTurnContextValidator.ValidateForNewEntry; omitted fields throw ArgumentException. SessionLogController.SubmitAsync has no catch; GlobalExceptionHandlerMiddleware maps it to error internal_server_error.'
+      - '- The subsequent beginTurn persist already defaults blank planFile/todoId to None. Reuse current-turn cache values when present, otherwise pass None on the supersede persist so a new-session insert matches that contract.'
+      - '- Do not persist the leftover turn onto a rotated session as if it originated there unless that re-bind is intentional (TR-MCP-PLUGIN-012). If the prior turn belongs to the old sessionId, close it against that session; if it was never stored, insert it with None sentinels rather than failing the submit.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

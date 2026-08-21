@@ -1,0 +1,48 @@
+type: result
+payload:
+  requestId: req-20260820T125752Z-d3d6
+  result:
+    id: PLAN-QUADBRAIN-E1-001
+    title: 'QuadBrain revision Elaboration E1: rename core, migrations, LCA milestone'
+    section: QuadBrain
+    priority: high
+    done: false
+    note: 'PARTIAL 2026-07-20, commit 2769ef24 on develop (40 files, +13584/-898). LANDED: rename core across constants, DTOs, client library, stdio contract, Node plugin schema, mcps tool descriptors, config/brain-slots template, scripts, and docs; the system-prompt swap (Claude Code slot becomes Creativity with the generative prompt, Codex slot becomes Logic with the analytical prompt); party ids brain-slot:creativity and brain-slot:logic; wire rename leftOutput/rightOutput to creativityOutput/logicOutput; RenameQuadBrainRolesToCreativityLogic data migration for Sqlite, PostgreSQL, and SqlServer re-timestamped to 20260720170000 with Designer snapshots regenerated from the current model snapshots. Rescued from the F:/GitHub/mcpserver-quadbrain worktree where the three migrations were the only copy in existence. RECEIPTS: dotnet build McpServer.sln 0 errors 0 warnings; ./build.ps1 Test Succeeded 1658/259/33/20/62/810/50 passed, 0 failed, 0 skipped; ./build.ps1 ValidateTraceability Succeeded; QuadBrain integration 17/0/0 against real Ollama in 4m51s; repo-wide grep for old identifiers returns 0 outside the migration SQL that must reference them. STILL OPEN on this TODO: (1) party and signing-key re-seed, the migration updates PartyId on BrainSlotDefinitions but leaves trusted-party and signing-key rows keyed to brain-slot:left-hemisphere:signing:1 orphaned; (2) three-provider migration tests, only the SQLite Up path is covered by RenameQuadBrainRolesMigrationTests, PostgreSQL and SqlServer and the Down path are not; (3) LCA milestone review across all three providers; (4) design artifacts (ballot schema, containment design, readiness contract) which belong to C1-C3. Supersedes the 2026-07-11 audit line that recorded 0 percent complete.'
+    description:
+    - 'RUP Elaboration iteration E1: the architecturally significant, risk-retiring rename core.'
+    - 'Analysis and Design: revised Software Architecture Document (QUADBRAIN.md rewrite fixing the Left/Right inversion and the false in-sequence claim), ballot schema, tool-loop containment design, readiness-split contract.'
+    - 'Test discipline first (red): role-value and party-key migration tests on all three providers (data-migrating Up AND reconstructing Down), contract tests for renamed wire DTOs (creativityOutput/logicOutput on /aot/reconcile).'
+    - 'Implementation (green): role constants, temperatures (Logic 0.0, Creativity unset), retuned prompts (Arbiter explicit ethics mandate and return-only-the-user-facing-answer), client library, stdio and Node contracts, config/brain-slots template rewrite, trusted-party ids via DefaultPartyId (brain-slot:creativity, brain-slot:logic) with party and signing-key re-seed.'
+    - 'Breaking changes registered: /aot/reconcile body, role string values, party ids. Historical audit rows keep old role strings as record.'
+    - 'Milestone Lifecycle Architecture (LCA): renamed quad runs against migrated stores on SQLite, PostgreSQL, and SQL Server with the full suite at 100 percent, zero skips.'
+    technicalDetails:
+    - 'Blast radius verified 2026-07-02: roughly 34 files / 150 refs; 48 role-name occurrences across 9 src files plus tests.'
+    - Provider migration tests extend the existing three-engine harness (SQLite in-memory, EphemeralPostgresFixture, LocalDB 15+).
+    - 'Byrd gate: red before green per slice; 100 percent green, zero skips, to exit.'
+    implementationTasks:
+    - task: 'Design artifacts: QUADBRAIN.md rewrite draft, ballot schema, containment design, readiness contract'
+      done: false
+    - task: 'Red: three-provider role-value and party-key migration tests (Up and Down)'
+      done: false
+    - task: 'Red: renamed wire DTO contract tests'
+      done: false
+    - task: 'Green: rename core across constants, prompts, temps, DTOs, client, stdio/Node, config template'
+      done: false
+    - task: 'Green: party and signing-key re-seed with migrations on all three providers'
+      done: false
+    - task: 'LCA review: full suite green on all providers, contracts frozen'
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): rename core and provider migrations shipped (Sqlite/SqlServer/Postgres 20260720170000_RenameQuadBrainRolesToCreativityLogic; tests RenameQuadBrainRolesMigrationTests). 2026-07-11 0% rename claim is false. Remaining: LCA evidence that migrated stores are green on all three providers in the target environments. Do not store-close.'
+    dependsOn:
+    - PLAN-QUADBRAIN-I1-001
+    functionalRequirements:
+    - FR-MCP-129
+    - FR-MCP-134
+    technicalRequirements:
+    - TR-MCP-QUAD-001
+    - TR-MCP-QUAD-003
+    - TR-MCP-QUAD-005
+  deprecated: true
+
+---
+

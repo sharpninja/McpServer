@@ -1,0 +1,12 @@
+{
+  "probe": "begin_turn omit required keys",
+  "result": "Failed to call sessionlog_begin_turn: An error occurred invoking 'sessionlog_begin_turn'.",
+  "schemaRequired": [
+    "agent",
+    "sessionId",
+    "requestId",
+    "workspacePath",
+    "planFile",
+    "todoId"
+  ]
+}

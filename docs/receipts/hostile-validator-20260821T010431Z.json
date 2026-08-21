@@ -1,0 +1,111 @@
+{
+  "TimestampUtc": "2026-08-21T01:04:31.910Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "WorkClass": "class2-operator-ops-plugin-hmac",
+  "SurfaceC": "N/A",
+  "SurfaceD": "N/A",
+  "SessionId": "GrokCode-20260821T005742Z-hostile-hmac-plugin",
+  "RequestId": "req-20260821T005742Z-001-hostile-plugin-hmac",
+  "PluginVersion": "1.97.0",
+  "PluginVersionSource": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "ValidatorDidNotRollHmac": true,
+  "ValidatorPluginRerun": {
+    "utc": "2026-08-21T00:57:42.790Z",
+    "script": "docs/receipts/_hv-hmac-plugin-validate.ps1",
+    "status": "available",
+    "TestMarkerSignature": true,
+    "InvokeFullBootstrap": true
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Implementer used plugin Test-MarkerSignature and Invoke-FullBootstrap (and/or Invoke-McpPlugin Status), not a hand-rolled HMACSHA256 canonical builder."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Plugin reports signature valid and bootstrap true this turn (validator re-ran plugin functions)."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Implementer conceded the prior homemade HMAC false-negative."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "N/A",
+      "claim": "Byrd v4 (class 2 ops)."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Receipts present for homemade false-negative and plugin trust."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "MCP-only storage; no TODO.yaml / session-log file edits."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "pwsh only; no python.exe."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Honesty: conceded homemade HMAC false-negative."
+    },
+    {
+      "id": "C",
+      "surface": "C",
+      "verdict": "N/A",
+      "claim": "User-directed ops."
+    },
+    {
+      "id": "D",
+      "surface": "D",
+      "verdict": "N/A",
+      "claim": "PLAN not claimed done."
+    }
+  ],
+  "PassCount": 7,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 3,
+  "FailList": [],
+  "UnknownList": [],
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 96,
+  "CompletenessRating": 94,
+  "Evidence": {
+    "homemadeUtc": "2026-08-20T23:46:01.3485936Z",
+    "homemadeSignatureOk": false,
+    "homemadeComputed": "09A02381566BF7AEEF61607C947698916DCCEB27C63B336C835D09A2B1ADC0C8",
+    "homemadeExpected": "64512C73B38D93CA862A1633182941E39A7AF414A9FE6605598E89D5B22915DA",
+    "pluginThisTurnUtc": "2026-08-21T00:54:59.0247327Z",
+    "pluginThisTurnTestMarkerSignature": true,
+    "pluginThisTurnInvokeFullBootstrap": true,
+    "pluginThisTurnRolledOwnHmac": false,
+    "homemadeArtifact": "docs/receipts/_hv-hmac-plugin-only/homemade-hmac-tool-result.jsonl",
+    "pluginArtifact": "docs/receipts/_hv-hmac-plugin-only/plugin-this-turn-tool-result.jsonl",
+    "chatHistory": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\chat_history.jsonl"
+  }
+}

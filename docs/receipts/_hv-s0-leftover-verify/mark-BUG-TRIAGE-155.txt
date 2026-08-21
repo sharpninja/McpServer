@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T190227Z-84ca
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-155
+      title: beginTurn superseded persist omits planFile/todoId and SubmitAsync 500s
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Grok hook beginTurn tried to persist superseded turn req-20260818T165719Z-prompt-4acc as canceled via SubmitAsync. Invoke-ReplSupersedeCurrentTurnIfInProgress calls Invoke-ReplPersistTurn without PlanFile/TodoId. SessionLogService.ApplyTurnContext then ValidateForNewEntry rejects omitted/empty planFile/todoId with ArgumentException, which the client surfaces as internal_server_error. Failsafe 20260818T170040Z-session_submit-ffb8.yaml was written and later quarantined; dedicated session GrokCode-20260818T170033Z-hostile-impl-exit still opened because new beginTurn defaults those fields to None. Same root cause as the 2026-08-18 sessionlog-backend-unavailable receipt.
+      - 'Triage group: triage-group-0b29251ccb550bdf'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.beginTurn that supersedes an in-progress hook turn never persisted on the server completes without SessionLog SubmitAsync internal_server_error'
+      - '- The superseded turn is stored as canceled (or superseded) with planFile and todoId defaulted to None when the hook cache omitted them'
+      - '- No session_submit failsafe is written for that superseded persist'
+      - '- The replacement beginTurn still opens and persists the new requestId'
+      - 'Implementation notes:'
+      - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress persists status canceled without PlanFile/TodoId; Invoke-WorkflowBeginTurn already defaults blank values to None for the new turn'
+      - '- SessionLogService.SubmitAsync treats an unseen requestId as a new entry and ApplyTurnContext requires both fields; existing-turn updates already use ValidateIfSupplied'
+      - '- Prefer defaulting omitted planFile/todoId to None on the superseded persist (plugin and/or new-turn server path). Do not treat this as a storage outage'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

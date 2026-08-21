@@ -1,0 +1,7 @@
+ .gitignore                              |  5 [32m++[m[31m-[m
+ docs/Project/Functional-Requirements.md | 64 [32m+++++++++++++++++++++++++++++++++[m
+ docs/Project/Requirements-Matrix.md     | 24 [32m+++++++++++++[m
+ docs/Project/TR-per-FR-Mapping.md       |  8 [32m+++++[m
+ docs/Project/Technical-Requirements.md  | 59 [32m+++++++++++++++++++++++++++++[m[31m-[m
+ docs/Project/Testing-Requirements.md    | 16 [32m+++++++++[m
+ 6 files changed, 174 insertions(+), 2 deletions(-)

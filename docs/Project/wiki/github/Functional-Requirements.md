@@ -1169,6 +1169,38 @@ Scope: layer-1+
 A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.
 Scope: layer-1+
 
+## FR-MCP-170 Incremental session-log dialog persist
+
+Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.
+
+Acceptance Criteria:
+- After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.
+- Server turn GET then contains the appended dialog items.
+- Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.
+- Missing turn is classified not-found, retryable false; failsafe is not used for that 404.
+Scope: layer-1+
+
+## FR-MCP-171 Retryable session-log persist degrade-queue
+
+When client.SessionLog.SubmitAsync (beginTurn, updateTurn, completeTurn, or legacy upsert) returns timeout, HTTP 503, or backend_unavailable, the plugin SHALL retain the session_submit failsafe, keep current-turn.yaml in_progress, SHALL NOT throw, and SHALL report degraded/queued using the same contract as the existing timeout path.
+
+Acceptance Criteria:
+- HTTP 503 backend_unavailable and timeout produce the same degrade-queue contract (persisted false, degraded true, queued true, failsafe retained).
+- Failsafe file remains until a later successful persist or drain replay.
+- After storage recovers, query shows the turn.
+Scope: layer-1+
+
+## FR-MCP-172 Failsafe drain does not poison successful plugin calls
+
+A successful workflow.requirements.getFr, getTr, or sessionlog queryHistory SHALL NOT be delayed by a 30s SessionLog.SubmitAsync drain timeout, SHALL NOT print Failsafe queue drain failed for timeout or HTTP 503, SHALL NOT latch drain completed, and a later drain after storage answers SHALL replay the queued record.
+
+Acceptance Criteria:
+- getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503.
+- stderr has no Failsafe queue drain failed for that class.
+- ReplFailsafeDrainCompleted stays false on abort.
+- Next drain in-process replays after a stubbed success.
+Scope: layer-1+
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -1200,6 +1232,18 @@ Scope: layer-1+
 - [ ] Generated DocFX files appear in platform manifests and stale generated files are removed on the next successful export.
 - [ ] Workspace traversal, absolute external paths, and reparse-point escapes are rejected before command execution or file copy.
 - [ ] Invalid configuration, process timeout, non-zero exit, or missing output fails the export without publishing a partial wiki artifact.
+
+## FR-MCP-FAILSAFE-001 Failsafe drain treats 503 backend_unavailable as backend-down and can retry
+
+Session-log persist that hits the storage budget or a transient provider fault stays retryable HTTP 503 backend_unavailable with failsafe on disk. Drain aborts without incrementing drainAttempts or quarantining. After storage answers, a later drain in the same process can replay. BUG-TRIAGE-159.
+- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+- [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+- [ ] Drain does not latch failed=1 as permanently completed in-process
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+- [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+- [ ] Drain does not latch failed=1 as permanently completed in-process
 
 ## FR-MCP-FILETOOLS-001 Global repository discovery tools
 
@@ -1784,6 +1828,30 @@ Scope: layer-1+
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
 
+## FR-MCP-SESSIONATTR-001 Session-log foreign filesModified and commits are rejected or marked
+
+A session-log turn for workspace W never lists filesModified or commit artifacts that resolve outside W unless the turn explicitly marks them as cross-workspace or foreign-repo. Forward-only. BUG-TRIAGE-108.
+- [ ] filesModified outside workspace root rejected or require foreign marker
+- [ ] commit SHA/message/files from another repo require foreign marker or redirect
+- [ ] Completeness audits can filter foreign artifacts
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] filesModified outside workspace root rejected or require foreign marker
+- [ ] commit SHA/message/files from another repo require foreign marker or redirect
+- [ ] Completeness audits can filter foreign artifacts
+
+## FR-MCP-SESSIONEND-001 SessionEnd emits empty object when cache cannot be resolved
+
+SessionEnd and pre-compact emit {} and exit 0 when Resolve-McpCacheDir cannot find a workspace. When cwd, CLAUDE_PROJECT_DIR, or hook payload identifies a workspace, flush that cache. No-op is not a hook failure. BUG-TRIAGE-140. FR-MCP-115.
+- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+- [ ] identifiable workspace still flushes .mcpServer/<agent>
+- [ ] no pending cache is a silent no-op
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+- [ ] identifiable workspace still flushes .mcpServer/<agent>
+- [ ] no pending cache is a silent no-op
+
 ## FR-MCP-SESSIONLOGCTX-001 Session turns record current plan file and MCP TODO id
 
 Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.
@@ -1808,6 +1876,18 @@ Scope: layer-1+
 - [ ] Filtering, total count, ordering, offset, and limit are computed from raw data and remain unchanged after redaction.
 - [ ] Federated and stdio read surfaces apply the same sanitization behavior.
 
+## FR-MCP-STRICTCOUNT-001 updateTurn accepts omitted empty or scalar tags and contextList under StrictMode
+
+workflow.sessionlog.updateTurn succeeds when tags or contextList is omitted, empty, or a single scalar. Invoke-McpPlugin exits 0. No StrictMode Count throw. Success stdout stays silent. BUG-TRIAGE-158.
+- [ ] omitted/empty/scalar tags and contextList persist
+- [ ] exit 0 and no Count cannot be found
+- [ ] appendActions/updateTurn emit no boolean on success
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] omitted/empty/scalar tags and contextList persist
+- [ ] exit 0 and no Count cannot be found
+- [ ] appendActions/updateTurn emit no boolean on success
+
 ## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
 
 The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured, capturing transaction id, event, reason, status, manifest and encrypted-body hashes, diffgram id, and party ids; logging is best-effort and SHALL never block or fail the commit path on sink errors.
@@ -1817,6 +1897,18 @@ Scope: layer-1+
 - [x] The Parseable sink POSTs a flat JSON batch to the ingest endpoint with the X-P-Stream header and basic auth.
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
+
+## FR-MCP-TEMPVOL-001 Plugin wrappers align TEMP to the workspace volume
+
+Plugin session-start and wrapper entrypoints set TEMP and TMP to a writable directory on the workspace volume when they differ from the target volume. Prompt-template guidance stays. Failed replacement moves must not look like success. Do not patch PSGallery PowerShell.MCP. BUG-TRIAGE-117.
+- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive
+- [ ] templates still document same-volume TEMP and verify-after-edit
+- [ ] failed move is a visible error
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive
+- [ ] templates still document same-volume TEMP and verify-after-edit
+- [ ] failed move is a visible error
 
 ## FR-MCP-TODO-CLOSE-001 Close TODO item by ID
 
@@ -1896,6 +1988,18 @@ Scope: layer-1+
 
 Transcript ingestion must accept transcript sources whose per-file size, per-JSONL-line size, record count, upload request size, and expanded archive size are bounded only by Int32.MaxValue (2,147,483,647). Operators ingesting large agent transcripts (notably Claude Code JSONL, where a single line can carry a full tool result) must not be rejected by the previous 256 MiB per-file, 8 MiB per-line, 2,000,000-record, 512 MiB request, or 2 GiB expanded-content ceilings. Guards that defend against hostile archives rather than large transcripts are retained unchanged: archive entry count, compression ratio, ZIP symlink rejection, and path-traversal rejection. Supersedes the ceiling values asserted by FR-MCP-TRANSCRIPT-002 and TR-MCP-TRANSCRIPT-001; the bounded-reader obligation itself is unchanged, only the bound values move.
 Scope: layer-1+
+
+## FR-MCP-TRANSCRIPT-SEARCH-001 Codex transcript adapter handles tool_search and inter_agent records
+
+Ingesting Codex JSONL with inter_agent_communication_metadata, tool_search_call, and tool_search_output produces zero unknown diagnostics for those types, emits paired tool events or a documented info skip, and a successful Persist=true ingest deletes importRecovery with persisted=true degraded=false. BUG-TRIAGE-122.
+- [ ] inter_agent_communication_metadata is normalized or documented info skip
+- [ ] tool_search_call/output become paired events with call_id/name/status
+- [ ] successful persist deletes importRecovery
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] inter_agent_communication_metadata is normalized or documented info skip
+- [ ] tool_search_call/output become paired events with call_id/name/status
+- [ ] successful persist deletes importRecovery
 
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
@@ -2068,6 +2172,18 @@ Scope: layer-1+
 Same graph exports PlantUML use-case syntax. ACs AC-014-1 through AC-014-3.
 Scope: layer-1+
 
+## FR-MCP-VERIFYWRAP-001 Code-verify reports disk-full and honors timeout without hanging
+
+code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.
+- [ ] IOException disk full is typed and current-turn remains valid
+- [ ] wrapper returns or fails within documented timeout
+- [ ] no indefinite in-process hang after child dotnet exits
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] IOException disk full is typed and current-turn remains valid
+- [ ] wrapper returns or fails within documented timeout
+- [ ] no indefinite in-process hang after child dotnet exits
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.
@@ -2096,6 +2212,18 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-MCP-WORKSPACE-LAYER-001.
 Scope: layer-1+
+
+## FR-MCP-XAGENT-001 CompleteTurn refuses cross-sourceType current-turn rebind
+
+When current-turn.yaml sessionId prefix differs from the active agent (Codex vs GrokCode vs ClaudeCode), CompleteTurn does not SubmitAsync as a new turn on the other session and does not return internal_server_error. Same-agent session rotation still rebinds. CompleteTurn never closes a different requestId. Empty title omits per TR-MCP-REPL-015. BUG-TRIAGE-106, BUG-TRIAGE-142.
+- [ ] cross-sourceType mismatch refused or restored to originating cache
+- [ ] same-agent rotation can complete without 500
+- [ ] CompleteTurn does not hijack a concurrent other requestId
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] cross-sourceType mismatch refused or restored to originating cache
+- [ ] same-agent rotation can complete without 500
+- [ ] CompleteTurn does not hijack a concurrent other requestId
 
 ## FR-SUPPORT-010 MCP Context Unification
 

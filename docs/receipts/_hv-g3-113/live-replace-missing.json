@@ -1,0 +1,6 @@
+{
+  "ok": false,
+  "statusCode": 404,
+  "error": "Response status code does not indicate success: 404 (Not Found).",
+  "body": "{\"type\":\"https://httpstatuses.io/404\",\"title\":\"not_found\",\"status\":404,\"detail\":\"Turn not found: GrokCode/GrokCode-20260819T184428Z-hv113tags/req-20260819T184513Z-missing-turn\",\"code\":\"not_found\",\"message\":\"Turn not found: GrokCode/GrokCode-20260819T184428Z-hv113tags/req-20260819T184513Z-missing-turn\",\"retryable\":false,\"details\":{\"reason\":\"not_found\"}}"
+}

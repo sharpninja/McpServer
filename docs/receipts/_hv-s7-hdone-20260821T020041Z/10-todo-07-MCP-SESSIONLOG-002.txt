@@ -1,0 +1,41 @@
+type: result
+payload:
+  requestId: req-20260821T020054Z-e2bd
+  result:
+    id: MCP-SESSIONLOG-002
+    title: Add required session-turn planFile and todoId fields with None sentinel and backfill
+    section: Session Logging
+    priority: high
+    done: false
+    estimate: multi-slice
+    note: Tasks flipped 20260812T190600Z after persist-query 46/0/0, backfill 10/0/0, tests 247/0/0. Hostile 185650Z AGREE. Done remains false until operator wants store-close.
+    description:
+    - 'Add two required scalar fields on every session-log turn: planFile (current plan file being worked) and todoId (MCP TODO id being worked).'
+    - New turn creates, submits, beginTurn, and replace-turn payloads MUST include both fields. Use the literal sentinel None when there is no active plan file or no active MCP TODO. Null, empty string, and omitted fields are invalid for new entries.
+    - planFile accepts a workspace-relative path, an exact absolute path, or a ~/ home-relative path. Backfill existing turns from turn contents and agent history under ~/.grok, ~/.claude, ~/.codex, and ~/.cursor. Extract those plan paths and canonical MCP TODO ids. If no confident value is found, persist None. Do not invent ids or paths.
+    technicalDetails: &o0 []
+    implementationTasks:
+    - task: Persist FR/TR/TEST and mapping for required planFile/todoId turn fields and backfill.
+      done: true
+    - task: 'Add red tests for DTO/entity/tool validation: required fields, None sentinel, reject null/empty/omit on new entries.'
+      done: true
+    - task: Add planFile and todoId to UnifiedRequestEntryDto, SessionLogTurnEntity, client models, OpenAPI, MCP tool schemas, and plugin wrappers.
+      done: true
+    - task: Add EF migration for both columns as required strings with default None for existing rows, then backfill from turn contents.
+      done: true
+    - task: Implement backfill scanner that maps turn text/paths to plan files and canonical TODO ids; leave None when uncertain.
+      done: true
+    - task: Expose fields on sessionlog_begin_turn, sessionlog_submit, sessionlog_replace_turn, query/get results, and plugin beginTurn/updateTurn.
+      done: true
+    - task: Add tests proving new entries without both fields fail and backfilled historical rows always have None or a extracted value.
+      done: true
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): in-repo slices complete (planFile/todoId None sentinel). Live UpdateService was a plan non-goal. Hostile 185650Z AGREE on prior note. This audit does not store-close. Do not set done:true here.'
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-MCP-SESSIONLOGCTX-001
+    technicalRequirements:
+    - TR-MCP-SESSIONLOG-006
+  deprecated: true
+
+---
+

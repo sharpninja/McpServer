@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T210233Z-fb3f
+  result:
+    id: FR-MCP-SESSIONEND-001
+    title: SessionEnd emits empty object when cache cannot be resolved
+    description: >-
+      SessionEnd and pre-compact emit {} and exit 0 when Resolve-McpCacheDir cannot find a workspace. When cwd, CLAUDE_PROJECT_DIR, or hook payload identifies a workspace, flush that cache. No-op is not a hook failure. BUG-TRIAGE-140. FR-MCP-115.
+
+      - [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+
+      - [ ] identifiable workspace still flushes .mcpServer/<agent>
+
+      - [ ] no pending cache is a silent no-op
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+      isSatisfied: false
+    - id: ac-2
+      text: identifiable workspace still flushes .mcpServer/<agent>
+      isSatisfied: false
+    - id: ac-3
+      text: no pending cache is a silent no-op
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T21:02:34.7173257+00:00
+    updatedAt: 2026-08-19T21:02:34.7174306+00:00
+  deprecated: true
+
+---
+
+

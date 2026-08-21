@@ -1,0 +1,96 @@
+{
+  "TimestampUtc": "2026-08-19T19:39:21Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260819T193418Z-hostile-closeout",
+  "RequestId": "req-20260819T193418Z-001-hostile-s1-closeout",
+  "TurnId": 42087,
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "Branch": "triage/closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": "add-profile.grok.md"
+  },
+  "WorkClass": "class 1 project implementation",
+  "Plugin": {
+    "name": "mcpserver-grok-plugin",
+    "version": "1.95.0"
+  },
+  "MarkerHmacValid": true,
+  "HealthNonceEchoed": true,
+  "HealthNonce": "hv-closeout-8586dffc52564e30a57d1f8f049005c1",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 14,
+    "FAIL": 5,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "PassList": ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "C1", "C2", "C3", "D2"],
+  "FailList": [
+    {
+      "id": "A6",
+      "summary": "Sqlite 20260818205751 header-column adds are not idempotent; AddNullableTextColumnIfMissing is a bare ALTER TABLE ADD COLUMN."
+    },
+    {
+      "id": "A7",
+      "summary": "FR ac-1 and TR ac-1 still cite 20260722214500; handwritten migration still has no [Migration]/[DbContext]."
+    },
+    {
+      "id": "A8",
+      "summary": "Per-provider apply-on-legacy-table tests incomplete; SqlServer and Postgres are source-grep only."
+    },
+    {
+      "id": "C4",
+      "summary": "Structured FR/TR AC still name 20260722214500_AddAgentSessionHeaderFields as the apply vehicle."
+    },
+    {
+      "id": "D1",
+      "summary": "G2 S1 closeout FAIL list items 1/2/3 remain; cannot mark 116/118 done."
+    }
+  ],
+  "Tests": {
+    "Filter": "FullyQualifiedName~SessionLogSchemaGuardTests|FullyQualifiedName~SessionLogAgentSessionHeaderMigrationTests",
+    "ExitCode": 0,
+    "TrxTotal": 10,
+    "TrxExecuted": 10,
+    "TrxPassed": 10,
+    "TrxFailed": 0,
+    "TrxNotExecuted": 0,
+    "TrxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-closeout-s1\\SessionLogCloseoutFilter.trx"
+  },
+  "Todos": {
+    "BUG-TRIAGE-116": false,
+    "BUG-TRIAGE-118": false,
+    "PLAN-TRIAGELEFTOVER-001": false
+  },
+  "Requirements": {
+    "FrId": "FR-MCP-TRIAGESCHEMA-001",
+    "TrId": "TR-MCP-TRIAGESCHEMA-001",
+    "TestId": "TEST-MCP-TRIAGESCHEMA-001",
+    "FrAcHas20260722214500": true,
+    "TrAcHas20260722214500": true,
+    "TestAcHas20260722214500": false,
+    "FrBodyHasProviderIds": true,
+    "TrBodyHasProviderIds": true
+  },
+  "DidNotMarkTodosDone": true,
+  "DidNotMerge": true,
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260819T193921Z.md",
+  "Accuracy": "9/10",
+  "Completeness": "8/10",
+  "Persistence": {
+    "sessionId": "GrokCode-20260819T193418Z-hostile-closeout",
+    "requestId": "req-20260819T193418Z-001-hostile-s1-closeout",
+    "turnId": 42087,
+    "queryTotalCount": 1,
+    "turnStatus": "completed",
+    "actionCount": 8,
+    "dialogCount": 4,
+    "designDecisionCount": 3,
+    "proofPath": "docs/receipts/_hv-closeout-s1/session-query-proof.json"
+  }
+}

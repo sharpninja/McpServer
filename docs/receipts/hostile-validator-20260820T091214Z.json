@@ -1,0 +1,98 @@
+{
+  "TimestampUtc": "2026-08-20T09:12:14Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": {
+    "class1": "leftover-27 S7 H-done PLAN-TRIAGELEFTOVER-001",
+    "class2": "hourly continuation timer 01a01e675dca",
+    "scoreCAndByrdOn": "class1"
+  },
+  "ActivePlan": "docs/plans/triage-cluster-002.md S7 Exit",
+  "RequirementIds": [
+    "FR-MCP-SESSIONATTR-001",
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-XAGENT-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "FR-MCP-TEMPVOL-001",
+    "FR-MCP-TRIAGESTORE-001"
+  ],
+  "SessionId": "GrokCode-20260820T090708Z-hdone-leftover27",
+  "RequestId": "req-20260820T090708Z-001-h-done-leftover-27",
+  "TurnId": 42215,
+  "HealthNonceSent": "0a934c88d849410e8896748b540bcfd9",
+  "HealthNonceMatch": true,
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitBranch": "develop",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 22,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "FailList": [
+    "D4 S7 Exit DoD requires SyncAgentPlugins. Installed grok/codex plugins do not match leftover plugins/core after 55a2774d and 9c7c3ec3. 107 AGREE 184513Z is not a substitute."
+  ],
+  "UnknownList": [],
+  "NaList": ["C class-2 hourly scheduler 01a01e675dca"],
+  "Claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "claim": "All 27 leftover BUG-TRIAGE IDs Done=true with AGREE receipt in DoneSummary or Note"},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "claim": "PLAN-TRIAGELEFTOVER-001 Done=false"},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "claim": "ValidateTraceability Succeeded findings=0"},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "claim": "Named unit filter Passed 34 Failed 0 Skipped 0"},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "claim": "CodexTranscriptAdapterCoverageTests Passed 12 Failed 0 Skipped 0"},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "claim": "develop HEAD 20db61aa; live health 1.4.29+20db61aa; no new UpdateService this turn"},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "claim": "Hourly scheduler 01a01e675dca prompt Continue current plan to completion interval 1h nextFireAt 2026-08-20T10:01:25Z"},
+    {"id": "A8", "surface": "A", "verdict": "PASS", "claim": "Facts: SyncAgentPlugins not re-run this S7 turn; 107 AGREE 184513Z exists. Sufficiency for S7 is D4."},
+    {"id": "B1", "surface": "B", "verdict": "PASS", "claim": "Byrd v4 class 1; inter-phase AGREE exists; no timestamp archaeology FAIL"},
+    {"id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified on disk"},
+    {"id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO and session storage"},
+    {"id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only, no Python"},
+    {"id": "B5", "surface": "B", "verdict": "PASS", "claim": "Honesty: implementer disclosed no SyncAgentPlugins this turn"},
+    {"id": "C1", "surface": "C", "verdict": "PASS", "claim": "Leftover FRs exist with structured AC"},
+    {"id": "C2", "surface": "C", "verdict": "PASS", "claim": "Leftover FR/TR/TEST mappings 1:1 plus TRIAGESTORE tests"},
+    {"id": "C3", "surface": "C", "verdict": "PASS", "claim": "Named slice tests plus ValidateTraceability cover leftover AC"},
+    {"id": "C2ops", "surface": "C", "verdict": "N/A", "claim": "Class 2 hourly scheduler is not FR/TR work"},
+    {"id": "D1", "surface": "D", "verdict": "PASS", "claim": "Leftover-27 Done=true with AGREE receipts; 160/161/162 excluded"},
+    {"id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN still Done=false"},
+    {"id": "D3", "surface": "D", "verdict": "PASS", "claim": "Named C# slice suites this turn Failed 0 Skipped 0"},
+    {"id": "D4", "surface": "D", "verdict": "FAIL", "claim": "S7 SyncAgentPlugins unmet; installed plugins drifted from leftover S2/S5 core"},
+    {"id": "D5", "surface": "D", "verdict": "PASS", "claim": "UpdateService not required this turn; live already 20db61aa"},
+    {"id": "D6", "surface": "D", "verdict": "PASS", "claim": "BUG-TRIAGE-160/161/162 remain open and outside leftover-27"}
+  ],
+  "Evidence": {
+    "leftover27Done": true,
+    "openLeftover27": [],
+    "planDone": false,
+    "otherOpenBugTriageOutsideLeftover27": ["BUG-TRIAGE-160", "BUG-TRIAGE-161", "BUG-TRIAGE-162"],
+    "a4": "Passed 34 Failed 0 Skipped 0",
+    "a5": "Passed 12 Failed 0 Skipped 0",
+    "validateTraceability": "Succeeded findings=0 TRACE_EXIT=0",
+    "schedulerId": "01a01e675dca",
+    "schedulerNextFireAt": "2026-08-20T10:01:25.834694700+00:00",
+    "pluginCoreMerge": "55a2774d",
+    "s5PluginCommit": "9c7c3ec3",
+    "lastSyncReceipt": "docs/receipts/_deploy-sync-plugins-20260818T180600Z.txt",
+    "corePluginHookSha256": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+    "grokPluginHookSha256": "602316F539C8D641900890AC8DA54F2C624F7F932BD82DF5135E9F9C3ED1F3C3",
+    "codexPluginHookSha256": "2585C64300DB2F0E3CD4770DCDDEAB34B3B35DBA364B61483C0DE26C5F6DC967",
+    "coreHasSameVolumeTemp": true,
+    "grokHasSameVolumeTemp": false,
+    "codexHasSameVolumeTemp": false,
+    "g11Receipt": "docs/receipts/hostile-validator-20260819T184513Z.md",
+    "bug113NoteReceipt": "docs/receipts/hostile-validator-20260820T082145Z.md"
+  },
+  "ParentMayMark": {
+    "PLAN-TRIAGELEFTOVER-001": "no; OverallVerdict DISAGREE until SyncAgentPlugins and re-H-done",
+    "leftover27": "already Done=true from prior slice AGREE receipts; this review did not change them"
+  }
+}

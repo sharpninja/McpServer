@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-08-19T20:37:26Z",
+  "Query": {
+    "workspacePath": "F:\\GitHub\\McpServer",
+    "agent": "GrokCode",
+    "from": "2026-08-19T20:27:00Z",
+    "todoId": "PLAN-TRIAGELEFTOVER-001",
+    "limit": 10
+  },
+  "totalCount": 1,
+  "sessionId": "GrokCode-20260819T202721Z-hostile-s2-resume",
+  "requestId": "req-20260819T202721Z-001-hostile-s2-resume",
+  "turnStatus": "completed",
+  "dialogCount": 3,
+  "designDecisionCount": 2,
+  "actionCount": 5,
+  "planFile": "docs/plans/triage-cluster-002.md",
+  "todoId": "PLAN-TRIAGELEFTOVER-001",
+  "responseContains": "OverallVerdict DISAGREE"
+}

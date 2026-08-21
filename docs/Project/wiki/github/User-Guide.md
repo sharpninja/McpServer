@@ -7,7 +7,7 @@ This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
 ### Supported host environment
 
 - Windows 10/11 or Windows Server
-- .NET SDK 9.x for local development
+- .NET SDK 10.x for local development (`global.json` pins `10.0.201` with `rollForward: latestFeature`)
 - PowerShell 7+
 - `gh` CLI for GitHub issue and PR workflows
 - Network access to the configured MCP port (default `7147`)
@@ -38,9 +38,11 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 #### Windows service deployment
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService --skip-version-bump
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 Get-Service McpServer
 ```
+
+The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
 
 ### Verify startup
 
@@ -485,9 +487,12 @@ Response example:
 
 ### SessionLog controller (`/mcpserver/sessionlog*`)
 
-- `GET /mcpserver/sessionlog`
+- `GET /mcpserver/sessionlog` (optional `planFile` and `todoId` filters)
 - `POST /mcpserver/sessionlog`
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog`
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` (requires `planFile` and `todoId`; use `None` when none)
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (incremental dialog; does not require a full-session upsert)
+
+Query and GET responses are sanitized outbound (`Mcp:SessionLogSanitization`). Stored rows stay raw.
 
 ### Todo controller (`/mcpserver/todo*`)
 
@@ -752,7 +757,8 @@ Current surface area: 42 tools.
 
 ### Session logs
 
-- `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
+- `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
+- `sessionlog_begin_turn` requires `planFile` and `todoId` (`None` when none)
 
 ### GitHub
 
@@ -865,7 +871,7 @@ Queue one-shot example:
 
 ### Windows service deployment concerns
 
-- always use the Nuke target: `pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
+- always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
 

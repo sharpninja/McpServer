@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260820T001151Z-e336
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-117
+      title: PowerShell.MCP Add-LinesToFile cross-volume replacement move leaves target unchanged
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Third-party PowerShell.MCP text-edit cmdlets (Add-LinesToFile and siblings) stage a replacement under TEMP/TMP then move it onto the target. When TEMP/TMP is on a different volume than the edit target (common on this workspace: target under F:\, TEMP usually under C:\), the move fails after the multiline insertion is previewed, so the target file is left unmodified while the agent may believe the edit applied. This matches known prior art BUG-TRIAGE-084; operator guidance already documents same-volume TEMP/TMP plus post-edit verification in templates/prompt-templates.yaml (and its graphrag canonical mirror). Not an McpServer first-party code defect; remediation is operational (align TEMP/TMP volume, verify edits) or upstream module fix/pin when available.'
+      - 'Triage group: triage-group-59ea6110465b87b1'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When Add-LinesToFile (or sibling text-edit cmdlets) is used against a path on a non-TEMP volume, either the replacement move succeeds and the target content includes the requested lines, or the cmdlet fails with a clear error and does not present a successful-looking preview without applying the change.'
+      - '- Operators editing files under F:\ (or other non-system volumes) have TEMP and TMP set to a directory on the same volume as the target before text-edit cmdlets run, and post-edit re-read/diff confirms the change landed.'
+      - '- Existing PowerShell.Mcp Command Routing guidance remains present in templates/prompt-templates.yaml and the graphrag canonical mirror, covering cross-volume move failure, same-volume TEMP/TMP, and verify-after-edit.'
+      - '- No silent partial success: a failed replacement move must not leave agents assuming the target was updated based only on the insertion preview.'
+      - 'Implementation notes:'
+      - '- Root cause is third-party PowerShell.MCP (PSGallery) staging replacement files via TEMP/TMP then File.Move/equivalent into place; cross-volume moves fail on Windows while preview already rendered.'
+      - '- Workspace path F:\GitHub\McpServer strongly implies the reported failure mode without needing a local reproduction if TEMP/TMP default to the system drive.'
+      - '- Do not change McpServer application code for this unless adding wrappers or env setup that force same-volume TEMP/TMP for PowerShell.Mcp sessions.'
+      - '- Preferred immediate fix for agents: before text edits on F:, set $env:TEMP and $env:TMP to a writable directory on F: (for example F:\Temp), re-run the edit, and re-read the target.'
+      - '- Longer term: track upstream PowerShell.MCP for a same-volume or copy-then-replace implementation; pin a fixed version once identified (template already notes unpinned install).'
+      - '- Treat as duplicate/recurrence of BUG-TRIAGE-084 documentation track (TR-MCP-PLUGINCORE-005 / TEST-MCP-PLUGINCORE-005); no new first-party TODO required unless product wants automated TEMP alignment in session bootstrap.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260820T000449Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T234306Z.md. Merged triage/tempvol. Pester TEST-MCP-TEMPVOL-001 8/0/0. PSGallery not patched.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

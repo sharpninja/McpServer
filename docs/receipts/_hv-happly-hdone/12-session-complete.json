@@ -1,0 +1,26 @@
+{
+  "dialog": {
+    "method": "workflow.sessionlog.appendDialog",
+    "exitCode": 0,
+    "stdout": "",
+    "isError": false,
+    "has503": false
+  },
+  "actions": {
+    "method": "workflow.sessionlog.appendActions",
+    "exitCode": 0,
+    "stdout": "",
+    "isError": false,
+    "has503": false
+  },
+  "complete": {
+    "method": "workflow.sessionlog.completeTurn",
+    "exitCode": 0,
+    "stdout": "",
+    "isError": false,
+    "has503": false
+  },
+  "historyHasSessionId": false,
+  "historyHasTitle": true,
+  "historySnippet": "type: result\r\npayload:\r\n  requestId: req-20260820T130117Z-f321\r\n  result:\r\n  - agent: GrokCode\r\n    sessionId: GrokCode-20260820T125730Z-plugin-session\r\n    title: Hostile H-apply H-done PLAN-TODOALIGN-001 store hygiene\r\n    model: grok\r\n    started:\r\n      dateTime: 2026-08-20T12:57:36.0000000\r\n      utcDateTime: 2026-08-20T12:57:36.0000000Z\r\n      localDateTime: 2026-08-20T07:57:36.0000000-05:00\r\n      date: 2026-08-20T00:00:00.0000000\r\n      day: 20\r\n      dayOfWeek: Thursday\r\n      dayOfYear: 232\r\n      hour: 12\r\n      millisecond: 0\r\n      microsecond: 0\r\n      nanosecond: 0\r\n      minute: 57\r\n      month: 8\r\n      offset: 00:00:00\r\n      totalOffsetMinutes: 0\r\n      second: 36\r\n      ticks: 639228274560000000\r\n      utcTicks: 639228274560000000\r\n      timeOfDay: 12:57:36\r\n      year: 2026\r\n    lastUpdated:\r\n      dateTime: 2026-08-20T13:01:13.0000000\r\n      utcDateTime: 2026-08-20T13:01:13.0000000Z\r\n      localDateTime: 2026-08-20T08:01:13.0000000-05:00\r\n      date: 2026-08-20T00:00:00.0000000\r\n      day: 20\r\n      dayOfWeek: Thursday\r\n      dayOfYear: 232\r\n      hour: 13\r\n      millisecond: 0\r\n      microsecond: 0\r\n      nanosecond: 0\r\n      minute: 1\r\n      month: 8\r\n      offset: 00:00:00\r\n      totalOffsetMinutes: 0\r\n      second: 13\r\n      ticks: 639228276730000000\r\n      utcTicks: 639228276730000000\r\n      timeOfDay: 13:01:13\r\n      year: 2026\r\n    status: in_progress\r\n    turnCount: 1\r\n    tags: []\r\n    filesModifiedCount: 1\r\n  - agent: GrokCode\r\n    sessionId: GrokCode-20260820T115415Z-plugin-session\r\n    title: Hostile H0 D1 reattack\r\n    model: grok\r\n    started:\r\n      dateTime: 2026-08-20T11:56:55.0000000\r\n      utcDateTime: 2026-08-20T11:56:55.0000000Z\r\n      localDateTime: 2026-08-20T06:56:55.0000000-05:00\r\n      date: 2026-08-20T00:00:00.0000000\r\n      day: 20\r\n      dayOfWeek: Thursday\r\n      dayOfYear: 232\r\n      hour: 11\r\n      millisecond: 0\r\n      microsecond: 0\r\n      nanosecond: 0\r\n      minute: 56\r\n      month: 8\r\n      offset: 00:00:00\r\n      totalOffsetMinutes: 0\r\n      second: 55\r\n      ticks: 639228238150000000\r\n      utcTicks: 639228238150000000\r\n      timeOfDay: 11:56:55\r\n      year: 2026\r\n    lastUpdated:\r\n      dateTime: 2026-08-20T11:57:12.0000000\r\n      utcDateTime: 2026-08-20T11:57:12.0000000Z\r\n      localDateTime: 2026-08-20T06:57:12.0000000-05:00\r\n      date: 2026-08-20T00:00:00.0000000\r\n      day: 20\r\n      dayOfWeek: Thursday\r\n      dayOfYear: 232\r\n      hour: 11\r\n      millisecond: 0\r\n      microsecond: 0\r\n     "
+}

@@ -1,0 +1,87 @@
+{
+  "TimestampUtc": "2026-08-19T18:45:13Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project implementation closeout",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "TodoId": "BUG-TRIAGE-107",
+  "SessionId": "GrokCode-20260819T183701Z-hostile-g11-closeout",
+  "TurnRequestId": "req-20260819T183701Z-001-hostile-g11-closeout",
+  "TurnId": 42063,
+  "GitBranch": "develop",
+  "GitHead": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "VendorFixCommit": "0c7844fcb3d4bd923c93dc516580e31e2a2c0d8f",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "trust": {
+    "signatureOk": true,
+    "nonce": "664ac57ea1954d2e8e2b3941537f62bc",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "mcpUntrusted": false
+  },
+  "overallVerdict": "AGREE",
+  "counts": {
+    "PASS": 17,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "failList": [],
+  "unknownMandatorySurfaces": [],
+  "nextSyncNote": "Not a FAIL. Consumer vendor copies already use sharpninja-mcpserver-plugin-core.tgz. BUILD does not hard-code 0.1.0.tgz.",
+  "claims": {
+    "A": {
+      "A1": "PASS",
+      "A2": "PASS",
+      "A3": "PASS",
+      "A4": "PASS"
+    },
+    "B": {
+      "B1": "PASS",
+      "B2": "PASS",
+      "B3": "PASS",
+      "B4": "PASS",
+      "B5": "PASS"
+    },
+    "C": {
+      "C1": "PASS",
+      "C2": "PASS",
+      "C3": "PASS",
+      "C4": "PASS"
+    },
+    "D": {
+      "D1": "PASS",
+      "D2": "PASS",
+      "D3": "PASS",
+      "D4": "PASS"
+    }
+  },
+  "tests": {
+    "filter": "FullyQualifiedName~SyncAgentPluginsVendorNameTests",
+    "failed": 0,
+    "skipped": 0,
+    "passed": 3,
+    "total": 3,
+    "exitCode": 0,
+    "trx": "docs/receipts/_hv-g11-out/SyncAgentPluginsVendorNameTests.trx"
+  },
+  "npmPack": {
+    "filename": "sharpninja-mcpserver-plugin-core-0.2.0.tgz",
+    "version": "0.2.0",
+    "packageJsonVersion": "0.2.0",
+    "exitCode": 0
+  },
+  "todos": {
+    "BUG-TRIAGE-107": false,
+    "PLAN-TRIAGELEFTOVER-001": false
+  },
+  "accuracy": 96,
+  "completeness": 94,
+  "receiptMd": "docs/receipts/hostile-validator-20260819T184513Z.md",
+  "evidenceDir": "docs/receipts/_hv-g11-out"
+}

@@ -1,0 +1,10 @@
+{
+  "TimestampUtc": "2026-08-21T01:10:30Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-sanitizer",
+  "Branch": "sessionsan/s3-red",
+  "Head": "4605eab6",
+  "UnitFilter": "SessionLogSanitiz|SessionLogStdioSanitizationTests|QueryAsync_WhenWrappedBySanitizer",
+  "Unit": { "Failed": 0, "Passed": 40, "Skipped": 0, "Exit": 0 },
+  "IntegrationFilter": "SessionLogSanitizationControllerTests",
+  "Integration": { "Failed": 0, "Passed": 2, "Skipped": 0, "Exit": 0 }
+}

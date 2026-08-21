@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="19d01308-0ead-4974-9927-7bf45b1ea8a7" name="kingd@PAYTON-LEGION2 2026-08-20 19:42:48" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-20T19:42:48.3419505-05:00" queuing="2026-08-20T19:42:48.3419509-05:00" start="2026-08-20T19:42:45.5723467-05:00" finish="2026-08-20T19:42:48.3486105-05:00" />
+  <TestSettings name="default" id="e7cca116-860c-45b3-a77f-3f0b50c5a0af">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-20_19_42_48" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="378983db-6ebf-4baa-8398-2477754239cd" testId="308ffcc8-1f5c-66af-f78c-692952d1063d" testName="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests.AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse" computerName="PAYTON-LEGION2" duration="00:00:00.1748280" startTime="2026-08-20T19:42:48.0604502-05:00" endTime="2026-08-20T19:42:48.2429539-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="378983db-6ebf-4baa-8398-2477754239cd" />
+    <UnitTestResult executionId="f9c2daa0-423d-4a11-a833-8f1f2c001c6d" testId="a835a64f-61c8-12db-e7e0-ffa41fa9d065" testName="McpServer.Support.Mcp.Tests.Services.McpErrorClassifierTests.Classify_SqliteBusy_IsNotBackendUnavailable" computerName="PAYTON-LEGION2" duration="00:00:00.0286673" startTime="2026-08-20T19:42:48.0604484-05:00" endTime="2026-08-20T19:42:48.1000909-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9c2daa0-423d-4a11-a833-8f1f2c001c6d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.McpErrorClassifierTests.Classify_SqliteBusy_IsNotBackendUnavailable" storage="f:\github\mcpserver\.worktrees\session-persist\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="a835a64f-61c8-12db-e7e0-ffa41fa9d065">
+      <Execution id="f9c2daa0-423d-4a11-a833-8f1f2c001c6d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\session-persist\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.McpErrorClassifierTests" name="Classify_SqliteBusy_IsNotBackendUnavailable" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests.AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse" storage="f:\github\mcpserver\.worktrees\session-persist\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="308ffcc8-1f5c-66af-f78c-692952d1063d">
+      <Execution id="378983db-6ebf-4baa-8398-2477754239cd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\session-persist\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests" name="AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="308ffcc8-1f5c-66af-f78c-692952d1063d" executionId="378983db-6ebf-4baa-8398-2477754239cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a835a64f-61c8-12db-e7e0-ffa41fa9d065" executionId="f9c2daa0-423d-4a11-a833-8f1f2c001c6d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.42]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.63]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.87]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:02.13]   Finished:    McpServer.Support.Mcp.Tests (ID = '791f393bff79f306b509b4eb7f062efb1909048234c95067e1c54427962fe229')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

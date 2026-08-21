@@ -1,0 +1,91 @@
+{
+  "TimestampUtc": "2026-08-20T01:24:05Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "Phase": "H-green",
+  "Slice": "leftover-S6-BUG-TRIAGE-121",
+  "LateReview": true,
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-stale-turns",
+  "Branch": "triage/stale-turns",
+  "Head": "8ff862efd3a2b4f9e667b86b65ab18a5bb71d7c5",
+  "SessionId": "GrokCode-20260820T011703Z-hostile-s6-hgreen",
+  "RequestId": "req-20260820T011703Z-001-hostile-s6-hgreen-exit",
+  "TurnId": 42149,
+  "AddProfile": {
+    "Executed": true,
+    "NonSkillProfileFilesRead": 18,
+    "ExcludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "OverallVerdict": "AGREE",
+  "OverallScope": "Leftover S6 H-green / implementation-exit. Not PLAN done. Not merge by this validator. Parent may merge triage/stale-turns and mark BUG-TRIAGE-121 done citing this receipt.",
+  "Accuracy": 97,
+  "Completeness": 94,
+  "Counts": {
+    "PASS": 25,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "FailList": [],
+  "PriorTestPhaseReceipt": {
+    "Path": "docs/receipts/hostile-validator-20260820T010803Z.md",
+    "JsonPath": "docs/receipts/hostile-validator-20260820T010803Z.json",
+    "OverallVerdict": "AGREE",
+    "FailList": [],
+    "Counts": { "PASS": 21, "FAIL": 0, "UNKNOWN": 0 }
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Pester TriagePluginIdentity.Tests.ps1 18/0/0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "SessionLogTriageStoreTests 8/0/0" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Client QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours 1/0/0" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "Isolation completed isolate-skip; in_progress background reuse" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "Source has turnStatus and staleOlderThanHours" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "No mass-cancel API added" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "claim": "BUG-TRIAGE-121 Done=false" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "claim": "PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "claim": "HEAD 8ff862ef on triage/stale-turns" },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "claim": "Live schema omission is deploy lag; source has filters" },
+    { "id": "A11", "surface": "A", "verdict": "PASS", "claim": "010803Z AGREE FailList empty" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "add-profile executed; 18 files" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "TEST-PHASE AGREE exists; no B2 timestamp FAIL; red not required" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "Receipts independently re-run" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage; TODOs not marked done" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "pwsh.exe only" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Honesty; parent counts matched re-runs" },
+    { "id": "B7", "surface": "B", "verdict": "PASS", "claim": "No merge" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "Applicable FR/TR/TEST identified" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "Leftover AC exist on plan G10 and TEST markdown" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "Leftover AC are testable" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "Tests cover leftover AC" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "Plan S6 leftover DoD met" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "Validator did not mark TODOs done or merge" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "PLAN remains open; 121 may be marked by parent citing this receipt" }
+  ],
+  "IndependentTestRerun": {
+    "Script": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s6-hgreen-20260820T011703Z\\run-s6-tests.ps1",
+    "ExitCode": 0,
+    "Pester": { "Passed": 18, "Failed": 0, "Skipped": 0, "Total": 18 },
+    "SessionLogTriageStoreTests": { "Passed": 8, "Failed": 0, "Skipped": 0, "Total": 8 },
+    "ClientQueryAsync": { "Passed": 1, "Failed": 0, "Skipped": 0, "Total": 1 }
+  },
+  "Todos": {
+    "BUG-TRIAGE-121": { "Done": false },
+    "PLAN-TRIAGELEFTOVER-001": { "Done": false }
+  },
+  "PluginIdentity": {
+    "sourceType": "GrokCode",
+    "pluginName": "mcpserver-grok-plugin",
+    "pluginVersion": "1.95.0",
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "markerSignatureMatch": true,
+    "healthNonceMatch": true,
+    "workspacePath": "F:\\GitHub\\McpServer"
+  },
+  "ObservationsNotFail": [
+    "Live deployed sessionlog_query schema omits turnStatus and staleOlderThanHours; worktree tool JSON includes them.",
+    "docs/plans/triage-cluster-002.md is not in worktree HEAD; read from main workspace.",
+    "MCP store FR/TEST-MCP-TRIAGEPLUGIN-001 AC text is still original plugin-identity; leftover bullets are on markdown TEST and plan G10.",
+    "Worktree dirty: wiki Testing-Requirements.md and untracked _s6-* scripts.",
+    "BUG-TRIAGE-121 TODO still lists FR-MCP-TRIAGE-002."
+  ]
+}

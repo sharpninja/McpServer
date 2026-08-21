@@ -1,0 +1,235 @@
+{
+  "TimestampUtc": "2026-08-19T20:27:41Z",
+  "ReceiptCount": 68,
+  "S2RelatedReceipts": [
+    {
+      "Name": "hostile-validator-20260808T095026Z.md",
+      "LastWriteTimeUtc": "2026-08-08T09:51:30.6584479Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260812T184500Z.md",
+      "LastWriteTimeUtc": "2026-08-12T17:52:13.4857485Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260812T191500Z.md",
+      "LastWriteTimeUtc": "2026-08-12T18:16:19.3243218Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260812T193000Z.md",
+      "LastWriteTimeUtc": "2026-08-12T18:29:01.8205789Z",
+      "Verdict": "AGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260812T221041Z.md",
+      "LastWriteTimeUtc": "2026-08-12T22:11:35.2240751Z",
+      "Verdict": "AGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T000400Z.md",
+      "LastWriteTimeUtc": "2026-08-18T00:04:38.3958339Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T174337Z.md",
+      "LastWriteTimeUtc": "2026-08-18T17:44:51.7713427Z",
+      "Verdict": "AGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T193842Z.md",
+      "LastWriteTimeUtc": "2026-08-18T19:39:23.0026501Z",
+      "Verdict": null,
+      "MentionsS2Red": true,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T211500Z.md",
+      "LastWriteTimeUtc": "2026-08-18T21:34:17.5652436Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260818T214800Z.md",
+      "LastWriteTimeUtc": "2026-08-18T22:02:20.2943268Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260818T221400Z.md",
+      "LastWriteTimeUtc": "2026-08-18T22:25:57.1018474Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T221500Z.md",
+      "LastWriteTimeUtc": "2026-08-18T22:27:16.3889113Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260818T223200Z.md",
+      "LastWriteTimeUtc": "2026-08-18T22:45:19.2291422Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260818T225300Z.md",
+      "LastWriteTimeUtc": "2026-08-18T23:06:50.4742059Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T230200Z.md",
+      "LastWriteTimeUtc": "2026-08-18T23:19:06.6194926Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T232500Z.md",
+      "LastWriteTimeUtc": "2026-08-18T23:35:13.6196670Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T233800Z.md",
+      "LastWriteTimeUtc": "2026-08-18T23:47:22.2391503Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260818T234800Z.md",
+      "LastWriteTimeUtc": "2026-08-19T00:02:34.6150997Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T000500Z.md",
+      "LastWriteTimeUtc": "2026-08-19T00:17:10.0657781Z",
+      "Verdict": null,
+      "MentionsS2Red": true,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T005100Z.md",
+      "LastWriteTimeUtc": "2026-08-19T01:01:35.6621953Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T010800Z.md",
+      "LastWriteTimeUtc": "2026-08-19T01:22:06.8255249Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T013000Z.md",
+      "LastWriteTimeUtc": "2026-08-19T01:40:04.6529267Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T174750Z.md",
+      "LastWriteTimeUtc": "2026-08-19T17:52:18.6768755Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T183208Z.md",
+      "LastWriteTimeUtc": "2026-08-19T18:34:10.3791485Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T184513Z.md",
+      "LastWriteTimeUtc": "2026-08-19T18:46:02.6062584Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T184741Z.md",
+      "LastWriteTimeUtc": "2026-08-19T18:50:09.2563289Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T184746Z.md",
+      "LastWriteTimeUtc": "2026-08-19T18:49:30.4742556Z",
+      "Verdict": null,
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T184859Z.md",
+      "LastWriteTimeUtc": "2026-08-19T18:52:44.3542621Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T185900Z.md",
+      "LastWriteTimeUtc": "2026-08-19T19:00:35.7996110Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": false
+    },
+    {
+      "Name": "hostile-validator-20260819T193921Z.md",
+      "LastWriteTimeUtc": "2026-08-19T19:42:30.1993132Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T200334Z.md",
+      "LastWriteTimeUtc": "2026-08-19T20:04:40.0428048Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": true,
+      "MentionsHGreen": true
+    },
+    {
+      "Name": "hostile-validator-20260819T201639Z.md",
+      "LastWriteTimeUtc": "2026-08-19T20:20:01.7205696Z",
+      "Verdict": "DISAGREE",
+      "MentionsS2Red": false,
+      "MentionsHGreen": true
+    }
+  ],
+  "AgreeCount": 3,
+  "DisagreeCount": 10,
+  "PlanExists": true,
+  "PlanLength": 18100,
+  "PlanMentionsS2": true
+}

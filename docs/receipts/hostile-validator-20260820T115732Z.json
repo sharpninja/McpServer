@@ -1,0 +1,150 @@
+{
+  "TimestampUtc": "2026-08-20T11:57:32Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "MCP-store hygiene S0 freeze D1 reattack",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260820T114439Z.md",
+  "SessionLog": {
+    "persistedSessionId": "GrokCode-20260820T115415Z-plugin-session",
+    "queryHistoryTitle": "Hostile H0 D1 reattack",
+    "queryHistoryTurnCount": 1,
+    "queryHistoryStatus": "in_progress"
+  },
+  "Trust": {
+    "markerSignatureMatch": true,
+    "healthNonceEchoed": true,
+    "healthNonce": "3318cef7ae3d4828a31f8aedd508be3a",
+    "serverVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 13,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "FailList": [
+    "D1 leftover provenance still not a successful freeze todo_get: leftoverGetSnippet is schema_validation_failed; fix-leftover-flag.ps1 force-set leftoverDone true. Live leftover is done true, but hardcoded leftover from prior D1 is not closed."
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "Named S0 files exist in durable dir and scratch twins",
+      "verdict": "PASS",
+      "evidence": "Seven named files exist both sides; SHA256 equal for each pair"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "doneTrueCount live hundreds; leftoverDone true via MCP todo_get",
+      "verdict": "PASS",
+      "evidence": "doneTrueCount 253 matches source JSON and live todo.query done:true id count 253. Validator todo.get leftover done:true. Implementer leftover get failed; scored under D1."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "trCount 422 testCount 448 mappingCount 293",
+      "verdict": "PASS",
+      "evidence": "Independent source JSON recounts 422/448/293; mapping keys FrId TrIds TestIds WorkspaceId"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "s0-git.json head matches git rev-parse; statusShort is git status --short",
+      "verdict": "PASS",
+      "evidence": "HEAD 20db61aa0dd70f2d4f94da06d2a133ecfe6967a8 match; status txt SHA-equal to scratch; 2-byte json vs txt line-ending diff"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "claim": "ALIGN done false; no QuadBrain/FILETOOLS/Handoff src/tests this slice",
+      "verdict": "PASS",
+      "evidence": "todo.get ALIGN done:false; git srcOrTestsTouched empty"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Byrd v4 product tests-first",
+      "verdict": "PASS",
+      "evidence": "N/A for S0 freeze"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "Receipts re-verified",
+      "verdict": "PASS",
+      "evidence": "Live git, hashes, MCP gets, source recounts"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "MCP-only storage",
+      "verdict": "PASS",
+      "evidence": "No TODO.yaml write in this slice"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "claim": "No Python",
+      "verdict": "PASS",
+      "evidence": "s0-complete.ps1 and fix-leftover-flag.ps1 are pwsh"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "claim": "Honesty of leftoverDone state",
+      "verdict": "PASS",
+      "evidence": "leftoverDone true matches live leftover done and leftover membership in 253 done:true list; force-set method is D1"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "claim": "Reviewer session-log persisted",
+      "verdict": "PASS",
+      "evidence": "queryHistory GrokCode-20260820T115415Z-plugin-session Hostile H0 D1 reattack turnCount 1"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "FR/TR completion",
+      "verdict": "N/A",
+      "evidence": "No FR/TR completed claim"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "S0 snapshot completeness leftover/HEAD/files",
+      "verdict": "FAIL",
+      "evidence": "Files and git HEAD now present. leftoverGetSnippet schema_validation_failed. fix-leftover-flag.ps1 force leftoverDone true. Prior hardcoded leftover not closed."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "claim": "Not claiming S4-S7",
+      "verdict": "PASS",
+      "evidence": "S0 reattack only"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "claim": "Leftover closed ALIGN open no product code",
+      "verdict": "PASS",
+      "evidence": "Live leftover done true ALIGN done false src/tests empty"
+    }
+  ],
+  "AccuracyRating": 91,
+  "CompletenessRating": 90,
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "LiveDoneTrueCount": 253,
+  "TrCount": 422,
+  "TestCount": 448,
+  "MappingCount": 293,
+  "ReceiptMd": "docs/receipts/hostile-validator-20260820T115732Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260820T115732Z.json"
+}

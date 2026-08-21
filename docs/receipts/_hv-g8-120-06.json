@@ -1,0 +1,33 @@
+{
+  "TimestampUtc": "2026-08-19T18:56:16Z",
+  "SessionId": "GrokCode-20260819T185507Z-hostile-g8-120",
+  "RequestId": "req-20260819T185507Z-001-hostile-g8-120-closeout",
+  "PlanFile": "docs/plans/triage-cluster-002.md",
+  "TodoId": "BUG-TRIAGE-120",
+  "Bootstrap": {
+    "Method": "workflow.sessionlog.bootstrap",
+    "TimedOut": false,
+    "ExitCode": 1,
+    "ElapsedSec": 25.851,
+    "StdOut": "",
+    "StdErr": "Exception: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:289\r\nLine |\r\n 289 |          throw \"Plugin command timed out after ${boundedTimeout}s.\"\r\n     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Plugin command timed out after 25s.\r\n"
+  },
+  "OpenSession": {
+    "Method": "workflow.sessionlog.openSession",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 1.863,
+    "StdOut": "",
+    "StdErr": ""
+  },
+  "BeginTurn": {
+    "Method": "workflow.sessionlog.beginTurn",
+    "TimedOut": false,
+    "ExitCode": 1,
+    "ElapsedSec": 40.809,
+    "StdOut": "",
+    "StdErr": "Exception: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:289\r\nLine |\r\n 289 |          throw \"Plugin command timed out after ${boundedTimeout}s.\"\r\n     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Plugin command timed out after 40s.\r\n"
+  },
+  "BeginClassified": "failed-unclassified",
+  "BeginExceeded30s": true
+}

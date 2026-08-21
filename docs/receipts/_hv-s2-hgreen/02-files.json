@@ -1,0 +1,77 @@
+{
+  "TimestampUtc": "2026-08-19T19:54:09Z",
+  "Claimed": [
+    {
+      "Rel": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "Exists": true,
+      "Length": 23894,
+      "LastWriteTimeUtc": "2026-08-19T19:41:24.0882662Z",
+      "DiffStatHead": " plugins/core/lib-ps/McpPluginShim.psm1 | 54 \u001b[32m+++++++++++++++++++++++++++\u001b[m\u001b[31m-------\u001b[m  1 file changed, 44 insertions(+), 10 deletions(-)",
+      "DiffStatVsDevelop": " plugins/core/lib-ps/McpPluginShim.psm1 | 54 \u001b[32m+++++++++++++++++++++++++++\u001b[m\u001b[31m-------\u001b[m  1 file changed, 44 insertions(+), 10 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/repl-invoke.ps1",
+      "Exists": true,
+      "Length": 96465,
+      "LastWriteTimeUtc": "2026-08-19T19:37:10.2891613Z",
+      "DiffStatHead": " plugins/core/lib-ps/repl-invoke.ps1 | 74 \u001b[32m++++++++++++++++++++++++++++++++\u001b[m\u001b[31m-----\u001b[m  1 file changed, 64 insertions(+), 10 deletions(-)",
+      "DiffStatVsDevelop": " plugins/core/lib-ps/repl-invoke.ps1 | 74 \u001b[32m++++++++++++++++++++++++++++++++\u001b[m\u001b[31m-----\u001b[m  1 file changed, 64 insertions(+), 10 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Exists": true,
+      "Length": 54785,
+      "LastWriteTimeUtc": "2026-08-19T19:38:12.3643664Z",
+      "DiffStatHead": " plugins/core/lib-ps/plugin-hook.ps1 | 183 \u001b[32m++++++++++++++++++++++++++++++++\u001b[m\u001b[31m----\u001b[m  1 file changed, 166 insertions(+), 17 deletions(-)",
+      "DiffStatVsDevelop": " plugins/core/lib-ps/plugin-hook.ps1 | 183 \u001b[32m++++++++++++++++++++++++++++++++\u001b[m\u001b[31m----\u001b[m  1 file changed, 166 insertions(+), 17 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+      "Exists": true,
+      "Length": 13417,
+      "LastWriteTimeUtc": "2026-08-19T19:38:37.7346120Z",
+      "DiffStatHead": " plugins/core/lib-ps/Invoke-McpPlugin.ps1 | 18 \u001b[32m+++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 17 insertions(+), 1 deletion(-)",
+      "DiffStatVsDevelop": " plugins/core/lib-ps/Invoke-McpPlugin.ps1 | 18 \u001b[32m+++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 17 insertions(+), 1 deletion(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "Exists": true,
+      "Length": 5492,
+      "LastWriteTimeUtc": "2026-08-19T19:39:16.6439904Z",
+      "DiffStatHead": " plugins/core/lib-ps/resolve-cache-dir.ps1 | 1 \u001b[32m+\u001b[m  1 file changed, 1 insertion(+)",
+      "DiffStatVsDevelop": " plugins/core/lib-ps/resolve-cache-dir.ps1 | 1 \u001b[32m+\u001b[m  1 file changed, 1 insertion(+)"
+    },
+    {
+      "Rel": "plugins/core/hooks-templates/wrapper.ps1.template",
+      "Exists": true,
+      "Length": 3692,
+      "LastWriteTimeUtc": "2026-08-19T19:44:11.7062063Z",
+      "DiffStatHead": " plugins/core/hooks-templates/wrapper.ps1.template | 70 \u001b[32m++++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 69 insertions(+), 1 deletion(-)",
+      "DiffStatVsDevelop": " plugins/core/hooks-templates/wrapper.ps1.template | 70 \u001b[32m++++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 69 insertions(+), 1 deletion(-)"
+    },
+    {
+      "Rel": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+      "Exists": true,
+      "Length": 25919,
+      "LastWriteTimeUtc": "2026-08-19T19:40:50.7982615Z",
+      "DiffStatHead": " .../pester/TriagePluginIdentity.Tests.ps1          | 224 \u001b[32m+++++++++++++++++++++\u001b[m  1 file changed, 224 insertions(+)",
+      "DiffStatVsDevelop": " .../pester/TriagePluginIdentity.Tests.ps1          | 224 \u001b[32m+++++++++++++++++++++\u001b[m  1 file changed, 224 insertions(+)"
+    },
+    {
+      "Rel": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "Exists": true,
+      "Length": 250927,
+      "LastWriteTimeUtc": "2026-08-19T19:44:35.3404807Z",
+      "DiffStatHead": " .../pester/PluginPowerShellRuntime.Tests.ps1       | 305 \u001b[32m++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 301 insertions(+), 4 deletions(-)",
+      "DiffStatVsDevelop": " .../pester/PluginPowerShellRuntime.Tests.ps1       | 305 \u001b[32m++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 301 insertions(+), 4 deletions(-)"
+    }
+  ],
+  "PlanTouchAlsoNamed": {
+    "CodeVerifyExists": false,
+    "CacheManagerExists": true,
+    "CodeVerifyLastWriteUtc": null,
+    "CacheManagerLastWriteUtc": "2026-08-19T19:16:33.0273704Z",
+    "CodeVerifyVsDevelop": null,
+    "CacheManagerVsDevelop": null
+  }
+}

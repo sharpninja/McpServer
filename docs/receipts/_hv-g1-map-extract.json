@@ -1,0 +1,56 @@
+{
+  "dump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01b4f-1f61-7d33-8313-e19bdd66b6b8\\mcp\\call-696111cb-56e6-45d5-a960-cfcd1a008c24-113.json",
+  "total": 293,
+  "wanted": [
+    {
+      "FrId": "FR-MCP-SESSIONLOGCTX-001",
+      "TrIds": [
+        "TR-MCP-SESSIONLOG-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLOG-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGE-002",
+      "TrIds": [
+        "TR-MCP-TRIAGE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGE-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEPLUGIN-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEPLUGIN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEPLUGIN-001",
+        "TEST-MCP-TRIAGEPLUGIN-002",
+        "TEST-MCP-TRIAGEPLUGIN-003",
+        "TEST-MCP-TRIAGEPLUGIN-004",
+        "TEST-MCP-TRIAGEPLUGIN-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGESTORE-001",
+      "TrIds": [
+        "TR-MCP-TRIAGESTORE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGESTORE-001",
+        "TEST-MCP-TRIAGESTORE-002",
+        "TEST-MCP-TRIAGESTORE-003",
+        "TEST-MCP-TRIAGESTORE-004",
+        "TEST-MCP-TRIAGESTORE-005",
+        "TEST-MCP-TRIAGESTORE-006",
+        "TEST-MCP-TRIAGESTORE-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    }
+  ]
+}

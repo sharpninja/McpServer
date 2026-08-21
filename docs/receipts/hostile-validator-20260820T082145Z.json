@@ -1,0 +1,81 @@
+{
+  "TimestampUtc": "2026-08-20T08:21:45Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": {
+    "class1": "leftover BUG-TRIAGE-113 live hosted GET tags closeout",
+    "class2": "Nuke UpdateService deploy",
+    "scoreCAndByrdOn": "class1"
+  },
+  "ActivePlan": "docs/plans/triage-cluster-002.md leftover 113",
+  "RequirementIds": ["FR-MCP-TRIAGESTORE-001", "TEST-MCP-TRIAGESTORE-001"],
+  "SessionId": "GrokCode-20260820T081512Z-hv113closeout",
+  "RequestId": "req-20260820T081512Z-001-hv113-live-closeout",
+  "TurnId": 42188,
+  "MarkerHmacMatch": true,
+  "HealthNonceSent": "f5282853bf0f462389f0ef43ad3a6478",
+  "HealthNonceMatch": true,
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": ["C class-2 Nuke deploy ops"],
+  "Claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "claim": "Merge --no-ff 20db61aa cites 080315Z"},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "claim": "Nuke UpdateService not manual copy; manifest generatedBy UpdateService; health SHA; WSHealth 38/38"},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "claim": "GET hv113tags session.tags hostile-113 cluster-closeout after-updateservice"},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "claim": "GET hv113live session.tags hostile-113 after-sanitizer-deploy; independent POST+GET also tags"},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "claim": "SanitizeSessionLog copies Tags"},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "claim": "BUG-TRIAGE-113 and PLAN still Done=false; leftover-27 open set is only 113"},
+    {"id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty and receipts"},
+    {"id": "B2", "surface": "B", "verdict": "PASS", "claim": "Byrd v4 class 1; prior H-green 080315Z plus live GET"},
+    {"id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage writes"},
+    {"id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only, no Python"},
+    {"id": "B5", "surface": "B", "verdict": "PASS", "claim": "No fabricated results"},
+    {"id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-MCP-TRIAGESTORE-001 AC tags round-trip"},
+    {"id": "C2", "surface": "C", "verdict": "PASS", "claim": "TEST-MCP-TRIAGESTORE-001 AC and mapping"},
+    {"id": "C3", "surface": "C", "verdict": "PASS", "claim": "Named tests plus live GET cover leftover-113 GET AC"},
+    {"id": "C2ops", "surface": "C", "verdict": "N/A", "claim": "Class 2 deploy is not FR/TR work"},
+    {"id": "D1", "surface": "D", "verdict": "PASS", "claim": "Leftover 113 live GET after UpdateService"},
+    {"id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN not complete from this slice"}
+  ],
+  "Evidence": {
+    "gitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+    "gitBranch": "develop",
+    "gitParents": [
+      "e272d84b29b069e4a81f70783d687b1442cc3b21",
+      "dfd7097b5dad0081a67a35f2085b97e9cde3d562"
+    ],
+    "gitSubject": "merge triage/113-tags after hostile AGREE docs/receipts/hostile-validator-20260820T080315Z.md",
+    "wrapperPath": "C:\\Users\\kingd\\AppData\\Local\\Temp\\hv-113-sanitizer-update-service.ps1",
+    "manifestGeneratedBy": "build/Build.UpdateService.cs",
+    "manifestGeneratedUtc": "2026-08-20T08:12:03.3913619Z",
+    "deployedExeSha256": "FA4534D2705D410F4CB02ABC6560C1BE0EB7EB7DBCEE6250741B477436A84AA3",
+    "wsHealth": "38/38",
+    "a3Session": "GrokCode-20260820T071556Z-hv113tags",
+    "a3Tags": ["after-updateservice", "cluster-closeout", "hostile-113"],
+    "a4Session": "GrokCode-20260820T081325Z-hv113live",
+    "a4Tags": ["after-sanitizer-deploy", "hostile-113"],
+    "independentSession": "GrokCode-20260820T081701Z-hv113reget",
+    "independentTags": ["hostile-113", "hv-independent-reget"],
+    "openLeftover27": ["BUG-TRIAGE-113"],
+    "otherOpenBugTriageOutsideLeftover27": ["BUG-TRIAGE-160", "BUG-TRIAGE-161", "BUG-TRIAGE-162"],
+    "planDone": false,
+    "bug113Done": false
+  },
+  "ParentMayMark": {
+    "BUG-TRIAGE-113": "yes, citing this receipt",
+    "PLAN-TRIAGELEFTOVER-001": "not from this slice while 113 is still Done=false; leftover-27 besides 113 are already done"
+  }
+}

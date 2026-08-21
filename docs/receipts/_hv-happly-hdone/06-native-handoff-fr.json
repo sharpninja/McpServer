@@ -1,0 +1,41 @@
+{
+  "http": 200,
+  "items": [
+    {
+      "id": "FR-HANDOFF-001",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-002",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-003",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-004",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-005",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-006",
+      "present": true,
+      "status": "in_progress"
+    },
+    {
+      "id": "FR-HANDOFF-007",
+      "present": true,
+      "status": "in_progress"
+    }
+  ],
+  "completedHandoff": []
+}

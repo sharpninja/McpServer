@@ -1,0 +1,1 @@
+{"status":"Healthy","version":"1.4.28\u002Bf4060f037e62e64974026aff9d24e11b2f481952","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0038},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0031}],"nonce":"71de2e5b231d4cbf92e837c90a15a9c9","storage":"reachable"}

@@ -1,0 +1,146 @@
+[
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-FAILSAFE-001",
+    "AcCount": 3,
+    "FirstText": "Submit/append still returns retryable backend_unavailable and keeps failsafe YAML"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-SESSIONATTR-001",
+    "AcCount": 3,
+    "FirstText": "filesModified outside workspace root rejected or require foreign marker"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-SESSIONEND-001",
+    "AcCount": 3,
+    "FirstText": "missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-STRICTCOUNT-001",
+    "AcCount": 3,
+    "FirstText": "omitted/empty/scalar tags and contextList persist"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-TEMPVOL-001",
+    "AcCount": 3,
+    "FirstText": "TEMP/TMP on workspace volume when workspace is not on TEMP drive"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "AcCount": 3,
+    "FirstText": "inter_agent_communication_metadata is normalized or documented info skip"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-VERIFYWRAP-001",
+    "AcCount": 3,
+    "FirstText": "IOException disk full is typed and current-turn remains valid"
+  },
+  {
+    "Kind": "fr",
+    "Id": "FR-MCP-XAGENT-001",
+    "AcCount": 3,
+    "FirstText": "cross-sourceType mismatch refused or restored to originating cache"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-FAILSAFE-001",
+    "AcCount": 1,
+    "FirstText": "Failsafe drain abort markers include backend_unavailable and HTTP 503 and do not burn drainAttempts"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-SESSIONATTR-001",
+    "AcCount": 1,
+    "FirstText": "SessionLogService validates filesModified/commit paths against workspace root"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-SESSIONEND-001",
+    "AcCount": 1,
+    "FirstText": "SessionEnd cache flush no-ops when cache cannot be resolved"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-STRICTCOUNT-001",
+    "AcCount": 1,
+    "FirstText": "updateTurn collection fields use null-safe enumeration under StrictMode"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-TEMPVOL-001",
+    "AcCount": 1,
+    "FirstText": "Plugin entrypoints set TEMP/TMP on the workspace volume"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-TRANSCRIPT-SEARCH-001",
+    "AcCount": 1,
+    "FirstText": "CodexTranscriptAdapter handles tool_search and inter_agent"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-VERIFYWRAP-001",
+    "AcCount": 1,
+    "FirstText": "code-verify catches disk-full and enforces wrapper timeout"
+  },
+  {
+    "Kind": "tr",
+    "Id": "TR-MCP-XAGENT-001",
+    "AcCount": 1,
+    "FirstText": "Assert-ReplCurrentTurnFresh refuses different sourceType prefixes"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-FAILSAFE-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-SESSIONATTR-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-SESSIONEND-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-STRICTCOUNT-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-TEMPVOL-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-TRANSCRIPT-SEARCH-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-TRANSCRIPT-SEARCH-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-VERIFYWRAP-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria"
+  },
+  {
+    "Kind": "test",
+    "Id": "TEST-MCP-XAGENT-001",
+    "AcCount": 1,
+    "FirstText": "Named tests cover TEST-MCP-XAGENT-001 acceptance criteria"
+  }
+]

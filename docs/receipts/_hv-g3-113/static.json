@@ -1,0 +1,37 @@
+{
+  "gitBranch": "develop",
+  "gitHead": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "gitShort": "06200782",
+  "hasCompositeUnique": true,
+  "hasRequestIdOnlyIndex": false,
+  "snapshots": [
+    {
+      "file": "src\\McpServer.Storage\\Migrations\\McpDbContextModelSnapshot.cs",
+      "compositeUniqueMatches": 1,
+      "requestIdOnlyUniqueMatches": 0
+    },
+    {
+      "file": "src\\McpServer.Storage.SqliteMigrations\\Migrations\\McpDbContextModelSnapshot.cs",
+      "compositeUniqueMatches": 1,
+      "requestIdOnlyUniqueMatches": 0
+    },
+    {
+      "file": "src\\McpServer.Storage.SqlServerMigrations\\Migrations\\McpDbContextModelSnapshot.cs",
+      "compositeUniqueMatches": 1,
+      "requestIdOnlyUniqueMatches": 0
+    },
+    {
+      "file": "src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\McpDbContextModelSnapshot.cs",
+      "compositeUniqueMatches": 1,
+      "requestIdOnlyUniqueMatches": 0
+    }
+  ],
+  "classifierHasPersistenceError": true,
+  "classifierDbUpdateMapsPersistence": true,
+  "classifierRejectsSeeInner": true,
+  "schemaDocumentsTags": true,
+  "schemaDocumentsCanceled": true,
+  "schemaDocumentsCompositeUnique": false,
+  "schemaDocumentsCrossSessionDup": false,
+  "workflowDocumentsMergeVsReplace": true
+}

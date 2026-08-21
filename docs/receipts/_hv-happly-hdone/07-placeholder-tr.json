@@ -1,0 +1,145 @@
+{
+  "timestampUtc": "2026-08-20T12:59:08.3623365Z",
+  "items": [
+    {
+      "id": "[]",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "schema_validation_failed",
+      "errorMessage": "YAML request failed schema validation.",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125837Z-7c9e\r\n  code: schema_validation_failed\r\n  message: YAML request failed schema validation.\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    errors:\r\n    - payload.params.id must be a non-empty string.\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error payload:   requestId: req-"
+    },
+    {
+      "id": "TR-02",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-02. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125839Z-5347\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-02. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-03",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-03. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125841Z-d08a\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-03. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-04",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-04. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125844Z-6fba\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-04. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-05",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-05. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125846Z-7d64\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-05. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-06",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-06. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125848Z-5216\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-06. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-07",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-07. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125851Z-aea9\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-07. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-08",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-08. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125853Z-f141\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-08. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-09",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-09. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125855Z-55d9\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-09. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-10",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-10. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125858Z-fd72\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-10. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-11",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-11. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125900Z-670a\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-11. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-12",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-12. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125902Z-8184\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-12. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-13",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-13. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125905Z-07b6\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-13. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    },
+    {
+      "id": "TR-14",
+      "exitCode": 1,
+      "isError": true,
+      "errorCode": "method_invocation_error",
+      "errorMessage": "Invalid TR ID format: TR-14. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###",
+      "status": null,
+      "hasAlignNote": false,
+      "snippet": "type: error\r\npayload:\r\n  requestId: req-20260820T125907Z-2e88\r\n  code: method_invocation_error\r\n  message: 'Invalid TR ID format: TR-14. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###'\r\n  details:\r\n    methodName: workflow.requirements.getTr\r\n    exceptionType: System.ArgumentException\r\n\r\n---\r\nException: F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          throw $msg\r\n     |          ~~~~~~~~~~\r\n     | Plugin command failed with exit code 1. type: error p"
+    }
+  ]
+}

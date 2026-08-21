@@ -1,0 +1,9 @@
+{
+  "probe": "begin_turn empty planFile and todoId",
+  "requestId": "req-20260821T013731Z-003-empty-new-entry",
+  "result": {
+    "code": "validation_error",
+    "message": "Invalid session turn planFile/todoId: planFile is empty. (Parameter 'planFile')",
+    "retryable": false
+  }
+}

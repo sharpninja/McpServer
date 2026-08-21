@@ -1,0 +1,37 @@
+{
+  "FrCount": 293,
+  "TrCount": 422,
+  "TestCount": 448,
+  "MapCount": 293,
+  "FR": {
+    "Id": "FR-MCP-TEMPVOL-001",
+    "Title": "Plugin wrappers align TEMP to the workspace volume",
+    "Status": "pending",
+    "AcceptanceCriteria": [
+      { "id": "ac-1", "text": "TEMP/TMP on workspace volume when workspace is not on TEMP drive", "isSatisfied": false },
+      { "id": "ac-2", "text": "templates still document same-volume TEMP and verify-after-edit", "isSatisfied": false },
+      { "id": "ac-3", "text": "failed move is a visible error", "isSatisfied": false }
+    ]
+  },
+  "TR": {
+    "Id": "TR-MCP-TEMPVOL-001",
+    "Title": "Plugin entrypoints set TEMP TMP on the workspace volume",
+    "Status": "pending",
+    "AcceptanceCriteria": [
+      { "id": "ac-1", "text": "Plugin entrypoints set TEMP/TMP on the workspace volume", "isSatisfied": false }
+    ]
+  },
+  "TEST": {
+    "Id": "TEST-MCP-TEMPVOL-001",
+    "Status": "pending",
+    "Condition": "Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.",
+    "AcceptanceCriteria": [
+      { "id": "ac-1", "text": "Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria", "isSatisfied": false }
+    ]
+  },
+  "Mapping": {
+    "FrId": "FR-MCP-TEMPVOL-001",
+    "TrIds": ["TR-MCP-TEMPVOL-001"],
+    "TestIds": ["TEST-MCP-TEMPVOL-001"]
+  }
+}

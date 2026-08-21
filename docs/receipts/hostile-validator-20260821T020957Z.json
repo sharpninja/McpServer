@@ -1,0 +1,70 @@
+{
+  "TimestampUtc": "2026-08-21T02:09:57Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "Class1",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18
+  },
+  "PlanFile": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "ReviewSessionId": "GrokCode-20260821T020909Z-plugin-session",
+  "ReviewRequestId": "req-20260821T020907Z-001-s7-hdone-a10-rescore",
+  "PluginVersion": "1.97.0",
+  "GitHead": "ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "LiveHostedVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T020355Z.md",
+  "PriorReceiptEdited": false,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 25,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "ExplicitFailList": [],
+  "UnknownList": [],
+  "A10a": "PASS",
+  "A10b": "PASS",
+  "SchedulerListFile": "docs/receipts/_hv-s7-hdone-parent/02-scheduler-list.json",
+  "TimerId": "01a0218b0965",
+  "TimerNextFireAt": "2026-08-21T02:39:15.192009800+00:00",
+  "TimerDeletedByValidator": false,
+  "NamedTestsRerunThisTurn": false,
+  "NamedTestsPrior": {
+    "PesterTestMcp195": {
+      "Passed": 4,
+      "Failed": 0,
+      "Skipped": 0
+    },
+    "UnitSanitizerPersist": {
+      "Passed": 42,
+      "Failed": 0,
+      "Skipped": 0
+    },
+    "IntegrationS15S16": {
+      "Passed": 2,
+      "Failed": 0,
+      "Skipped": 0
+    },
+    "UnitPlanFileTodoId": {
+      "Passed": 30,
+      "Failed": 0,
+      "Skipped": 0
+    },
+    "ValidateTraceability": "Succeeded"
+  },
+  "TodosStillDoneFalse": [
+    "PLAN-SESSIONLOGREMEDIATE-001",
+    "BUG-TRIAGE-160",
+    "BUG-TRIAGE-161",
+    "BUG-TRIAGE-162",
+    "BUG-TRIAGE-164",
+    "MCP-SESSIONLOG-001",
+    "MCP-SESSIONLOG-002"
+  ],
+  "TodosMarkedDoneByValidator": false,
+  "Accuracy": 95,
+  "Completeness": 96
+}

@@ -1,0 +1,70 @@
+{
+  "listFrInProgressExit": 0,
+  "inProgressIds": [
+    "FR-HANDOFF-001",
+    "FR-HANDOFF-002",
+    "FR-HANDOFF-003",
+    "FR-HANDOFF-004",
+    "FR-HANDOFF-005",
+    "FR-HANDOFF-006",
+    "FR-HANDOFF-007"
+  ],
+  "gets": [
+    {
+      "id": "FR-HANDOFF-001",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-002",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-003",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-004",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-005",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-006",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    },
+    {
+      "id": "FR-HANDOFF-007",
+      "exitCode": 0,
+      "isError": false,
+      "status": "in_progress",
+      "isSatisfiedMention": false,
+      "completed": false
+    }
+  ]
+}

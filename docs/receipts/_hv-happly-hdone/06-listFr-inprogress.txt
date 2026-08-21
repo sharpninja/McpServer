@@ -1,0 +1,138 @@
+type: result
+payload:
+  requestId: req-20260820T125816Z-5899
+  result:
+    items:
+    - id: FR-HANDOFF-001
+      title: Ingest workspace-scoped handoff documents
+      description: Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 source ingestion surface.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-001-formats
+        text: Supports Markdown, text, JSON, and YAML inputs.
+        isSatisfied: false
+      - id: ac-fr-handoff-001-reject
+        text: Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+        isSatisfied: false
+      - id: ac-fr-handoff-001-limit
+        text: Maximum decoded input is 8 MiB.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2344550+00:00
+      updatedAt: 2026-08-20T12:58:17.2344830+00:00
+    - id: FR-HANDOFF-002
+      title: Extract structured MCP TODO drafts via one-shot agents
+      description: Use the existing one-shot agent system to extract a structured MCP TODO draft.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 extraction contract.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-002-prompt
+        text: Extraction uses a versioned prompt and strict JSON contract.
+        isSatisfied: false
+      - id: ac-fr-handoff-002-malformed
+        text: Malformed output produces diagnostics and never creates a TODO.
+        isSatisfied: false
+      - id: ac-fr-handoff-002-source
+        text: Unknown or missing source information is not silently discarded.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2349408+00:00
+      updatedAt: 2026-08-20T12:58:17.2349636+00:00
+    - id: FR-HANDOFF-003
+      title: Validate and normalize generated TODO drafts
+      description: Validate and normalize generated TODO drafts.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 draft validation.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-003-fields
+        text: Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+        isSatisfied: false
+      - id: ac-fr-handoff-003-diagnostics
+        text: Invalid or conflicting values produce field-specific diagnostics.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2353428+00:00
+      updatedAt: 2026-08-20T12:58:17.2353631+00:00
+    - id: FR-HANDOFF-004
+      title: Support DraftOnly, RequireReview, and CreateWhenConfident modes
+      description: Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 ingestion modes.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-004-default
+        text: DraftOnly is the default and never mutates TODO state.
+        isSatisfied: false
+      - id: ac-fr-handoff-004-review
+        text: RequireReview persists an approvable run without creating a TODO.
+        isSatisfied: false
+      - id: ac-fr-handoff-004-create
+        text: CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2357198+00:00
+      updatedAt: 2026-08-20T12:58:17.2357397+00:00
+    - id: FR-HANDOFF-005
+      title: Persist approved TODOs exclusively through the TODO service
+      description: Persist approved TODOs exclusively through the existing TODO service.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 TODO persistence.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-005-one
+        text: Successful creation produces exactly one TODO.
+        isSatisfied: false
+      - id: ac-fr-handoff-005-replay
+        text: Replay of the same workspace, content hash, and prompt version returns the existing receipt.
+        isSatisfied: false
+      - id: ac-fr-handoff-005-collision
+        text: ID collisions require review and are never silently renamed.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2360977+00:00
+      updatedAt: 2026-08-20T12:58:17.2361174+00:00
+    - id: FR-HANDOFF-006
+      title: Preserve auditable provenance and diagnostics
+      description: Preserve auditable provenance and diagnostics for every run.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 audit record.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-006-fields
+        text: Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+        isSatisfied: false
+      - id: ac-fr-handoff-006-secrets
+        text: Raw credentials or source content are not copied into logs.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2364349+00:00
+      updatedAt: 2026-08-20T12:58:17.2364545+00:00
+    - id: FR-HANDOFF-007
+      title: Provide equivalent public handoff surfaces
+      description: Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+      status: in_progress
+      priority: high
+      area: HANDOFF
+      notes: MCP-HANDOFF-001 public surface parity.
+      acceptanceCriteria:
+      - id: ac-fr-handoff-007-delegate
+        text: Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-20T12:58:17.2367215+00:00
+      updatedAt: 2026-08-20T12:58:17.2367425+00:00
+    totalCount: 7
+  deprecated: true
+
+---
+

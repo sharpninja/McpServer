@@ -1,0 +1,26 @@
+{
+  "receiptMatrixExists": true,
+  "scratchMatrixExists": true,
+  "hashReceiptMatrix": "8940C9F69C7C44F24E3CA24D6EDFE108C1799B2933BE84475DB108D9B8EE6B5F",
+  "hashScratchMatrix": "8940C9F69C7C44F24E3CA24D6EDFE108C1799B2933BE84475DB108D9B8EE6B5F",
+  "matricesEqual": true,
+  "hashReceiptInv": "9B84FCB93FF19E8C177D23BF1CB2974515714EF62656C7C7E4EAE4A5D8E09F59",
+  "hashScratchInv": "9B84FCB93FF19E8C177D23BF1CB2974515714EF62656C7C7E4EAE4A5D8E09F59",
+  "inventoriesEqual": true,
+  "s4TodoGetsExists": false,
+  "scratchFiles": [
+    "list-hostile.ps1",
+    "s0-drift.json",
+    "s0-freeze.ps1",
+    "s0-inventory.json",
+    "s0-req-histograms.json",
+    "s0-req-ids.ps1",
+    "s3-build-matrix.ps1",
+    "s3-coverage.json",
+    "s3-matrix.json",
+    "s3-verify-coverage.ps1",
+    "s4-apply-todos.ps1",
+    "s5-apply-reqs.ps1",
+    "s6-none.json"
+  ]
+}

@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T210200Z-0b3a
+  result:
+    id: FR-MCP-FAILSAFE-001
+    title: Failsafe drain treats 503 backend_unavailable as backend-down and can retry
+    description: >-
+      Session-log persist that hits the storage budget or a transient provider fault stays retryable HTTP 503 backend_unavailable with failsafe on disk. Drain aborts without incrementing drainAttempts or quarantining. After storage answers, a later drain in the same process can replay. BUG-TRIAGE-159.
+
+      - [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+
+      - [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+
+      - [ ] Drain does not latch failed=1 as permanently completed in-process
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+      isSatisfied: false
+    - id: ac-2
+      text: Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+      isSatisfied: false
+    - id: ac-3
+      text: Drain does not latch failed=1 as permanently completed in-process
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T21:02:01.5917080+00:00
+    updatedAt: 2026-08-19T21:02:01.5918067+00:00
+  deprecated: true
+
+---
+
+

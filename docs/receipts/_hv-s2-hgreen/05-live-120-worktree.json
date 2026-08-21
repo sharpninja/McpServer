@@ -1,0 +1,40 @@
+{
+  "TimestampUtc": "2026-08-19T20:00:33Z",
+  "PluginExe": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+  "CacheRoot": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\cache-worktree-120",
+  "SessionId": "GrokCode-20260819T200030Z-hostile-s2-120",
+  "RequestId": "req-20260819T200030Z-001-hostile-s2-120-wt",
+  "BeginTimeoutSecondsPassed": 8,
+  "Bootstrap": {
+    "Method": "workflow.sessionlog.bootstrap",
+    "TimedOut": false,
+    "ExitCode": 1,
+    "ElapsedSec": 0.778,
+    "StdOut": "",
+    "StdErr": "\u001b[31;1mException: \u001b[0mF:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1:153\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1mLine |\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m 153 | \u001b[0m     \u001b[36;1mthrow \"Unable to find plugin PowerShell script '$Name' under '$Ro\u001b[0m .\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m     | \u001b[31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1mUnable to find plugin PowerShell script 'repl-invoke.ps1' under\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1m'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core'.\u001b[0m\r\n",
+    "TimeoutSecondsPassed": 25
+  },
+  "OpenSession": {
+    "Method": "workflow.sessionlog.openSession",
+    "TimedOut": false,
+    "ExitCode": 1,
+    "ElapsedSec": 0.644,
+    "StdOut": "",
+    "StdErr": "\u001b[31;1mException: \u001b[0mF:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1:153\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1mLine |\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m 153 | \u001b[0m     \u001b[36;1mthrow \"Unable to find plugin PowerShell script '$Name' under '$Ro\u001b[0m .\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m     | \u001b[31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1mUnable to find plugin PowerShell script 'repl-invoke.ps1' under\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1m'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core'.\u001b[0m\r\n",
+    "TimeoutSecondsPassed": 35
+  },
+  "BeginTurn": {
+    "Method": "workflow.sessionlog.beginTurn",
+    "TimedOut": false,
+    "ExitCode": 1,
+    "ElapsedSec": 0.636,
+    "StdOut": "",
+    "StdErr": "\u001b[31;1mException: \u001b[0mF:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1:153\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1mLine |\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m 153 | \u001b[0m     \u001b[36;1mthrow \"Unable to find plugin PowerShell script '$Name' under '$Ro\u001b[0m .\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m     | \u001b[31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1mUnable to find plugin PowerShell script 'repl-invoke.ps1' under\u001b[0m\r\n\u001b[31;1m\u001b[0m\u001b[36;1m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[0m\u001b[36;1m\u001b[31;1m\u001b[31;1m\u001b[36;1m\u001b[31;1m\u001b[36;1m     | \u001b[31;1m'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core'.\u001b[0m\r\n",
+    "TimeoutSecondsPassed": 8
+  },
+  "BeginClassified": "failed-unclassified",
+  "BeginHasCommandTimeout": false,
+  "BeginHasRetryableTrue": false,
+  "BeginHasUnclassifiedThrow": false,
+  "BeginExitZeroOnTimeout": false
+}

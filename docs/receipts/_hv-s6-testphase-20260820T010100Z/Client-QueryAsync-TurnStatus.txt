@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\.worktrees\triage-stale-turns\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Client.Tests -> F:\GitHub\McpServer\.worktrees\triage-stale-turns\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+Test run for F:\GitHub\McpServer\.worktrees\triage-stale-turns\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: F:\GitHub\McpServer\docs\receipts\_hv-s6-testphase-20260820T010100Z\Client-QueryAsync-TurnStatus.trx
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 166 ms - McpServer.Client.Tests.dll (net10.0)

@@ -1,0 +1,34 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Client -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.Repl.Host -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.QBAgent.Tools -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.QBAgent -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\.worktrees\triage-113-tags\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\.worktrees\triage-113-tags\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
+Test run for F:\GitHub\McpServer\.worktrees\triage-113-tags\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+  Failed McpServer.Support.Mcp.IntegrationTests.Controllers.SessionLogControllerTests.WhenPostingSessionTagsThenGetBySessionIdReturnsTags [4 s]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at McpServer.Support.Mcp.IntegrationTests.Controllers.SessionLogControllerTests.WhenPostingSessionTagsThenGetBySessionIdReturnsTags() in F:\GitHub\McpServer\.worktrees\triage-113-tags\tests\McpServer.Support.Mcp.IntegrationTests\Controllers\SessionLogControllerTests.cs:line 258
+--- End of stack trace from previous location ---
+Results File: F:\GitHub\McpServer\.worktrees\triage-113-tags\tests\McpServer.Support.Mcp.IntegrationTests\TestResults\hv-113-red-int.trx
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 4 s - McpServer.Support.Mcp.IntegrationTests.dll (net10.0)

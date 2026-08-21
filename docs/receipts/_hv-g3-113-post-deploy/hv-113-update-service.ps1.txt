@@ -1,0 +1,19 @@
+#Requires -Version 7.0
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+Set-Location -LiteralPath 'F:\GitHub\McpServer'
+$d = Get-PSDrive -Name F
+Write-Output ('F_FREE_GB=' + [math]::Round(($d.Free / 1GB), 3))
+Write-Output '=== UPDATESERVICE ==='
+# gsudo: one elevated call for the whole deploy
+gsudo pwsh.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File '.\build.ps1' UpdateService
+Write-Output ('UPDATESERVICE_EXIT=' + $LASTEXITCODE)
+. '.\plugins\core\lib-ps\marker-resolver.ps1'
+Start-Sleep -Seconds 5
+$nonce = [guid]::NewGuid().ToString('N')
+$health = Invoke-RestMethod -Uri ("http://PAYTON-LEGION2:7147/health?nonce=$nonce") -TimeoutSec 30
+Write-Output ('HealthStatus=' + $health.status)
+Write-Output ('NonceOk=' + ($health.nonce -eq $nonce))
+Write-Output ('Version=' + $health.version)
+Write-Output ('Storage=' + $health.storage)
+

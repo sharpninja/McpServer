@@ -1,0 +1,43 @@
+type: result
+payload:
+  requestId: req-20260821T012745Z-d01e
+  result:
+    id: TR-MCP-SESSIONLOG-006
+    title: Required planFile and todoId scalars with None sentinel and backfill
+    description: Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: SESSIONLOG
+    acceptanceCriteria:
+    - id: AC-TR-MCP-SESSIONLOG-006-001
+      text: todoId is None, canonical TODO id, or ISSUE-N. FR/TR/TEST ids fail. planFile is None or a normalized relative/exact/~/ path, max 2048, no .. .
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-002
+      text: Additive upsert/complete omits preserve stored values. Supplied values are validated. ReplaceTurnAsync requires both fields.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-003
+      text: Extractor scans turn text, tags, context, files, actions, dialog, and agent history under ~. Tag TODO ids win. Ties and FR/TR/TEST ids yield None.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-004
+      text: SessionLogTurns.PlanFile required string max 2048 default None. TodoId required string max 128 default None. Three provider migrations add both columns.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-005
+      text: Backfill writes extractor hits onto None columns only. Non-None is not overwritten. Rerun is a no-op.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-006
+      text: POST begin and sessionlog_begin_turn require planFile and todoId. Missing is 400/error. None/None succeeds.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-007
+      text: SessionLogClient.BeginTurnAsync, McpAgent BeginTurnAsync, and REPL beginTurn serialize and persist the supplied values.
+      isSatisfied: false
+    - id: AC-TR-MCP-SESSIONLOG-006-008
+      text: Read projection copies planFile and todoId onto a clone. Source is unchanged. None is not rewritten.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-21T01:27:47.5936789+00:00
+    updatedAt: 2026-08-21T01:27:47.5938648+00:00
+  deprecated: true
+
+---
+

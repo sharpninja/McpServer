@@ -1,0 +1,103 @@
+{
+  "TimestampUtc": "2026-08-19T20:36:01Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core",
+  "WorkClass": 1,
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/plugin-core",
+  "GitSha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyCount": 9,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": "add-profile.grok.md"
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T202721Z-hostile-s2-resume",
+    "requestId": "req-20260819T202721Z-001-hostile-s2-resume",
+    "beginTurnId": 42103,
+    "completeStatus": "completed",
+    "queryProof": "docs/receipts/_hv-s2-resume/14-query-proof.json",
+    "queryTotalCount": 1,
+    "queryTurnStatus": "completed",
+    "queryDialogCount": 3,
+    "queryDesignDecisionCount": 2
+  },
+  "Plugin": {
+    "sourceType": "GrokCode",
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.95.0",
+    "signatureOk": true,
+    "nonceMatch": true,
+    "nonce": "hv-s2r-20260819T202721Z-62708",
+    "healthStorage": "reachable",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "toolsSearchExact": 1
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 92,
+  "Completeness": 90,
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "title": "SessionEnd flush YAML gone; flush-failed exit 1; unresolved {}" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "title": "Hanging mcpserver-repl.cmd through real Invoke-ReplRaw; degraded/queued; no throw" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "title": "disk_full current-turn remains parseable; auditActions and lastBuildStatus unchanged" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "title": "Named Pester Passed 15 Failed 0 Skipped 0" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "title": "Leftover TODOs Done=false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "title": "No FR-vs-file timestamp FAIL" },
+    { "id": "B2", "surface": "B", "verdict": "FAIL", "title": "No S2 red-phase hostile AGREE" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "title": "MCP-only storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "title": "PowerShell only" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "title": "15/0/0 honesty" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "title": "Leftover FR/TEST identified" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "title": "Structured AC exist" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "title": "AC testable" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "title": "Prior leftover AC holes now have live tests" },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "title": "Leftover IDs created" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "title": "Merge not claimed" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "title": "TODOs remain Done=false" }
+  ],
+  "FailList": [
+    "B2: No S2 red-phase hostile AGREE exists. Leftover AC proofs do not close PLAN-TRIAGELEFTOVER-001 or the BUG-TRIAGE leftovers. Do not mark those TODOs done."
+  ],
+  "PesterNamed": {
+    "Passed": 15,
+    "Failed": 0,
+    "Skipped": 0,
+    "NotRun": 115,
+    "ElapsedSec": 17.565,
+    "Collector": "docs/receipts/_hv-s2-resume/03-pester-named.json"
+  },
+  "LiveFlushTemp": {
+    "UnresolvedExit0Empty": true,
+    "OkPendingGone": true,
+    "FailExitCode": 1,
+    "FailHasFlushFailed": true,
+    "Collector": "docs/receipts/_hv-s2-resume/05c-live-flush-temp.json"
+  },
+  "LivePersist": {
+    "Threw": false,
+    "Persisted": false,
+    "ElapsedSec": 2.146,
+    "HangCmd": true,
+    "Degraded": true,
+    "Queued": true,
+    "Collector": "docs/receipts/_hv-s2-resume/06-live-persist.json"
+  },
+  "LiveDiskFull": {
+    "Exists": true,
+    "ParseOk": true,
+    "HashUnchanged": true,
+    "AuditActions": 2,
+    "LastBuildStatus": "unknown",
+    "Collector": "docs/receipts/_hv-s2-resume/07-live-diskfull.json"
+  },
+  "DoNotMarkTodosDone": true,
+  "DoNotMerge": true
+}

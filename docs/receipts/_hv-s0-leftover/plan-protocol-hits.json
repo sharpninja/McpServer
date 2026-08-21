@@ -1,0 +1,18 @@
+[
+  {
+    "Needle": "Worktree and subagent protocol",
+    "Present": true
+  },
+  {
+    "Needle": ".worktrees/",
+    "Present": true
+  },
+  {
+    "Needle": "git worktree add",
+    "Present": true
+  },
+  {
+    "Needle": "PLAN-TRIAGELEFTOVER-001",
+    "Present": true
+  }
+]

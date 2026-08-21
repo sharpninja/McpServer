@@ -1,0 +1,98 @@
+{
+  "TimestampUtc": "2026-08-19T22:54:35Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-session-store",
+  "Branch": "triage/session-store",
+  "HeadSha": "c43b4d48b342c603c57ebbf01f0ac0e8faed01b3",
+  "ParentSha": "400d881b6599b2fbc696ba51b65a47b4b48cb9eb",
+  "WorkClass": "class 1",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.95.0"
+  },
+  "MarkerSignatureValid": true,
+  "HealthNonceMatch": true,
+  "HealthNonce": "094d7721b83648f3994820d1646e5a22",
+  "HealthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "SessionId": "GrokCode-20260819T224825Z-hostile-g3s3-commit",
+  "RequestId": "req-20260819T224825Z-001-hostile-validate-g3-s3-commit",
+  "TurnId": 42123,
+  "PlanFile": "docs/plans/triage-cluster-002.md",
+  "TodoId": "PLAN-TRIAGELEFTOVER-001",
+  "OverallVerdict": "AGREE",
+  "Accuracy": 95,
+  "Completeness": 95,
+  "Counts": {
+    "PASS": 24,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "summary": "HEAD c43b4d48 contains the 9 claimed S3 files; product working tree clean; receipts untracked only." },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "summary": "Named two-class filter Failed 0 Passed 9 Skipped 0 EXIT 0." },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "summary": "BUG-TRIAGE-108, BUG-TRIAGE-144, PLAN-TRIAGELEFTOVER-001 Done=false." },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "summary": "Prior D1 (HEAD 400d881b uncommitted) is false of current HEAD c43b4d48." },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "summary": "Unmarked outside-root filesModified/commits rejected; documented markers accepted; forward-only." },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "summary": "replace_section budgeted SaveChanges, tracker clear, HTTP/tool retryable true; no new availability, health, or global requestId unique." },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "summary": "Independent 11-filter Failed 0 Passed 11 Skipped 0 EXIT 0." },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "summary": "Independent 38-filter Failed 0 Passed 38 Skipped 0 EXIT 0." },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "summary": "plugins/core not in HEAD vs parent or develop diffs." },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "summary": "H0 leftover AGREE exists; tests independently green; no timestamp archaeology FAIL." },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "summary": "This review re-ran tests and re-read store/source/git." },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "summary": "MCP-only TODO/session/requirements." },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "summary": "pwsh.exe collectors; no Python." },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "summary": "Named Failed 0 Skipped 0 and expanded 11/38 counts matched this re-run." },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "summary": "No unexpected deletes." },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "summary": "SESSIONATTR FR/TR/TEST plus TRIAGEERR for 144 discovered from MCP list." },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "summary": "Structured AC present on SESSIONATTR and TRIAGEERR." },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "summary": "AC path-based and testable; SHA-only documented as unprovable." },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "summary": "Named tests cover SESSIONATTR path AC and 144 retryable envelopes." },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "summary": "Mappings 1:1 SESSIONATTR and TRIAGEERR." },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "summary": "HEAD contains S3 product files; product tree clean; merge of current tip would ship 108/144." },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "summary": "113 not claimed done; PLAN remains open." },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "summary": "108/144/PLAN Done=false." },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "summary": "Named 9-filter and 11/38 filters match plan S3 named tests for 108/144." }
+  ],
+  "FailList": [],
+  "UnknownList": [],
+  "TestNamed": {
+    "filter": "FullyQualifiedName~SessionLogSessionAttrTests|FullyQualifiedName~SessionLogReplaceSectionRetryableTests",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 9,
+    "skipped": 0,
+    "log": "docs/receipts/_hv-g3s3-224825Z/tests-named.txt",
+    "trx": "docs/receipts/_hv-g3s3-224825Z/tests-named.trx"
+  },
+  "TestEleven": {
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 11,
+    "skipped": 0,
+    "log": "docs/receipts/_hv-g3s3-224825Z/tests-11.txt",
+    "trx": "docs/receipts/_hv-g3s3-224825Z/tests-11.trx"
+  },
+  "TestBroad": {
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 38,
+    "skipped": 0,
+    "log": "docs/receipts/_hv-g3s3-224825Z/tests-38.txt",
+    "trx": "docs/receipts/_hv-g3s3-224825Z/tests-38.trx"
+  },
+  "Todos": {
+    "BUG-TRIAGE-108": false,
+    "BUG-TRIAGE-144": false,
+    "BUG-TRIAGE-113": false,
+    "PLAN-TRIAGELEFTOVER-001": false
+  },
+  "MayMerge": true,
+  "MayMarkDone": ["BUG-TRIAGE-108", "BUG-TRIAGE-144"],
+  "MustNotMarkDone": ["PLAN-TRIAGELEFTOVER-001", "BUG-TRIAGE-113"]
+}

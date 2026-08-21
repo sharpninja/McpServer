@@ -1,0 +1,257 @@
+{
+  "TimestampUtc": "2026-08-19T18:53:20Z",
+  "CacheDir": "F:\\GitHub\\McpServer\\.mcpServer\\grok",
+  "FailsafeDir": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe",
+  "LiveCount": 12,
+  "QuarantineCount": 96,
+  "KindCounts": {
+    "503-or-backend_unavailable": 0,
+    "timeout": 0,
+    "session_submit": 12,
+    "other": 0
+  },
+  "Methods": [
+    {
+      "Method": "",
+      "Count": 12
+    }
+  ],
+  "SessionState": "status: verified\r\nsessionId: GrokCode-20260819T185029Z-plugin-session\r\nagent: GrokCode\r\nstarted: 2026-08-19T18:50:30Z\r\nlastUpdated: 2026-08-19T18:50:30Z\r\nmarkerFilePath: F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml\r\nmarkerLastWriteUtc: 2026-08-19T13:05:36.9456178Z\r\nagentSessionId: 01a01b5c-261e-77a1-86f8-0921bdef347f\r\nagentSessionTranscriptFile: \"\"\r\nagentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\r\nagentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n",
+  "CurrentTurn": "turnRequestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\r\nqueryTitle: Remediate hook cache isolation FAILs\r\nopenedAt: 2026-08-19T15:54:40Z\r\nstatus: in_progress\r\nsessionId: GrokCode-20260818T182741Z-plugin-session\r\ncodeEdits: 0\r\nlastBuildStatus: unknown\r\nauditActions: 0\r\nauditDialog: 0\r\nauditDecisions: 0\r\nauditFiles: 0\r\nauditCommits: 0\r\nqueryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\r\nplanFile: None\r\ntodoId: None\r\nmarkerFilePath: F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml\r\nmarkerLastWriteUtc: 2026-08-19T13:05:36.9456178Z\n",
+  "LiveItems": [
+    {
+      "Name": "20260819T134743Z-session_submit-4cbf.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T134743Z-session_submit-4cbf.yaml",
+      "Length": 10055,
+      "LastWriteTimeUtc": "2026-08-19T13:47:43.4800611Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T134743Z\nparams:\n  sessionLog:\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    status: in_progress\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    started: 2026-08-19T13:22:27Z\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    sourceType: GrokCode\n    model: grok\n    turnCount: 1\n    turns:\n      - status: canceled\n        queryText: |-\n          <user_query>\n          /refresh-docs then /mcpserver:wrap-up\n          </user_query>\n          <skill_information>\n          <skills_referenced>\n          <skill name=\"refresh-docs\" path=\"C:\\Users\\kingd\\.grok\\skills\\refresh-docs\\SKILL.md\"/>\n          <skill name=\"mcpserver:wrap-up\" path=\"C:\\Users\\kingd\\.grok\\installed-plugins\\f--github-mcpserver-grok-plugin-67f1f31f\\./sk"
+    },
+    {
+      "Name": "20260819T142740Z-session_submit-1965.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T142740Z-session_submit-1965.yaml",
+      "Length": 10055,
+      "LastWriteTimeUtc": "2026-08-19T14:27:40.1444989Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T142740Z\nparams:\n  sessionLog:\n    model: grok\n    turns:\n      - model: grok\n        queryTitle: Refresh docs then wrap-up\n        requestId: req-20260819T130800Z-015-refresh-docs-wrap-up\n        queryText: |-\n          <user_query>\n          /refresh-docs then /mcpserver:wrap-up\n          </user_query>\n          <skill_information>\n          <skills_referenced>\n          <skill name=\"refresh-docs\" path=\"C:\\Users\\kingd\\.grok\\skills\\refresh-docs\\SKILL.md\"/>\n          <skill name=\"mcpserver:wrap-up\" path=\"C:\\Users\\kingd\\.grok\\installed-plugins\\f--github-mcpserver-grok-plugin-67f1f31f\\./skills/wrap-up\\SKILL.md\"/>\n          </skills_referenced>\n          <skill name=\"refresh-docs\" args=\"then\">\n          # Refresh Docs\n\n          Reconcile `docs/` with the current codebase, remove documentation that no longer appl"
+    },
+    {
+      "Name": "20260819T143419Z-session_submit-2e5e.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T143419Z-session_submit-2e5e.yaml",
+      "Length": 10055,
+      "LastWriteTimeUtc": "2026-08-19T14:34:19.3077158Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T143419Z\nparams:\n  sessionLog:\n    lastUpdated: 2026-08-19T14:34:19Z\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    model: grok\n    sourceType: GrokCode\n    started: 2026-08-19T13:22:27Z\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    turnCount: 1\n    turns:\n      - queryTitle: Refresh docs then wrap-up\n        model: grok\n        timestamp: 2026-08-19T13:17:04Z\n        response: Superseded by req-20260819T143418Z-prompt-87c3 before it was completed.\n        status: canceled\n        requestId: req-20260819T130800Z-015-refresh-docs-wrap-up\n        queryText: |-\n          <user_query>\n          /refresh-docs then /mcpserver:wrap-up\n          </user_query>\n          <skill_information>\n          <skills_referenced>\n          <skill name=\"refresh-docs\" path=\"C:\\Users\\kingd\\.grok\\skills"
+    },
+    {
+      "Name": "20260819T144645Z-session_submit-98d9.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T144645Z-session_submit-98d9.yaml",
+      "Length": 1010,
+      "LastWriteTimeUtc": "2026-08-19T14:46:45.0507273Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T144645Z\nparams:\n  sessionLog:\n    turns:\n      - timestamp: 2026-08-19T14:39:47Z\n        status: canceled\n        queryText: 'resolve problems: fix A7 canceled turn 015 vs cache, A8 staged GitVersion.yml, B honesty. Keep commit-sync pause. Do not commit or push.'\n        queryTitle: Resolve hostile wrap-up FAIL list\n        requestId: req-20260819T143000Z-017-resolve-hostile-fail-list\n        model: grok\n        response: Superseded by req-20260819T144644Z-prompt-9cc5 before it was completed.\n        tokenCount: 0\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    status: in_progress\n    sourceType: GrokCode\n    turnCount: 1\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    lastUpdated: 2026-08-19T14:46:44Z\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    model: grok\n    "
+    },
+    {
+      "Name": "20260819T150655Z-session_submit-61d1.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T150655Z-session_submit-61d1.yaml",
+      "Length": 4280,
+      "LastWriteTimeUtc": "2026-08-19T15:06:55.7166835Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T150655Z\nparams:\n  sessionLog:\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    model: grok\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    sourceType: GrokCode\n    status: in_progress\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    turns:\n      - requestId: req-20260819T150654Z-prompt-41a3\n        planFile: None\n        queryTitle: You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpSer\n        model: grok\n        todoId: None\n        response: (turn opened)\n        tokenCount: 0\n        status: in_progress\n        queryText: |\n          You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpServer.\n          You are adversarial. Your job is to disprove the implementer's claims.\n\n          FIRST ACTION (mandatory, before any validation):\n          Execute the add-"
+    },
+    {
+      "Name": "20260819T154431Z-session_submit-d5a4.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T154431Z-session_submit-d5a4.yaml",
+      "Length": 4216,
+      "LastWriteTimeUtc": "2026-08-19T15:44:31.4364871Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T154431Z\nparams:\n  sessionLog:\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    status: in_progress\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    model: grok\n    turnCount: 1\n    turns:\n      - timestamp: 2026-08-19T15:06:55Z\n        queryTitle: You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpSer\n        status: canceled\n        requestId: req-20260819T150654Z-prompt-41a3\n        model: grok\n        response: Superseded by req-20260819T154430Z-prompt-d518 before it was completed.\n        queryText: |\n          You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpServer.\n          You are adversarial. Your job is to disprove the implementer's claims.\n\n          FIRST ACTION (mandatory, before any validation):\n          Execute the add-profile skill now. Read C:\\User"
+    },
+    {
+      "Name": "20260819T162301Z-session_submit-889d.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T162301Z-session_submit-889d.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T16:23:01.1982065Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T162301Z\nparams:\n  sessionLog:\n    sourceType: GrokCode\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    lastUpdated: 2026-08-19T16:23:00Z\n    turnCount: 1\n    started: 2026-08-19T13:22:27Z\n    model: grok\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    turns:\n      - tokenCount: 0\n        requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\n        timestamp: 2026-08-19T15:54:40Z\n        status: canceled\n        model: grok\n        response: Superseded by req-20260819T162300Z-prompt-85ad before it was completed.\n        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        queryTitle: Remediate hook cache isolation FAILs\n    ag"
+    },
+    {
+      "Name": "20260819T162329Z-session_submit-2381.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T162329Z-session_submit-2381.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T16:23:29.9631136Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T162329Z\nparams:\n  sessionLog:\n    lastUpdated: 2026-08-19T16:23:29Z\n    sourceType: GrokCode\n    model: grok\n    status: in_progress\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    started: 2026-08-19T13:22:27Z\n    turns:\n      - tokenCount: 0\n        status: canceled\n        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\n        response: Superseded by req-20260819T162329Z-prompt-b2a2 before it was completed.\n        model: grok\n        queryTitle: Remediate hook cache"
+    },
+    {
+      "Name": "20260819T165452Z-session_submit-d49f.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T165452Z-session_submit-d49f.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T16:54:52.4272067Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T165452Z\nparams:\n  sessionLog:\n    turnCount: 1\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    lastUpdated: 2026-08-19T16:54:52Z\n    agentSessionId: 01a01290-749a-7271-8c76-d04be7e683d7\n    started: 2026-08-19T13:22:27Z\n    model: grok\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    turns:\n      - requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\n        status: canceled\n        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        tokenCount: 0\n        queryTitle: Remediate hook cache isolation FAILs\n        model: grok\n        response: Superseded by req-20260819T165451Z-prompt-0015 before it was completed.\n        ti"
+    },
+    {
+      "Name": "20260819T165531Z-session_submit-fa51.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T165531Z-session_submit-fa51.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T16:55:31.9188766Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T165531Z\nparams:\n  sessionLog:\n    lastUpdated: 2026-08-19T16:55:31Z\n    turnCount: 1\n    sourceType: GrokCode\n    model: grok\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    status: in_progress\n    turns:\n      - status: canceled\n        model: grok\n        tokenCount: 0\n        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        response: Superseded by req-20260819T165531Z-prompt-5b41 before it was completed.\n        queryTitle: Remediate hook cache isolation FAILs\n        requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\n        timestamp: 2026-08-19T15:54:40Z\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    started: 20"
+    },
+    {
+      "Name": "20260819T171757Z-session_submit-cd5e.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T171757Z-session_submit-cd5e.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T17:17:57.4180486Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T171757Z\nparams:\n  sessionLog:\n    model: grok\n    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]\n    turnCount: 1\n    status: in_progress\n    lastUpdated: 2026-08-19T17:17:57Z\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    sourceType: GrokCode\n    sessionId: GrokCode-20260818T182741Z-plugin-session\n    turns:\n      - queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        response: Superseded by req-20260819T171756Z-prompt-35a1 before it was completed.\n        timestamp: 2026-08-19T15:54:40Z\n        status: canceled\n        queryTitle: Remediate hook cache isolation FAILs\n        model: grok\n        requestId: req-20260819T153500Z-019-remediate"
+    },
+    {
+      "Name": "20260819T185050Z-session_submit-f5ee.yaml",
+      "Path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\20260819T185050Z-session_submit-f5ee.yaml",
+      "Length": 1058,
+      "LastWriteTimeUtc": "2026-08-19T18:50:50.2020693Z",
+      "KindGuess": "session_submit",
+      "Method": "client.SessionLog.SubmitAsync",
+      "Label": "session_submit",
+      "Code": null,
+      "Head": "method: client.SessionLog.SubmitAsync\nlabel: session_submit\ntimestamp: 20260819T185050Z\nparams:\n  sessionLog:\n    started: 2026-08-19T18:50:30Z\n    model: grok\n    lastUpdated: 2026-08-19T18:50:49Z\n    status: in_progress\n    sourceType: GrokCode\n    turnCount: 1\n    agentSessionId: 01a01b5c-261e-77a1-86f8-0921bdef347f\n    agentExecutablePath: C:\\Users\\kingd\\.grok\\bin\\grok.exe\n    turns:\n      - queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\n        model: grok\n        response: Superseded by req-20260819T185048Z-prompt-d214 before it was completed.\n        timestamp: 2026-08-19T15:54:40Z\n        status: canceled\n        tokenCount: 0\n        queryTitle: Remediate hook cache isolation FAILs\n        requestId: req-20260819T153500Z-019-remediate-hoo"
+    }
+  ],
+  "QuarantinePreview": [
+    {
+      "Name": "20260812T220155Z-session_submit-9ed4.yaml",
+      "Length": 1261,
+      "LastWriteTimeUtc": "2026-08-12T22:09:54.3610007Z"
+    },
+    {
+      "Name": "20260812T220155Z-session_submit-9ed4.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-12T22:09:59.8913944Z"
+    },
+    {
+      "Name": "20260812T220901Z-session_submit-0a95.yaml",
+      "Length": 3346,
+      "LastWriteTimeUtc": "2026-08-12T22:26:29.1055218Z"
+    },
+    {
+      "Name": "20260812T220901Z-session_submit-0a95.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-12T22:27:18.2910333Z"
+    },
+    {
+      "Name": "20260816T174019Z-session_submit-4e3a.yaml",
+      "Length": 5015,
+      "LastWriteTimeUtc": "2026-08-16T18:01:40.8615421Z"
+    },
+    {
+      "Name": "20260816T174019Z-session_submit-4e3a.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-16T18:01:44.3944325Z"
+    },
+    {
+      "Name": "20260816T191013Z-session_submit-d3ca.yaml",
+      "Length": 4482,
+      "LastWriteTimeUtc": "2026-08-16T20:57:37.3881436Z"
+    },
+    {
+      "Name": "20260816T191013Z-session_submit-d3ca.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-16T20:58:12.4069709Z"
+    },
+    {
+      "Name": "20260816T200548Z-session_submit-e91c.yaml",
+      "Length": 5095,
+      "LastWriteTimeUtc": "2026-08-16T20:58:13.6194879Z"
+    },
+    {
+      "Name": "20260816T200548Z-session_submit-e91c.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-16T20:58:16.7975961Z"
+    },
+    {
+      "Name": "20260816T204641Z-session_submit-4a31.yaml",
+      "Length": 1714,
+      "LastWriteTimeUtc": "2026-08-16T20:58:17.7480598Z"
+    },
+    {
+      "Name": "20260816T204641Z-session_submit-4a31.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-16T20:58:19.7941263Z"
+    },
+    {
+      "Name": "20260816T205733Z-session_submit-edbb.yaml",
+      "Length": 7182,
+      "LastWriteTimeUtc": "2026-08-16T20:59:26.2368214Z"
+    },
+    {
+      "Name": "20260816T205733Z-session_submit-edbb.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-16T20:59:27.1036812Z"
+    },
+    {
+      "Name": "20260816T221600Z-session_submit-ecc3.yaml",
+      "Length": 5047,
+      "LastWriteTimeUtc": "2026-08-17T01:59:26.9437656Z"
+    },
+    {
+      "Name": "20260816T221600Z-session_submit-ecc3.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-17T01:59:33.9022125Z"
+    },
+    {
+      "Name": "20260816T224534Z-session_submit-1627.yaml",
+      "Length": 3556,
+      "LastWriteTimeUtc": "2026-08-17T01:59:35.5742774Z"
+    },
+    {
+      "Name": "20260816T224534Z-session_submit-1627.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-17T02:00:53.1828409Z"
+    },
+    {
+      "Name": "20260817T015208Z-session_submit-2cb4.yaml",
+      "Length": 6151,
+      "LastWriteTimeUtc": "2026-08-17T01:59:36.8005148Z"
+    },
+    {
+      "Name": "20260817T015208Z-session_submit-2cb4.yaml.reason.txt",
+      "Length": 454,
+      "LastWriteTimeUtc": "2026-08-17T02:00:53.2378643Z"
+    }
+  ]
+}

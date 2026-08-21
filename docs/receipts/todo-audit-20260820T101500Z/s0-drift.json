@@ -1,0 +1,35 @@
+{
+  "timestampUtc": "2026-08-20T101500Z",
+  "head": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "checks": [
+    {
+      "id": "remaining-2026-07-11",
+      "observed": "s0-inventory.json remaining0711Count=23 of 40 open TODOs",
+      "passIf": "at least one Remaining contains 2026-07-11"
+    },
+    {
+      "id": "quadbrain-e1-vs-rename",
+      "todo": "PLAN-QUADBRAIN-E1-001",
+      "remainingClaim": "0% complete. No actual code evidence for rename core or migration work",
+      "headEvidence": "src/McpServer.Storage.SqliteMigrations/Migrations/20260720170000_RenameQuadBrainRolesToCreativityLogic.cs plus SqlServer and Postgres twins; BrainSlotRoles.Creativity in QuadBrainOrchestrationService.cs"
+    },
+    {
+      "id": "sessionlog-001-vs-di",
+      "todo": "MCP-SESSIONLOG-001",
+      "remainingClaim": "Next slice starts at S13/S14 federation and outermost DI registration",
+      "headEvidence": "SessionLogSanitizingService constructed in src/McpServer.Support.Mcp/Program.cs and McpStdioHost.cs; FederatedSessionLogServiceTests wrap the decorator"
+    },
+    {
+      "id": "filetools-vs-mcp-tool-names",
+      "todo": "PLAN-FILETOOLS-001",
+      "remainingClaim": "No IRepoDiscoveryService",
+      "headEvidence": "RepoFileService exists at src/McpServer.Services/Services/RepoFileService.cs; grep of *Tools*.cs found no read_file MCP tool name"
+    },
+    {
+      "id": "deletecompliance-empty-fr",
+      "todo": "PLAN-DELETECOMPLIANCE-003",
+      "remainingClaim": "FR=[] placeholder",
+      "headEvidence": "todo_list FunctionalRequirements contained []; requirements_list type tr includes Id [] placeholder pending"
+    }
+  ]
+}

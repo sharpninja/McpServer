@@ -1,0 +1,96 @@
+{
+  "TimestampUtc": "2026-08-19T20:15:46Z",
+  "FrDump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01ba2-bf1c-70b2-a1f8-43751c63f792\\mcp\\call-676cd967-eb9f-45de-86c6-d434ae78137b-69.json",
+  "TestDump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01ba2-bf1c-70b2-a1f8-43751c63f792\\mcp\\call-380efd39-a96a-4a14-aa44-d07c2870373a-71.json",
+  "MapDump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01ba2-bf1c-70b2-a1f8-43751c63f792\\mcp\\call-380efd39-a96a-4a14-aa44-d07c2870373a-72.json",
+  "TrDumpExists": true,
+  "FrItemCount": 293,
+  "TrItemCount": 422,
+  "TestItemCount": 448,
+  "MapItemCount": 293,
+  "FrFound": true,
+  "TrFound": true,
+  "TestFound": true,
+  "MappingFound": true,
+  "FrTitle": "SessionLogs missing AgentSession columns fail closed",
+  "FrStatus": "pending",
+  "FrBody": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.",
+  "FrAc": [
+    {
+      "id": "ac-1",
+      "text": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.",
+      "isSatisfied": false,
+      "contains20260722214500": false,
+      "contains20260818205751": true,
+      "contains20260818205807": true,
+      "contains20260818205822": true
+    }
+  ],
+  "FrAc1": {
+    "id": "ac-1",
+    "text": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.",
+    "isSatisfied": false,
+    "contains20260722214500": false,
+    "contains20260818205751": true,
+    "contains20260818205807": true,
+    "contains20260818205822": true
+  },
+  "TrTitle": "Startup probe for AgentSession header columns",
+  "TrStatus": "pending",
+  "TrBody": "Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders on host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.",
+  "TrAc": [
+    {
+      "id": "ac-1",
+      "text": "Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders on host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.",
+      "isSatisfied": false,
+      "contains20260722214500": false,
+      "contains20260818205751": true,
+      "contains20260818205807": true,
+      "contains20260818205822": true
+    }
+  ],
+  "TrAc1": {
+    "id": "ac-1",
+    "text": "Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders on host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.",
+    "isSatisfied": false,
+    "contains20260722214500": false,
+    "contains20260818205751": true,
+    "contains20260818205807": true,
+    "contains20260818205822": true
+  },
+  "TestTitle": "Missing AgentSession columns fail closed",
+  "TestCondition": "A fixture database missing the four agent header columns fails closed with pending-migration. After Sqlite MigrateAsync applies 20260818205751_AddSessionLogTagsAndAgentSessionHeaders on a legacy SessionLogs table (with or without SessionLogTags), sessionlog query with and without text filter succeeds. SqlServer 20260818205807 and Postgres 20260818205822 Up() add the same columns; live MigrateAsync for those providers requires a server host.",
+  "TestNotes": "",
+  "TestAc": [
+    {
+      "id": "ac-1",
+      "text": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.",
+      "isSatisfied": false,
+      "contains20260722214500": false,
+      "contains20260818205751": false,
+      "contains20260818205807": false,
+      "contains20260818205822": false
+    }
+  ],
+  "TestAc1": {
+    "id": "ac-1",
+    "text": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.",
+    "isSatisfied": false,
+    "contains20260722214500": false,
+    "contains20260818205751": false,
+    "contains20260818205807": false,
+    "contains20260818205822": false
+  },
+  "MappingFrId": "FR-MCP-TRIAGESCHEMA-001",
+  "MappingTrIds": "TR-MCP-TRIAGESCHEMA-001",
+  "MappingTestIds": "TEST-MCP-TRIAGESCHEMA-001",
+  "FrHas20260722214500": false,
+  "TrHas20260722214500": false,
+  "TestHas20260722214500": false,
+  "FrBodyHas20260818205751": true,
+  "TrBodyHas20260818205751": true,
+  "FrAc1HasOld": false,
+  "FrAc1HasNew": true,
+  "TrAc1HasOld": false,
+  "TrAc1HasNew": true
+}

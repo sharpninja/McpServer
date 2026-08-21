@@ -1,0 +1,40 @@
+type: result
+payload:
+  requestId: req-20260821T020047Z-3235
+  result:
+    id: BUG-TRIAGE-161
+    title: Failsafe drain times out SessionLog.SubmitAsync at 30s after successful getFr/getTr
+    section: Session Logging
+    priority: high
+    done: false
+    description:
+    - 'Grok plugin workflow.requirements.getFr and getTr returned EXIT 0 with valid FR/TR bodies (native requirements_list confirmed the same IDs), but the wrapper printed Failsafe queue drain failed: mcpserver-repl invocation failed for method client.SessionLog.SubmitAsync: mcpserver-repl timed out after 30s. After the first successful Invoke-ReplRaw, plugins/core/lib-ps/repl-invoke.ps1 runs Invoke-ReplFailsafeDrainOnFirstSuccess and replays queued client.SessionLog.SubmitAsync records using the default 30s REPL timeout. Drain exceptions are swallowed so the requirement read still succeeds, but stderr is noisy, the first successful call can stall ~30s, and queued session-log records are not replayed. $ErrorActionPreference is Stop, so Write-Error in Invoke-ReplRaw bypasses Test-ReplFailsafeBackendUnreachable (which already treats timed out as backend-down abort) and hits the drain catch instead.'
+    - 'Triage group: triage-group-e6cca188011c3eb0'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- workflow.requirements.getFr and getTr still return EXIT 0 with the requested FR/TR body when a failsafe SessionLog.SubmitAsync replay times out'
+    - '- stderr does not print Failsafe queue drain failed for a SessionLog.SubmitAsync timeout; timeout is treated as a retryable backend-unreachable abort that leaves the failsafe record on disk'
+    - '- A SessionLog.SubmitAsync drain timeout does not latch failsafe drain completed, so a later reachable backend still replays the queued record'
+    - '- A successful non-sessionlog plugin call does not block for the full 30s SubmitAsync timeout before returning its own result'
+    - 'Implementation notes:'
+    - '- Target plugins/core/lib-ps/repl-invoke.ps1: Invoke-ReplFailsafeDrainOnFirstSuccess (catch at Failsafe queue drain failed), Invoke-ReplFailsafeDrain, Invoke-ReplRaw, and Get-ReplMethodTimeoutSeconds (default 30s; SessionLog.SubmitAsync is not a long method)'
+    - '- Invoke-ReplRaw catch uses Write-Error under ErrorActionPreference Stop; that throw skips Test-ReplFailsafeBackendUnreachable even though timed out and invocation failed are already abort markers'
+    - '- PersistTurn already maps SubmitAsync timeout to degraded/queued and keeps failsafe; drain replay should reuse that path instead of throwing'
+    - '- Do not run an unbounded synchronous drain inside the first successful getFr/getTr; cap records or time, or drain after the caller has already returned the requirement body'
+    implementationTasks: []
+    remaining: 'PLAN-SESSIONLOGREMEDIATE-001 S0: linked FR-MCP-170..172 / TR-MCP-PERSIST-001..004. Do not store-close without H-done AGREE.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-170
+    - FR-MCP-171
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PERSIST-001
+    - TR-MCP-PERSIST-002
+    - TR-MCP-PERSIST-003
+    - TR-MCP-PERSIST-004
+  deprecated: true
+
+---
+

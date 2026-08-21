@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260820T125749Z-f6e2
+  result:
+    id: PLAN-DELETECOMPLIANCE-003
+    title: Reconcile delete-compliance docs, migrations, filesystem cleanup, and static guards
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - Reconcile TR-MCP-DB-003 and recycle-safe delete policy across requirements wording, legacy migrations, deployment cleanup, agent clone cleanup, rollback file cleanup, and static regression guards.
+    technicalDetails:
+    - Update GraphRAG and QA requirement language from cascade delete to soft delete plus index cleanup semantics.
+    - Document whether old migrations are exempt; for active upgrade paths, replace durable hard deletes with safe migration behavior or prove no user data can exist.
+    - Introduce a shared recycle/quarantine delete helper for service install/update cleanup, clone cleanup, and rollback compensation files, with explicit temp/generated exemptions.
+    - Add a static compliance test that blocks new ExecuteDelete, raw durable DELETE, and permanent filesystem deletes outside named exemptions.
+    implementationTasks:
+    - task: Reconcile GraphRAG/QA requirements and tests with soft-delete wording.
+      done: false
+    - task: Classify or remediate migration hard-delete behavior.
+      done: false
+    - task: Add recycle/quarantine filesystem delete helper and migrate production cleanup paths.
+      done: false
+    - task: Add static delete-compliance guard tests.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): unlinked invalid FR []. Keep TR-MCP-DB-003. Soft-delete/recycle code exists; quarantine source and full DELETE compliance still incomplete. Do not store-close.'
+    dependsOn: &o0 []
+    functionalRequirements: *o0
+    technicalRequirements:
+    - TR-MCP-DB-003
+  deprecated: true
+
+---
+

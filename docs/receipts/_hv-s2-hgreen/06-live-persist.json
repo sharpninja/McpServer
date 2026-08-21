@@ -1,0 +1,27 @@
+{
+  "TimestampUtc": "2026-08-19T21:00:52Z",
+  "Threw": false,
+  "ThrowText": "",
+  "Persisted": false,
+  "ElapsedSec": 1.751,
+  "Details": {
+    "persisted": false,
+    "degraded": true,
+    "queued": true,
+    "persistenceStrategy": "failsafe-queue",
+    "failsafePath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\scratch-persist\\failsafe\\20260819T210050Z-session_submit-a22c.yaml",
+    "message": "beginTurn persist timed out; failsafe retained and current-turn stays active."
+  },
+  "FailsafePath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\scratch-persist\\failsafe\\20260819T210050Z-session_submit-a22c.yaml",
+  "FailsafeExists": true,
+  "RawSource": "",
+  "RawDefHasSubmitAsync": false,
+  "RawDefHasGetCommandRepl": true,
+  "RawDefHasStartSleep": false,
+  "RawDefHasProcessStart": true,
+  "WhichReplSource": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\scratch-persist\\bin\\mcpserver-repl.cmd",
+  "WhichReplIsHangCmd": true,
+  "HangCmdPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\scratch-persist\\bin\\mcpserver-repl.cmd",
+  "Degraded": true,
+  "Queued": true
+}

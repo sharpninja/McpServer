@@ -1,0 +1,73 @@
+type: result
+payload:
+  requestId: req-20260821T021323Z-62e8
+  result:
+    success: true
+    item:
+      id: MCP-SESSIONLOG-001
+      title: Session Log Sanitizer for credentials and regex redaction on search endpoints
+      section: Session Logging
+      priority: high
+      done: true
+      estimate: multi-slice
+      description:
+      - Add a session-log sanitizer that redacts credentials, tokens, API keys, secrets, and caller-configured regex matches before session-log search/query results leave the server.
+      - Apply redaction consistently to session log search endpoints, returned turn content, processing dialogs, actions, context lists, files, blockers, requirements, and any serialized payload fields that may contain sensitive values.
+      - Support centrally configured regex-based redaction rules with bounded execution, diagnostics for invalid patterns, and safe defaults for common credential formats.
+      technicalDetails:
+      - Sanitization is an outbound projection after raw filtering, ordering, federation merge, and pagination.
+      - The decorator is outermost so every server read transport shares one behavior.
+      - Raw storage and submitted DTO instances are never overwritten.
+      - Regex rules are bounded at configuration and execution time; timeout handling fails closed without logging the input.
+      - Default replacement tokens include stable rule IDs for diagnosis but no captured secret fragments.
+      implementationTasks:
+      - task: S0 [Planning] Persist FR-MCP-SESSIONLOGSAN-001, TR-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-001, their mapping, and TODO requirement links through the MCP plugins.
+        done: true
+      - task: S1 [Red] Add SessionLogSanitizationOptionsValidatorTests
+        done: true
+      - task: S2 [Green] Add SessionLogSanitizationOptions and validator
+        done: true
+      - task: S3 [Red] Add SessionLogSanitizerTests
+        done: true
+      - task: S4 [Red] Add DTO graph tests
+        done: true
+      - task: S5 [Red] Add recursive payload tests
+        done: true
+      - task: S6 [Green] Define ISessionLogSanitizer
+        done: true
+      - task: S7 [Green] Implement SessionLogSanitizer
+        done: true
+      - task: S8 [Green] Implement explicit DTO cloning
+        done: true
+      - task: S9 [Red] Add timeout-path tests
+        done: true
+      - task: S10 [Green] On regex timeout redact fail-closed
+        done: true
+      - task: S11 [Red] Add SessionLogSanitizingServiceTests
+        done: true
+      - task: S12 [Green] Implement SessionLogSanitizingService decorator
+        done: true
+      - task: S13 [Red] Extend FederatedSessionLogService tests to prove local and remote items are both sanitized after merge
+        done: true
+      - task: S14 [Green] Register SessionLogSanitizingService as the outermost HTTP/federation decorator in Program.cs and as the outermost stdio decorator in McpStdioHost.cs
+        done: true
+      - task: S15 [Red] Extend SessionLogController integration tests with a raw secret fixture
+        done: true
+      - task: S16 [Red] Add query-semantics cases proving a secret-containing raw record still participates in text filtering
+        done: true
+      - task: S17 [Integration] Add stdio tools/list plus sessionlog query/get invocations and a federated remote fixture
+        done: true
+      - task: S18 [Config/Docs] Add Mcp:SessionLogSanitization configuration examples
+        done: true
+      - task: S19 [Gate] Run sanitizer/options/service tests, Support.Mcp tests, HTTP integration tests, stdio/federation scopes
+        done: true
+      doneSummary: 'S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md (A10 rescore; prior 20260821T020355Z DISAGREE FAIL empty). Named tests Failed 0 Skipped 0: Pester TEST-MCP-195 4, unit sanitizer+persist 42, integration S15/S16 2, planFile/todoId 30, ValidateTraceability Succeeded. Persist merged 4605eab6/0e0c5763. Sanitizer merged ee89cd63/d54f4e32. Live planFile/todoId on hosted 20db61aa. Plugin HMAC 1.97.0. HEAD ee89cd63.'
+      remaining: Closed after S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-SESSIONLOGSAN-001
+      technicalRequirements:
+      - TR-MCP-SESSIONLOGSAN-001
+  deprecated: true
+
+---

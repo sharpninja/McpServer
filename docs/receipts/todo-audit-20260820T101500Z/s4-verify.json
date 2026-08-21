@@ -1,0 +1,12 @@
+{
+  "timestampUtc": "2026-08-20T12:48:42Z",
+  "s0Count": 40,
+  "liveOpenCount": 41,
+  "missingDate": [],
+  "staleOnly": [],
+  "orphanBad": [],
+  "stillOpenDone": [],
+  "newOpenIds": [
+    "BUG-TRIAGE-164"
+  ]
+}

@@ -515,6 +515,10 @@
   Scope: layer-1+
 - TEST-MCP-194: Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
   Scope: layer-1+
+- TEST-MCP-195: Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog. (2) Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw. (3) Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays. (4) getFr EXIT 0 with body before 30s when a queued session_submit 503s.
+  Scope: layer-1+
+- TEST-MCP-196: C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+  Scope: layer-1+
 - TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with key server and subscriber mocked in-process and the coordinator as system under test; happy commit, mutation-abort+rollback, subscriber-unavailable degraded+rollback, and all published-message rejections.
   Scope: layer-1+
 - TEST-MCP-ACID-002: Same lifecycle commits with key server and subscriber as real spun-up WebApplicationFactory hosts torn down after the test; coordinator drives sign and commit over the HTTP transports.
@@ -575,6 +579,10 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
   - [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
   - [ ] The current-plus-prior gate reports zero failures and zero skips.
+- TEST-MCP-FAILSAFE-001: Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
 - TEST-MCP-FILETOOLS-001: Unit tests must cover repository discovery behavior, path safety, MCP schemas, client delegation, hosted-agent registration, QBAgent registration, and backward compatibility.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -981,6 +989,14 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-REQWS-001: Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
   Scope: layer-1+
+- TEST-MCP-SESSIONATTR-001: Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria
+- TEST-MCP-SESSIONEND-001: Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria
 - TEST-MCP-SESSIONLOG-001: Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError and SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-002: Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
@@ -1016,11 +1032,19 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] Executed current-plus-prior test scope reports zero failures and zero skips.
 - TEST-MCP-SESSIONLOGSAN-002: Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs: CreateTimeoutSanitizer now constructs SessionLogSanitizer with an injected RegexReplaceInvoker that raises RegexMatchTimeoutException deterministically for the catastrophic rule on large input (length>10000 + pattern match, no wall-clock). SanitizeString_WhenConfiguredRuleTimesOut_ReturnsTimeoutTokenAndDoesNotLogInput and SanitizeSessionLog_WhenOneFieldTimesOut_ContinuesSanitizingOtherFields verified 10/10 green across repeated isolated runs (previously flaked pass/pass/fail). Production path uses the default Regex.Replace invoker.
   Scope: layer-1+
+- TEST-MCP-STRICTCOUNT-001: Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria
 - TEST-MCP-SUBLOG-001: Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
   - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
+- TEST-MCP-TEMPVOL-001: Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
 - TEST-MCP-TODO-CLOSE-001: Unit tests cover REST and typed client close-by-id behavior, including timestamp creation and missing item failure.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1083,6 +1107,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-TRANSCRIPT-013: Validates FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010. Unit: a JSONL transcript line larger than the former 8 MiB ceiling is ingested without an InvalidDataException, replacing the assertion in IngestionService_RejectsOversizedJsonlLine which is retargeted to prove the int.MaxValue ceiling is still an enforced bound rather than an absent one. Unit: the streaming reader returns identical records to the previous ReadAllLinesAsync implementation for an existing multi-record fixture, proving no regression in parse behavior. Unit: peak allocation while reading a many-small-line transcript stays proportional to the largest line rather than to file size. Integration: retained hostile-archive guards still reject their fixtures at the unchanged values, specifically archive entry count above 10,000, compression ratio above 20, ZIP symlink entries, and path-traversal entries, each returning 413 or 400 as previously mapped.
   Scope: layer-1+
+- TEST-MCP-TRANSCRIPT-SEARCH-001: CodexTranscriptAdapterCoverageTests ingest inline JSONL for inter_agent_communication_metadata, tool_search_call, and tool_search_output with zero unknown diagnostics and persist cleanup. Validates TR-MCP-TRANSCRIPT-SEARCH-001 / BUG-TRIAGE-122.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-TRANSCRIPT-SEARCH-001 acceptance criteria
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1115,12 +1143,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
-- TEST-MCP-TRIAGEPLUGIN-001: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe. Later UserPromptSubmit does not cancel a completed root turn (isolate-skip) and does not cancel an in_progress root work turn on a background prompt (reuse). Query filter turnStatus plus staleOlderThanHours lists stale in_progress turns without mass close.
+- TEST-MCP-TRIAGEPLUGIN-001: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
-  - [ ] Later UserPromptSubmit does not cancel a completed root turn (isolate-skip) and does not cancel an in_progress root work turn on a background prompt (reuse).
-  - [ ] Query or documented operator filter lists in_progress turns older than N hours and does not mass-close them.
 - TEST-MCP-TRIAGEPLUGIN-002: ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1219,6 +1245,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
   Scope: layer-1+
+- TEST-MCP-VERIFYWRAP-001: Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria
 - TEST-MCP-WIKIEXPORT-001: Tests must cover docs/wiki.yaml loading, validation, renderer output, service integration, unchanged default behavior, and BDPv4 traceability for configured GitHub and Azure wiki exports.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1236,6 +1266,10 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
   - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
   - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
+- TEST-MCP-XAGENT-001: Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-XAGENT-001 acceptance criteria
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   Scope: layer-1+
   **Acceptance Criteria:**

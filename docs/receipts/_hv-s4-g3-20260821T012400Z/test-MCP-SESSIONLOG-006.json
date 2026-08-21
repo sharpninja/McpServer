@@ -1,0 +1,103 @@
+{
+  "Id": "TEST-MCP-SESSIONLOG-006",
+  "Condition": "Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.",
+  "WorkspaceId": "F:\\GitHub\\McpServer",
+  "Title": "Required session-turn planFile and todoId persist, query, and backfill",
+  "Priority": "medium",
+  "Status": "pending",
+  "Notes": null,
+  "AcceptanceCriteria": [
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+      "text": "Round-trip planFile/todoId on persist and get.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "text": "None sentinel persists and is never rewritten to null.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "text": "New persist without fields is rejected.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "text": "Relative, exact, and ~/ plan paths are accepted; .. is rejected.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "text": "Query filter and text search match planFile and todoId.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "text": "Backfill upgrades None from turn contents and ~ history.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "text": "Import/ingest/federation persist a validated pair, never null.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-001",
+      "text": "Validator rules covered by SessionLogTurnContextValidatorTests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-002",
+      "text": "Additive omit-preserve and replace-required covered by SessionLogServiceTurnContextTests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-003",
+      "text": "Extractor ranking covered by SessionLogTurnContextExtractorTests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-004",
+      "text": "Schema/migration covered by model and provider migration tests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-005",
+      "text": "Backfill None-only upgrades covered by SessionLogTurnContextBackfillTests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-006",
+      "text": "REST/MCP begin required fields covered by controller and tool tests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-007",
+      "text": "Client/agent/REPL carry fields covered by their session-log tests.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC-TR-MCP-SESSIONLOG-006-008",
+      "text": "Sanitizer clones new fields covered by SessionLogSanitizerTests.",
+      "isSatisfied": false,
+      "evidence": null
+    }
+  ],
+  "ScopeStartLayerKey": "layer-1",
+  "ScopeEndLayerKey": null
+}

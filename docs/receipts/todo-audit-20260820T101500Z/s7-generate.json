@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "format": "markdown",
+  "docType": "all",
+  "generatedAtUtc": "2026-08-20T12:50:45.7597304+00:00",
+  "outputRoot": "F:\\GitHub\\McpServer\\docs\\Project",
+  "files": [
+    "Functional-Requirements.md",
+    "Technical-Requirements.md",
+    "Testing-Requirements.md",
+    "TR-per-FR-Mapping.md",
+    "Requirements-Matrix.md"
+  ]
+}

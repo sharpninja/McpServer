@@ -1,0 +1,121 @@
+{
+  "TimestampUtc": "2026-08-21T00:43:49Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-persist",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1-project-requirements-S2-green",
+  "Class2Timer": {
+    "id": "01a0218b0965",
+    "surfaceC": "N/A",
+    "usedAsFail": false
+  },
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "SessionId": "GrokCode-20260821T004002Z-hostile-hgreen-s2",
+  "RequestId": "req-20260821T004002Z-001-hostile-hgreen-s2-validate",
+  "PluginVersion": "1.96.0",
+  "PluginVersionSource": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "MarkerSignatureOk": true,
+  "HealthNonceSent": "a2512a6d0a62457b87614d5a7fc8b59e",
+  "HealthNonceEchoed": "a2512a6d0a62457b87614d5a7fc8b59e",
+  "HealthStatus": 200,
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitHeadWorktree": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitBranchWorktree": "sessionpersist/s1-red",
+  "CommitsAheadOfDevelop": 0,
+  "S2Uncommitted": true,
+  "MergedToDevelop": false,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 14,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "Accuracy": 96,
+  "Completeness": 94,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": ["timer 01a0218b0965 class-2 ops; not a surface C FAIL"],
+  "DidNotCall": [
+    "workflow.requirements.getFr",
+    "workflow.requirements.getTr",
+    "workflow.requirements.getTest",
+    "workflow.requirements.generateDocument",
+    "Invoke-McpPlugin requirements"
+  ],
+  "DidNotMarkTodosDone": true,
+  "DidNotMerge": true,
+  "DidNotImplementProduct": true,
+  "PriorReceipts": {
+    "H0": "docs/receipts/hostile-validator-20260821T000938Z.md",
+    "Hred": "docs/receipts/hostile-validator-20260821T002453Z.md"
+  },
+  "Pester": {
+    "paths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\session-persist\\plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+      "F:\\GitHub\\McpServer\\.worktrees\\session-persist\\plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1"
+    ],
+    "filterFullName": [
+      "*TEST-MCP-195*",
+      "*TEST-MCP-REPL-037*",
+      "*TEST-MCP-FAILSAFE-001*",
+      "*TEST-MCP-PLUGINCORE-004*",
+      "*TEST-MCP-REPL-025*",
+      "*TEST-MCP-REPL-040*",
+      "*PersistTurn.SubmitAsyncChildTimeout*"
+    ],
+    "pesterVersion": "5.7.1",
+    "totalDiscovered": 136,
+    "filterSelected": 28,
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0,
+    "notRun": 108,
+    "durationSeconds": 10.933,
+    "nunitXml": "docs/receipts/_hv-hgreen-s2/pester-named.xml",
+    "nunitTotal": 28,
+    "nunitFailures": 0,
+    "nunitSkipped": 0,
+    "nunitIgnored": 0,
+    "nunitErrors": 0,
+    "failedNames": []
+  },
+  "CsharpNamed": {
+    "filter": "FullyQualifiedName~AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse|FullyQualifiedName~Classify_SqliteBusy_IsNotBackendUnavailable",
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "trx": "docs/receipts/_hv-hgreen-s2/hv-hgreen-s2-csharp.trx"
+  },
+  "ReplInvoke": {
+    "worktreeSha256": "C1D26D3B52C17603ED4561CDF4ACF6DC57F7AD100541C261ABA248A19C2679A1",
+    "developSha256": "B6D2B1EC3579DD8441B6766A2542E4E6B44D8403D57C98C1BB02BD39B2A0023F",
+    "appendDialogMethod": "client.SessionLog.AppendDialogAsync",
+    "appendDialogLine": 1878,
+    "persistTurn503Degrades": true,
+    "persistTurn503Line": 1321,
+    "drainDefersWhenReplRawInFlight": true,
+    "drainCatchSuppressesUnreachable": true
+  },
+  "TodosDoneFalse": [
+    "PLAN-SESSIONLOGREMEDIATE-001",
+    "BUG-TRIAGE-160",
+    "BUG-TRIAGE-161",
+    "BUG-TRIAGE-162",
+    "BUG-TRIAGE-164"
+  ],
+  "SessionLogProof": {
+    "openCreated": true,
+    "beginTurnId": 42350,
+    "appendDialogTotalItems": 2,
+    "queryByTodoIdFrom": "2026-08-21T00:00:00Z",
+    "queryFoundSession": true
+  }
+}

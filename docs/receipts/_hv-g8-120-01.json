@@ -1,0 +1,63 @@
+{
+  "TimestampUtc": "2026-08-19T18:49:54Z",
+  "Branch": "develop",
+  "Sha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyCount": 66,
+  "DirtyPreview": [
+    " M .gitignore",
+    " M docs/Project/Functional-Requirements.md",
+    " M docs/Project/Requirements-Matrix.md",
+    " M docs/Project/TR-per-FR-Mapping.md",
+    " M docs/Project/Technical-Requirements.md",
+    " M docs/Project/Testing-Requirements.md",
+    "?? docs/plans/triage-cluster-002.md",
+    "?? docs/receipts/_collect-hostile-g2-bootstrap.ps1",
+    "?? docs/receipts/_collect-hostile-g2-mapping-provider.ps1",
+    "?? docs/receipts/_collect-hostile-g2-remaining.ps1",
+    "?? docs/receipts/_collect-hostile-g2-reqs.ps1",
+    "?? docs/receipts/_collect-hostile-g2-signature.ps1",
+    "?? docs/receipts/_collect-hostile-g2-tests-nobuild.ps1",
+    "?? docs/receipts/_collect-hostile-g2-tests.ps1",
+    "?? docs/receipts/_hv-g1-closeout/",
+    "?? docs/receipts/_hv-g1-extract-fr.ps1",
+    "?? docs/receipts/_hv-g1-extract-map.ps1",
+    "?? docs/receipts/_hv-g1-extract-tests.ps1",
+    "?? docs/receipts/_hv-g1-fr-extract.json",
+    "?? docs/receipts/_hv-g1-git-sha.ps1",
+    "?? docs/receipts/_hv-g1-live-process.json",
+    "?? docs/receipts/_hv-g1-live-process.ps1",
+    "?? docs/receipts/_hv-g1-live-sha-code.ps1",
+    "?? docs/receipts/_hv-g1-map-extract.json",
+    "?? docs/receipts/_hv-g1-run-named-tests.ps1",
+    "?? docs/receipts/_hv-g1-test-extract.json",
+    "?? docs/receipts/_hv-g1-trx-skipped.ps1",
+    "?? docs/receipts/_hv-g11-collect-mcp.ps1",
+    "?? docs/receipts/_hv-g11-collect-sig.ps1",
+    "?? docs/receipts/_hv-g11-collect-sig2.ps1"
+  ],
+  "MarkerLastWriteUtc": "2026-08-19T13:05:36.9456178Z",
+  "SignatureOk": true,
+  "NonceSent": "hv-20260819T184955Z-18988",
+  "NonceEcho": "hv-20260819T184955Z-18988",
+  "NonceMatch": true,
+  "HealthRaw": {
+    "status": "Healthy",
+    "version": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0038
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0038
+      }
+    ],
+    "nonce": "hv-20260819T184955Z-18988",
+    "storage": "reachable"
+  }
+}

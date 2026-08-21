@@ -1,0 +1,35 @@
+{
+  "timestampUtc": "2026-08-20T12:57:26.6553223Z",
+  "sessionId": "GrokCode-20260820T125722Z-happly-hdone-align",
+  "requestId": "req-20260820T125722Z-001-hostile-apply-done-align",
+  "signatureOk": true,
+  "nonce": "2f115ba5a41049b4b5895b7cbd4178ca",
+  "nonceOk": true,
+  "healthVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "health": {
+    "status": "Healthy",
+    "version": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0216
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0349
+      }
+    ],
+    "nonce": "2f115ba5a41049b4b5895b7cbd4178ca",
+    "storage": "reachable"
+  },
+  "head": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "branch": "develop",
+  "srcTestsStatus": [],
+  "todoYamlStatus": [],
+  "pluginStatusExit": 0,
+  "pluginStatusSnippet": "{\"status\":\"no-session\",\"agent\":\"GrokCode\",\"namespaces\":[\"workflow.sessionlog\",\"workflow.todo\",\"workflow.requirements\",\"workflow.triage\",\"workflow.graphrag\",\"workflow.memory\",\"workflow.failsafe\"],\"requirementMethods\":[\"workflow.requirements.listLayers\",\"workflow.requirements.createLayer\",\"workflow.requirements.updateLayer\",\"workflow.requirements.effective\"],\"requirementClientMethods\":[\"client.Requirements.ListRequirementLayersAsync\",\"client.Requirements.CreateRequirementLayerAsync\",\"client.Requirements.UpdateRequirementLayerAsync\",\"client.Requirements.GetEffectiveRequirementsAsync\"],\"cacheDir\":\"F:\\\\GitHub\\\\McpServer\\\\docs\\\\receipts\\\\_hv-happly-hdone\\\\plugin-cache\",\"hasSession\":false,\"hasCurrentTurn\":false,\"pendingCount\":0,\"pendingTurnCount\":0,\"failsafeDir\":\"F:\\\\GitHub\\\\McpServer\\\\docs\\\\receipts\\\\_hv-happly-hdone\\\\plugin-cache\\\\failsafe\",\"failsafeCount\":0,\"failsafeQuarantineCount\":0}\r\n"
+}

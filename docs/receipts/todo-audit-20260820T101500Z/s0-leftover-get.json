@@ -1,0 +1,7 @@
+{
+  "Id": "PLAN-TRIAGELEFTOVER-001",
+  "Done": true,
+  "Title": "Resolve remaining 27 medium BUG-TRIAGE items via grouped worktrees",
+  "Source": "mcpserver__todo_get 2026-08-20 after H0 D1 leftover provenance FAIL",
+  "Note": "S7 H-done AGREE docs/receipts/hostile-validator-20260820T092641Z.md"
+}

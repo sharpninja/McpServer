@@ -1,0 +1,17 @@
+turnRequestId: req-20260821T111105Z-001-hostile-hyphen-fix-rescan
+queryTitle: Hostile rescan hyphen fix on docs refresh
+openedAt: 2026-08-21T11:11:15Z
+status: completed
+sessionId: GrokCode-20260821T111108Z-plugin-session
+codeEdits: 7
+lastBuildStatus: unknown
+auditActions: 7
+auditDialog: 4
+auditDecisions: 2
+auditFiles: 7
+auditCommits: 0
+queryText: Resume hostile review. Prior DISAGREE A2/B5 U+2014 on session-log-schema L11. Attack claim that added begin/dialog bullets now use ASCII hyphen. Re-scan added lines only. Do not commit. Do not mark TODOs. Do not edit prior receipt.
+planFile: docs/plans/sessionlog-remediate-001.md
+todoId: PLAN-SESSIONLOGREMEDIATE-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-21T10:20:37.4844112Z

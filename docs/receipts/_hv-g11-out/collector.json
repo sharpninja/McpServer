@@ -1,0 +1,85 @@
+{
+  "TimestampUtc": "2026-08-19T18:39:40.4083419Z",
+  "Git": {
+    "Branch": "develop",
+    "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+    "StatusShort": "",
+    "Log1": "0620078259d0be441d953fbaf457b0fdb670dbbc docs(receipts): wrap-up push hostile AGREE 164408Z"
+  },
+  "HardcodedVersionedTarballInBuild": {
+    "Path": "F:\\GitHub\\McpServer\\build\\Build.SyncAgentPlugins.cs",
+    "LiteralMatches": [],
+    "Count": 0,
+    "StableConstPresent": true,
+    "ReadNodeCorePackageVersionPresent": true,
+    "ExpectedPackedInterpolated": true,
+    "FailOnMismatchPresent": true
+  },
+  "PackageJson": {
+    "Path": "F:\\GitHub\\McpServer\\plugins\\core\\lib-node\\package.json",
+    "Name": "@sharpninja/mcpserver-plugin-core",
+    "Version": "0.2.0"
+  },
+  "NpmPack": {
+    "ExitCode": 1,
+    "WorkingDirectory": "F:\\GitHub\\McpServer\\plugins\\core\\lib-node",
+    "Raw": "npm error Invalid package, must have name and version\r\n{\r\n  \"error\": {\r\n    \"summary\": \"Invalid package, must have name and version\",\r\n    \"detail\": \"\"\r\n  }\r\n}\r\nnpm error A complete log of this run can be found in: C:\\Users\\kingd\\AppData\\Local\\npm-cache\\_logs\\2026-08-19T18_39_44_847Z-debug-0.log",
+    "ExpectedFileName": "sharpninja-mcpserver-plugin-core-0.2.0.tgz",
+    "FromLibNodeExit": 0,
+    "FromLibNodeRaw": "[\r\n  {\r\n    \"id\": \"@sharpninja/mcpserver-plugin-core@0.2.0\",\r\n    \"name\": \"@sharpninja/mcpserver-plugin-core\",\r\n    \"version\": \"0.2.0\",\r\n    \"size\": 40877,\r\n    \"unpackedSize\": 208496,\r\n    \"shasum\": \"e76339126159239dde1ba5c47aa0eacc401a4031\",\r\n    \"integrity\": \"sha512-bW5Zurhsm+MxFWw8vA5GCVLcNMGCIPC91aV0+kG3E6I77kSIPe4tyGVeGo9u8oi7lvQyY2JjjWJCAfP7NV6VRw==\",\r\n    \"filename\": \"sharpninja-mcpserver-plugin-core-0.2.0.tgz\",\r\n    \"files\": [\r\n      {\r\n        \"path\": \"README.md\",\r\n        \"size\": 4443,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/cache/cache-manager.d.ts\",\r\n        \"size\": 475,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/cache/cache-manager.js\",\r\n        \"size\": 4931,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/discovery/marker-resolver.d.ts\",\r\n        \"size\": 1150,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/discovery/marker-resolver.js\",\r\n        \"size\": 9037,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/index.d.ts\",\r\n        \"size\": 2123,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/index.js\",\r\n        \"size\": 9274,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/runtime/core-config.d.ts\",\r\n        \"size\": 1762,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/runtime/core-config.js\",\r\n        \"size\": 1267,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/runtime/host-context.d.ts\",\r\n        \"size\": 2584,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/runtime/host-context.js\",\r\n        \"size\": 15541,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/graphrag.d.ts\",\r\n        \"size\": 388,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/graphrag.js\",\r\n        \"size\": 18253,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/memory.d.ts\",\r\n        \"size\": 384,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/memory.js\",\r\n        \"size\": 5760,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/requirements.d.ts\",\r\n        \"size\": 400,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/requirements.js\",\r\n        \"size\": 42932,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/schema-validation.d.ts\",\r\n        \"size\": 192,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/schema-validation.js\",\r\n        \"size\": 4687,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/session-shim.d.ts\",\r\n        \"size\": 4347,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/session-shim.js\",\r\n        \"size\": 12331,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/session.d.ts\",\r\n        \"size\": 681,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/session.js\",\r\n        \"size\": 7785,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/todo.d.ts\",\r\n        \"size\": 1388,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/todo.js\",\r\n        \"size\": 22474,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/tool-descriptor.d.ts\",\r\n        \"size\": 171,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/tool-descriptor.js\",\r\n        \"size\": 77,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/usecase.d.ts\",\r\n        \"size\": 719,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/usecase.js\",\r\n        \"size\": 11870,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/workspace.d.ts\",\r\n        \"size\": 1536,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/tools/workspace.js\",\r\n        \"size\": 7397,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/transport/repl-bridge.d.ts\",\r\n        \"size\": 1205,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"dist/transport/repl-bridge.js\",\r\n        \"size\": 10028,\r\n        \"mode\": 420\r\n      },\r\n      {\r\n        \"path\": \"package.json\",\r\n        \"size\": 904,\r\n        \"mode\": 420\r\n      }\r\n    ],\r\n    \"entryCount\": 34,\r\n    \"bundled\": []\r\n  }\r\n]",
+    "Filename": "sharpninja-mcpserver-plugin-core-0.2.0.tgz",
+    "Name": "@sharpninja/mcpserver-plugin-core",
+    "Version": "0.2.0"
+  },
+  "VendorCopies": [
+    {
+      "Directory": "F:\\GitHub\\mcpserver-cline-plugin\\vendor",
+      "Exists": true,
+      "Files": [
+        {
+          "Name": "sharpninja-mcpserver-plugin-core.tgz",
+          "Length": 40877,
+          "LastWriteTimeUtc": "2026-08-19T13:02:27.3522289Z",
+          "FullName": "F:\\GitHub\\mcpserver-cline-plugin\\vendor\\sharpninja-mcpserver-plugin-core.tgz"
+        }
+      ]
+    },
+    {
+      "Directory": "F:\\GitHub\\mcpserver-cline-v2-plugin\\vendor",
+      "Exists": true,
+      "Files": [
+        {
+          "Name": "sharpninja-mcpserver-plugin-core.tgz",
+          "Length": 40877,
+          "LastWriteTimeUtc": "2026-08-19T13:02:27.3522289Z",
+          "FullName": "F:\\GitHub\\mcpserver-cline-v2-plugin\\vendor\\sharpninja-mcpserver-plugin-core.tgz"
+        }
+      ]
+    },
+    {
+      "Directory": "F:\\GitHub\\mcpserver-opencode-plugin\\vendor",
+      "Exists": true,
+      "Files": [
+        {
+          "Name": "sharpninja-mcpserver-plugin-core.tgz",
+          "Length": 40877,
+          "LastWriteTimeUtc": "2026-08-19T13:02:27.3522289Z",
+          "FullName": "F:\\GitHub\\mcpserver-opencode-plugin\\vendor\\sharpninja-mcpserver-plugin-core.tgz"
+        }
+      ]
+    }
+  ],
+  "DotnetTest": {
+    "ExitCode": 1,
+    "Failed": null,
+    "Skipped": null,
+    "Passed": null,
+    "Total": null,
+    "Output": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'F:\\GitHub\\McpServer\\tests\\Build.Tests\\obj\\project.assets.json' not found. Run a NuGet package restore to generate this file. [F:\\GitHub\\McpServer\\tests\\Build.Tests\\Build.Tests.csproj]\r\n",
+    "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g11-out\\SyncAgentPluginsVendorNameTests.trx"
+  },
+  "SourceLiteralScan": {
+    "BuildFileHardcoded01": false,
+    "TestFileMentionsLegacy": true
+  }
+}

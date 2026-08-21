@@ -1,0 +1,665 @@
+{
+  "TimestampUtc": "2026-08-19T19:52:50Z",
+  "Patterns": {
+    "CommandTimeout": [
+      {
+        "File": "plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+        "Line": 291,
+        "Text": "# timeout. Session-log callers treat command_timeout as retryable"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+        "Line": 296,
+        "Text": "'  code: command_timeout'"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1266,
+        "Text": "if ($combined -match 'timeout|timed out|command_timeout') {"
+      }
+    ],
+    "RetryableTrue": [
+      {
+        "File": "plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+        "Line": 298,
+        "Text": "'  retryable: true'"
+      }
+    ],
+    "BackendUnavailable": [
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 865,
+        "Text": "'backend_unavailable',"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1081,
+        "Text": "# A 503/backend_unavailable pass must be retryable in this process after"
+      }
+    ],
+    "Http503": [
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 866,
+        "Text": "'HTTP 503',"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 867,
+        "Text": "'http 503'"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1081,
+        "Text": "# A 503/backend_unavailable pass must be retryable in this process after"
+      }
+    ],
+    "DrainAttempts": [
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1012,
+        "Text": "if ($document.Contains('drainAttempts')) {"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1013,
+        "Text": "try { $attempts = [int]$document['drainAttempts'] } catch { $attempts = 0 }"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1045,
+        "Text": "$document['drainAttempts'] = $attempts + 1"
+      }
+    ],
+    "CountCannot": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4531,
+        "Text": "$result.Stderr | Should -Not -Match 'Count cannot be found' -Because $case.Name"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 237,
+        "Text": "# throws \"Count cannot be found\" when Tags or ContextList is $null or a"
+      }
+    ],
+    "UpdateTurnTags": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 630,
+        "Text": "It 'TEST-MCP-BUGTRIAGE-067 handles updateTurn locally with cached session state' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 635,
+        "Text": "$script:updateTurnPersistArgs = $null"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 644,
+        "Text": "function Invoke-ReplRaw { throw 'raw dispatch should not be used for workflow.sessionlog.updateTurn' }"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 658,
+        "Text": "$script:updateTurnPersistArgs = [ordered]@{"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 695,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml $paramsYaml"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 698,
+        "Text": "$script:updateTurnPersistArgs.RequestId | Should -Be 'req-20260712T000001Z-update-red'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 699,
+        "Text": "$script:updateTurnPersistArgs.Title | Should -Be 'Updated update title'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 700,
+        "Text": "$script:updateTurnPersistArgs.Status | Should -Be 'in_progress'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 701,
+        "Text": "$script:updateTurnPersistArgs.ResponseText | Should -Be 'Captured response'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 702,
+        "Text": "$script:updateTurnPersistArgs.Interpretation | Should -Be 'Captured interpretation'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 703,
+        "Text": "$script:updateTurnPersistArgs.TokenCount | Should -Be 321"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 704,
+        "Text": "$script:updateTurnPersistArgs.Tags | Should -Be @('triage', 'codex')"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 705,
+        "Text": "$script:updateTurnPersistArgs.ContextList | Should -Be @('plugins/core/lib-ps/repl-invoke.ps1')"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 731,
+        "Text": "Remove-Variable -Name updateTurnPersistArgs -Scope Script -ErrorAction SilentlyContinue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4487,
+        "Text": "Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4488,
+        "Text": "It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4518,
+        "Text": "-Arguments @('-Method', 'workflow.sessionlog.updateTurn', '-ParamsYaml', $case.Yaml) `"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 269,
+        "Text": "It 'TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn omitted empty and scalar tags stay silent under StrictMode' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 296,
+        "Text": "{ Invoke-WorkflowUpdateTurn -ParamsYaml \"response: ok`n\" } | Should -Not -Throw"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 297,
+        "Text": "{ Invoke-WorkflowUpdateTurn -ParamsYaml \"response: ok`ntags: []`ncontextList: []`n\" } | Should -Not -Throw"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 298,
+        "Text": "{ Invoke-WorkflowUpdateTurn -ParamsYaml \"response: ok`ntags: one-tag`ncontextList: one-context`n\" } | Should -Not -Throw"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 300,
+        "Text": "$stdout = Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml \"response: ok`ntags: one-tag`ncontextList: one-context`n\" | Out-String"
+      }
+    ],
+    "SessionEndEmpty": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4539,
+        "Text": "Describe 'TEST-MCP-SESSIONEND-001 SessionEnd unresolved cache is a silent no-op' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4541,
+        "Text": "$cwd = Join-Path $script:SmokeCache ('sessionend-empty-' + [guid]::NewGuid().ToString('N'))"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4573,
+        "Text": "$root = Join-Path $script:SmokeCache ('sessionend-flush-' + [guid]::NewGuid().ToString('N'))"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4580,
+        "Text": "Set-Content -LiteralPath (Join-Path $workspace 'AGENTS-README-FIRST.yaml') -Value \"workspace: sessionend`n\""
+      }
+    ],
+    "CrossSource": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 254,
+        "Text": "sourceType = 'Codex'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 265,
+        "Text": "sourceType = 'Codex'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1452,
+        "Text": "'SourceType',"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 2739,
+        "Text": "sourceType = `$env:CT2R_SOURCE_TYPE"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 2769,
+        "Text": "$status.sourceType | Should -Be $case.Agent"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3359,
+        "Text": "sourceType = 'ClaudeCode'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 322,
+        "Text": "It 'TEST-MCP-XAGENT-001 different sourceType prefixes are incompatible and same-agent prefixes rebind' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 323,
+        "Text": "$prefixFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Get-ReplSessionIdSourceTypePrefix \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 324,
+        "Text": "$compatFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Test-ReplSessionSourceTypeCompatible \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 330,
+        "Text": "Get-ReplSessionIdSourceTypePrefix -SessionId 'Codex-20260819T000000Z-plugin-session' | Should -Be 'Codex'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 331,
+        "Text": "Get-ReplSessionIdSourceTypePrefix -SessionId 'GrokCode-20260819T000000Z-plugin-session' | Should -Be 'GrokCode'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 332,
+        "Text": "Get-ReplSessionIdSourceTypePrefix -SessionId 'ClaudeCode-20260819T000000Z-plugin-session' | Should -Be 'ClaudeCode'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 333,
+        "Text": "Test-ReplSessionSourceTypeCompatible -Left 'Codex-20260819T000000Z-a' -Right 'GrokCode-20260819T000000Z-b' | Should -BeFalse"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 334,
+        "Text": "Test-ReplSessionSourceTypeCompatible -Left 'GrokCode-20260819T010000Z-root' -Right 'GrokCode-20260819T020000Z-rotated' | Should -BeTrue"
+      }
+    ],
+    "DiskFull": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 356,
+        "Text": "$status.code | Should -Be 'disk_full'"
+      }
+    ],
+    "DiskFullLib": [
+      {
+        "File": "plugins\\core\\lib-ps\\plugin-hook.ps1",
+        "Line": 993,
+        "Text": "# ERROR_DISK_FULL (0x70) as HRESULT 0x80070070."
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\plugin-hook.ps1",
+        "Line": 1014,
+        "Text": "code = 'disk_full'"
+      }
+    ],
+    "PersistedFalse": [],
+    "SubmitAsyncTimeout": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3121,
+        "Text": "$match.Groups['body'].Value | Should -Match 'client\\.SessionLog\\.SubmitAsync'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3157,
+        "Text": "$script:rawMethod | Should -Be 'client.SessionLog.SubmitAsync'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3318,
+        "Text": "MCPSERVER_FAILSAFE_DIR, seeded with synthetic client.SessionLog.SubmitAsync"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3354,
+        "Text": "method = 'client.SessionLog.SubmitAsync'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3409,
+        "Text": "$script:drainReplayOrder[0] | Should -Be 'client.SessionLog.SubmitAsync|req-20260714T154733Z-001-aaaa'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3410,
+        "Text": "$script:drainReplayOrder[1] | Should -Be 'client.SessionLog.SubmitAsync|req-20260716T112949Z-002-bbbb'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3411,
+        "Text": "$script:drainReplayOrder[2] | Should -Be 'client.SessionLog.SubmitAsync|req-20260720T230559Z-003-cccc'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3487,
+        "Text": "[System.IO.File]::WriteAllText($malformedPath, \"method: client.SessionLog.SubmitAsync`nparams: [oops`n  unbalanced: '\")"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3621,
+        "Text": "$inFlightPath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml \"sessionLog:`n  sessionId: ClaudeCode-20260720T230559Z-plugin-session\" -Label 'session_submit'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3756,
+        "Text": "method = 'client.SessionLog.SubmitAsync'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3858,
+        "Text": "client.SessionLog.SubmitAsync payloads, answers"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3931,
+        "Text": "# SubmitAsync payloads are captured into $script:t40Submits and"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3940,
+        "Text": "if ($Method -eq 'client.SessionLog.SubmitAsync') {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3989,
+        "Text": "Parses one captured SubmitAsync payload back into its turn map."
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4001,
+        "Text": "Parses one captured SubmitAsync payload back into its session log map."
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4021,
+        "Text": "# Invoke-ReplTurnUpsertParams and reach SubmitAsync with the title"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 121,
+        "Text": "Set-Content -LiteralPath $queued -Value \"method: client.SessionLog.SubmitAsync`nlabel: session_submit`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 147,
+        "Text": "Set-Content -LiteralPath $queued -Value \"method: client.SessionLog.SubmitAsync`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 374,
+        "Text": "It 'BeginTurn.SubmitAsyncTimeout_ReturnsDegradedQueued without hanging the caller' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 376,
+        "Text": "# SubmitAsync (sleeping mcpserver-repl child) instead of injecting"
+      }
+    ],
+    "TimeoutSecondsHonor": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1402,
+        "Text": "-TimeoutSeconds 5"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1434,
+        "Text": "'TimeoutSeconds'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1596,
+        "Text": "-Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $workspace, '-PluginRoot', $sourcePluginRoot, '-TimeoutSeconds', '5') `"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1650,
+        "Text": "-Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $activeWorkspace, '-PluginRoot', $sourcePluginRoot, '-TimeoutSeconds', '5') `"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1704,
+        "Text": "-Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $workspace, '-PluginRoot', $pluginRoot, '-TimeoutSeconds', '5') `"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 2096,
+        "Text": "$psi.ArgumentList.Add('-TimeoutSeconds')"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 38,
+        "Text": "It 'Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 41,
+        "Text": "'(?ms)^function Get-ReplMethodTimeoutSeconds \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 49,
+        "Text": "Get-ReplMethodTimeoutSeconds -Method 'workflow.agenthelp.submitTurn' | Should -Be 120"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 56,
+        "Text": "It 'Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 59,
+        "Text": "'(?ms)^function Get-ReplMethodTimeoutSeconds \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 67,
+        "Text": "Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.beginTurn' | Should -Be 30"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 340,
+        "Text": "$timeoutFn = [regex]::Match($script:PluginHookSource, '(?ms)^function Get-PluginCodeVerifyTimeoutSeconds \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 361,
+        "Text": "Get-PluginCodeVerifyTimeoutSeconds | Should -Be 45"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 368,
+        "Text": "$result = Invoke-PluginBoundedProcess -FileName $pwsh -Arguments @('-NoLogo', '-NoProfile', '-NonInteractive', '-Command', 'Start-Sleep -Seconds 20') -TimeoutSeconds 1"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 417,
+        "Text": "$timeout = Get-ReplMethodTimeoutSeconds -Method $Method"
+      }
+    ],
+    "TestReplFailsafe": [
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 847,
+        "Text": "function Test-ReplFailsafeBackendUnreachable {"
+      },
+      {
+        "File": "plugins\\core\\lib-ps\\repl-invoke.ps1",
+        "Line": 1036,
+        "Text": "if (Test-ReplFailsafeBackendUnreachable -Detail $detail) {"
+      }
+    ],
+    "TestReplFailsafeTests": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 310,
+        "Text": "It 'TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 311,
+        "Text": "$fn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Test-ReplFailsafeBackendUnreachable \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 315,
+        "Text": "Test-ReplFailsafeBackendUnreachable -Detail 'code: backend_unavailable' | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 316,
+        "Text": "Test-ReplFailsafeBackendUnreachable -Detail 'HTTP 503 Service Unavailable' | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 317,
+        "Text": "Test-ReplFailsafeBackendUnreachable -Detail \"type: error`npayload:`n  code: backend_unavailable`n  retryable: true\" | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 318,
+        "Text": "Test-ReplFailsafeBackendUnreachable -Detail 'MCP_UNTRUSTED: marker refresh failed' | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 319,
+        "Text": "Test-ReplFailsafeBackendUnreachable -Detail \"type: error`npayload:`n  code: validation_failed\" | Should -BeFalse"
+      }
+    ],
+    "CompleteTurn": [
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 305,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $completePayload | Should -BeFalse"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 492,
+        "Text": "It 'TEST-MCP-BUGTRIAGE-041 keeps current turn in_progress when completeTurn persistence fails' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 519,
+        "Text": "Invoke-WorkflowCompleteTurn -ParamsYaml '{\"response\":\"Done\"}' | Should -BeFalse"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 991,
+        "Text": "$source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.completeTurn'''"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1140,
+        "Text": "It 'TEST-MCP-BUGTRIAGE-029 completeTurn refreshes marker-only drift before closeout' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 1198,
+        "Text": "Invoke-WorkflowCompleteTurn -ParamsYaml 'response: Done after marker drift' | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3231,
+        "Text": "It 'reports degraded persistence and its failsafe path only when completeTurn closes the turn' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3265,
+        "Text": "Invoke-WorkflowCompleteTurn -ParamsYaml '{\"response\":\"Done\"}' | Should -BeTrue"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 3983,
+        "Text": "# appendDialog/appendActions/completeTurn/failTurn freshness gate."
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4155,
+        "Text": "# TR-MCP-REPL-018 (BUG-TRIAGE-098): completeTurn without queryTitle must"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4157,
+        "Text": "# the completeTurn catch and the call reports failure."
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4175,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml 'response: All acceptance criteria satisfied.'"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4386,
+        "Text": "It 'TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4416,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml \"response: Done`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4434,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml \"response: Done`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4447,
+        "Text": "It 'TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4465,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml \"requestId: req-20260819T000000Z-999-other`nresponse: hijack`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+        "Line": 4469,
+        "Text": "Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml \"response: Done`n\""
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 1,
+        "Text": "# TEST-MCP-TRIAGEPLUGIN-001..005: plugin root session, cache resolve, beginTurn degraded, completeTurn rebind."
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 135,
+        "Text": "It 'CompleteTurn.SessionIdRebind_PersistsAndClearsFailsafe' {"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 136,
+        "Text": "$idFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Get-ReplCompleteTurnPersistSessionId \\{.*?^\\}').Value"
+      },
+      {
+        "File": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+        "Line": 143,
+        "Text": "$original = Get-ReplCompleteTurnPersistSessionId -CurrentTurnSessionId 'GrokCode-20260818T000000Z-turn' -ActiveSessionId 'GrokCode-20260818T000000Z-root'"
+      }
+    ],
+    "InvokeMcpPluginTimeout": [
+      {
+        "File": "plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+        "Line": 297,
+        "Text": "\"  message: Plugin command timed out after ${boundedTimeout}s.\""
+      }
+    ]
+  }
+}

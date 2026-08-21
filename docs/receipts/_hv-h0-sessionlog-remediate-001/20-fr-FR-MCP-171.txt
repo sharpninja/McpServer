@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20260820T234706Z-99fe
+  result:
+    id: FR-MCP-171
+    title: Retryable session-log persist degrade-queue
+    description: >-
+      When client.SessionLog.SubmitAsync (beginTurn, updateTurn, completeTurn, or legacy upsert) returns timeout, HTTP 503, or backend_unavailable, the plugin SHALL retain the session_submit failsafe, keep current-turn.yaml in_progress, SHALL NOT throw, and SHALL report degraded/queued using the same contract as the existing timeout path.
+
+
+      Acceptance Criteria:
+
+      - HTTP 503 backend_unavailable and timeout produce the same degrade-queue contract (persisted false, degraded true, queued true, failsafe retained).
+
+      - Failsafe file remains until a later successful persist or drain replay.
+
+      - After storage recovers, query shows the turn.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T23:47:07.3158949+00:00
+    updatedAt: 2026-08-20T23:47:07.3159941+00:00
+  deprecated: true
+
+---
+

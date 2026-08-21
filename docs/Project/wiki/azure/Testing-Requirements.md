@@ -1117,6 +1117,16 @@ Validates FR-MCP-142 and TR-MCP-QB-001. Absence tests, each written to fail if t
 Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
 
 
+### TEST-MCP-195
+
+Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog. (2) Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw. (3) Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays. (4) getFr EXIT 0 with body before 30s when a queued session_submit 503s.
+
+
+### TEST-MCP-196
+
+C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+
+
 
 ## TEST-MCP-ACID
 
@@ -1251,6 +1261,16 @@ Tests must prove typed DocFX configuration, isolated process execution, secure a
 - [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
 - [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
 - [ ] The current-plus-prior gate reports zero failures and zero skips.
+
+
+## TEST-MCP-FAILSAFE
+
+### TEST-MCP-FAILSAFE-001
+
+Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
 
 
 ## TEST-MCP-FILETOOLS
@@ -2175,6 +2195,26 @@ Explicit workspacePath override for requirements document generation (follow-up 
 
 
 
+## TEST-MCP-SESSIONATTR
+
+### TEST-MCP-SESSIONATTR-001
+
+Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria
+
+
+## TEST-MCP-SESSIONEND
+
+### TEST-MCP-SESSIONEND-001
+
+Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria
+
+
 ## TEST-MCP-SESSIONLOG
 
 ### TEST-MCP-SESSIONLOG-001
@@ -2237,6 +2277,16 @@ Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/S
 
 
 
+## TEST-MCP-STRICTCOUNT
+
+### TEST-MCP-STRICTCOUNT-001
+
+Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria
+
+
 ## TEST-MCP-SUBLOG
 
 ### TEST-MCP-SUBLOG-001
@@ -2246,6 +2296,16 @@ Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream 
 **Acceptance Criteria:**
 - [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
 - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
+
+
+## TEST-MCP-TEMPVOL
+
+### TEST-MCP-TEMPVOL-001
+
+Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
 
 
 ## TEST-MCP-TODO-CLOSE
@@ -2374,6 +2434,16 @@ Imported-session lifecycle semantics (validates TR-MCP-TRANSCRIPT-004). Unit tes
 
 Validates FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010. Unit: a JSONL transcript line larger than the former 8 MiB ceiling is ingested without an InvalidDataException, replacing the assertion in IngestionService_RejectsOversizedJsonlLine which is retargeted to prove the int.MaxValue ceiling is still an enforced bound rather than an absent one. Unit: the streaming reader returns identical records to the previous ReadAllLinesAsync implementation for an existing multi-record fixture, proving no regression in parse behavior. Unit: peak allocation while reading a many-small-line transcript stays proportional to the largest line rather than to file size. Integration: retained hostile-archive guards still reject their fixtures at the unchanged values, specifically archive entry count above 10,000, compression ratio above 20, ZIP symlink entries, and path-traversal entries, each returning 413 or 400 as previously mapped.
 
+
+
+## TEST-MCP-TRANSCRIPT-SEARCH
+
+### TEST-MCP-TRANSCRIPT-SEARCH-001
+
+CodexTranscriptAdapterCoverageTests ingest inline JSONL for inter_agent_communication_metadata, tool_search_call, and tool_search_output with zero unknown diagnostics and persist cleanup. Validates TR-MCP-TRANSCRIPT-SEARCH-001 / BUG-TRIAGE-122.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-TRANSCRIPT-SEARCH-001 acceptance criteria
 
 
 ## TEST-MCP-TRIAGE
@@ -2666,6 +2736,16 @@ Adversarial Grok hostile validator + live canvas smoke claim pack.
 
 
 
+## TEST-MCP-VERIFYWRAP
+
+### TEST-MCP-VERIFYWRAP-001
+
+Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria
+
+
 ## TEST-MCP-WIKIEXPORT
 
 ### TEST-MCP-WIKIEXPORT-001
@@ -2690,6 +2770,16 @@ Tests must prove marker generation creates a valid default docs/wiki.yaml, prese
 - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
 - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
 - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
+
+
+## TEST-MCP-XAGENT
+
+### TEST-MCP-XAGENT-001
+
+Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-XAGENT-001 acceptance criteria
 
 
 ## TEST-REQAC-LIVE

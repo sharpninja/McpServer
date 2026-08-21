@@ -1,0 +1,69 @@
+{
+  "TimestampUtc": "2026-08-19T18:32:08Z",
+  "ActualCompletedUtc": "2026-08-19T18:32:08Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project requirement work",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "TodoId": "PLAN-TRIAGELEFTOVER-001",
+  "SessionId": "GrokCode-20260819T181500Z-hostile-s0-leftover",
+  "TurnRequestId": "req-20260819T181500Z-001-hostile-h0-leftover-s0",
+  "TurnId": 42060,
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "trust": {
+    "signatureOk": true,
+    "nonce": "e40be4eb2c8748eaab1b9b8f9652ea12",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "mcpUntrusted": false
+  },
+  "overallVerdict": "AGREE",
+  "counts": {
+    "PASS": 21,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "failList": [],
+  "unknownMandatorySurfaces": [],
+  "claims": {
+    "A": {
+      "A1": "PASS",
+      "A2": "PASS",
+      "A3": "PASS",
+      "A4": "PASS",
+      "A5": "PASS",
+      "A6": "PASS",
+      "A7": "PASS",
+      "A8": "PASS",
+      "A9": "PASS"
+    },
+    "B": {
+      "B1": "PASS",
+      "B2": "PASS",
+      "B3": "PASS",
+      "B4": "PASS",
+      "B5": "PASS"
+    },
+    "C": {
+      "C1": "PASS",
+      "C2": "PASS",
+      "C3": "PASS",
+      "C4": "N/A"
+    },
+    "D": {
+      "D1": "PASS",
+      "D2": "PASS",
+      "D3": "PASS",
+      "D4": "PASS"
+    }
+  },
+  "accuracy": 96,
+  "completeness": 94,
+  "receiptMd": "docs/receipts/hostile-validator-20260819T183208Z.md",
+  "evidenceDir": "docs/receipts/_hv-s0-h0-reattack"
+}

@@ -1,0 +1,23 @@
+type: result
+payload:
+  requestId: req-20260820T125744Z-b12b
+  result:
+    id: PLAN-TODOALIGN-001
+    title: Audit open TODOs against logged requirements and HEAD code
+    section: Process
+    priority: high
+    done: false
+    estimate: 2d
+    note: Same workstream as PLAN-TODOAUDIT-001.
+    description:
+    - Master tracker for docs/plans/todo-requirements-audit.md and the PLAN-TODOALIGN-001 goal. Same workstream as PLAN-TODOAUDIT-001. Classify and rewrite S0-open TODOs to match live MCP FR/TR/TEST and develop HEAD. Reprioritize. Do not implement product slices. Do not mark leftover-27 or 160-163 done from this plan. Hostile AGREE required before this tracker done:true.
+    technicalDetails: &o0 []
+    implementationTasks: []
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): S0 inventory freeze written (40 open TODOs, leftover still done, 23 Remaining still cited 2026-07-11). S1-S7 in progress. OrphanReason: process tracker for this audit, not a product FR. Do not set done:true without H-done AGREE.'
+    dependsOn: *o0
+    functionalRequirements: *o0
+    technicalRequirements: *o0
+  deprecated: true
+
+---
+

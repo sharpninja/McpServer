@@ -1,0 +1,137 @@
+{
+  "timestampUtc": "2026-08-20T11:51:42.9034364Z",
+  "sessionId": "GrokCode-20260820T114334Z-hclassify-s3",
+  "requestId": "req-20260820T114334Z-001-hostile-classify-s3-matrix",
+  "openIdCount": 0,
+  "leftoverInOpen": false,
+  "openHasAlign": false,
+  "openHasAudit": false,
+  "openHas160": false,
+  "openHasE1": false,
+  "openHasFiletools": false,
+  "openHasHandoff": false,
+  "spot": [
+    {
+      "id": "PLAN-TRIAGELEFTOVER-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 2024,
+      "containsId": true
+    },
+    {
+      "id": "PLAN-QUADBRAIN-E1-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 5202,
+      "containsId": true
+    },
+    {
+      "id": "PLAN-FILETOOLS-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 1974,
+      "containsId": true
+    },
+    {
+      "id": "PLAN-DELETECOMPLIANCE-003",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 2465,
+      "containsId": true
+    },
+    {
+      "id": "MCP-HANDOFF-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 5702,
+      "containsId": true
+    },
+    {
+      "id": "BUG-TRIAGE-160",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 3316,
+      "containsId": true
+    },
+    {
+      "id": "BUG-TRIAGE-161",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 3369,
+      "containsId": true
+    },
+    {
+      "id": "BUG-TRIAGE-162",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 1794,
+      "containsId": true
+    },
+    {
+      "id": "BUG-TRIAGE-163",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 2597,
+      "containsId": true
+    },
+    {
+      "id": "PLAN-TODOALIGN-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 1151,
+      "containsId": true
+    },
+    {
+      "id": "PLAN-TODOAUDIT-001",
+      "httpStatus": 200,
+      "done": null,
+      "remainingHas0711": null,
+      "remainingHasAuditDate": null,
+      "remainingPreview": null,
+      "frJson": "",
+      "bodyLength": 1080,
+      "containsId": true
+    }
+  ],
+  "openIds": []
+}

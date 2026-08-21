@@ -1,0 +1,137 @@
+{
+  "TimestampUtc": "2026-08-21T00:24:53Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-persist",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1-project-requirements-S1-red",
+  "Class2Timer": {
+    "id": "01a0218b0965",
+    "surfaceC": "N/A",
+    "usedAsFail": false
+  },
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "SessionId": "GrokCode-20260821T002129Z-hostile-hred-s1",
+  "RequestId": "req-20260821T002129Z-001-hostile-validate-s1-red",
+  "PluginVersion": "1.96.0",
+  "PluginVersionSource": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "MarkerSignatureOk": true,
+  "HealthNonceSent": "eb6e20e70a4c4252949be981edf21284",
+  "HealthNonceEchoed": "eb6e20e70a4c4252949be981edf21284",
+  "HealthStatus": 200,
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitHeadWorktree": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitBranchWorktree": "sessionpersist/s1-red",
+  "CommitsAheadOfDevelop": 0,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "Accuracy": 95,
+  "Completeness": 93,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": ["timer 01a0218b0965 class-2 ops; not a surface C FAIL"],
+  "DidNotCall": [
+    "workflow.requirements.getFr",
+    "workflow.requirements.getTr",
+    "workflow.requirements.getTest",
+    "workflow.requirements.generateDocument",
+    "Invoke-McpPlugin requirements"
+  ],
+  "DidNotMarkTodosDone": true,
+  "DidNotImplementProduct": true,
+  "Pester": {
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\session-persist\\plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+    "filterFullName": "*TEST-MCP-195*",
+    "pesterVersion": "5.7.1",
+    "totalDiscovered": 118,
+    "filterSelected": 4,
+    "passed": 0,
+    "failed": 4,
+    "skipped": 0,
+    "inconclusive": 0,
+    "notRun": 114,
+    "durationSeconds": 13.77,
+    "nunitXml": "docs/receipts/_hv-hred-s1/pester-TEST-MCP-195.xml",
+    "nunitTotal": 4,
+    "nunitFailures": 4,
+    "nunitSkipped": 0,
+    "failures": [
+      {
+        "name": "TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists",
+        "message": "Expected 'client.SessionLog.AppendDialogAsync' to be found in collection client.SessionLog.SubmitAsync, but it was not found."
+      },
+      {
+        "name": "TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe",
+        "message": "Expected $false, but got $true. ($threw | Should -BeFalse)"
+      },
+      {
+        "name": "TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays",
+        "message": "Expected regular expression 'Failsafe queue drain failed' to not match 'Failsafe queue drain failed: mcpserver-repl invocation failed for method client.SessionLog.SubmitAsync: timed out'"
+      },
+      {
+        "name": "TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s",
+        "message": "Expected the actual value to be less than 3, but got 8.0649586"
+      }
+    ]
+  },
+  "Csharp": {
+    "filter": "FullyQualifiedName~AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse|FullyQualifiedName~Classify_SqliteBusy_IsNotBackendUnavailable",
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "total": 2,
+    "trx": "docs/receipts/_hv-hred-s1/csharp-TEST-MCP-196.trx",
+    "greenAllowedAtS1": true
+  },
+  "ProductPersistPath": {
+    "replInvokeDiffEmpty": true,
+    "sha256Worktree": "B6D2B1EC3579DD8441B6766A2542E4E6B44D8403D57C98C1BB02BD39B2A0023F",
+    "sha256Main": "B6D2B1EC3579DD8441B6766A2542E4E6B44D8403D57C98C1BB02BD39B2A0023F",
+    "appendDialogCalls": "Invoke-ReplPersistTurn",
+    "persistTurnMethod": "client.SessionLog.SubmitAsync",
+    "http503Throws": true
+  },
+  "H0": {
+    "path": "docs/receipts/hostile-validator-20260821T000938Z.md",
+    "overallVerdict": "AGREE",
+    "failListEmpty": true
+  },
+  "S1Gap": {
+    "id": "TR-MCP-PERSIST-004-concurrent-SubmitAsync-fixture",
+    "status": "gap-not-fail",
+    "note": "No live concurrent TODO query during SubmitAsync C# fixture. Plan L129 allows documenting the fixture. Classifier SQLITE_BUSY not backend_unavailable exists and is green."
+  },
+  "Claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "claim": "S1 tests live on worktree .worktrees/session-persist branch sessionpersist/s1-red", "evidence": "git branch sessionpersist/s1-red HEAD 20db61aa; porcelain M three test files 297 insertions; tests uncommitted but on-disk and executed"},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "claim": "Pester Describe TEST-MCP-195 has four Its covering appendDialog incremental, PersistTurn 503 degrade, drain Write-Error, getFr not blocked 30s", "evidence": "PluginPowerShellRuntime.Tests.ps1 L4680 Describe; Its at L4726 L4770 L4813 L4872"},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "claim": "Validator re-ran Pester *TEST-MCP-195* Failed 4 Skipped 0; fail reasons match SubmitAsync, 503 throw, drain failed text, getFr ~8s", "evidence": "Invoke-Pester Failed=4 Skipped=0; NUnit total=4 failures=4 skipped=0; messages cited in Pester.failures"},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "claim": "Product persist path unchanged: AppendDialog still PersistTurn/SubmitAsync; PersistTurn 503 throws; git diff repl-invoke.ps1 empty", "evidence": "git diff empty; SHA256 equal B6D2B1EC...; L1824 PersistTurn; L1276 SubmitAsync; L1290 throw on non-timeout including 503"},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "claim": "No skipped tests in executed S1 Pester scope", "evidence": "SkippedCount=0; NUnit skipped=0 ignored=0; 4 executed Failure cases"},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "claim": "Prior H0 AGREE docs/receipts/hostile-validator-20260821T000938Z.md OverallVerdict AGREE FailList empty", "evidence": "file exists; OverallVerdict AGREE; FAIL 0; JSON FailList []"},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "claim": "C# TEST-MCP-196 404 and SQLITE_BUSY not backend_unavailable exist; green allowed; concurrent fixture gap not FAIL", "evidence": "dotnet test Passed 2 Failed 0 Skipped 0; concurrent fixture missing recorded as gap per plan L129"},
+    {"id": "A8", "surface": "A", "verdict": "PASS", "claim": "Implementer did not mark PLAN or 160-164 done", "evidence": "todo_get PLAN-SESSIONLOGREMEDIATE-001 and BUG-TRIAGE-160/161/162/164 all Done=false"},
+    {"id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty: claims match artifacts; PLAN not claimed done", "evidence": "Pester/C#/git/todo_get vs A1-A8"},
+    {"id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified independently; H0 inter-phase AGREE present", "evidence": "this Pester/C#/git/HMAC/nonce; H0 path OverallVerdict AGREE"},
+    {"id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/session storage", "evidence": "native MCP tools; porcelain test files only"},
+    {"id": "B4", "surface": "B", "verdict": "PASS", "claim": "pwsh.exe only", "evidence": "Test-MarkerSignature, Invoke-RestMethod health, Invoke-Pester, git, ConvertFrom-Json XML parse"},
+    {"id": "B5", "surface": "B", "verdict": "PASS", "claim": "No Python", "evidence": "no python/python3/py this review"},
+    {"id": "C1", "surface": "C", "verdict": "PASS", "claim": "Tests map to FR-MCP-170/171/172 AC", "evidence": "docs/Project Functional-Requirements.md L1172-1202; Testing-Requirements.md L518-520; four Pester Its 1:1 with TEST-MCP-195 AC"},
+    {"id": "D1", "surface": "D", "verdict": "PASS", "claim": "S1 DoD is red tests shown red, not plan done", "evidence": "plan L153; Pester Failed 4; PLAN Done=false; product persist unchanged"}
+  ],
+  "Notes": [
+    "S1 tests are uncommitted working-tree edits on sessionpersist/s1-red; HEAD remains 20db61aa.",
+    "C# named tests green does not make S1 green.",
+    "TR-MCP-PERSIST-004 live contention fixture is a gap, not a FAIL of S1 red.",
+    "This receipt does not authorize done:true on PLAN-SESSIONLOGREMEDIATE-001 or 160-164."
+  ]
+}

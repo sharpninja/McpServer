@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20260819T190006Z-7f97
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-151
+      title: updateTurn SubmitAsync 500 after sessionId rebind omits required planFile/todoId
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'workflow.sessionlog.updateTurn rebound current-turn from GrokCode-20260818T020614Z-hostile-tipalign-dod to GrokCode-20260818T125944Z-plugin-session (TR-MCP-PLUGIN-012) then client.SessionLog.SubmitAsync failed with McpServerException internal_server_error and wrote a failsafe. The rebind is intended. The failure is the persist that follows: updateTurn calls Invoke-ReplPersistTurn without PlanFile/TodoId, New-McpPluginTurnUpsertRequest omits those empty fields, and SessionLogService.SubmitAsync treats the requestId as a new turn on the rebound session. ValidateForNewEntry then throws ArgumentException (planFile/todoId required on new turns). SessionLogController.SubmitAsync does not catch ArgumentException (UpsertTurnAsync does and returns 400), so GlobalExceptionHandlerMiddleware maps it to 500 internal_server_error. Requirements still succeeded and wrap-up continued locally, so this is a session-log persist/audit gap, not a total outage.'
+      - 'Triage group: triage-group-5131a7f1705834bd'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After Assert-ReplCurrentTurnFresh rebinds current-turn.yaml from sessionId A to active sessionId B, workflow.sessionlog.updateTurn persists that turn under session B without McpServerException or error internal_server_error.'
+      - '- The rebound persist includes planFile and todoId from current-turn cache, or the exact sentinel None when those fields are absent.'
+      - '- POST /mcpserver/sessionlog SubmitAsync of a new turn that omits planFile or todoId returns HTTP 400 with the validation message, not HTTP 500 error internal_server_error.'
+      - '- On successful persist after rebind, the session_submit failsafe written before SubmitAsync is cleared.'
+      - 'Implementation notes:'
+      - '- Rebind lives in plugins/core/lib-ps/repl-invoke.ps1 Assert-ReplCurrentTurnFresh (TR-MCP-PLUGIN-012 / BUG-TRIAGE-071/075). Do not revert that rebind to a hard reject.'
+      - '- Invoke-WorkflowUpdateTurn calls Invoke-ReplPersistTurn without -PlanFile/-TodoId. beginTurn stores those fields on current-turn.yaml; updateTurn persist should pass the cached values (or None) especially when the sessionId just changed.'
+      - '- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 omits blank planFile/todoId. That is correct for same-session incidental updates (ValidateIfSupplied). After rebind the turn is new on session B, so omission is invalid.'
+      - '- SessionLogService.SubmitAsync ApplyTurnContext calls SessionLogTurnContextValidator.ValidateForNewEntry when existing is null or the requestId is not already on that session.'
+      - '- SessionLogController.SubmitAsync should catch ArgumentException and return 400 the same way UpsertTurnAsync already does, instead of leaking to GlobalExceptionHandlerMiddleware as internal_server_error.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

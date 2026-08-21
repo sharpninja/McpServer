@@ -1,0 +1,6 @@
+requestId: req-20260819T185507Z-001-hostile-g8-120-closeout
+queryTitle: Hostile G8 120 closeout review
+queryText: Hostile validate leftover BUG-TRIAGE-120 closeout-first on develop
+planFile: docs/plans/triage-cluster-002.md
+todoId: BUG-TRIAGE-120
+

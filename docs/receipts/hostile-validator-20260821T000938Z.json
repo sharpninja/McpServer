@@ -1,0 +1,74 @@
+{
+  "TimestampUtc": "2026-08-21T00:09:38Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1-project-requirements-S0",
+  "Class2Timer": {
+    "id": "01a0218b0965",
+    "surfaceC": "N/A",
+    "usedAsFail": false
+  },
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "SessionId": "GrokCode-20260821T000535Z-hostile-h0-s0",
+  "RequestId": "req-20260821T000535Z-001-hostile-h0-s0-validate",
+  "PluginVersion": "1.96.0",
+  "PluginVersionSource": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "MarkerSignatureOk": true,
+  "HealthNonceSent": "4477e9688a0748d9b2702dd2537af878",
+  "HealthNonceEchoed": "4477e9688a0748d9b2702dd2537af878",
+  "HealthStatus": 200,
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 19,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "Accuracy": 93,
+  "Completeness": 91,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": ["A12 timer 01a0218b0965 class-2 ops; not a surface C FAIL"],
+  "DidNotCall": [
+    "workflow.requirements.getFr",
+    "workflow.requirements.getTr",
+    "workflow.requirements.getTest",
+    "workflow.requirements.generateDocument",
+    "Invoke-McpPlugin requirements"
+  ],
+  "Claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "claim": "PLAN-SESSIONLOGREMEDIATE-001 exists, Done false, FR-MCP-170/171/172 and TR-MCP-PERSIST-001..004 linked", "evidence": "mcpserver__todo_get Done=false FR=[FR-MCP-170,FR-MCP-171,FR-MCP-172] TR=[TR-MCP-PERSIST-001..004]"},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "claim": "docs/plans/sessionlog-remediate-001.md exists, covers 160/161/162/164 + SESSIONLOG-001/002, not leftover-27", "evidence": "plan L3 and L13; git untracked plan file"},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "claim": "Store+docs FR-MCP-170/171/172 with testable AC; alias SESSIONPERSIST OK", "evidence": "requirements_list type=fr IDs present; Body+docs/Project/Functional-Requirements.md L1172-1202 have AppendDialogAsync, 503 degrade-queue, drain does not poison getFr; structured AC_COUNT=0 but Body AC not empty"},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "claim": "Store+docs TR-MCP-PERSIST-001..004", "evidence": "requirements_list type=tr; Technical-Requirements.md L1371-1413"},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "claim": "Store+docs TEST-MCP-195 Pester and TEST-MCP-196 C#", "evidence": "requirements_list type=test Conditions; Testing-Requirements.md L518-521"},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "claim": "Mapping rows FR-MCP-170/171/172", "evidence": "requirements_list type=mapping; TR-per-FR-Mapping.md L155-157"},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "claim": "BUG-TRIAGE-160/161/162/164 Done false and persist FR/TR not only TRIAGE-002", "evidence": "todo_get all four Done=false FR-MCP-170..172 TR-MCP-PERSIST-001..004"},
+    {"id": "A8", "surface": "A", "verdict": "PASS", "claim": "MCP-SESSIONLOG-001 remaining S15-S19; 002 in-repo complete Done false; no store-close", "evidence": "todo_get implementationTasks S15-S19 false; 002 all tasks true Done=false"},
+    {"id": "A9", "surface": "A", "verdict": "PASS", "claim": "S0 did not change Invoke-ReplPersistTurn 503 throw or AppendDialog PersistTurn call", "evidence": "git status/diff empty for plugins/core/lib-ps/repl-invoke.ps1; L1824 PersistTurn; L1290 throw on non-timeout including 503"},
+    {"id": "A10", "surface": "A", "verdict": "PASS", "claim": "163 out of scope; leftover-27 not reopened; PLAN-TODOALIGN-001 remains Done", "evidence": "todo_get BUG-TRIAGE-163 Done=false FR-MCP-TRIAGE-002; PLAN-TRIAGELEFTOVER-001 Done=true; BUG-TRIAGE-159 Done=true; PLAN-TODOALIGN-001 Done=true"},
+    {"id": "A11", "surface": "A", "verdict": "PASS", "claim": "Generated docs contain persist FR/TR/TEST/mapping", "evidence": "docs/Project Functional/Technical/Testing/Mapping/Matrix persist IDs present; git diff vs HEAD adds them"},
+    {"id": "A12", "surface": "A", "verdict": "PASS", "claim": "Timer is class 2; do not FAIL S0 for it", "evidence": "classified N/A for surface C; not used as FAIL"},
+    {"id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty: claims match artifacts; PLAN not claimed done", "evidence": "store Done flags and remaining vs claims"},
+    {"id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified independently", "evidence": "HMAC, nonce, todo_get, requirements_list, docs, git"},
+    {"id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/requirements storage", "evidence": "native MCP reads; no todo.yaml in git status; markdown export allowed"},
+    {"id": "B4", "surface": "B", "verdict": "PASS", "claim": "pwsh.exe only", "evidence": "Test-MarkerSignature, Invoke-WebRequest health, ConvertFrom-Json extract, git"},
+    {"id": "B5", "surface": "B", "verdict": "PASS", "claim": "No Python", "evidence": "no python/python3/py this review"},
+    {"id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR/TR/TEST/AC adequate for S0; tests not required yet", "evidence": "testable Body+doc AC; mappings present; S1 tests not in S0 DoD"},
+    {"id": "D1", "surface": "D", "verdict": "PASS", "claim": "S0 DoD is requirements capture + H0, not PLAN done", "evidence": "plan L151; PLAN TODO Done=false; product persist path unchanged; no done:true this review"}
+  ],
+  "Notes": [
+    "Structured AcceptanceCriteria arrays length 0; AC lives in Body and generated markdown.",
+    "sessionpersist/s1-red worktree at SHA 20db61aa, 0 commits ahead, porcelain empty, repl-invoke hash equal. Not S1 product work.",
+    "GitVersion.yml staged unrelated to persist S0.",
+    "This receipt does not authorize done:true on PLAN-SESSIONLOGREMEDIATE-001, 160-164, or SESSIONLOG-001/002."
+  ]
+}

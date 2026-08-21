@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20260821T110517Z-b8fd
+  result:
+    id: FR-MCP-SESSIONLOGSAN-001
+    title: Sanitized session-log read responses
+    description: Session-log query and single-session read responses must redact built-in credential forms and workspace-configured regular-expression matches before data leaves the server while preserving the raw persisted session log.
+    status: pending
+    priority: high
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: Query and single-session GET responses redact secrets from session metadata, turns, actions, processing dialog, contexts, files, blockers, requirements, commits, raw context, and original entry payloads.
+      isSatisfied: false
+    - id: ac-2
+      text: Stored entities and submitted DTOs remain unchanged; sanitization is an outbound projection only.
+      isSatisfied: false
+    - id: ac-3
+      text: Default credential detectors are active without custom configuration and custom workspace rules may add bounded regex matches.
+      isSatisfied: false
+    - id: ac-4
+      text: Filtering, total count, ordering, offset, and limit are computed from raw data and remain unchanged after redaction.
+      isSatisfied: false
+    - id: ac-5
+      text: Federated and stdio read surfaces apply the same sanitization behavior.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-21T11:05:18.0250248+00:00
+    updatedAt: 2026-08-21T11:05:18.0251165+00:00
+  deprecated: true
+
+---
+

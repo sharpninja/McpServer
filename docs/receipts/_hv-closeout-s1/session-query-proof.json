@@ -1,0 +1,21 @@
+{
+  "queriedAtUtc": "2026-08-19T19:42:20Z",
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "agent": "GrokCode",
+  "from": "2026-08-19T19:30:00Z",
+  "todoId": "PLAN-TRIAGELEFTOVER-001",
+  "limit": 10,
+  "totalCount": 1,
+  "sessionId": "GrokCode-20260819T193418Z-hostile-closeout",
+  "sourceType": "GrokCode",
+  "turnCount": 1,
+  "sessionStatus": "in_progress",
+  "turnRequestId": "req-20260819T193418Z-001-hostile-s1-closeout",
+  "turnStatus": "completed",
+  "turnIdAtBegin": 42087,
+  "lastUpdated": "2026-08-19T19:41:55.6657357+00:00",
+  "actionCount": 8,
+  "dialogCount": 4,
+  "designDecisionCount": 3,
+  "responseStartsWith": "OverallVerdict DISAGREE"
+}

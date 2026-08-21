@@ -1,6 +1,6 @@
 # MCP Server Documentation
 
-Welcome to the MCP Server documentation. MCP Server is a .NET 9/ASP.NET Core application providing workspace management, tool registry, API key authentication, pluggable tunnel providers, MCP Streamable HTTP transport, and Windows service support.
+Welcome to the MCP Server documentation. MCP Server is a .NET 10/ASP.NET Core application providing workspace management, tool registry, API key authentication, pluggable tunnel providers, MCP Streamable HTTP transport, and Windows service support.
 
 ## Quick Links
 

@@ -1,0 +1,787 @@
+{
+  "timestampUtc": "2026-08-20T101500Z",
+  "head": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "count": 40,
+  "missingTodos": [],
+  "requirementPatches": [
+    {
+      "id": "[]",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: placeholder backfilled for TODO link []; deferred not deleted."
+    },
+    {
+      "id": "TR-02",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes. TR-01 already deferred."
+    },
+    {
+      "id": "TR-03",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-04",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-05",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-06",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-07",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-08",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-09",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-10",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-11",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-12",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-13",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-14",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    }
+  ],
+  "items": [
+    {
+      "id": "PLAN-QBCODE-001",
+      "class": "ORPHAN-TODO,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): QBAgent projects exist; Byrd phase state machine, Arbiter gate evidence, escalation tiers, task profiles, byrd-coding skill, and degradation UX are still absent. Blocked on QuadBrain IOC before Construction. OrphanReason was empty FR/TR; now linked FR-MCP-QBAGENT-001 / TR-MCP-QBAGENT-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-I1-001",
+      "class": "NOT-STARTED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no I1 requirements-baseline slice beyond existing FR-MCP-QBAGENT-001 family. Remaining: draft the uplift FR family with AC via MCP, TEST entries, lock task-phase taxonomy and TaskProfiles. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-E1-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): existing QBAgent architecture is present; no uplift-specific LCA evidence, evidence-parser contract tests, or metadata plumb-through. Depends on PLAN-QBCODE-I1-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-C1-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no QBAgent Byrd phase state machine or Arbiter gate-evidence surface. Depends on PLAN-QBCODE-E1-001 and QuadBrain IOC. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-C2-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no QBAgent escalation tiers or task profiles. Depends on PLAN-QBCODE-C1-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-C3-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no QBAgent research pre-pass, byrd-coding skill, or degradation UX. Depends on PLAN-QBCODE-C2-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QBCODE-T1-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no Product Release evidence for the QBAgent uplift. Depends on PLAN-QBCODE-C3-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-QBAGENT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QBAGENT-001"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): Creativity/Logic rename migrations exist (20260720170000_RenameQuadBrainRolesToCreativityLogic on Sqlite/SqlServer/Postgres). QuadBrainOrchestrationService uses BrainSlotRoles.Creativity/Logic. Ballot protocol (MaxRejectionRounds) and decisionReady split are absent. 2026-07-11 remaining that denied rename is stale. Linked FR-MCP-129, FR-MCP-134 (completed) and TR-MCP-QUAD-001/003/005. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-I1-001",
+      "class": "PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): FR-MCP-129 and FR-MCP-134 exist and are completed in the store; they cover registry and orchestration, not the RUP revision ballot/readiness FRs. Remaining: capture revision-specific FR/TR/TEST for readiness split and ballots before C1/C2. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-E1-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): rename core and provider migrations shipped (Sqlite/SqlServer/Postgres 20260720170000_RenameQuadBrainRolesToCreativityLogic; tests RenameQuadBrainRolesMigrationTests). 2026-07-11 0% rename claim is false. Remaining: LCA evidence that migrated stores are green on all three providers in the target environments. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C1-001",
+      "class": "NOT-STARTED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): decisionReady identifier is absent. Orchestration still runs Creativity then Logic then AoT in QuadBrainOrchestrationService.cs. Curiosity-out-of-happy-path and readiness split are not shipped. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C2-001",
+      "class": "NOT-STARTED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no MaxRejectionRounds and no ballot tally types in cs. Ballot-based rejection protocol is not shipped. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C3-001",
+      "class": "PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): CuriosityEngine/orchestration exist; no dedicated research-tool loop or audit-side observer for rejection rounds found. IOC (rewritten live Ollama suite) not claimed. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-QUADBRAIN-T1-001",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no Product Release 1.5.0 evidence for this revision playlist. Depends on PLAN-QUADBRAIN-C3-001 IOC. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-129",
+        "FR-MCP-134"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005"
+      ]
+    },
+    {
+      "id": "PLAN-FILETOOLS-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "Iteration Global File Tools",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): shared core is RepoFileService (src/McpServer.Services/Services/RepoFileService.cs) plus RepoFileServiceTests, not IRepoDiscoveryService. FR-MCP-FILETOOLS-001 still requires MCP tools/list names read_file, list_dir, grep_files; those names are absent from *Tools*.cs. Remaining: expose the three tool names on the shared core. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-FILETOOLS-001"
+      ]
+    },
+    {
+      "id": "PLAN-FILETOOLS-002",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "Iteration Global File Tools",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no FwhMcpTools read_file/list_dir/grep_files names. Depends on PLAN-FILETOOLS-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-FILETOOLS-001"
+      ]
+    },
+    {
+      "id": "PLAN-FILETOOLS-003",
+      "class": "PARTIAL-SHIPPED,BLOCKED",
+      "priority": "high",
+      "section": "Iteration Global File Tools",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): QBAgent has existing external file tools routed through RepoFileService (docs/QBAGENT.md); hosted-agent and MCP tool-name parity for read_file/list_dir/grep_files is not complete. Depends on PLAN-FILETOOLS-002. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-FILETOOLS-001"
+      ]
+    },
+    {
+      "id": "PLAN-FILETOOLS-004",
+      "class": "NOT-STARTED,BLOCKED",
+      "priority": "high",
+      "section": "Iteration Global File Tools",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no integration/deployment evidence for global file-tool names. Depends on PLAN-FILETOOLS-003. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-FILETOOLS-001"
+      ]
+    },
+    {
+      "id": "PLAN-LLMSTRATEGY-001",
+      "class": "ORPHAN-TODO,NOT-STARTED",
+      "priority": "high",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): IBrainSlotChatClient / BrainSlotChatClientFactory exist as the HTTP hop (OpenAI vs OpenAICompatible). Per-segment strategy richer than CompleteAsync is not shipped. OrphanReason: no FR/TR family for per-segment LLM strategy; capture via MCP before implementation. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "PLAN-SHARPMIND-001",
+      "class": "BLOCKED,ORPHAN-TODO",
+      "priority": "medium",
+      "section": "QuadBrain",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): Blocked on PLAN-LLMSTRATEGY-001. OrphanReason: no FR/TR for SharpMind-as-Arbiter experiment. Do not start. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "MCP-HANDOFF-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "MCP Server",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): HandoffIngestionService, HandoffClient, HandoffModels, HandoffMcpToolTests, HandoffDirectorCommands, HandoffIngestionServiceTests exist. FR-HANDOFF-001..007 and TR-HANDOFF-* remain in_progress with isSatisfied false. ImplementationTasks 1-10 match files; docs/wiki export still open. Do not store-close.",
+      "functionalRequirements": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "technicalRequirements": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "implementationTasks": [
+        {
+          "done": true,
+          "task": "Define BDPv4 FR/TR/TEST requirements and acceptance criteria for handoff ingestion and TODO generation."
+        },
+        {
+          "done": true,
+          "task": "Inspect existing one-shot AI agent, TODO creation, artifact reference, session log, REPL, Director, and plugin surfaces before choosing integration points."
+        },
+        {
+          "done": true,
+          "task": "Design handoff ingestion request/result models with source provenance, content hash, generated TODO draft, confidence, diagnostics, and approval state."
+        },
+        {
+          "done": true,
+          "task": "Implement bounded handoff document ingestion from workspace path, uploaded content, or MCP artifact reference."
+        },
+        {
+          "done": true,
+          "task": "Implement one-shot AI extraction prompt/schema that converts handoff content into a validated TODO draft."
+        },
+        {
+          "done": true,
+          "task": "Add validation and normalization for TODO IDs, sections, priorities, estimates, dependencies, implementation tasks, and requirement links."
+        },
+        {
+          "done": true,
+          "task": "Add create/draft/requires-review modes and persist TODOs only through supported MCP TODO workflow methods."
+        },
+        {
+          "done": true,
+          "task": "Persist audit/provenance records linking the created TODO to the handoff document, source artifacts, model metadata, and extraction diagnostics."
+        },
+        {
+          "done": true,
+          "task": "Expose the feature through appropriate MCP tool/API, REPL/Director command, and plugin skill surfaces after inspecting current conventions."
+        },
+        {
+          "done": true,
+          "task": "Add tests for successful extraction, ambiguous handoff review mode, malformed input, unsupported formats, unsafe paths, duplicate TODOs, provenance, and TODO workflow integration."
+        },
+        {
+          "done": false,
+          "task": "Update docs, examples, requirements mappings, and generated wiki exports after validation is green."
+        }
+      ]
+    },
+    {
+      "id": "MCP-HANDOFFPLAN-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "MCP Server",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): same code as MCP-HANDOFF-001. Execution prompt TODO remains open until Handoff AC isSatisfied and hostile AGREE. Do not store-close.",
+      "functionalRequirements": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "technicalRequirements": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ]
+    },
+    {
+      "id": "MCP-HANDOFFREVIEW-001",
+      "class": "PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "MCP Server",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open until current-plus-prior gates are zero-failure/zero-skip and a fresh independent hostile AGREE. Do not store-close.",
+      "functionalRequirements": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "technicalRequirements": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ]
+    },
+    {
+      "id": "MCP-SESSIONLOG-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "Session Logging",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): S13/S14 shipped. SessionLogSanitizingService is the outermost decorator over FederatedSessionLogService in Program.cs (around line 621) and McpStdioHost.cs. FederatedSessionLogServiceTests wrap the sanitizer. Remaining slices S15-S19 (controller secret fixture, query-semantics, stdio/federation live, config docs, full gate). Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-SESSIONLOGSAN-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-SESSIONLOGSAN-001"
+      ],
+      "implementationTasks": [
+        {
+          "done": true,
+          "task": "S0 [Planning] Persist FR-MCP-SESSIONLOGSAN-001, TR-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-001, their mapping, and TODO requirement links through the MCP plugins."
+        },
+        {
+          "done": true,
+          "task": "S1 [Red] Add SessionLogSanitizationOptionsValidatorTests"
+        },
+        {
+          "done": true,
+          "task": "S2 [Green] Add SessionLogSanitizationOptions and validator"
+        },
+        {
+          "done": true,
+          "task": "S3 [Red] Add SessionLogSanitizerTests"
+        },
+        {
+          "done": true,
+          "task": "S4 [Red] Add DTO graph tests"
+        },
+        {
+          "done": true,
+          "task": "S5 [Red] Add recursive payload tests"
+        },
+        {
+          "done": true,
+          "task": "S6 [Green] Define ISessionLogSanitizer"
+        },
+        {
+          "done": true,
+          "task": "S7 [Green] Implement SessionLogSanitizer"
+        },
+        {
+          "done": true,
+          "task": "S8 [Green] Implement explicit DTO cloning"
+        },
+        {
+          "done": true,
+          "task": "S9 [Red] Add timeout-path tests"
+        },
+        {
+          "done": true,
+          "task": "S10 [Green] On regex timeout redact fail-closed"
+        },
+        {
+          "done": true,
+          "task": "S11 [Red] Add SessionLogSanitizingServiceTests"
+        },
+        {
+          "done": true,
+          "task": "S12 [Green] Implement SessionLogSanitizingService decorator"
+        },
+        {
+          "done": true,
+          "task": "S13 [Red] Extend FederatedSessionLogService tests to prove local and remote items are both sanitized after merge"
+        },
+        {
+          "done": true,
+          "task": "S14 [Green] Register SessionLogSanitizingService as the outermost HTTP/federation decorator in Program.cs and as the outermost stdio decorator in McpStdioHost.cs"
+        },
+        {
+          "done": false,
+          "task": "S15 [Red] Extend SessionLogController integration tests with a raw secret fixture"
+        },
+        {
+          "done": false,
+          "task": "S16 [Red] Add query-semantics cases proving a secret-containing raw record still participates in text filtering"
+        },
+        {
+          "done": false,
+          "task": "S17 [Integration] Add stdio tools/list plus sessionlog query/get invocations and a federated remote fixture"
+        },
+        {
+          "done": false,
+          "task": "S18 [Config/Docs] Add Mcp:SessionLogSanitization configuration examples"
+        },
+        {
+          "done": false,
+          "task": "S19 [Gate] Run sanitizer/options/service tests, Support.Mcp tests, HTTP integration tests, stdio/federation scopes"
+        }
+      ]
+    },
+    {
+      "id": "MCP-SESSIONLOG-002",
+      "class": "SHIPPED-UNCLOSED",
+      "priority": "high",
+      "section": "Session Logging",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): in-repo slices complete (planFile/todoId None sentinel). Live UpdateService was a plan non-goal. Hostile 185650Z AGREE on prior note. This audit does not store-close. Do not set done:true here.",
+      "functionalRequirements": [
+        "FR-MCP-SESSIONLOGCTX-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-SESSIONLOG-006"
+      ]
+    },
+    {
+      "id": "MCP-PLUGINCORE-004",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "Plugin Core",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): plugin core CompleteTurn/current-turn.yaml/degraded persistence code exists. FR-MCP-PLUGINCORE-004 and FR-MCP-REPL-009 still pending. Remaining: dialog parsing reliability and REPL degraded persistence closeout with tests. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-PLUGINCORE-004",
+        "FR-MCP-REPL-009"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-PLUGINCORE-004",
+        "TR-MCP-REPL-010"
+      ]
+    },
+    {
+      "id": "MCP-PLUGININT-001",
+      "class": "PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "Testing",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): P0 architecture/requirements work is complete per prior remaining; P1-P20 harness, adapter, cross-repo, and deployment validation still open. Linked FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-PLUGININT-001"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-PLUGININT-001"
+      ]
+    },
+    {
+      "id": "MCP-WIKIEXPORT-001",
+      "class": "PARTIAL-SHIPPED",
+      "priority": "high",
+      "section": "MCP Server",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): FR-MCP-WIKIEXPORT-001 and FR-MCP-WIKIEXPORT-002 are completed in the store (existing wiki export). This TODO remaining is workspace-keyed JSON dump plus add-workspace import hydration and todo.yaml deprecation, which is not those completed FRs. Dump/import work is NOT-STARTED. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-WIKIEXPORT-001",
+        "FR-MCP-WIKIEXPORT-002"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-WIKIEXPORT-001",
+        "TR-MCP-WIKIEXPORT-002"
+      ]
+    },
+    {
+      "id": "MCP-HOSTILEREVIEW-001",
+      "class": "ORPHAN-TODO,NOT-STARTED",
+      "priority": "high",
+      "section": "Review Automation",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no hostile-review queue MCP tool or normalized result store. OrphanReason: no FR/TR family; needs BDPv4 capture before implementation. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "MCP-WORKSPACEHYGIENE-002",
+      "class": "ORPHAN-TODO,NOT-STARTED",
+      "priority": "high",
+      "section": "Workspace Validation",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open per owner. OrphanReason: no FR/TR family for workspace data-hygiene validation across Server, Director, REPL, and plugin. Needs requirements-first design. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "BUG-TRIAGE-160",
+      "class": "ALIGNED",
+      "priority": "critical",
+      "section": "Session Logging",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): plugin appendDialog still persists via full client.SessionLog.SubmitAsync upsert; classified HTTP 503 backend_unavailable when storage budget/lock hits. Remaining: incremental dialog POST SessionLogClient.AppendDialogAsync; failsafe drainable on 503. Do not store-close from this audit.",
+      "functionalRequirements": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-TRIAGE-004"
+      ]
+    },
+    {
+      "id": "BUG-TRIAGE-161",
+      "class": "ALIGNED",
+      "priority": "critical",
+      "section": "Session Logging",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): failsafe drain times out SessionLog.SubmitAsync at 30s after successful getFr/getTr. Same SubmitAsync write-budget class as 160. Do not store-close from this audit.",
+      "functionalRequirements": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-TRIAGE-004"
+      ]
+    },
+    {
+      "id": "BUG-TRIAGE-162",
+      "class": "ALIGNED",
+      "priority": "critical",
+      "section": "Session Logging",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): SessionLog SubmitAsync HTTP 503 backend_unavailable during refresh-docs wrap-up. Same full-upsert path as 160/161. Do not store-close from this audit.",
+      "functionalRequirements": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-TRIAGE-004"
+      ]
+    },
+    {
+      "id": "BUG-TRIAGE-163",
+      "class": "WRONG-REPO",
+      "priority": "low",
+      "section": "Backlog",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): avalonia-remote MCP handshake pipe closed (os error 232) is not an McpServer in-repo defect. Keep open as triage record. Linked FR-MCP-TRIAGE-002 / TR-MCP-TRIAGE-004. Do not store-close from this audit.",
+      "functionalRequirements": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-TRIAGE-004"
+      ]
+    },
+    {
+      "id": "PLAN-BYRDPROCESS-001",
+      "class": "STALE-CONTENT,PARTIAL-SHIPPED",
+      "priority": "medium",
+      "section": "Process",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): docs/Development-Process-draft-v4.md exists. Grep found no LCO/Lifecycle Objectives/IOC/Product Release recast in that file. FR-MCP-104 pending; TR-MCP-BYRD-005 pending. Remaining: RUP terminology recast and TEST-MCP-141 contract coverage. Do not store-close.",
+      "functionalRequirements": [
+        "FR-MCP-104"
+      ],
+      "technicalRequirements": [
+        "TR-MCP-BYRD-005"
+      ]
+    },
+    {
+      "id": "PLAN-DELETECOMPLIANCE-003",
+      "class": "STALE-CONTENT",
+      "priority": "medium",
+      "section": "Backlog",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): unlinked invalid FR []. Keep TR-MCP-DB-003. Soft-delete/recycle code exists; quarantine source and full DELETE compliance still incomplete. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": [
+        "TR-MCP-DB-003"
+      ]
+    },
+    {
+      "id": "PLAN-OCTOPUS-001",
+      "class": "ORPHAN-TODO,PARTIAL-SHIPPED",
+      "priority": "medium",
+      "section": "Backlog",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): azure-pipelines.yml has optional Octopus LEGION2 release when OCTOPUS_API_KEY is set. No in-repo Octopus product integration beyond that pipeline step. OrphanReason: no FR/TR for Octopus Deploy Integration Prompt. Do not store-close.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "TR-AUDIT-001",
+      "class": "STALE-CONTENT,ORPHAN-TODO",
+      "priority": "medium",
+      "section": "Backlog",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): live store 422 TR (30 completed, 8 in_progress all Handoff, 13 deferred, 5 planned, 366 pending). Placeholder/stub TRs include [] and TR-01..TR-14 (TR-01 already deferred). 254 pending FRs many Covered-by with empty AC. OrphanReason: TR-AUDIT is a process audit of the TR corpus, not a single FR. This PLAN-TODOALIGN-001 audit rewrites TODO links; TR-internal code-compliance walk remains. Do not store-close TR-AUDIT from this goal.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    },
+    {
+      "id": "PLAN-TODOALIGN-001",
+      "class": "PARTIAL-SHIPPED,ORPHAN-TODO",
+      "priority": "high",
+      "section": "Process",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): S0 inventory freeze written (40 open TODOs, leftover still done, 23 Remaining still cited 2026-07-11). S1-S7 in progress. OrphanReason: process tracker for this audit, not a product FR. Do not set done:true without H-done AGREE.",
+      "functionalRequirements": [],
+      "technicalRequirements": [],
+      "note": "Same workstream as PLAN-TODOAUDIT-001."
+    },
+    {
+      "id": "PLAN-TODOAUDIT-001",
+      "class": "DUPLICATE,ORPHAN-TODO",
+      "priority": "high",
+      "section": "Process",
+      "remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): same workstream as PLAN-TODOALIGN-001 (goal-named tracker). OrphanReason: process tracker duplicate, not a product FR. Do not run a second audit. Close together after H-done AGREE on ALIGN. Do not set done:true without that receipt.",
+      "functionalRequirements": [],
+      "technicalRequirements": []
+    }
+  ]
+}

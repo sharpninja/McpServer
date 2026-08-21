@@ -1,0 +1,33 @@
+{
+  "TimestampUtc": "2026-08-19T21:00:53Z",
+  "Scratch": "C:\\Users\\kingd\\AppData\\Local\\Temp\\hv-s2-hgreen-flush-76f2a2cf19ef46c98ba6d9b7f6053618",
+  "HookPath": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\lib-ps\\plugin-hook.ps1",
+  "Unresolved": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "UnresolvedExit0Empty": true,
+  "OkFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "OkPendingGone": true,
+  "OkPendingCount": 0,
+  "OkExit0": true,
+  "FailFlush": {
+    "ExitCode": 1,
+    "Stdout": "{\"status\":\"flush-failed\",\"flushed\":0,\"failed\":1,\"pending\":1}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "FailPendingStillThere": true,
+  "FailLooksEmptySuccess": false,
+  "FailHasFlushFailed": true,
+  "FailExitCode": 1,
+  "FailStdout": "{\"status\":\"flush-failed\",\"flushed\":0,\"failed\":1,\"pending\":1}",
+  "FailMatchesClaim": true
+}

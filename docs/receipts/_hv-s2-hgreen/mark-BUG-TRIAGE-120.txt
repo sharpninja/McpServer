@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260819T212058Z-9607
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-120
+      title: Codex UserPromptSubmit beginTurn fails when SessionLog.SubmitAsync exceeds 30s REPL timeout
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Codex 1.83.0 UserPromptSubmit calls workflow.sessionlog.beginTurn, which writes current-turn state then persists via client.SessionLog.SubmitAsync. Invoke-ReplRaw applies a default 30s method timeout (Get-ReplMethodTimeoutSeconds / REPL_TIMEOUT; sessionlog intentionally fail-fast per BUG-TRIAGE-072). When SubmitAsync exceeds that budget, mcpserver-repl is killed, beginTurn fails, and the pre-write failsafe record remains so plugin Status stays available with pendingCount 1. Observed during a read-only plan-status check for req-20260723T152507Z-prompt-d89f (original workspace TruckMate).
+      - 'Triage group: triage-group-dbcb5ac49982323d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- UserPromptSubmit on Codex successfully opens a session-log turn (status turn-opened with the requested requestId) when the MCP server is healthy and Plugin Status is available, even if SessionLog.SubmitAsync takes longer than 30 seconds under normal load.'
+      - '- If remote SessionLog.SubmitAsync fails or times out, a failsafe queue record remains, pendingCount reflects live queue depth, and Plugin Status remains queryable (no false healthy/empty queue).'
+      - '- When beginTurn cannot confirm durable remote persistence, the hook reports turn-open-failed (or equivalent) without leaving an inconsistent durable turn claim that later hooks treat as a successful open without recovery guidance.'
+      - '- A subsequent successful REPL call drains or otherwise clears the queued session_submit failsafe so pendingCount returns to 0 without manual intervention, unless the record is quarantined for a non-retryable reason.'
+      - 'Implementation notes:'
+      - '- Primary path: plugins/core/lib-ps/plugin-hook.ps1 UserPromptSubmit -> Invoke-PluginRepl workflow.sessionlog.beginTurn; plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowBeginTurn -> Write-ReplCurrentTurnState then Invoke-ReplPersistTurn -> Write-ReplFailsafe(client.SessionLog.SubmitAsync) then Invoke-ReplRaw.'
+      - '- Timeout source: Get-ReplMethodTimeoutSeconds defaults to 30s for all non-long methods including client.SessionLog.SubmitAsync and workflow.sessionlog.beginTurn (long timeout only for requirements/todo analyze-style methods).'
+      - '- beginTurn may also call Invoke-ReplSupersedeCurrentTurnIfInProgress (another persist) before the new turn submit, so wall-clock pressure on the 30s budget can be higher when an in-progress turn is superseded.'
+      - '- Likely fix directions: raise or specialize timeout for SessionLog.SubmitAsync / beginTurn persistence; make beginTurn treat failsafe-backed deferred persistence as success with degraded status when Status is healthy; ensure partial local turn state is reconciled on submit timeout; investigate server-side SubmitAsync latency for the affected workspace as a separate performance track.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

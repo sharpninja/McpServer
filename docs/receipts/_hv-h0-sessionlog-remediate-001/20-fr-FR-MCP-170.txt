@@ -1,0 +1,30 @@
+type: result
+payload:
+  requestId: req-20260820T234843Z-777a
+  result:
+    id: FR-MCP-170
+    title: Incremental session-log dialog persist
+    description: >-
+      Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.
+
+
+      Acceptance Criteria:
+
+      - After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.
+
+      - Server turn GET then contains the appended dialog items.
+
+      - Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.
+
+      - Missing turn is classified not-found, retryable false; failsafe is not used for that 404.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T23:48:43.8517766+00:00
+    updatedAt: 2026-08-20T23:48:43.8518946+00:00
+  deprecated: true
+
+---
+

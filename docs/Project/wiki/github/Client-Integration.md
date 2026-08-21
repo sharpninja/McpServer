@@ -183,7 +183,7 @@ var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string,
 
 ## Hosted .NET Agent Framework Library
 
-Use `src\McpServer.McpAgent` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+Use `src\McpServer.McpAgent` when you want a .NET 10 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
 
 Typical registration:
 

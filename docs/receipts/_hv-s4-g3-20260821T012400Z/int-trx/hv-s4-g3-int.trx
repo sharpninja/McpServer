@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="91c3d263-c96f-479b-8976-576507c64934" name="kingd@PAYTON-LEGION2 2026-08-20 20:28:10" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-20T20:28:10.1226550-05:00" queuing="2026-08-20T20:28:10.1226556-05:00" start="2026-08-20T20:28:01.8224571-05:00" finish="2026-08-20T20:28:10.1298088-05:00" />
+  <TestSettings name="default" id="222c5e41-e4cd-4810-8eda-962f202653d4">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-20_20_28_10" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5efd669f-edd5-471c-aee6-13f953ab6a8d" testId="d7d30891-4dd7-0a0c-bc55-ed4fec7945da" testName="McpServer.Support.Mcp.IntegrationTests.Controllers.SessionLogControllerTests.BeginTurn_MissingFields_Returns400" computerName="PAYTON-LEGION2" duration="00:00:05.7548899" startTime="2026-08-20T20:28:04.1198318-05:00" endTime="2026-08-20T20:28:09.8911464-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5efd669f-edd5-471c-aee6-13f953ab6a8d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.IntegrationTests.Controllers.SessionLogControllerTests.BeginTurn_MissingFields_Returns400" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.integrationtests\bin\debug\net10.0\mcpserver.support.mcp.integrationtests.dll" id="d7d30891-4dd7-0a0c-bc55-ed4fec7945da">
+      <Execution id="5efd669f-edd5-471c-aee6-13f953ab6a8d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.IntegrationTests.Controllers.SessionLogControllerTests" name="BeginTurn_MissingFields_Returns400" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d7d30891-4dd7-0a0c-bc55-ed4fec7945da" executionId="5efd669f-edd5-471c-aee6-13f953ab6a8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.37]   Discovering: McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:00:00.92]   Discovered:  McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:00:01.23]   Starting:    McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:00:07.23]   Finished:    McpServer.Support.Mcp.IntegrationTests (ID = '7be753efa3ec5e129ddb1000abcf5617cfd9c9b93e60bc19efa26678fac8887f')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

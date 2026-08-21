@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-08-19T19:59:53Z",
+  "StagedExists": false,
+  "SessionEndExists": false,
+  "SessionEndPath": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\.staged-plugin\\hooks\\scripts\\session-end.ps1",
+  "ExitCode": null,
+  "ElapsedSec": null,
+  "StdOut": "",
+  "StdErr": "",
+  "IntegrityCandidates": [
+    "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\sync\\check-core-integrity.ps1",
+    "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\sync\\check-core-integrity.sh"
+  ]
+}

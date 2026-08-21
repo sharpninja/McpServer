@@ -1,0 +1,145 @@
+{
+  "label": "planFile-None",
+  "totalCount": 907,
+  "sessionCountReturned": 5,
+  "turnCountReturned": 25,
+  "missingPlanOrTodo": 0,
+  "noneTodoId": 10,
+  "nonePlanFile": 9,
+  "noneBoth": 9,
+  "sampleNoneTodo": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093155Z-008-align-hourly-02-timer",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "None",
+      "queryTitle": "Align hourly continue-plan timer after :02 wait",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    },
+    {
+      "sessionId": "ClaudeCode-20260820T073014Z-plugin-session",
+      "requestId": "req-20260820T073310Z-prompt-a259",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpSer",
+      "status": "canceled"
+    }
+  ],
+  "sampleNonePlan": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    },
+    {
+      "sessionId": "ClaudeCode-20260820T073014Z-plugin-session",
+      "requestId": "req-20260820T073310Z-prompt-a259",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpSer",
+      "status": "canceled"
+    },
+    {
+      "sessionId": "ClaudeCode-20260820T073014Z-plugin-session",
+      "requestId": "req-20260820T074816Z-prompt-36fe",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "<system-reminder>",
+      "status": "canceled"
+    }
+  ],
+  "sampleNoneBoth": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    },
+    {
+      "sessionId": "ClaudeCode-20260820T073014Z-plugin-session",
+      "requestId": "req-20260820T073310Z-prompt-a259",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "You are the HOSTILE VALIDATOR for workspace F:\\GitHub\\McpSer",
+      "status": "canceled"
+    },
+    {
+      "sessionId": "ClaudeCode-20260820T073014Z-plugin-session",
+      "requestId": "req-20260820T074816Z-prompt-36fe",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "<system-reminder>",
+      "status": "canceled"
+    }
+  ],
+  "sampleMissing": [],
+  "firstTurn": {
+    "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+    "requestId": "req-20260819T181845Z-001-resume-leftover-s0-h0",
+    "planFile": "docs/plans/triage-cluster-002.md",
+    "todoId": "PLAN-TRIAGELEFTOVER-001",
+    "queryTitle": "Resume leftover S0 H0 after AC patch",
+    "status": "in_progress"
+  }
+}

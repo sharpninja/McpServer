@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181509Z-6acb
+  result:
+    id: TEST-MCP-SESSIONATTR-001
+    title: Test TEST-MCP-SESSIONATTR-001
+    description: Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-1
+      text: Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:15:10.5579071+00:00
+    updatedAt: 2026-08-19T18:15:10.5580126+00:00
+  deprecated: true
+
+---

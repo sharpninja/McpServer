@@ -1,0 +1,34 @@
+$ErrorActionPreference = 'Stop'
+$turn = [ordered]@{
+    queryTitle = 'Hostile HMAC plugin-only validation'
+    queryText = 'Class 2 operator action: implementer was told to use the plugin to validate the marker, never roll their own HMAC.'
+    interpretation = 'Hostile class-2 review of plugin-only marker HMAC. Default A1-A3 FAIL until plugin re-run and implementer chat_history evidence. C N/A. D N/A.'
+    response = 'OverallVerdict AGREE. Receipt docs/receipts/hostile-validator-20260821T010431Z.md. PASS 7 FAIL 0 UNKNOWN 0 N/A 3. FAIL list empty. Plugin Test-MarkerSignature True Invoke-FullBootstrap True Status available. Implementer used plugin this turn and conceded homemade HMAC false-negative. Do not mark PLAN done.'
+    status = 'completed'
+    tags = @('hostile-validator','class-2','plugin-hmac','Test-MarkerSignature')
+    contextList = @(
+        'F:\GitHub\mcpserver-grok-plugin\lib\marker-resolver.ps1',
+        'F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1',
+        'F:\GitHub\McpServer\AGENTS-README-FIRST.yaml',
+        'docs/receipts/hostile-validator-20260821T010431Z.md'
+    )
+    filesModified = @(
+        'docs/receipts/hostile-validator-20260821T010431Z.md',
+        'docs/receipts/hostile-validator-20260821T010431Z.json'
+    )
+    designDecisions = @(
+        'OverallVerdict AGREE for class-2 plugin HMAC. Consequence: HMAC plugin-only operator action is validated; do not mark PLAN-SESSIONLOGREMEDIATE-001 done from this review. Alternatives rejected: FAIL A1 because plugin Test-MarkerSignature internally uses HMACSHA256; FAIL A3 because sessionlog_query for plugin-hmac-validate returned 0.'
+        'Homemade 23:46 signatureOk false was a false-negative: same marker later Test-MarkerSignature true and this review Invoke-FullBootstrap true.'
+    )
+    actions = @(
+        [ordered]@{ order = 1; description = 'add-profile: read SKILL.md and 18 non-skill profile markdown files'; type = 'read'; status = 'completed'; filePath = 'C:\Users\kingd\.claude\profile' }
+        [ordered]@{ order = 2; description = 'Invoke-McpPlugin Status available. Test-MarkerSignature True. Invoke-FullBootstrap True. Did not roll HMACSHA256.'; type = 'validation'; status = 'completed'; filePath = 'F:\GitHub\McpServer\AGENTS-README-FIRST.yaml' }
+        [ordered]@{ order = 3; description = 'Re-read implementer chat_history homemade signatureOk false then plugin-this-turn trust true plus concession.'; type = 'read'; status = 'completed'; filePath = 'C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a01290-749a-7271-8c76-d04be7e683d7\chat_history.jsonl' }
+        [ordered]@{ order = 4; description = 'Wrote hostile receipts OverallVerdict AGREE FailList empty'; type = 'file_write'; status = 'completed'; filePath = 'docs/receipts/hostile-validator-20260821T010431Z.md' }
+        [ordered]@{ order = 5; description = 'OverallVerdict AGREE. Class 2 HMAC plugin-only. Do not mark PLAN done.'; type = 'design_decision'; status = 'completed'; filePath = 'docs/receipts/hostile-validator-20260821T010431Z.md' }
+    )
+}
+$path = 'F:\GitHub\McpServer\docs\receipts\_hv-hmac-plugin-only\complete-turn.json'
+$turn | ConvertTo-Json -Depth 8 -Compress | Set-Content -LiteralPath $path -Encoding utf8
+Write-Output $path
+Write-Output ((Get-Item $path).Length)

@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260819T211648Z-2c68
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-158
+      title: Guard workflow.sessionlog.updateTurn against StrictMode Count misses
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Parent Wave 1 staging called workflow.sessionlog.updateTurn for session GrokCode-20260818T194650Z-wave1-parent turn req-20260818T194650Z-001-wave1-stage-spawn. The plugin wrapper reported The property Count cannot be found on this object at Invoke-McpPlugin.ps1:306. That line is the wrapper rethrow after repl-invoke.ps1 exits 1; it is not a Count access. updateTurn persists through New-McpPluginTurnUpsertRequest in McpPluginShim.psm1, which enables Set-StrictMode -Version Latest and reads .Count on Tags, ContextList, FilesModified, Actions, and ProcessingDialog. A $null or scalar collection (single tag, single contextList item, or omitted field after YAML/JSON bind) throws under StrictMode. Invoke-WorkflowUpdateTurn also uses $tags.Count and $contextList.Count after optional state/params merge. appendActions empty stdout is intentional: local workflow verbs record success on LastInvokeReplMethodSuccess and emit nothing.'
+      - 'Triage group: triage-group-37763754206c3ea0'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.updateTurn on a cached in-progress turn succeeds when tags or contextList is omitted, empty, or a single scalar value'
+      - '- Invoke-McpPlugin.ps1 -Command Invoke -Method workflow.sessionlog.updateTurn exits 0 on that shape and does not throw The property Count cannot be found on this object'
+      - '- McpPluginShim.psm1 collection guards remain safe under Set-StrictMode -Version Latest for $null and non-collection values'
+      - '- appendActions and updateTurn still emit no boolean to stdout on success; callers use process exit code'
+      - 'Implementation notes:'
+      - '- Treat Invoke-McpPlugin.ps1:306 as the child-failure rethrow (exit code plus stdout), not the Count site'
+      - '- Harden New-McpPluginTurnUpsertRequest Count checks with @($Tags).Count or equivalent null-safe enumeration'
+      - '- Normalize tags and contextList with @() in Invoke-WorkflowUpdateTurn before persist'
+      - '- Do not treat empty appendActions stdout as failure; that silence is by design in Invoke-ReplMethod'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

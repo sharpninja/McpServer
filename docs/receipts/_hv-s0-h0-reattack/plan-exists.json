@@ -1,0 +1,124 @@
+{
+  "exists": true,
+  "length": 18100,
+  "idHits": [
+    {
+      "id": 106,
+      "present": true
+    },
+    {
+      "id": 107,
+      "present": true
+    },
+    {
+      "id": 108,
+      "present": true
+    },
+    {
+      "id": 113,
+      "present": true
+    },
+    {
+      "id": 116,
+      "present": true
+    },
+    {
+      "id": 117,
+      "present": true
+    },
+    {
+      "id": 118,
+      "present": true
+    },
+    {
+      "id": 120,
+      "present": true
+    },
+    {
+      "id": 121,
+      "present": true
+    },
+    {
+      "id": 122,
+      "present": true
+    },
+    {
+      "id": 125,
+      "present": true
+    },
+    {
+      "id": 130,
+      "present": true
+    },
+    {
+      "id": 134,
+      "present": true
+    },
+    {
+      "id": 140,
+      "present": true
+    },
+    {
+      "id": 142,
+      "present": true
+    },
+    {
+      "id": 144,
+      "present": true
+    },
+    {
+      "id": 147,
+      "present": true
+    },
+    {
+      "id": 150,
+      "present": true
+    },
+    {
+      "id": 151,
+      "present": true
+    },
+    {
+      "id": 152,
+      "present": true
+    },
+    {
+      "id": 153,
+      "present": true
+    },
+    {
+      "id": 154,
+      "present": true
+    },
+    {
+      "id": 155,
+      "present": true
+    },
+    {
+      "id": 156,
+      "present": true
+    },
+    {
+      "id": 157,
+      "present": true
+    },
+    {
+      "id": 158,
+      "present": true
+    },
+    {
+      "id": 159,
+      "present": true
+    }
+  ],
+  "missingIds": [],
+  "presentCount": 27,
+  "protocolHits": {
+    "worktreeHeading": true,
+    "worktreesPath": true,
+    "gitWorktreeAdd": true,
+    "mergeAfterAgree": true,
+    "planTodo": true,
+    "repoRootWorktrees": true
+  }
+}

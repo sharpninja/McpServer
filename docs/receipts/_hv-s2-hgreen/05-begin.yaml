@@ -1,0 +1,6 @@
+requestId: req-20260819T200030Z-001-hostile-s2-120-wt
+queryTitle: Hostile S2 live 120 worktree beginTurn
+queryText: Attack BUG-TRIAGE-120 persist timeout classification on worktree plugin core
+planFile: docs/plans/triage-cluster-002.md
+todoId: BUG-TRIAGE-120
+

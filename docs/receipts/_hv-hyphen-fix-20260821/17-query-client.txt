@@ -1,0 +1,86 @@
+type: result
+payload:
+  requestId: req-20260821T111433Z-0256
+  result:
+    totalCount: 234
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T111108Z-plugin-session
+      agentSessionId: 01a02402-c914-7943-86b6-1e1148f4648f
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile rescan hyphen fix on docs refresh
+      model: grok
+      started: 2026-08-21T11:11:15.0000000+00:00
+      lastUpdated: 2026-08-21T11:14:30.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T111105Z-001-hostile-hyphen-fix-rescan
+        timestamp: 2026-08-21T11:11:15.0000000+00:00
+        queryText: Resume hostile review. Prior DISAGREE A2/B5 U+2014 on session-log-schema L11. Attack claim that added begin/dialog bullets now use ASCII hyphen. Re-scan added lines only. Do not commit. Do not mark TODOs. Do not edit prior receipt.
+        queryTitle: Hostile rescan hyphen fix on docs refresh
+        response: 'Hostile hyphen-fix rescan. OverallVerdict AGREE. A2 and B5 PASS: added begin/dialog bullets are U+002D; added-line U+2014 scan 0. Zip rewritten 978097. Receipt docs/receipts/hostile-validator-20260821T111310Z.md. Did not mark TODOs. Did not commit. Did not edit 110543Z receipt.'
+        status: completed
+        planFile: docs/plans/sessionlog-remediate-001.md
+        todoId: PLAN-SESSIONLOGREMEDIATE-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: 'Plugin HMAC only: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available.'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\marker-resolver.ps1
+        - order: 3
+          description: 'git diff HEAD added-line U+2014 scan: 0 hits across six named files'
+          type: edit
+          status: completed
+          filePath: docs/context/session-log-schema.md
+        - order: 4
+          description: Hex dump source and wiki Session-Log-Schema L10/L11 U+002D only
+          type: edit
+          status: completed
+          filePath: docs/Project/wiki/github/Session-Log-Schema.md
+        - order: 5
+          description: generateDocument re-run success true; zip rewritten length 978097
+          type: edit
+          status: completed
+          filePath: docs/requirements/requirements-wiki-documents.zip
+        - order: 6
+          description: Rescore A2/B5 PASS; AGREE; do not treat L8-L9 pre-existing em-dashes as this-turn new prose
+          type: design_decision
+          status: completed
+          filePath: docs/context/session-log-schema.md
+        - order: 7
+          description: No TODO flip; no commit; did not edit hostile-validator-20260821T110543Z
+          type: design_decision
+          status: completed
+          filePath: docs/plans/sessionlog-remediate-001.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-21T11:13:03.6446170+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile markdown files. HMAC plugin-only Test-MarkerSignature=True Invoke-FullBootstrap=True Status available. Did not construct HMACSHA256.'
+          category: observation
+        - timestamp: 2026-08-21T11:13:03.6446170+00:00
+          role: model
+          content: 'Decision: rescore A2/B5 on added-line U+2014 only. Consequence: pre-existing L8-L9 em-dashes are out of scope for this hyphen-fix claim. Alternatives rejected: failing A2 again because unchanged older bullets still contain U+2014.'
+          category: decision
+        - timestamp: 2026-08-21T11:13:03.6446170+00:00
+          role: model
+          content: 'Independent re-scan: six named files addedEmDash=0 addedEnDash=0. Source and wiki github/azure Session-Log-Schema L10/L11 dashes are U+002D only. generateDocument re-run success true generatedAt 2026-08-21T11:09:04Z zip 978097 rewritten 11:09:18Z. HEAD ee89cd63. PLAN-SESSIONLOGREMEDIATE-001 done true not flipped. Prior receipt 110543Z not edited this turn.'
+          category: observation
+        - timestamp: 2026-08-21T11:13:03.6446170+00:00
+          role: model
+          content: 'Decision: OverallVerdict AGREE. A2 and B5 now PASS. No new product FAIL. Class 1 docs style fix plus class 2 pause. Do not mark TODOs. Do not commit.'
+          category: decision
+
+---
+

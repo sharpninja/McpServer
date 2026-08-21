@@ -1,0 +1,33 @@
+{
+  "timestampUtc": "2026-08-20T23:48:12.4772922Z",
+  "utcStamp": "20260820T234812Z",
+  "pluginVersionFile": "1.96.0",
+  "pluginJsonName": "mcpserver",
+  "pluginJsonVersion": "1.96.0",
+  "signatureOk": true,
+  "nonce": "5dfa7b81cb80fc6a",
+  "nonceOk": true,
+  "healthStatusCode": 200,
+  "health": {
+    "status": "Healthy",
+    "version": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0036
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0035
+      }
+    ],
+    "nonce": "5dfa7b81cb80fc6a",
+    "storage": "reachable"
+  },
+  "cwd": "F:\\GitHub\\McpServer",
+  "markerWrittenAtUtc": "2026-08-20T08:12:30.0349512+00:00"
+}

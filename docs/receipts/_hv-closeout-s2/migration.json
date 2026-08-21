@@ -1,0 +1,74 @@
+{
+  "TimestampUtc": "2026-08-19T20:13:53Z",
+  "SqlitePath": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+  "DdlPath": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage\\Database\\SqliteSessionLogHeaderDdl.cs",
+  "SqliteHeaderColumnsPresent": {
+    "AgentSessionId": true,
+    "AgentSessionTranscriptFile": true,
+    "AgentExecutablePath": true,
+    "AgentExecutableVersion": true
+  },
+  "CallerInvokesHelper": true,
+  "CallerHasPragmaWhereNotExists": true,
+  "HelperFunctionAlwaysIssuesAlter": true,
+  "HelperFunctionContainsPragma": true,
+  "HelperFunctionHasMissingColumnBranch": false,
+  "HelperUsesSqlite3Exec": true,
+  "RegisterOnMcpDbContext": true,
+  "SqliteCreateSessionLogTagsIfNotExists": true,
+  "GuardPendingMessageHas20260818205751": true,
+  "GuardPendingMessageHas20260818205807": true,
+  "GuardPendingMessageHas20260818205822": true,
+  "GuardPendingMessageHas20260722214500": false,
+  "HandwrittenExists": true,
+  "HandwrittenHasMigrationAttribute": false,
+  "HandwrittenHasDbContextAttribute": false,
+  "TestsContainAlreadyHasColumnsFact": true,
+  "TestsCallRepairLegacyMethod": false,
+  "TestsContainRepairLegacyToken": true,
+  "TestsCallMigrateAsync": true,
+  "TestsSqlServerLiveMigrate": false,
+  "TestsPostgresLiveMigrate": false,
+  "TestsSqlServerSourceAssert": true,
+  "TestsPostgresSourceAssert": true,
+  "TestsDocumentSourceCheckedNotLive": true,
+  "TestsHaveSkipAttribute": false,
+  "ScratchStillDefinesRepair": true,
+  "ScratchApplyStillCallsRepair": true,
+  "ScratchStaleCommentNoUpAdds": true,
+  "SqlServerHasColLength": true,
+  "SqlServerCreateTableApi": true,
+  "SqlServerSessionLogTagsIfNotExists": false,
+  "PostgresHasIfNotExists": true,
+  "PostgresCreateTableApi": true,
+  "PostgresSessionLogTagsIfNotExists": false,
+  "DocHits": {
+    "docs\\Project\\Functional-Requirements.md": {
+      "Exists": true,
+      "Hit20260722214500": 2,
+      "Hit20260818205751": 0
+    },
+    "docs\\Project\\Technical-Requirements.md": {
+      "Exists": true,
+      "Hit20260722214500": 2,
+      "Hit20260818205751": 0
+    },
+    "docs\\Project\\Testing-Requirements.md": {
+      "Exists": true,
+      "Hit20260722214500": 0,
+      "Hit20260818205751": 0
+    },
+    "docs\\Project\\TR-per-FR-Mapping.md": {
+      "Exists": true,
+      "Hit20260722214500": 0,
+      "Hit20260818205751": 0
+    },
+    "docs\\Project\\Requirements-Matrix.md": {
+      "Exists": true,
+      "Hit20260722214500": 0,
+      "Hit20260818205751": 0
+    }
+  },
+  "DdlSnippet": "using Microsoft.Data.Sqlite;\nusing SQLitePCL;\n\nnamespace McpServer.Support.Mcp.Storage.Database;\n\n/// <summary>\n/// TR-MCP-TRIAGESCHEMA-001: registers a Sqlite scalar that issues ALTER TABLE ADD COLUMN\n/// for SessionLogs agent-header fields. The migration SQL skips the call when\n/// <c>pragma_table_info</c> already lists the column.\n/// </summary>\npublic static class SqliteSessionLogHeaderDdl\n{\n    /// <summary>Scalar function name invoked from Sqlite 20260818205751 Up().</summary>\n    public const string FunctionName = \"mcp_add_sessionlog_text_column_if_missing\";\n\n    /// <summary>Registers <see cref=\"FunctionName\"/> on <paramref name=\"connection\"/>.</summary>\n    /// <param name=\"connection\">The Sqlite connection used by EF migrate.</param>\n    public static void Register(SqliteConnection connection)\n    {\n        ArgumentNullException.ThrowIfNull(connection);\n        connection.CreateFunction(FunctionName, (string column) =>\n        {\n            ArgumentException.ThrowIfNullOrWhiteSpace(column);\n            if (column.AsSpan().IndexOfAny(\"\\\"';[]\") >= 0)\n                throw new ArgumentException(\"Column name must be a simple identifier.\", nameof(column));\n\n            var sql = $\"\"\"ALTER TABLE \"SessionLogs\" ADD COLUMN \"{column}\" TEXT NULL;\"\"\";\n            var rc = raw.sqlite3_exec(connection.Handle, sql);\n            if (rc != raw.SQLITE_OK)\n            {\n                var message = raw.sqlite3_errmsg(connection.Handle).utf8_to_string();\n                throw new InvalidOperationException($\"Failed to add SessionLogs.{column}: {message}\");\n            }\n\n            return 1;\n        });\n    }\n}\n",
+  "SqliteHelperCallSnippet": "        /// TR-MCP-TRIAGESCHEMA-001: add a nullable TEXT column on SessionLogs when missing.\r\n        /// </summary>\r\n        private static void AddNullableTextColumnIfMissing(MigrationBuilder migrationBuilder, string column)\r\n        {\r\n            ArgumentNullException.ThrowIfNull(migrationBuilder);\r\n            ArgumentException.ThrowIfNullOrWhiteSpace(column);\r\n            if (column.AsSpan().IndexOfAny(\"\\\"';[]\") >= 0)\r\n                throw new ArgumentException(\"Column name must be a simple identifier.\", nameof(column));\r\n\r\n            // Microsoft.Data.Sqlite runs one statement per Sql(). Skip ADD when pragma_table_info lists the column.\r\n            migrationBuilder.Sql(\r\n                $\"\"\"\r\n                SELECT mcp_add_sessionlog_text_column_if_missing('{column}')\r\n                WHERE NOT EXISTS (\r\n                    SELECT 1 FROM pragma_table_info('SessionLogs') WHERE name = '{column}'\r\n                );\r\n                \"\"\");\r\n        }\r"
+}

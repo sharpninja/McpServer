@@ -1,0 +1,142 @@
+{
+  "count": 14,
+  "ids": [
+    "[]",
+    "TR-02",
+    "TR-03",
+    "TR-04",
+    "TR-05",
+    "TR-06",
+    "TR-07",
+    "TR-08",
+    "TR-09",
+    "TR-10",
+    "TR-11",
+    "TR-12",
+    "TR-13",
+    "TR-14"
+  ],
+  "actions": [
+    "defer"
+  ],
+  "deleteActions": [],
+  "handoffInDefer": [],
+  "expectedDefer": [
+    "[]",
+    "TR-02",
+    "TR-03",
+    "TR-04",
+    "TR-05",
+    "TR-06",
+    "TR-07",
+    "TR-08",
+    "TR-09",
+    "TR-10",
+    "TR-11",
+    "TR-12",
+    "TR-13",
+    "TR-14"
+  ],
+  "missingDefer": [],
+  "extraDefer": [],
+  "patches": [
+    {
+      "id": "[]",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: placeholder backfilled for TODO link []; deferred not deleted."
+    },
+    {
+      "id": "TR-02",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes. TR-01 already deferred."
+    },
+    {
+      "id": "TR-03",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-04",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-05",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-06",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-07",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-08",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-09",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-10",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-11",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-12",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-13",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    },
+    {
+      "id": "TR-14",
+      "type": "tr",
+      "action": "defer",
+      "status": "deferred",
+      "notes": "PLAN-TODOALIGN-001: numeric stub placeholder; deferred with notes."
+    }
+  ]
+}

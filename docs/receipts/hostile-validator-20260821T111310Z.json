@@ -1,0 +1,133 @@
+{
+  "TimestampUtc": "2026-08-21T11:13:10Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "mixed-class1-hyphen-fix-class2-wrapup-pause",
+  "AddProfileExecuted": true,
+  "ProfileFileCount": 18,
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "TodoDone": true,
+  "TodoFlippedThisReview": false,
+  "PriorReceiptNotEdited": "docs/receipts/hostile-validator-20260821T110543Z.md",
+  "ReviewSessionId": "GrokCode-20260821T111108Z-plugin-session",
+  "ReviewRequestId": "req-20260821T111105Z-001-hostile-hyphen-fix-rescan",
+  "PluginVersion": "1.97.0",
+  "GitHead": "ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "OverallVerdict": "AGREE",
+  "PassCount": 13,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "Accuracy": 96,
+  "Completeness": 94,
+  "FailList": [],
+  "UnknownList": [],
+  "Trust": {
+    "TestMarkerSignature": true,
+    "InvokeFullBootstrap": true,
+    "StatusAvailable": true,
+    "RolledHmacSha256": false,
+    "CacheRoot": "docs/receipts/_hv-hyphen-fix-20260821/plugin-cache",
+    "PendingCount": 53,
+    "FailsafeCount": 53
+  },
+  "Claims": [
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Added begin/dialog bullets U+002D; added-line U+2014 scan 0 on six named files; L8-L9 pre-existing em-dashes not in added hunk"
+    },
+    {
+      "id": "A4b",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "generateDocument re-run success true generatedAt 11:09:04Z; zip rewritten 978097 bytes; wiki twins hyphen on L10/L11"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "HEAD still ee89cd63; TODO done true not flipped; prior 110543Z receipt not edited"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "Byrd TDD not applicable to hyphen-only docs fix plus class 2 pause"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Independent re-scan and hex dump"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Plugin-only TODO/session; no TODO.yaml edit"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh only; no python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Hyphen-fix claim matches added-line artifacts"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Did not delete prior receipt or wiki pages"
+    },
+    {
+      "id": "C",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Existing FR-MCP-170 SESSIONLOGSAN SESSIONLOGCTX cover docs refresh; no new FR required"
+    },
+    {
+      "id": "D",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Plan store-closed; wrap-up pause; no TODO flip"
+    }
+  ],
+  "Evidence": {
+    "addedLineEmDashHits": 0,
+    "addedLineEnDashHits": 0,
+    "schemaL10Dashes": [
+      "U+002D",
+      "U+002D"
+    ],
+    "schemaL11Dashes": [
+      "U+002D",
+      "U+002D",
+      "U+002D"
+    ],
+    "zipPath": "docs/requirements/requirements-wiki-documents.zip",
+    "zipBytes": 978097,
+    "zipLastWriteUtc": "2026-08-21T11:09:18.8415997Z",
+    "generateDocumentGeneratedAt": "2026-08-21T06:09:04.7262749-05:00",
+    "committedThisWrapUp": false
+  },
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260821T111310Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260821T111310Z.json",
+  "EvidenceDir": "docs/receipts/_hv-hyphen-fix-20260821/",
+  "QueryProof": {
+    "method": "client.SessionLog.QueryAsync",
+    "sessionId": "GrokCode-20260821T111108Z-plugin-session",
+    "requestId": "req-20260821T111105Z-001-hostile-hyphen-fix-rescan",
+    "turnStatus": "completed",
+    "planFile": "docs/plans/sessionlog-remediate-001.md",
+    "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+    "evidence": "docs/receipts/_hv-hyphen-fix-20260821/17-query-client.txt"
+  }
+}

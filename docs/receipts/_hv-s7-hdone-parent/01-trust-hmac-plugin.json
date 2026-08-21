@@ -1,0 +1,26 @@
+{
+  "TimestampUtc": "2026-08-21T01:48:15.0000000Z",
+  "PluginRoot": "C:\\Users\\kingd\\.grok\\installed-plugins\\f--github-mcpserver-grok-plugin-67f1f31f",
+  "MarkerFile": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "PluginVersion": "1.97.0",
+  "TestMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "RolledOwnHmac": false,
+  "Status": "available",
+  "Agent": "GrokCode",
+  "GitHead": "ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "Branch": "develop",
+  "SessionId": "GrokCode-20260821T014642Z-plugin-session",
+  "RequestId": "req-20260821T014850Z-001-hmac-plugin-hourly-closeout",
+  "HostileSubagentId": "01a02204-6c7b-7813-8fc0-9702601017c1",
+  "TimerId": "01a0218b0965",
+  "TodosStillDoneFalse": [
+    "PLAN-SESSIONLOGREMEDIATE-001",
+    "BUG-TRIAGE-160",
+    "BUG-TRIAGE-161",
+    "BUG-TRIAGE-162",
+    "BUG-TRIAGE-164",
+    "MCP-SESSIONLOG-001",
+    "MCP-SESSIONLOG-002"
+  ]
+}

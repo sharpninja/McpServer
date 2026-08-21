@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T211800Z-bb90
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-140
+      title: SessionEnd hook throws when workspace cache cannot be resolved
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Claude SessionEnd runs plugins/core/hooks-templates session-end.ps1, which calls plugin-hook.ps1 Invoke-CacheFlushHook and then cache-manager.ps1. That script always calls Resolve-McpCacheDir with no StartPath. When headless claude -p exits before authentication, SessionStart never sets MCP_WORKSPACE_PATH, hook cwd is often not the workspace, and CLAUDE_PROJECT_DIR is not an env fallback in Get-McpWorkspaceFromEnvironment. Resolve-McpCacheDir then throws at plugins/core/lib-ps/resolve-cache-dir.ps1:125. plugin-hook.ps1 and cache-manager.ps1 both use ErrorActionPreference Stop and SessionEnd has no catch, so both registered SessionEnd hooks fail instead of emitting {}. FR-MCP-115 requires status-only SessionEnd to emit {} even when there is no session to flush.
+      - 'Triage group: triage-group-e1199cdcadc39eca'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When claude -p exits before authentication or SessionStart in a marked workspace, each configured SessionEnd hook exits 0 and writes {} with no resolve-cache-dir.ps1:125 throw.'
+      - '- When SessionEnd can identify the workspace from hook cwd, CLAUDE_PROJECT_DIR, or an equivalent start path, cache flush uses <workspace>/.mcpServer/<agent> rather than failing.'
+      - '- A SessionEnd with no pending cache and no session state is treated as a no-op and is not reported as a Claude hook failure.'
+      - 'Implementation notes:'
+      - '- Harden plugins/core/lib-ps/plugin-hook.ps1 Invoke-CacheFlushHook so unresolved cache is a no-op that still emits {} for session-end and pre-compact.'
+      - '- Stop cache-manager.ps1 from calling Resolve-McpCacheDir at script load with no StartPath; pass the hook start path or treat missing cache as flushed=0.'
+      - '- Optionally treat Claude hook payload cwd and CLAUDE_PROJECT_DIR as workspace fallbacks in Get-McpWorkspaceFromEnvironment so a real LyftAuditTools cache can be found when env from SessionStart is absent.'
+      - '- Keep the existing throw for callers that must have a real cache (status, write, failsafe), and add a SessionEnd test that omits MCP_WORKSPACE_PATH and still expects exit 0 plus {}.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

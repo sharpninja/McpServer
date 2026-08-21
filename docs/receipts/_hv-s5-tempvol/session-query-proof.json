@@ -1,0 +1,38 @@
+{
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "agent": "GrokCode",
+  "todoId": "BUG-TRIAGE-117",
+  "from": "2026-08-19T23:00:00Z",
+  "limit": 10,
+  "totalCount": 2,
+  "thisSession": {
+    "sessionId": "GrokCode-20260819T232157Z-hostile-tempvol",
+    "sourceType": "GrokCode",
+    "title": "Hostile validate Plan G12 S5 BUG-TRIAGE-117 TEMPVOL",
+    "sessionStatus": "in_progress",
+    "turnCount": 1,
+    "requestId": "req-20260819T232157Z-001-hostile-validate-tempvol",
+    "turnStatus": "completed",
+    "planFile": "docs/plans/triage-cluster-002.md",
+    "todoId": "BUG-TRIAGE-117",
+    "lastUpdated": "2026-08-19T23:33:16.1505453+00:00",
+    "responseStartsWith": "OverallVerdict DISAGREE",
+    "actionCount": 7,
+    "actionOrders": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "hasDesignDecisionAction": true,
+    "dialogCount": 4,
+    "decisionDialogCount": 2,
+    "designDecisionCount": 2,
+    "filesModifiedCount": 3
+  },
+  "siblingImplementerSession": "GrokCode-20260819T230651Z-tempvol-s5",
+  "textFilterHostileTempvolTotalCount": 0
+}

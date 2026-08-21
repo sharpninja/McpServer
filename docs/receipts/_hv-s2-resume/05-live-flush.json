@@ -1,0 +1,30 @@
+{
+  "TimestampUtc": "2026-08-19T20:28:14Z",
+  "Unresolved": {
+    "ExitCode": 0,
+    "Stdout": "{}\r\n",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "UnresolvedExit0Empty": true,
+  "OkFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}\r\n",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "OkPendingGone": false,
+  "OkPendingCount": 1,
+  "OkExit0Empty": true,
+  "FailFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}\r\n",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "FailPendingStillThere": true,
+  "FailLooksEmptySuccess": true,
+  "FailHasFlushFailed": false,
+  "FailExitCode": 0,
+  "FailStdoutTrim": "{}"
+}

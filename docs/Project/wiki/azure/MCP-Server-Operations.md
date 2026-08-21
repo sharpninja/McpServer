@@ -339,7 +339,13 @@ Source: `src/McpServer.Client/` — see the [package README](https://github.com/
 
 ## Health, storage, and errors
 
-`GET /health` is liveness. Observed live payload keys on 1.4.28: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+`GET /health` is liveness. Observed live payload keys on 1.4.30: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+
+## Session log sanitization and incremental persist
+
+`SessionLogSanitizingService` is the outermost HTTP and stdio decorator. Query/GET/MCP/stdio reads replace configured secrets in the outbound DTO. SQLite rows are not rewritten. Configure `Mcp:SessionLogSanitization` (`Enabled`, `MaxRuleCount`, `MaxPatternLength`, `RegexTimeoutMilliseconds`, `Rules` with `Id`/`Pattern`/`Replacement`). The in-repo example rule uses `example-token-` (not a live secret). Text filters still match the raw record; TotalCount/order/Limit/Offset stay the same. Regex timeout fails closed without logging the input.
+
+Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `SessionLogClient.AppendDialogAsync` (POST `.../dialog`), not a full-session `SubmitAsync` upsert. HTTP 503 `backend_unavailable` on persist uses the same degrade-queue as timeout: failsafe retained, current-turn stays `in_progress`, no throw. SQLITE_BUSY under the storage budget is retryable persist contention, not storage-down, when TODO/requirements reads still succeed.
 
 Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 

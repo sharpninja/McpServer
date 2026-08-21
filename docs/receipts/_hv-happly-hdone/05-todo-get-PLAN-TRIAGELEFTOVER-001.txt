@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20260820T125741Z-6960
+  result:
+    id: PLAN-TRIAGELEFTOVER-001
+    title: Resolve remaining 27 medium BUG-TRIAGE items via grouped worktrees
+    section: Backlog
+    priority: high
+    done: true
+    note: S7 H-done AGREE docs/receipts/hostile-validator-20260820T092641Z.md FAIL empty. Prior 091214Z DISAGREE D4 closed by Nuke SyncAgentPlugins (core 20db61aa, 8 plugins, grok/codex 1.96.0). leftover-27 all Done=true with AGREE receipts. ValidateTraceability findings=0. Named C# 34/0/0 plus CodexTranscriptAdapterCoverageTests 12/0/0. Live 1.4.29+20db61aa. BUG-TRIAGE-160/161/162/163 remain outside leftover-27.
+    description:
+    - Master TODO for docs/plans/triage-cluster-002.md. Close BUG-TRIAGE-106,107,108,113,116,117,118,120,121,122,125,130,134,140,142,144,147,150-159. Closeout-first for G1/G2/G11. Worktrees under .worktrees/. Merge only after hostile AGREE. Byrd v4. Do not reopen PLAN-TRIAGECLUSTER-001.
+    technicalDetails: &o0 []
+    implementationTasks: []
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-MCP-SESSIONATTR-001
+    - FR-MCP-FAILSAFE-001
+    - FR-MCP-STRICTCOUNT-001
+    - FR-MCP-XAGENT-001
+    - FR-MCP-SESSIONEND-001
+    - FR-MCP-VERIFYWRAP-001
+    - FR-MCP-TRANSCRIPT-SEARCH-001
+    - FR-MCP-TEMPVOL-001
+    technicalRequirements:
+    - TR-MCP-SESSIONATTR-001
+    - TR-MCP-FAILSAFE-001
+    - TR-MCP-STRICTCOUNT-001
+    - TR-MCP-XAGENT-001
+    - TR-MCP-SESSIONEND-001
+    - TR-MCP-VERIFYWRAP-001
+    - TR-MCP-TRANSCRIPT-SEARCH-001
+    - TR-MCP-TEMPVOL-001
+  deprecated: true
+
+---
+

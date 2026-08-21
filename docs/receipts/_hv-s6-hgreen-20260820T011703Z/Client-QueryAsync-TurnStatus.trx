@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1769d67c-240f-4dc0-bca7-569a6e30eddd" name="SYSTEM@PAYTON-LEGION2 2026-08-19 20:21:52" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-19T20:21:52.5589290-05:00" queuing="2026-08-19T20:21:52.5589292-05:00" start="2026-08-19T20:21:50.8605185-05:00" finish="2026-08-19T20:21:52.5698594-05:00" />
+  <TestSettings name="default" id="4fd4d1f3-6bc4-4cd6-bc0c-bac0b289b87b">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-08-19_20_21_52" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="4015251b-7501-48e1-afeb-7a1bbefe0de5" testId="69b00dd3-7603-a8c1-46d8-17384eba75d6" testName="McpServer.Client.Tests.SessionLogClientTests.QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours" computerName="PAYTON-LEGION2" duration="00:00:00.1630744" startTime="2026-08-19T20:21:52.2340248-05:00" endTime="2026-08-19T20:21:52.4090988-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4015251b-7501-48e1-afeb-7a1bbefe0de5" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Client.Tests.SessionLogClientTests.QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours" storage="f:\github\mcpserver\.worktrees\triage-stale-turns\tests\mcpserver.client.tests\bin\debug\net10.0\mcpserver.client.tests.dll" id="69b00dd3-7603-a8c1-46d8-17384eba75d6">
+      <Execution id="4015251b-7501-48e1-afeb-7a1bbefe0de5" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-stale-turns\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Client.Tests.SessionLogClientTests" name="QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="69b00dd3-7603-a8c1-46d8-17384eba75d6" executionId="4015251b-7501-48e1-afeb-7a1bbefe0de5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.22]   Discovering: McpServer.Client.Tests&#xD;
+[xUnit.net 00:00:00.58]   Discovered:  McpServer.Client.Tests&#xD;
+[xUnit.net 00:00:00.80]   Starting:    McpServer.Client.Tests&#xD;
+[xUnit.net 00:00:01.07]   Finished:    McpServer.Client.Tests (ID = 'cfec76a5985dbafa1f55be20b14bb14118cebd5946bf4b620f7b93b88f797bab')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,8 @@
+{
+  "TimestampUtc": "2026-08-19T18:52:19Z",
+  "TimedOut": false,
+  "ExitCode": 0,
+  "ElapsedSec": 3.405,
+  "StdOut": "{\"status\":\"available\",\"agent\":\"GrokCode\",\"namespaces\":[\"workflow.sessionlog\",\"workflow.todo\",\"workflow.requirements\",\"workflow.triage\",\"workflow.graphrag\",\"workflow.memory\",\"workflow.failsafe\"],\"requirementMethods\":[\"workflow.requirements.listLayers\",\"workflow.requirements.createLayer\",\"workflow.requirements.updateLayer\",\"workflow.requirements.effective\"],\"requirementClientMethods\":[\"client.Requirements.ListRequirementLayersAsync\",\"client.Requirements.CreateRequirementLayerAsync\",\"client.Requirements.UpdateRequirementLayerAsync\",\"client.Requirements.GetEffectiveRequirementsAsync\"],\"cacheDir\":\"F:\\\\GitHub\\\\McpServer\\\\.mcpServer\\\\grok\",\"hasSession\":true,\"hasCurrentTurn\":true,\"pendingCount\":12,\"pendingTurnCount\":0,\"failsafeDir\":\"F:\\\\GitHub\\\\McpServer\\\\.mcpServer\\\\grok\\\\failsafe\",\"failsafeCount\":12,\"failsafeQuarantineCount\":48}\r\n",
+  "StdErr": ""
+}

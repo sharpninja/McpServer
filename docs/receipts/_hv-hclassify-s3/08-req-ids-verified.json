@@ -1,0 +1,243 @@
+{
+  "missingFr": [],
+  "missingTr": [],
+  "missingPlaceholder": [],
+  "frHits": [
+    {
+      "id": "FR-MCP-QBAGENT-001",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-129",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-134",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-FILETOOLS-001",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-001",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-002",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-003",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-004",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-005",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-006",
+      "exists": true
+    },
+    {
+      "id": "FR-HANDOFF-007",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-SESSIONLOGSAN-001",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-SESSIONLOGCTX-001",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-PLUGINCORE-004",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-REPL-009",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-PLUGININT-001",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-WIKIEXPORT-001",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-WIKIEXPORT-002",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-TRIAGE-002",
+      "exists": true
+    },
+    {
+      "id": "FR-MCP-104",
+      "exists": true
+    }
+  ],
+  "trHits": [
+    {
+      "id": "TR-MCP-QBAGENT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-QUAD-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-QUAD-003",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-QUAD-005",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-FILETOOLS-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-CONTRACT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-SECURITY-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-AGENT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-VALIDATE-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-MODES-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-TODO-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-AUDIT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-HANDOFF-SURFACE-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-SESSIONLOGSAN-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-SESSIONLOG-006",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-PLUGINCORE-004",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-REPL-010",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-PLUGININT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-WIKIEXPORT-001",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-WIKIEXPORT-002",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-TRIAGE-004",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-BYRD-005",
+      "exists": true
+    },
+    {
+      "id": "TR-MCP-DB-003",
+      "exists": true
+    }
+  ],
+  "phHits": [
+    {
+      "id": "[]",
+      "exists": true
+    },
+    {
+      "id": "TR-01",
+      "exists": true
+    },
+    {
+      "id": "TR-02",
+      "exists": true
+    },
+    {
+      "id": "TR-03",
+      "exists": true
+    },
+    {
+      "id": "TR-04",
+      "exists": true
+    },
+    {
+      "id": "TR-05",
+      "exists": true
+    },
+    {
+      "id": "TR-06",
+      "exists": true
+    },
+    {
+      "id": "TR-07",
+      "exists": true
+    },
+    {
+      "id": "TR-08",
+      "exists": true
+    },
+    {
+      "id": "TR-09",
+      "exists": true
+    },
+    {
+      "id": "TR-10",
+      "exists": true
+    },
+    {
+      "id": "TR-11",
+      "exists": true
+    },
+    {
+      "id": "TR-12",
+      "exists": true
+    },
+    {
+      "id": "TR-13",
+      "exists": true
+    },
+    {
+      "id": "TR-14",
+      "exists": true
+    }
+  ]
+}

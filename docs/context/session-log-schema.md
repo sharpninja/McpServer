@@ -7,8 +7,12 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 
 - `POST /mcpserver/sessionlog` — create or update a session log
 - `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` — first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
+
+## Outbound sanitization (FR-MCP-SESSIONLOGSAN-001)
+
+Query, GET, MCP, and stdio reads clone the DTO and apply `Mcp:SessionLogSanitization` rules before the payload leaves the process. Raw storage is unchanged. Replacement tokens include the rule Id (for example `[REDACTED:example-internal-token]`). A secret in a stored turn still participates in text filtering and does not change paging metadata. Invalid or duplicate rule Ids fail options validation. Regex timeout redacts fail-closed and does not log the input.
 
 ## Stale in_progress turns (BUG-TRIAGE-121)
 

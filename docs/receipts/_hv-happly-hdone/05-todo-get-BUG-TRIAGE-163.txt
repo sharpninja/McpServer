@@ -1,0 +1,32 @@
+type: result
+payload:
+  requestId: req-20260820T125805Z-ebb5
+  result:
+    id: BUG-TRIAGE-163
+    title: avalonia-remote MCP handshake fails with pipe closed (os error 232)
+    section: Backlog
+    priority: low
+    done: false
+    description:
+    - "Grok's MCP client failed to initialize the third-party avalonia-remote server during a TruckMate session on 2026-08-20. Transport xai_grok_mcp::servers::SafeTokioChildProcess reported Windows error 232 (pipe closed) while sending the MCP initialize request. McpServer is not involved: this workspace has no avalonia-remote code or config, and sessionlog/todo tools continued to work. The child process closed stdio before initialize completed, so the client surfaces an opaque pipe error instead of a process exit code or stderr."
+    - 'Triage group: triage-group-2e7fb52e191260ac'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - "- avalonia-remote either completes the MCP initialize handshake successfully, or the client reports a diagnosable child-process failure (exit code and/or captured stderr) instead of only 'The pipe is being closed. (os error 232)' during initialize."
+    - '- A failed avalonia-remote handshake must not be attributed to McpServer when McpServer sessionlog/todo tools still succeed.'
+    - 'Implementation notes:'
+    - '- Not an McpServer product defect. Targeted search of F:\GitHub\McpServer found no avalonia-remote or Avalonia MCP references.'
+    - "- Original observation workspace is F:\\GitHub\\TruckMate; error source is Grok's SafeTokioChildProcess stdio transport, not /mcpserver REST or MCP transport."
+    - '- Windows error 232 typically means the child closed the pipe (process exit or crash) before or during initialize. Inspect the Grok MCP launch command for avalonia-remote in the TruckMate or user Grok MCP config, capture child stdout/stderr/exit code, and fail initialize with that diagnostic rather than a generic pipe-closed send error.'
+    implementationTasks: []
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): avalonia-remote MCP handshake pipe closed (os error 232) is not an McpServer in-repo defect. Keep open as triage record. Linked FR-MCP-TRIAGE-002 / TR-MCP-TRIAGE-004. Do not store-close from this audit.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

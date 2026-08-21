@@ -1,0 +1,9 @@
+{
+  "TimestampUtc": "2026-08-19T20:00:39Z",
+  "MainStagedExists": true,
+  "WorktreeStagedExists": false,
+  "GitignoreMentionsStaged": true,
+  "GitignorePreview": "/cache/\n.staged-plugin/\nnode_modules/\ndist/\n",
+  "MainStagedCount": 43,
+  "WorktreeGitCheckIgnore": null
+}

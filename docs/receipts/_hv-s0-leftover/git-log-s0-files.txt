@@ -1,0 +1,8 @@
+6786775e1df0e42f1ef81690176c40e601fd09c4 2026-07-07T04:15:27-05:00 chore sync mcpserver wrap up artifacts
+27e06c979b76c28147a1d5e908f79edbbfc7153c 2026-06-17T09:21:04-05:00 chore: remove committed MCP marker archive and ignore the pattern
+ee70f993d3dd5c9ad08993ff4576a5df617d36ca 2026-06-06T09:37:06-05:00 fix(grok): clarify MCP plugin tool discovery
+ddebc31a933d00b4541ef94faea0596a6462a1aa 2026-05-29T09:21:39-05:00 feat(core-pkg): complete Core Package Integration wave [PLAN-AGENTPARITY-001]
+82a2a06160d91fe3f53b84aa967f23f6c1f355ea 2026-04-21T14:57:27-05:00 docs(todo): flip TR-MCP-TODO-005/006/008 Complete + unblock 003/LOG-002
+71effc7517a2dd954c97dd49e865cfe8e9147d15 2026-04-20T14:39:35-05:00 chore(p0): preconditions for provider-agnostic TodoService
+bd62ae209d1120d85e8f1a1014f96208118eb2ed 2026-03-30T06:24:41-05:00 Configure McpServer.Repl.Host as a .NET global tool with interactive mode and publish to local NuGet feed
+792981748e66d83cc0347cf932e14598b1fa0031 2026-03-25T14:24:01-05:00 Prefer .mcpSession cache in McpSession

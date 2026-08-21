@@ -1,0 +1,66 @@
+{
+  "TimestampUtc": "2026-08-19T20:14:11Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "TestProject": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj",
+  "Filter": "FullyQualifiedName~SessionLogSchemaGuardTests|FullyQualifiedName~SessionLogAgentSessionHeaderMigrationTests",
+  "ExitCode": 0,
+  "LogPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-closeout-s2\\dotnet-test.log",
+  "TrxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-closeout-s2\\SessionLogCloseoutFilter.trx",
+  "TrxExists": true,
+  "Passed": 11,
+  "Failed": null,
+  "Skipped": null,
+  "Total": 11,
+  "Tail": "  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n  McpServer.SessionLog.Transcripts -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.SessionLog.Transcripts\\bin\\Debug\\net10.0\\McpServer.SessionLog.Transcripts.dll\r\n  McpServer.TransactionSecurity -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.TransactionSecurity\\bin\\Debug\\net10.0\\McpServer.TransactionSecurity.dll\r\n  McpServer.Common.AgentCli -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Common.AgentCli\\bin\\Debug\\net10.0\\McpServer.Common.AgentCli.dll\r\n  McpServer.Cqrs -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Cqrs\\bin\\Debug\\net10.0\\McpServer.Cqrs.dll\r\n  McpServer.Client -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Client\\bin\\Debug\\net10.0\\McpServer.Client.dll\r\n  McpServer.ServiceDefaults -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.ServiceDefaults\\bin\\Debug\\net10.0\\McpServer.ServiceDefaults.dll\r\n  McpServer.Repl.Core -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Repl.Core\\bin\\Debug\\net10.0\\McpServer.Repl.Core.dll\r\n  McpServer.Cqrs.Mvvm -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Cqrs.Mvvm\\bin\\Debug\\net10.0\\McpServer.Cqrs.Mvvm.dll\r\n  McpServer.Storage -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage\\bin\\Debug\\net10.0\\McpServer.Storage.dll\r\n  McpServer.McpAgent -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.McpAgent\\bin\\Debug\\net10.0\\McpServer.McpAgent.dll\r\n  McpServer.Storage.PostgreSqlMigrations -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage.PostgreSqlMigrations\\bin\\Debug\\net10.0\\McpServer.Storage.PostgreSqlMigrations.dll\r\n  McpServer.Storage.SqlServerMigrations -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage.SqlServerMigrations\\bin\\Debug\\net10.0\\McpServer.Storage.SqlServerMigrations.dll\r\n  McpServer.Storage.SqliteMigrations -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Storage.SqliteMigrations\\bin\\Debug\\net10.0\\McpServer.Storage.SqliteMigrations.dll\r\n  McpServer.Services -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Services\\bin\\Debug\\net10.0\\McpServer.Services.dll\r\n  McpServer.GraphRag -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.GraphRag\\bin\\Debug\\net10.0\\McpServer.GraphRag.dll\r\n  McpServer.Support.Mcp -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\src\\McpServer.Support.Mcp\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll\r\n  McpServer.Support.Mcp.Tests -> F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\tests\\McpServer.Support.Mcp.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.Tests.dll\r\nTest run for F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\tests\\McpServer.Support.Mcp.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)\r\nA total of 1 test files matched the specified pattern.\r\nF:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\tests\\McpServer.Support.Mcp.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.Tests.dll\r\n[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)\r\n[xUnit.net 00:00:00.40]   Discovering: McpServer.Support.Mcp.Tests\r\n[xUnit.net 00:00:01.44]   Discovered:  McpServer.Support.Mcp.Tests\r\n[xUnit.net 00:00:01.69]   Starting:    McpServer.Support.Mcp.Tests\r\n  Passed McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError [1 s]\r\n  Passed McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId [< 1 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds [765 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration [1 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError [14 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds [3 s]\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_SourceSkipsExistingHeaderColumnsViaPragma [1 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True) [1 s]\r\n[xUnit.net 00:00:08.33]   Finished:    McpServer.Support.Mcp.Tests (ID = 'c5ca1de1ae91e96913acead9117a91077232c5e52724fe7cc3c41458a86c0caa')\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False) [1 s]\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_AddsFourHeaderColumnsIdempotentlyWithIfNotExists [1 ms]\r\n  Passed McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_AddsFourHeaderColumnsIdempotentlyWithColLengthGuards [1 ms]\r\nResults File: F:\\GitHub\\McpServer\\docs\\receipts\\_hv-closeout-s2\\SessionLogCloseoutFilter.trx\r\n\r\nTest Run Successful.\r\nTotal tests: 11\r\n     Passed: 11\r\n Total time: 8.9481 Seconds\r\n",
+  "TrxTotal": 11,
+  "TrxExecuted": 11,
+  "TrxPassed": 11,
+  "TrxFailed": 0,
+  "TrxNotExecuted": 0,
+  "Methods": [
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_AddsFourHeaderColumnsIdempotentlyWithColLengthGuards",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_SourceSkipsExistingHeaderColumnsViaPragma",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_AddsFourHeaderColumnsIdempotentlyWithIfNotExists",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)",
+      "outcome": "Passed"
+    }
+  ]
+}

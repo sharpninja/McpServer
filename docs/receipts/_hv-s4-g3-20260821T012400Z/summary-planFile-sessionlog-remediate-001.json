@@ -1,0 +1,105 @@
+{
+  "label": "planFile-sessionlog-remediate-001",
+  "totalCount": 7,
+  "sessionCountReturned": 7,
+  "turnCountReturned": 25,
+  "missingPlanOrTodo": 0,
+  "noneTodoId": 4,
+  "nonePlanFile": 3,
+  "noneBoth": 3,
+  "sampleNoneTodo": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093155Z-008-align-hourly-02-timer",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "None",
+      "queryTitle": "Align hourly continue-plan timer after :02 wait",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    }
+  ],
+  "sampleNonePlan": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    }
+  ],
+  "sampleNoneBoth": [
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open TODOs grouped by topic",
+      "status": "completed"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "Plan TODO-requirements-code alignment audit",
+      "status": "in_progress"
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "queryTitle": "List open MCP TODOs",
+      "status": "completed"
+    }
+  ],
+  "sampleMissing": [],
+  "firstTurn": {
+    "sessionId": "GrokCode-20260821T012400Z-hostile-s4-g3",
+    "requestId": "req-20260821T012400Z-001-s4-g3-closeout-002",
+    "planFile": "docs/plans/sessionlog-remediate-001.md",
+    "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+    "queryTitle": "Hostile S4 G3 closeout MCP-SESSIONLOG-002",
+    "status": "in_progress"
+  }
+}

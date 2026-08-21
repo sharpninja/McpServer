@@ -1,0 +1,168 @@
+{
+  "TimestampUtc": "2026-08-19T17:47:50Z",
+  "ActualCompletedUtc": "2026-08-19T17:51:27Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project requirement work (Byrd requirements phase; leftover-triage S0 / H0)",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "TodoId": "PLAN-TRIAGELEFTOVER-001",
+  "SessionId": "GrokCode-20260819T174750Z-hostile-s0-leftover",
+  "TurnRequestId": "req-20260819T174750Z-001-hostile-s0-leftover-triage",
+  "TurnId": 42056,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Trust": {
+    "signatureOk": true,
+    "nonce": "71de2e5b231d4cbf92e837c90a15a9c9",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "storage": "reachable",
+    "mcpUntrusted": false
+  },
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 2,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "OverallVerdict": "DISAGREE",
+  "FailList": [
+    "C2: leftover FR/TR/TEST AcceptanceCriteria arrays are empty ([]). AC text lives only as markdown checkboxes in Body/Condition.",
+    "D2: PLAN-TRIAGELEFTOVER-001 FunctionalRequirements and TechnicalRequirements are null; leftover FR/TR IDs were not attached to the master TODO."
+  ],
+  "Accuracy": 95,
+  "Completeness": 92,
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "PLAN-TRIAGELEFTOVER-001 Done=false; plan names 27 BUG-TRIAGE IDs and worktree protocol"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": ".gitignore contains .worktrees/"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "MCP store has leftover FR/TR/TEST records and 1:1 mappings"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "ValidateTraceability Succeeded findings=0"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "No leftover-slice product implementation in this S0"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "27 BUG-TRIAGE items remain Done=false"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "Byrd scored at requirements-phase gate; no FR-vs-mtime FAIL"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "Independent receipts re-run"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "MCP-only storage"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "PowerShell only; no Python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "Honesty on stated A claims"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "Eight leftover FR/TR/TEST records exist"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "FAIL",
+      "title": "Structured AcceptanceCriteria empty on leftover FR/TR/TEST"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "Eight leftover mappings 1:1"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "N/A",
+      "title": "AC-covering tests not required at S0 requirements phase"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "title": "S0 artifacts exist (TODO, plan, gitignore, records, mappings, traceability)"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "FAIL",
+      "title": "PLAN-TRIAGELEFTOVER-001 FunctionalRequirements and TechnicalRequirements null"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS",
+      "title": "No leftover product implementation; predecessor isolation not this S0"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS",
+      "title": "27 BUG-TRIAGE remain Done=false per plan"
+    }
+  ],
+  "PersistenceProof": {
+    "completeSuccess": true,
+    "turnId": 42056,
+    "status": "completed",
+    "queryTotalCount": 1,
+    "sessionId": "GrokCode-20260819T174750Z-hostile-s0-leftover",
+    "requestId": "req-20260819T174750Z-001-hostile-s0-leftover-triage",
+    "planFile": "docs/plans/triage-cluster-002.md",
+    "todoId": "PLAN-TRIAGELEFTOVER-001",
+    "queryPath": "docs/receipts/_hv-s0-leftover/session-query-proof.json"
+  }
+}

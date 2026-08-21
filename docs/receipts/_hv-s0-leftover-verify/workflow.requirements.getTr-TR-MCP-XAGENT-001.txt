@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181928Z-1bbe
+  result:
+    id: TR-MCP-XAGENT-001
+    title: Assert-ReplCurrentTurnFresh refuses different sourceType prefixes
+    description: Assert-ReplCurrentTurnFresh compares sessionId sourceType prefix. Different prefix refuses CompleteTurn persist. Same prefix still rebinds. persist identity keeps planFile/todoId. Covered by FR-MCP-XAGENT-001 TEST-MCP-XAGENT-001.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: XAGENT
+    acceptanceCriteria:
+    - id: ac-1
+      text: Assert-ReplCurrentTurnFresh refuses different sourceType prefixes
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:19:29.1102558+00:00
+    updatedAt: 2026-08-19T18:19:29.1103877+00:00
+  deprecated: true
+
+---

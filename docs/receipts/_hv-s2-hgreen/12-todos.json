@@ -1,0 +1,17 @@
+{
+  "TimestampUtc": "2026-08-19T21:02:40Z",
+  "Source": "mcpserver__todo_get",
+  "WorkspacePath": "F:\\GitHub\\McpServer",
+  "Items": [
+    { "Id": "PLAN-TRIAGELEFTOVER-001", "Done": false, "CompletedDate": null, "DoneSummary": null, "FunctionalRequirementsCount": 8, "TechnicalRequirementsCount": 8 },
+    { "Id": "BUG-TRIAGE-158", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-159", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-140", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-142", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-106", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-125", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-130", "Done": false, "CompletedDate": null, "DoneSummary": null },
+    { "Id": "BUG-TRIAGE-120", "Done": false, "CompletedDate": null, "DoneSummary": null }
+  ],
+  "AnyDoneTrue": false
+}

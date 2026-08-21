@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20260820T125824Z-3b69
+  result:
+    id: FR-HANDOFF-003
+    title: Validate and normalize generated TODO drafts
+    description: Validate and normalize generated TODO drafts.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 draft validation.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-003-fields
+      text: Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+      isSatisfied: false
+    - id: ac-fr-handoff-003-diagnostics
+      text: Invalid or conflicting values produce field-specific diagnostics.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:25.1661662+00:00
+    updatedAt: 2026-08-20T12:58:25.1662601+00:00
+  deprecated: true
+
+---
+

@@ -1,0 +1,85 @@
+type: result
+payload:
+  requestId: req-20260821T021105Z-d683
+  result:
+    totalCount: 230
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T020909Z-plugin-session
+      agentSessionId: 01a02212-b62d-79a0-abf8-a4ffebe71a71
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile S7 H-done A10 rescore
+      model: grok
+      started: 2026-08-21T02:09:24.0000000+00:00
+      lastUpdated: 2026-08-21T02:11:03.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T020907Z-001-s7-hdone-a10-rescore
+        timestamp: 2026-08-21T02:09:24.0000000+00:00
+        queryText: Rescore A10 timer 01a0218b0965 from parent scheduler_list JSON. Do not mark any MCP TODO done true. Do not delete the timer.
+        queryTitle: Hostile S7 H-done A10 rescore
+        response: 'OverallVerdict AGREE. Explicit FAIL empty. UNKNOWN empty. A10a PASS from on-disk parent scheduler_list JSON for timer 01a0218b0965. A10b PASS: timer is parent-scheduler ops, not a product AC. Seven TODOs still Done=false. Validator did not delete the timer. Receipt docs/receipts/hostile-validator-20260821T020957Z.md'
+        status: completed
+        planFile: docs/plans/sessionlog-remediate-001.md
+        todoId: PLAN-SESSIONLOGREMEDIATE-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: 'Plugin HMAC only: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\marker-resolver.ps1
+        - order: 3
+          description: git rev-parse HEAD still ee89cd63; named suite not re-run
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer
+        - order: 4
+          description: workflow.todo.get seven closeout IDs Done=false
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-s7-hdone-a10-20260821T020907Z
+        - order: 5
+          description: Opened parent scheduler_list JSON; timer 01a0218b0965 still listed; did not delete
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-s7-hdone-parent/02-scheduler-list.json
+        - order: 6
+          description: A10a PASS from parent JSON; A10b PASS ops not product AC; OverallVerdict AGREE
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T020957Z.md
+        - order: 7
+          description: Wrote new hostile receipt md+json; did not edit 20260821T020355Z
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T020957Z.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-21T02:08:43.0000000+00:00
+          role: model
+          content: add-profile 18 files. Plugin HMAC Test-MarkerSignature True. Invoke-FullBootstrap True. Status available GrokCode failsafeCount=52. git HEAD still ee89cd63. Named suite not re-run.
+          category: observation
+        - timestamp: 2026-08-21T02:09:07.0000000+00:00
+          role: model
+          content: 'workflow.todo.get: PLAN-SESSIONLOGREMEDIATE-001, BUG-TRIAGE-160/161/162/164, MCP-SESSIONLOG-001/002 all Done=false.'
+          category: observation
+        - timestamp: 2026-08-21T02:09:57.0000000+00:00
+          role: model
+          content: Opened docs/receipts/_hv-s7-hdone-parent/02-scheduler-list.json. id=01a0218b0965 recurring=true nextFireAt=2026-08-21T02:39:15.192009800+00:00. Validator cannot reproduce scheduler_list. Did not delete timer.
+          category: observation
+        - timestamp: 2026-08-21T02:09:57.0000000+00:00
+          role: model
+          content: 'Decision: PASS A10a from the on-disk parent scheduler_list JSON, not from chat. PASS A10b as parent-scheduler ops not a product AC. Consequence: prior UNKNOWN is cleared. OverallVerdict AGREE. Parent may store-close and then delete the timer. This validator did not flip Done and did not delete the timer.'
+          category: decision
+
+---
