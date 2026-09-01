@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGESTORE-002
+title: Triage intake fail-fast when SQL unreachable
+description: TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+    isSatisfied: false

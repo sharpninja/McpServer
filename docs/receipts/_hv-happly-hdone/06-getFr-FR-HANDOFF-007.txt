@@ -1,0 +1,22 @@
+type: result
+payload:
+  requestId: req-20260820T125834Z-738e
+  result:
+    id: FR-HANDOFF-007
+    title: Provide equivalent public handoff surfaces
+    description: Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 public surface parity.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-007-delegate
+      text: Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:35.4182653+00:00
+    updatedAt: 2026-08-20T12:58:35.4183830+00:00
+  deprecated: true
+
+---
+

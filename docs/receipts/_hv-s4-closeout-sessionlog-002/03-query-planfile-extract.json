@@ -1,0 +1,209 @@
+{
+  "totalCount": 6,
+  "itemCount": 3,
+  "turnCount": 22,
+  "turnsMissingPlanFile": 0,
+  "turnsMissingTodoId": 0,
+  "turnsMatchingFilter": 7,
+  "turnsNotMatchingFilter": 15,
+  "turns": [
+    {
+      "sessionId": "GrokCode-20260821T012400Z-hostile-s4-g3",
+      "requestId": "req-20260821T012400Z-001-s4-g3-closeout-002",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260821T012400Z-hostile-s4-g3",
+      "requestId": "req-20260821T012800Z-002-none-none-probe",
+      "planFile": "None",
+      "todoId": "None",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260819T181845Z-001-resume-leftover-s0-h0",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "PLAN-TRIAGELEFTOVER-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T070047Z-002-continue-113-updateservice",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "BUG-TRIAGE-113",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T071243Z-003-nuke-not-manual-113",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "BUG-TRIAGE-113",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T074800Z-004-113-hgreen-disagree",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "BUG-TRIAGE-113",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T080700Z-005-merge-113-updateservice",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "BUG-TRIAGE-113",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T085106Z-006-hourly-continue-plan-timer",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "PLAN-TRIAGELEFTOVER-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T090200Z-007-continue-plan-to-completion",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "PLAN-TRIAGELEFTOVER-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093155Z-008-align-hourly-02-timer",
+      "planFile": "docs/plans/triage-cluster-002.md",
+      "todoId": "None",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093300Z-009-list-open-todos-by-topic",
+      "planFile": "None",
+      "todoId": "None",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T093500Z-010-plan-todo-requirements-audit",
+      "planFile": "None",
+      "todoId": "None",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T100500Z-011-s0-todo-audit-inventory",
+      "planFile": "docs/plans/todo-requirements-audit.md",
+      "todoId": "PLAN-TODOAUDIT-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T101500Z-011-s0-todoalign-inventory",
+      "planFile": "docs/plans/todo-requirements-audit.md",
+      "todoId": "PLAN-TODOALIGN-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T140100Z-012-scheduled-todoalign-timer",
+      "planFile": "docs/plans/todo-requirements-audit.md",
+      "todoId": "PLAN-TODOALIGN-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T141500Z-013-list-open-todos",
+      "planFile": "None",
+      "todoId": "None",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": false
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T143000Z-014-s0-sessionlog-remediate",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T234000Z-016-sessionlog-remediate-timer-and-continue",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260820T234628Z-017-timer-sessionlog-remediate",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260821T005459Z-018-plugin-hmac-validate",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260819T181126Z-plugin-session",
+      "requestId": "req-20260821T010826Z-019-hourly-sessionlog-remediate",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    },
+    {
+      "sessionId": "GrokCode-20260821T004002Z-hostile-hgreen-s2",
+      "requestId": "req-20260821T004002Z-001-hostile-hgreen-s2-validate",
+      "planFile": "docs/plans/sessionlog-remediate-001.md",
+      "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+      "planFilePresent": true,
+      "todoIdPresent": true,
+      "matchesFilter": true
+    }
+  ]
+}

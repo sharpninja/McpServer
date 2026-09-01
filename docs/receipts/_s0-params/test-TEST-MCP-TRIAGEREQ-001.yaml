@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGEREQ-001
+title: Legacy TR-066 get update delete and create reject
+description: Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+    isSatisfied: false

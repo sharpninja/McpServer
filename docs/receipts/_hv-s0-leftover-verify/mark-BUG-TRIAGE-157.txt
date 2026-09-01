@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T190337Z-5eb0
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-157
+      title: beginTurn superseded persist SubmitAsync 500 on empty planFile/todoId
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Grok plugin workflow.sessionlog.beginTurn calls Invoke-ReplSupersedeCurrentTurnIfInProgress, which persists the prior in_progress turn as canceled through Invoke-ReplPersistTurn and client.SessionLog.SubmitAsync. That call omits PlanFile/TodoId, so they default to empty strings. SubmitAsync treats the hook turn as existing and runs SessionLogTurnContextValidator.ValidatePlanFile/ValidateTodoId(required: true), which throws ArgumentException on empty values. The server maps that to McpServerException SubmitAsync internal_server_error. Failsafe YAML is written before the call; drain retries the same invalid payload and reports failed=1. The beginTurn catch only logs stderr, so the new session still appears in queryHistory.'
+      - 'Triage group: triage-group-6b6e879f0bcac59d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- beginTurn that supersedes an in_progress hook turn persists the old turn as status canceled with planFile None and todoId None when those fields were omitted'
+      - '- The superseded persist does not return McpServerException SubmitAsync internal_server_error'
+      - '- Failsafe session_submit YAML is cleared and failsafe drain reports failed=0 for that persist'
+      - '- queryHistory or SessionLog query returns the old turn as canceled with response text naming the next requestId, and still returns the new session'
+      - 'Implementation notes:'
+      - '- Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 should pass planFile/todoId None sentinels (or omit the fields) instead of empty strings'
+      - '- Prefer UpsertTurnAsync for superseded persist instead of a one-turn whole-session SubmitAsync'
+      - '- Map planFile/todoId ArgumentException to a structured 400, not opaque 500 internal_server_error, so drain and plugins can branch on code'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

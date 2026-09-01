@@ -1,0 +1,44 @@
+{
+  "TimestampUtc": "2026-08-19T20:03:34Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core",
+  "WorkClass": 1,
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/plugin-core",
+  "GitSha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyCount": 8,
+  "AddProfile": { "executed": true, "profileFileCount": 18 },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T195224Z-hostile-s2-hgreen",
+    "requestId": "req-20260819T195224Z-001-hostile-s2-hgreen"
+  },
+  "Plugin": {
+    "sourceType": "GrokCode",
+    "name": "mcpserver",
+    "version": "1.95.0",
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "signatureOk": true,
+    "nonceMatch": true
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": { "PASS": 14, "FAIL": 7, "UNKNOWN": 0, "NA": 0 },
+  "Pester": {
+    "twoFiles": { "Passed": 121, "Failed": 8, "Skipped": 0, "Total": 129, "path": "docs/receipts/_hv-s2-hgreen/03-pester-full.json" },
+    "s2Only": { "Passed": 15, "Failed": 0, "Skipped": 0, "NotRun": 114, "path": "docs/receipts/_hv-s2-hgreen/03-pester-s2-only.json" },
+    "broadFilter": { "Passed": 30, "Failed": 1, "Skipped": 0, "path": "docs/receipts/_hv-s2-hgreen/03-pester-named.json" }
+  },
+  "Live120": {
+    "worktreeCoreBeginTurn": { "class": "completed-exit0", "elapsedSec": 3.097, "path": "docs/receipts/_hv-s2-hgreen/16-live-120-core.json" },
+    "forcedWrapperTimeout": { "class": "classified-command-timeout", "elapsedSec": 1.918, "retryable": true, "path": "docs/receipts/_hv-s2-hgreen/17-live-120-force-timeout.json" }
+  },
+  "FailList": [
+    "A4 SessionEnd flush AC not proven",
+    "A7 no real SubmitAsync timeout test",
+    "A8 Pester 44/0/0 not reproduced; two-file 121/8/0; S2-only 15/0/0",
+    "B2 no S2 red-phase hostile AGREE",
+    "B5 honesty: 44/0/0 does not match artifacts",
+    "C4 leftover AC coverage still red for 120 SubmitAsync, 140 flush, 125 current-turn",
+    "D1 S2 not merge-ready"
+  ]
+}

@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20260819T181719Z-c9f5
+  result:
+    id: FR-MCP-STRICTCOUNT-001
+    title: updateTurn accepts omitted empty or scalar tags and contextList under StrictMode
+    description: >-
+      workflow.sessionlog.updateTurn succeeds when tags or contextList is omitted, empty, or a single scalar. Invoke-McpPlugin exits 0. No StrictMode Count throw. Success stdout stays silent. BUG-TRIAGE-158.
+
+      - [ ] omitted/empty/scalar tags and contextList persist
+
+      - [ ] exit 0 and no Count cannot be found
+
+      - [ ] appendActions/updateTurn emit no boolean on success
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: omitted/empty/scalar tags and contextList persist
+      isSatisfied: false
+    - id: ac-2
+      text: exit 0 and no Count cannot be found
+      isSatisfied: false
+    - id: ac-3
+      text: appendActions/updateTurn emit no boolean on success
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:17:19.8173008+00:00
+    updatedAt: 2026-08-19T18:17:19.8173976+00:00
+  deprecated: true
+
+---

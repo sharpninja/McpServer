@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7de7b346-e5b9-4c84-88cc-17289c738410" name="kingd@PAYTON-LEGION2 2026-08-19 14:34:30" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-19T14:34:30.9748749-05:00" queuing="2026-08-19T14:34:30.9748755-05:00" start="2026-08-19T14:34:27.1391969-05:00" finish="2026-08-19T14:34:35.1857606-05:00" />
+  <TestSettings name="default" id="55d1f7b6-86fc-4bb0-9dcf-89d410151624">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-19_14_34_30" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="6893a79a-aed2-49a4-a8a7-d4cf7bba5d8a" testId="cd2221b9-b219-cd6a-6f0f-567ef07b2b72" testName="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)" computerName="PAYTON-LEGION2" duration="00:00:04.1081370" startTime="2026-08-19T14:34:29.5107374-05:00" endTime="2026-08-19T14:34:33.6189372-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6893a79a-aed2-49a4-a8a7-d4cf7bba5d8a" />
+    <UnitTestResult executionId="ca696114-2763-4e82-a4ab-becef4df16e6" testId="5ffd08ad-635a-ce17-c2cb-3bcba9a8ac3c" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds" computerName="PAYTON-LEGION2" duration="00:00:00.7668095" startTime="2026-08-19T14:34:30.5989775-05:00" endTime="2026-08-19T14:34:31.3658476-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca696114-2763-4e82-a4ab-becef4df16e6" />
+    <UnitTestResult executionId="35b61dc3-472b-460b-80e1-c8ec662f1dc9" testId="839a33f8-abb9-f085-aead-d41015b0bdbf" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" computerName="PAYTON-LEGION2" duration="00:00:00.0020649" startTime="2026-08-19T14:34:31.3675375-05:00" endTime="2026-08-19T14:34:31.3696616-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35b61dc3-472b-460b-80e1-c8ec662f1dc9" />
+    <UnitTestResult executionId="40e7715c-dbeb-47b6-860d-2a78cb0c8565" testId="9956a633-c352-cc2b-bd54-3c284896d2b7" testName="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_SourceAddsFourAgentSessionHeaderColumns" computerName="PAYTON-LEGION2" duration="00:00:00.0691151" startTime="2026-08-19T14:34:29.4269305-05:00" endTime="2026-08-19T14:34:29.5031508-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40e7715c-dbeb-47b6-860d-2a78cb0c8565" />
+    <UnitTestResult executionId="65429d1d-4f58-4f59-a9b2-8d105179237e" testId="e35a616f-0f88-5989-98e4-238620d40fb0" testName="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_SourceAddsFourAgentSessionHeaderColumns" computerName="PAYTON-LEGION2" duration="00:00:00.0008695" startTime="2026-08-19T14:34:35.0691479-05:00" endTime="2026-08-19T14:34:35.0700933-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65429d1d-4f58-4f59-a9b2-8d105179237e" />
+    <UnitTestResult executionId="fb94fc8e-6d00-4a7f-9aa5-9e8b1df373ba" testId="7e0ae3d8-5a1c-734b-7f36-e42e70952630" testName="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_SourceAddsFourAgentSessionHeaderColumns" computerName="PAYTON-LEGION2" duration="00:00:00.0233369" startTime="2026-08-19T14:34:35.0443349-05:00" endTime="2026-08-19T14:34:35.0677641-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb94fc8e-6d00-4a7f-9aa5-9e8b1df373ba" />
+    <UnitTestResult executionId="727099a7-0345-44b1-9388-dc7eb7da0857" testId="6e715395-8465-9820-edde-f315cd601e7c" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError" computerName="PAYTON-LEGION2" duration="00:00:00.0156690" startTime="2026-08-19T14:34:31.3700363-05:00" endTime="2026-08-19T14:34:31.3857675-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="727099a7-0345-44b1-9388-dc7eb7da0857" />
+    <UnitTestResult executionId="86cb6f23-6be8-4585-bd98-ca082bece18d" testId="04bd4fe0-83ea-25bd-3dfe-bb8dc77d8317" testName="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)" computerName="PAYTON-LEGION2" duration="00:00:01.4232418" startTime="2026-08-19T14:34:33.6199950-05:00" endTime="2026-08-19T14:34:35.0433144-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86cb6f23-6be8-4585-bd98-ca082bece18d" />
+    <UnitTestResult executionId="1df0591c-3da7-4fce-82d7-adcf9fa6de19" testId="653d6432-89ac-376b-19ed-4a260c8fa069" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" computerName="PAYTON-LEGION2" duration="00:00:01.1614968" startTime="2026-08-19T14:34:29.4269304-05:00" endTime="2026-08-19T14:34:30.5971081-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1df0591c-3da7-4fce-82d7-adcf9fa6de19" />
+    <UnitTestResult executionId="980171e5-c973-43f8-8a97-77eaba4f9a4e" testId="1fa1ea91-5eb4-4814-00af-cec5f6892532" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId" computerName="PAYTON-LEGION2" duration="00:00:00.0003753" startTime="2026-08-19T14:34:30.5982351-05:00" endTime="2026-08-19T14:34:30.5986585-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="980171e5-c973-43f8-8a97-77eaba4f9a4e" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: True)" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="cd2221b9-b219-cd6a-6f0f-567ef07b2b72">
+      <Execution id="6893a79a-aed2-49a4-a8a7-d4cf7bba5d8a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="839a33f8-abb9-f085-aead-d41015b0bdbf">
+      <Execution id="35b61dc3-472b-460b-80e1-c8ec662f1dc9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(sessionLogTagsAlreadyExist: False)" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="04bd4fe0-83ea-25bd-3dfe-bb8dc77d8317">
+      <Execution id="86cb6f23-6be8-4585-bd98-ca082bece18d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUp_SourceAddsFourAgentSessionHeaderColumns" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="7e0ae3d8-5a1c-734b-7f36-e42e70952630">
+      <Execution id="fb94fc8e-6d00-4a7f-9aa5-9e8b1df373ba" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqlServerUp_SourceAddsFourAgentSessionHeaderColumns" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="5ffd08ad-635a-ce17-c2cb-3bcba9a8ac3c">
+      <Execution id="ca696114-2763-4e82-a4ab-becef4df16e6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="QueryAsync_AfterColumnsPresent_Succeeds" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="653d6432-89ac-376b-19ed-4a260c8fa069">
+      <Execution id="1df0591c-3da7-4fce-82d7-adcf9fa6de19" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUp_SourceAddsFourAgentSessionHeaderColumns" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="e35a616f-0f88-5989-98e4-238620d40fb0">
+      <Execution id="65429d1d-4f58-4f59-a9b2-8d105179237e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="PostgreSqlUp_SourceAddsFourAgentSessionHeaderColumns" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="6e715395-8465-9820-edde-f315cd601e7c">
+      <Execution id="727099a7-0345-44b1-9388-dc7eb7da0857" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="Classify_PendingMigration_IsPersistenceError" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqliteUp_SourceAddsFourAgentSessionHeaderColumns" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="9956a633-c352-cc2b-bd54-3c284896d2b7">
+      <Execution id="40e7715c-dbeb-47b6-860d-2a78cb0c8565" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqliteUp_SourceAddsFourAgentSessionHeaderColumns" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId" storage="f:\github\mcpserver\.worktrees\triage-closeout\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="1fa1ea91-5eb4-4814-00af-cec5f6892532">
+      <Execution id="980171e5-c973-43f8-8a97-77eaba4f9a4e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-closeout\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="cd2221b9-b219-cd6a-6f0f-567ef07b2b72" executionId="6893a79a-aed2-49a4-a8a7-d4cf7bba5d8a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5ffd08ad-635a-ce17-c2cb-3bcba9a8ac3c" executionId="ca696114-2763-4e82-a4ab-becef4df16e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="839a33f8-abb9-f085-aead-d41015b0bdbf" executionId="35b61dc3-472b-460b-80e1-c8ec662f1dc9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9956a633-c352-cc2b-bd54-3c284896d2b7" executionId="40e7715c-dbeb-47b6-860d-2a78cb0c8565" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e35a616f-0f88-5989-98e4-238620d40fb0" executionId="65429d1d-4f58-4f59-a9b2-8d105179237e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e0ae3d8-5a1c-734b-7f36-e42e70952630" executionId="fb94fc8e-6d00-4a7f-9aa5-9e8b1df373ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e715395-8465-9820-edde-f315cd601e7c" executionId="727099a7-0345-44b1-9388-dc7eb7da0857" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="04bd4fe0-83ea-25bd-3dfe-bb8dc77d8317" executionId="86cb6f23-6be8-4585-bd98-ca082bece18d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="653d6432-89ac-376b-19ed-4a260c8fa069" executionId="1df0591c-3da7-4fce-82d7-adcf9fa6de19" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1fa1ea91-5eb4-4814-00af-cec5f6892532" executionId="980171e5-c973-43f8-8a97-77eaba4f9a4e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.36]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.44]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.70]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:07.44]   Finished:    McpServer.Support.Mcp.Tests (ID = 'c5ca1de1ae91e96913acead9117a91077232c5e52724fe7cc3c41458a86c0caa')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

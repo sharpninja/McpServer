@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T230032Z-ae31
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-144
+      title: sessionlog_replace_section surfaces transient storage outage as transport 503
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - One sessionlog_replace_section call on MCP Streamable HTTP POST /mcp-transport at 2026-08-17T01:52:08Z failed with HTTP 503 error backend_unavailable and message The storage backend is currently unreachable. That matches the existing TR-MCP-HEALTH-003 mapping in GlobalExceptionHandlerMiddleware for connection-class storage failures. A later sessionlog_dialog on the same in-progress turn succeeded, so the outage was transient and the turn was not dropped. ReplaceTurnSectionAsync is a single SaveChanges wrapped by TransactionGatedSessionLogService RestorePreMutation. The tool method itself catches exceptions and returns McpToolErrors with retryable true, but the observed operation name is the MapMcp endpoint display name, so the exception escaped as a transport-level 503. HttpErrorResponse has no retryable field, so Streamable HTTP clients can treat a retryable storage blip as a fatal dropped mutation.
+      - 'Triage group: triage-group-1755b24ad28c0b5f'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When storage is transiently unreachable, sessionlog_replace_section fails with a machine-readable retryable contract (tool payload error backend_unavailable with retryable true, or HTTP 503 backend_unavailable that also includes retryable true).'
+      - '- A failed sessionlog_replace_section during an in-progress turn does not delete or orphan that turn: after storage recovers, sessionlog_dialog or another section mutation on the same agent/sessionId/requestId succeeds.'
+      - '- A recovered follow-up session-log mutation on the same requestId does not require recreating the turn.'
+      - 'Implementation notes:'
+      - '- Do not add a new availability subsystem. Reuse TR-MCP-HEALTH-003 / StorageBackendUnavailability and McpToolErrors.'
+      - '- HttpErrorResponse and GlobalExceptionHandlerMiddleware currently omit retryable; McpToolErrors already emits retryable true. Align the HTTP 503 body if Streamable HTTP keeps surfacing these as unhandled transport errors.'
+      - '- sessionlog_replace_section catches inside the tool, but ApplyWorkspaceOverride sits outside that try and WorkspaceResolutionMiddleware can hit storage on /mcp-transport. Prefer converting those failures into the retryable tool or JSON-RPC error instead of aborting the whole POST.'
+      - '- TransactionGatedSessionLogService already uses RestorePreMutation for replace_section; keep that rollback so a failed SaveChanges cannot commit a partial section replace.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T225435Z.md. Merged triage/session-store as 90d6e474. Named tests 11/0/0. Session GrokCode-20260819T224825Z-hostile-g3s3-commit.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

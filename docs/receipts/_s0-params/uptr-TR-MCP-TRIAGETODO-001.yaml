@@ -1,0 +1,8 @@
+id: TR-MCP-TRIAGETODO-001
+title: Durable EXEC fallback and soft-delete id allocate
+description: TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+priority: high
+acceptanceCriteria:
+  - id: ac-1
+    text: TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+    isSatisfied: false

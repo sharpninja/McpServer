@@ -1,0 +1,120 @@
+{
+  "TimestampUtc": "2026-08-19T00:51:00Z",
+  "ActualCompletedUtc": "2026-08-19T01:01:06Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project implementation (full goal-state closeout of PLAN-TRIAGECLUSTER-001)",
+  "ActivePlan": "docs/plans/triage-cluster-001.md",
+  "GoalPlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\goal\\plan.md",
+  "TodoId": "PLAN-TRIAGECLUSTER-001",
+  "SessionId": "GrokSubagentHostile-20260819T005100Z-hgoal",
+  "TurnRequestId": "req-20260819T005100Z-001-hgoal-full-closeout",
+  "TurnId": 41990,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Trust": {
+    "signatureOk": true,
+    "nonce": "d4b3c04ea889454b92d19f921433c11b",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+    "storage": "reachable",
+    "pluginJsonVersion": "1.94.0",
+    "diskFreeBytesAtTrust": 2927751168
+  },
+  "InterPhaseReceipts": {
+    "H0": { "path": "docs/receipts/hostile-validator-20260818T193842Z.md", "OverallVerdict": "AGREE" },
+    "HRed": { "path": "docs/receipts/hostile-validator-20260818T233800Z.md", "OverallVerdict": "AGREE", "PASS": 27, "FAIL": 0 },
+    "HGreen": { "path": "docs/receipts/hostile-validator-20260818T234800Z.md", "OverallVerdict": "AGREE", "FAIL": 0 },
+    "H9": { "path": "docs/receipts/hostile-validator-20260818T221600Z.md", "OverallVerdict": "AGREE" },
+    "HDone": { "path": "docs/receipts/hostile-validator-20260819T000500Z.md", "OverallVerdict": "AGREE", "FAIL": 0, "FailList": [] }
+  },
+  "TestsThisReview": {
+    "LeftoverPlusValidator": { "Failed": 0, "Passed": 7, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T005100Z/leftover-five.log" },
+    "NamedSpot": { "Failed": 0, "Passed": 20, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T005100Z/named-spot.log" },
+    "Pester": { "Failed": 0, "Passed": 9, "Skipped": 0, "NotRun": 0, "log": "docs/receipts/_hv-20260819T005100Z/pester.log" },
+    "NukeTestLog": { "path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-01353e344a72\\implementer\\nuke-test.log", "TEST_EXIT": 0, "Support": 2037, "Client": 283, "Cqrs": 33, "Launcher": 20, "McpAgent": 63, "ReplCore": 840, "QBAgent": 50, "Failed": 0, "Skipped": 0 },
+    "ValidateTraceabilityLog": { "path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-01353e344a72\\implementer\\validate-traceability.log", "findings": 0, "Succeeded": true }
+  },
+  "LiveReplaceTurn": {
+    "status": 400,
+    "hasCode": false,
+    "hasRetryable": false,
+    "detailContainsOmittedPlanFile": true,
+    "log": "docs/receipts/_hv-20260819T005100Z/live-replace.json"
+  },
+  "Claims": {
+    "A": {
+      "A1": "PASS",
+      "A2": "PASS",
+      "A3": "PASS",
+      "A4": "PASS",
+      "A5": "PASS",
+      "A6": "FAIL",
+      "A7": "PASS",
+      "A8": "PASS",
+      "A9": "PASS",
+      "A10": "PASS"
+    },
+    "B": {
+      "B1": "FAIL",
+      "B2": "PASS",
+      "B3": "PASS",
+      "B4": "PASS",
+      "B5": "FAIL"
+    },
+    "C": {
+      "C1": "PASS",
+      "C2": "PASS",
+      "C3": "PASS",
+      "C4": "PASS",
+      "C5": "N/A",
+      "C6": "FAIL"
+    },
+    "D": {
+      "D1": "FAIL",
+      "D2": "PASS",
+      "D3": "PASS",
+      "D4": "PASS",
+      "D5": "N/A",
+      "D6": "PASS",
+      "D7": "FAIL"
+    }
+  },
+  "Counts": {
+    "PASS": 19,
+    "FAIL": 6,
+    "UNKNOWN": 0,
+    "NA": 2
+  },
+  "FailList": [
+    "A6 leftover five tests are first-persist persist-None, not TEST-MCP-TRIAGESTORE-006 superseded+canceled AC",
+    "B1 post-H-done first-persist product+test invert claimed complete with no inter-phase hostile AGREE",
+    "B5 STORE-006 mis-cite used to justify relaxing FR-MCP-SESSIONLOGCTX-001 AC-003",
+    "C6 FR-MCP-SESSIONLOGCTX-001 AC-003 first persist reject is bypassed; leftover tests insert None instead of rejecting",
+    "D1 full goal-state DoD not met while decision 5 / AC-003 are violated",
+    "D7 plan decision 5 required-on-first-persist is relaxed in working-tree SessionLogService"
+  ],
+  "UnknownList": [],
+  "AccuracyRating": 94,
+  "CompletenessRating": 95,
+  "OverallVerdict": "DISAGREE",
+  "DoNotMark": ["PLAN-TRIAGECLUSTER-001"],
+  "ReceiptMd": "docs/receipts/hostile-validator-20260819T005100Z.md",
+  "SessionPersistence": {
+    "queryTotalCount": 1,
+    "sessionId": "GrokSubagentHostile-20260819T005100Z-hgoal",
+    "requestId": "req-20260819T005100Z-001-hgoal-full-closeout",
+    "turnId": 41990,
+    "turnStatus": "completed",
+    "actions": 9,
+    "designDecisions": 3,
+    "processingDialog": 4,
+    "filesModified": 11,
+    "responseContainsOverallVerdictDisagree": true,
+    "sessionStatus": "in_progress"
+  }
+}

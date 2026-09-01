@@ -5,6 +5,7 @@ namespace Microsoft.Extensions.Hosting;
 
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
 [JsonSerializable(typeof(HttpErrorResponse))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(HealthCheckResponse))]
 internal sealed partial class ServiceDefaultsJsonContext : JsonSerializerContext;
 

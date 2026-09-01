@@ -1,0 +1,16 @@
+NAME=repl
+PROJECT=tests/McpServer.Repl.Core.Tests
+FILTER=FullyQualifiedName~GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients
+START=2026-08-18T15:37:32.0755338Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Todo.Validation -> F:\GitHub\McpServer\tests\McpServer.Todo.Validation\bin\Debug\net10.0\McpServer.Todo.Validation.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Repl.Core.Tests -> F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 70 ms - McpServer.Repl.Core.Tests.dll (net10.0)
+EXIT=0
+END=2026-08-18T15:37:37.0520808Z

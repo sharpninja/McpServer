@@ -1,0 +1,2 @@
+48:**McpServer** is an ASP.NET Core 9 server (.NET 9.0) providing workspace-scoped context retrieval, TODO management, session logging, repository operations, GraphRAG, and GitHub automation for AI agents.
+207:GitHub Actions (`.github/workflows/build.yml`) on Windows-latest with .NET 9.0. Triggers on push/PR to main/develop. Jobs: build-test, validate, package, msix, publish. The Nuke `Test` target excludes `*.IntegrationTests` projects.

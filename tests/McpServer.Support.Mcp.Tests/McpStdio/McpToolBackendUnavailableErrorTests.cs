@@ -70,6 +70,10 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
         Assert.True(
             error == "backend_unavailable",
             $"Expected the typed backend_unavailable error; actual tool payload: {json}");
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
+        Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
+        Assert.False(string.IsNullOrWhiteSpace(document.RootElement.GetProperty("message").GetString()));
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("details").GetProperty("reason").GetString());
         Assert.DoesNotContain("SQLite Error", json, StringComparison.Ordinal);
     }
 
@@ -93,7 +97,42 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         using var document = JsonDocument.Parse(json);
-        Assert.Equal("turn validation failed", document.RootElement.GetProperty("error").GetString());
+        Assert.Equal("internal_server_error", document.RootElement.GetProperty("code").GetString());
+        Assert.Equal("turn validation failed", document.RootElement.GetProperty("message").GetString());
+        Assert.False(document.RootElement.GetProperty("retryable").GetBoolean());
+    }
+
+    /// <summary>
+    /// BUG-TRIAGE-144: sessionlog_replace_section storage unavailability returns
+    /// backend_unavailable with retryable true on the tool JSON payload.
+    /// </summary>
+    [Fact]
+    public async Task SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue()
+    {
+        _sessionLogService
+            .ReplaceTurnSectionAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<UnifiedRequestEntryDto>(),
+                Arg.Any<CancellationToken>())
+            .Returns<bool>(_ => throw new SqliteException("unable to open database file", 14));
+
+        var json = await _tools.SessionLogReplaceSection(
+            "ClaudeCode",
+            "ClaudeCode-20260819T220000Z-replace-section",
+            "req-20260819T220000Z-001-replace-section",
+            "tags",
+            """{"tags":["retry"]}""",
+            Path.GetTempPath(),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("error").GetString());
+        Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
+        Assert.DoesNotContain("unable to open database file", json, StringComparison.Ordinal);
     }
 
     /// <inheritdoc />

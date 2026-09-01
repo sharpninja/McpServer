@@ -1,0 +1,47 @@
+{
+  "TimestampUtc": "2026-08-19T20:02:26Z",
+  "Filter": [
+    {
+      "Default": [],
+      "Description": "Full name of test with -like wildcards, joined by dot. Example: '*.describe Get-Item.test1'",
+      "Value": [
+        "*TEST-MCP-STRICTCOUNT-001*",
+        "*TEST-MCP-FAILSAFE-001*",
+        "*TEST-MCP-SESSIONEND-001*",
+        "*TEST-MCP-XAGENT-001*",
+        "*TEST-MCP-VERIFYWRAP-001*",
+        "*SubmitAsyncTimeout*",
+        "*command_timeout*",
+        "*updateTurn omitted*",
+        "*session-end*",
+        "*wrapper template*",
+        "*BeginTurn.SubmitTimeoutAfterFailsafe*"
+      ],
+      "IsModified": true
+    }
+  ],
+  "ElapsedSec": 14.741,
+  "TotalCount": 129,
+  "PassedCount": 15,
+  "FailedCount": 0,
+  "SkippedCount": 0,
+  "NotRunCount": 114,
+  "Failed": [],
+  "PassedNames": [
+    "BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued",
+    "TEST-MCP-STRICTCOUNT-001 New-McpPluginTurnUpsertRequest accepts omitted empty null and scalar tags under StrictMode",
+    "TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn omitted empty and scalar tags stay silent under StrictMode",
+    "TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down",
+    "TEST-MCP-XAGENT-001 different sourceType prefixes are incompatible and same-agent prefixes rebind",
+    "TEST-MCP-VERIFYWRAP-001 disk-full IOException is typed and bounded process honors timeout",
+    "BeginTurn.SubmitAsyncTimeout_ReturnsDegradedQueued without hanging the caller",
+    "TEST-MCP-FAILSAFE-001 HTTP 503 abort does not increment drainAttempts and a later drain in the same process can replay",
+    "TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation",
+    "TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle",
+    "workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout",
+    "session-end without a resolvable workspace exits 0 and writes {}",
+    "session-end flushes the cache identified by CLAUDE_PROJECT_DIR",
+    "wrapper template documents a hard timeout for code-verify",
+    "Invoke-McpPlugin sessionlog timeout emits classified retryable command_timeout instead of unclassified throw"
+  ]
+}

@@ -1,0 +1,6 @@
+.gitignore
+docs/Project/Functional-Requirements.md
+docs/Project/Requirements-Matrix.md
+docs/Project/TR-per-FR-Mapping.md
+docs/Project/Technical-Requirements.md
+docs/Project/Testing-Requirements.md

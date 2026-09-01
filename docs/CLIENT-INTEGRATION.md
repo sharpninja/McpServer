@@ -69,6 +69,24 @@ Key tool categories:
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
 - **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (MCP Server issues)`)
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
+- **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
+- **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
+
+## Typed client: Products
+
+`McpServerClient.Products` (`ProductClient`) covers `/mcpserver/products`:
+
+```csharp
+var product = await client.Products.CreateAsync(new CreateProductRequest
+{
+    Key = "PROD-MCPSERVER",
+    Name = "McpServer",
+});
+await client.Products.AddMemberAsync(product.Key, memberWorkspaceId);
+var effective = await client.Requirements.GetEffectiveRequirementsAsync(layerKey: null, productScope: "product");
+```
+
+`RemoveMemberAsync` returns the DELETE response body. Do not follow a self-leave with GET (that is 404).
 
 ## Typed client: Use Cases
 
@@ -165,7 +183,7 @@ var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string,
 
 ## Hosted .NET Agent Framework Library
 
-Use `src\McpServer.McpAgent` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+Use `src\McpServer.McpAgent` when you want a .NET 10 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
 
 Typical registration:
 
@@ -202,7 +220,9 @@ Reference implementations:
 All clients should verify connectivity before making API calls:
 
 ```text
-GET /health → { "status": "Healthy" }
+GET /health → { "status": "Healthy", "version": "...", "nonce": "<echo>", "storage": "reachable|unreachable" }
+
+`/health` stays liveness-Healthy with an exact nonce echo during a storage-only outage. Treat `storage: unreachable` as a ready failure, not as MCP_UNTRUSTED. Mutating API errors use `{ code, message, retryable, details }`.
 ```
 
 ## Swagger / OpenAPI

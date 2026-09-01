@@ -1,0 +1,6 @@
+{
+  "requestId": "req-20260819T153500Z-019-remediate-hook-cache-isolation",
+  "status": "in_progress",
+  "lastWriteUtc": "2026-08-19T15:54:40.4249271Z",
+  "raw": "turnRequestId: req-20260819T153500Z-019-remediate-hook-cache-isolation\r\nqueryTitle: Remediate hook cache isolation FAILs\r\nopenedAt: 2026-08-19T15:54:40Z\r\nstatus: in_progress\r\nsessionId: GrokCode-20260818T182741Z-plugin-session\r\ncodeEdits: 0\r\nlastBuildStatus: unknown\r\nauditActions: 0\r\nauditDialog: 0\r\nauditDecisions: 0\r\nauditFiles: 0\r\nauditCommits: 0\r\nqueryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'\r\nplanFile: None\r\ntodoId: None\r\nmarkerFilePath: F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml\r\nmarkerLastWriteUtc: 2026-08-19T13:05:36.9456178Z\n"
+}

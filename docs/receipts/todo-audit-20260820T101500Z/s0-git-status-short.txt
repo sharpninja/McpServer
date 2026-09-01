@@ -1,0 +1,230 @@
+[32mM[m  GitVersion.yml
+ [31mD[m docs/receipts/_h0-hostile-raw/00-trust.json
+ [31mD[m docs/receipts/_h0-hostile-raw/01-bootstrap.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/02-currentSession.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/03-todo-PLAN-TRIAGECLUSTER-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEERR-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEHELP-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEPLUGIN-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEREQ-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESCHEMA-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESTORE-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESTORE-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGETODO-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEERR-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEHELP-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEPLUGIN-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEREQ-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESCHEMA-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESTORE-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESTORE-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGETODO-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEERR-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEHELP-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-003.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-004.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-005.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEREQ-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESCHEMA-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-003.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-004.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-005.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-006.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-007.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGETODO-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGETODO-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEERR-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEHELP-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEPLUGIN-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEREQ-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESCHEMA-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESTORE-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESTORE-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGETODO-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEERR-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEHELP-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEPLUGIN-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEREQ-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESCHEMA-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESTORE-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESTORE-002.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGETODO-001.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/20-sessionlog-query-implementer-turn.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/20b-sessionlog-query-implementer-turn.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/20c-sessionlog-query-s0-slug.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/21-sessionlog-query-implementer-session.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/22-queryHistory-GrokCode.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/23-sessionlog-query-hostile-hook-turn.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/24c-dump-session-slice.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/24d-dump-turn-slice.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/24e-dump21-session-slice.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/24f-history-session-slice.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/24g-implementer-turn-exact.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-110.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-119.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-139.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/40-updateTurn.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/41-appendDialog.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/42-appendActions.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/43-completeTurn.txt
+ [31mD[m docs/receipts/_h0-hostile-raw/44-sessionlog-query-hostile-complete.txt
+[31m??[m .worktrees/
+[31m??[m docs/plans/todo-requirements-audit.md
+[31m??[m docs/plans/triage-cluster-002.md
+[31m??[m docs/receipts/_collect-hostile-g2-bootstrap.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-mapping-provider.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-remaining.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-reqs.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-signature.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-tests-nobuild.ps1
+[31m??[m docs/receipts/_collect-hostile-g2-tests.ps1
+[31m??[m docs/receipts/_hv-113-sanitizer-hgreen/
+[31m??[m docs/receipts/_hv-closeout-s1/
+[31m??[m docs/receipts/_hv-closeout-s2/
+[31m??[m docs/receipts/_hv-closeout-s4/
+[31m??[m docs/receipts/_hv-g1-closeout/
+[31m??[m docs/receipts/_hv-g1-extract-fr.ps1
+[31m??[m docs/receipts/_hv-g1-extract-map.ps1
+[31m??[m docs/receipts/_hv-g1-extract-tests.ps1
+[31m??[m docs/receipts/_hv-g1-fr-extract.json
+[31m??[m docs/receipts/_hv-g1-git-sha.ps1
+[31m??[m docs/receipts/_hv-g1-live-process.json
+[31m??[m docs/receipts/_hv-g1-live-process.ps1
+[31m??[m docs/receipts/_hv-g1-live-sha-code.ps1
+[31m??[m docs/receipts/_hv-g1-map-extract.json
+[31m??[m docs/receipts/_hv-g1-run-named-tests.ps1
+[31m??[m docs/receipts/_hv-g1-test-extract.json
+[31m??[m docs/receipts/_hv-g1-trx-skipped.ps1
+[31m??[m docs/receipts/_hv-g1-verify-receipt.ps1
+[31m??[m docs/receipts/_hv-g11-collect-mcp.ps1
+[31m??[m docs/receipts/_hv-g11-collect-sig.ps1
+[31m??[m docs/receipts/_hv-g11-collect-sig2.ps1
+[31m??[m docs/receipts/_hv-g11-collect-test.ps1
+[31m??[m docs/receipts/_hv-g11-collect.ps1
+[31m??[m docs/receipts/_hv-g11-out/
+[31m??[m docs/receipts/_hv-g2-testout/
+[31m??[m docs/receipts/_hv-g3-113-collect.ps1
+[31m??[m docs/receipts/_hv-g3-113-live-tags-after-deploy.ps1
+[31m??[m docs/receipts/_hv-g3-113-live.ps1
+[31m??[m docs/receipts/_hv-g3-113-live2.ps1
+[31m??[m docs/receipts/_hv-g3-113-post-deploy.ps1
+[31m??[m docs/receipts/_hv-g3-113-post-deploy/
+[31m??[m docs/receipts/_hv-g3-113-sql-tags.ps1
+[31m??[m docs/receipts/_hv-g3-113/
+[31m??[m docs/receipts/_hv-g3s3-222946Z/
+[31m??[m docs/receipts/_hv-g3s3-224825Z/
+[31m??[m docs/receipts/_hv-g8-120-01-trust-git.ps1
+[31m??[m docs/receipts/_hv-g8-120-01.json
+[31m??[m docs/receipts/_hv-g8-120-02-repl-tests.ps1
+[31m??[m docs/receipts/_hv-g8-120-02.json
+[31m??[m docs/receipts/_hv-g8-120-02.trx
+[31m??[m docs/receipts/_hv-g8-120-03-failsafe.ps1
+[31m??[m docs/receipts/_hv-g8-120-03.json
+[31m??[m docs/receipts/_hv-g8-120-04-status.ps1
+[31m??[m docs/receipts/_hv-g8-120-04.json
+[31m??[m docs/receipts/_hv-g8-120-05-grok-failsafe.ps1
+[31m??[m docs/receipts/_hv-g8-120-05.json
+[31m??[m docs/receipts/_hv-g8-120-06-beginturn.ps1
+[31m??[m docs/receipts/_hv-g8-120-06.json
+[31m??[m docs/receipts/_hv-g8-120-begin.yaml
+[31m??[m docs/receipts/_hv-g8-120-collect.ps1
+[31m??[m docs/receipts/_hv-g8-120-dotnet.trx
+[31m??[m docs/receipts/_hv-g8-120-open.yaml
+[31m??[m docs/receipts/_hv-g8-120-pester.xml
+[31m??[m docs/receipts/_hv-g9s4-patch-json.ps1
+[31m??[m docs/receipts/_hv-g9s4-write-json.ps1
+[31m??[m docs/receipts/_hv-hclassify-s3/
+[31m??[m docs/receipts/_hv-s0-h0-reattack/
+[31m??[m docs/receipts/_hv-s0-leftover-collect.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-collect2.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-fix-json-utc.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-list-new.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-native-ac.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-patch-proof.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-save-trace.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-session-complete.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-session.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-verify-ac.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-verify/
+[31m??[m docs/receipts/_hv-s0-leftover/
+[31m??[m docs/receipts/_hv-s0-mark-107-done.ps1
+[31m??[m docs/receipts/_hv-s0-mark-107-done.yaml
+[31m??[m docs/receipts/_hv-s0-mark-g1-done.ps1
+[31m??[m docs/receipts/_hv-s2-hgreen/
+[31m??[m docs/receipts/_hv-s2-resume/
+[31m??[m docs/receipts/_hv-s2-testgate/
+[31m??[m docs/receipts/_hv-s4s5-mark/
+[31m??[m docs/receipts/_hv-s5-hgreen/
+[31m??[m docs/receipts/_hv-s5-tempvol/
+[31m??[m docs/receipts/_hv-s5-testgate/
+[31m??[m docs/receipts/_hv-s6-hgreen-20260820T011703Z/
+[31m??[m docs/receipts/_hv-s6-mark/
+[31m??[m docs/receipts/_hv-s6-testphase-20260820T010100Z/
+[31m??[m docs/receipts/hostile-validator-20260819T174750Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T174750Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T183208Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T183208Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T184513Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T184513Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T184741Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T184741Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T184746Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T184746Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T184859Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T184859Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T185900Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T185900Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T193921Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T193921Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T200334Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T200334Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T201639Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T201639Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T203601Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T203601Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T205003Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T205003Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T210204Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T210204Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T210624Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T210624Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T215323Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T215323Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T223912Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T223912Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T225435Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T225435Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T232840Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T232840Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T233252Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T233252Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T234306Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T234306Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T234620Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T234620Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T235845Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T235845Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T000449Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T000449Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T010803Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T010803Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T012405Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T012405Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T074520Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T074520Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T080315Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T080315Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T082145Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T082145Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T091214Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T091214Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T092641Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T092641Z.md
+[31m??[m docs/receipts/hostile-validator-20260820T114439Z.json
+[31m??[m docs/receipts/hostile-validator-20260820T114439Z.md
+[31m??[m docs/receipts/todo-audit-20260820T101500Z/
+

@@ -1,0 +1,211 @@
+{
+  "TimestampUtc": "2026-08-18T14:06:30Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 1 / H1-red only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 94,
+  "completenessRating": 93,
+  "sessionId": "GrokCode-20260818T140400Z-h1-red-products",
+  "requestId": "req-20260818T140400Z-001-hostile-h1-red-expanded",
+  "turnId": 41721,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.93.0",
+    "versionFile": "1.93.0"
+  },
+  "markerSignature": true,
+  "healthNonceThisReview": "94d0e658b1b04e55943b78f370593f28",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "productTestFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Products|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductEntityTests|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests",
+    "utcStart": "2026-08-18T14:01:55.3770819Z",
+    "utcEnd": "2026-08-18T14:02:15.6799291Z",
+    "exitCode": 1,
+    "failed": 24,
+    "passed": 0,
+    "skipped": 0,
+    "total": 24
+  },
+  "broadProductFilterListCount": 25,
+  "broadProductFilterExtra": "McpServer.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests.ProductKey_AssignAndListByProduct",
+  "priorH1RedReceipt": "docs/receipts/hostile-validator-20260818T133728Z.md",
+  "priorH1RedOverallVerdict": "DISAGREE",
+  "h0Receipt": "docs/receipts/hostile-validator-20260818T132341Z.md",
+  "h0OverallVerdict": "AGREE",
+  "todoDone": false,
+  "approvedPlanSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "sessionPlanSha256": "0D73B5C6B754DEC494F4EAB445AD2A6EEB73D2F2923260366E07D4A9351FD92C",
+  "claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Expanded named-case red tests exist on disk for create/invalid/duplicate/add/unknown/non-owner/remove/leave/outsider/update/delete/soft-delete/isolation/migrate."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Independent focused filter: Failed 24, Passed 0, Skipped 0. Failures are not-implemented, missing ProductEntity, missing Products tables, missing AddProductsStorage files."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "All product handlers return Failure(\"not implemented\"). No ProductEntity, Products DbSet, AddProductsStorage, or IProductService."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Phase 2+ test and adapter files absent."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "todo_get MCP-PRODUCTS-001 Done=false."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Only H1-red claimed. Full DoD not claimed."
+    },
+    {
+      "id": "B1-honesty",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Implementer claims and admitted fixture limits match artifacts."
+    },
+    {
+      "id": "B2-receipts",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Re-ran tests, greps, store queries, marker, health, tools/list."
+    },
+    {
+      "id": "B3-mcp-only",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "TODO/requirements/session via native sessionlog_*/todo_*/requirements_* only."
+    },
+    {
+      "id": "B4-no-python",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh and MCP transport only."
+    },
+    {
+      "id": "B5-look-before-delete",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No deletes."
+    },
+    {
+      "id": "B6-byrd",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "H1-red AC-covering tests now exist and are red; green persist has not started."
+    },
+    {
+      "id": "C1-exist",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR/TR/TEST PRODUCT records exist in the store."
+    },
+    {
+      "id": "C2-structured-ac",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-001 ac-1..5, FR-002 ac-1..4, FR-004 ac-1 present, isSatisfied=false."
+    },
+    {
+      "id": "C3-ac-coverage",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Prior FAIL list and plan named cases now have red tests with status-code assertions."
+    },
+    {
+      "id": "C4-mappings",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-001 and FR-002 mappings match the plan sets."
+    },
+    {
+      "id": "C5-created",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Product FR/TR/TEST already in store from Phase 0."
+    },
+    {
+      "id": "D1-h1-red",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Approved-plan Phase 1 named cases and H1-red attack text are met. Full DoD not claimed."
+    },
+    {
+      "id": "D2-no-advance",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "No Phase 2+. TODO not marked done."
+    }
+  ],
+  "h1RedAttacks": [
+    {
+      "id": "H1-accept-reject",
+      "verdict": "PASS",
+      "summary": "PROD-MCPSERVER accept and invalid-key reject tests exist and are red."
+    },
+    {
+      "id": "H1-membership",
+      "verdict": "PASS",
+      "summary": "Add, unknown 400, non-owner 403, owner-remove, self-leave, member-cannot-remove-other exist and are red."
+    },
+    {
+      "id": "H1-red-reason",
+      "verdict": "PASS",
+      "summary": "Assertion failures on not implemented / missing types / missing Products table / missing AddProductsStorage files. Compiled."
+    },
+    {
+      "id": "H1-no-green",
+      "verdict": "PASS",
+      "summary": "No persist, membership storage, or migrations."
+    },
+    {
+      "id": "H1-named-cases",
+      "verdict": "PASS",
+      "summary": "Isolation, owner-remove, self-leave, soft-delete hide now exist and are red."
+    },
+    {
+      "id": "H1-test-005",
+      "verdict": "PASS",
+      "summary": "Empty SQLite migrate, predecessor migrate, and three-provider compiled source existence tests exist and are red."
+    }
+  ],
+  "failList": [],
+  "unknownList": [
+    "Full ./build.ps1 Test not run (not required to exit H1-red).",
+    "Live PostgreSQL/SQL Server Migrate() apply not run (H1-red fallback is compiled three-provider sources plus SQLite empty+predecessor).",
+    "Removed-member test does not invoke Remove before Get (admitted no-persist-seed fixture weakness).",
+    "TODO Remaining text still mentions H0 (stale note, not a done-state claim).",
+    "First sessionlog_dialog/complete/query after open returned retryable backend_unavailable; retry after health re-check succeeded and queryHistory proved the completed turn."
+  ],
+  "passCount": 19,
+  "failCount": 0,
+  "unknownCount": 5
+}

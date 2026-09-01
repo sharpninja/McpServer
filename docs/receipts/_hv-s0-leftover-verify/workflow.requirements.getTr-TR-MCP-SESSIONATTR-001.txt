@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181437Z-1393
+  result:
+    id: TR-MCP-SESSIONATTR-001
+    title: Validate filesModified and commit paths against workspace root
+    description: SessionLogService or turn append validates filesModified and commit paths against X-Workspace-Path. Outside-root paths require foreignRepo or equivalent or are rejected. Forward-only. Covered by FR-MCP-SESSIONATTR-001 TEST-MCP-SESSIONATTR-001.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: SESSIONATTR
+    acceptanceCriteria:
+    - id: ac-1
+      text: SessionLogService validates filesModified/commit paths against workspace root
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:14:38.2756136+00:00
+    updatedAt: 2026-08-19T18:14:38.2757332+00:00
+  deprecated: true
+
+---

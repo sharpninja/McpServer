@@ -137,7 +137,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             Dictionary<string, string>? environmentVariablesMap = null;
             if (!string.IsNullOrWhiteSpace(environmentVariables))
             {
@@ -201,7 +201,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var result = await _promptTemplateService.QueryAsync(category, tag, keyword, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(result, s_caseInsensitiveOptions);
         }
@@ -221,7 +221,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var result = await _promptTemplateService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
             if (result is null)
                 return JsonSerializer.Serialize(new { error = $"Template '{id}' not found." });
@@ -249,7 +249,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var request = new Models.PromptTemplateCreateRequest
             {
                 Id = id,
@@ -287,7 +287,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var request = new Models.PromptTemplateUpdateRequest
             {
                 Title = title,
@@ -318,7 +318,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var result = await _promptTemplateService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(result, s_caseInsensitiveOptions);
         }
@@ -340,7 +340,7 @@ public sealed partial class FwhMcpTools
     {
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var variables = string.IsNullOrWhiteSpace(variablesJson)
                 ? new Dictionary<string, object?>()
                 : JsonSerializer.Deserialize<Dictionary<string, object?>>(variablesJson, s_caseInsensitiveOptions) ?? new();

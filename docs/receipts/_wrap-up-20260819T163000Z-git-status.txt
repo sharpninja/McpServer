@@ -1,0 +1,512 @@
+ [31mM[m GitVersion.yml
+ [31mM[m README.md
+ [31mD[m artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json
+ [31mM[m build/Build.SyncAgentPlugins.cs
+ [31mM[m docs/AGENT-PLUGIN-AVAILABILITY.md
+ [31mM[m docs/CLIENT-INTEGRATION.md
+ [31mM[m docs/FAQ.md
+ [31mM[m docs/MCP-SERVER.md
+ [31mM[m docs/Project/Functional-Requirements.md
+ [31mM[m docs/Project/Requirements-Matrix.md
+ [31mM[m docs/Project/TR-per-FR-Mapping.md
+ [31mM[m docs/Project/Technical-Requirements.md
+ [31mM[m docs/Project/Testing-Requirements.md
+ [31mM[m docs/Project/requirements-wiki-documents.zip
+ [31mM[m docs/Project/wiki/azure/.mcp-requirements-manifest.json
+ [31mM[m docs/Project/wiki/azure/Agent-Plugin-Availability.md
+ [31mM[m docs/Project/wiki/azure/Architecture/.order
+ [31mM[m docs/Project/wiki/azure/Client-Integration.md
+ [31mM[m docs/Project/wiki/azure/FAQ.md
+ [31mM[m docs/Project/wiki/azure/Functional-Requirements.md
+ [31mM[m docs/Project/wiki/azure/Home.md
+ [31mM[m docs/Project/wiki/azure/MCP-Server-Operations.md
+ [31mM[m docs/Project/wiki/azure/Operations/.order
+ [31mM[m docs/Project/wiki/azure/Process/.order
+ [31mM[m docs/Project/wiki/azure/REPL-Agent-Guide.md
+ [31mM[m docs/Project/wiki/azure/Requirements-Matrix.md
+ [31mM[m docs/Project/wiki/azure/Session-Log-Schema.md
+ [31mM[m docs/Project/wiki/azure/TR-per-FR-Mapping.md
+ [31mM[m docs/Project/wiki/azure/Technical-Requirements.md
+ [31mM[m docs/Project/wiki/azure/Testing-Requirements.md
+ [31mM[m docs/Project/wiki/azure/User-Guide.md
+ [31mM[m docs/Project/wiki/github/.mcp-requirements-manifest.json
+ [31mM[m docs/Project/wiki/github/Agent-Plugin-Availability.md
+ [31mM[m docs/Project/wiki/github/Client-Integration.md
+ [31mM[m docs/Project/wiki/github/FAQ.md
+ [31mM[m docs/Project/wiki/github/Functional-Requirements.md
+ [31mM[m docs/Project/wiki/github/Home.md
+ [31mM[m docs/Project/wiki/github/MCP-Server-Operations.md
+ [31mM[m docs/Project/wiki/github/REPL-Agent-Guide.md
+ [31mM[m docs/Project/wiki/github/Requirements-Matrix.md
+ [31mM[m docs/Project/wiki/github/Session-Log-Schema.md
+ [31mM[m docs/Project/wiki/github/TR-per-FR-Mapping.md
+ [31mM[m docs/Project/wiki/github/Technical-Requirements.md
+ [31mM[m docs/Project/wiki/github/Testing-Requirements.md
+ [31mM[m docs/Project/wiki/github/User-Guide.md
+ [31mM[m docs/Project/wiki/github/_Sidebar.md
+ [31mM[m docs/REPL-AGENT-GUIDE.md
+ [31mM[m docs/USER-GUIDE.md
+ [31mM[m docs/context/session-log-schema.md
+ [31mM[m docs/requirements/requirements-wiki-documents.zip
+ [31mM[m docs/wiki.yaml
+ [31mM[m plugins/core/lib-ps/plugin-env.ps1
+ [31mM[m plugins/core/lib-ps/plugin-hook.ps1
+ [31mM[m plugins/core/lib-ps/repl-invoke.ps1
+ [31mM[m plugins/core/lib-ps/resolve-cache-dir.ps1
+ [31mM[m src/McpServer.Repl.Core/AgentStdioProtocol.cs
+ [31mM[m src/McpServer.Repl.Core/IYamlEnvelope.cs
+ [31mM[m src/McpServer.Repl.Core/RequirementsWorkflow.cs
+ [31mM[m src/McpServer.Repl.Core/YamlEnvelopeTypes.cs
+ [31mM[m src/McpServer.Repl.Core/YamlSerializer.cs
+ [31mM[m src/McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware.cs
+ [31mM[m src/McpServer.ServiceDefaults/HttpErrorResponse.cs
+ [31mM[m src/McpServer.ServiceDefaults/ServiceDefaultsJsonContext.cs
+ [31mM[m src/McpServer.Services/Models/UnifiedSessionLogDto.cs
+ [31mM[m src/McpServer.Services/Options/AgentHelpOptions.cs
+ [31mM[m src/McpServer.Services/Services/AgentHelp/AgentHelpConversationService.cs
+ [31mM[m src/McpServer.Services/Services/EfTodoService.cs
+ [31mM[m src/McpServer.Services/Services/SessionLogService.cs
+ [31mM[m src/McpServer.Services/Services/TodoExecutionService.cs
+ [31mM[m src/McpServer.Services/Services/TriageService.cs
+ [31mM[m src/McpServer.Storage.PostgreSqlMigrations/Migrations/McpDbContextModelSnapshot.cs
+ [31mM[m src/McpServer.Storage.SqlServerMigrations/Migrations/McpDbContextModelSnapshot.cs
+ [31mM[m src/McpServer.Storage.SqliteMigrations/Migrations/McpDbContextModelSnapshot.cs
+ [31mM[m src/McpServer.Storage/Entities/SessionLogEntity.cs
+ [31mM[m src/McpServer.Storage/McpDbContext.cs
+ [31mM[m src/McpServer.Support.Mcp/Controllers/SessionLogController.cs
+ [31mM[m src/McpServer.Support.Mcp/Controllers/UseCasesController.cs
+ [31mM[m src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.UseCases.cs
+ [31mM[m src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs
+ [31mM[m src/McpServer.Support.Mcp/McpStdio/McpToolErrors.cs
+ [31mM[m src/McpServer.Support.Mcp/Program.cs
+ [31mM[m src/McpServer.Support.Mcp/Services/StorageBackendUnavailability.cs
+ [31mM[m tests/Build.Tests/BuildTargetTests.cs
+ [31mM[m tests/McpServer.Repl.Core.Tests/ContractCorrectnessTests.cs
+ [31mM[m tests/McpServer.Repl.Core.Tests/RequirementsWorkflowMetadataTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Controllers/UseCasesControllerTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/McpStdio/McpToolBackendUnavailableErrorTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Middleware/GlobalExceptionHandlerBackendUnavailableTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/EfTodoServiceTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/SqlExceptionFactory.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/StorageBackendUnavailabilityTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/TriageServiceTests.cs
+ [31mM[m tests/McpServer.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs
+[31m??[m docs/Project/wiki/azure/Action-Types.md
+[31m??[m docs/Project/wiki/azure/Byrd-Todo-Execution-Spec.md
+[31m??[m docs/Project/wiki/azure/Federation.md
+[31m??[m docs/Project/wiki/azure/MCP-Memories.md
+[31m??[m docs/Project/wiki/azure/Operations/Tunnel-Cloudflare.md
+[31m??[m docs/Project/wiki/azure/Operations/Tunnel-FRP-Railway.md
+[31m??[m docs/Project/wiki/azure/Operations/Tunnel-Ngrok.md
+[31m??[m docs/Project/wiki/azure/TODO-Schema.md
+[31m??[m docs/Project/wiki/github/Action-Types.md
+[31m??[m docs/Project/wiki/github/Byrd-Todo-Execution-Spec.md
+[31m??[m docs/Project/wiki/github/Federation.md
+[31m??[m docs/Project/wiki/github/MCP-Memories.md
+[31m??[m docs/Project/wiki/github/Operations/Tunnel-Cloudflare.md
+[31m??[m docs/Project/wiki/github/Operations/Tunnel-FRP-Railway.md
+[31m??[m docs/Project/wiki/github/Operations/Tunnel-Ngrok.md
+[31m??[m docs/Project/wiki/github/TODO-Schema.md
+[31m??[m docs/plans/triage-cluster-001.md
+[31m??[m docs/receipts/_h0-bug-spotcheck.ps1
+[31m??[m docs/receipts/_h0-extract-session.ps1
+[31m??[m docs/receipts/_h0-extract-session2.ps1
+[31m??[m docs/receipts/_h0-extract-session3.ps1
+[31m??[m docs/receipts/_h0-extract-session4.ps1
+[31m??[m docs/receipts/_h0-hostile-query.ps1
+[31m??[m docs/receipts/_h0-hostile-query2.ps1
+[31m??[m docs/receipts/_h0-hostile-query3.ps1
+[31m??[m docs/receipts/_h0-hostile-raw/00-trust.json
+[31m??[m docs/receipts/_h0-hostile-raw/01-bootstrap.txt
+[31m??[m docs/receipts/_h0-hostile-raw/02-currentSession.txt
+[31m??[m docs/receipts/_h0-hostile-raw/03-todo-PLAN-TRIAGECLUSTER-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEERR-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEHELP-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEPLUGIN-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEREQ-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESCHEMA-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESTORE-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGESTORE-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGETODO-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEERR-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEHELP-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEPLUGIN-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGEREQ-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESCHEMA-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESTORE-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGESTORE-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/11-tr-TR-MCP-TRIAGETODO-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEERR-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEHELP-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-003.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-004.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEPLUGIN-005.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGEREQ-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESCHEMA-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-003.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-004.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-005.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-006.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGESTORE-007.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGETODO-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGETODO-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEERR-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEHELP-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEPLUGIN-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGEREQ-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESCHEMA-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESTORE-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGESTORE-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13-map-FR-MCP-TRIAGETODO-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEERR-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEHELP-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEPLUGIN-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGEREQ-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESCHEMA-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESTORE-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGESTORE-002.txt
+[31m??[m docs/receipts/_h0-hostile-raw/13b-map-FR-MCP-TRIAGETODO-001.txt
+[31m??[m docs/receipts/_h0-hostile-raw/20-sessionlog-query-implementer-turn.txt
+[31m??[m docs/receipts/_h0-hostile-raw/20b-sessionlog-query-implementer-turn.txt
+[31m??[m docs/receipts/_h0-hostile-raw/20c-sessionlog-query-s0-slug.txt
+[31m??[m docs/receipts/_h0-hostile-raw/21-sessionlog-query-implementer-session.txt
+[31m??[m docs/receipts/_h0-hostile-raw/22-queryHistory-GrokCode.txt
+[31m??[m docs/receipts/_h0-hostile-raw/23-sessionlog-query-hostile-hook-turn.txt
+[31m??[m docs/receipts/_h0-hostile-raw/24c-dump-session-slice.txt
+[31m??[m docs/receipts/_h0-hostile-raw/24d-dump-turn-slice.txt
+[31m??[m docs/receipts/_h0-hostile-raw/24e-dump21-session-slice.txt
+[31m??[m docs/receipts/_h0-hostile-raw/24f-history-session-slice.txt
+[31m??[m docs/receipts/_h0-hostile-raw/24g-implementer-turn-exact.txt
+[31m??[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-110.txt
+[31m??[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-119.txt
+[31m??[m docs/receipts/_h0-hostile-raw/30-todo-BUG-TRIAGE-139.txt
+[31m??[m docs/receipts/_h0-hostile-raw/40-updateTurn.txt
+[31m??[m docs/receipts/_h0-hostile-raw/41-appendDialog.txt
+[31m??[m docs/receipts/_h0-hostile-raw/42-appendActions.txt
+[31m??[m docs/receipts/_h0-hostile-raw/43-completeTurn.txt
+[31m??[m docs/receipts/_h0-hostile-raw/44-sessionlog-query-hostile-complete.txt
+[31m??[m docs/receipts/_h0-persist-turn.ps1
+[31m??[m docs/receipts/_h0-persist-turn2.ps1
+[31m??[m docs/receipts/_h9-139/classifier-test.txt
+[31m??[m docs/receipts/_h9-139/h9-usecase.trx
+[31m??[m docs/receipts/_h9-139/usecase-test.txt
+[31m??[m docs/receipts/_hv-20260819T000500Z/01-trust-and-store.ps1
+[31m??[m docs/receipts/_hv-20260819T000500Z/02-tests.ps1
+[31m??[m docs/receipts/_hv-20260819T000500Z/03-validate-traceability.ps1
+[31m??[m docs/receipts/_hv-20260819T000500Z/disk.json
+[31m??[m docs/receipts/_hv-20260819T000500Z/mappings.json
+[31m??[m docs/receipts/_hv-20260819T000500Z/test-ac.json
+[31m??[m docs/receipts/_hv-20260819T000500Z/truckmate-query.json
+[31m??[m docs/receipts/_hv-20260819T000500Z/trust.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/fr-ac.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/live-replace.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/mappings.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/sessionlogctx-ac.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/test-ac.json
+[31m??[m docs/receipts/_hv-20260819T005100Z/trust.json
+[31m??[m docs/receipts/_hv-20260819T010800Z/req-ac.json
+[31m??[m docs/receipts/_hv-20260819T010800Z/trust.json
+[31m??[m docs/receipts/_hv-20260819T013000Z-collect.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-extract-map.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-extract-req.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-extract-test.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-help-todo.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-pester.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-repl.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-tests.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z-trust.ps1
+[31m??[m docs/receipts/_hv-20260819T013000Z/file-mtimes.json
+[31m??[m docs/receipts/_hv-20260819T013000Z/fr-triage.json
+[31m??[m docs/receipts/_hv-20260819T013000Z/git-diffstat-slice.txt
+[31m??[m docs/receipts/_hv-20260819T013000Z/git-status-slice.txt
+[31m??[m docs/receipts/_hv-20260819T013000Z/map-triage.json
+[31m??[m docs/receipts/_hv-20260819T013000Z/pester-summary.json
+[31m??[m docs/receipts/_hv-20260819T013000Z/support-attr-count.json
+[31m??[m docs/receipts/_hv-20260819T013000Z/test-triage.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/00-trust.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/01-status.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/019-turn-block.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/02-query-title.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/03-query-querytext.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/04-query-plugin-session.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/05-query-window.err.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/06-queryHistory.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/07-todo-plan.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/08-getFr.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/09-getTest.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/10-hostile-query-proof.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/cache-meta-before.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/collect-plugin.ps1
+[31m??[m docs/receipts/_hv-20260819T160006Z/current-turn-after-hostile-session.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/current-turn-after-queries.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/current-turn-before.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/d518-context.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/hook-hashes.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/hostile-cache/current-turn.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/hostile-cache/session-state.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/hostile-cache/sessions/GrokCode-20260819T161322Z-hostile-triageplugin/session-state.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/hostile-ids.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso-workflow-sessionlog-bootstrap.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso-workflow-sessionlog-openSession.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-client-SessionLog-QueryAsync.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-workflow-sessionlog-appendActions.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-workflow-sessionlog-appendDialog.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-workflow-sessionlog-beginTurn.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-workflow-sessionlog-completeTurn.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/iso2-workflow-sessionlog-updateTurn.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/isolated-current-turn.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/isolation-eval.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/persist-hostile-turn-2.ps1
+[31m??[m docs/receipts/_hv-20260819T160006Z/persist-hostile-turn.ps1
+[31m??[m docs/receipts/_hv-20260819T160006Z/pester-TriagePluginIdentity.nunit.xml
+[31m??[m docs/receipts/_hv-20260819T160006Z/pester-TriagePluginIdentity.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/root-turn-after-hostile-session.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/root-turn-after-queries.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/root-turn-before-hostile-session.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/root-turn-before-plugin.json
+[31m??[m docs/receipts/_hv-20260819T160006Z/session-state-after-queries.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/session-state-before.yaml
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-GrokCode-20260818T182741.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-Remediate-hook-cache-iso.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-canceled.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-in-progress.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-prompt-d518.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-req-20260819T153500Z-019.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-02-query-title-txt-req-20260819T154430Z.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-GrokCode-20260818T182741.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-Remediate-hook-cache-iso.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-canceled.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-in-progress.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-prompt-d518.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-req-20260819T153500Z-019.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-03-query-querytext-txt-req-20260819T154430Z.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-GrokCode-20260818T182741.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-Remediate-hook-cache-iso.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-canceled.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-in-progress.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-prompt-d518.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-req-20260819T153500Z-019.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-04-query-plugin-session-txt-req-20260819T154430Z.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-06-queryHistory-txt-GrokCode-20260818T182741.txt
+[31m??[m docs/receipts/_hv-20260819T160006Z/slice-06-queryHistory-txt-in-progress.txt
+[31m??[m docs/receipts/_hv-225300Z-collect.ps1
+[31m??[m docs/receipts/_hv-225300Z-map.ps1
+[31m??[m docs/receipts/_hv-225300Z-tests.ps1
+[31m??[m docs/receipts/_hv-225300Z-trust.ps1
+[31m??[m docs/receipts/_hv-225300Z/mappings.json
+[31m??[m docs/receipts/_hv-225300Z/plugin-identity.txt
+[31m??[m docs/receipts/_hv-225300Z/scratch-log.txt
+[31m??[m docs/receipts/_hv-225300Z/signature.txt
+[31m??[m docs/receipts/_hv-225300Z/test-ac.json
+[31m??[m docs/receipts/_hv-225300Z/test-summary.txt
+[31m??[m docs/receipts/_hv-230200Z/extract-mappings.ps1
+[31m??[m docs/receipts/_hv-230200Z/extract-test-acs.ps1
+[31m??[m docs/receipts/_hv-230200Z/mappings.json
+[31m??[m docs/receipts/_hv-230200Z/run-tests.ps1
+[31m??[m docs/receipts/_hv-230200Z/test-ac.json
+[31m??[m docs/receipts/_hv-230200Z/trust.ps1
+[31m??[m docs/receipts/_hv-230200Z/verify-receipts.ps1
+[31m??[m docs/receipts/_hv-232500Z/mappings.json
+[31m??[m docs/receipts/_hv-232500Z/test-ac.json
+[31m??[m docs/receipts/_hv-232500Z/trust.json
+[31m??[m docs/receipts/_hv-233800Z/extract-mappings.ps1
+[31m??[m docs/receipts/_hv-233800Z/extract-test-ac.ps1
+[31m??[m docs/receipts/_hv-233800Z/mappings.json
+[31m??[m docs/receipts/_hv-233800Z/run-pester.ps1
+[31m??[m docs/receipts/_hv-233800Z/run-trust-and-tests.ps1
+[31m??[m docs/receipts/_hv-233800Z/test-ac.json
+[31m??[m docs/receipts/_hv-234800Z/00-trust.ps1
+[31m??[m docs/receipts/_hv-234800Z/01-mcp-open.ps1
+[31m??[m docs/receipts/_hv-234800Z/02-tests.ps1
+[31m??[m docs/receipts/_hv-234800Z/03-inspect.ps1
+[31m??[m docs/receipts/_hv-234800Z/04-store.ps1
+[31m??[m docs/receipts/_hv-234800Z/05-parse-req.ps1
+[31m??[m docs/receipts/_hv-234800Z/06-summarize-tests.ps1
+[31m??[m docs/receipts/_hv-234800Z/07-mcp-complete.ps1
+[31m??[m docs/receipts/_hv-234800Z/08-parse-query.ps1
+[31m??[m docs/receipts/_hv-234800Z/09-patch-response.ps1
+[31m??[m docs/receipts/_hv-234800Z/10-verify-receipts.ps1
+[31m??[m docs/receipts/_hv-234800Z/inspect.json
+[31m??[m docs/receipts/_hv-234800Z/mappings.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-actions.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-begin.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-complete-retry.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-complete.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-context.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-decisions.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-dialog.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-files.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-init.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-open.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-query.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-query2.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-session-header.txt
+[31m??[m docs/receipts/_hv-234800Z/mcp-tags.json
+[31m??[m docs/receipts/_hv-234800Z/mcp-tools-list.json
+[31m??[m docs/receipts/_hv-234800Z/query-proof.json
+[31m??[m docs/receipts/_hv-234800Z/req-fr.json
+[31m??[m docs/receipts/_hv-234800Z/req-mapping.json
+[31m??[m docs/receipts/_hv-234800Z/req-test.json
+[31m??[m docs/receipts/_hv-234800Z/req-tr.json
+[31m??[m docs/receipts/_hv-234800Z/test-ac.json
+[31m??[m docs/receipts/_hv-234800Z/test-summary.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-110.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-111.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-112.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-114.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-115.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-119.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-123.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-124.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-126.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-128.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-131.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-132.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-139.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-143.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-148.json
+[31m??[m docs/receipts/_hv-234800Z/todo-BUG-TRIAGE-149.json
+[31m??[m docs/receipts/_hv-234800Z/todo-PLAN-TRIAGECLUSTER-001.json
+[31m??[m docs/receipts/_hv-234800Z/todos.json
+[31m??[m docs/receipts/_hv-234800Z/tool-names.txt
+[31m??[m docs/receipts/_hv-234800Z/trust.json
+[31m??[m docs/receipts/_hv-hgreen-221500Z/pester.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/repl-req-meta.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/store-frs.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/store-maps.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/store-tests.json
+[31m??[m docs/receipts/_hv-hgreen-221500Z/store-tests.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/support-focus-1.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/support-focus-2.txt
+[31m??[m docs/receipts/_hv-hgreen-221500Z/validate-traceability.txt
+[31m??[m docs/receipts/_s0-create-20260818T191655Z.txt
+[31m??[m docs/receipts/_s0-gendoc-wiki.err.txt
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/fr-FR-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-params/gendoc-md.yaml
+[31m??[m docs/receipts/_s0-params/gendoc-wiki.yaml
+[31m??[m docs/receipts/_s0-params/get-fr-err.yaml
+[31m??[m docs/receipts/_s0-params/get-fr-err2.yaml
+[31m??[m docs/receipts/_s0-params/get-tr-err.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/map-FR-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/test-TEST-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-params/todo-create.yaml
+[31m??[m docs/receipts/_s0-params/todo-update-remaining.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/tr-TR-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/upfr-FR-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGEERR-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGEHELP-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGEPLUGIN-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGEREQ-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGESCHEMA-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGESTORE-001.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGESTORE-002.yaml
+[31m??[m docs/receipts/_s0-params/uptr-TR-MCP-TRIAGETODO-001.yaml
+[31m??[m docs/receipts/_s0-reqs-20260818T191655Z.txt
+[31m??[m docs/receipts/_s0-update-20260818T192230Z.txt
+[31m??[m docs/receipts/_wrap-up-20260819T134500Z-git-status.txt
+[31m??[m docs/receipts/hostile-validator-20260818T193842Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T193842Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T211500Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T211500Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T214800Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T214800Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T221400Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T221400Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T221500Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T221500Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T221600Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T221600Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T223200Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T223200Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T225300Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T225300Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T230200Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T230200Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T232500Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T232500Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T233800Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T233800Z.md
+[31m??[m docs/receipts/hostile-validator-20260818T234800Z.json
+[31m??[m docs/receipts/hostile-validator-20260818T234800Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T000500Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T000500Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T005100Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T005100Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T010800Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T010800Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T013000Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T013000Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T140828Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T140828Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T145533Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T145533Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T151600Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T151600Z.md
+[31m??[m docs/receipts/hostile-validator-20260819T161322Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T161322Z.md
+[31m??[m docs/receipts/wrap-up-20260819T134500Z.md
+[31m??[m plugins/core/lib-ps/classified-error.ps1
+[31m??[m plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1
+[31m??[m src/McpServer.Repl.Core/ReplMcpErrorClassifier.cs
+[31m??[m src/McpServer.ServiceDefaults/IMcpErrorClassifier.cs
+[31m??[m src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260818205822_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs
+[31m??[m src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260818205822_AddSessionLogTagsAndAgentSessionHeaders.cs
+[31m??[m src/McpServer.Storage.SqlServerMigrations/Migrations/20260818205807_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs
+[31m??[m src/McpServer.Storage.SqlServerMigrations/Migrations/20260818205807_AddSessionLogTagsAndAgentSessionHeaders.cs
+[31m??[m src/McpServer.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs
+[31m??[m src/McpServer.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs
+[31m??[m src/McpServer.Storage/Entities/SessionLogTagEntity.cs
+[31m??[m src/McpServer.Storage/SessionLogSchemaGuard.cs
+[31m??[m src/McpServer.Storage/StorageCommandBudget.cs
+[31m??[m src/McpServer.Support.Mcp/Services/McpErrorClassifier.cs
+[31m??[m src/McpServer.Support.Mcp/Services/StartupStorageBootstrap.cs
+[31m??[m tests/McpServer.Repl.Core.Tests/ReplMcpErrorClassifierTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/McpStdio/McpToolErrorEnvelopeTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Services/McpErrorClassifierTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Services/SessionLogSchemaGuardTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Services/StartupStorageBootstrapTests.cs
+[31m??[m tests/McpServer.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs

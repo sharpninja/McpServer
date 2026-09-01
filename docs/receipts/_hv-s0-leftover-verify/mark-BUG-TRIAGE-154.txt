@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260819T190152Z-7931
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-154
+      title: beginTurn supersede persist of leftover in-progress turn 500s on SubmitAsync
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - workflow.sessionlog.beginTurn calls Invoke-ReplSupersedeCurrentTurnIfInProgress, which re-submits the leftover current-turn.yaml requestId as status canceled via client.SessionLog.SubmitAsync without planFile or todoId and without checking that the leftover turn belongs to the current session. In this report, leftover req-20260818T143114Z-001-hostile-leftover-slices was written onto new session GrokCode-20260818T145557Z-goal-done-lock, so SessionLogService.SubmitAsync treated it as a new turn, ApplyTurnContext/ValidateForNewEntry threw ArgumentException for omitted planFile/todoId, and SessionLogController.SubmitAsync does not catch ArgumentException (unlike UpsertTurnAsync), so the client saw internal_server_error. The plugin catch only logs stderr, then Write-ReplCurrentTurnState still advances current-turn.yaml to the new turn.
+      - 'Triage group: triage-group-4c478997a189178e'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.beginTurn with a leftover in_progress current-turn.yaml (including a requestId or sessionId that is not on the current session) does not make client.SessionLog.SubmitAsync return internal_server_error.'
+      - '- When the leftover turn exists on the current session, beginTurn persists it with a durable terminal status (canceled or superseded) and a valid planFile/todoId (cached values or the None sentinel).'
+      - '- When the leftover turn is from another session or was never persisted, beginTurn skips remote cancel onto the new session instead of creating a new turn there.'
+      - '- After beginTurn returns, current-turn.yaml may point at the new turn only if the prior same-session in_progress turn was durably closed or the leftover was skipped as foreign.'
+      - '- POST /mcpserver/sessionlog maps ArgumentException from planFile/todoId validation to HTTP 400, not 500.'
+      - 'Implementation notes:'
+      - '- Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 currently calls Invoke-ReplPersistTurn with only RequestId, Title, Status=canceled, and ResponseText. Pass leftover planFile/todoId from current-turn.yaml and default omitted values to None, matching the new-turn persist path.'
+      - '- Compare leftover current-turn.yaml sessionId to the active session-state sessionId before persisting; do not upsert a foreign requestId onto the new session.'
+      - '- SessionLogController.SubmitAsync should catch ArgumentException the same way UpsertTurnAsync already does and return ValidationProblem/400.'
+      - '- Prefer a turn-scoped upsert or fail path over a whole-session SubmitAsync of a one-turn payload when closing a superseded turn.'
+      - '- Named failsafe F:\GitHub\TruckMate\.mcpServer\grok\failsafe\20260818T145627Z-session_submit-ef28.yaml was not present at triage time; determination is from the group report plus the named beginTurn/SubmitAsync code.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

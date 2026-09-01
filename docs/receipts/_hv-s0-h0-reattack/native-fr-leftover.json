@@ -1,0 +1,169 @@
+{
+  "source": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01b3f-f652-7743-a0be-d3556deb3929\\mcp\\call-da460f33-ad31-4d2c-8949-4098612b2e9b-54.json",
+  "totalItems": 293,
+  "leftover": [
+    {
+      "id": "FR-MCP-SESSIONATTR-001",
+      "exists": true,
+      "title": "Session-log foreign filesModified and commits are rejected or marked",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "filesModified outside workspace root rejected or require foreign marker",
+        "commit SHA/message/files from another repo require foreign marker or redirect",
+        "Completeness audits can filter foreign artifacts"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 424
+    },
+    {
+      "id": "FR-MCP-FAILSAFE-001",
+      "exists": true,
+      "title": "Failsafe drain treats 503 backend_unavailable as backend-down and can retry",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "Submit/append still returns retryable backend_unavailable and keeps failsafe YAML",
+        "Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable",
+        "Drain does not latch failed=1 as permanently completed in-process"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 558
+    },
+    {
+      "id": "FR-MCP-STRICTCOUNT-001",
+      "exists": true,
+      "title": "updateTurn accepts omitted empty or scalar tags and contextList under StrictMode",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "omitted/empty/scalar tags and contextList persist",
+        "exit 0 and no Count cannot be found",
+        "appendActions/updateTurn emit no boolean on success"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 357
+    },
+    {
+      "id": "FR-MCP-XAGENT-001",
+      "exists": true,
+      "title": "CompleteTurn refuses cross-sourceType current-turn rebind",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "cross-sourceType mismatch refused or restored to originating cache",
+        "same-agent rotation can complete without 500",
+        "CompleteTurn does not hijack a concurrent other requestId"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 567
+    },
+    {
+      "id": "FR-MCP-SESSIONEND-001",
+      "exists": true,
+      "title": "SessionEnd emits empty object when cache cannot be resolved",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}",
+        "identifiable workspace still flushes .mcpServer/<agent>",
+        "no pending cache is a silent no-op"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 401
+    },
+    {
+      "id": "FR-MCP-VERIFYWRAP-001",
+      "exists": true,
+      "title": "Code-verify reports disk-full and honors timeout without hanging",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "IOException disk full is typed and current-turn remains valid",
+        "wrapper returns or fails within documented timeout",
+        "no indefinite in-process hang after child dotnet exits"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 508
+    },
+    {
+      "id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+      "exists": true,
+      "title": "Codex transcript adapter handles tool_search and inter_agent records",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "inter_agent_communication_metadata is normalized or documented info skip",
+        "tool_search_call/output become paired events with call_id/name/status",
+        "successful persist deletes importRecovery"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 521
+    },
+    {
+      "id": "FR-MCP-TEMPVOL-001",
+      "exists": true,
+      "title": "Plugin wrappers align TEMP to the workspace volume",
+      "status": "pending",
+      "acCount": 3,
+      "acNonEmpty": 3,
+      "acIds": [
+        "ac-1",
+        "ac-2",
+        "ac-3"
+      ],
+      "acTexts": [
+        "TEMP/TMP on workspace volume when workspace is not on TEMP drive",
+        "templates still document same-volume TEMP and verify-after-edit",
+        "failed move is a visible error"
+      ],
+      "bodyHasCheckbox": true,
+      "bodyLength": 468
+    }
+  ],
+  "missing": [],
+  "emptyAc": [],
+  "shortAc": []
+}

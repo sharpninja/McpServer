@@ -1,0 +1,38 @@
+type: result
+payload:
+  requestId: req-20260820T001113Z-3268
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-122
+      title: Codex adapter drops tool_search and inter_agent records, leaving importRecovery pending
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - CodexTranscriptAdapter has no handlers for top-level inter_agent_communication_metadata or response_item/tool-call types tool_search_call and tool_search_output, so they aggregate as codex_unknown_record / codex_unknown_response_item warnings. agent_message is only treated as an intentional event_msg UI-mirror skip (codex_event_msg_skipped info), not as a normalized event. Write-ahead importRecovery under .mcpServer/{agent}/failsafe/pending is created with persisted=false and degraded=true and is deleted only after ITranscriptSessionPersister.PersistAsync succeeds; a degraded pending recovery for root 019f5a3b-a22f-7f01-b440-b187484c35a7 (41 MB canonical YAML from 115 MB JSONL) therefore means normalization gaps and/or failed persistence left recovery retained by design (FR-MCP-TRANSCRIPT-004).
+      - 'Triage group: triage-group-e2b4d21bb87a8512'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Ingesting a Codex JSONL fixture that includes inter_agent_communication_metadata records produces zero codex_unknown_record diagnostics for that type and either normalizes the record into canonical session events/metadata or documents a deliberate aggregate info skip (same pattern as world_state/compacted).'
+      - '- Ingesting a Codex JSONL fixture with tool_search_call and tool_search_output records produces zero codex_unknown_response_item diagnostics for those payload types and emits paired assistant tool-call and tool-role events with call_id/name/status (or equivalent) metadata preserved, consistent with function_call / web_search_call handling.'
+      - '- agent_message that appears only as event_msg remains an intentional UI-mirror skip with a single aggregate info diagnostic and no warning; if agent_message also appears as a response_item payload type in real rollouts, it normalizes without codex_unknown_response_item.'
+      - '- After a successful Persist=true ingest of a fixture containing the above record classes, the corresponding <rootId>.<sourceHash>.importRecovery.yaml under {workspace}/.mcpServer/{agent}/failsafe/pending is removed and the ingestion result reports persisted=true and degraded=false.'
+      - '- A focused unit test (extend CodexTranscriptAdapterCoverageTests / TEST-MCP-TRANSCRIPT-011) covers the three named record classes with inline JSONL fixtures and asserts the diagnostic and event outcomes above.'
+      - 'Implementation notes:'
+      - '- Primary code: src/McpServer.SessionLog.Transcripts/TranscriptAdapters.cs CodexTranscriptAdapter.NormalizeAsync switch: top-level default increments unknownRecordCounts; response_item default increments unknownResponseItemCounts; known tool payloads today are function_call, custom_tool_call, local_shell_call, web_search_call and their *_output variants; tool_search_call/tool_search_output are absent from that list; inter_agent_communication_metadata has no case.'
+      - '- Recovery lifecycle: TranscriptRunArtifactWriter.WritePendingAsync always writes importRecovery with persisted=false/degraded=true; TranscriptIngestionService.PersistPendingAsync deletes the envelope only after PersistAsync succeeds; failures retain the path and set degraded=true.'
+      - '- agent_message is already covered as event_msg skip in CodexTranscriptAdapterCoverageTests.IngestionService_CodexEventMsgRecordsSkippedWithoutWarnings; do not reclassify event_msg agent_message as an error unless real rollouts show it is the sole source of conversation text.'
+      - '- Grep shows no existing inter_agent or tool_search symbols in the repo; fixtures should be taken from real Codex rollout samples (report origin workspace TruckMate session root 019f5a3b-a22f-7f01-b440-b187484c35a7) rather than invented shapes.'
+      - '- Large artifacts (115 MB JSONL / 41 MB YAML) may independently stress PersistAsync; if recovery stays pending after adapter coverage is fixed, investigate persistence failures separately (timeouts/size) via persistence_failed diagnostics, not only unknown-record warnings.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T235845Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T234620Z.md. Merged triage/transcript. CodexTranscriptAdapterCoverageTests 12/0/0.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

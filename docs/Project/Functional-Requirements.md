@@ -1,5 +1,64 @@
 # Functional Requirements (MCP Server)
 
+## FR-HANDOFF-001 Ingest workspace-scoped handoff documents
+
+Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Supports Markdown, text, JSON, and YAML inputs.
+- [ ] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+- [ ] Maximum decoded input is 8 MiB.
+
+## FR-HANDOFF-002 Extract structured MCP TODO drafts via one-shot agents
+
+Use the existing one-shot agent system to extract a structured MCP TODO draft.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction uses a versioned prompt and strict JSON contract.
+- [ ] Malformed output produces diagnostics and never creates a TODO.
+- [ ] Unknown or missing source information is not silently discarded.
+
+## FR-HANDOFF-003 Validate and normalize generated TODO drafts
+
+Validate and normalize generated TODO drafts.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+- [ ] Invalid or conflicting values produce field-specific diagnostics.
+
+## FR-HANDOFF-004 Support DraftOnly, RequireReview, and CreateWhenConfident modes
+
+Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] DraftOnly is the default and never mutates TODO state.
+- [ ] RequireReview persists an approvable run without creating a TODO.
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+
+## FR-HANDOFF-005 Persist approved TODOs exclusively through the TODO service
+
+Persist approved TODOs exclusively through the existing TODO service.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Successful creation produces exactly one TODO.
+- [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt.
+- [ ] ID collisions require review and are never silently renamed.
+
+## FR-HANDOFF-006 Preserve auditable provenance and diagnostics
+
+Preserve auditable provenance and diagnostics for every run.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+- [ ] Raw credentials or source content are not copied into logs.
+
+## FR-HANDOFF-007 Provide equivalent public handoff surfaces
+
+Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -1110,6 +1169,38 @@ Scope: layer-1+
 A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.
 Scope: layer-1+
 
+## FR-MCP-170 Incremental session-log dialog persist
+
+Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.
+
+Acceptance Criteria:
+- After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.
+- Server turn GET then contains the appended dialog items.
+- Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.
+- Missing turn is classified not-found, retryable false; failsafe is not used for that 404.
+Scope: layer-1+
+
+## FR-MCP-171 Retryable session-log persist degrade-queue
+
+When client.SessionLog.SubmitAsync (beginTurn, updateTurn, completeTurn, or legacy upsert) returns timeout, HTTP 503, or backend_unavailable, the plugin SHALL retain the session_submit failsafe, keep current-turn.yaml in_progress, SHALL NOT throw, and SHALL report degraded/queued using the same contract as the existing timeout path.
+
+Acceptance Criteria:
+- HTTP 503 backend_unavailable and timeout produce the same degrade-queue contract (persisted false, degraded true, queued true, failsafe retained).
+- Failsafe file remains until a later successful persist or drain replay.
+- After storage recovers, query shows the turn.
+Scope: layer-1+
+
+## FR-MCP-172 Failsafe drain does not poison successful plugin calls
+
+A successful workflow.requirements.getFr, getTr, or sessionlog queryHistory SHALL NOT be delayed by a 30s SessionLog.SubmitAsync drain timeout, SHALL NOT print Failsafe queue drain failed for timeout or HTTP 503, SHALL NOT latch drain completed, and a later drain after storage answers SHALL replay the queued record.
+
+Acceptance Criteria:
+- getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503.
+- stderr has no Failsafe queue drain failed for that class.
+- ReplFailsafeDrainCompleted stays false on abort.
+- Next drain in-process replays after a stubbed success.
+Scope: layer-1+
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -1141,6 +1232,18 @@ Scope: layer-1+
 - [ ] Generated DocFX files appear in platform manifests and stale generated files are removed on the next successful export.
 - [ ] Workspace traversal, absolute external paths, and reparse-point escapes are rejected before command execution or file copy.
 - [ ] Invalid configuration, process timeout, non-zero exit, or missing output fails the export without publishing a partial wiki artifact.
+
+## FR-MCP-FAILSAFE-001 Failsafe drain treats 503 backend_unavailable as backend-down and can retry
+
+Session-log persist that hits the storage budget or a transient provider fault stays retryable HTTP 503 backend_unavailable with failsafe on disk. Drain aborts without incrementing drainAttempts or quarantining. After storage answers, a later drain in the same process can replay. BUG-TRIAGE-159.
+- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+- [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+- [ ] Drain does not latch failed=1 as permanently completed in-process
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
+- [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
+- [ ] Drain does not latch failed=1 as permanently completed in-process
 
 ## FR-MCP-FILETOOLS-001 Global repository discovery tools
 
@@ -1360,6 +1463,54 @@ Scope: layer-1+
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 Scope: layer-1+
+
+## FR-MCP-PRODUCT-001 Product CRUD
+
+A registered workspace can create, get, list (visible), update, and soft-delete products it owns. Key is a PROD-* string matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ (examples PROD-MCPSERVER, PROD-MCP-PLUGIN), unique among non-deleted products. Application API is CQRS only; REST/MCP/REPL/client only dispatch handlers. AC: create returns key + ownerWorkspaceId; invalid key is 400; duplicate key is 409; non-owner update/delete is 403; soft-delete hides from default list.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] create returns key and ownerWorkspaceId
+- [ ] invalid key is 400
+- [ ] duplicate key is 409
+- [ ] non-owner update or delete is 403
+- [ ] soft-delete hides product from default list
+
+## FR-MCP-PRODUCT-002 Workspace product membership
+
+A workspace maps to zero or more products. The owner workspace adds and removes members by workspace id. A member may leave itself. Adding a workspace requires that workspace to be registered, enabled, and not soft-deleted. AC: add requires registered enabled workspace; list members returns owner + members; leave removes only the caller; removed member loses product reads.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] add requires registered enabled workspace
+- [ ] list members returns owner and members
+- [ ] leave removes only the caller
+- [ ] removed member loses product reads
+
+## FR-MCP-PRODUCT-003 Shared effective requirements
+
+Member GetEffectiveRequirements unions local effective rows with sibling members' effective rows, provenance-tagged with originWorkspaceId, layer-matched using the origin workspace layer catalog. productScope=local hides siblings; default productScope is product. AC: two workspaces in one product see each other's in-scope FR/TR/TEST/mappings; productScope=local hides siblings; id collision returns two rows with different originWorkspaceId.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] two member workspaces see each others in-scope FR TR TEST and mappings
+- [ ] productScope local hides siblings
+- [ ] id collision returns two rows with different originWorkspaceId
+
+## FR-MCP-PRODUCT-004 Product isolation
+
+Non-members cannot read product membership or sibling requirements. Local requirement mutations never write sibling rows. A leaked workspace API key cannot list all products or dump non-member workspaces. AC: outsider get-product is 404; outsider effective is local-only; update-fr on sibling id does not change the sibling row.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] outsider get-product is 404
+- [ ] outsider effective is local-only
+- [ ] update-fr on sibling id does not change the sibling row
+
+## FR-MCP-PRODUCT-005 Product requirement context
+
+Context search/pack can retrieve product-visible requirement text with origin tags. It must not pull sibling source files. Source type product-requirements filters to those chunks. AC: pack for a member includes sibling FR body; pack does not include sibling .cs chunks; source type product-requirements filters to those chunks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] pack for a member includes sibling FR body
+- [ ] pack does not include sibling source file chunks
+- [ ] source type product-requirements filters to those chunks
 
 ## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
 
@@ -1677,6 +1828,43 @@ Scope: layer-1+
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
 
+## FR-MCP-SESSIONATTR-001 Session-log foreign filesModified and commits are rejected or marked
+
+A session-log turn for workspace W never lists filesModified or commit artifacts that resolve outside W unless the turn explicitly marks them as cross-workspace or foreign-repo. Forward-only. BUG-TRIAGE-108.
+- [ ] filesModified outside workspace root rejected or require foreign marker
+- [ ] commit SHA/message/files from another repo require foreign marker or redirect
+- [ ] Completeness audits can filter foreign artifacts
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] filesModified outside workspace root rejected or require foreign marker
+- [ ] commit SHA/message/files from another repo require foreign marker or redirect
+- [ ] Completeness audits can filter foreign artifacts
+
+## FR-MCP-SESSIONEND-001 SessionEnd emits empty object when cache cannot be resolved
+
+SessionEnd and pre-compact emit {} and exit 0 when Resolve-McpCacheDir cannot find a workspace. When cwd, CLAUDE_PROJECT_DIR, or hook payload identifies a workspace, flush that cache. No-op is not a hook failure. BUG-TRIAGE-140. FR-MCP-115.
+- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+- [ ] identifiable workspace still flushes .mcpServer/<agent>
+- [ ] no pending cache is a silent no-op
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}
+- [ ] identifiable workspace still flushes .mcpServer/<agent>
+- [ ] no pending cache is a silent no-op
+
+## FR-MCP-SESSIONLOGCTX-001 Session turns record current plan file and MCP TODO id
+
+Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.
+- [ ] When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).
+- [ ] The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. No turn row is inserted.
+- [ ] planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.
+- [ ] Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.
+- [ ] Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.
+- [ ] Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.
+
 ## FR-MCP-SESSIONLOGSAN-001 Sanitized session-log read responses
 
 Session-log query and single-session read responses must redact built-in credential forms and workspace-configured regular-expression matches before data leaves the server while preserving the raw persisted session log.
@@ -1688,6 +1876,18 @@ Scope: layer-1+
 - [ ] Filtering, total count, ordering, offset, and limit are computed from raw data and remain unchanged after redaction.
 - [ ] Federated and stdio read surfaces apply the same sanitization behavior.
 
+## FR-MCP-STRICTCOUNT-001 updateTurn accepts omitted empty or scalar tags and contextList under StrictMode
+
+workflow.sessionlog.updateTurn succeeds when tags or contextList is omitted, empty, or a single scalar. Invoke-McpPlugin exits 0. No StrictMode Count throw. Success stdout stays silent. BUG-TRIAGE-158.
+- [ ] omitted/empty/scalar tags and contextList persist
+- [ ] exit 0 and no Count cannot be found
+- [ ] appendActions/updateTurn emit no boolean on success
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] omitted/empty/scalar tags and contextList persist
+- [ ] exit 0 and no Count cannot be found
+- [ ] appendActions/updateTurn emit no boolean on success
+
 ## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
 
 The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured, capturing transaction id, event, reason, status, manifest and encrypted-body hashes, diffgram id, and party ids; logging is best-effort and SHALL never block or fail the commit path on sink errors.
@@ -1697,6 +1897,18 @@ Scope: layer-1+
 - [x] The Parseable sink POSTs a flat JSON batch to the ingest endpoint with the X-P-Stream header and basic auth.
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
+
+## FR-MCP-TEMPVOL-001 Plugin wrappers align TEMP to the workspace volume
+
+Plugin session-start and wrapper entrypoints set TEMP and TMP to a writable directory on the workspace volume when they differ from the target volume. Prompt-template guidance stays. Failed replacement moves must not look like success. Do not patch PSGallery PowerShell.MCP. BUG-TRIAGE-117.
+- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive
+- [ ] templates still document same-volume TEMP and verify-after-edit
+- [ ] failed move is a visible error
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive
+- [ ] templates still document same-volume TEMP and verify-after-edit
+- [ ] failed move is a visible error
 
 ## FR-MCP-TODO-CLOSE-001 Close TODO item by ID
 
@@ -1777,6 +1989,18 @@ Scope: layer-1+
 Transcript ingestion must accept transcript sources whose per-file size, per-JSONL-line size, record count, upload request size, and expanded archive size are bounded only by Int32.MaxValue (2,147,483,647). Operators ingesting large agent transcripts (notably Claude Code JSONL, where a single line can carry a full tool result) must not be rejected by the previous 256 MiB per-file, 8 MiB per-line, 2,000,000-record, 512 MiB request, or 2 GiB expanded-content ceilings. Guards that defend against hostile archives rather than large transcripts are retained unchanged: archive entry count, compression ratio, ZIP symlink rejection, and path-traversal rejection. Supersedes the ceiling values asserted by FR-MCP-TRANSCRIPT-002 and TR-MCP-TRANSCRIPT-001; the bounded-reader obligation itself is unchanged, only the bound values move.
 Scope: layer-1+
 
+## FR-MCP-TRANSCRIPT-SEARCH-001 Codex transcript adapter handles tool_search and inter_agent records
+
+Ingesting Codex JSONL with inter_agent_communication_metadata, tool_search_call, and tool_search_output produces zero unknown diagnostics for those types, emits paired tool events or a documented info skip, and a successful Persist=true ingest deletes importRecovery with persisted=true degraded=false. BUG-TRIAGE-122.
+- [ ] inter_agent_communication_metadata is normalized or documented info skip
+- [ ] tool_search_call/output become paired events with call_id/name/status
+- [ ] successful persist deletes importRecovery
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] inter_agent_communication_metadata is normalized or documented info skip
+- [ ] tool_search_call/output become paired events with call_id/name/status
+- [ ] successful persist deletes importRecovery
+
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
@@ -1815,6 +2039,151 @@ Scope: layer-1+
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
+## FR-MCP-TRIAGEERR-001 Normalized error envelope for REST, MCP, REPL, and plugins
+
+Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+
+## FR-MCP-TRIAGEHELP-001 Agent Help is diagnosis or incomplete never completed echo
+
+Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+
+## FR-MCP-TRIAGEPLUGIN-001 Plugin root session, cache, console, and persist identity
+
+Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+
+## FR-MCP-TRIAGEREQ-001 listTr ids are getTr updateTr deleteTr able
+
+Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+
+## FR-MCP-TRIAGESCHEMA-001 SessionLogs missing AgentSession columns fail closed
+
+After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Provider migrations apply the four columns on every host workspace database: Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders, Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders.
+
+## FR-MCP-TRIAGESTORE-001 Session-log persist is diagnosable and idempotent
+
+Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+
+## FR-MCP-TRIAGESTORE-002 Storage-only outages fail fast without flipping health liveness
+
+Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+
+## FR-MCP-TRIAGETODO-001 EXEC dual-store rehydrate and retry-clean plan create
+
+set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.
+
+## FR-MCP-USECASE-001 CRUD workspace-scoped use cases
+
+The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.
+Scope: layer-1+
+
+## FR-MCP-USECASE-002 Actors, flows, and ordered steps
+
+Use cases support actors (Primary, Secondary, System, External), flows (Basic, Alternative, Exception) with sequence numbers, and ordered steps with action text and optional system response and data entities.
+Scope: layer-1+
+
+## FR-MCP-USECASE-003 Bidirectional UC to FR links with Realizes default
+
+Use cases link bidirectionally to functional requirements using string FR ids. Default link type is Realizes. Active links are unique per workspace, use case, and FR. Unlink is soft-delete of the link row.
+Scope: layer-1+
+
+## FR-MCP-USECASE-004 Create use case from FR
+
+Operators and agents can create a shell use case from an existing FR title/body with an automatic Realizes link.
+Scope: layer-1+
+
+## FR-MCP-USECASE-005 Diagram generation Mermaid primary
+
+Two diagram kinds: (a) sequence from flows/steps; (b) UML use-case from persisted graph. Mermaid primary; PlantUML supported. Sequence is not a substitute for the use-case canvas editor.
+Scope: layer-1+
+
+## FR-MCP-USECASE-006 UC FR Realizes coverage API
+
+A runtime coverage API reports use cases without Realizes FR links and FRs without Realizes use case links for the active workspace.
+Scope: layer-1+
+
+## FR-MCP-USECASE-007 First-party Use Case UI
+
+First-party UI via REST. Primary diagram UI is UML use-case drag-and-drop canvas (FR-011). Structure forms secondary. Sequence render separate.
+Scope: layer-1+
+
+## FR-MCP-USECASE-008 Use case versioning and approval
+
+Draft/Submitted/Approved/Rejected; version increments on Approve.
+Scope: layer-1+
+Acceptance: Approve increments VersionNumber; invalid status rejected.
+Scope: layer-1+
+
+## FR-MCP-USECASE-009 Product membership hooks
+
+Optional ProductKey and list-by-product (hooks only).
+Scope: layer-1+
+Acceptance: set/clear ProductKey; list-by-product returns matches.
+Scope: layer-1+
+
+## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
+
+Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
+Scope: layer-1+
+Acceptance: Shared algorithm tests; ValidateTraceability green for USECASE IDs.
+Scope: layer-1+
+
+## FR-MCP-USECASE-011 UML use-case canvas editor
+
+Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
+ACs: AC-011-1 palette; AC-011-2 place shapes; AC-011-3 association; AC-011-4 include/extend; AC-011-5 rename; AC-011-6 move+layout persist; AC-011-7 boundary; AC-011-8 canvas primary UI; AC-011-9 REST only.
+Scope: layer-1+
+
+## FR-MCP-USECASE-012 Persist use-case diagram graph
+
+Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation. ACs AC-012-1 through AC-012-6 including audit on put.
+Scope: layer-1+
+
+## FR-MCP-USECASE-013 Export diagram to Mermaid
+
+Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1. ACs AC-013-1 through AC-013-4.
+Scope: layer-1+
+
+## FR-MCP-USECASE-014 Export diagram to PlantUML
+
+Same graph exports PlantUML use-case syntax. ACs AC-014-1 through AC-014-3.
+Scope: layer-1+
+
+## FR-MCP-VERIFYWRAP-001 Code-verify reports disk-full and honors timeout without hanging
+
+code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.
+- [ ] IOException disk full is typed and current-turn remains valid
+- [ ] wrapper returns or fails within documented timeout
+- [ ] no indefinite in-process hang after child dotnet exits
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] IOException disk full is typed and current-turn remains valid
+- [ ] wrapper returns or fails within documented timeout
+- [ ] no indefinite in-process hang after child dotnet exits
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.
@@ -1843,6 +2212,18 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-MCP-WORKSPACE-LAYER-001.
 Scope: layer-1+
+
+## FR-MCP-XAGENT-001 CompleteTurn refuses cross-sourceType current-turn rebind
+
+When current-turn.yaml sessionId prefix differs from the active agent (Codex vs GrokCode vs ClaudeCode), CompleteTurn does not SubmitAsync as a new turn on the other session and does not return internal_server_error. Same-agent session rotation still rebinds. CompleteTurn never closes a different requestId. Empty title omits per TR-MCP-REPL-015. BUG-TRIAGE-106, BUG-TRIAGE-142.
+- [ ] cross-sourceType mismatch refused or restored to originating cache
+- [ ] same-agent rotation can complete without 500
+- [ ] CompleteTurn does not hijack a concurrent other requestId
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] cross-sourceType mismatch refused or restored to originating cache
+- [ ] same-agent rotation can complete without 500
+- [ ] CompleteTurn does not hijack a concurrent other requestId
 
 ## FR-SUPPORT-010 MCP Context Unification
 
@@ -1951,131 +2332,4 @@ Scope: layer-1+
 - [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-
-## FR-MCP-USECASE-001 Use case header CRUD
-
-Workspace-scoped create, get, list, update, and soft-delete for use case headers.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Create/get/list/update succeed in a workspace
-- [ ] Soft-delete hides use case from default get/list
-- [ ] Cross-workspace id does not leak
-
-## FR-MCP-USECASE-002 Actors, flows, and ordered steps
-
-Actors and flows (Basic/Alternative/Exception) with ordered steps.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Attach actor; add flow; add ordered steps
-- [ ] Invalid actor/flow type rejected
-
-## FR-MCP-USECASE-003 Bidirectional UC-FR links with default Realizes
-
-Link/unlink use cases to string FrId requirements; default LinkType Realizes.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Link defaults to Realizes; unlink soft-deletes link
-- [ ] Duplicate active link conflicts; missing FR rejected
-
-## FR-MCP-USECASE-004 Create use case from FR
-
-Shell use case from FR with automatic Realizes link.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] from-fr creates UC and Realizes link
-- [ ] FR get shows linked use case
-
-## FR-MCP-USECASE-005 Use case diagrams
-
-Two diagram kinds: (a) **sequence** generated from flows/steps; (b) **UML use-case** from persisted graph. Mermaid primary export; PlantUML also supported. Sequence is not a substitute for the use-case canvas editor.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] kind=sequence mermaid contains sequenceDiagram
-- [ ] kind=usecase mermaid uses mcp-usecase-diagram-schema:1 header
-- [ ] plantuml for usecase kind contains @startuml
-- [ ] unknown format fails validation
-
-## FR-MCP-USECASE-006 Realizes coverage report
-
-Runtime report of UC/FR Realizes gaps.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Coverage payload includes totals and gap lists with live DTO names
-
-## FR-MCP-USECASE-007 First-party Use Case UI
-
-First-party UI via REST `/mcpserver/usecases` only. **Primary diagram UI is the UML use-case drag-and-drop canvas** (FR-MCP-USECASE-011). Structure forms (actors/flows/steps/FR links) are secondary. Sequence render remains available separately.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] UI assets call live REST; served at /usecases/ after deploy
-- [ ] Canvas is primary diagram surface (not forms-only)
-- [ ] Structure panels remain available as secondary
-- [ ] No direct DB access from UI
-
-## FR-MCP-USECASE-008 Use case versioning and approval
-
-Draft/Submitted/Approved/Rejected; version increments on Approve.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Approve increments VersionNumber; invalid status rejected
-
-## FR-MCP-USECASE-009 Product membership hooks
-
-Optional ProductKey and list-by-product (hooks only).
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] set/clear ProductKey; list-by-product returns matches
-
-## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
-
-Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Shared algorithm tests; ValidateTraceability green for USECASE IDs
-
-## FR-MCP-USECASE-011 UML use-case canvas editor
-
-Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-011-1 Palette offers Actor, UseCase, SystemBoundary, Association, Include, Extend
-- [ ] AC-011-2 User can place Actor and UseCase on free canvas
-- [ ] AC-011-3 User can draw Association between Actor and UseCase
-- [ ] AC-011-4 User can create Include and Extend between use cases
-- [ ] AC-011-5 User can rename a selected shape
-- [ ] AC-011-6 User can move shapes; layout coordinates persist with graph
-- [ ] AC-011-7 System boundary contains use cases (visual nesting or membership)
-- [ ] AC-011-8 Canvas is primary diagram UI at /usecases/
-- [ ] AC-011-9 UI mutates diagram graph only via REST
-
-## FR-MCP-USECASE-012 Persist use-case diagram graph
-
-Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-012-1 GET returns empty or last-saved graph
-- [ ] AC-012-2 PUT then GET round-trips the same graph
-- [ ] AC-012-3 Graph is workspace-scoped; no cross-workspace leak
-- [ ] AC-012-4 Soft-delete of use case hides graph from default get
-- [ ] AC-012-5 Invalid graph rejected with validation error
-- [ ] AC-012-6 Put emits append-only audit row (TR-MCP-DB-004)
-
-## FR-MCP-USECASE-013 Export diagram to Mermaid
-
-Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-013-1 Export includes %% mcp-usecase-diagram-schema:1 header
-- [ ] AC-013-2 Golden fixture: actors, use cases, boundary, edge types
-- [ ] AC-013-3 Same graph yields same Mermaid (deterministic)
-- [ ] AC-013-4 Empty graph yields documented minimal Mermaid
-
-## FR-MCP-USECASE-014 Export diagram to PlantUML
-
-Same graph exports PlantUML use-case syntax.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-014-1 Export contains @startuml and @enduml
-- [ ] AC-014-2 Golden fixture matches actors/use cases/include/extend
-- [ ] AC-014-3 Deterministic for same graph
 

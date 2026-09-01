@@ -1,0 +1,15 @@
+type: result
+payload:
+  requestId: req-20260819T182645Z-55b5
+  result:
+    items:
+    - frId: FR-MCP-FAILSAFE-001
+      trId: TR-MCP-FAILSAFE-001
+      createdAt: 2026-08-19T18:26:46.1027323+00:00
+    - frId: FR-MCP-FAILSAFE-001
+      testId: TEST-MCP-FAILSAFE-001
+      createdAt: 2026-08-19T18:26:46.1031654+00:00
+    totalCount: 2
+  deprecated: true
+
+---

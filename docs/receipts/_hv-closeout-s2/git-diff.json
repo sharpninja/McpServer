@@ -1,0 +1,104 @@
+{
+  "TimestampUtc": "2026-08-19T20:13:53Z",
+  "Branch": "triage/closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "StatusPorcelain": [
+    " M src/McpServer.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    " M src/McpServer.Storage/McpDbContext.cs",
+    " M src/McpServer.Storage/SessionLogSchemaGuard.cs",
+    " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogSchemaGuardTests.cs",
+    "?? src/McpServer.Storage/Database/SqliteSessionLogHeaderDdl.cs",
+    "?? tests/McpServer.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs"
+  ],
+  "Untracked": [
+    "src/McpServer.Storage/Database/SqliteSessionLogHeaderDdl.cs",
+    "tests/McpServer.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs"
+  ],
+  "DiffStat": [
+    " ...5751_AddSessionLogTagsAndAgentSessionHeaders.cs | 80 \u001b[32m+++++++++++\u001b[m\u001b[31m-----------\u001b[m",
+    " src/McpServer.Storage/McpDbContext.cs              | 14 \u001b[32m++++\u001b[m",
+    " src/McpServer.Storage/SessionLogSchemaGuard.cs     |  7 \u001b[32m+\u001b[m\u001b[31m-\u001b[m",
+    " .../Services/SessionLogSchemaGuardTests.cs         | 15 \u001b[32m++++\u001b[m",
+    " 4 files changed, 75 insertions(+), 41 deletions(-)"
+  ],
+  "PerFile": {
+    "src/McpServer.Storage/Database/SqliteSessionLogHeaderDdl.cs": {
+      "WorkExists": true,
+      "HeadExists": false,
+      "WorkHasPragma": true,
+      "WorkHasHelper": true,
+      "WorkHasAlreadyHasTest": false,
+      "WorkHasColLength": false,
+      "WorkHasIfNotExists": false,
+      "WorkHasBareAlter": true,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    },
+    "src/McpServer.Storage/McpDbContext.cs": {
+      "WorkExists": true,
+      "HeadExists": true,
+      "WorkHasPragma": false,
+      "WorkHasHelper": false,
+      "WorkHasAlreadyHasTest": false,
+      "WorkHasColLength": false,
+      "WorkHasIfNotExists": false,
+      "WorkHasBareAlter": false,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    },
+    "src/McpServer.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs": {
+      "WorkExists": true,
+      "HeadExists": true,
+      "WorkHasPragma": true,
+      "WorkHasHelper": true,
+      "WorkHasAlreadyHasTest": false,
+      "WorkHasColLength": false,
+      "WorkHasIfNotExists": false,
+      "WorkHasBareAlter": false,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    },
+    "src/McpServer.Storage.SqlServerMigrations/Migrations/20260818205807_AddSessionLogTagsAndAgentSessionHeaders.cs": {
+      "WorkExists": true,
+      "HeadExists": true,
+      "WorkHasPragma": false,
+      "WorkHasHelper": false,
+      "WorkHasAlreadyHasTest": false,
+      "WorkHasColLength": true,
+      "WorkHasIfNotExists": false,
+      "WorkHasBareAlter": false,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    },
+    "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260818205822_AddSessionLogTagsAndAgentSessionHeaders.cs": {
+      "WorkExists": true,
+      "HeadExists": true,
+      "WorkHasPragma": false,
+      "WorkHasHelper": false,
+      "WorkHasAlreadyHasTest": false,
+      "WorkHasColLength": false,
+      "WorkHasIfNotExists": true,
+      "WorkHasBareAlter": true,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    },
+    "tests/McpServer.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs": {
+      "WorkExists": true,
+      "HeadExists": false,
+      "WorkHasPragma": true,
+      "WorkHasHelper": false,
+      "WorkHasAlreadyHasTest": true,
+      "WorkHasColLength": true,
+      "WorkHasIfNotExists": true,
+      "WorkHasBareAlter": false,
+      "HeadHasPragma": false,
+      "HeadHasHelper": false,
+      "HeadHasAlreadyHasTest": false
+    }
+  }
+}

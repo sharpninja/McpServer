@@ -1,9 +1,11 @@
 // TR-MCP-REPL-005 / Phase 1d: Requirements management MCP tools partial of FwhMcpTools.
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Products.Queries;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
@@ -27,7 +29,7 @@ public sealed partial class FwhMcpTools
         [Description("Entry type: fr, tr, test, mapping, or all")] string? type = "all",
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType))
@@ -56,6 +58,28 @@ public sealed partial class FwhMcpTools
         }
     }
 
+    /// <summary>FR-MCP-PRODUCT-003 / TR-MCP-PRODUCT-API-001: Effective requirements with productScope.</summary>
+    [McpServerTool(Name = "requirements_effective"), Description("Get effective requirements. Optional layerKey and productScope=local|product (default product).")]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<string> RequirementsEffective(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional layer preview key")] string? layerKey = null,
+        [Description("product (default) or local")] string? productScope = "product",
+        CancellationToken cancellationToken = default)
+    {
+        if (_dispatcher is null)
+            return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
+
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
+        var result = await _dispatcher.QueryAsync(
+            new GetProductEffectiveRequirementsQuery(
+                workspacePath,
+                layerKey,
+                string.IsNullOrWhiteSpace(productScope) ? "product" : productScope),
+            cancellationToken).ConfigureAwait(false);
+        return SerializeResult(result);
+    }
+
     /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown or workspace files.</summary>
     [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents. doc = functional|technical|testing|mapping|matrix|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.")]
     public async Task<string> RequirementsGenerate(
@@ -64,7 +88,7 @@ public sealed partial class FwhMcpTools
         [Description("Output format: markdown or wiki")] string? format = "markdown",
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsDocType(doc, out var docType))
@@ -114,7 +138,7 @@ public sealed partial class FwhMcpTools
         [Description("Comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
@@ -179,7 +203,7 @@ public sealed partial class FwhMcpTools
         [Description("Updated comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
@@ -264,7 +288,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)

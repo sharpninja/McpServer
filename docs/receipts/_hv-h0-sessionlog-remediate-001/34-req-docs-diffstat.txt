@@ -1,0 +1,7 @@
+ docs/Project/Functional-Requirements.md | 770 [32m+++++++++++++++++++[m[31m-------------[m
+ docs/Project/Requirements-Matrix.md     |  33 [32m++[m
+ docs/Project/TR-per-FR-Mapping.md       |  11 [32m+[m
+ docs/Project/Technical-Requirements.md  | 733 [32m+++++++++++++++++[m[31m-------------[m
+ docs/Project/Testing-Requirements.md    |  52 [32m++[m[31m-[m
+ 5 files changed, 961 insertions(+), 638 deletions(-)
+

@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20260820T125832Z-f50c
+  result:
+    id: FR-HANDOFF-006
+    title: Preserve auditable provenance and diagnostics
+    description: Preserve auditable provenance and diagnostics for every run.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 audit record.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-006-fields
+      text: Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+      isSatisfied: false
+    - id: ac-fr-handoff-006-secrets
+      text: Raw credentials or source content are not copied into logs.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:32.9627094+00:00
+    updatedAt: 2026-08-20T12:58:32.9628691+00:00
+  deprecated: true
+
+---
+

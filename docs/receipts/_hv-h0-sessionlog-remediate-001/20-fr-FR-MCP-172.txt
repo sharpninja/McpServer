@@ -1,0 +1,30 @@
+type: result
+payload:
+  requestId: req-20260820T234930Z-1938
+  result:
+    id: FR-MCP-172
+    title: Failsafe drain does not poison successful plugin calls
+    description: >-
+      A successful workflow.requirements.getFr, getTr, or sessionlog queryHistory SHALL NOT be delayed by a 30s SessionLog.SubmitAsync drain timeout, SHALL NOT print Failsafe queue drain failed for timeout or HTTP 503, SHALL NOT latch drain completed, and a later drain after storage answers SHALL replay the queued record.
+
+
+      Acceptance Criteria:
+
+      - getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503.
+
+      - stderr has no Failsafe queue drain failed for that class.
+
+      - ReplFailsafeDrainCompleted stays false on abort.
+
+      - Next drain in-process replays after a stubbed success.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T23:49:31.0990562+00:00
+    updatedAt: 2026-08-20T23:49:31.0991550+00:00
+  deprecated: true
+
+---
+

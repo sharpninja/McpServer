@@ -1,0 +1,58 @@
+[
+  {
+    "id": "FR-MCP-FAILSAFE-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-FAILSAFE-001",
+    "testIds": "TEST-MCP-FAILSAFE-001",
+    "blob": "{\"FrId\":\"FR-MCP-FAILSAFE-001\",\"TrIds\":[\"TR-MCP-FAILSAFE-001\"],\"TestIds\":[\"TEST-MCP-FAILSAFE-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-SESSIONATTR-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-SESSIONATTR-001",
+    "testIds": "TEST-MCP-SESSIONATTR-001",
+    "blob": "{\"FrId\":\"FR-MCP-SESSIONATTR-001\",\"TrIds\":[\"TR-MCP-SESSIONATTR-001\"],\"TestIds\":[\"TEST-MCP-SESSIONATTR-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-SESSIONEND-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-SESSIONEND-001",
+    "testIds": "TEST-MCP-SESSIONEND-001",
+    "blob": "{\"FrId\":\"FR-MCP-SESSIONEND-001\",\"TrIds\":[\"TR-MCP-SESSIONEND-001\"],\"TestIds\":[\"TEST-MCP-SESSIONEND-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-STRICTCOUNT-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-STRICTCOUNT-001",
+    "testIds": "TEST-MCP-STRICTCOUNT-001",
+    "blob": "{\"FrId\":\"FR-MCP-STRICTCOUNT-001\",\"TrIds\":[\"TR-MCP-STRICTCOUNT-001\"],\"TestIds\":[\"TEST-MCP-STRICTCOUNT-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-TEMPVOL-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-TEMPVOL-001",
+    "testIds": "TEST-MCP-TEMPVOL-001",
+    "blob": "{\"FrId\":\"FR-MCP-TEMPVOL-001\",\"TrIds\":[\"TR-MCP-TEMPVOL-001\"],\"TestIds\":[\"TEST-MCP-TEMPVOL-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-TRANSCRIPT-SEARCH-001",
+    "testIds": "TEST-MCP-TRANSCRIPT-SEARCH-001",
+    "blob": "{\"FrId\":\"FR-MCP-TRANSCRIPT-SEARCH-001\",\"TrIds\":[\"TR-MCP-TRANSCRIPT-SEARCH-001\"],\"TestIds\":[\"TEST-MCP-TRANSCRIPT-SEARCH-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-VERIFYWRAP-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-VERIFYWRAP-001",
+    "testIds": "TEST-MCP-VERIFYWRAP-001",
+    "blob": "{\"FrId\":\"FR-MCP-VERIFYWRAP-001\",\"TrIds\":[\"TR-MCP-VERIFYWRAP-001\"],\"TestIds\":[\"TEST-MCP-VERIFYWRAP-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  },
+  {
+    "id": "FR-MCP-XAGENT-001",
+    "acCount": 0,
+    "trIds": "TR-MCP-XAGENT-001",
+    "testIds": "TEST-MCP-XAGENT-001",
+    "blob": "{\"FrId\":\"FR-MCP-XAGENT-001\",\"TrIds\":[\"TR-MCP-XAGENT-001\"],\"TestIds\":[\"TEST-MCP-XAGENT-001\"],\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\"}"
+  }
+]

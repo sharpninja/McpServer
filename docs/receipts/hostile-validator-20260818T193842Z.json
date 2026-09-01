@@ -1,0 +1,53 @@
+{
+  "TimestampUtc": "2026-08-18T19:38:42.8164594Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class1-s0-requirements",
+  "ActivePlan": "docs/plans/triage-cluster-001.md",
+  "SessionId": "GrokCode-20260818T185357Z-plugin-session",
+  "TurnRequestId": "req-20260818T192456Z-prompt-33a0",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Trust": {
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.94.0",
+    "signatureOk": true,
+    "nonceOk": true,
+    "nonce": "nonce-20260818142908-26972",
+    "healthStatus": "Healthy",
+    "serverVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e"
+  },
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 95,
+  "CompletenessRating": 92,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    { "id": "A1", "surface": "A", "title": "PLAN-TRIAGECLUSTER-001 exists Done=false", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/03-todo-PLAN-TRIAGECLUSTER-001.txt" },
+    { "id": "A2", "surface": "A", "title": "Plan decision 6 four-field envelope", "verdict": "PASS", "evidence": "docs/plans/triage-cluster-001.md:46-53" },
+    { "id": "A3", "surface": "A", "title": "FR-MCP-TRIAGEERR-001 real with ac-1 and amendment notes", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/10-fr-FR-MCP-TRIAGEERR-001.txt" },
+    { "id": "A4", "surface": "A", "title": "Seven sibling FRs high priority non-empty AC", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/10-fr-*.txt" },
+    { "id": "A5", "surface": "A", "title": "Matching TRs exist not placeholder", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/11-tr-*.txt" },
+    { "id": "A6", "surface": "A", "title": "Eight named TESTs exist", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/12-test-TEST-MCP-TRIAGE*.txt" },
+    { "id": "A7", "surface": "A", "title": "FR-TR-TEST mappings for eight FRs", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/13b-map-*.txt" },
+    { "id": "A8", "surface": "A", "title": "Export heading and ValidateTraceability findings=0", "verdict": "PASS", "evidence": "docs/Project/Functional-Requirements.md:1938; build.ps1 ValidateTraceability Succeeded" },
+    { "id": "A9", "surface": "A", "title": "No S2+ product implementation", "verdict": "PASS", "evidence": "src/McpServer.Support.Mcp/McpStdio/McpToolErrors.cs last commit 00a71449 2026-07-21" },
+    { "id": "A10", "surface": "A", "title": "Implementer session turn exists", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw/24g-implementer-turn-exact.txt" },
+    { "id": "B1", "surface": "B", "title": "Byrd v4 S0 phase-order", "verdict": "PASS", "evidence": "requirements exist; no S2 claimed" },
+    { "id": "B2", "surface": "B", "title": "Receipts re-verified", "verdict": "PASS", "evidence": "docs/receipts/_h0-hostile-raw" },
+    { "id": "B3", "surface": "B", "title": "MCP-only storage", "verdict": "PASS", "evidence": "plugin workflow.* queries only" },
+    { "id": "B4", "surface": "B", "title": "PowerShell no Python", "verdict": "PASS", "evidence": "pwsh.exe only" },
+    { "id": "B5", "surface": "B", "title": "Honesty", "verdict": "PASS", "evidence": "claims match store and artifacts" },
+    { "id": "C1", "surface": "C", "title": "Applicable FR/TR/TEST exist", "verdict": "PASS", "evidence": "getFr/getTr/getTest" },
+    { "id": "C2", "surface": "C", "title": "Structured AC exist", "verdict": "PASS", "evidence": "ac-1 on all eight triples" },
+    { "id": "C3", "surface": "C", "title": "AC appropriate for S0", "verdict": "PASS", "evidence": "testable plan text" },
+    { "id": "C4", "surface": "C", "title": "Mappings FR-TR-TEST", "verdict": "PASS", "evidence": "listMappings + ValidateTraceability findings=0" },
+    { "id": "C5", "surface": "C", "title": "Requirement process", "verdict": "PASS", "evidence": "store create + export" },
+    { "id": "D1", "surface": "D", "title": "H0 S0 DoD", "verdict": "PASS", "evidence": "FR/TR/TEST/AC/mappings/export/VT/amendment" },
+    { "id": "D2", "surface": "D", "title": "No BUG-TRIAGE done", "verdict": "PASS", "evidence": "BUG-TRIAGE-119/110/139 done=false" },
+    { "id": "D3", "surface": "D", "title": "Extra plan TEST ids observation", "verdict": "PASS", "evidence": "STORE-003-007 PLUGIN-002-005 TODO-002 not found; not H0 DoD" }
+  ]
+}

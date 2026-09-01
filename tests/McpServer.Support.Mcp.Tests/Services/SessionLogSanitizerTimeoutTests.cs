@@ -54,7 +54,7 @@ public sealed class SessionLogSanitizerTimeoutTests
 
         Assert.Equal("[REDACTED:catastrophic:timeout]", sanitized.Title);
         Assert.DoesNotContain("hunter2", sanitizedTurn.Response, StringComparison.Ordinal);
-        Assert.Contains("[REDACTED:secret-assignment]", sanitizedTurn.Response, StringComparison.Ordinal);
+        Assert.Equal("[REDACTED:secret-assignment]", sanitizedTurn.Response);
         Assert.Contains(logger.Messages, message => message.Contains("catastrophic", StringComparison.Ordinal) && message.Contains("title", StringComparison.Ordinal));
         Assert.All(logger.Messages, message => Assert.DoesNotContain("hunter2", message, StringComparison.Ordinal));
     }

@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGEERR-001
+title: Unified error envelope on tool REST and REPL
+description: Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+    isSatisfied: false

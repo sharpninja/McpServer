@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20260820T125802Z-48d4
+  result:
+    id: BUG-TRIAGE-162
+    title: SessionLog SubmitAsync HTTP 503 backend_unavailable during refresh-docs wrap-up
+    section: Session Logging
+    priority: high
+    done: false
+    description:
+    - workflow.sessionlog.appendDialog failed with HTTP 503 backend_unavailable. Plugin wrote failsafe YAML. Refresh-docs and wrap-up validation completed; commit-sync is paused for operator ack.
+    - 'Triage group: triage-group-9216aa535cbd7bec'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Investigate and resolve the grouped triage report.'
+    - '- Add or update validation that proves the triage issue is fixed.'
+    - '- Verify the workflow no longer reproduces this triage report.'
+    - 'Implementation notes:'
+    - '- Fallback TODO created because successful triage research output contained no JSON object.'
+    - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+    - '- Raw triage research output is preserved on run triage-run-785f8740b847495c893a6e63a658dfdc.'
+    implementationTasks: []
+    remaining: 'P0 intended critical; plugin workflow.todo.update accepts only high/medium/low so stored priority is high. HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): SessionLog SubmitAsync HTTP 503 backend_unavailable during refresh-docs wrap-up. Same full-upsert path as 160/161. Do not store-close from this audit.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

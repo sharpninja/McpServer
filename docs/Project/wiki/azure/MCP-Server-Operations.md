@@ -232,7 +232,7 @@ Main endpoints:
 - `/usecases/` — first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
 - `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
-- `/health`
+- `/health` — liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
 - `/swagger`
 
 ### Transcript Ingestion Limits
@@ -245,6 +245,10 @@ full tool result on a single line therefore import without special handling.
 Guards against hostile archives keep their original values and are not affected by those ceilings: a maximum of
 10,000 archive entries, a decompression ratio ceiling of 20:1, rejection of ZIP symlink entries, and rejection of
 paths that escape the upload root. Exceeded limits return 413; malformed or unsafe inputs return 400.
+
+## Products
+
+Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /mcpserver/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/mcpserver/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `McpServerClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
 
 ## Requirements Wiki Export
 
@@ -332,6 +336,18 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
 Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+
+## Health, storage, and errors
+
+`GET /health` is liveness. Observed live payload keys on 1.4.30: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+
+## Session log sanitization and incremental persist
+
+`SessionLogSanitizingService` is the outermost HTTP and stdio decorator. Query/GET/MCP/stdio reads replace configured secrets in the outbound DTO. SQLite rows are not rewritten. Configure `Mcp:SessionLogSanitization` (`Enabled`, `MaxRuleCount`, `MaxPatternLength`, `RegexTimeoutMilliseconds`, `Rules` with `Id`/`Pattern`/`Replacement`). The in-repo example rule uses `example-token-` (not a live secret). Text filters still match the raw record; TotalCount/order/Limit/Offset stay the same. Regex timeout fails closed without logging the input.
+
+Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `SessionLogClient.AppendDialogAsync` (POST `.../dialog`), not a full-session `SubmitAsync` upsert. HTTP 503 `backend_unavailable` on persist uses the same degrade-queue as timeout: failsafe retained, current-turn stays `in_progress`, no throw. SQLITE_BUSY under the storage budget is retryable persist contention, not storage-down, when TODO/requirements reads still succeed.
+
+Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 
 ## Additional Documentation
 

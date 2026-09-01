@@ -1,0 +1,82 @@
+type: result
+payload:
+  requestId: req-20260819T165040Z-a09c
+  result:
+    totalCount: 4
+    limit: 10
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260819T164408Z-hostile-wrapup
+      agentSessionId: 01a01ae5-2933-72a0-9593-05646e7e5c8d
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile validate wrap-up push claims
+      model: grok
+      started: 2026-08-19T16:50:28.0000000+00:00
+      lastUpdated: 2026-08-19T16:50:38.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T164408Z-001-hostile-validate-wrap-up
+        timestamp: 2026-08-19T16:50:28.0000000+00:00
+        queryText: Hostile validation of operator-directed refresh-docs wrap-up and GitHub/wiki push claims. Class 2. planFile None. todoId None.
+        queryTitle: Hostile validate wrap-up push claims
+        response: >-
+          Hostile validation of refresh-docs wrap-up push.
+
+          OverallVerdict: AGREE
+
+          Receipt: docs/receipts/hostile-validator-20260819T164408Z.md
+
+          add-profile: 18 non-skill profile files
+
+          PASS 15 FAIL 0 UNKNOWN 0
+
+          Surface C N/A class 2
+
+          020 completed on GrokCode-20260818T182741Z-plugin-session
+
+          PLAN-TRIAGECLUSTER-001 last done flip 2026-08-19T01:41:53Z
+
+          HEAD cbae4dd on origin/develop; wiki 763c838
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: Test-MarkerSignature True. GET /health nonce nonce-hv-20260819T164408Z-wrapup echoed. status Healthy version 1.4.28+f4060f037e62e64974026aff9d24e11b2f481952 storage reachable.
+          type: tool_call
+          status: completed
+          filePath: AGENTS-README-FIRST.yaml
+        - order: 2
+          description: ZIP sha256 C666EBD12134F452C9722247F3343F82D01653DA06E2328CD2C6E47CEB438D2E length 954459 entries 79 including github/Byrd-Todo-Execution-Spec.md. wiki.yaml schema mcp-wiki-export/v1 documents 34 file-backed 28 missing 0.
+          type: tool_call
+          status: completed
+          filePath: docs/requirements/requirements-wiki-documents.zip
+        - order: 3
+          description: ls-remote origin/develop cbae4dd6febf6cfab81b77a2578ff1b36a6a3499 matches HEAD. c81abaf feat(triage) is parent. Wiki HEAD 763c83803046a018107e06c9945e508551236d86. origin/main d14a2330 does not contain wrap-up SHAs. Azure develop still f4060f03.
+          type: tool_call
+          status: completed
+          filePath: ''
+        - order: 4
+          description: client.SessionLog.QueryAsync agent=GrokCode text=refresh-docs wrap-up (no exact requestId filter) shows 020 completed on GrokCode-20260818T182741Z-plugin-session planFile None todoId None. workflow.todo.get plus client.Todo.GetAuditAsync last done true at 2026-08-19T01:41:53.1708697Z totalCount 7.
+          type: tool_call
+          status: completed
+          filePath: docs/receipts/_hv-20260819T164408Z/06-turn-020-slice.txt
+        - order: 5
+          description: 'AGREE: wrap-up push claims A1-A8 and applicable B/D re-verified. Surface C N/A class 2 ops. No PLAN TODO flipped this wrap-up.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T164408Z.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-19T16:50:31.0000000+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile markdown files. Independently verified marker signature, health nonce, ZIP hash, wiki.yaml parse, ls-remote origin and wiki, ValidateTraceability, sessionlog QueryAsync without exact-requestId filter, todo get and GetAuditAsync.'
+          category: observation
+        - timestamp: 2026-08-19T16:50:31.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict AGREE on wrap-up push claims. Rationale: marker HMAC True; health Healthy 1.4.28+f4060f03 storage reachable nonce match; wiki.yaml schema mcp-wiki-export/v1 documents 34 file-backed 28 missing 0; ZIP sha256 C666EBD12134F452C9722247F3343F82D01653DA06E2328CD2C6E47CEB438D2E length 954459 entries 79 including github/Byrd-Todo-Execution-Spec.md; git diff --check 0; ValidateTraceability Succeeded findings=0; ls-remote origin/develop cbae4dd matches HEAD (docs-receipts on top of c81abaf feat(triage)); wiki HEAD 763c838 includes Byrd-Todo-Execution-Spec.md and Agent-Plugin-Availability.md UserPromptSubmit background section; QueryAsync text refresh-docs wrap-up shows 020 completed planFile None todoId None; todo get+audit last done flip 2026-08-19T01:41:53Z; origin/main does not contain c81abaf/cbae4dd; Azure develop still f4060f03. Alternatives rejected: FAIL A3 because empty-tree vs HEAD has historical whitespace (wrap-up command was git diff --check, independently 0); FAIL A5 because the word isolat is absent (section is UserPromptSubmit and background agents); FAIL A4 because HEAD is not c81abaf (parent allowed subsequent docs-receipts commit; ls-remote matches HEAD).'
+          category: decision

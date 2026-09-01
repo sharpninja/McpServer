@@ -1,0 +1,24 @@
+{
+  "Id": "PLAN-TRIAGELEFTOVER-001",
+  "Title": "Resolve remaining 27 medium BUG-TRIAGE items via grouped worktrees",
+  "Section": "Backlog",
+  "Priority": "high",
+  "Done": false,
+  "Estimate": null,
+  "Note": null,
+  "Description": [
+    "Master TODO for docs/plans/triage-cluster-002.md. Close BUG-TRIAGE-106,107,108,113,116,117,118,120,121,122,125,130,134,140,142,144,147,150-159. Closeout-first for G1/G2/G11. Worktrees under .worktrees/. Merge only after hostile AGREE. Byrd v4. Do not reopen PLAN-TRIAGECLUSTER-001."
+  ],
+  "TechnicalDetails": null,
+  "ImplementationTasks": null,
+  "CompletedDate": null,
+  "DoneSummary": null,
+  "Remaining": null,
+  "PriorityNote": null,
+  "Reference": null,
+  "Phase": null,
+  "DependsOn": null,
+  "FunctionalRequirements": null,
+  "TechnicalRequirements": null,
+  "IdempotencyKey": null
+}

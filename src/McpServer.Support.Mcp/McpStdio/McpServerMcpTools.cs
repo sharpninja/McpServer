@@ -66,6 +66,7 @@ public sealed partial class FwhMcpTools
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ITriageService? _triageService;
+    private readonly IHandoffIngestionService? _handoffIngestionService;
     private readonly IAgentHelpConversationService _agentHelpService;
     private readonly ITranscriptIngestionService? _transcriptIngestionService;
     private readonly IDispatcher? _dispatcher;
@@ -103,7 +104,8 @@ public sealed partial class FwhMcpTools
         ITriageService? triageService = null,
         IAgentHelpConversationService? agentHelpService = null,
         ITranscriptIngestionService? transcriptIngestionService = null,
-        IDispatcher? dispatcher = null)
+        IDispatcher? dispatcher = null,
+        IHandoffIngestionService? handoffIngestionService = null)
     {
         _logger = logger;
         _db = db;
@@ -133,6 +135,7 @@ public sealed partial class FwhMcpTools
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
         _triageService = triageService;
+        _handoffIngestionService = handoffIngestionService;
         _agentHelpService = agentHelpService
             ?? throw new ArgumentNullException(nameof(agentHelpService));
         _transcriptIngestionService = transcriptIngestionService;
@@ -140,25 +143,62 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>
-    /// TR-MCP-MT-001: Overrides the scoped workspace context when an explicit workspace path
-    /// is provided by the MCP tool caller. Sets both the scoped <see cref="WorkspaceContext"/>
-    /// and the <see cref="McpDbContext"/> workspace ID so query filters and auto-stamping apply correctly.
+    /// TR-MCP-MT-001: Pushes a scoped workspace context for one STDIO/native tool call and
+    /// restores the previous workspace path, DbContext id, and accessor override on dispose.
     /// </summary>
-    private void ApplyWorkspaceOverride(string workspacePath)
+    private IDisposable ApplyWorkspaceOverride(string workspacePath)
     {
-        _workspaceContext.WorkspacePath = workspacePath;
-        _workspaceContext.SessionsPath = Path.Combine(workspacePath, "docs", "sessions");
-        _workspaceContext.ExternalDocsPath = Path.Combine(workspacePath, "docs", "external");
+        var previousContextPath = _workspaceContext.WorkspacePath;
+        var previousSessions = _workspaceContext.SessionsPath;
+        var previousExternal = _workspaceContext.ExternalDocsPath;
+        var httpCtx = _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
+        var previousHttpPath = httpCtx?.WorkspacePath;
+        var previousHttpSessions = httpCtx?.SessionsPath;
+        var previousHttpExternal = httpCtx?.ExternalDocsPath;
 
-        var ctx = _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
-        if (ctx is not null)
+        var canonical = HandoffWorkspacePaths.Canonicalize(workspacePath);
+        _workspaceContext.WorkspacePath = canonical;
+        _workspaceContext.SessionsPath = Path.Combine(canonical, "docs", "sessions");
+        _workspaceContext.ExternalDocsPath = Path.Combine(canonical, "docs", "external");
+        if (httpCtx is not null)
         {
-            ctx.WorkspacePath = workspacePath;
-            ctx.SessionsPath = _workspaceContext.SessionsPath;
-            ctx.ExternalDocsPath = _workspaceContext.ExternalDocsPath;
+            httpCtx.WorkspacePath = canonical;
+            httpCtx.SessionsPath = _workspaceContext.SessionsPath;
+            httpCtx.ExternalDocsPath = _workspaceContext.ExternalDocsPath;
         }
 
-        _db.OverrideWorkspaceId(workspacePath);
+        var accessorScope = _workspaceAccessor.PushWorkspace(canonical);
+        var dbScope = _db.PushWorkspaceId(canonical);
+        return new WorkspaceCallScope(() =>
+        {
+            accessorScope.Dispose();
+            dbScope.Dispose();
+            _workspaceContext.WorkspacePath = previousContextPath;
+            _workspaceContext.SessionsPath = previousSessions;
+            _workspaceContext.ExternalDocsPath = previousExternal;
+            if (httpCtx is not null)
+            {
+                httpCtx.WorkspacePath = previousHttpPath ?? string.Empty;
+                httpCtx.SessionsPath = previousHttpSessions ?? string.Empty;
+                httpCtx.ExternalDocsPath = previousHttpExternal ?? string.Empty;
+            }
+        });
+    }
+
+    private sealed class WorkspaceCallScope : IDisposable
+    {
+        private readonly Action _restore;
+        private bool _disposed;
+
+        public WorkspaceCallScope(Action restore) => _restore = restore;
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+            _disposed = true;
+            _restore();
+        }
     }
 
     private bool ShouldDeferContextMutation(out string error)
@@ -255,7 +295,7 @@ public sealed partial class FwhMcpTools
         if (string.IsNullOrWhiteSpace(directive))
             return JsonSerializer.Serialize(new { success = false, error = "directive is required." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         var result = await _workspacePolicyService.ApplyAsync(
             new WorkspacePolicyApplyRequest
             {
@@ -275,7 +315,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         if (string.IsNullOrWhiteSpace(path))
             return JsonSerializer.Serialize(new { error = "path is required" });
         var result = await _repoFileService.ReadAsync(path, cancellationToken).ConfigureAwait(false);
@@ -292,7 +332,7 @@ public sealed partial class FwhMcpTools
         [Description("Relative path (optional, default repo root)")] string? path = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         var result = await _repoFileService.ListAsync(path, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new { path = result.Path, entries = result.Entries.Select(e => new { e.Name, e.IsDirectory }).ToList() });
     }
@@ -306,7 +346,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         if (string.IsNullOrWhiteSpace(path))
             return JsonSerializer.Serialize(new { error = "path and content are required" });
         var result = await _repoFileService.WriteAsync(path, content ?? string.Empty, cancellationToken).ConfigureAwait(false);
@@ -322,7 +362,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         if (ShouldDeferContextMutation(out var transactionError))
             return JsonSerializer.Serialize(new { error = transactionError, code = "turn_transaction_gate" });
 
@@ -345,7 +385,7 @@ public sealed partial class FwhMcpTools
     public string SyncStatus(
         [Description("Workspace path (required)")] string workspacePath)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         var last = _syncStatusStore.GetLast();
         if (last == null)
             return JsonSerializer.Serialize(new { lastRun = (DateTime?)null, status = "idle", error = (string?)null });
@@ -371,7 +411,7 @@ public sealed partial class FwhMcpTools
         [Description("Optional keyword filter")] string? keyword = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryListScope(scope, out var parsedScope, out var error))
@@ -401,7 +441,7 @@ public sealed partial class FwhMcpTools
         [Description("Memory id")] string id,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var item = await _memoryService.GetAsync(id, cancellationToken).ConfigureAwait(false);
@@ -427,7 +467,7 @@ public sealed partial class FwhMcpTools
         [Description("Optional updater identity")] string? updatedBy = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryScope(scope, MemoryScope.Workspace, out var parsedScope, out var error))
@@ -466,7 +506,7 @@ public sealed partial class FwhMcpTools
         [Description("Optional updater identity")] string? updatedBy = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryScope(scope, out var parsedScope, out var error))
@@ -500,7 +540,7 @@ public sealed partial class FwhMcpTools
         [Description("Memory id")] string id,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = _memoryMutations is null

@@ -334,6 +334,7 @@ public sealed class RequirementScopeLayerReplIntegrationTests
             await File.WriteAllTextAsync(Path.Combine(RootPath, "appsettings.yaml"), BuildAppSettingsYaml(), Encoding.UTF8)
                 .ConfigureAwait(false);
 
+            await ScratchSqliteSchema.ApplyAndVerifyAsync(DatabasePath).ConfigureAwait(false);
             await StageWorkspaceDatabaseAsync().ConfigureAwait(false);
         }
 
@@ -346,7 +347,6 @@ public sealed class RequirementScopeLayerReplIntegrationTests
                 .Options;
 
             await using var db = new McpDbContext(options);
-            await db.Database.MigrateAsync().ConfigureAwait(false);
             var now = DateTimeOffset.UtcNow;
             db.Workspaces.Add(new WorkspaceEntity
             {

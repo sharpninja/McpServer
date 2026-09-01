@@ -1,0 +1,226 @@
+type: result
+payload:
+  requestId: req-20260820T125810Z-3283
+  result:
+    id: MCP-HANDOFFPLAN-001
+    title: 'Grok execution prompt: Implement MCP-HANDOFF-001'
+    section: MCP Server
+    priority: high
+    done: false
+    estimate: 2-4d
+    note: 'Independent Codex review VERDICT: NOT APPROVED. Remediating P1-1..P1-8, P2-1..P2-6, P3. Do not mark done. No commit. Unrelated sanitizer/requirements dirty work is preserved and is not handoff evidence. Historical SQL Server 4NF/rename tests are not the handoff gate. New-migration gate remains AddHandoffIngestionStorage apply/round-trip/down-up on SQLite, SQL Server, and PostgreSQL, run serially when no competing LocalDB suite is active.'
+    description:
+    - >-
+      Implement MCP-HANDOFF-001 completely in F:\GitHub\McpServer.
+
+
+      Read and obey AGENTS.md, AGENTS-README-FIRST.yaml, .github/copilot-instructions.md, and docs/Development-Process-draft-v4.md before changing code. Use supported MCP plugin/REPL operations for sessions, TODOs, requirements, and mappings. Never use raw REST when a supported operation exists. Never hand-edit generated YAML, requirements projections, todo.yaml, or database rows. Preserve unrelated worktree changes.
+
+
+      Do not stop after planning. Implement, test, document, and validate the feature. Do not mark MCP-HANDOFF-001 complete and do not commit; leave the validated changes for independent Codex review.
+
+
+      PHASE 0: REQUIREMENTS GATE
+
+
+      Before production code, create these database-backed requirements with structured acceptanceCriteria through workflow.requirements.* operations.
+
+
+      FR-HANDOFF-001: Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+
+      Acceptance criteria: supports Markdown, text, JSON, and YAML inputs; rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths; maximum decoded input is 8 MiB.
+
+
+      FR-HANDOFF-002: Use the existing one-shot agent system to extract a structured MCP TODO draft.
+
+      Acceptance criteria: extraction uses a versioned prompt and strict JSON contract; malformed output produces diagnostics and never creates a TODO; unknown or missing source information is not silently discarded.
+
+
+      FR-HANDOFF-003: Validate and normalize generated TODO drafts.
+
+      Acceptance criteria: validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links; invalid or conflicting values produce field-specific diagnostics.
+
+
+      FR-HANDOFF-004: Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+
+      Acceptance criteria: DraftOnly is the default and never mutates TODO state; RequireReview persists an approvable run without creating a TODO; CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+
+
+      FR-HANDOFF-005: Persist approved TODOs exclusively through the existing TODO service.
+
+      Acceptance criteria: successful creation produces exactly one TODO; replay of the same workspace, content hash, and prompt version returns the existing receipt; ID collisions require review and are never silently renamed.
+
+
+      FR-HANDOFF-006: Preserve auditable provenance and diagnostics for every run.
+
+      Acceptance criteria: retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID; raw credentials or source content are not copied into logs.
+
+
+      FR-HANDOFF-007: Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+
+      Acceptance criteria: every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+
+
+      Create these technical requirements:
+
+      TR-HANDOFF-CONTRACT-001 for documented request/result/draft/provenance/diagnostic contracts.
+
+      TR-HANDOFF-SECURITY-001 for bounded readers, workspace containment, and reparse-point protection.
+
+      TR-HANDOFF-AGENT-001 for AgentPoolOneShotContext.HandoffTodoDraft and versioned strict-JSON extraction.
+
+      TR-HANDOFF-VALIDATE-001 for pure draft validation and normalization.
+
+      TR-HANDOFF-MODES-001 for confidence gating, review approval, and idempotent replay.
+
+      TR-HANDOFF-TODO-001 for exclusive TODO-service persistence.
+
+      TR-HANDOFF-AUDIT-001 for normalized ingestion-run and diagnostic persistence.
+
+      TR-HANDOFF-SURFACE-001 for shared API/client/REPL/Director/MCP/plugin delegation.
+
+
+      Create TEST-HANDOFF-001 through TEST-HANDOFF-007 covering, respectively: contracts; source security; one-shot extraction; validation and modes; TODO integration and replay; public-surface parity; provenance and audit persistence. Give every TEST record structured acceptance criteria describing its pass conditions.
+
+
+      Create mappings:
+
+      FR-HANDOFF-001 -> TR-HANDOFF-CONTRACT-001, TR-HANDOFF-SECURITY-001 -> TEST-HANDOFF-001, TEST-HANDOFF-002
+
+      FR-HANDOFF-002 -> TR-HANDOFF-CONTRACT-001, TR-HANDOFF-AGENT-001 -> TEST-HANDOFF-003
+
+      FR-HANDOFF-003 -> TR-HANDOFF-VALIDATE-001 -> TEST-HANDOFF-004
+
+      FR-HANDOFF-004 -> TR-HANDOFF-VALIDATE-001, TR-HANDOFF-MODES-001 -> TEST-HANDOFF-004
+
+      FR-HANDOFF-005 -> TR-HANDOFF-MODES-001, TR-HANDOFF-TODO-001 -> TEST-HANDOFF-005
+
+      FR-HANDOFF-006 -> TR-HANDOFF-AUDIT-001 -> TEST-HANDOFF-007
+
+      FR-HANDOFF-007 -> TR-HANDOFF-SURFACE-001 -> TEST-HANDOFF-006
+
+
+      Verify all seven FRs have TR and TEST coverage before production code. Link the resulting IDs to MCP-HANDOFF-001 and this execution TODO.
+
+
+      PUBLIC CONTRACT
+
+
+      Add HandoffSourceKind: Path, Content, Artifact.
+
+      Add HandoffIngestionMode: DraftOnly, RequireReview, CreateWhenConfident.
+
+      Add HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest with complete XMLDocs.
+
+      Expose POST /mcpserver/handoff/ingest, GET /mcpserver/handoff/runs/{runId}, and POST /mcpserver/handoff/runs/{runId}/approve.
+
+      Add typed client methods IngestHandoffAsync, GetHandoffRunAsync, and ApproveHandoffAsync.
+
+      Add workflow.handoff.ingest/get/approve, native handoff_ingest/get/approve tools, matching Director commands, and a shared plugin-core handoff skill.
+
+
+      IMPLEMENTATION
+
+
+      Create one IHandoffIngestionService shared by every public surface. Resolve and hash bounded source content, invoke the existing one-shot agent infrastructure with HandoffTodoDraft context, parse strict JSON, validate the draft, persist the normalized run and diagnostics, and call the existing TODO service only when the selected mode permits it.
+
+
+      Use a versioned prompt template. Never reparse compatibility output. Never let AI output directly write TODO storage. Store source provenance and draft state separately from TODO records. Approval must revalidate the stored draft before creation. Replays must be deterministic unless force=true is explicitly requested.
+
+
+      BDPV4 RED -> GREEN -> REFACTOR SLICES
+
+
+      1. Requirements and mappings gate.
+
+      2. Contract serialization and typed-client tests, then contracts.
+
+      3. Source-resolution/security tests, then bounded ingestion.
+
+      4. Mocked one-shot extraction tests, then prompt context and strict parser.
+
+      5. Draft-validation and mode tests, then validators and confidence policy.
+
+      6. TODO-service and idempotency tests, then persistence.
+
+      7. Audit/provenance tests, then normalized run storage.
+
+      8. Controller/client/REPL/Director/MCP/plugin inventory and invocation tests, then public surfaces.
+
+      9. Documentation, prompt-template, plugin-core synchronization, generated requirements export, and regression validation.
+
+
+      Each slice must begin with a failing consumer test and a failing real-service test. Record the test plan before implementation. A slice may exit only when its current-plus-prior test scope reports zero failures and zero skips. Record checkpoints and validation evidence on the execution TODO after each gate.
+
+
+      VALIDATION
+
+
+      Cover malformed AI JSON, missing fields, low confidence, duplicate IDs, deterministic replay, cancellation, unsupported formats, input limits, traversal, external paths, reparse escapes, ambiguous handoffs, approval races, TODO-service failure, audit persistence, and workspace isolation.
+
+
+      Run:
+
+      dotnet test tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj
+
+      dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj
+
+      dotnet test tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj
+
+      dotnet test tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj
+
+      dotnet test tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj
+
+      .\build.ps1 Compile
+
+      .\build.ps1 Test
+
+      .\build.ps1 ValidateTraceability
+
+      .\build.ps1 SyncAgentPlugins
+
+
+      Report exact changed files, requirement and mapping receipts, tests and counts, zero-skip evidence, unresolved blockers, and the final git diff summary.
+    technicalDetails: &o0 []
+    implementationTasks:
+    - task: Capture and map FR-HANDOFF, TR-HANDOFF, TEST-HANDOFF, and structured acceptance criteria through the requirements plugin.
+      done: false
+    - task: Red/Green/Refactor contracts and typed client.
+      done: false
+    - task: Red/Green/Refactor bounded source ingestion and workspace security.
+      done: false
+    - task: Red/Green/Refactor one-shot extraction and strict JSON parsing.
+      done: false
+    - task: Red/Green/Refactor draft validation and confidence modes.
+      done: false
+    - task: Red/Green/Refactor TODO persistence and idempotency.
+      done: false
+    - task: Red/Green/Refactor normalized provenance and diagnostics.
+      done: false
+    - task: Red/Green/Refactor API, client, REPL, Director, MCP tool, and plugin surfaces.
+      done: false
+    - task: Update docs and generated artifacts, synchronize plugin core, and pass all validation gates with zero failures and zero skips.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): same code as MCP-HANDOFF-001. Execution prompt TODO remains open until Handoff AC isSatisfied and hostile AGREE. Do not store-close.'
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-HANDOFF-001
+    - FR-HANDOFF-002
+    - FR-HANDOFF-003
+    - FR-HANDOFF-004
+    - FR-HANDOFF-005
+    - FR-HANDOFF-006
+    - FR-HANDOFF-007
+    technicalRequirements:
+    - TR-HANDOFF-CONTRACT-001
+    - TR-HANDOFF-SECURITY-001
+    - TR-HANDOFF-AGENT-001
+    - TR-HANDOFF-VALIDATE-001
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-TODO-001
+    - TR-HANDOFF-AUDIT-001
+    - TR-HANDOFF-SURFACE-001
+  deprecated: true
+
+---
+

@@ -1,0 +1,6 @@
+requestId: req-20260819T200246Z-001-hostile-s2-120-to
+queryTitle: Hostile S2 forced wrapper timeout
+queryText: Force Invoke-McpPlugin TimeoutSeconds 1 on beginTurn to classify command_timeout
+planFile: docs/plans/triage-cluster-002.md
+todoId: BUG-TRIAGE-120
+

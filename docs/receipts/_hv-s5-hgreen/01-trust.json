@@ -1,0 +1,34 @@
+{
+  "TimestampUtc": "2026-08-19T23:54:23.8691715Z",
+  "Stamp": "20260819T235423Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol",
+  "Branch": "triage/tempvol",
+  "Sha": "9c7c3ec3c1e792a1476ca711392812a0ba29425a",
+  "DirtyCount": 0,
+  "Porcelain": [],
+  "HeadFiles": [
+    "plugins/core/hooks-templates/wrapper.ps1.template",
+    "plugins/core/lib-ps/plugin-hook.ps1",
+    "plugins/core/lib-ps/resolve-cache-dir.ps1",
+    "plugins/core/test-fixtures/pester/PluginTempVolume.Tests.ps1"
+  ],
+  "SignatureOk": true,
+  "NonceSent": "hv-s5hg-20260819T235423Z-41905",
+  "NonceEcho": "hv-s5hg-20260819T235423Z-41905",
+  "NonceMatch": true,
+  "HealthStorage": "reachable",
+  "HealthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "HealthStatus": "Healthy",
+  "PluginDotVersion": "1.95.0",
+  "PluginJsonName": "mcpserver",
+  "PluginJsonVersion": "1.95.0",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ToolsSearchType": "System.Management.Automation.PSCustomObject",
+  "ToolsSearchExactNameCount": 1,
+  "ToolsSearchTopKeys": [
+    "tools",
+    "totalCount"
+  ],
+  "SuggestedSessionId": "GrokCode-20260819T235423Z-hostile-s5-hgreen",
+  "SuggestedRequestId": "req-20260819T235423Z-001-hostile-s5-hgreen"
+}

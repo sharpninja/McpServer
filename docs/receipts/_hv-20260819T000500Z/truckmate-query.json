@@ -1,0 +1,14 @@
+{
+  "workspacePath": "F:\\GitHub\\TruckMate",
+  "totalCount": 230,
+  "invalidColumnName": false,
+  "agentHeaderFieldsPresent": true,
+  "observedFields": [
+    "agentSessionId",
+    "agentSessionTranscriptFile",
+    "agentExecutablePath",
+    "agentExecutableVersion"
+  ],
+  "sampleSessionId": "ClaudeCode-20260818T231002Z-plugin-session",
+  "note": "Independent mcpserver__sessionlog_query workspacePath=F:\\GitHub\\TruckMate returned totalCount=230 with AgentSession header fields populated. No Invalid column name."
+}

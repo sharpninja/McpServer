@@ -1,0 +1,14 @@
+{
+  "timestampUtc": "2026-08-19T00:10:19.8093064Z",
+  "signatureOk": true,
+  "nonce": "7d80238d7a2f34843035f147b1c8995f",
+  "nonceOk": true,
+  "healthStatusCode": 200,
+  "healthStatus": "Healthy",
+  "healthVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+  "storage": "reachable",
+  "pluginJsonVersion": "1.94.0",
+  "pluginDotVersion": "1.94.0",
+  "markerPluginVersion": "1.93.0-not-authority",
+  "diskFreeGB": 2.03
+}

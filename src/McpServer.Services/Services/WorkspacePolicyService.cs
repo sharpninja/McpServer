@@ -253,6 +253,8 @@ public sealed class WorkspacePolicyService : IWorkspacePolicyService
             Interpretation = $"action={directive.Action}; category={directive.Category}; scope={directive.Scope}; parser={directive.Parser}",
             Response = $"Updated {directive.Category} policy in workspace '{workspaceName}'.",
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
             Actions =
             [
                 new UnifiedActionDto

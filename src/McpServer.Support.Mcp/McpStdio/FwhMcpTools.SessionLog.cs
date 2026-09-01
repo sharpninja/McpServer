@@ -27,7 +27,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, s_caseInsensitiveOptions);
@@ -43,7 +43,7 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>TR-PLANNED-CORE-013: Query session logs.</summary>
-    [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit.")]
+    [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit, turnStatus, staleOlderThanHours.")]
     public async Task<string> SessionLogQuery(
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Agent filter (e.g. cursor, copilot)")] string? agent = null,
@@ -54,9 +54,11 @@ public sealed partial class FwhMcpTools
         [Description("Max results (default 100)")] int? limit = null,
         [Description("Exact planFile filter (None or path; ~/ is expanded)")] string? planFile = null,
         [Description("Exact todoId filter (None or canonical TODO id)")] string? todoId = null,
+        [Description("Turn status filter (e.g. in_progress). BUG-TRIAGE-121 stale listing.")] string? turnStatus = null,
+        [Description("Keep sessions with a matching turn older than this many hours. Does not close turns.")] int? staleOlderThanHours = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new SessionLogQueryRequest
@@ -69,6 +71,8 @@ public sealed partial class FwhMcpTools
                 Limit = limit ?? 100,
                 PlanFile = planFile,
                 TodoId = todoId,
+                TurnStatus = turnStatus,
+                StaleOlderThanHours = staleOlderThanHours,
             };
             var result = await _sessionLogService.QueryAsync(req, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { totalCount = result.TotalCount, items = result.Items });
@@ -90,7 +94,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var items = JsonSerializer.Deserialize<List<ProcessingDialogItemDto>>(itemsJson, s_caseInsensitiveOptions);
@@ -115,7 +119,7 @@ public sealed partial class FwhMcpTools
         [Description("Model id (used only on create)")] string? model = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var created = await _sessionLogService.OpenSessionAsync(agent, sessionId, title, model, cancellationToken).ConfigureAwait(false);
@@ -180,7 +184,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var turn = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(turnJson, s_caseInsensitiveOptions) ?? new UnifiedRequestEntryDto();
@@ -206,9 +210,9 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
         try
         {
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var payload = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(sectionJson, s_caseInsensitiveOptions) ?? new UnifiedRequestEntryDto();
             payload.RequestId = requestId;
             var found = await _sessionLogService.ReplaceTurnSectionAsync(agent, sessionId, requestId, section, payload, cancellationToken).ConfigureAwait(false);
@@ -233,7 +237,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var found = await _sessionLogService.ClearTurnSectionAsync(agent, sessionId, requestId, section, cancellationToken).ConfigureAwait(false);
@@ -259,7 +263,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var found = await _sessionLogService.DeleteTurnItemAsync(agent, sessionId, requestId, section, itemKey, cancellationToken).ConfigureAwait(false);
@@ -283,7 +287,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var found = await _sessionLogService.DeleteTurnAsync(agent, sessionId, requestId, cancellationToken).ConfigureAwait(false);
@@ -306,7 +310,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var found = await _sessionLogService.DeleteSessionAsync(agent, sessionId, cancellationToken).ConfigureAwait(false);
@@ -373,7 +377,7 @@ public sealed partial class FwhMcpTools
         // failure also returns a structured {error} rather than escaping to the opaque SDK message.
         try
         {
-            ApplyWorkspaceOverride(workspacePath);
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var turn = new UnifiedRequestEntryDto
             {
                 RequestId = requestId,

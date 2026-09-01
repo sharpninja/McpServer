@@ -1,0 +1,10 @@
+id: FR-MCP-TRIAGESTORE-001
+title: Session-log persist is diagnosable and idempotent
+description: Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+priority: high
+area: MCP
+notes: Closes BUG-TRIAGE-112 and 148 after S4 hostile AGREE.
+acceptanceCriteria:
+  - id: ac-1
+    text: Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+    isSatisfied: false

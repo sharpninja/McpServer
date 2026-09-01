@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20260820T125819Z-2307
+  result:
+    id: FR-HANDOFF-001
+    title: Ingest workspace-scoped handoff documents
+    description: Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 source ingestion surface.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-001-formats
+      text: Supports Markdown, text, JSON, and YAML inputs.
+      isSatisfied: false
+    - id: ac-fr-handoff-001-reject
+      text: Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+      isSatisfied: false
+    - id: ac-fr-handoff-001-limit
+      text: Maximum decoded input is 8 MiB.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:19.8440188+00:00
+    updatedAt: 2026-08-20T12:58:19.8441267+00:00
+  deprecated: true
+
+---
+

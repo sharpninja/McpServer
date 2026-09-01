@@ -1,0 +1,85 @@
+UTC=2026-08-18T18:49:25.2513753Z
+PARENT_WIKI_DOC_COUNT=25
+CURR_WIKI_DOC_COUNT=26
+PARENT_IDS=home,functional,technical,testing,mapping,matrix,triage-plugin-code-quality-case-study,user-guide,faq,client-integration,repl-user-guide,repl-agent-guide,repl-migration-guide,mcp-server-guide,quadbrain,qbagent,agent-plugin-availability,agent-plugin-feature-matrix,byrd-development-process,azure-pipelines,release-checklist,onboarding-human-ai-partnership,usecase-extension-design-v3,usecase-diagram-mermaid-schema-v1,session-log-schema
+CURR_IDS=home,functional,technical,testing,mapping,matrix,triage-plugin-code-quality-case-study,user-guide,faq,client-integration,repl-user-guide,repl-agent-guide,repl-migration-guide,mcp-server-guide,quadbrain,qbagent,agent-plugin-availability,agent-plugin-feature-matrix,byrd-development-process,azure-pipelines,release-checklist,onboarding-human-ai-partnership,usecase-extension-design-v3,usecase-diagram-mermaid-schema-v1,session-log-schema,handoff-ingestion
+REMOVED_IDS=
+ADDED_IDS=handoff-ingestion
+FILE_SOURCES_OK=20 GENERATED=6 FILE_MISSING=0
+CLONE Cloning into 'wiki'...
+WIKI_CLONE_HEAD=5764ee7a2b1d133d08b0c246807e6d674c2ebd91
+WIKI_CLONE_FILES
+_Footer.md
+_Sidebar.md
+.mcp-requirements-manifest.json
+Agent-Plugin-Availability.md
+Agent-Plugin-Feature-Matrix.md
+Azure-Pipelines.md
+Byrd-Development-Process.md
+Client-Integration.md
+FAQ.md
+Functional-Requirements.md
+Handoff-Ingestion.md
+Home.md
+MCP-Server-Operations.md
+Onboarding-Human-AI-Partnership.md
+QBAgent.md
+QuadBrain.md
+Release-Checklist.md
+REPL-Agent-Guide.md
+REPL-Migration-Guide.md
+REPL-User-Guide.md
+Requirements-Matrix.md
+Session-Log-Schema.md
+Technical-Requirements.md
+Testing-Requirements.md
+TR-per-FR-Mapping.md
+Use-Case-Diagram-Mermaid-Schema-v1.md
+Use-Case-Extension-Design-v3.md
+User-Guide.md
+Case-Studies\Triage-Plugin-Code-Quality-Case-Study.md
+HANDOFF_EXISTS=True
+HANDOFF_LEN=1615
+HANDOFF_HEAD=# Handoff Ingestion |  | Handoff ingestion turns a workspace-scoped handoff document into a structured MCP TODO draft. Every public surface delegates to `IHandoffIngestionService`. |  | ## Sources |  | - `Path`: a workspace-contained Markdown, text, JSON, or YAML file. | - `Content`: caller-supplied text.
+TRACKED_N3
+TRACKED_N3_EXIT=1
+COMMIT_SIG=N||
+COMMIT_SHOW_SIG
+[33mcommit bf000bb7fc495b6011eb5888a8c9293c992eb305[m
+Author: Sharp Ninja <ninja@thesharp.ninja>
+Date:   Tue Aug 18 13:38:20 2026 -0500
+
+    feat(products,handoff): ship products + handoff; refresh docs and wiki
+    
+    Host-local Products (PROD-* keys, CQRS-only) share FR/TR/TEST/layers
+    across member workspaces via effective union and product-requirements
+    context. Handoff ingestion lands as a first-class workspace workflow.
+    
+    Refresh-docs updates README, user/client/REPL/server guides, wiki.yaml
+    (handoff page), and re-exports requirements wiki ZIP from MCP
+    (generateDocument format=wiki docType=all). Wrap-up validation:
+    ValidateTraceability passed; git diff --check clean; Nuke Test
+    3279 passed / 0 failed / 0 skipped. Operator authorized push all
+    including wiki.
+    
+    Redacted a rotated API key from two hostile receipt scripts so they
+    read the marker like later collectors.
+    
+TODO_YAML_IN_COMMIT
+PYTHON_IN_WRAPUP_RECEIPT=False
+TESTRESULT 2026-08-17T09:00:01.5101288Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\session-artifacts.jsonl
+TESTRESULT 2026-08-17T09:00:01.5091250Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085959Z-field-variants-a3d8d004.transcript.jsonl
+TESTRESULT 2026-08-17T09:00:01.5091250Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085959Z-field-variants-a3d8d004.json
+TESTRESULT 2026-08-17T08:59:59.2051975Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085931Z-ollama-hello-58ea060c.transcript.jsonl
+TESTRESULT 2026-08-17T08:59:59.2051975Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085931Z-ollama-hello-58ea060c.json
+TESTRESULT 2026-08-17T08:59:28.9642754Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085856Z-ollama-create-hello-world-in-c-34a95d04.transcript.jsonl
+TESTRESULT 2026-08-17T08:59:28.9632085Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085856Z-ollama-create-hello-world-in-c-34a95d04.json
+TESTRESULT 2026-08-17T08:58:53.4246053Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085542Z-qbagent-ollama-hello-7ddce24e.transcript.jsonl
+TESTRESULT 2026-08-17T08:58:53.4065972Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085542Z-qbagent-ollama-hello-7ddce24e.json
+TESTRESULT 2026-08-17T08:58:53.0586441Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\qbagent-interaction-artifacts.jsonl
+TESTRESULT 2026-08-17T08:58:53.0526371Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085542Z-qbagent-ollama-hello-7ddce24e.qbagent-interactions.jsonl
+TESTRESULT 2026-08-17T08:55:38.2492427Z F:\GitHub\McpServer\TestResults\QBAgentSendingIntegrationTests\qbagent-tool-failure-20260817T085538244Z.jsonl
+TESTRESULT 2026-08-17T08:55:29.7235914Z F:\GitHub\McpServer\TestResults\QBAgentSendingIntegrationTests\qbagent-create-hello-world-cpp-20260817T085529689Z.jsonl
+TESTRESULT 2026-08-17T08:54:58.3511908Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085448Z-field-variants-97416429.transcript.jsonl
+TESTRESULT 2026-08-17T08:54:58.3506847Z F:\GitHub\McpServer\TestResults\QuadBrainOllamaEndpointIntegrationTests\QBAgent-20260817T085448Z-field-variants-97416429.json
+UTC_END=2026-08-18T18:49:28.0298851Z

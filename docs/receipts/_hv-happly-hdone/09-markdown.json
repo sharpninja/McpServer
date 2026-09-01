@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "name": "Functional-Requirements.md",
+      "lastWriteTimeUtc": "2026-08-20T12:50:45.7597304Z",
+      "length": 186049,
+      "hasAlignNote": false,
+      "alignNoteCount": 0
+    },
+    {
+      "name": "Technical-Requirements.md",
+      "lastWriteTimeUtc": "2026-08-20T12:50:45.7597304Z",
+      "length": 291427,
+      "hasAlignNote": true,
+      "alignNoteCount": 13
+    },
+    {
+      "name": "Testing-Requirements.md",
+      "lastWriteTimeUtc": "2026-08-20T12:50:45.7597304Z",
+      "length": 183694,
+      "hasAlignNote": false,
+      "alignNoteCount": 0
+    },
+    {
+      "name": "TR-per-FR-Mapping.md",
+      "lastWriteTimeUtc": "2026-08-20T12:50:45.7597304Z",
+      "length": 24034,
+      "hasAlignNote": false,
+      "alignNoteCount": 0
+    },
+    {
+      "name": "Requirements-Matrix.md",
+      "lastWriteTimeUtc": "2026-08-20T12:50:45.7597304Z",
+      "length": 110063,
+      "hasAlignNote": false,
+      "alignNoteCount": 0
+    }
+  ],
+  "claimedGenerateUtc": "2026-08-20T12:50:45Z"
+}

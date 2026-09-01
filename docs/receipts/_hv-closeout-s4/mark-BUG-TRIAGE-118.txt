@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260819T220145Z-4801
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-118
+      title: Hand-written migration AddAgentSessionHeaderFields lacks EF attributes; deploy shipped binary without schema, causing store outage
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - "Commit aeb03db6 (2026-07-22 18:27, agent session header metadata) added src/McpServer.Storage/Migrations/20260722214500_AddAgentSessionHeaderFields.cs hand-written: no [Migration] attribute, no [DbContext] attribute, no Designer.cs. EF tooling therefore cannot see or apply it (dotnet ef migrations list omits it entirely), while McpDbContextModelSnapshot.cs WAS updated with the new columns and the 18:46 redeploy (481d337e) shipped a binary requiring them. Result: every sessionlog_query/submit failed with 'Invalid column name AgentExecutablePath/AgentExecutableVersion/AgentSessionId/AgentSessionTranscriptFile' from ~18:40, breaking the PLAN-SESSIONPARITY-001 fleet (22 agents, 0 writes; two agent triage reports 6d592f7100664d13aada44d354d830d5 and 20878374c3504d408c660fca38ffe999 preceded full transport loss). Also note Update-McpService.ps1 contains no migration step, so deploys never auto-migrate. Remediation applied 2026-07-22 18:5x by ClaudeCode under lab authorization: equivalent additive SQL executed directly on 192.168.1.77/McpServer_PAYTON_LEGION2 (4 nullable nvarchar columns matching store conventions: 256/2048/2048/128) plus __EFMigrationsHistory row '20260722214500_AddAgentSessionHeaderFields'/'10.0.0', transactional, verified via INFORMATION_SCHEMA and a live sessionlog_query probe. Outstanding for the server repo: add the [Migration]/[DbContext(typeof(McpDbContext))] attributes and a Designer.cs to the migration file so tooling and other environments (Sqlite/Postgres) can apply it (note its AddColumn type 'TEXT' is SQLite-flavored and wrong for the SqlServer provider), and add a migration step to Update-McpService.ps1 so deploys cannot outrun schema again."
+      - 'Triage group: triage-group-23f93ce89281481c'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Investigate and resolve the grouped triage report.'
+      - '- Add or update validation that proves the triage issue is fixed.'
+      - '- Verify the workflow no longer reproduces this triage report.'
+      - 'Implementation notes:'
+      - '- Fallback TODO created because successful triage research output contained no JSON object.'
+      - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+      - '- Raw triage research output is preserved on run triage-run-ed0b234e2c154ed4a94ed098fbc12044.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T215323Z.md. Merged triage/closeout as 400d881b. Named tests 13/0/0 including Sqlite MigrateAsync, SqlServer LocalDB apply, Postgres initdb apply. Session GrokCode-20260819T214401Z-hostile-closeout-s4.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

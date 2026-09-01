@@ -98,6 +98,7 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
                     continue;
                 case "world_state":
                 case "compacted":
+                case "inter_agent_communication_metadata":
                     Increment(nonConversationCounts, type);
                     continue;
                 case "response_item":
@@ -161,10 +162,9 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
                 case "custom_tool_call":
                 case "local_shell_call":
                 case "web_search_call":
+                case "tool_search_call":
                     var toolName = TranscriptUtilities.GetString(payload, "name") ?? payloadType;
-                    var toolInput = TranscriptUtilities.GetString(payload, "arguments") ?? TranscriptUtilities.GetString(payload, "input");
-                    if (toolInput is null && payload.TryGetProperty("action", out var actionElement))
-                        toolInput = actionElement.GetRawText();
+                    var toolInput = GetJsonText(payload, "arguments") ?? GetJsonText(payload, "input") ?? GetJsonText(payload, "action");
                     var callText = string.IsNullOrWhiteSpace(toolInput) ? toolName : toolName + "\n" + toolInput;
                     events.Add(new TranscriptEvent(
                         EventId(payload, order),
@@ -178,7 +178,8 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
                 case "function_call_output":
                 case "custom_tool_call_output":
                 case "local_shell_call_output":
-                    var outputText = TranscriptUtilities.GetString(payload, "output");
+                case "tool_search_output":
+                    var outputText = GetJsonText(payload, "output") ?? GetJsonText(payload, "tools");
                     if (outputText is null && payload.TryGetProperty("output", out var outputElement))
                     {
                         var outputBlocks = TranscriptUtilities.ExtractContentBlocks(outputElement);
@@ -202,6 +203,20 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
 
         AppendAggregateDiagnostics(diagnostics, path, unknownRecordCounts, unknownResponseItemCounts, eventMsgCounts, nonConversationCounts, encryptedReasoningCount);
         return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, model: model, workspacePath: workspacePath, diagnostics: diagnostics);
+    }
+
+    private static string? GetJsonText(JsonElement payload, string propertyName)
+    {
+        if (!payload.TryGetProperty(propertyName, out var element))
+            return null;
+
+        return element.ValueKind switch
+        {
+            JsonValueKind.String => element.GetString(),
+            JsonValueKind.Object or JsonValueKind.Array => element.GetRawText(),
+            JsonValueKind.Number or JsonValueKind.True or JsonValueKind.False => element.GetRawText(),
+            _ => null
+        };
     }
 
     private static string? PayloadType(JsonElement record)

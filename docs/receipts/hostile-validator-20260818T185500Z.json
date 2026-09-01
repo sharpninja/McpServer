@@ -1,0 +1,207 @@
+{
+  "TimestampUtc": "2026-08-18T18:55:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260818T184548Z-hostile-wrapup",
+  "RequestId": "req-20260818T184548Z-001-hostile-wrap-up-review",
+  "add-profile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "WorkClass": "mixed-primary-class-2",
+  "WorkClassNote": "Primary operator request is refresh-docs + wrap-up + push. Product+handoff code is first-committed in the same SHA. Implementer does not claim a new plan-step done.",
+  "AccuracyRating": 97,
+  "CompletenessRating": 96,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 18,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 2
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Signature True; health Healthy 1.4.26+298c5fde; live nonce echo; storage reachable; plugin 1.94.0"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "wiki.yaml mcp-wiki-export/v1 26 docs including handoff-ingestion; 20 file sources exist; 0 removed ids"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "ZIP both copies sha256 8bbee5067d... length 869459 entries 63 including both Handoff-Ingestion.md; gendoc sidecar 18:31:59Z exit 0"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "git diff --check exit 0; independent ValidateTraceability Succeeded findings=0 VT_EXIT=0"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Independent ./build.ps1 Test TEST_EXIT=0 Failed 0 Passed 2004/283/33/20/63/826/50 Skipped 0"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "HEAD origin/develop azure/develop all bf000bb7"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "GitHub wiki HEAD 5764ee7 includes Handoff-Ingestion.md"
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Azure code wiki MCP Server mappedPath=/docs version=main; no McpServer.wiki repo; main not updated"
+    },
+    {
+      "id": "A9",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Two collect scripts use Get-MarkerField; git grep N3fWcoY on bf000bb7 empty"
+    },
+    {
+      "id": "A10",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "sessionlog_query wrap-up turn completed; wrap-up-20260818T183800Z.md exists"
+    },
+    {
+      "id": "A11",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "PLAN-LLMSTRATEGY-001 and PLAN-SHARPMIND-001 Done=false; MCP-PRODUCTS-001 Done=true from prior H5 AGREE not wrap-up"
+    },
+    {
+      "id": "B1-honesty",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Independent facts match claims; no wrap-up TODO flip"
+    },
+    {
+      "id": "B2-receipts",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "This review re-ran remotes, ZIP, Test, VT, store queries. Implementer kept gendoc sidecar + wrap-up.md + completed turn."
+    },
+    {
+      "id": "B3-mcp-only",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No todo.yaml in commit; session on MCP store"
+    },
+    {
+      "id": "B4-no-python",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh only; wrap-up receipt has no python"
+    },
+    {
+      "id": "B5-look-before-delete",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Commit deleted-file list empty; wiki.yaml removed-id list empty"
+    },
+    {
+      "id": "B6-byrd",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "Class 2 wrap-up; no new Byrd phase claimed"
+    },
+    {
+      "id": "C1-requirements",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Class 2 ops; no new product-complete claim in wrap-up"
+    },
+    {
+      "id": "D1-plan",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "No wrap-up plan-step done claim; PLAN TODOs still false; products TODO already true from H5"
+    }
+  ],
+  "Test": {
+    "command": ".\\build.ps1 Test",
+    "utcStart": "2026-08-18T18:49:25.1167951Z",
+    "utcEnd": "2026-08-18T18:53:10.746431Z",
+    "exitCode": 0,
+    "transcript": "docs/receipts/_hv-wrapup-test-20260818.txt",
+    "counts": {
+      "Support.Mcp.Tests": {
+        "failed": 0,
+        "passed": 2004,
+        "skipped": 0
+      },
+      "Client.Tests": {
+        "failed": 0,
+        "passed": 283,
+        "skipped": 0
+      },
+      "Cqrs.Tests": {
+        "failed": 0,
+        "passed": 33,
+        "skipped": 0
+      },
+      "Launcher.Tests": {
+        "failed": 0,
+        "passed": 20,
+        "skipped": 0
+      },
+      "McpAgent.Tests": {
+        "failed": 0,
+        "passed": 63,
+        "skipped": 0
+      },
+      "Repl.Core.Tests": {
+        "failed": 0,
+        "passed": 826,
+        "skipped": 0
+      },
+      "QBAgent.Tests": {
+        "failed": 0,
+        "passed": 50,
+        "skipped": 0
+      }
+    }
+  },
+  "ValidateTraceability": {
+    "command": ".\\build.ps1 ValidateTraceability",
+    "utcStart": "2026-08-18T18:53:38.3099796Z",
+    "utcEnd": "2026-08-18T18:53:44.0068124Z",
+    "status": "Succeeded",
+    "findings": 0,
+    "exitCode": 0,
+    "transcript": "docs/receipts/_hv-wrapup-vt-20260818.txt"
+  },
+  "Commit": "bf000bb7fc495b6011eb5888a8c9293c992eb305",
+  "WikiHead": "5764ee7a2b1d133d08b0c246807e6d674c2ebd91",
+  "ZipSha256": "8bbee5067d061821510390c4b912160edad1951fbf5f98b8b18a916b67c7ed2d",
+  "SessionProof": {
+    "file": "docs/receipts/_hv-wrapup-query-proof2.json",
+    "sessionId": "GrokCode-20260818T184548Z-hostile-wrapup",
+    "requestId": "req-20260818T184548Z-001-hostile-wrap-up-review",
+    "turnStatus": "completed",
+    "actionCount": 10,
+    "dialogCount": 3
+  }
+}

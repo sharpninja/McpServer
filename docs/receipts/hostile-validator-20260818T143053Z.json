@@ -1,0 +1,204 @@
+{
+  "TimestampUtc": "2026-08-18T14:30:53Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 1 / H1-green only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 95,
+  "completenessRating": 93,
+  "sessionId": "GrokCode-20260818T142439Z-h1-green-products",
+  "requestId": "req-20260818T142439Z-001-hostile-h1-green-products",
+  "turnId": 41727,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.93.0",
+    "versionFile": "1.93.0"
+  },
+  "markerSignature": true,
+  "healthNonceThisReview": "35cf4b82c264402b84bcf234eebd9a1e",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "productTestFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Products|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductEntityTests|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests",
+    "utcStart": "2026-08-18T14:25:16.1916634Z",
+    "utcEnd": "2026-08-18T14:25:39.9977679Z",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 24,
+    "skipped": 0,
+    "total": 24
+  },
+  "officialPlanProductFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~Product",
+    "utcStart": "2026-08-18T14:27:48.5211227Z",
+    "utcEnd": "2026-08-18T14:28:19.6739Z",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 25,
+    "skipped": 0,
+    "total": 25,
+    "extraCase": "McpServer.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests.ProductKey_AssignAndListByProduct"
+  },
+  "implementerCopyPath": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-18747a5af710\\implementer\\product-unit.txt",
+  "implementerCopyTrusted": false,
+  "implementerCopyLastWriteUtc": "2026-08-18T14:22:05.9181453Z",
+  "priorH1RedReceipt": "docs/receipts/hostile-validator-20260818T140630Z.md",
+  "priorH1RedOverallVerdict": "AGREE",
+  "h0Receipt": "docs/receipts/hostile-validator-20260818T132341Z.md",
+  "h0OverallVerdict": "AGREE",
+  "todoDone": false,
+  "approvedPlanSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "sessionPlanSha256": "0D73B5C6B754DEC494F4EAB445AD2A6EEB73D2F2923260366E07D4A9351FD92C",
+  "toolsListUniqueNameCount": 106,
+  "failList": [],
+  "unknownList": [
+    "Full ./build.ps1 Test not run; not required for H1-green.",
+    "Live PostgreSQL/SQL Server Database.Migrate() apply not run; compiled three-provider sources plus SQLite empty+predecessor apply is the documented fallback.",
+    "TR-AUTH degraded-transaction fail-closed is not implemented on product handlers and has no Phase 1 test; deferred to Phase 3 adapters.",
+    "TODO Remaining text still mentions H0 / no implementation.",
+    "Disabled-but-registered add is implemented but still untested."
+  ],
+  "claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "ProductEntity and ProductWorkspaceMembershipEntity exist; Products/ProductWorkspaceMemberships DbSets have no Workspace query filter; unique Key filtered on IsDeleted false."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Handlers persist via McpDbContext. No IProductService. ProductCqrsHelpers used only by those handlers. AddProductCqrs on Program.cs and McpStdioHost."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Key regex, 400/409/403/404, owner/member/self-leave/soft-delete/removed-member semantics implemented and asserted green."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "AddProductsStorage non-Designer sources exist for Sqlite 20260818142008, SqlServer 20260818142028, PostgreSql 20260818142039; create only Products + ProductWorkspaceMemberships; no SessionLogs."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Independent focused filter: Failed 0, Passed 24, Skipped 0, Total 24, EXIT=0."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "todo_get MCP-PRODUCTS-001 Done=false. Phase 2+ files absent. Full suite not claimed."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Honesty: claims match artifacts; no overclaim of Phase 2+, full suite, or done."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Receipts re-run on this pass."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP-only TODO/session/requirements via native sessionlog_*/todo_*/requirements_*."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh.exe only; no Python."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No deletes."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Byrd H1-green: prior H0 and H1-red AGREE exist; Phase 1 tests green with zero skips."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "PRODUCT FR/TR/TEST IDs present in MCP store."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Phase 1 FR ACs exist and remain isSatisfied=false."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Phase 1 AC-covering tests exist and are green."
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-to-TR/TEST mappings match the approved plan."
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Requirement IDs exist; none marked completed."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "H1-green checkpoint met. Official Product filter 25/0/0. Full DoD not claimed."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Phase 2+ not started. TODO remains Done=false."
+    }
+  ],
+  "sessionLogProof": {
+    "openCreated": true,
+    "beginTurnId": 41727,
+    "beginStatus": "in_progress",
+    "dialogItems": 4,
+    "actionsReplaced": true,
+    "actionCount": 7,
+    "designDecisionsSection": "null; decisions persisted via dialog category=decision and actions type=design_decision",
+    "completeStatus": "completed",
+    "queryTodoIdTotalCount": 5,
+    "queryFirstSessionId": "GrokCode-20260818T142439Z-h1-green-products",
+    "queryFirstTurnRequestId": "req-20260818T142439Z-001-hostile-h1-green-products",
+    "queryFirstTurnStatus": "completed",
+    "queryTextSessionIdTotalCount": 0
+  }
+}

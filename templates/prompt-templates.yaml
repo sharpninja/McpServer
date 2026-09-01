@@ -645,3 +645,38 @@ templates:
 
       ---
       MCP Server version: {{version}}
+  handoff-todo-draft:
+    title: Handoff TODO Draft
+    category: system
+    tags:
+      - handoff
+      - todo
+      - extraction
+    description: Versioned strict-JSON prompt for extracting one MCP TODO draft from a handoff document. Prompt version handoff-todo-draft/v1.
+    engine: handlebars
+    variables:
+      - name: handoffText
+        description: Decoded handoff document text
+        required: true
+    content: |-
+      Extract one MCP TODO draft from the handoff document in {{handoffText}}.
+      Return only a single JSON object. Do not wrap it in markdown. Do not emit prose.
+
+      Required properties:
+      - id: canonical TODO id matching ^[A-Z]+-[A-Z0-9]+-\d{3}$ or ^ISSUE-\d+$
+      - title: short title
+      - section: existing or proposed section name
+      - priority: critical, high, medium, or low
+      - confidence: number from 0.0 to 1.0
+
+      Optional properties:
+      - estimate
+      - description: string array
+      - technicalDetails: string array
+      - implementationTasks: array of { "task": string, "done": boolean }
+      - dependsOn: string array of TODO ids
+      - functionalRequirements: string array of FR ids
+      - technicalRequirements: string array of TR ids
+      - unknownSourceNotes: string array. Put unknown, missing, or ambiguous source facts here. Never omit them.
+
+      If the handoff is ambiguous, lower confidence and populate unknownSourceNotes.

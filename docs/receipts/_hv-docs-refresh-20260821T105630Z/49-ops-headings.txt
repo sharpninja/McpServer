@@ -1,0 +1,63 @@
+FILE=docs/MCP-SERVER.md
+  ## What This Server Provides
+  ## Repository Layout
+  ## Prerequisites
+  ## Quick Start
+  ## Run Modes
+  ## Configuration
+  ## Multi-Instance and Storage Validation
+  ## Build System
+  ## Common Scripts And Service Updates
+  ## GraphRAG
+  ## Build and Test
+  ## API Surface
+  ## Products
+  ## Requirements Wiki Export
+  ## CI/CD
+  ## VS Code / VS 2026 Extensions
+  ## Client Library
+  ## Health, storage, and errors
+  ## Session log sanitization and incremental persist
+  ## Additional Documentation
+FILE=docs/Project/wiki/github/MCP-Server-Operations.md
+  ## What This Server Provides
+  ## Repository Layout
+  ## Prerequisites
+  ## Quick Start
+  ## Run Modes
+  ## Configuration
+  ## Multi-Instance and Storage Validation
+  ## Build System
+  ## Common Scripts And Service Updates
+  ## GraphRAG
+  ## Build and Test
+  ## API Surface
+  ## Products
+  ## Requirements Wiki Export
+  ## CI/CD
+  ## VS Code / VS 2026 Extensions
+  ## Client Library
+  ## Health, storage, and errors
+  ## Session log sanitization and incremental persist
+  ## Additional Documentation
+FILE=docs/Project/wiki/azure/MCP-Server-Operations.md
+  ## What This Server Provides
+  ## Repository Layout
+  ## Prerequisites
+  ## Quick Start
+  ## Run Modes
+  ## Configuration
+  ## Multi-Instance and Storage Validation
+  ## Build System
+  ## Common Scripts And Service Updates
+  ## GraphRAG
+  ## Build and Test
+  ## API Surface
+  ## Products
+  ## Requirements Wiki Export
+  ## CI/CD
+  ## VS Code / VS 2026 Extensions
+  ## Client Library
+  ## Health, storage, and errors
+  ## Session log sanitization and incremental persist
+  ## Additional Documentation

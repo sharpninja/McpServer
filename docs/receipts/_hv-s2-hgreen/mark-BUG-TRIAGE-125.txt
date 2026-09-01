@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260819T211947Z-b8ce
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-125
+      title: Codex code verifier cannot record result when workspace drive is full
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Observed: lib/code-verify.ps1 completed its build work but then threw while writing .mcpServer/codex/last-build.log because F: had only about 3 MiB free. Expected: verifier should report a typed disk-capacity failure and preserve current-turn audit state without an unhandled WriteAllText exception. This blocked the mandatory post-edit gate until verified generated outputs were reclaimed.'
+      - 'Triage group: triage-group-410e9004ab69f3ab'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Investigate and resolve the grouped triage report.'
+      - '- Add or update validation that proves the triage issue is fixed.'
+      - '- Verify the workflow no longer reproduces this triage report.'
+      - 'Implementation notes:'
+      - '- Fallback TODO created because successful triage research output contained no JSON object.'
+      - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+      - '- Raw triage research output is preserved on run triage-run-700aea35d53b412ab899379c84b2ff55.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

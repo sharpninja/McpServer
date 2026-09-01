@@ -1,0 +1,21 @@
+ [31mM[m .gitignore
+ [31mM[m docs/Project/Functional-Requirements.md
+ [31mM[m docs/Project/Requirements-Matrix.md
+ [31mM[m docs/Project/TR-per-FR-Mapping.md
+ [31mM[m docs/Project/Technical-Requirements.md
+ [31mM[m docs/Project/Testing-Requirements.md
+[31m??[m docs/plans/triage-cluster-002.md
+[31m??[m docs/receipts/_hv-s0-h0-reattack/
+[31m??[m docs/receipts/_hv-s0-leftover-collect.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-collect2.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-fix-json-utc.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-native-ac.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-patch-proof.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-save-trace.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-session-complete.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-session.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-verify-ac.ps1
+[31m??[m docs/receipts/_hv-s0-leftover-verify/
+[31m??[m docs/receipts/_hv-s0-leftover/
+[31m??[m docs/receipts/hostile-validator-20260819T174750Z.json
+[31m??[m docs/receipts/hostile-validator-20260819T174750Z.md

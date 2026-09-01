@@ -7,7 +7,7 @@ This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
 ### Supported host environment
 
 - Windows 10/11 or Windows Server
-- .NET SDK 9.x for local development
+- .NET SDK 10.x for local development (`global.json` pins `10.0.201` with `rollForward: latestFeature`)
 - PowerShell 7+
 - `gh` CLI for GitHub issue and PR workflows
 - Network access to the configured MCP port (default `7147`)
@@ -38,13 +38,15 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 #### Windows service deployment
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService --skip-version-bump
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 Get-Service McpServer
 ```
 
+The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
+
 ### Verify startup
 
-- `GET /health` returns healthy status
+- `GET /health` returns liveness Healthy, echoes a caller nonce when one is supplied, and reports `storage` as `reachable` or `unreachable` (storage outage does not flip liveness off Healthy)
 - `GET /swagger` loads the API UI
 - `GET /swagger/v1/swagger.json` returns OpenAPI metadata
 - marker file `AGENTS-README-FIRST.yaml` exists at workspace root
@@ -485,9 +487,12 @@ Response example:
 
 ### SessionLog controller (`/mcpserver/sessionlog*`)
 
-- `GET /mcpserver/sessionlog`
+- `GET /mcpserver/sessionlog` (optional `planFile` and `todoId` filters)
 - `POST /mcpserver/sessionlog`
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog`
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` (requires `planFile` and `todoId`; use `None` when none)
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (incremental dialog; does not require a full-session upsert)
+
+Query and GET responses are sanitized outbound (`Mcp:SessionLogSanitization`). Stored rows stay raw.
 
 ### Todo controller (`/mcpserver/todo*`)
 
@@ -744,6 +749,7 @@ Current surface area: 42 tools.
 
 - `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`, `todo_move`
 - `todo_plan`, `todo_implement`, `todo_status`
+- `handoff_ingest`, `handoff_get`, `handoff_approve` (see `docs/Handoff-Ingestion.md`)
 
 ### Requirements
 
@@ -751,7 +757,8 @@ Current surface area: 42 tools.
 
 ### Session logs
 
-- `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
+- `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
+- `sessionlog_begin_turn` requires `planFile` and `todoId` (`None` when none)
 
 ### GitHub
 
@@ -864,7 +871,7 @@ Queue one-shot example:
 
 ### Windows service deployment concerns
 
-- always use the Nuke target: `pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
+- always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
 
@@ -902,6 +909,27 @@ Canvas and graph persistence require a service build that includes the latest `w
 ```powershell
 .\build.ps1 UpdateService --SkipVersionBump true
 ```
+
+## 7c) Products (shared requirements across workspaces)
+
+A Product groups workspaces on the same host so members can read each other's FR/TR/TEST/layers without copying rows. Keys look like `PROD-MCPSERVER` (uppercase `PROD-` prefix). TODOs, session logs, and sibling source files are not shared.
+
+### REST
+
+- `POST /mcpserver/products` body `{ "key": "PROD-MCPSERVER", "name": "McpServer" }` (caller becomes owner)
+- `GET /mcpserver/products` and `GET /mcpserver/products/{key}`
+- `PATCH /mcpserver/products/{key}` (owner) and `DELETE /mcpserver/products/{key}` (owner soft-delete)
+- Members: `GET/PUT/DELETE /mcpserver/products/{key}/members/{workspaceId}`
+- Effective requirements: `GET /mcpserver/requirements/effective?productScope=product|local` (default `product`)
+
+All routes require `X-Api-Key`. Invalid keys are 400; duplicate keys 409; non-owner mutate 403; outsider get 404.
+
+### MCP and REPL
+
+- Tools: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
+- Effective union: `requirements_effective` with `productScope=product` (default) or `local`
+- Typed client: `client.Products`
+- Context source `product-requirements` returns sibling FR/TR/TEST text tagged with `originWorkspaceId`, not sibling `.cs` files
 
 ## 8) Wire docs into README index and docs folder
 

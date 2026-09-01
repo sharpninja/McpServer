@@ -1,0 +1,40 @@
+FILE=docs/USER-GUIDE.md added=13 removed=7 addedEm=0 addedEn=0
+  ADD:+++ b/docs/USER-GUIDE.md
+  ADD:+- .NET SDK 10.x for local development (`global.json` pins `10.0.201` with `rollForward: latestFeature`)
+  ADD:+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
+  ADD:+The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
+  ADD:+
+  ADD:+- `GET /mcpserver/sessionlog` (optional `planFile` and `todoId` filters)
+  ADD:+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` (requires `planFile` and `todoId`; use `None` when none)
+  ADD:+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (incremental dialog; does not require a full-session upsert)
+  ADD:+
+  ADD:+Query and GET responses are sanitized outbound (`Mcp:SessionLogSanitization`). Stored rows stay raw.
+  ADD:+- `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
+  ADD:+- `sessionlog_begin_turn` requires `planFile` and `todoId` (`None` when none)
+  ADD:+- always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
+FILE=docs/MCP-SERVER.md added=8 removed=2 addedEm=0 addedEn=0
+  ADD:+++ b/docs/MCP-SERVER.md
+  ADD:+`GET /health` is liveness. Observed live payload keys on 1.4.30: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+  ADD:+
+  ADD:+## Session log sanitization and incremental persist
+  ADD:+
+  ADD:+`SessionLogSanitizingService` is the outermost HTTP and stdio decorator. Query/GET/MCP/stdio reads replace configured secrets in the outbound DTO. SQLite rows are not rewritten. Configure `Mcp:SessionLogSanitization` (`Enabled`, `MaxRuleCount`, `MaxPatternLength`, `RegexTimeoutMilliseconds`, `Rules` with `Id`/`Pattern`/`Replacement`). The in-repo example rule uses `example-token-` (not a live secret). Text filters still match the raw record; TotalCount/order/Limit/Offset stay the same. Regex timeout fails closed without logging the input.
+  ADD:+
+  ADD:+Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `SessionLogClient.AppendDialogAsync` (POST `.../dialog`), not a full-session `SubmitAsync` upsert. HTTP 503 `backend_unavailable` on persist uses the same degrade-queue as timeout: failsafe retained, current-turn stays `in_progress`, no throw. SQLITE_BUSY under the storage budget is retryable persist contention, not storage-down, when TODO/requirements reads still succeed.
+FILE=docs/context/session-log-schema.md added=6 removed=2 addedEm=0 addedEn=0
+  ADD:+++ b/docs/context/session-log-schema.md
+  ADD:+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` ΓÇö stream reasoning dialog (incremental persist; not a full-session upsert)
+  ADD:+
+  ADD:+## Outbound sanitization (FR-MCP-SESSIONLOGSAN-001)
+  ADD:+
+  ADD:+Query, GET, MCP, and stdio reads clone the DTO and apply `Mcp:SessionLogSanitization` rules before the payload leaves the process. Raw storage is unchanged. Replacement tokens include the rule Id (for example `[REDACTED:example-internal-token]`). A secret in a stored turn still participates in text filtering and does not change paging metadata. Invalid or duplicate rule Ids fail options validation. Regex timeout redacts fail-closed and does not log the input.
+FILE=docs/CLIENT-INTEGRATION.md added=2 removed=2 addedEm=0 addedEn=0
+  ADD:+++ b/docs/CLIENT-INTEGRATION.md
+  ADD:+Use `src\McpServer.McpAgent` when you want a .NET 10 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+FILE=index.md added=2 removed=2 addedEm=0 addedEn=0
+  ADD:+++ b/index.md
+  ADD:+Welcome to the MCP Server documentation. MCP Server is a .NET 10/ASP.NET Core application providing workspace management, tool registry, API key authentication, pluggable tunnel providers, MCP Streamable HTTP transport, and Windows service support.
+FILE=README.md added=3 removed=3 addedEm=0 addedEn=0
+  ADD:+++ b/README.md
+  ADD:+**Current line:** GitVersion `next-version` **1.4.30** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits (observed `1.4.30+ee89cd63` after Nuke `UpdateService`). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`.
+  ADD:+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.30` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.

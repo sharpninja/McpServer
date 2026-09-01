@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-08-19T00:54:08.3961297Z",
+  "SignatureOk": true,
+  "Nonce": "d4b3c04ea889454b92d19f921433c11b",
+  "HealthStatusCode": 200,
+  "HealthStatus": "Healthy",
+  "HealthVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+  "NonceMatchProperty": true,
+  "NonceInBody": true,
+  "Storage": "reachable",
+  "PluginJsonVersion": "1.94.0",
+  "PluginVersionFile": "1.94.0",
+  "FFreeBytes": 2927751168
+}

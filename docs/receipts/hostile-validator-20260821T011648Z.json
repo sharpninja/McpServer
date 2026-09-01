@@ -1,0 +1,119 @@
+{
+  "TimestampUtc": "2026-08-21T01:16:48Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-sanitizer",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1-project-requirements-S3-hgreen-g2-sanitizer",
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "MCP-SESSIONLOG-001",
+  "PlanTodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "SessionId": "GrokCode-20260821T011128Z-hostile-hgreen-s3",
+  "RequestId": "req-20260821T011128Z-001-hostile-hgreen-s3-s15-s19",
+  "PluginVersion": "1.97.0",
+  "PluginVersionSource": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "MarkerSignatureOk": true,
+  "MarkerSignaturePath": "plugin Test-MarkerSignature via F:\\GitHub\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1",
+  "DidNotComputeHmacSha256Directly": true,
+  "InvokeFullBootstrap": true,
+  "InvokeMcpPluginStatus": "available",
+  "PluginAgent": "GrokCode",
+  "GitHeadWorktree": "4605eab6dc1cc94e21c3bb7a2bd1ac65c2a85bb3",
+  "GitBranchWorktree": "sessionsan/s3-red",
+  "GitDevelop": "4605eab6dc1cc94e21c3bb7a2bd1ac65c2a85bb3",
+  "GitOriginMain": "d14a23302a9bcdb8887033f56c4b4a652aed195a",
+  "MergedToOriginMain": false,
+  "Uncommitted": [
+    "M src/McpServer.Support.Mcp/appsettings.yaml",
+    "?? tests/McpServer.Support.Mcp.IntegrationTests/Controllers/SessionLogSanitizationControllerTests.cs",
+    "?? tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogStdioSanitizationTests.cs"
+  ],
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 19,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 95,
+  "Completeness": 93,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [],
+  "PersistenceProof": {
+    "queryHistorySessionId": "GrokCode-20260821T011128Z-hostile-hgreen-s3",
+    "queryHistoryTitle": "Hostile H-green S3 session-log sanitizer remaining (S15-S19)",
+    "queryHistoryTurnCount": 1,
+    "queryHistoryTagsIncludeAgree": true,
+    "completeTurnId": 42360,
+    "completeTurnStatus": "completed",
+    "nativeTextQueryTotalCount": 0,
+    "nativeTextQueryNote": "FTS text query empty; queryHistory is the persistence proof"
+  },
+  "DidNotCall": [
+    "workflow.requirements.getFr",
+    "workflow.requirements.getTr",
+    "workflow.requirements.generateDocument"
+  ],
+  "DidNotMarkTodosDone": true,
+  "DidNotMerge": true,
+  "DidNotImplementProduct": true,
+  "PriorReceipts": {
+    "H0": "docs/receipts/hostile-validator-20260821T000938Z.md",
+    "HredG1": "docs/receipts/hostile-validator-20260821T002453Z.md",
+    "HgreenG1": "docs/receipts/hostile-validator-20260821T004349Z.md"
+  },
+  "UnitFilter": "FullyQualifiedName~SessionLogSanitiz|FullyQualifiedName~SessionLogStdioSanitizationTests|FullyQualifiedName~QueryAsync_WhenWrappedBySanitizer",
+  "UnitResult": {
+    "failed": 0,
+    "passed": 40,
+    "skipped": 0,
+    "total": 40,
+    "exitCode": 0
+  },
+  "IntegrationFilter": "FullyQualifiedName~SessionLogSanitizationControllerTests",
+  "IntegrationResult": {
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0,
+    "total": 2,
+    "exitCode": 0
+  },
+  "Claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "text": "S15 HTTP query/GET redact secrets, DB unsanitized"},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "text": "S16 TotalCount/order/Limit/Offset unchanged; secret still matches filter"},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "text": "S17 stdio sessionlog_query JSON omits raw secret; federation wrap test present"},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "text": "S18 Mcp:SessionLogSanitization example-token- pattern, no real credentials"},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "text": "S19 named sanitizer unit+integration Failed 0 Skipped 0"},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "text": "MCP-SESSIONLOG-001 and PLAN-SESSIONLOGREMEDIATE-001 Done false"},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "text": "Worktree not merged to origin/main"},
+    {"id": "B1", "surface": "B", "verdict": "PASS", "text": "Receipts: validator re-ran tests and re-read artifacts"},
+    {"id": "B2", "surface": "B", "verdict": "PASS", "text": "Byrd at H-green: H0 AGREE exists; S15-S16 already-green allowed"},
+    {"id": "B3", "surface": "B", "verdict": "PASS", "text": "MCP-only TODO/session storage"},
+    {"id": "B4", "surface": "B", "verdict": "PASS", "text": "pwsh only; no Python"},
+    {"id": "B5", "surface": "B", "verdict": "PASS", "text": "Honesty: HMAC via plugin; nonce string not fabricated"},
+    {"id": "B6", "surface": "B", "verdict": "PASS", "text": "appsettings.yaml object-first rewrite plus example block"},
+    {"id": "C1", "surface": "C", "verdict": "PASS", "text": "FR AC query/GET redact DTO sections"},
+    {"id": "C2", "surface": "C", "verdict": "PASS", "text": "FR AC stored entities unsanitized"},
+    {"id": "C3", "surface": "C", "verdict": "PASS", "text": "FR AC default detectors plus example custom rule"},
+    {"id": "C4", "surface": "C", "verdict": "PASS", "text": "FR AC filter/count/order/offset/limit from raw"},
+    {"id": "C5", "surface": "C", "verdict": "PASS", "text": "FR AC federated and stdio same sanitizer decorator"},
+    {"id": "D1", "surface": "D", "verdict": "PASS", "text": "S3 DoD is S15-S19 evidence, not full PLAN done"}
+  ],
+  "Notes": [
+    "Plan G2 names stdio tools/list and sessionlog get; S17 file only covers SessionLogQuery JSON. Parent A3 scoped to query omit plus federation wrap.",
+    "TEST-MCP-SESSIONLOGSAN-001 AC3 asks for stdio/federated integration plus DB retain; HTTP S15 is that integration. Stdio/federation at this slice are unit wraps of the same decorator.",
+    "S15-S19 store task Done flags remain false. Correct until S7 H-done."
+  ],
+  "TodoGet": {
+    "id": "MCP-SESSIONLOG-001",
+    "done": false,
+    "s15toS19TaskDone": false,
+    "planTodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+    "planDone": false
+  }
+}

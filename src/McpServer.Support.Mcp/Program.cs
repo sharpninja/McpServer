@@ -12,6 +12,7 @@ using McpServer.Common.AgentCli.Extensions;
 using McpServer.Cqrs;
 using McpServer.GraphRag;
 using McpServer.Support.Mcp.UseCases;
+using McpServer.Support.Mcp.Products;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
@@ -385,6 +386,7 @@ builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddAgentHelpServices(builder.Configuration);
 builder.Services.AddTriageServices();
+builder.Services.AddHandoffServices();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
     new TransactionGatedVoiceConversationService(
@@ -450,6 +452,7 @@ builder.Services.AddMcpGraphRag();
 // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
 builder.Services.AddCqrsDispatcher();
 builder.Services.AddUseCaseCqrs();
+builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
@@ -572,6 +575,7 @@ builder.Services.AddHealthChecks()
 // TR-MCP-HEALTH-003: single typed backend-unavailable mapping used by the shared
 // GlobalExceptionHandlerMiddleware (HTTP 503 {"error":"backend_unavailable"}).
 builder.Services.AddSingleton<IBackendUnavailabilityDetector, StorageBackendUnavailabilityDetector>();
+builder.Services.AddSingleton<IMcpErrorClassifier, McpErrorClassifierAdapter>();
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.
@@ -681,7 +685,12 @@ builder.Services.AddHostedService<TodoBootstrapImporter>();
 builder.Services.AddHostedService<BrainSlotStartupSeeder>();
 builder.Services.AddHostedService<GraphRagGlobalCorpusStartupSeeder>();
 
-var mvcBuilder = builder.Services.AddControllers();
+var mvcBuilder = builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Insert(
+        0,
+        new System.Text.Json.Serialization.JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false));
+});
 #if !DEBUG
 if (!builder.Environment.IsStaging())
     mvcBuilder.ConfigureApplicationPartManager(mgr =>
@@ -753,43 +762,52 @@ if (!app.Environment.IsEnvironment("Test"))
 
 if (!app.Environment.IsEnvironment("Test"))
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-        await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions).ConfigureAwait(false);
-        await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
-        await SessionLogTurnContextBackfillStartup.TryRunAsync(
-            db,
-            scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
-            scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>()).ConfigureAwait(false);
-    }
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
-        var seededCount = await agentService.SeedBuiltInDefaultsAsync().ConfigureAwait(false);
-        if (seededCount > 0)
-            Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
-    }
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var bucketService = scope.ServiceProvider.GetRequiredService<ToolBucketService>();
-        var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
-        foreach (var entry in toolRegistryOpts.DefaultBuckets)
+    var storageReady = await StartupStorageBootstrap.TryInitializeAsync(
+        async ct =>
         {
-            if (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Owner) || string.IsNullOrWhiteSpace(entry.Repo))
-                continue;
+            using var scope = app.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+            if (!SessionLogSchemaGuard.Probe(db))
+                Log.Error("{Message}", SessionLogSchemaGuard.PendingMigrationMessage);
+            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
+            await SessionLogTurnContextBackfillStartup.TryRunAsync(
+                db,
+                scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+                scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
+                ct).ConfigureAwait(false);
+        },
+        app.Logger).ConfigureAwait(false);
 
-            var result = await bucketService.AddBucketAsync(
-                new BucketAddRequest(entry.Name, entry.Owner, entry.Repo, entry.Branch, entry.ManifestPath),
-                default).ConfigureAwait(false);
+    if (storageReady)
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
+            var seededCount = await agentService.SeedBuiltInDefaultsAsync().ConfigureAwait(false);
+            if (seededCount > 0)
+                Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
+        }
 
-            if (result.Success)
-                Log.Information("[ToolRegistry] Seeded default bucket '{Name}' ({Owner}/{Repo})", entry.Name, entry.Owner, entry.Repo);
-            else
-                Log.Debug("[ToolRegistry] Default bucket '{Name}' already exists, skipping.", entry.Name);
+        using (var scope = app.Services.CreateScope())
+        {
+            var bucketService = scope.ServiceProvider.GetRequiredService<ToolBucketService>();
+            var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
+            foreach (var entry in toolRegistryOpts.DefaultBuckets)
+            {
+                if (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Owner) || string.IsNullOrWhiteSpace(entry.Repo))
+                    continue;
+
+                var result = await bucketService.AddBucketAsync(
+                    new BucketAddRequest(entry.Name, entry.Owner, entry.Repo, entry.Branch, entry.ManifestPath),
+                    default).ConfigureAwait(false);
+
+                if (result.Success)
+                    Log.Information("[ToolRegistry] Seeded default bucket '{Name}' ({Owner}/{Repo})", entry.Name, entry.Owner, entry.Repo);
+                else
+                    Log.Debug("[ToolRegistry] Default bucket '{Name}' already exists, skipping.", entry.Name);
+            }
         }
     }
 }

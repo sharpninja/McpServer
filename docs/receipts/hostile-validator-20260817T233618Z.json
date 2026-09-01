@@ -1,0 +1,144 @@
+{
+  "TimestampUtc": "2026-08-17T23:36:18Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "user-directed-general-action-class-2",
+  "AddProfileExecuted": true,
+  "ProfileFilesRead": 18,
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersion": "1.93.0",
+  "MarkerSignature": true,
+  "HealthNonce": "db6d47b89040455c82e9d233da40c195",
+  "HealthNonceEchoed": true,
+  "FullBootstrap": true,
+  "SessionId": "GrokCode-20260817T233333Z-hostile-svc-cfg",
+  "RequestId": "req-20260817T233333Z-001-hostile-validate-svc-cfg",
+  "ServerTurnId": 41539,
+  "PlanFile": "None",
+  "TodoId": "None",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "SurfacesNotEvaluated": [],
+  "Accuracy": 97,
+  "Completeness": 96,
+  "SessionLogQuery": {
+    "TextEqualsSessionIdTotalCount": 0,
+    "TextHostileSvcCfgHit": "GrokCode-20260817T232250Z-hostile-effort",
+    "AgentFromTotalCount": 1,
+    "AgentFromSessionId": "GrokCode-20260817T233333Z-hostile-svc-cfg",
+    "AgentFromTurnRequestId": "req-20260817T233333Z-001-hostile-validate-svc-cfg",
+    "AgentFromTurnStatus": "completed"
+  },
+  "LiveYaml": {
+    "Path": "C:\\ProgramData\\McpServer\\appsettings.yaml",
+    "LastWriteTimeUtc": "2026-08-17T23:30:09.0404870Z",
+    "Length": 58975,
+    "Sha256": "B42E2462D67EADE136EC3BF64A1224BF1253ADB73EA6596CFED1BC7C7A4E3D46",
+    "AgentHelpKeys": [
+      "DefaultExecutionStrategy",
+      "HelperModel",
+      "Enabled"
+    ],
+    "DefaultExecutionStrategy": "grok-cli",
+    "HelperModel": "grok-4.5",
+    "Enabled": true,
+    "EffortLikeKeys": []
+  },
+  "Service": {
+    "Name": "McpServer",
+    "State": "Running",
+    "StartMode": "Auto",
+    "StartName": "LocalSystem",
+    "PathName": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+    "ProcessId": 5572
+  },
+  "AgentHelp": {
+    "ClaimedSessionId": "help-20260817233017-0bf8ab01a3af4e92a0c6c38ab8dba245",
+    "ClaimedStatusExecutionStrategy": "grok-cli",
+    "ClaimedStatus": "idle",
+    "IndependentSessionId": "help-20260817233334-998196a156f24f1f9577015aea5ac98b",
+    "IndependentExecutionStrategy": "grok-cli",
+    "IndependentModelRequested": "grok-4.5",
+    "IndependentModelResolved": "grok-4.5"
+  },
+  "Claims": [
+    {
+      "Surface": "A",
+      "Id": "A1",
+      "Claim": "Class 2 ops; live ProgramData yaml updated; no product code; no plan done",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A2",
+      "Claim": "McpServer Running Auto LocalSystem PathName ProgramData exe --urls http://+:7147",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A3",
+      "Claim": "Live AgentHelp grok-cli / grok-4.5 / Enabled=true",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A4",
+      "Claim": "Claimed create-session strategy grok-cli; models reproduced by independent create-session",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A5",
+      "Claim": "No unbound effort key; grok-cli hardcoded high",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "A",
+      "Id": "A6",
+      "Claim": "Repo appsettings.yaml unchanged vs HEAD",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B1",
+      "Claim": "Byrd v4 N/A for class 2",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B2",
+      "Claim": "Receipts re-verified independently",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B3",
+      "Claim": "MCP-only storage",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B4",
+      "Claim": "PowerShell only; no Python used",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "B",
+      "Id": "B5",
+      "Claim": "Honesty; claims match artifacts",
+      "Verdict": "PASS"
+    },
+    {
+      "Surface": "C",
+      "Id": "C1",
+      "Claim": "Requirements N/A for class 2 ops",
+      "Verdict": "N/A"
+    },
+    {
+      "Surface": "D",
+      "Id": "D1",
+      "Claim": "No plan-step completion claimed",
+      "Verdict": "N/A"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "TimestampUtc": "2026-08-18T17:43:37Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class1",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "SessionId": "GrokCode-20260818T173615Z-h5-skeptic-rerun",
+  "RequestId": "req-20260818T173615Z-001-hostile-h5-skeptic",
+  "TurnId": 41815,
+  "PlanFile": "docs/plans/mcp-products-001.md",
+  "TodoId": "MCP-PRODUCTS-001",
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 96,
+  "CompletenessRating": 95,
+  "Claims": {
+    "A": [
+      { "id": "A1", "verdict": "PASS", "summary": "ProductShareHelper loads RequirementAcceptanceCriteria; MapFr/MapTr/MapTest attach AC; zero-product local AC kept" },
+      { "id": "A2", "verdict": "PASS", "summary": "context_search/context_pack dispatch GetProductRequirementContextQuery; surface tests drive real methods; no Secret.cs" },
+      { "id": "A3", "verdict": "PASS", "summary": "RemoveMemberAsync uses DeleteAsync body; ProductClientTests use ws-caller/ws-owner/ws-member; no F: paths" },
+      { "id": "A4", "verdict": "PASS", "summary": "requirements_effective exists in source and dispatches GetProductEffectiveRequirementsQuery; live catalog stale" },
+      { "id": "A5", "verdict": "PASS", "summary": "Launch scratch files are raw POST/GET JSON with PROD-MCPSERVER, ownerWorkspaceId, and functional array" },
+      { "id": "A6", "verdict": "PASS", "summary": "Independent ./build.ps1 Test EXIT=0 Failed 0 Passed 2004/283/33/20/63/826/50 Skipped 0" },
+      { "id": "A7", "verdict": "PASS", "summary": "Independent ValidateTraceability Succeeded 12:41:01 PM local EXIT=0" },
+      { "id": "A8", "verdict": "PASS", "summary": "todo_get MCP-PRODUCTS-001 Done=false; review did not flip it" }
+    ],
+    "S": [
+      { "id": "S1", "verdict": "PASS", "summary": "MapFr no longer hardcodes AcceptanceCriteria=[]" },
+      { "id": "S2", "verdict": "PASS", "summary": "MCP context_search/pack dispatch product query" },
+      { "id": "S3", "verdict": "PASS", "summary": "RemoveMemberAsync has no GET after DELETE" },
+      { "id": "S4", "verdict": "PASS", "summary": "requirements_effective MCP tool exists in source" },
+      { "id": "S5", "verdict": "PASS", "summary": "Launch files are raw bodies, not Passed 1 summaries" }
+    ],
+    "B": [
+      { "id": "B1", "verdict": "PASS", "summary": "Honesty: claims match artifacts; stale plan header noted; TODO still false" },
+      { "id": "B2", "verdict": "PASS", "summary": "Receipts re-run independently" },
+      { "id": "B3", "verdict": "PASS", "summary": "MCP-only storage via /mcp-transport" },
+      { "id": "B4", "verdict": "PASS", "summary": "pwsh only; no Python" },
+      { "id": "B5", "verdict": "PASS", "summary": "No fabricated results; first traceability lock failure reported" },
+      { "id": "B6", "verdict": "PASS", "summary": "Byrd H5-done gate; prior H0-H4 AGREE exist; suite Failed 0 Skipped 0" }
+    ],
+    "C": [
+      { "id": "C1", "verdict": "PASS", "summary": "FR/TR/TEST PRODUCT ids exist in store" },
+      { "id": "C2", "verdict": "PASS", "summary": "FR ACs exist; TR store AC arrays empty since H0" },
+      { "id": "C3", "verdict": "PASS", "summary": "FR ACs are testable" },
+      { "id": "C4", "verdict": "PASS", "summary": "Mappings plus named tests cover FR ACs" },
+      { "id": "C5", "verdict": "PASS", "summary": "Skeptic fixes sit inside existing FR-003/FR-005/TR-API-001" }
+    ],
+    "D": [
+      { "id": "D1", "verdict": "PASS", "summary": "Plan DoD software items met; TODO still false" },
+      { "id": "D2", "verdict": "PASS", "summary": "Five skeptic bugs fixed" },
+      { "id": "D3", "verdict": "PASS", "summary": "TODO Done flag still false; plan header stale noted on B1" },
+      { "id": "D4", "verdict": "PASS", "summary": "CQRS-only, PROD-* keys, isolation, no source leak, full Test green" }
+    ]
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "IndependentTest": {
+    "command": "./build.ps1 Test",
+    "exitCode": 0,
+    "localEnd": "2026-08-18 12:39:54 PM",
+    "transcript": "docs/receipts/_hv-h5-skeptic-full-test.txt",
+    "counts": {
+      "Support.Mcp.Tests": { "failed": 0, "passed": 2004, "skipped": 0 },
+      "Client.Tests": { "failed": 0, "passed": 283, "skipped": 0 },
+      "Cqrs.Tests": { "failed": 0, "passed": 33, "skipped": 0 },
+      "Launcher.Tests": { "failed": 0, "passed": 20, "skipped": 0 },
+      "McpAgent.Tests": { "failed": 0, "passed": 63, "skipped": 0 },
+      "Repl.Core.Tests": { "failed": 0, "passed": 826, "skipped": 0 },
+      "QBAgent.Tests": { "failed": 0, "passed": 50, "skipped": 0 }
+    }
+  },
+  "FocusedFilters": {
+    "Product": { "failed": 0, "passed": 50, "skipped": 0 },
+    "ProductClientTests": { "failed": 0, "passed": 2, "skipped": 0 },
+    "ProductRequirementContextSurfaceTests": { "failed": 0, "passed": 6, "skipped": 0 },
+    "ProductsLaunchTests": { "failed": 0, "passed": 2, "skipped": 0 }
+  },
+  "ValidateTraceability": { "status": "Succeeded", "local": "2026-08-18 12:41:01 PM", "exitCode": 0 },
+  "TodoGet": { "id": "MCP-PRODUCTS-001", "done": false },
+  "IProductServiceCsCount": 0,
+  "DidNotFlipTodo": true,
+  "ReceiptMd": "docs/receipts/hostile-validator-20260818T174337Z.md"
+}

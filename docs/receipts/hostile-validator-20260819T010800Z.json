@@ -1,0 +1,89 @@
+{
+  "TimestampUtc": "2026-08-19T01:08:00Z",
+  "ActualCompletedUtc": "2026-08-19T01:15:38Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project implementation (restore-gate after 005100Z DISAGREE FAIL 6; first-persist reject)",
+  "ActivePlan": "docs/plans/triage-cluster-001.md",
+  "GoalPlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\goal\\plan.md",
+  "TodoId": "PLAN-TRIAGECLUSTER-001",
+  "SessionId": "GrokSubagentHostile-20260819T010800Z-hrestore",
+  "TurnRequestId": "req-20260819T010800Z-001-hrestore-first-persist",
+  "TurnId": 41993,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Trust": {
+    "signatureOk": true,
+    "nonce": "44d170cf09d74d3c826905642542cea8",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+    "storage": "reachable",
+    "pluginJsonVersion": "1.94.0",
+    "diskFreeBytesAtTrust": 2898866176,
+    "diskFreeBytesAfterTests": 2899582976
+  },
+  "PriorReceipts": {
+    "H0": { "path": "docs/receipts/hostile-validator-20260818T193842Z.md", "OverallVerdict": "AGREE" },
+    "HRed": { "path": "docs/receipts/hostile-validator-20260818T233800Z.md", "OverallVerdict": "AGREE", "PASS": 27, "FAIL": 0 },
+    "HGreen": { "path": "docs/receipts/hostile-validator-20260818T234800Z.md", "OverallVerdict": "AGREE", "FAIL": 0 },
+    "H9": { "path": "docs/receipts/hostile-validator-20260818T221600Z.md", "OverallVerdict": "AGREE" },
+    "HDone": { "path": "docs/receipts/hostile-validator-20260819T000500Z.md", "OverallVerdict": "AGREE", "FAIL": 0 },
+    "HGoal": { "path": "docs/receipts/hostile-validator-20260819T005100Z.md", "OverallVerdict": "DISAGREE", "FAIL": 6 }
+  },
+  "TestsThisReview": {
+    "FocusedLeftoverStore006Validator": { "Failed": 0, "Passed": 19, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T010800Z/leftover-store006-validator.log" },
+    "SupportMcpTestsNoBuild": { "Failed": 0, "Passed": 2078, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T010800Z/support-mcp-tests.log", "implementerClaimedPassed": 2037 }
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "title": "First-persist reject restored; None only on canceled superseded persist" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "title": "Leftover five tests throw or return structured error" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "title": "STORE-006 canceled+omitted writes None" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "title": "Focused leftover+STORE-006+validator 19/0/0" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "title": "Support.Mcp.Tests --no-build Failed 0 Skipped 0 (independent Passed 2078)" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "title": "PLAN Done=false; 16 BUG-TRIAGE Done=true citing H-done" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "title": "005100Z FAIL list A6/B1/B5/C6/D1/D7 addressed" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "title": "Restore-gate is the inter-phase hostile for the invert undo" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "title": "Receipts independently re-run" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "title": "MCP-only storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "title": "PowerShell only; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "title": "No STORE-006 mis-cite for first persist" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "title": "Applicable FR/TEST ids exist" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "title": "AC-003 and STORE-006 ac-1 exist" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "title": "Plan-required STORE TEST records present" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "title": "AC-003 and STORE-006 covered by tests this review ran" },
+    { "id": "C5", "surface": "C", "verdict": "N/A", "title": "FR/TR/TEST remain pending while PLAN Done=false" },
+    { "id": "C6", "surface": "C", "verdict": "PASS", "title": "AC-003 first persist reject restored" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "title": "005100Z invert no longer blocks DoD; PLAN not claimed done" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "title": "S5 plugin tests not invalidated by this restore" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "title": "H-done AGREE stands; 005100Z DISAGREE was the invert" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "title": "139 remains Done=true citing H-done" },
+    { "id": "D5", "surface": "D", "verdict": "N/A", "title": "No live deploy claim" },
+    { "id": "D6", "surface": "D", "verdict": "PASS", "title": "PLAN Done=false; goal checkboxes unchecked" },
+    { "id": "D7", "surface": "D", "verdict": "PASS", "title": "Decision 5 required-on-first-persist holds" }
+  ],
+  "PriorFailMap": {
+    "A6": "GONE",
+    "B1": "GONE",
+    "B5": "GONE",
+    "C6": "GONE",
+    "D1": "GONE_as_current_violation",
+    "D7": "GONE"
+  },
+  "Counts": {
+    "PASS": 24,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 2
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "AccuracyRating": 93,
+  "CompletenessRating": 94,
+  "OverallVerdict": "AGREE",
+  "DoNotMarkPlanDone": true,
+  "PlanMustStayDoneFalse": true
+}

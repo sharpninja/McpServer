@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-08-20T07:05:12.9558007Z",
+  "generatedBy": "build/Build.UpdateService.cs",
+  "operation": "update",
+  "serviceName": "McpServer",
+  "executable": "McpServer.Support.Mcp.exe",
+  "port": 7147,
+  "executableHashes": [
+    {
+      "name": "McpServer.Launcher.exe",
+      "sha256": "51fcb2b7a39a0f1c48c067d2934d8ef5abd974fb896fad0ec5a2dfd4036f9971"
+    },
+    {
+      "name": "McpServer.Support.Mcp.exe",
+      "sha256": "3a3634dd9ace7befacdaee034558a824e742807c6ccd4d8cbdbd949489afd30e"
+    }
+  ]
+}

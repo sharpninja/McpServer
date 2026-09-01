@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-08-21T02:05:30.0000000Z",
+  "Tool": "scheduler_list",
+  "ParentSessionId": "GrokCode-20260821T014642Z-plugin-session",
+  "ParentRequestId": "req-20260821T014850Z-001-hmac-plugin-hourly-closeout",
+  "Items": [
+    {
+      "id": "01a0218b0965",
+      "prompt": "Complete TODO remediation in current plan and when hostile validator agrees with...",
+      "intervalHuman": "every 1 hour",
+      "nextFireAt": "2026-08-21T02:39:15.192009800+00:00",
+      "createdAt": "2026-08-20T23:39:15.173934100+00:00",
+      "recurring": true
+    }
+  ]
+}

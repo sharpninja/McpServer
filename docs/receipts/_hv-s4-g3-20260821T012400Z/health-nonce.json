@@ -1,0 +1,34 @@
+{
+  "pluginSignature": true,
+  "pluginBootstrap": true,
+  "nonceSent": "hv-s4-g3-20260820202737-85960",
+  "nonceEchoed": "hv-s4-g3-20260820202737-85960",
+  "nonceMatch": true,
+  "healthKeys": [
+    "status",
+    "version",
+    "checks",
+    "nonce",
+    "storage"
+  ],
+  "health": {
+    "status": "Healthy",
+    "version": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0006
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.001
+      }
+    ],
+    "nonce": "hv-s4-g3-20260820202737-85960",
+    "storage": "reachable"
+  }
+}

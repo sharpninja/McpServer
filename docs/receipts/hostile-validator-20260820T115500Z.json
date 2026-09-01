@@ -1,0 +1,139 @@
+{
+  "TimestampUtc": "2026-08-20T11:55:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfileExecuted": true,
+  "ProfileFileCount": 18,
+  "WorkClass": "class1-mcp-store-hygiene-hclassify-s3",
+  "ActivePlan": "docs/plans/todo-requirements-audit.md",
+  "SessionId": "GrokCode-20260820T114334Z-hclassify-s3",
+  "RequestId": "req-20260820T114334Z-001-hostile-classify-s3-matrix",
+  "TurnId": 42264,
+  "PluginStatus": "available",
+  "HealthNonceOk": true,
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "OverallVerdict": "AGREE",
+  "PassCount": 18,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "Accuracy": 95,
+  "Completeness": 90,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "C: no FR completed claim"
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "verdict": "PASS",
+      "title": "s3-matrix both paths count 40 match s0 openTodoIds"
+    },
+    {
+      "id": "A2",
+      "verdict": "PASS",
+      "title": "remaining cites HEAD or 2026-08-20T101500Z; 07-11 not only evidence"
+    },
+    {
+      "id": "A3",
+      "verdict": "PASS",
+      "title": "FR/TR exist live or OrphanReason; DELETE unlinks []"
+    },
+    {
+      "id": "A4",
+      "verdict": "PASS",
+      "title": "no done:true; keep-open; E1 rename admitted; FILETOOLS not conflated"
+    },
+    {
+      "id": "A5",
+      "verdict": "PASS",
+      "title": "placeholder TR [] and TR-02..14 defer not delete; no Handoff"
+    },
+    {
+      "id": "A6",
+      "verdict": "PASS",
+      "title": "S4 store writes not applied"
+    },
+    {
+      "id": "B1",
+      "verdict": "PASS",
+      "title": "Byrd product tests N/A for classification JSON"
+    },
+    {
+      "id": "B2",
+      "verdict": "PASS",
+      "title": "receipts and honesty"
+    },
+    {
+      "id": "B3",
+      "verdict": "PASS",
+      "title": "MCP-only storage; no S4 store write"
+    },
+    {
+      "id": "B4",
+      "verdict": "PASS",
+      "title": "pwsh only; no Python"
+    },
+    {
+      "id": "B5",
+      "verdict": "PASS",
+      "title": "honesty: s4 script unrun"
+    },
+    {
+      "id": "C1",
+      "verdict": "N/A",
+      "title": "no FR completed claim"
+    },
+    {
+      "id": "D1",
+      "verdict": "PASS",
+      "title": "matrix covers S0-open TODOs"
+    },
+    {
+      "id": "D2",
+      "verdict": "PASS",
+      "title": "no premature done:true"
+    },
+    {
+      "id": "D3",
+      "verdict": "PASS",
+      "title": "leftover-27 not reopened; live leftover Done true"
+    },
+    {
+      "id": "D4",
+      "verdict": "PASS",
+      "title": "2026-07-11 not used as only HEAD evidence"
+    },
+    {
+      "id": "D5",
+      "verdict": "PASS",
+      "title": "FILETOOLS does not treat RepoFileService as MCP read_file"
+    },
+    {
+      "id": "D6",
+      "verdict": "PASS",
+      "title": "QuadBrain rename not denied"
+    }
+  ],
+  "Evidence": {
+    "matrixSha256": "8940C9F69C7C44F24E3CA24D6EDFE108C1799B2933BE84475DB108D9B8EE6B5F",
+    "inventorySha256": "9B84FCB93FF19E8C177D23BF1CB2974515714EF62656C7C7E4EAE4A5D8E09F59",
+    "leftoverLiveDone": true,
+    "e1LiveRemainingHas0711": true,
+    "e1LiveRemainingHasAuditDate": false,
+    "filetoolsLiveRemainingHas0711": true,
+    "deleteLiveFr": [
+      "[]"
+    ],
+    "mcpToolsListHasReadFile": false,
+    "mcpToolsListHasListDir": false,
+    "mcpToolsListHasGrepFiles": false,
+    "missingFr": [],
+    "missingTr": [],
+    "s4TodoGetsExists": false,
+    "sessionQueryHasHclassify": true
+  },
+  "ReceiptMd": "docs/receipts/hostile-validator-20260820T115500Z.md"
+}

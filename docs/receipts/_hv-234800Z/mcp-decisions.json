@@ -1,0 +1,1 @@
+{"result":{"content":[{"type":"text","text":"{\u0022error\u0022:\u0022The JSON value could not be converted to System.String. Path: $.designDecisions[0] | LineNumber: 0 | BytePositionInLine: 21.\u0022}"}]},"id":5,"jsonrpc":"2.0"}

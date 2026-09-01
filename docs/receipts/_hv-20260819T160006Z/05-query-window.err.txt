@@ -1,0 +1,14 @@
+System.Management.Automation.RuntimeException: Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20260819T160631Z-8152
+  code: method_invocation_error
+  message: "Type conversion error for parameter 'from': cannot convert '2026-08-19T15:30:00Z' to DateTimeOffset"
+  details:
+    clientName: SessionLog
+    methodName: QueryAsync
+    exceptionType: System.ArgumentException
+
+---
+
+

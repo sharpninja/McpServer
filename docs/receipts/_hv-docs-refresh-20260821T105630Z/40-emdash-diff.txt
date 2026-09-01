@@ -1,0 +1,6 @@
+FILE=docs/USER-GUIDE.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=4
+FILE=docs/MCP-SERVER.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=6
+FILE=docs/context/session-log-schema.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=42
+FILE=docs/CLIENT-INTEGRATION.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=0
+FILE=index.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=3
+FILE=README.md addedLines=0 addedEmDash=0 addedEnDash=0 fileEmDashHits=0

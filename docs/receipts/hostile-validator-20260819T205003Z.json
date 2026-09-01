@@ -1,0 +1,105 @@
+{
+  "TimestampUtc": "2026-08-19T20:50:03Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation leftover S2 plugin-core late TEST-PHASE gate",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/plugin-core",
+  "GitSha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyCount": 9,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T204441Z-hostile-s2-testgate",
+    "requestId": "req-20260819T204441Z-001-hostile-s2-test-gate",
+    "turnIdBegin": 42106,
+    "turnStatus": "completed",
+    "queryProof": "docs/receipts/_hv-s2-testgate/14-query-proof.json",
+    "queryTotalCount": 1,
+    "queryDialogCount": 6,
+    "queryDesignDecisionCount": 3,
+    "queryActionCount": 6
+  },
+  "PluginIdentity": {
+    "sourceType": "GrokCode",
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginVersion": "1.95.0",
+    "markerSignatureOk": true,
+    "healthNonceSent": "hv-s2tg-20260819T204441Z-60860",
+    "healthNonceEcho": "hv-s2tg-20260819T204441Z-60860",
+    "healthNonceMatch": true,
+    "healthStorage": "reachable",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "toolsSearchExactNameCount": 1
+  },
+  "PesterNamed": {
+    "paths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+      "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1"
+    ],
+    "filter": [
+      "*TEST-MCP-STRICTCOUNT-001*",
+      "*TEST-MCP-FAILSAFE-001*",
+      "*TEST-MCP-SESSIONEND-001*",
+      "*TEST-MCP-XAGENT-001*",
+      "*TEST-MCP-VERIFYWRAP-001*",
+      "*TEST-MCP-TRIAGEPLUGIN-004*"
+    ],
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "notRun": 115,
+    "total": 130,
+    "elapsedSec": 16.036,
+    "result": "Passed",
+    "artifact": "docs/receipts/_hv-s2-testgate/03-pester-named.json"
+  },
+  "OverallVerdict": "AGREE",
+  "AgreeScope": "leftover S2 TEST-PHASE gate only; not TODO done; not merge; not implementation-exit",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 94,
+  "Completeness": 90,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Named Pester filter re-run 15/0/0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "Named tests cover leftover FR/TR/TEST AC" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Leftover ACs are not regex-only greps" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "PLAN-TRIAGELEFTOVER-001 and S2 BUG-TRIAGE IDs Done=false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "No FR createdAt vs LastWriteTime FAIL" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "This receipt is the late leftover S2 test-phase gate" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only, no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "Honesty 15/0/0 matches artifacts" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "Leftover FR/TR/TEST identified from MCP" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "Structured AC exist" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "AC are testable" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "Named tests cover leftover AC" },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "claim": "Leftover FR/TR/TEST remain mapped" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "Not merge or plan DoD" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "TODOs remain Done=false" }
+  ],
+  "TodosStillFalse": [
+    "PLAN-TRIAGELEFTOVER-001",
+    "BUG-TRIAGE-158",
+    "BUG-TRIAGE-159",
+    "BUG-TRIAGE-140",
+    "BUG-TRIAGE-142",
+    "BUG-TRIAGE-106",
+    "BUG-TRIAGE-125",
+    "BUG-TRIAGE-130",
+    "BUG-TRIAGE-120"
+  ],
+  "DoNotMarkTodosDone": true,
+  "DoNotMerge": true
+}

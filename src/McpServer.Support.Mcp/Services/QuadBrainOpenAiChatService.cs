@@ -232,6 +232,8 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                 Response = assistantResponse ?? string.Empty,
                 Model = response.Model,
                 TokenCount = response.Usage.TotalTokens,
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
                 Actions =
                 [
                     new UnifiedActionDto

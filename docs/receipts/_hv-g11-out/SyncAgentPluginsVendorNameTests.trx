@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="93023718-c012-4b8d-a408-1a32a8a55359" name="kingd@PAYTON-LEGION2 2026-08-19 13:41:31" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-19T13:41:31.0285570-05:00" queuing="2026-08-19T13:41:31.0285575-05:00" start="2026-08-19T13:41:27.9899516-05:00" finish="2026-08-19T13:41:31.0501016-05:00" />
+  <TestSettings name="default" id="4c0be1d1-e904-4ba8-b5db-e3218f4818e2">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-19_13_41_31" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="756e0f95-c26e-48e6-88c8-7d606943e1df" testId="2225d694-ac9c-d2ed-a312-3ef932eb2a17" testName="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson" computerName="PAYTON-LEGION2" duration="00:00:00.0005689" startTime="2026-08-19T13:41:30.8409761-05:00" endTime="2026-08-19T13:41:30.8415817-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="756e0f95-c26e-48e6-88c8-7d606943e1df" />
+    <UnitTestResult executionId="2fd30997-0ea4-4d8b-a661-4f13ca31a2c8" testId="e42389b4-33be-0f97-8abf-c73ef217e2ef" testName="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_UsesStableVersionlessName" computerName="PAYTON-LEGION2" duration="00:00:00.0010407" startTime="2026-08-19T13:41:30.8394738-05:00" endTime="2026-08-19T13:41:30.8406467-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2fd30997-0ea4-4d8b-a661-4f13ca31a2c8" />
+    <UnitTestResult executionId="410bf88d-b89e-487c-9d68-92c064c2a55e" testId="18f8271e-87c9-1e44-020c-c09f42526a08" testName="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral" computerName="PAYTON-LEGION2" duration="00:00:00.0330523" startTime="2026-08-19T13:41:30.7789928-05:00" endTime="2026-08-19T13:41:30.8288808-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="410bf88d-b89e-487c-9d68-92c064c2a55e" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="18f8271e-87c9-1e44-020c-c09f42526a08">
+      <Execution id="410bf88d-b89e-487c-9d68-92c064c2a55e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SyncAgentPluginsVendorNameTests" name="SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="2225d694-ac9c-d2ed-a312-3ef932eb2a17">
+      <Execution id="756e0f95-c26e-48e6-88c8-7d606943e1df" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SyncAgentPluginsVendorNameTests" name="SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SyncAgentPluginsVendorNameTests.SyncAgentPlugins_VendorStep_UsesStableVersionlessName" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="e42389b4-33be-0f97-8abf-c73ef217e2ef">
+      <Execution id="2fd30997-0ea4-4d8b-a661-4f13ca31a2c8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SyncAgentPluginsVendorNameTests" name="SyncAgentPlugins_VendorStep_UsesStableVersionlessName" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="2225d694-ac9c-d2ed-a312-3ef932eb2a17" executionId="756e0f95-c26e-48e6-88c8-7d606943e1df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e42389b4-33be-0f97-8abf-c73ef217e2ef" executionId="2fd30997-0ea4-4d8b-a661-4f13ca31a2c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18f8271e-87c9-1e44-020c-c09f42526a08" executionId="410bf88d-b89e-487c-9d68-92c064c2a55e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.46]   Discovering: Build.Tests&#xD;
+[xUnit.net 00:00:01.14]   Discovered:  Build.Tests&#xD;
+[xUnit.net 00:00:01.60]   Starting:    Build.Tests&#xD;
+[xUnit.net 00:00:01.81]   Finished:    Build.Tests (ID = 'e1b1f30cb109091d20dcc58709bccb108b6668bc6c05d94cab09123b02db39aa')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

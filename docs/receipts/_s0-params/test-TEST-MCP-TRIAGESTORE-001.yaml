@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGESTORE-001
+title: Session-log store AC for merge tags replace canceled supersede
+description: SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+    isSatisfied: false

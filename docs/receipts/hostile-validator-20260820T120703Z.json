@@ -1,0 +1,131 @@
+{
+  "TimestampUtc": "2026-08-20T12:07:03Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "S0 leftover-get reattack",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 12,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "FailList": [
+    "B6 Reviewer session-log turn did not persist: beginTurn HTTP 503 backend_unavailable then 400 planFile omitted; retry beginTurn exit 1; queryHistory has no leftover-get reattack title"
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "s0-leftover-get.json compact leftover get not 900KB list",
+      "verdict": "PASS",
+      "evidence": "306 bytes; Id PLAN-TRIAGELEFTOVER-001 Done true; no items array; scratch twin 306 bytes"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "Live leftover todo_get Done true",
+      "verdict": "PASS",
+      "evidence": "workflow.todo.get PLAN-TRIAGELEFTOVER-001 done: true exit 0"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "ALIGN Done false",
+      "verdict": "PASS",
+      "evidence": "workflow.todo.get PLAN-TODOALIGN-001 done: false"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "HEAD 20db61aa",
+      "verdict": "PASS",
+      "evidence": "git rev-parse HEAD 20db61aa0dd70f2d4f94da06d2a133ecfe6967a8"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Byrd v4 product tests-first",
+      "verdict": "PASS",
+      "evidence": "N/A S0 leftover receipt"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "Receipts re-verified",
+      "verdict": "PASS",
+      "evidence": "File size JSON shape live gets git HEAD"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "MCP-only storage",
+      "verdict": "PASS",
+      "evidence": "Leftover via MCP get plus compact JSON"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "claim": "No Python",
+      "verdict": "PASS",
+      "evidence": "pwsh plugin only"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "claim": "Honesty compact leftover get",
+      "verdict": "PASS",
+      "evidence": "306-byte object matches live leftover done true"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "claim": "Reviewer session-log persisted",
+      "verdict": "FAIL",
+      "evidence": "beginTurn 503 backend_unavailable; complete 400 planFile omitted; queryHistory missing this title"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "FR/TR completion",
+      "verdict": "N/A",
+      "evidence": "No FR/TR completed claim"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "Leftover provenance compact get",
+      "verdict": "PASS",
+      "evidence": "s0-leftover-get.json compact Id/Done; live leftover done true"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "claim": "Not claiming S4-S7",
+      "verdict": "PASS",
+      "evidence": "Leftover-get reattack only"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "claim": "Leftover done ALIGN open",
+      "verdict": "PASS",
+      "evidence": "Live leftover done true ALIGN done false"
+    }
+  ],
+  "LeftoverFileBytes": 306,
+  "LeftoverFileId": "PLAN-TRIAGELEFTOVER-001",
+  "LeftoverFileDone": true,
+  "LiveLeftoverDone": true,
+  "LiveAlignDone": false,
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "AccuracyRating": 93,
+  "CompletenessRating": 86,
+  "ReceiptMd": "docs/receipts/hostile-validator-20260820T120703Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260820T120703Z.json"
+}

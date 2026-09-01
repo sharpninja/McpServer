@@ -1,0 +1,13 @@
+NAME=client
+PROJECT=tests/McpServer.Client.Tests
+FILTER=FullyQualifiedName~ProductClientTests
+START=2026-08-18T15:37:20.9364595Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Client.Tests -> F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+The following Tests are available:
+    McpServer.Client.Tests.ProductClientTests.CreateAsync_PostsProductsEndpoint
+EXIT=0
+END=2026-08-18T15:37:24.0743664Z

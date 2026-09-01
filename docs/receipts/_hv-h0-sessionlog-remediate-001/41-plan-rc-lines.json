@@ -1,0 +1,10 @@
+[
+  "39:**RC1 Full-session upsert for incremental verbs (160, 162).** Plugin appendDialog (and other mutation verbs) serialize the whole session. A 5s SaveChanges budget plus SQLite lock from concurrent TODO/requirements reads yields 503 even though reads succeed.",
+  "41:**RC2 PersistTurn treats 503 as fatal throw (160, 162, 164).** Timeout is degraded/queued. 503 is retryable per classifier but the plugin throws, so callers fail even though failsafe is on disk.",
+  "43:**RC3 Drain of those same `session_submit` records blocks and misfires (161).** First successful plugin call (getFr/getTr) drains the queue with a 30s SubmitAsync timeout. Write-Error under Stop bypasses the unreachable test. Catch prints drain failed. Drain may latch completed so replay never happens.",
+  "45:**RC4 False backend_unavailable (164, 160).** Storage is reachable (health, TODO, requirements succeed). Busy/locked SQLite or budget expiry is classified as backend down.",
+  "47:**RC5 Sanitizer HTTP/stdio AC unproven (SESSIONLOG-001 S15-S19).** Core sanitizer and DI exist. Controller integration, query-semantics, stdio/federation, and config docs do not.",
+  "49:**RC6 SESSIONLOG-002 not store-closed.** Code and tests exist. Live hosted GET of planFile/todoId after deploy was explicitly a non-goal of the prior plan.",
+  "63:9. appendActions/updateTurn/completeTurn may still full-upsert after G1 if no incremental actions API exists. They still get RC2 (503 degrade). Dialog gets RC1 incremental. Do not block G1 on a new actions REST surface unless H-red says appendActions is required AC. If needed, that is a follow-on FR in S0 notes, not silent scope.",
+  "130:Touch: `plugins/core/lib-ps/repl-invoke.ps1`, matching Pester, `SessionLogService` SaveChanges classification only if RC4 tests require it, `McpErrorClassifier` only if a new contention code is introduced (prefer reuse retryable 503 vs new code unless AC needs a distinct code). Client already has AppendDialogAsync."
+]

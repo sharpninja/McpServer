@@ -1,0 +1,70 @@
+type: result
+payload:
+  requestId: req-20260820T125808Z-792f
+  result:
+    id: MCP-HANDOFF-001
+    title: Create handoff ingestion feature that generates TODOs with one-shot AI
+    section: MCP Server
+    priority: high
+    done: false
+    estimate: 2-4d
+    note: 'Implementation and required validation are in the dirty worktree for Codex review. PLAN evidence 2026-08-16T20:54Z: required suites Failed 0 / Skipped 0. Do not mark this TODO done. Do not commit.'
+    description:
+    - Create a Handoff feature that can ingest a handoff document and convert it into a proper MCP TODO entry.
+    - Use the one-shot AI agent to analyze the handoff document, extract actionable work, identify scope, risks, dependencies, and validation requirements, then draft the TODO payload.
+    - Persist the resulting TODO through the supported MCP TODO workflow with traceable linkage back to the source handoff document and any referenced MCP artifacts.
+    - Support review/approval of the generated TODO before creation when confidence is low or the handoff contains ambiguous scope.
+    technicalDetails:
+    - Define a handoff ingestion request contract that accepts a workspace-scoped handoff document path, uploaded content, or MCP artifact reference.
+    - The one-shot AI agent must produce a structured draft TODO with title, section, priority, estimate, description, technicalDetails, implementationTasks, dependencies, requirement links when discoverable, confidence, and diagnostics.
+    - 'The ingestion pipeline must preserve provenance: source document path/artifact ID, content hash, extraction timestamp, agent/model metadata, prompt/template version, and reviewer/user approval status.'
+    - The feature must distinguish between direct creation, draft-only mode, and requires-review mode based on confidence, missing scope, conflicting instructions, or unsafe/ambiguous handoff content.
+    - The generated TODO must obey existing TODO ID conventions and use the supported workflow.todo.create/update APIs rather than editing todo.yaml or database rows directly.
+    - Handoff parsing must handle markdown, plain text, and common exported handoff formats, with bounded input size and clear diagnostics for unsupported formats.
+    - Result records should allow operators to audit handoff-to-TODO transformations and rerun extraction deterministically where possible.
+    implementationTasks:
+    - task: Define BDPv4 FR/TR/TEST requirements and acceptance criteria for handoff ingestion and TODO generation.
+      done: true
+    - task: Inspect existing one-shot AI agent, TODO creation, artifact reference, session log, REPL, Director, and plugin surfaces before choosing integration points.
+      done: true
+    - task: Design handoff ingestion request/result models with source provenance, content hash, generated TODO draft, confidence, diagnostics, and approval state.
+      done: true
+    - task: Implement bounded handoff document ingestion from workspace path, uploaded content, or MCP artifact reference.
+      done: true
+    - task: Implement one-shot AI extraction prompt/schema that converts handoff content into a validated TODO draft.
+      done: true
+    - task: Add validation and normalization for TODO IDs, sections, priorities, estimates, dependencies, implementation tasks, and requirement links.
+      done: true
+    - task: Add create/draft/requires-review modes and persist TODOs only through supported MCP TODO workflow methods.
+      done: true
+    - task: Persist audit/provenance records linking the created TODO to the handoff document, source artifacts, model metadata, and extraction diagnostics.
+      done: true
+    - task: Expose the feature through appropriate MCP tool/API, REPL/Director command, and plugin skill surfaces after inspecting current conventions.
+      done: true
+    - task: Add tests for successful extraction, ambiguous handoff review mode, malformed input, unsupported formats, unsafe paths, duplicate TODOs, provenance, and TODO workflow integration.
+      done: true
+    - task: Update docs, examples, requirements mappings, and generated wiki exports after validation is green.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): HandoffIngestionService, HandoffClient, HandoffModels, HandoffMcpToolTests, HandoffDirectorCommands, HandoffIngestionServiceTests exist. FR-HANDOFF-001..007 and TR-HANDOFF-* remain in_progress with isSatisfied false. ImplementationTasks 1-10 match files; docs/wiki export still open. Do not store-close.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-HANDOFF-001
+    - FR-HANDOFF-002
+    - FR-HANDOFF-003
+    - FR-HANDOFF-004
+    - FR-HANDOFF-005
+    - FR-HANDOFF-006
+    - FR-HANDOFF-007
+    technicalRequirements:
+    - TR-HANDOFF-CONTRACT-001
+    - TR-HANDOFF-SECURITY-001
+    - TR-HANDOFF-AGENT-001
+    - TR-HANDOFF-VALIDATE-001
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-TODO-001
+    - TR-HANDOFF-AUDIT-001
+    - TR-HANDOFF-SURFACE-001
+  deprecated: true
+
+---
+

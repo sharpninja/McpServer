@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260819T185931Z-e365
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-150
+      title: SessionLog.SubmitAsync 500 on superseded hook-turn persist
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Hostile beginTurn for GrokCode-20260817T230138Z-hostile-agenthelp tried to persist canceled hook turn req-20260817T225951Z-prompt-5569 via client.SessionLog.SubmitAsync. The failsafe payload (later quarantined after 5 drains) is a new-session submit of that single canceled turn with no planFile or todoId. SessionLogService.SubmitAsync treats it as a new turn, ApplyTurnContext calls SessionLogTurnContextValidator.ValidateForNewEntry, and a null/omitted pair throws ArgumentException. SessionLogController.SubmitAsync does not map that to 400, so GlobalExceptionHandlerMiddleware returns internal_server_error. Same class as prior SubmitAsync supersede reports: hook-turn close on a later beginTurn is not a valid new-entry persist.'
+      - 'Triage group: triage-group-a37d54014236736b'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Submitting a canceled or superseded hook turn that omits planFile and todoId does not return HTTP 500 or method_invocation_error/internal_server_error from SessionLog.SubmitAsync.'
+      - '- A later beginTurn that supersedes an in-progress hook turn (for example req-20260817T225951Z-prompt-5569) persists that prior turn as canceled or superseded and still creates the new turn.'
+      - '- If omitted planFile/todoId remain rejected for this persist path, SessionLogController.SubmitAsync returns 400 with the validator detail instead of an opaque 500.'
+      - '- Replaying the quarantined failsafe shape F:\GitHub\TruckMate\.mcpServer\grok\failsafe\quarantine\20260817T230144Z-session_submit-29cf.yaml succeeds or is rejected with a non-500 contract; it is not retried into quarantine.'
+      - 'Implementation notes:'
+      - '- Root cause is SessionLogService.ApplyTurnContext -> ValidateForNewEntry on new turns. Existing-turn updates use ValidateIfSupplied and allow omitted context; canceled hook-turn persist takes the new-turn path.'
+      - '- Default omitted planFile/todoId to None for canceled/superseded persist, or skip required-context validation when status is canceled/superseded.'
+      - '- Map ArgumentException from SubmitAsync to 400 in SessionLogController so validator failures never become internal_server_error.'
+      - '- The failsafe bound the hook turn to the new hostile sessionId rather than the original hook session. Persist superseded hook turns against their original session when that id is known.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

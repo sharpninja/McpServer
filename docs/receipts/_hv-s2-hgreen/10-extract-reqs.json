@@ -1,0 +1,288 @@
+{
+  "TimestampUtc": "2026-08-19T19:55:59Z",
+  "Source": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01b91-0223-70b3-b29a-4a19fe36952b\\mcp\\call-d755417a-354d-4d11-9349-03cbf1e55bff-98.json",
+  "ItemCount": 293,
+  "Wanted": [
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-XAGENT-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-TRIAGEPLUGIN-001",
+    "FR-MCP-TRIAGEERR-001",
+    "FR-MCP-TRIAGE-002",
+    "FR-MCP-SESSIONATTR-001",
+    "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "FR-MCP-TEMPVOL-001"
+  ],
+  "FoundIds": [
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-SESSIONATTR-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-TEMPVOL-001",
+    "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "FR-MCP-TRIAGE-002",
+    "FR-MCP-TRIAGEERR-001",
+    "FR-MCP-TRIAGEPLUGIN-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-XAGENT-001"
+  ],
+  "Missing": [],
+  "Found": [
+    {
+      "Id": "FR-MCP-FAILSAFE-001",
+      "Title": "Failsafe drain treats 503 backend_unavailable as backend-down and can retry",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Submit/append still returns retryable backend_unavailable and keeps failsafe YAML",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "Drain does not latch failed=1 as permanently completed in-process",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Session-log persist that hits the storage budget or a transient provider fault stays retryable HTTP 503 backend_unavailable with failsafe on disk. Drain aborts without incrementing drainAttempts or quarantining. After storage answers, a later drain in the same process can replay. BUG-TRIAGE-159.\n- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML\n- [ ] Test-Repl"
+    },
+    {
+      "Id": "FR-MCP-SESSIONATTR-001",
+      "Title": "Session-log foreign filesModified and commits are rejected or marked",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "filesModified outside workspace root rejected or require foreign marker",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "commit SHA/message/files from another repo require foreign marker or redirect",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "Completeness audits can filter foreign artifacts",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "A session-log turn for workspace W never lists filesModified or commit artifacts that resolve outside W unless the turn explicitly marks them as cross-workspace or foreign-repo. Forward-only. BUG-TRIAGE-108.\n- [ ] filesModified outside workspace root rejected or require foreign marker\n- [ ] commit SHA/message/files from another repo require foreign marker or redirect\n- [ ] Completeness audits can "
+    },
+    {
+      "Id": "FR-MCP-SESSIONEND-001",
+      "Title": "SessionEnd emits empty object when cache cannot be resolved",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "identifiable workspace still flushes .mcpServer/<agent>",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "no pending cache is a silent no-op",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "SessionEnd and pre-compact emit {} and exit 0 when Resolve-McpCacheDir cannot find a workspace. When cwd, CLAUDE_PROJECT_DIR, or hook payload identifies a workspace, flush that cache. No-op is not a hook failure. BUG-TRIAGE-140. FR-MCP-115.\n- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}\n- [ ] identifiable workspace still flushes .mcpServer/<agent>\n- [ ] no pending cache is a silent no-o"
+    },
+    {
+      "Id": "FR-MCP-STRICTCOUNT-001",
+      "Title": "updateTurn accepts omitted empty or scalar tags and contextList under StrictMode",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "omitted/empty/scalar tags and contextList persist",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "exit 0 and no Count cannot be found",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "appendActions/updateTurn emit no boolean on success",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "workflow.sessionlog.updateTurn succeeds when tags or contextList is omitted, empty, or a single scalar. Invoke-McpPlugin exits 0. No StrictMode Count throw. Success stdout stays silent. BUG-TRIAGE-158.\n- [ ] omitted/empty/scalar tags and contextList persist\n- [ ] exit 0 and no Count cannot be found\n- [ ] appendActions/updateTurn emit no boolean on success"
+    },
+    {
+      "Id": "FR-MCP-TEMPVOL-001",
+      "Title": "Plugin wrappers align TEMP to the workspace volume",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "TEMP/TMP on workspace volume when workspace is not on TEMP drive",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "templates still document same-volume TEMP and verify-after-edit",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "failed move is a visible error",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Plugin session-start and wrapper entrypoints set TEMP and TMP to a writable directory on the workspace volume when they differ from the target volume. Prompt-template guidance stays. Failed replacement moves must not look like success. Do not patch PSGallery PowerShell.MCP. BUG-TRIAGE-117.\n- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive\n- [ ] templates still document same-vo"
+    },
+    {
+      "Id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+      "Title": "Codex transcript adapter handles tool_search and inter_agent records",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "inter_agent_communication_metadata is normalized or documented info skip",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "tool_search_call/output become paired events with call_id/name/status",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "successful persist deletes importRecovery",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Ingesting Codex JSONL with inter_agent_communication_metadata, tool_search_call, and tool_search_output produces zero unknown diagnostics for those types, emits paired tool events or a documented info skip, and a successful Persist=true ingest deletes importRecovery with persisted=true degraded=false. BUG-TRIAGE-122.\n- [ ] inter_agent_communication_metadata is normalized or documented info skip\n- "
+    },
+    {
+      "Id": "FR-MCP-TRIAGE-002",
+      "Title": "Async triage grouping and research",
+      "Status": "pending",
+      "AcCount": 5,
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-TRIAGE-002-AC001",
+          "text": "Groups are deterministic and workspace-isolated.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC002",
+          "text": "New matching reports reset the 15-minute quiet window.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC003",
+          "text": "A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC004",
+          "text": "Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC005",
+          "text": "MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs."
+    },
+    {
+      "Id": "FR-MCP-TRIAGEERR-001",
+      "Title": "Normalized error envelope for REST, MCP, REPL, and plugins",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner."
+    },
+    {
+      "Id": "FR-MCP-TRIAGEPLUGIN-001",
+      "Title": "Plugin root session, cache, console, and persist identity",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe."
+    },
+    {
+      "Id": "FR-MCP-VERIFYWRAP-001",
+      "Title": "Code-verify reports disk-full and honors timeout without hanging",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "IOException disk full is typed and current-turn remains valid",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "wrapper returns or fails within documented timeout",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "no indefinite in-process hang after child dotnet exits",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.\n- [ ] IOException disk full is typed and current-turn remains valid\n- [ ] wra"
+    },
+    {
+      "Id": "FR-MCP-XAGENT-001",
+      "Title": "CompleteTurn refuses cross-sourceType current-turn rebind",
+      "Status": "pending",
+      "AcCount": 3,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "cross-sourceType mismatch refused or restored to originating cache",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-2",
+          "text": "same-agent rotation can complete without 500",
+          "isSatisfied": false
+        },
+        {
+          "id": "ac-3",
+          "text": "CompleteTurn does not hijack a concurrent other requestId",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "When current-turn.yaml sessionId prefix differs from the active agent (Codex vs GrokCode vs ClaudeCode), CompleteTurn does not SubmitAsync as a new turn on the other session and does not return internal_server_error. Same-agent session rotation still rebinds. CompleteTurn never closes a different requestId. Empty title omits per TR-MCP-REPL-015. BUG-TRIAGE-106, BUG-TRIAGE-142.\n- [ ] cross-sourceTy"
+    }
+  ]
+}

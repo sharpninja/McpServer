@@ -1,0 +1,3 @@
+ M src/McpServer.Services/Services/SessionLogService.cs
+ M tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs
+?? tests/McpServer.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs

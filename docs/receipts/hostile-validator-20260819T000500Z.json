@@ -1,0 +1,144 @@
+{
+  "TimestampUtc": "2026-08-19T00:05:00Z",
+  "ActualCompletedUtc": "2026-08-19T00:14:10Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project implementation (H-done closeout of PLAN-TRIAGECLUSTER-001 sixteen BUG-TRIAGE items)",
+  "ActivePlan": "docs/plans/triage-cluster-001.md",
+  "TodoId": "PLAN-TRIAGECLUSTER-001",
+  "SessionId": "GrokSubagentHostile-20260819T000500Z-hdone",
+  "TurnRequestId": "req-20260819T000500Z-001-hdone-closeout-triagecluster",
+  "TurnId": 41981,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Trust": {
+    "signatureOk": true,
+    "nonce": "7d80238d7a2f34843035f147b1c8995f",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+    "storage": "reachable",
+    "pluginJsonVersion": "1.94.0",
+    "diskFreeGBAtTrust": 2.03,
+    "diskFreeGBAfterTests": 0.89,
+    "diskFreeGBAfterValidateTraceability": 0.95
+  },
+  "InterPhaseReceipts": {
+    "H0": { "path": "docs/receipts/hostile-validator-20260818T193842Z.md", "OverallVerdict": "AGREE" },
+    "HRed": { "path": "docs/receipts/hostile-validator-20260818T233800Z.md", "OverallVerdict": "AGREE", "PASS": 27, "FAIL": 0 },
+    "HGreen": { "path": "docs/receipts/hostile-validator-20260818T234800Z.md", "OverallVerdict": "AGREE", "FAIL": 0 },
+    "H9": { "path": "docs/receipts/hostile-validator-20260818T221600Z.md", "OverallVerdict": "AGREE" }
+  },
+  "TestsThisReview": {
+    "SupportNamed": { "Failed": 0, "Passed": 39, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T000500Z/support-named.log" },
+    "ReplNamed": { "Failed": 0, "Passed": 18, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T000500Z/repl-named.log" },
+    "Pester": { "Failed": 0, "Passed": 9, "Skipped": 0, "NotRun": 0, "log": "docs/receipts/_hv-20260819T000500Z/pester.log" },
+    "BuildCache": { "Failed": 0, "Passed": 2, "Skipped": 0, "Exit": 0, "log": "docs/receipts/_hv-20260819T000500Z/build-cache.log" },
+    "ValidateTraceability": { "findings": 0, "exit": 0, "log": "docs/receipts/_hv-20260819T000500Z/validate-traceability.log" }
+  },
+  "TruckMateSessionLogQuery": {
+    "workspacePath": "F:\\GitHub\\TruckMate",
+    "totalCount": 230,
+    "invalidColumnName": false,
+    "agentHeaderFieldsPresent": true
+  },
+  "TodosStillDoneFalse": [
+    "PLAN-TRIAGECLUSTER-001",
+    "BUG-TRIAGE-110",
+    "BUG-TRIAGE-111",
+    "BUG-TRIAGE-112",
+    "BUG-TRIAGE-114",
+    "BUG-TRIAGE-115",
+    "BUG-TRIAGE-119",
+    "BUG-TRIAGE-123",
+    "BUG-TRIAGE-124",
+    "BUG-TRIAGE-126",
+    "BUG-TRIAGE-128",
+    "BUG-TRIAGE-131",
+    "BUG-TRIAGE-132",
+    "BUG-TRIAGE-139",
+    "BUG-TRIAGE-143",
+    "BUG-TRIAGE-148",
+    "BUG-TRIAGE-149"
+  ],
+  "Claims": {
+    "A": {
+      "A1": "PASS",
+      "A2": "PASS",
+      "A3": "PASS",
+      "A4": "PASS",
+      "A5": "PASS",
+      "A6": "PASS",
+      "A7": "PASS"
+    },
+    "B": {
+      "B1": "PASS",
+      "B2": "PASS",
+      "B3": "PASS",
+      "B4": "PASS",
+      "B5": "PASS"
+    },
+    "C": {
+      "C1": "PASS",
+      "C2": "PASS",
+      "C3": "PASS",
+      "C4": "PASS",
+      "C5": "N/A"
+    },
+    "D": {
+      "D1": "PASS",
+      "D2": "PASS",
+      "D3": "PASS",
+      "D4": "PASS",
+      "D5": "N/A",
+      "D6": "N/A"
+    }
+  },
+  "Counts": {
+    "PASS": 20,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 3
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "AccuracyRating": 96,
+  "CompletenessRating": 96,
+  "OverallVerdict": "AGREE",
+  "ParentMayMarkDone": [
+    "BUG-TRIAGE-110",
+    "BUG-TRIAGE-111",
+    "BUG-TRIAGE-112",
+    "BUG-TRIAGE-114",
+    "BUG-TRIAGE-115",
+    "BUG-TRIAGE-119",
+    "BUG-TRIAGE-123",
+    "BUG-TRIAGE-124",
+    "BUG-TRIAGE-126",
+    "BUG-TRIAGE-128",
+    "BUG-TRIAGE-131",
+    "BUG-TRIAGE-132",
+    "BUG-TRIAGE-139",
+    "BUG-TRIAGE-143",
+    "BUG-TRIAGE-148",
+    "BUG-TRIAGE-149"
+  ],
+  "DoNotMark": ["PLAN-TRIAGECLUSTER-001"],
+  "ReceiptMd": "docs/receipts/hostile-validator-20260819T000500Z.md",
+  "SessionPersistence": {
+    "queryTotalCount": 1,
+    "sessionId": "GrokSubagentHostile-20260819T000500Z-hdone",
+    "requestId": "req-20260819T000500Z-001-hdone-closeout-triagecluster",
+    "turnId": 41981,
+    "turnStatus": "completed",
+    "actions": 9,
+    "designDecisions": 3,
+    "processingDialog": 4,
+    "filesModified": 10,
+    "responseContainsOverallVerdictAgree": true,
+    "sessionStatus": "in_progress"
+  }
+}

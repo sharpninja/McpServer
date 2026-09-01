@@ -1,0 +1,108 @@
+{
+  "TimestampUtc": "2026-08-19T21:05:14Z",
+  "Dump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01bce-1251-7640-9005-c6075b5284c0\\mcp\\call-f4c0f3c3-b4f4-4d54-90ab-82a31ef8e719-110.json",
+  "ItemCount": 448,
+  "Wanted": [
+    "TEST-MCP-STRICTCOUNT-001",
+    "TEST-MCP-FAILSAFE-001",
+    "TEST-MCP-SESSIONEND-001",
+    "TEST-MCP-XAGENT-001",
+    "TEST-MCP-VERIFYWRAP-001",
+    "TEST-MCP-TRIAGEPLUGIN-004"
+  ],
+  "FoundIds": [
+    "TEST-MCP-STRICTCOUNT-001",
+    "TEST-MCP-FAILSAFE-001",
+    "TEST-MCP-SESSIONEND-001",
+    "TEST-MCP-XAGENT-001",
+    "TEST-MCP-VERIFYWRAP-001",
+    "TEST-MCP-TRIAGEPLUGIN-004"
+  ],
+  "Missing": [],
+  "Found": [
+    {
+      "Id": "TEST-MCP-STRICTCOUNT-001",
+      "Title": "",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    },
+    {
+      "Id": "TEST-MCP-FAILSAFE-001",
+      "Title": "",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONEND-001",
+      "Title": "",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    },
+    {
+      "Id": "TEST-MCP-XAGENT-001",
+      "Title": "",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Named tests cover TEST-MCP-XAGENT-001 acceptance criteria",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    },
+    {
+      "Id": "TEST-MCP-VERIFYWRAP-001",
+      "Title": "",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    },
+    {
+      "Id": "TEST-MCP-TRIAGEPLUGIN-004",
+      "Title": "beginTurn persist timeout is degraded/queued",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+          "isSatisfied": false
+        }
+      ],
+      "Conditions": null
+    }
+  ]
+}

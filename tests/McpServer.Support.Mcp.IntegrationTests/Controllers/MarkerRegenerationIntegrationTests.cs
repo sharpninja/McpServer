@@ -97,7 +97,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         // FileSystemWatcher on the marker file — fires when marker is written/rewritten.
         _markerWatcher = new FileSystemWatcher(_workspacePath, MarkerFileService.MarkerFileName)
         {
-            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime,
+            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.FileName,
+            InternalBufferSize = 64 * 1024,
             EnableRaisingEvents = true,
         };
 
@@ -284,31 +285,17 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Returns a <see cref="Task"/> that completes when the marker file is created or changed.
+    /// Completes when the marker file is rewritten. FileSystemWatcher Changed/Created can miss
+    /// atomic replace (rename) and can drop events under suite load; Renamed plus a timestamp
+    /// poll observe the actual file write instead of waiting longer for a lost event.
     /// </summary>
     private Task WatchForMarkerChange()
-    {
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        FileSystemEventHandler? changedHandler = null;
-        FileSystemEventHandler? createdHandler = null;
-
-        void Complete()
-        {
-            _markerWatcher.Changed -= changedHandler;
-            _markerWatcher.Created -= createdHandler;
-            tcs.TrySetResult();
-        }
-
-        changedHandler = (_, _) => Complete();
-        createdHandler = (_, _) => Complete();
-        _markerWatcher.Changed += changedHandler;
-        _markerWatcher.Created += createdHandler;
-
-        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        cts.Token.Register(() => tcs.TrySetException(
-            new TimeoutException($"Marker file was not written within 10 s at {_markerPath}")));
-        return tcs.Task;
-    }
+        => MarkerFileChangeObserver.WatchAsync(
+            _markerPath,
+            _markerWatcher,
+            MarkerFileChangeObserver.Mode.RenamedAndPoll,
+            TimeSpan.FromSeconds(10),
+            TestContext.Current.CancellationToken);
 
     private async Task EnsureWorkspaceSeededAsync()
     {

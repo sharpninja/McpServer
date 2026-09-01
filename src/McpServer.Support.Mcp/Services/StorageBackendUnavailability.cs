@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Data.Common;
 using System.Net.Sockets;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -79,9 +80,12 @@ public static class StorageBackendUnavailability
         switch (exception)
         {
             case StorageUnavailableException:
+            case StorageCommandBudgetExceededException:
             case RetryLimitExceededException:
                 return true;
-            case SqlException sql when sql.IsTransient || s_sqlConnectionErrorNumbers.Contains(sql.Number):
+            case SqlException sql when sql.IsTransient
+                || s_sqlConnectionErrorNumbers.Contains(sql.Number)
+                || IsSqlHandshakeFailure(sql):
                 return true;
             case SqliteException sqlite when s_sqliteConnectionErrorCodes.Contains(sqlite.SqliteErrorCode):
                 return true;
@@ -99,6 +103,17 @@ public static class StorageBackendUnavailability
         }
 
         return Classify(exception.InnerException, visited, depth + 1);
+    }
+
+    /// <summary>
+    /// SQL SSL/pre-login handshake timeouts report as provider error 0 with a non-catalog
+    /// <see cref="SqlException.Number"/> (observed 1.4.27 crash: SSL Provider wait timed out).
+    /// </summary>
+    private static bool IsSqlHandshakeFailure(SqlException sql)
+    {
+        var text = sql.Message ?? string.Empty;
+        return text.Contains("pre-login handshake", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("SSL Provider", StringComparison.OrdinalIgnoreCase);
     }
 }
 

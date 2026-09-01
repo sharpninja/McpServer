@@ -1,0 +1,299 @@
+UTC=2026-08-18T18:45:48.6642418Z
+GIT_HEAD=bf000bb7fc495b6011eb5888a8c9293c992eb305
+GIT_BRANCH=develop
+GIT_STATUS=## [32mdevelop[m...[31morigin/develop[m [31m??[m docs/receipts/_hv-wrapup-bootstrap.json [31m??[m docs/receipts/_hv-wrapup-collect-20260818.ps1 [31m??[m docs/receipts/_hv-wrapup-collect2-20260818.ps1 [31m??[m docs/receipts/_hv-wrapup-git-20260818.ps1 [31m??[m docs/receipts/_hv-wrapup-ids-20260818.txt [31m??[m docs/receipts/_hv-wrapup-session-20260818.ps1 [31m??[m docs/receipts/_hv-wrapup-session2-20260818.ps1 [31m??[m docs/receipts/_wrap-up-turn-20260818T183800Z.json [31m??[m docs/receipts/wrap-up-20260818T183800Z.md
+GIT_REMOTES
+azure	https://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (fetch)
+azure	https://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (push)
+origin	https://github.com/sharpninja/McpServer.git (fetch)
+origin	https://github.com/sharpninja/McpServer.git (push)
+ORIGIN_DEVELOP=bf000bb7fc495b6011eb5888a8c9293c992eb305	refs/heads/develop
+AZURE_DEVELOP=bf000bb7fc495b6011eb5888a8c9293c992eb305	refs/heads/develop
+ORIGIN_MAIN=d14a23302a9bcdb8887033f56c4b4a652aed195a	refs/heads/main
+AZURE_MAIN=b1615e9a29503cd415bb0bc830bc3e6127ec954d	refs/heads/main
+WIKI_HEAD=5764ee7a2b1d133d08b0c246807e6d674c2ebd91	HEAD
+WIKI_MASTER=5764ee7a2b1d133d08b0c246807e6d674c2ebd91	refs/heads/master
+WIKI_MAIN=
+GIT_DIFF_CHECK_WT=0
+GIT_DIFF_CHECK_HEAD=0
+COMMIT_ONELINE=bf000bb7fc495b6011eb5888a8c9293c992eb305 HEAD -> develop, origin/develop, azure/develop feat(products,handoff): ship products + handoff; refresh docs and wiki
+COMMIT_PARENTS=298c5fde3d1438ff7741ebec82ced796b207433e
+COMMIT_NAME_STATUS_SUMMARY
+[33mcommit bf000bb7fc495b6011eb5888a8c9293c992eb305[m
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Tue Aug 18 13:38:20 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Tue Aug 18 13:38:20 2026 -0500
+
+    feat(products,handoff): ship products + handoff; refresh docs and wiki
+    
+    Host-local Products (PROD-* keys, CQRS-only) share FR/TR/TEST/layers
+    across member workspaces via effective union and product-requirements
+    context. Handoff ingestion lands as a first-class workspace workflow.
+    
+    Refresh-docs updates README, user/client/REPL/server guides, wiki.yaml
+    (handoff page), and re-exports requirements wiki ZIP from MCP
+    (generateDocument format=wiki docType=all). Wrap-up validation:
+    ValidateTraceability passed; git diff --check clean; Nuke Test
+    3279 passed / 0 failed / 0 skipped. Operator authorized push all
+    including wiki.
+    
+    Redacted a rotated API key from two hostile receipt scripts so they
+    read the marker like later collectors.
+    
+    Signed-off: grok-4.6@GrokCode; confidence high in correctness, accuracy,
+    and completeness (Nuke Test 0 fail 0 skip; ValidateTraceability passed;
+    wiki ZIP sha256 8bbee5067d061821510390c4b912160edad1951fbf5f98b8b18a916b67c7ed2d).
+    
+    Co-Authored-By: Grok Code <noreply@x.ai>
+
+M	README.md
+M	docs/CLIENT-INTEGRATION.md
+A	docs/Handoff-Ingestion.md
+M	docs/MCP-SERVER.md
+M	docs/Project/Functional-Requirements.md
+M	docs/Project/Requirements-Matrix.md
+M	docs/Project/TR-per-FR-Mapping.md
+M	docs/Project/Technical-Requirements.md
+M	docs/Project/Testing-Requirements.md
+M	docs/Project/requirements-wiki-documents.zip
+M	docs/Project/wiki/azure/.mcp-requirements-manifest.json
+M	docs/Project/wiki/azure/Client-Integration.md
+M	docs/Project/wiki/azure/Functional-Requirements.md
+A	docs/Project/wiki/azure/Handoff-Ingestion.md
+M	docs/Project/wiki/azure/Home.md
+M	docs/Project/wiki/azure/MCP-Server-Operations.md
+M	docs/Project/wiki/azure/REPL-User-Guide.md
+M	docs/Project/wiki/azure/Requirements-Matrix.md
+M	docs/Project/wiki/azure/TR-per-FR-Mapping.md
+M	docs/Project/wiki/azure/Technical-Requirements.md
+M	docs/Project/wiki/azure/Testing-Requirements.md
+M	docs/Project/wiki/azure/User-Guide.md
+M	docs/Project/wiki/azure/User-Guides/.order
+M	docs/Project/wiki/github/.mcp-requirements-manifest.json
+M	docs/Project/wiki/github/Client-Integration.md
+M	docs/Project/wiki/github/Functional-Requirements.md
+A	docs/Project/wiki/github/Handoff-Ingestion.md
+M	docs/Project/wiki/github/Home.md
+M	docs/Project/wiki/github/MCP-Server-Operations.md
+M	docs/Project/wiki/github/REPL-User-Guide.md
+M	docs/Project/wiki/github/Requirements-Matrix.md
+M	docs/Project/wiki/github/TR-per-FR-Mapping.md
+M	docs/Project/wiki/github/Technical-Requirements.md
+M	docs/Project/wiki/github/Testing-Requirements.md
+M	docs/Project/wiki/github/User-Guide.md
+M	docs/Project/wiki/github/_Sidebar.md
+M	docs/README.md
+M	docs/REPL-USER-GUIDE.md
+M	docs/USER-GUIDE.md
+A	docs/plans/mcp-products-001.md
+A	docs/receipts/_deploy-install-repl-20260818T180300Z.txt
+A	docs/receipts/_deploy-sync-plugins-20260818T180600Z.txt
+A	docs/receipts/_deploy-update-service-20260818T180100Z.txt
+A	docs/receipts/_extract-185223-exception.ps1
+A	docs/receipts/_extract-claude-sessionlog-0030-20260818T003125Z.ps1
+A	docs/receipts/_extract-sessionlog-exception-20260818T003125Z.ps1
+A	docs/receipts/_find-grok-503-1852.ps1
+A	docs/receipts/_find-grok-503-235223Z.ps1
+A	docs/receipts/_gendoc-wiki-20260818T183111Z.err.txt
+A	docs/receipts/_gendoc-wiki-20260818T183111Z.yaml
+A	docs/receipts/_gendoc-wiki-params-20260818T183111Z.yaml
+A	docs/receipts/_health-before-agenthelp-test-20260818T001157Z.ps1
+COMMIT_FILE_COUNT=590
+COMMIT_DELETED
+WIKI_YAML_PAGES_IN_COMMIT
+schema: mcp-wiki-export/v1
+  - id: home
+    source: generated:home
+  - id: functional
+    source: generated:functional
+  - id: technical
+    source: generated:technical
+  - id: testing
+    source: generated:testing
+  - id: mapping
+    source: generated:mapping
+  - id: matrix
+    source: generated:matrix
+  - id: triage-plugin-code-quality-case-study
+    source: docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md
+  - id: user-guide
+    source: docs/USER-GUIDE.md
+  - id: faq
+    source: docs/FAQ.md
+  - id: client-integration
+    source: docs/CLIENT-INTEGRATION.md
+  - id: repl-user-guide
+    source: docs/REPL-USER-GUIDE.md
+  - id: repl-agent-guide
+    source: docs/REPL-AGENT-GUIDE.md
+  - id: repl-migration-guide
+    source: docs/REPL-MIGRATION-GUIDE.md
+  - id: mcp-server-guide
+    source: docs/MCP-SERVER.md
+  - id: quadbrain
+    source: docs/QUADBRAIN.md
+  - id: qbagent
+    source: docs/QBAGENT.md
+  - id: agent-plugin-availability
+    source: docs/AGENT-PLUGIN-AVAILABILITY.md
+  - id: agent-plugin-feature-matrix
+    source: docs/AGENT-PLUGIN-FEATURE-MATRIX.md
+  - id: byrd-development-process
+    source: docs/Development-Process-draft-v4.md
+  - id: azure-pipelines
+    source: docs/AZURE-PIPELINES.md
+  - id: release-checklist
+    source: docs/RELEASE-CHECKLIST.md
+  - id: onboarding-human-ai-partnership
+    source: docs/Onboarding-Human-AI-Partnership.md
+  - id: usecase-extension-design-v3
+    source: docs/McpServer-UseCase-Extension-Design-v3.0.md
+  - id: usecase-diagram-mermaid-schema-v1
+    source: docs/context/usecase-diagram-mermaid-schema-v1.md
+  - id: session-log-schema
+    source: docs/context/session-log-schema.md
+  - id: handoff-ingestion
+    source: docs/Handoff-Ingestion.md
+COMMIT_PRODUCT_CS
+docs/Handoff-Ingestion.md
+docs/Project/wiki/azure/Handoff-Ingestion.md
+docs/Project/wiki/github/Handoff-Ingestion.md
+docs/plans/mcp-products-001.md
+docs/receipts/_hv-h4-green-list-product.txt
+docs/receipts/_hv-h4-green-test-product-default.txt
+docs/receipts/_hv-h4-green-test-product.txt
+docs/receipts/_hv-h5-done-handoff-isolated.txt
+docs/receipts/_hv-h5-done-handoff.ps1
+docs/receipts/_hv-h5-done-test-product.txt
+docs/receipts/_hv-h5-rerun-product.txt
+docs/receipts/mcp-handoff-001-validation-20260816T185657Z.md
+docs/receipts/mcp-handoff-001-validation-20260816T185657Z.md.json
+docs/receipts/mcp-handoffplan-001-codex-not-approved-20260817T035435Z.md
+docs/receipts/mcp-handoffplan-001-final-20260816T205400Z.md
+docs/receipts/mcp-handoffplan-001-final-20260816T231500Z.md
+docs/receipts/mcp-handoffplan-001-gate-a-corrected-20260817T063623Z.md
+docs/receipts/mcp-handoffplan-001-gate-a-mutation-red-20260817T041322Z.md
+docs/receipts/mcp-handoffplan-001-gate-b-20260817T090020Z.md
+docs/receipts/mcp-handoffplan-001-scope-corrected-20260817T005200Z.md
+docs/receipts/mcp-handoffplan-001-validation-20260816T230700Z.md
+plugins/core/skills/handoff/SKILL.md
+src/McpServer.Client/HandoffClient.cs
+src/McpServer.Client/Models/HandoffModels.cs
+src/McpServer.Client/Models/HandoffStrictStringEnumConverter.cs
+src/McpServer.Client/ProductClient.cs
+src/McpServer.Cqrs.Mvvm/HandoffDirectorCommands.cs
+src/McpServer.Repl.Core/HandoffCommandShapes.cs
+src/McpServer.Repl.Core/HandoffWorkflow.cs
+src/McpServer.Repl.Core/IHandoffWorkflow.cs
+src/McpServer.Services/Models/HandoffModels.cs
+src/McpServer.Services/Services/HandoffContainedFileReader.cs
+src/McpServer.Services/Services/HandoffDbExceptions.cs
+src/McpServer.Services/Services/HandoffDirectorExecutor.cs
+src/McpServer.Services/Services/HandoffHttpStatus.cs
+src/McpServer.Services/Services/HandoffIngestionService.cs
+src/McpServer.Services/Services/HandoffModePolicy.cs
+src/McpServer.Services/Services/HandoffOneShotExtractor.cs
+src/McpServer.Services/Services/HandoffProcessing.cs
+src/McpServer.Services/Services/HandoffPromptDefaults.cs
+src/McpServer.Services/Services/HandoffReplayKeys.cs
+src/McpServer.Services/Services/HandoffServiceCollectionExtensions.cs
+src/McpServer.Services/Services/HandoffSourceResolver.cs
+src/McpServer.Services/Services/HandoffStrictStringEnumConverter.cs
+src/McpServer.Services/Services/HandoffTodoDraftParser.cs
+src/McpServer.Services/Services/HandoffTodoDraftValidator.cs
+src/McpServer.Services/Services/HandoffWorkspacePaths.cs
+src/McpServer.Services/Services/IHandoffIngestionService.cs
+src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260816183202_AddHandoffIngestionStorage.Designer.cs
+src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260816183202_AddHandoffIngestionStorage.cs
+src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260818142039_AddProductsStorage.Designer.cs
+src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260818142039_AddProductsStorage.cs
+src/McpServer.Storage.SqlServerMigrations/Migrations/20260816183150_AddHandoffIngestionStorage.Designer.cs
+src/McpServer.Storage.SqlServerMigrations/Migrations/20260816183150_AddHandoffIngestionStorage.cs
+src/McpServer.Storage.SqlServerMigrations/Migrations/20260818142028_AddProductsStorage.Designer.cs
+src/McpServer.Storage.SqlServerMigrations/Migrations/20260818142028_AddProductsStorage.cs
+src/McpServer.Storage.SqliteMigrations/Migrations/20260816183137_AddHandoffIngestionStorage.Designer.cs
+src/McpServer.Storage.SqliteMigrations/Migrations/20260816183137_AddHandoffIngestionStorage.cs
+src/McpServer.Storage.SqliteMigrations/Migrations/20260818142008_AddProductsStorage.Designer.cs
+src/McpServer.Storage.SqliteMigrations/Migrations/20260818142008_AddProductsStorage.cs
+src/McpServer.Storage/Entities/HandoffDiagnosticEntity.cs
+src/McpServer.Storage/Entities/HandoffIngestionRunEntity.cs
+src/McpServer.Storage/Entities/ProductEntity.cs
+src/McpServer.Storage/Entities/ProductWorkspaceMembershipEntity.cs
+src/McpServer.Support.Mcp/Controllers/HandoffController.cs
+src/McpServer.Support.Mcp/Controllers/ProductsController.cs
+src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.Handoff.cs
+src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.Products.cs
+src/McpServer.Support.Mcp/Products/Commands/AddProductMemberCommand.cs
+src/McpServer.Support.Mcp/Products/Commands/CreateProductCommand.cs
+src/McpServer.Support.Mcp/Products/Commands/DeleteProductCommand.cs
+src/McpServer.Support.Mcp/Products/Commands/RemoveProductMemberCommand.cs
+src/McpServer.Support.Mcp/Products/Commands/UpdateProductCommand.cs
+src/McpServer.Support.Mcp/Products/Models/ProductDto.cs
+src/McpServer.Support.Mcp/Products/ProductCqrsHelpers.cs
+src/McpServer.Support.Mcp/Products/ProductResultCodes.cs
+src/McpServer.Support.Mcp/Products/ProductServiceCollectionExtensions.cs
+src/McpServer.Support.Mcp/Products/ProductShareHelper.cs
+src/McpServer.Support.Mcp/Products/Queries/GetProductEffectiveRequirementsQuery.cs
+src/McpServer.Support.Mcp/Products/Queries/GetProductQuery.cs
+src/McpServer.Support.Mcp/Products/Queries/GetProductRequirementContextQuery.cs
+src/McpServer.Support.Mcp/Products/Queries/ListProductMembersQuery.cs
+src/McpServer.Support.Mcp/Products/Queries/ListProductsQuery.cs
+tests/McpServer.Client.Tests/HandoffClientTests.cs
+tests/McpServer.Client.Tests/ProductClientTests.cs
+tests/McpServer.Repl.Core.Tests/HandoffSkillDelegationTests.cs
+tests/McpServer.Repl.Core.Tests/HandoffWorkflowTests.cs
+tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProductsLaunchTests.cs
+tests/McpServer.Support.Mcp.IntegrationTests/HandoffHttpEnumIntegrationTests.cs
+tests/McpServer.Support.Mcp.IntegrationTests/HandoffIngestionStorageMigrationTests.cs
+tests/McpServer.Support.Mcp.Tests/Controllers/HandoffControllerTests.cs
+tests/McpServer.Support.Mcp.Tests/Controllers/ProductsControllerTests.cs
+tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
+tests/McpServer.Support.Mcp.Tests/Products/AddProductMemberCommandHandlerTests.cs
+tests/McpServer.Support.Mcp.Tests/Products/CreateProductCommandHandlerTests.cs
+tests/McpServer.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs
+tests/McpServer.Support.Mcp.Tests/Products/ProductHandlerTestContext.cs
+tests/McpServer.Support.Mcp.Tests/Products/ProductRequirementContextSurfaceTests.cs
+tests/McpServer.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffDbExceptionsTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffOneShotExtractorTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffReplayKeysTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffServiceRegistrationTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffStrictEnumAndHttpTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffTodoDraftValidatorTests.cs
+tests/McpServer.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs
+tests/McpServer.Support.Mcp.Tests/Storage/ProductEntityTests.cs
+tests/McpServer.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs
+AZURE_WIKI_LSREMOTE_TRY
+remote: TF401019: The Git repository with name or identifier McpServer.wiki does not exist or you do not have permissions for the operation you are attempting.
+fatal: repository 'https://dev.azure.com/McpServer/McpServer/_git/McpServer.wiki/' not found
+AZURE_WIKI_LSREMOTE_EXIT=128
+AZ_WIKI_LIST
+[
+  {
+    "id": "ed86a90e-3d73-443e-8655-3907088747e4",
+    "mappedPath": "/docs",
+    "name": "MCP Server",
+    "projectId": "8d9dd702-0a2b-47f4-a0bd-945635f4d52a",
+    "properties": null,
+    "remoteUrl": "https://dev.azure.com/McpServer/8d9dd702-0a2b-47f4-a0bd-945635f4d52a/_wiki/wikis/ed86a90e-3d73-443e-8655-3907088747e4",
+    "repositoryId": "db0ca35a-53dd-4a5d-80d8-bc807fef53c1",
+    "type": "codeWiki",
+    "url": "https://dev.azure.com/McpServer/8d9dd702-0a2b-47f4-a0bd-945635f4d52a/_apis/wiki/wikis/ed86a90e-3d73-443e-8655-3907088747e4",
+    "versions": [
+      {
+        "version": "main",
+        "versionOptions": null,
+        "versionType": null
+      }
+    ]
+  }
+]
+AZ_WIKI_LIST_EXIT=0
+UTC_END=2026-08-18T18:45:58.7505170Z

@@ -1,0 +1,10 @@
+id: TR-MCP-TRIAGESTORE-002
+title: Five second intake and submit storage budget
+description: TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+priority: high
+area: MCP
+subarea: TRIAGESTORE
+acceptanceCriteria:
+  - id: ac-1
+    text: TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+    isSatisfied: false

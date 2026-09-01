@@ -1,0 +1,31 @@
+{
+  "FunctionalCount": 293,
+  "TechnicalCount": 422,
+  "TestingCount": 448,
+  "MappingCount": 293,
+  "FrId": "FR-MCP-TEMPVOL-001",
+  "FrTitle": "Plugin wrappers align TEMP to the workspace volume",
+  "FrStatus": "pending",
+  "FrAc": [
+    "ac-1|False|TEMP/TMP on workspace volume when workspace is not on TEMP drive",
+    "ac-2|False|templates still document same-volume TEMP and verify-after-edit",
+    "ac-3|False|failed move is a visible error"
+  ],
+  "TrId": "TR-MCP-TEMPVOL-001",
+  "TrTitle": "Plugin entrypoints set TEMP TMP on the workspace volume",
+  "TrStatus": "pending",
+  "TrAc": [
+    "ac-1|False|Plugin entrypoints set TEMP/TMP on the workspace volume"
+  ],
+  "TestId": "TEST-MCP-TEMPVOL-001",
+  "TestTitle": "",
+  "TestStatus": "pending",
+  "TestCondition": "Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.",
+  "TestAc": [
+    "ac-1|False|Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria"
+  ],
+  "MapFr": "FR-MCP-TEMPVOL-001",
+  "MapTr": ["TR-MCP-TEMPVOL-001"],
+  "MapTest": ["TEST-MCP-TEMPVOL-001"],
+  "Source": "mcpserver__requirements_effective productScope=product; dump call-52871580; testing key not tests"
+}

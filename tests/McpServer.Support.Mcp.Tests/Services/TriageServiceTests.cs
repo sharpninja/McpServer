@@ -43,6 +43,52 @@ public sealed class TriageServiceTests : IDisposable
     public void Dispose() => _connection.Dispose();
 
     /// <summary>
+    /// TEST-MCP-TRIAGESTORE-002 / BUG-TRIAGE-110: unreachable storage fails fast as
+    /// storage-unavailable instead of hanging until the REPL timeout.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable()
+    {
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        var unreachableOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(@"Data Source=Z:\mcp-triage-missing\unreachable.db")
+            .Options;
+        var db = new McpDbContext(unreachableOptions, new WorkspaceContext { WorkspacePath = PrimaryWorkspace });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = PrimaryWorkspace, WorkspaceName = "IncidentSource" };
+        var workspaceService = Substitute.For<IWorkspaceService>();
+        workspaceService.ListAsync(Arg.Any<CancellationToken>())
+            .Returns(new WorkspaceListResult([Workspace(PrimaryWorkspace, "IncidentSource")], 1));
+        var todo = Substitute.For<ITodoService>();
+        var sut = new TriageService(
+            db,
+            workspaceContext,
+            workspaceService,
+            Substitute.For<ITriageResearchRunner>(),
+            todo,
+            new ForwardingTriageTodoCreator(todo),
+            Substitute.For<IPromptTemplateService>(),
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions
+            {
+                QuietPeriod = TimeSpan.FromMinutes(15),
+                MaxRunTime = TimeSpan.FromMinutes(30),
+            }),
+            _time,
+            NullLogger<TriageService>.Instance);
+
+        var thrown = await Assert.ThrowsAnyAsync<Exception>(() =>
+            sut.SubmitReportAsync(CreateReport("unreachable-sql"), TestContext.Current.CancellationToken))
+            .ConfigureAwait(true);
+        clock.Stop();
+
+        var classified = McpErrorClassifier.Classify(thrown);
+        Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
+        Assert.True(classified.Retryable);
+        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Intake hung for {clock.Elapsed}.");
+        using var verify = CreateDb(PrimaryWorkspace);
+        Assert.Equal(0, await verify.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-001: valid intake persists a report, returns accepted queue state,
     /// and does not invoke research or TODO creation synchronously.
     /// </summary>

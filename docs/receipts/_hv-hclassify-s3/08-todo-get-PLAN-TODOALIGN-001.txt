@@ -1,0 +1,19 @@
+type: error
+payload:
+  requestId: req-20260820T114641Z-a0bd
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  details:
+    methodName: workflow.todo.get
+    errors:
+    - payload.params.id is required.
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:322
+Line |
+ 322 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260820T114641Z-a0bd   code:
+     | schema_validation_failed   message: YAML request failed schema validation.   details:     methodName:
+     | workflow.todo.get     errors:     - payload.params.id is required.  ---
+

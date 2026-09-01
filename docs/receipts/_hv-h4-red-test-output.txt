@@ -1,0 +1,79 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)
+[xUnit.net 00:00:00.30]   Discovering: McpServer.Support.Mcp.Tests
+[xUnit.net 00:00:01.29]   Discovered:  McpServer.Support.Mcp.Tests
+[xUnit.net 00:00:01.52]   Starting:    McpServer.Support.Mcp.Tests
+[xUnit.net 00:00:04.47]       not implemented
+[xUnit.net 00:00:04.47]       Stack Trace:
+[xUnit.net 00:00:04.47]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(107,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr()
+[xUnit.net 00:00:04.47]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(108,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr()
+[xUnit.net 00:00:04.47]         --- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr [2 s]
+  Error Message:
+   not implemented
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 107
+   at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 108
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:04.70]       not implemented
+[xUnit.net 00:00:04.70]       Stack Trace:
+[xUnit.net 00:00:04.70]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(121,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks()
+[xUnit.net 00:00:04.70]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(123,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks()
+[xUnit.net 00:00:04.70]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:04.93]       not implemented
+[xUnit.net 00:00:04.93]       Stack Trace:
+[xUnit.net 00:00:04.93]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(92,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles()
+[xUnit.net 00:00:04.93]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(93,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles()
+[xUnit.net 00:00:04.93]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.11]       not implemented
+[xUnit.net 00:00:05.11]       Stack Trace:
+[xUnit.net 00:00:05.11]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(76,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin()
+[xUnit.net 00:00:05.11]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs(77,0): at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin()
+[xUnit.net 00:00:05.11]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.14]   Finished:    McpServer.Support.Mcp.Tests (ID = 'fb6b7ca1b59a739774a8a8668e88283949ecc0192ba18c822eead5027e319992')
+  Failed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks [227 ms]
+  Error Message:
+   not implemented
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 121
+   at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 123
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles [233 ms]
+  Error Message:
+   not implemented
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 92
+   at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 93
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin [178 ms]
+  Error Message:
+   not implemented
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 76
+   at McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Products\ProductRequirementContextTests.cs:line 77
+--- End of stack trace from previous location ---
+
+Total tests: 4
+     Failed: 4
+ Total time: 5.6721 Seconds

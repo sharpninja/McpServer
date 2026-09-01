@@ -20,6 +20,26 @@ $pluginRoot = (Resolve-Path -LiteralPath (Join-Path $scriptDir '__DEPTH__')).Pro
 $env:MCP_PLUGIN_ROOT = $pluginRoot
 $env:MCP_PLUGIN_HOST = '__HOST__'
 
+$resolveCacheDir = Join-Path $pluginRoot 'lib\resolve-cache-dir.ps1'
+if (Test-Path -LiteralPath $resolveCacheDir -PathType Leaf) {
+    . $resolveCacheDir
+    $wrapperTempTarget = @(
+        $env:MCP_WORKSPACE_PATH,
+        $env:MCPSERVER_WORKSPACE_PATH,
+        $env:CLAUDE_PROJECT_DIR,
+        $env:CODEX_CWD,
+        $env:CODEX_WORKSPACE_PATH,
+        $env:GROK_WORKSPACE_PATH,
+        (Get-Location).ProviderPath
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ($wrapperTempTarget) {
+        $wrapperTempAlign = Set-McpPluginSameVolumeTemp -TargetPath $wrapperTempTarget
+        if ($wrapperTempAlign -and -not $wrapperTempAlign.Succeeded -and $wrapperTempAlign.Error) {
+            [Console]::Error.WriteLine([string]$wrapperTempAlign.Error)
+        }
+    }
+}
+
 $hookParams = $Params
 if (-not $hookParams -and $null -ne $InputObject) {
     if ($InputObject -is [string]) {
@@ -37,7 +57,75 @@ $hookArguments = @{
 if ($hookParams) { $hookArguments.Params = $hookParams }
 if ($ParamsPath) { $hookArguments.ParamsPath = $ParamsPath }
 
-& (Join-Path $pluginRoot 'lib\plugin-hook.ps1') @hookArguments @RemainingArguments
+$hookScript = Join-Path $pluginRoot 'lib\plugin-hook.ps1'
+if ('__HOOK_NAME__' -eq 'code-verify') {
+    $timeoutSeconds = 60
+    if ($env:MCP_CODE_VERIFY_TIMEOUT_SECONDS) {
+        $parsedTimeout = 0
+        if ([int]::TryParse([string]$env:MCP_CODE_VERIFY_TIMEOUT_SECONDS, [ref]$parsedTimeout) -and $parsedTimeout -gt 0) {
+            $timeoutSeconds = $parsedTimeout
+        }
+    }
+
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    $psi.WorkingDirectory = (Get-Location).ProviderPath
+    $psi.ArgumentList.Add('-NoLogo')
+    $psi.ArgumentList.Add('-NoProfile')
+    $psi.ArgumentList.Add('-NonInteractive')
+    $psi.ArgumentList.Add('-File')
+    $psi.ArgumentList.Add($hookScript)
+    $psi.ArgumentList.Add('-HookName')
+    $psi.ArgumentList.Add('__HOOK_NAME__')
+    $psi.ArgumentList.Add('-HostName')
+    $psi.ArgumentList.Add('__HOST__')
+    $psi.ArgumentList.Add('-CacheMode')
+    $psi.ArgumentList.Add('__CACHE_MODE__')
+    if ($hookParams) {
+        $psi.ArgumentList.Add('-Params')
+        $psi.ArgumentList.Add($hookParams)
+    }
+    if ($ParamsPath) {
+        $psi.ArgumentList.Add('-ParamsPath')
+        $psi.ArgumentList.Add($ParamsPath)
+    }
+    foreach ($remaining in @($RemainingArguments)) {
+        $psi.ArgumentList.Add($remaining)
+    }
+
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdinText = ''
+    if ([Console]::IsInputRedirected) {
+        $stdinText = [Console]::In.ReadToEnd()
+    }
+    if ($stdinText) {
+        $process.StandardInput.Write($stdinText)
+    }
+    $process.StandardInput.Close()
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit($timeoutSeconds * 1000)) {
+        try { $process.Kill($true) } catch { }
+        try { [void]$process.WaitForExit(2000) } catch { }
+        Write-Output '{"status":"failed","code":"command_timeout"}'
+        exit 0
+    }
+
+    $stderrText = ''
+    try { $stderrText = [string]$stderrTask.Result } catch { }
+    if ($stderrText) { [Console]::Error.Write($stderrText) }
+    $stdoutText = ''
+    try { $stdoutText = [string]$stdoutTask.Result } catch { }
+    if ($stdoutText) { Write-Output $stdoutText.TrimEnd("`r", "`n") }
+    exit $process.ExitCode
+}
+
+& $hookScript @hookArguments @RemainingArguments
 if (Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue) {
     exit $global:LASTEXITCODE
 }

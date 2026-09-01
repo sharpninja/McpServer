@@ -1,0 +1,157 @@
+{
+  "TimestampUtc": "2026-08-21T11:05:43Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "mixed-class1-docs-refresh-class2-wrapup-pause",
+  "AddProfileExecuted": true,
+  "ProfileFileCount": 18,
+  "ActivePlan": "docs/plans/sessionlog-remediate-001.md",
+  "TodoId": "PLAN-SESSIONLOGREMEDIATE-001",
+  "TodoDone": true,
+  "TodoFlippedThisReview": false,
+  "ReviewSessionId": "GrokCode-20260821T110036Z-plugin-session",
+  "ReviewRequestId": "req-20260821T110035Z-001-hostile-docs-refresh-wrapup",
+  "PluginVersion": "1.97.0",
+  "GitHead": "ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "LiveHostedVersion": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "OverallVerdict": "DISAGREE",
+  "PassCount": 12,
+  "FailCount": 2,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "Accuracy": 94,
+  "Completeness": 93,
+  "FailList": [
+    "A2: session-log-schema.md L11 added hunk contains U+2014",
+    "B5: no-em-dash claim does not match the added hunk"
+  ],
+  "UnknownList": [],
+  "Trust": {
+    "TestMarkerSignature": true,
+    "InvokeFullBootstrap": true,
+    "StatusAvailable": true,
+    "RolledHmacSha256": false,
+    "CacheRoot": "docs/receipts/_hv-docs-refresh-20260821T105630Z/plugin-cache",
+    "PendingCount": 52,
+    "FailsafeCount": 52
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "WT GitVersion.yml and README next-version 1.4.30; live health 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8 nonce match"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "FAIL",
+      "summary": "Docs topics updated; added session-log-schema L11 contains U+2014"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "wiki.yaml schema mcp-wiki-export/v1, 34 docs, nav resolve, no yaml diff vs HEAD"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "generateDocument success true format wiki docType all; zip 978095 bytes; ops pages 1.4.30 plus sanitization heading; wiki names unchanged"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "ValidateTraceability Succeeded findings=0; git diff --check only Technical-Requirements.md source plus wiki twins trailing blank EOF"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "HEAD still ee89cd63; wrap-up uncommitted; ahead 19 is prior; PLAN-SESSIONLOGREMEDIATE-001 done true not flipped"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "No project-doc wiki deletes; CLAUDE.md not in porcelain still .NET 9"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "Byrd TDD not applicable to docs-only refresh of shipped behavior plus class 2 pause"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Implementer generate receipts re-verified independently"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Plugin-only TODO/session/requirements; no TODO.yaml edit"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh only; no python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "FAIL",
+      "summary": "No-em-dash claim mismatches added U+2014 line"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No project-doc wiki pages deleted"
+    },
+    {
+      "id": "C",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Existing FR-MCP-170, FR-MCP-SESSIONLOGSAN-001, FR-MCP-SESSIONLOGCTX-001 cover the docs refresh; no new FR required"
+    },
+    {
+      "id": "D",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Plan store-closed; wrap-up pause claimed not push; no TODO flip"
+    }
+  ],
+  "Evidence": {
+    "zipPath": "docs/requirements/requirements-wiki-documents.zip",
+    "zipBytes": 978095,
+    "wikiSchema": "mcp-wiki-export/v1",
+    "wikiDocumentCount": 34,
+    "validateTraceability": "Succeeded findings=0 EXIT=0",
+    "gitDiffCheck": [
+      "docs/Project/Technical-Requirements.md:3456: new blank line at EOF.",
+      "docs/Project/wiki/azure/Technical-Requirements.md:3456: new blank line at EOF.",
+      "docs/Project/wiki/github/Technical-Requirements.md:3456: new blank line at EOF."
+    ],
+    "sessionLogSchemaLine11HasEmDash": true,
+    "claudeMdNet9": true,
+    "committedThisWrapUp": false
+  },
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260821T110543Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260821T110543Z.json",
+  "EvidenceDir": "docs/receipts/_hv-docs-refresh-20260821T105630Z/",
+  "QueryProof": {
+    "method": "client.SessionLog.QueryAsync",
+    "sessionId": "GrokCode-20260821T110036Z-plugin-session",
+    "requestId": "req-20260821T110035Z-001-hostile-docs-refresh-wrapup",
+    "turnStatus": "completed",
+    "planFile": "docs/plans/sessionlog-remediate-001.md",
+    "todoId": "PLAN-SESSIONLOGREMEDIATE-001",
+    "evidence": "docs/receipts/_hv-docs-refresh-20260821T105630Z/17-query-client.txt"
+  }
+}

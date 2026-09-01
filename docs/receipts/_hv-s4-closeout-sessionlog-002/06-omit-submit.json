@@ -1,0 +1,9 @@
+{
+  "probe": "sessionlog_submit new session omit planFile/todoId",
+  "sessionId": "GrokCode-20260821T013731Z-omit-submit-probe",
+  "result": {
+    "code": "validation_error",
+    "message": "Invalid session turn planFile/todoId: planFile is omitted. (Parameter 'planFile')",
+    "retryable": false
+  }
+}

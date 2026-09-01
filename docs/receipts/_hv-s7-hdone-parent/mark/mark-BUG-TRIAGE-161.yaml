@@ -1,0 +1,4 @@
+id: BUG-TRIAGE-161
+done: true
+doneSummary: 'S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md (A10 rescore; prior 20260821T020355Z DISAGREE FAIL empty). Named tests Failed 0 Skipped 0: Pester TEST-MCP-195 4, unit sanitizer+persist 42, integration S15/S16 2, planFile/todoId 30, ValidateTraceability Succeeded. Persist merged 4605eab6/0e0c5763. Sanitizer merged ee89cd63/d54f4e32. Live planFile/todoId on hosted 20db61aa. Plugin HMAC 1.97.0. HEAD ee89cd63.'
+remaining: Closed after S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md.

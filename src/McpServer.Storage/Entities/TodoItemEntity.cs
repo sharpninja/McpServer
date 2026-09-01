@@ -105,6 +105,10 @@ public sealed class TodoItemEntity
     /// <summary>Sort order of the item inside its section.</summary>
     public int ItemOrder { get; set; }
 
+    /// <summary>Optional request identity used to distinguish a heal/retry from a caller-owned id collision.</summary>
+    [StringLength(128)]
+    public string? IdempotencyKey { get; set; }
+
     /// <summary>Code-review phase label for remediation items.</summary>
     [StringLength(128)]
     public string? PhaseLabel { get; set; }

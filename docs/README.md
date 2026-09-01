@@ -9,6 +9,8 @@
 - [Agent pool and workspace multi-tenancy guide](USER-GUIDE.md#6-agent-pool-and-workspace-multi-tenancy)
 - [Troubleshooting / FAQ](USER-GUIDE.md#7-troubleshooting-and-faq)
 - [Documentation index and wiring](USER-GUIDE.md#8-wire-docs-into-readme-index-and-docs-folder)
+- [Products (shared requirements)](USER-GUIDE.md#7c-products-shared-requirements-across-workspaces)
+- [Handoff Ingestion](Handoff-Ingestion.md)
 - [MCP Server Guide](MCP-SERVER.md)
 - [QuadBrain User Guide](QUADBRAIN.md)
 - [QBAgent User Guide](QBAGENT.md)

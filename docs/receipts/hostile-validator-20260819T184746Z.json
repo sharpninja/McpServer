@@ -1,0 +1,233 @@
+{
+  "TimestampUtc": "2026-08-19T18:47:46Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Class": 1,
+  "ClassLabel": "project implementation closeout leftover G1 on current develop",
+  "Plan": "docs/plans/triage-cluster-002.md",
+  "Slice": "G1 / S1 closeout-first",
+  "AddProfileFileCount": 18,
+  "SessionId": "GrokCode-20260819T183656Z-hostile-g1-closeout",
+  "RequestId": "req-20260819T183656Z-001-hostile-g1-closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "Store006Commit": "c81abaf0193c393bfecffc07015962424a601dfe",
+  "LiveMarkerInformationalVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "LivePid": 34520,
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 94,
+  "CompletenessRating": 91,
+  "PassCount": 22,
+  "FailCount": 0,
+  "UnknownCount": 1,
+  "NaCount": 1,
+  "FailList": [],
+  "UnknownList": [
+    "Live process ExecutablePath/product version for PID 34520 (CIM ExecutablePath empty). Persist AC scored from live sessionlog_submit, not the binary string."
+  ],
+  "NaList": [
+    "BUG-TRIAGE-134 unique leftover concurrent current-turn.yaml file lock; persist path PASS so leftover is not required"
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "title": "Named unit tests STORE-006 omit stamp and first-persist reject",
+      "verdict": "PASS",
+      "evidence": "dotnet test 36/36 failed=0 skipped=0 EXIT=0; UpsertTurnAsync_OmittedPlanFileTodoId_WritesNoneAndCanceled omits fields; NewTurnWithoutPlanFile throws and does not insert; ApplyTurnContext stamps None only for canceled/cancelled"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "title": "Live canceled omit does not 500; in_progress omit rejected",
+      "verdict": "PASS",
+      "evidence": "sessionlog_submit canceled omit success id=13750 query planFile=None todoId=None status=canceled; canceled empty strings id=13753 None/None; in_progress omit validation_error and query totalCount=0"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "title": "Ten G1 TODOs and PLAN-TRIAGELEFTOVER-001 Done=false",
+      "verdict": "PASS",
+      "evidence": "todo_get BUG-TRIAGE-134 147 150 151 152 153 154 155 156 157 and PLAN-TRIAGELEFTOVER-001 all Done=false; no todo_update this review"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "title": "Isolation is predecessor not G1 closeout proof",
+      "verdict": "PASS",
+      "evidence": "Test-PluginPromptIsBackgroundAgent exists; Pester isolation Its exist; supersede persist still omits planFile/todoId; persist closeout is server stamp plus first-persist reject"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "title": "Original group AC including unique leftover 134",
+      "verdict": "PASS",
+      "na": "unique leftover concurrent yaml clobber",
+      "evidence": "Live canceled persist succeeds without internal_server_error; first persist reject holds; no proof canceled turn is dropped by yaml clobber; no global unique requestId index"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "title": "Honesty and receipts",
+      "verdict": "PASS",
+      "evidence": "Re-ran tests, re-queried MCP store, live probes this turn; marker SHA vs live stamp recorded as observation"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "title": "MCP-only storage PowerShell no Python",
+      "verdict": "PASS",
+      "evidence": "mcpserver_* tools only; pwsh collectors; no todo.yaml edits"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "title": "Byrd v4 phase-order not FR vs file timestamps",
+      "verdict": "PASS",
+      "evidence": "Closeout of shipped persist on develop; S0 leftover H0 already AGREE 183208Z; this is G1 closeout hostile"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "title": "Look-before-delete",
+      "verdict": "PASS",
+      "evidence": "No operator-data deletes"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "title": "Did not mark TODOs done or merge",
+      "verdict": "PASS",
+      "evidence": "todo_get only; .worktrees/triage-closeout absent"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "title": "No global unique requestId; AC-003 not relaxed",
+      "verdict": "PASS",
+      "evidence": "Index remains SessionLogId+RequestId; live in_progress omit still rejected"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "title": "FR-MCP-TRIAGESTORE-001",
+      "verdict": "PASS",
+      "evidence": "ac-1 superseded hook persist canceled None sentinels no opaque 500; mapped to TEST-MCP-TRIAGESTORE-001..007"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "title": "FR-MCP-SESSIONLOGCTX-001 AC-003",
+      "verdict": "PASS",
+      "evidence": "First persist reject omitted/empty/whitespace; mapped TR-MCP-SESSIONLOG-006 TEST-MCP-SESSIONLOG-006; live in_progress omit not inserted"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "title": "TEST-MCP-TRIAGESTORE-006 omitted fields",
+      "verdict": "PASS",
+      "evidence": "MCP TEST body omitted planFile/todoId writes None and canceled; named test omits fields"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "title": "AC coverage not suite-green rhetoric",
+      "verdict": "PASS",
+      "evidence": "Named 36/36 plus live SubmitAsync canceled omit"
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "title": "isSatisfied remains false until parent closeout",
+      "verdict": "PASS",
+      "evidence": "FR/TEST isSatisfied=false and TODOs Done=false; hostile did not flip"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "title": "Closeout-first on develop no product code unless DISAGREE",
+      "verdict": "PASS",
+      "evidence": "c81abaf0 already on develop; no persist product edits this review; no triage-closeout worktree"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "title": "Unique leftover lock not required",
+      "verdict": "PASS",
+      "evidence": "Persist path PASS; plan unique leftover only if closeout DISAGREE"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "title": "Named G1 checks executed",
+      "verdict": "PASS",
+      "evidence": "Superseded persist tests and live sessionlog_query executed; SchemaGuard and Build.Tests are G2/G11"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "title": "Parent closeout after AGREE; this review did not flip TODOs",
+      "verdict": "PASS",
+      "evidence": "FAIL list empty; no worktree required for G1 persist; TODOs remain Done=false"
+    },
+    {
+      "id": "B-honesty-count",
+      "surface": "B",
+      "title": "Receipts written",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/hostile-validator-20260819T184746Z.md and .json"
+    },
+    {
+      "id": "A-session-persist",
+      "surface": "A",
+      "title": "Dedicated review session persisted",
+      "verdict": "PASS",
+      "evidence": "sessionlog_query text Hostile G1 closeout leftover persist returns GrokCode-20260819T183656Z-hostile-g1-closeout requestId req-20260819T183656Z-001-hostile-g1-closeout"
+    }
+  ],
+  "TodosAttacked": [
+    "BUG-TRIAGE-134",
+    "BUG-TRIAGE-147",
+    "BUG-TRIAGE-150",
+    "BUG-TRIAGE-151",
+    "BUG-TRIAGE-152",
+    "BUG-TRIAGE-153",
+    "BUG-TRIAGE-154",
+    "BUG-TRIAGE-155",
+    "BUG-TRIAGE-156",
+    "BUG-TRIAGE-157"
+  ],
+  "TodosRemainDoneFalse": true,
+  "PlanTodoRemainDoneFalse": "PLAN-TRIAGELEFTOVER-001",
+  "NamedTests": {
+    "total": 36,
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "trx": "docs/receipts/_hv-g1-closeout/named-unit.trx"
+  },
+  "LiveProbes": {
+    "canceledOmit": {
+      "id": 13750,
+      "sessionId": "GrokCode-20260819T183656Z-hv-canceled-omit",
+      "requestId": "req-20260819T183656Z-canceled-omit",
+      "status": "canceled",
+      "planFile": "None",
+      "todoId": "None"
+    },
+    "canceledEmpty": {
+      "id": 13753,
+      "sessionId": "GrokCode-20260819T183656Z-hv-canceled-empty",
+      "status": "canceled",
+      "planFile": "None",
+      "todoId": "None"
+    },
+    "inProgressOmit": {
+      "code": "validation_error",
+      "retryable": false,
+      "inserted": false
+    }
+  },
+  "WorktreeCloseoutRequired": false,
+  "ParentFailListForWorktree": []
+}

@@ -1,0 +1,6 @@
+Independent focused filters after ./build.ps1 Test EXIT=0
+Support FullyQualifiedName~Product: Failed 0 Passed 50 Skipped 0
+Client FullyQualifiedName~ProductClientTests: Failed 0 Passed 2 Skipped 0
+Support FullyQualifiedName~ProductRequirementContextSurfaceTests: Failed 0 Passed 6 Skipped 0
+Integration FullyQualifiedName~ProductsLaunchTests: Failed 0 Passed 2 Skipped 0
+ValidateTraceability: Succeeded 2026-08-18 12:41:01 PM local EXIT=0

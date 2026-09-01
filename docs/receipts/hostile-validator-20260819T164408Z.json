@@ -1,0 +1,122 @@
+{
+  "TimestampUtc": "2026-08-19T16:50:38Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 2,
+  "WorkClassLabel": "operator-directed refresh-docs wrap-up push GitHub and GitHub wiki",
+  "AddProfileExecuted": true,
+  "ProfileFileCount": 18,
+  "OverallVerdict": "AGREE",
+  "PassCount": 15,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "AccuracyRating": 94,
+  "CompletenessRating": 91,
+  "AdversarialSessionId": "GrokCode-20260819T164408Z-hostile-wrapup",
+  "AdversarialRequestId": "req-20260819T164408Z-001-hostile-validate-wrap-up",
+  "planFile": "None",
+  "todoId": "None",
+  "SessionProof": "docs/receipts/_hv-20260819T164408Z/10-hostile-proof-first-turn.txt",
+  "FailList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Marker signature True. Health Healthy 1.4.28+f4060f03 storage reachable nonce match."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "wiki.yaml v1 34 docs 28 file-backed 0 missing. ZIP sha256 C666EBD... length 954459 entries 79 including github/Byrd-Todo-Execution-Spec.md."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "git diff --check 0. ValidateTraceability Succeeded findings=0."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "ls-remote origin/develop cbae4dd matches HEAD. Parent c81abaf feat(triage)."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Wiki HEAD 763c838 includes Byrd-Todo-Execution-Spec.md and Agent-Plugin-Availability.md UserPromptSubmit section."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "020 completed on GrokCode-20260818T182741Z-plugin-session planFile None todoId None."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "PLAN-TRIAGECLUSTER-001 last done flip 2026-08-19T01:41:53.1708697Z. No wrap-up audit row."
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "c81abaf/cbae4dd not on origin/main. Azure develop still f4060f03. Azure wiki not claimed updated."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Receipts re-verified independently."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Byrd TDD N/A for class 2 ops push."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP plugin only. Isolated CacheRoot. Root current-turn unchanged."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh only. No Python."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Live artifacts match the eight wrap-up claims."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Class 2 ops. No new product/FR complete claim in this wrap-up."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "No PLAN-TRIAGECLUSTER-001 done flip this wrap-up."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Plan DoD not claimed complete here."
+    }
+  ],
+  "EvidenceDir": "docs/receipts/_hv-20260819T164408Z",
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260819T164408Z.md"
+}

@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260819T190117Z-65e6
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-153
+      title: Hook superseded-turn persist 500s without planFile/todoId
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Hostile close-gate beginTurn in TruckMate failed while persisting superseded turn req-20260818T131702Z-prompt-3fda. Invoke-ReplSupersedeCurrentTurnIfInProgress calls Invoke-ReplPersistTurn without PlanFile or TodoId, so the canceled turn is submitted as a new entry with those fields omitted. SessionLogService.SubmitAsync then runs ValidateForNewEntry and throws ArgumentException. SessionLogController.SubmitAsync has no ArgumentException catch, so the call becomes method_invocation_error / internal_server_error / McpServerException. Failsafe YAML is written before the submit; the hook swallows the error and still opens the next turn.
+      - 'Triage group: triage-group-5fac5a7a9cf69e4a'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.beginTurn that supersedes an in-progress turn which was never stored persists that old requestId as canceled (or superseded) and returns success with no SubmitAsync internal_server_error.'
+      - '- The superseded persist includes planFile and todoId from current-turn state, or the exact sentinel None when none is active.'
+      - '- A new-turn SubmitAsync that still omits planFile or todoId returns HTTP 400 with the validator message, not HTTP 500 internal_server_error.'
+      - "- On successful superseded persist the session_submit failsafe is cleared and beginTurn does not write 'could not persist superseded turn'."
+      - 'Implementation notes:'
+      - '- Fix plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress: pass planFile/todoId from Read-ReplCurrentTurnState (default None) into Invoke-ReplPersistTurn. Empty values are omitted by New-McpPluginTurnUpsertRequest.'
+      - '- SessionLogController.SubmitAsync should catch ArgumentException from SessionLogTurnContextValidator the same way other sessionlog actions already return 400.'
+      - '- Do not treat this as storage outage: the failsafe and 500 are the omitted new-entry planFile/todoId contract, matching prior session_submit receipts.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

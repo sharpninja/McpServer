@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="8" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-08-19" time="18:26:27">
+  <environment clr-version="10.0.10" user-domain="PAYTON-LEGION2" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" nunit-version="2.5.8.0" machine-name="PAYTON-LEGION2" user="kingd" os-version="10.0.26200" cwd="F:\GitHub\McpServer" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="1.103" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\triage-tempvol\plugins\core\test-fixtures\pester\PluginTempVolume.Tests.ps1" executed="True" result="Success" success="True" time="1.103" asserts="0" description="F:\GitHub\McpServer\.worktrees\triage-tempvol\plugins\core\test-fixtures\pester\PluginTempVolume.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment" executed="True" result="Success" success="True" time="0.5529" asserts="0" description="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment">
+            <results>
+              <test-case description="defines Set-McpPluginSameVolumeTemp after sourcing resolve-cache-dir.ps1" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.defines Set-McpPluginSameVolumeTemp after sourcing resolve-cache-dir.ps1" time="0.1147" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="leaves TEMP and TMP unchanged when they already share the target volume" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.leaves TEMP and TMP unchanged when they already share the target volume" time="0.0659" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="sets TEMP and TMP to a writable directory on the workspace volume when they differ" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.sets TEMP and TMP to a writable directory on the workspace volume when they differ" time="0.1074" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error" time="0.0435" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="treats a failed replacement move as a visible error and leaves the destination unchanged" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.treats a failed replacement move as a visible error and leaves the destination unchanged" time="0.0304" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="session-start and wrapper entrypoints call Set-McpPluginSameVolumeTemp" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.session-start and wrapper entrypoints call Set-McpPluginSameVolumeTemp" time="0.0118" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="keeps prompt-template same-volume TEMP and verify-after-edit guidance" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.keeps prompt-template same-volume TEMP and verify-after-edit guidance" time="0.0373" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="does not patch PSGallery PowerShell.MCP internals" name="TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.does not patch PSGallery PowerShell.MCP internals" time="0.0392" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

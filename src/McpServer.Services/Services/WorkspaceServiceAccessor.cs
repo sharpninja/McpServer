@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class WorkspaceServiceAccessor
 {
+    private static readonly AsyncLocal<string?> OverrideWorkspacePath = new();
     private readonly TodoServiceResolver _todoResolver;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly string _defaultWorkspacePath;
@@ -29,9 +30,31 @@ public sealed class WorkspaceServiceAccessor
         _defaultWorkspacePath = Path.GetFullPath(ingestionOptions.Value.RepoRoot ?? ".");
     }
 
+    /// <summary>
+    /// Pushes an explicit workspace onto the current async flow and restores the previous
+    /// value when the returned scope is disposed. Nested and parallel STDIO callers must use
+    /// <c>using</c> so a later call cannot leak into an earlier one.
+    /// </summary>
+    /// <param name="workspacePath">Workspace root to bind for the duration of the scope.</param>
+    /// <returns>A scope that restores the prior override on dispose.</returns>
+    public IDisposable PushWorkspace(string workspacePath)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
+
+        var canonical = HandoffWorkspacePaths.Canonicalize(workspacePath);
+        var previous = OverrideWorkspacePath.Value;
+        OverrideWorkspacePath.Value = canonical;
+        return new WorkspaceOverrideScope(() => OverrideWorkspacePath.Value = previous);
+    }
+
     /// <summary>Resolves the workspace-specific <see cref="ITodoService"/> for the current HTTP request, or the primary singleton.</summary>
     public ITodoService GetTodoService()
     {
+        var overridePath = OverrideWorkspacePath.Value;
+        if (!string.IsNullOrWhiteSpace(overridePath))
+            return _todoResolver.Resolve(new WorkspaceContext { WorkspacePath = overridePath });
+
         var ctx = GetWorkspaceContext();
         return _todoResolver.Resolve(ctx ?? new WorkspaceContext());
     }
@@ -39,11 +62,38 @@ public sealed class WorkspaceServiceAccessor
     /// <summary>Returns the workspace root path for the current request, or the primary workspace path.</summary>
     public string GetWorkspacePath()
     {
-        return GetWorkspaceContext()?.WorkspacePath ?? _defaultWorkspacePath;
+        var raw = OverrideWorkspacePath.Value
+            ?? GetWorkspaceContext()?.WorkspacePath
+            ?? _defaultWorkspacePath;
+        return HandoffWorkspacePaths.TryCanonicalize(raw, out var canonical, out _)
+            ? canonical
+            : _defaultWorkspacePath;
     }
 
     private WorkspaceContext? GetWorkspaceContext()
     {
         return _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
+    }
+
+    private sealed class WorkspaceOverrideScope : IDisposable, IAsyncDisposable
+    {
+        private readonly Action _restore;
+        private bool _disposed;
+
+        public WorkspaceOverrideScope(Action restore) => _restore = restore;
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+            _disposed = true;
+            _restore();
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            Dispose();
+            return ValueTask.CompletedTask;
+        }
     }
 }

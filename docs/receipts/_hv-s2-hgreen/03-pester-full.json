@@ -1,0 +1,53 @@
+{
+  "TimestampUtc": "2026-08-19T19:58:32Z",
+  "ElapsedSec": 54.495,
+  "TotalCount": 129,
+  "PassedCount": 121,
+  "FailedCount": 8,
+  "SkippedCount": 0,
+  "NotRunCount": 0,
+  "Failed": [
+    {
+      "Name": "TEST-MCP-PLUGIN-PSONLY-001 FR-MCP-PLUGIN-PSONLY-003 fails closed before MCP work when the runtime is refused",
+      "Result": "Failed",
+      "Error": "Expected 0, but got 64."
+    },
+    {
+      "Name": "TEST-MCP-PLUGIN-PSONLY-002 generated wrappers invoke PowerShell hook entrypoint",
+      "Result": "Failed",
+      "Error": "Expected 0, but got 64."
+    },
+    {
+      "Name": "TEST-MCP-PLUGIN-PSONLY-002 status entrypoint returns JSON status without mutation",
+      "Result": "Failed",
+      "Error": "Expected 0, but got 64."
+    },
+    {
+      "Name": "TEST-MCP-TRANSCRIPT-010 does not expose transcript ingestion endpoints through plugins",
+      "Result": "Failed",
+      "Error": "Exception calling \"ReadAllText\" with \"1\" argument(s): \"Could not find a part of the path 'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\.staged-plugin\\skills\\session\\SKILL.md'.\""
+    },
+    {
+      "Name": "TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation",
+      "Result": "Failed",
+      "Error": "Cannot find path 'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\.staged-plugin\\skills' because it does not exist."
+    },
+    {
+      "Name": "TEST-MCP-BUGTRIAGE-050 triage skill documents schema-valid REPL status methods",
+      "Result": "Failed",
+      "Error": "Exception calling \"ReadAllText\" with \"1\" argument(s): \"Could not find a part of the path 'F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core\\plugins\\core\\.staged-plugin\\skills\\triage\\SKILL.md'.\""
+    },
+    {
+      "Name": "TEST-MCP-PLUGIN-PSONLY-002 synced manifest contains PowerShell runtime files only",
+      "Result": "Failed",
+      "Error": "Expected $true, but got $false."
+    },
+    {
+      "Name": "TEST-MCP-BUGTRIAGE-027 core integrity checker exits 0 on success",
+      "Result": "Failed",
+      "Error": "Expected 0, but got 1."
+    }
+  ],
+  "Skipped": [],
+  "NUnitXml": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\03-pester-full.xml"
+}

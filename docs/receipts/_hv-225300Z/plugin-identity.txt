@@ -1,0 +1,28 @@
+pluginJson={
+  "name": "mcpserver",
+  "version": "1.94.0",
+  "description": "Connect Grok to McpServer for TODO management, session logging, requirements tracking, use case management, GraphRAG knowledge graph operations, and per-turn \u002B build-verification enforcement hooks.",
+  "author": {
+    "name": "Payton Byrd (The Sharp Ninja)",
+    "url": "https://github.com/sharpninja"
+  },
+  "homepage": "https://github.com/sharpninja/McpServer",
+  "repository": "https://github.com/sharpninja/mcpserver-grok-plugin",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "todo",
+    "session-log",
+    "requirements",
+    "graphrag",
+    "knowledge-graph",
+    "workspace",
+    "use-case",
+    "usecase"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}
+
+versionFile=1.94.0

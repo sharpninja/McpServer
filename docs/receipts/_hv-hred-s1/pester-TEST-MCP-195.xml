@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="4" errors="0" failures="4" not-run="114" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-08-20" time="19:22:57">
+  <environment clr-version="10.0.10" user-domain="PAYTON-LEGION2" cwd="F:\GitHub\McpServer\.worktrees\session-persist" os-version="10.0.26200" machine-name="PAYTON-LEGION2" nunit-version="2.5.8.0" user="kingd" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="13.775" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1" executed="True" result="Failure" success="False" time="13.775" asserts="0" description="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TEST-MCP-195 session-log incremental persist and failsafe drain" executed="True" result="Failure" success="False" time="11.1131" asserts="0" description="TEST-MCP-195 session-log incremental persist and failsafe drain">
+            <results>
+              <test-case description="TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists" time="1.7346" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected 'client.SessionLog.AppendDialogAsync' to be found in collection client.SessionLog.SubmitAsync, but it was not found.</message>
+                  <stack-trace>at $script:persistRawMethods | Should -Contain 'client.SessionLog.AppendDialogAsync', F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4757
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4757</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe" time="0.3996" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected $false, but got $true.</message>
+                  <stack-trace>at $threw | Should -BeFalse, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4797
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4797</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays" time="0.3371" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected regular expression 'Failsafe queue drain failed' to not match 'Failsafe queue drain failed: mcpserver-repl invocation failed for method client.SessionLog.SubmitAsync: timed out
+', but it did match.</message>
+                  <stack-trace>at $errorWriter.ToString() | Should -Not -Match 'Failsafe queue drain failed', F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4853
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4853</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s" time="8.4581" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected the actual value to be less than 3, but got 8.0649586.</message>
+                  <stack-trace>at $sw.Elapsed.TotalSeconds | Should -BeLessThan 3, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4918
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4918</stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

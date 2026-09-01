@@ -1,0 +1,12 @@
+{
+  "coreHash": "602316F539C8D641900890AC8DA54F2C624F7F932BD82DF5135E9F9C3ED1F3C3",
+  "grokHash": "602316F539C8D641900890AC8DA54F2C624F7F932BD82DF5135E9F9C3ED1F3C3",
+  "hashesEqual": true,
+  "coreWriteUtc": "2026-08-19T15:51:14.6374302Z",
+  "grokWriteUtc": "2026-08-19T15:54:20.0484741Z",
+  "coreLen": 50279,
+  "grokLen": 50279,
+  "pesterWriteUtc": "2026-08-19T15:50:19.2624328Z",
+  "pesterLen": 12248,
+  "pesterUntracked": true
+}

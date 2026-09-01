@@ -1,0 +1,173 @@
+{
+  "TimestampUtc": "2026-08-17T23:28:18Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfile": {
+    "Executed": true,
+    "ProfileFileCount": 18,
+    "ExcludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class-2-user-directed-ops",
+  "WorkClassDetail": "Live Agent Help HelperModel config plus official xAI docs lookup. No product plan-step done claim.",
+  "ActivePlan": null,
+  "RequirementIdsNoted": ["FR-MCP-HELP-011"],
+  "ReviewSessionId": "GrokCode-20260817T232439Z-hostile-model-slug",
+  "ReviewRequestId": "req-20260817T232439Z-001-hostile-validate-model-slug",
+  "ServerTurnId": 41529,
+  "McpTransportSessionId": "kY68tPNYCoBaskqJYP_YhQ",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "UnknownList": [],
+  "SessionLogProof": {
+    "Transport": "POST http://PAYTON-LEGION2:7147/mcp-transport tools/call",
+    "Open": { "success": true, "created": true },
+    "Begin": { "success": true, "turnId": 41529, "status": "in_progress" },
+    "Dialog": { "success": true, "totalDialogItems": 2 },
+    "Complete": { "success": true, "turnId": 41529, "status": "completed" },
+    "QueryByExactSessionIdText": { "totalCount": 0, "note": "text filter does not match sessionId string" },
+    "QueryByFromTimestamp": {
+      "from": "2026-08-17T23:20:00Z",
+      "agent": "GrokCode",
+      "totalCount": 1,
+      "sessionId": "GrokCode-20260817T232439Z-hostile-model-slug",
+      "requestId": "req-20260817T232439Z-001-hostile-validate-model-slug",
+      "turnStatus": "completed",
+      "actionCount": 4,
+      "dialogCount": 2
+    }
+  },
+  "IndependentAgentHelpCreate": {
+    "sessionId": "help-20260817232444-d85dbaa7c8964e2d8f9bc6d93029c40d",
+    "executionStrategy": "grok-cli",
+    "modelRequested": "grok-4.5",
+    "modelResolved": "grok-4.5"
+  },
+  "InspectedImplementerHelpSession": {
+    "sessionId": "help-20260817231518-ef612ec964cc4be998bf30ce1c8b9f0f",
+    "exists": true,
+    "createdUtc": "2026-08-17T23:15:18.2155333+00:00",
+    "executionStrategy": "grok-cli",
+    "topic": "config-verify-grok-4.5",
+    "statusDtoIncludesModelFields": false
+  },
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Claim": "Class 2 ops; no product code or plan-step done claim",
+      "Verdict": "PASS",
+      "Evidence": "Repo appsettings.yaml mtime 2026-07-11; AgentHelpOptions.cs mtime 2026-07-12; live yaml mtime 2026-08-17T23:15:04Z; TODO CompletedDate 2026-08-17 count 0"
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Claim": "Official Grok 4.5 model name is grok-4.5; aliases grok-4.5-latest, grok-build-latest",
+      "Verdict": "PASS",
+      "Evidence": "https://docs.x.ai/developers/models/grok-4.5 model name and aliases section"
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Claim": "grok-4.5-high is not a listed model slug in models.md or grok models",
+      "Verdict": "PASS",
+      "Evidence": "models.md pattern search zero matches; grok models lists only grok-4.6 and grok-4.5"
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Claim": "high is reasoning_effort default, not a model suffix",
+      "Verdict": "PASS",
+      "Evidence": "https://docs.x.ai/developers/model-capabilities/text/reasoning"
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Claim": "Local grok models lists only grok-4.6 (default) and grok-4.5",
+      "Verdict": "PASS",
+      "Evidence": "grok models exit 0"
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Claim": "Live ProgramData AgentHelp is grok-cli / grok-4.5, not grok-4.5-high, not auto",
+      "Verdict": "PASS",
+      "Evidence": "Read-McpYamlObject on C:\\ProgramData\\McpServer\\appsettings.yaml; two keys only"
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Claim": "create-session help-20260817231518-ef612ec964cc4be998bf30ce1c8b9f0f returned grok-cli and grok-4.5",
+      "Verdict": "PASS",
+      "Evidence": "get_status exists with executionStrategy=grok-cli; independent create-session reproduced modelRequested=modelResolved=grok-4.5"
+    },
+    {
+      "Id": "A8",
+      "Surface": "A",
+      "Claim": "Repo appsettings.yaml still one-shot-cli; no TODO/plan marked done",
+      "Verdict": "PASS",
+      "Evidence": "git status empty for appsettings.yaml; todo_list done=true has zero CompletedDate on 2026-08-17"
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Claim": "Byrd v4 phase-order",
+      "Verdict": "PASS",
+      "Evidence": "N/A to class-2 ops; no implementation phase claimed"
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Claim": "Receipts present and re-verified",
+      "Verdict": "PASS",
+      "Evidence": "Implementer receipt re-checked against live artifacts"
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Claim": "MCP-only TODO/session/requirements storage",
+      "Verdict": "PASS",
+      "Evidence": "TODO.yaml git-clean mtime 2026-07-10; reviewer used MCP tools"
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Claim": "PowerShell only / no Python",
+      "Verdict": "PASS",
+      "Evidence": "Implementer used Update-McpYamlObject ps1; reviewer used pwsh.exe"
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Claim": "Honesty and look-before-delete",
+      "Verdict": "PASS",
+      "Evidence": "Live AgentHelp still two-key map; no unexpected deletes; claims match disk"
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Claim": "Requirement / AC / mapping coverage",
+      "Verdict": "N/A",
+      "Evidence": "Class-2 ops. FR-MCP-HELP-011 exists but this turn is not a product-completion claim."
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Claim": "Current plan holistically",
+      "Verdict": "N/A",
+      "Evidence": "No plan-step completion claimed"
+    }
+  ],
+  "Health": {
+    "Nonce": "c9cfcd964392450abaf1a1bdd819f18c",
+    "Status": "Healthy",
+    "Version": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "NonceMatched": true,
+    "ServiceRestarted": false
+  },
+  "Counts": {
+    "Pass": 13,
+    "Fail": 0,
+    "Unknown": 0,
+    "NA": 2
+  }
+}

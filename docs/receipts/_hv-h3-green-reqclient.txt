@@ -1,0 +1,14 @@
+NAME=reqclient
+PROJECT=tests/McpServer.Client.Tests
+FILTER=FullyQualifiedName~RequirementsClient
+START=2026-08-18T15:37:39.9473594Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Client.Tests -> F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    23, Skipped:     0, Total:    23, Duration: 319 ms - McpServer.Client.Tests.dll (net10.0)
+EXIT=0
+END=2026-08-18T15:37:43.5630777Z

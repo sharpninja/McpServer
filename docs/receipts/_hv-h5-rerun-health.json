@@ -1,0 +1,20 @@
+{
+  "status": "Healthy",
+  "version": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "checks": [
+    {
+      "name": "self",
+      "status": "Healthy",
+      "description": null,
+      "duration": 0.0008
+    },
+    {
+      "name": "upstream",
+      "status": "Healthy",
+      "description": "Federation disabled.",
+      "duration": 0.0028
+    }
+  ],
+  "nonce": "h5rrdedc9d09476c4219994655a628cdd074",
+  "storage": "reachable"
+}

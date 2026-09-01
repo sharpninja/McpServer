@@ -1,0 +1,66 @@
+[
+  {
+    "Id": "FR-MCP-TRIAGE-002",
+    "Title": "Async triage grouping and research",
+    "Body": "Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "FR-MCP-TRIAGE-002-AC001",
+        "text": "Groups are deterministic and workspace-isolated.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC002",
+        "text": "New matching reports reset the 15-minute quiet window.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC003",
+        "text": "A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC004",
+        "text": "Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC005",
+        "text": "MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null,
+    "LinkedUseCases": []
+  },
+  {
+    "Id": "FR-MCP-TRIAGEPLUGIN-001",
+    "Title": "Plugin root session, cache, console, and persist identity",
+    "Body": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": "Closes BUG-TRIAGE-111, 124, 126, 131, 143.",
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null,
+    "LinkedUseCases": []
+  }
+]

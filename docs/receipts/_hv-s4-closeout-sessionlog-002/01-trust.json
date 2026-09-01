@@ -1,0 +1,8 @@
+{
+  "utc": "20260821T013645Z",
+  "marker": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "TestMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "computedHmacMyself": false,
+  "pluginFunction": "Test-MarkerSignature + Invoke-FullBootstrap from marker-resolver.ps1"
+}

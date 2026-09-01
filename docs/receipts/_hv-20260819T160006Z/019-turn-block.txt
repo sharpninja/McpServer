@@ -1,0 +1,50 @@
+requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation
+        timestamp: 2026-08-19T15:48:30.6867485+00:00
+        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'
+        queryTitle: Remediate hook cache isolation FAILs
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Red Pester: UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn failed because isolation functions were missing.'
+          type: edit
+          status: completed
+          filePath: plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1
+        - order: 2
+          description: Implemented Test-PluginPromptIsBackgroundAgent and Get-PluginRootTurnIsolationDecision; Open-PluginTurn reuses in_progress and skips rewrite of completed root turns for background prompts.
+          type: edit
+          status: completed
+          filePath: plugins/core/lib-ps/plugin-hook.ps1
+        - order: 3
+          description: Mirrored isolation into live grok plugin hook so UserPromptSubmit uses the remediATION.
+          type: edit
+          status: completed
+          filePath: F:/GitHub/mcpserver-grok-plugin/lib/plugin-hook.ps1
+        - order: 4
+          description: Pester TriagePluginIdentity 10/0/0 after implementation.
+          type: tool_call
+          status: completed
+          filePath: plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1
+        - order: 5
+          description: Isolation is existing FR-MCP-TRIAGEPLUGIN-001 AC (root UserPromptSubmit stays on root while background agents run), not a new requirement.
+          type: design_decision
+          status: completed
+          filePath: docs/Project/Functional-Requirements.md
+        processingDialog:
+        - timestamp: 2026-08-19T15:35:00.0000000+00:00
+          role: model
+          content: 'Diagnosed FAILs as FR-MCP-TRIAGEPLUGIN-001 gap: UserPromptSubmit Open-PluginTurn treats hostile/subagent prompts as new root turns, superseding in_progress work and rewriting current-turn.yaml after completed work. Tests first, then isolate background prompts.'
+          category: observation
+        - timestamp: 2026-08-19T15:35:10.0000000+00:00
+          role: model
+          content: >-
+            Decision: Implement root-turn isolation in Open-PluginTurn. Background/hostile prompts reuse an in_progress root turn and skip rewriting a completed root cache. Real user prompts still open a new turn. Covered by existing FR/TR/TEST-MCP-TRIAGEPLUGIN-001, not a new requirement.
+
+            Alternatives rejected: claiming cache is not a done criterion (operator asked remediATE); making all UserPromptSubmit no-ops; deleting hook-canceled history.
+          category: decision
+        designDecisions:
+        - 'RemediATE hook FAILs by isolating background UserPromptSubmit from the root current-turn. In_progress root turns are reused; completed root turns are not rewritten. Real user prompts still open a new turn. Consequence: hostile hooks must not cancel 019 or steal cache.'
+
+---
+

@@ -38,6 +38,66 @@ MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgen
 
 
 
+## TEST-HANDOFF
+
+### TEST-HANDOFF-001
+
+Cover documented request, result, draft, provenance, and diagnostic contracts, including typed-client serialization.
+
+**Acceptance Criteria:**
+- [ ] All public handoff contract types round-trip through the typed client JSON context.
+- [ ] Required contract types exist with complete XMLDocs and the documented enum values.
+
+### TEST-HANDOFF-002
+
+Cover bounded readers, workspace containment, and rejection of missing, unsupported, oversized, traversal, external, and reparse-escaping sources.
+
+**Acceptance Criteria:**
+- [ ] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO.
+- [ ] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB.
+
+### TEST-HANDOFF-003
+
+Cover versioned HandoffTodoDraft extraction and strict JSON parsing, including malformed AI output.
+
+**Acceptance Criteria:**
+- [ ] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt.
+- [ ] Malformed or compatibility JSON produces diagnostics and never creates a TODO.
+
+### TEST-HANDOFF-004
+
+Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
+
+**Acceptance Criteria:**
+- [ ] Invalid or conflicting draft fields produce field-specific diagnostics.
+- [ ] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates.
+
+### TEST-HANDOFF-005
+
+Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
+
+**Acceptance Criteria:**
+- [ ] Successful creation produces exactly one TODO through ITodoService.
+- [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true.
+- [ ] ID collisions require review and are never silently renamed.
+
+### TEST-HANDOFF-006
+
+Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
+
+**Acceptance Criteria:**
+- [ ] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill.
+- [ ] Every surface delegates to IHandoffIngestionService and applies workspace isolation.
+
+### TEST-HANDOFF-007
+
+Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
+
+**Acceptance Criteria:**
+- [ ] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+- [ ] Persisted runs and logs do not contain raw credentials or source content.
+
+
 ## TEST-MCP
 
 ### TEST-MCP-001
@@ -1057,6 +1117,16 @@ Validates FR-MCP-142 and TR-MCP-QB-001. Absence tests, each written to fail if t
 Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
 
 
+### TEST-MCP-195
+
+Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog. (2) Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw. (3) Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays. (4) getFr EXIT 0 with body before 30s when a queued session_submit 503s.
+
+
+### TEST-MCP-196
+
+C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+
+
 
 ## TEST-MCP-ACID
 
@@ -1191,6 +1261,16 @@ Tests must prove typed DocFX configuration, isolated process execution, secure a
 - [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
 - [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
 - [ ] The current-plus-prior gate reports zero failures and zero skips.
+
+
+## TEST-MCP-FAILSAFE
+
+### TEST-MCP-FAILSAFE-001
+
+Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
 
 
 ## TEST-MCP-FILETOOLS
@@ -1490,6 +1570,39 @@ A shared deterministic Theory and companion AiTheory matrix must exercise the re
 - [ ] Every AiTheory row receives the persisted receipt/artifact and returns a strict semantic completeness result that is asserted by the test.
 - [ ] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path.
 - [ ] The focused target and each plugin native suite complete with zero failures and zero skips.
+
+
+## TEST-MCP-PRODUCT
+
+### TEST-MCP-PRODUCT-001
+
+Unit tests for ProductEntity/membership CQRS handlers: isolation, PROD-* key accept (PROD-MCPSERVER) and reject (mcpserver, empty, missing prefix), unique key, soft-delete, owner add/remove, self-leave, unknown workspace rejected. Files: ProductEntityTests, CreateProductCommandHandlerTests, AddProductMemberCommandHandlerTests.
+
+
+### TEST-MCP-PRODUCT-002
+
+Unit tests for product effective-requirements share: union, productScope=local, id collision two origins, origin layer miss excludes, leave drops sibling, outsider cannot share. File: GetProductEffectiveRequirementsQueryHandlerTests.
+
+
+### TEST-MCP-PRODUCT-003
+
+Controller/API unit tests: 400 invalid key, 409 duplicate, 403 non-owner, 404 outsider get. File: ProductsControllerTests.
+
+
+### TEST-MCP-PRODUCT-004
+
+Client and MCP/REPL contract tests prove adapters dispatch CQRS only. File: ProductClientTests plus MCP/REPL allow-list tests.
+
+
+### TEST-MCP-PRODUCT-005
+
+Migration apply on empty and production-shaped DBs for SQLite, PostgreSQL, and SQL Server harnesses. Must not re-add unrelated SessionLogs agent-header columns. File: ProductMigrationApplyTests.
+
+
+### TEST-MCP-PRODUCT-006
+
+Context pack/search: member includes sibling FR body with origin; does not include sibling .cs chunks; source type product-requirements filters to those chunks. File: ProductRequirementContextTests.
+
 
 
 ## TEST-MCP-QBAGENT
@@ -2082,6 +2195,26 @@ Explicit workspacePath override for requirements document generation (follow-up 
 
 
 
+## TEST-MCP-SESSIONATTR
+
+### TEST-MCP-SESSIONATTR-001
+
+Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria
+
+
+## TEST-MCP-SESSIONEND
+
+### TEST-MCP-SESSIONEND-001
+
+Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria
+
+
 ## TEST-MCP-SESSIONLOG
 
 ### TEST-MCP-SESSIONLOG-001
@@ -2144,6 +2277,16 @@ Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/S
 
 
 
+## TEST-MCP-STRICTCOUNT
+
+### TEST-MCP-STRICTCOUNT-001
+
+Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria
+
+
 ## TEST-MCP-SUBLOG
 
 ### TEST-MCP-SUBLOG-001
@@ -2153,6 +2296,16 @@ Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream 
 **Acceptance Criteria:**
 - [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
 - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
+
+
+## TEST-MCP-TEMPVOL
+
+### TEST-MCP-TEMPVOL-001
+
+Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
 
 
 ## TEST-MCP-TODO-CLOSE
@@ -2283,6 +2436,16 @@ Validates FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010. Unit: a JSONL transcr
 
 
 
+## TEST-MCP-TRANSCRIPT-SEARCH
+
+### TEST-MCP-TRANSCRIPT-SEARCH-001
+
+CodexTranscriptAdapterCoverageTests ingest inline JSONL for inter_agent_communication_metadata, tool_search_call, and tool_search_output with zero unknown diagnostics and persist cleanup. Validates TR-MCP-TRANSCRIPT-SEARCH-001 / BUG-TRIAGE-122.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-TRANSCRIPT-SEARCH-001 acceptance criteria
+
+
 ## TEST-MCP-TRIAGE
 
 ### TEST-MCP-TRIAGE-001
@@ -2336,6 +2499,153 @@ Every new FR/TR/TEST acceptance criterion is referenced by at least one test and
 
 **Acceptance Criteria:**
 - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
+
+
+## TEST-MCP-TRIAGEERR
+
+### TEST-MCP-TRIAGEERR-001
+
+Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+
+**Acceptance Criteria:**
+- [ ] Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+
+
+## TEST-MCP-TRIAGEHELP
+
+### TEST-MCP-TRIAGEHELP-001
+
+Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+
+**Acceptance Criteria:**
+- [ ] Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+
+
+## TEST-MCP-TRIAGEPLUGIN
+
+### TEST-MCP-TRIAGEPLUGIN-001
+
+Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+
+**Acceptance Criteria:**
+- [ ] Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+
+### TEST-MCP-TRIAGEPLUGIN-002
+
+ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+
+**Acceptance Criteria:**
+- [ ] ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+
+### TEST-MCP-TRIAGEPLUGIN-003
+
+Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+
+**Acceptance Criteria:**
+- [ ] Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+
+### TEST-MCP-TRIAGEPLUGIN-004
+
+beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+
+**Acceptance Criteria:**
+- [ ] beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+
+### TEST-MCP-TRIAGEPLUGIN-005
+
+completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+
+**Acceptance Criteria:**
+- [ ] completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+
+
+## TEST-MCP-TRIAGEREQ
+
+### TEST-MCP-TRIAGEREQ-001
+
+Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+
+**Acceptance Criteria:**
+- [ ] Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+
+
+## TEST-MCP-TRIAGESCHEMA
+
+### TEST-MCP-TRIAGESCHEMA-001
+
+A fixture database missing the four agent header columns fails closed with pending-migration. Apply proofs: Sqlite MigrateAsync of 20260818205751_AddSessionLogTagsAndAgentSessionHeaders on a legacy SessionLogs table; SqlServer 20260818205807 captured Up() SQL on disposable LocalDB; Postgres 20260818205822 captured Up() SQL on disposable local PostgreSQL. After apply, sessionlog query with and without a text filter succeeds.
+
+**Acceptance Criteria:**
+- [ ] A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+
+
+## TEST-MCP-TRIAGESTORE
+
+### TEST-MCP-TRIAGESTORE-001
+
+SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+
+**Acceptance Criteria:**
+- [ ] SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+
+### TEST-MCP-TRIAGESTORE-002
+
+TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+
+**Acceptance Criteria:**
+- [ ] TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+
+### TEST-MCP-TRIAGESTORE-003
+
+ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+
+**Acceptance Criteria:**
+- [ ] ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+
+### TEST-MCP-TRIAGESTORE-004
+
+Turn status canceled and cancelled persist via submit and re-query with the same status.
+
+**Acceptance Criteria:**
+- [ ] Turn status canceled and cancelled persist via submit and re-query with the same status.
+
+### TEST-MCP-TRIAGESTORE-005
+
+SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+
+**Acceptance Criteria:**
+- [ ] SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+
+### TEST-MCP-TRIAGESTORE-006
+
+Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+
+**Acceptance Criteria:**
+- [ ] Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+
+### TEST-MCP-TRIAGESTORE-007
+
+Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+
+**Acceptance Criteria:**
+- [ ] Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+
+
+## TEST-MCP-TRIAGETODO
+
+### TEST-MCP-TRIAGETODO-001
+
+TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+### TEST-MCP-TRIAGETODO-002
+
+GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
 
 
 ## TEST-MCP-USECASE
@@ -2426,6 +2736,16 @@ Adversarial Grok hostile validator + live canvas smoke claim pack.
 
 
 
+## TEST-MCP-VERIFYWRAP
+
+### TEST-MCP-VERIFYWRAP-001
+
+Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria
+
+
 ## TEST-MCP-WIKIEXPORT
 
 ### TEST-MCP-WIKIEXPORT-001
@@ -2450,6 +2770,16 @@ Tests must prove marker generation creates a valid default docs/wiki.yaml, prese
 - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
 - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
 - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
+
+
+## TEST-MCP-XAGENT
+
+### TEST-MCP-XAGENT-001
+
+Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142.
+
+**Acceptance Criteria:**
+- [ ] Named tests cover TEST-MCP-XAGENT-001 acceptance criteria
 
 
 ## TEST-REQAC-LIVE

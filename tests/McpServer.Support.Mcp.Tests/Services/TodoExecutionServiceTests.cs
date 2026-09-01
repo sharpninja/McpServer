@@ -109,6 +109,127 @@ public sealed class TodoExecutionServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGETODO-001: durable EXEC-TODO rehydrates when execution-state is missing.
+    /// </summary>
+    [Fact]
+    public async Task SetTestPlanAsync_DurableExecTodoMissingExecutionState_Rehydrates()
+    {
+        _todoService.GetByIdAsync("EXEC-TODO-042", Arg.Any<CancellationToken>())
+            .Returns(new TodoFlatItem
+            {
+                Id = "EXEC-TODO-042",
+                Title = "Rehydrate me",
+                Section = "execution-phase",
+                Priority = "medium",
+                Done = false,
+                Note = "Byrd phase: Execution",
+                Description = ["Goal text"],
+                Remaining = "Summary text",
+            });
+
+        var result = await _sut.SetTestPlanAsync(
+            _workspacePath,
+            "EXEC-TODO-042",
+            new SetTodoTestPlanRequest
+            {
+                UnitTestsDefined = true,
+                TestFilePaths = ["tests/FooTests.cs"],
+                TestCommands = ["dotnet test"],
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal("EXEC-TODO-042", result.TodoId);
+        Assert.Equal(TodoExecutionStatus.TestReady, result.Status);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGETODO-002: GenerateNextTodoId skips a same-workspace soft-deleted
+    /// EXEC-TODO-001 and allocates the next id.
+    /// </summary>
+    [Fact]
+    public async Task GenerateNextTodoIdAsync_SkipsSoftDeletedDurableId()
+    {
+        _db.TodoItems.Add(new TodoItemEntity
+        {
+            WorkspaceId = _workspacePath,
+            Id = "EXEC-TODO-001",
+            Title = "Soft deleted exec",
+            Section = "execution-phase",
+            Priority = "medium",
+        });
+        await _db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var entry = _db.Entry(_db.TodoItems.Local.Single(item => item.Id == "EXEC-TODO-001"));
+        entry.Property("IsDeleted").CurrentValue = true;
+        await _db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var phase = await _sut.CreateIterationPhaseAsync(
+            _workspacePath,
+            new CreateIterationPhaseRequest
+            {
+                Name = "Allocate phase",
+                Summary = "Skip deleted EXEC id",
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.CreateTodosFromPlanAsync(
+            _workspacePath,
+            new CreateTodosFromPlanRequest
+            {
+                PhaseId = phase.PhaseId,
+                PlanId = "plan-skip-deleted",
+                Todos =
+                [
+                    new PlanTodoInput
+                    {
+                        Title = "Fresh exec",
+                        Goal = "Allocate next id",
+                        Summary = "Must not reuse EXEC-TODO-001",
+                    },
+                ],
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal("EXEC-TODO-002", Assert.Single(result.TodoIds));
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGETODO-002: invalid dependsOn fails before any durable insert.
+    /// </summary>
+    [Fact]
+    public async Task CreateTodosFromPlanAsync_InvalidDependsOn_FailsBeforeInsert()
+    {
+        var phase = await _sut.CreateIterationPhaseAsync(
+            _workspacePath,
+            new CreateIterationPhaseRequest
+            {
+                Name = "Depends phase",
+                Summary = "Invalid dependsOn",
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.CreateTodosFromPlanAsync(
+            _workspacePath,
+            new CreateTodosFromPlanRequest
+            {
+                PhaseId = phase.PhaseId,
+                PlanId = "plan-depends",
+                Todos =
+                [
+                    new PlanTodoInput
+                    {
+                        Title = "Child",
+                        Goal = "Goal",
+                        Summary = "Summary",
+                        DependsOnTodoIds = ["EXEC-TODO-MISSING"],
+                    },
+                ],
+            },
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+        await _todoService.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
+    }
+
+    /// <summary>
     /// TEST-MCP-BYRD-SVC-001: Verifies Byrd plan expansion emits canonical TODO identifiers that comply
     /// with the shared TODO naming contract enforced by the legacy MCP TODO store.
     /// </summary>

@@ -1,0 +1,112 @@
+{
+  "staleOnly0711": [],
+  "noHeadCite": [],
+  "mentions0711": [
+    "PLAN-QUADBRAIN-001",
+    "PLAN-QUADBRAIN-E1-001",
+    "PLAN-TODOALIGN-001"
+  ],
+  "doneTruePatches": [],
+  "donePropertyPresent": [],
+  "orphanNoReason": [],
+  "keepOpenMissing": [],
+  "keepOpenDone": [],
+  "keepOpenNoStoreClose": [
+    {
+      "id": "PLAN-QUADBRAIN-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): Creativity/Logic rename migrations exist (20260720170000_RenameQuadBrainRolesToCreativityLogic on Sqlite/SqlServer/Postgres). QuadBrainOrchestrationServ"
+    },
+    {
+      "id": "PLAN-QUADBRAIN-I1-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): FR-MCP-129 and FR-MCP-134 exist and are completed in the store; they cover registry and orchestration, not the RUP revision ballot/readiness FRs. Remain"
+    },
+    {
+      "id": "PLAN-QUADBRAIN-E1-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): rename core and provider migrations shipped (Sqlite/SqlServer/Postgres 20260720170000_RenameQuadBrainRolesToCreativityLogic; tests RenameQuadBrainRolesM"
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C1-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): decisionReady identifier is absent. Orchestration still runs Creativity then Logic then AoT in QuadBrainOrchestrationService.cs. Curiosity-out-of-happy-"
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C2-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no MaxRejectionRounds and no ballot tally types in cs. Ballot-based rejection protocol is not shipped. Do not store-close."
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C3-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): CuriosityEngine/orchestration exist; no dedicated research-tool loop or audit-side observer for rejection rounds found. IOC (rewritten live Ollama suite"
+    },
+    {
+      "id": "PLAN-QUADBRAIN-T1-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no Product Release 1.5.0 evidence for this revision playlist. Depends on PLAN-QUADBRAIN-C3-001 IOC. Do not store-close."
+    },
+    {
+      "id": "PLAN-FILETOOLS-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): shared core is RepoFileService (src/McpServer.Services/Services/RepoFileService.cs) plus RepoFileServiceTests, not IRepoDiscoveryService. FR-MCP-FILETOO"
+    },
+    {
+      "id": "PLAN-FILETOOLS-002",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no FwhMcpTools read_file/list_dir/grep_files names. Depends on PLAN-FILETOOLS-001. Do not store-close."
+    },
+    {
+      "id": "PLAN-FILETOOLS-003",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): QBAgent has existing external file tools routed through RepoFileService (docs/QBAGENT.md); hosted-agent and MCP tool-name parity for read_file/list_dir/"
+    },
+    {
+      "id": "PLAN-FILETOOLS-004",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): no integration/deployment evidence for global file-tool names. Depends on PLAN-FILETOOLS-003. Do not store-close."
+    },
+    {
+      "id": "MCP-HANDOFF-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): HandoffIngestionService, HandoffClient, HandoffModels, HandoffMcpToolTests, HandoffDirectorCommands, HandoffIngestionServiceTests exist. FR-HANDOFF-001."
+    },
+    {
+      "id": "MCP-HANDOFFPLAN-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): same code as MCP-HANDOFF-001. Execution prompt TODO remains open until Handoff AC isSatisfied and hostile AGREE. Do not store-close."
+    },
+    {
+      "id": "MCP-HANDOFFREVIEW-001",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open until current-plus-prior gates are zero-failure/zero-skip and a fresh independent hostile AGREE. Do not store-close."
+    },
+    {
+      "id": "BUG-TRIAGE-160",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): plugin appendDialog still persists via full client.SessionLog.SubmitAsync upsert; classified HTTP 503 backend_unavailable when storage budget/lock hits."
+    },
+    {
+      "id": "BUG-TRIAGE-161",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): failsafe drain times out SessionLog.SubmitAsync at 30s after successful getFr/getTr. Same SubmitAsync write-budget class as 160. Do not store-close from"
+    },
+    {
+      "id": "BUG-TRIAGE-162",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): SessionLog SubmitAsync HTTP 503 backend_unavailable during refresh-docs wrap-up. Same full-upsert path as 160/161. Do not store-close from this audit."
+    },
+    {
+      "id": "BUG-TRIAGE-163",
+      "saysDoNotStoreClose": true,
+      "remainingPreview": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): avalonia-remote MCP handshake pipe closed (os error 232) is not an McpServer in-repo defect. Keep open as triage record. Linked FR-MCP-TRIAGE-002 / TR-M"
+    }
+  ],
+  "deleteComplianceFr": null,
+  "e1AdmitsRename": true,
+  "e1Remaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): rename core and provider migrations shipped (Sqlite/SqlServer/Postgres 20260720170000_RenameQuadBrainRolesToCreativityLogic; tests RenameQuadBrainRolesMigrationTests). 2026-07-11 0% rename claim is false. Remaining: LCA evidence that migrated stores are green on all three providers in the target environments. Do not store-close.",
+  "filetoolsHasRepoFileService": true,
+  "filetoolsSaysReadFileMissing": true,
+  "filetoolsRemaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): shared core is RepoFileService (src/McpServer.Services/Services/RepoFileService.cs) plus RepoFileServiceTests, not IRepoDiscoveryService. FR-MCP-FILETOOLS-001 still requires MCP tools/list names read_file, list_dir, grep_files; those names are absent from *Tools*.cs. Remaining: expose the three tool names on the shared core. Do not store-close."
+}

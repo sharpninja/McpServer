@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260819T185822Z-66b1
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-134
+      title: beginTurn superseded persist 500s when planFile/todoId omitted
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Hostile-validator beginTurn on GrokCode-20260815T182402Z-hostile-currentnav tried to persist superseded turn req-20260815T182247Z-prompt-4d81 through client.SessionLog.SubmitAsync and received method_invocation_error internal_server_error. Invoke-ReplSupersedeCurrentTurnIfInProgress calls Invoke-ReplPersistTurn as status canceled without forwarding planFile/todoId from current-turn.yaml; New-McpPluginTurnUpsertRequest then omits those fields. SessionLogService.SubmitAsync treats an unseen requestId as a new turn and ApplyTurnContext/ValidateForNewEntry throws ArgumentException when the fields are omitted. SessionLogController.SubmitAsync does not map that to 400, so GlobalExceptionHandlerMiddleware returns internal_server_error. The failsafe was written and later quarantined. Concurrent beginTurns on the same session share one current-turn.yaml slot, so later writers overwrite the local turn and make the superseded persist more likely to be a new-turn insert. queryHistory later showed the session with turnCount 5, so later persist paths that send planFile/todoId (None) succeeded.
+      - 'Triage group: triage-group-b055d448c74cfe81'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.beginTurn that supersedes an in_progress current-turn requestId persists that requestId as canceled and does not return method_invocation_error or internal_server_error from client.SessionLog.SubmitAsync'
+      - '- A canceled superseded persist for a requestId not yet stored on the session succeeds by sending valid planFile and todoId (cached current-turn values, or None)'
+      - '- client.SessionLog.SubmitAsync / POST /mcpserver/sessionlog returns 400 ValidationProblem when planFile or todoId fail SessionLogTurnContextValidator, not 500 internal_server_error'
+      - '- After concurrent beginTurns on one session, queryHistory includes the superseded requestId as canceled (or superseded) rather than dropping it because current-turn.yaml was overwritten'
+      - 'Implementation notes:'
+      - '- In plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress, pass planFile and todoId from Read-ReplCurrentTurnState into Invoke-ReplPersistTurn; default each to None when missing so the canceled upsert is a valid new-turn insert'
+      - '- In SessionLogController.SubmitAsync, catch ArgumentException from ISessionLogService.SubmitAsync and return ValidationProblem (same pattern as RequirementsController) instead of letting GlobalExceptionHandlerMiddleware emit internal_server_error'
+      - '- Serialize current-turn.yaml updates (file lock) or key the file by requestId so concurrent beginTurns on the same session cannot clobber the superseded turn before persist'
+      - '- Existing Pester coverage (TR-MCP-REPL-018/019, BUG-TRIAGE-086) mocks persist success; add a fixture where SubmitAsync would take the new-turn path with omitted planFile/todoId and assert the superseded persist still succeeds'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

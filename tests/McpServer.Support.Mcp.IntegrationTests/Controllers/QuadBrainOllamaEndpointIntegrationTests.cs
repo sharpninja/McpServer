@@ -280,7 +280,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     {
         var response = await client.PostAsJsonAsync(
             new Uri($"mcpserver/sessionlog/{SourceType}/{sessionId}/{turnId}/begin", UriKind.Relative),
-            new { queryTitle = "QuadBrain Ollama " + prompt, queryText = prompt, model = "qbagent" }).ConfigureAwait(true);
+            new { queryTitle = "QuadBrain Ollama " + prompt, queryText = prompt, model = "qbagent", planFile = "None", todoId = "None" }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
@@ -765,22 +765,6 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         public IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential)
             => new RecordingBrainSlotChatClient(this, _inner.Create(slot, credential));
 
-        private void Record(BrainSlotDefinitionEntity slot)
-        {
-            lock (_gate)
-            {
-                _invokedRoles.Add(slot.Role);
-                _invokedModelIds.Add(slot.ModelId);
-                _invokedEndpoints.Add(slot.Endpoint);
-            }
-        }
-
-        private void RecordOutput(string output)
-        {
-            lock (_gate)
-                _invokedOutputs.Add(output);
-        }
-
         private sealed class RecordingBrainSlotChatClient(
             RecordingBrainSlotChatClientFactory owner,
             IBrainSlotChatClient inner) : IBrainSlotChatClient
@@ -791,9 +775,15 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
                 double? temperature,
                 CancellationToken cancellationToken = default)
             {
-                owner.Record(slot);
                 var output = await inner.CompleteAsync(slot, input, temperature, cancellationToken).ConfigureAwait(false);
-                owner.RecordOutput(output);
+                lock (owner._gate)
+                {
+                    owner._invokedRoles.Add(slot.Role);
+                    owner._invokedModelIds.Add(slot.ModelId);
+                    owner._invokedEndpoints.Add(slot.Endpoint);
+                    owner._invokedOutputs.Add(output);
+                }
+
                 return output;
             }
         }

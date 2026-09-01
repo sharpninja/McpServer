@@ -1,0 +1,7 @@
+False
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:322
+Line |
+ 322 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. False 
+

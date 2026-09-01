@@ -1,0 +1,17 @@
+turnRequestId: req-20260821T110035Z-001-hostile-docs-refresh-wrapup
+queryTitle: Hostile validate docs refresh and wrap-up pause
+openedAt: 2026-08-21T11:00:39Z
+status: completed
+sessionId: GrokCode-20260821T110036Z-plugin-session
+codeEdits: 7
+lastBuildStatus: unknown
+auditActions: 7
+auditDialog: 4
+auditDecisions: 2
+auditFiles: 7
+auditCommits: 0
+queryText: Class 1 project documentation refresh plus class 2 wrap-up pause. Attack claims A1-A7. Do not commit. Do not mark TODOs.
+planFile: docs/plans/sessionlog-remediate-001.md
+todoId: PLAN-SESSIONLOGREMEDIATE-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-21T10:20:37.4844112Z

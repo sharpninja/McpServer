@@ -1,0 +1,29 @@
+type: result
+payload:
+  requestId: req-20260820T130233Z-2021
+  result:
+    id: TR-AUDIT-001
+    title: TR Audit
+    section: Backlog
+    priority: medium
+    done: false
+    estimate: null
+    description:
+    - Audit all technical requirements for internal consistency, contradictions, duplication, drift, missing acceptance criteria, stale status, and mismatches across Technical-Requirements.md, TR-per-FR-Mapping.md, Requirements-Matrix.md, generated wiki exports, and related test requirements.
+    - Audit the codebase for compliance with all technical requirements, including TR-MCP-DB-003 no-hard-delete/soft-delete behavior, session-log durability, TODO durability, requirements persistence, federation, memory, plugin, REPL, and deployment requirements.
+    technicalDetails:
+    - Use existing requirements documents as the source of truth; do not invent new TRs when a governing TR already exists.
+    - Produce concrete findings with requirement IDs, source file paths, code/test evidence, and required remediation TODOs.
+    implementationTasks:
+    - task: Audit TR documents for consistency and traceability.
+      done: true
+    - task: Audit code and tests for compliance with every TR.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): live store 422 TR (30 completed, 8 in_progress all Handoff, 13 deferred, 5 planned, 366 pending). Placeholder/stub TRs include [] and TR-01..TR-14 (TR-01 already deferred). 254 pending FRs many Covered-by with empty AC. OrphanReason: TR-AUDIT is a process audit of the TR corpus, not a single FR. This PLAN-TODOALIGN-001 audit rewrites TODO links; TR-internal code-compliance walk remains. Do not store-close TR-AUDIT from this goal.'
+    dependsOn: &o0 []
+    functionalRequirements: *o0
+    technicalRequirements: *o0
+  deprecated: true
+
+---
+

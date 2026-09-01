@@ -1,0 +1,58 @@
+{
+  "TimestampUtc": "2026-08-18T02:03:39Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 2,
+  "WorkClassLabel": "user-directed analysis of Integral2u/SharpMind as a potential QuadBrain backend",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "OverallVerdict": "DISAGREE",
+  "accuracyRating": 90,
+  "completenessRating": 88,
+  "sessionId": "GrokCode-20260818T015054Z-plugin-session",
+  "requestId": "req-20260818T015644Z-prompt-f210",
+  "planFile": "None",
+  "todoId": "None",
+  "markerSignature": true,
+  "healthNonceThisReview": "98627f54e6a74971bb2e2382b69c0d2c",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "unreachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "claims": [
+    {"id": "A1-architecture", "surface": "A", "verdict": "PASS", "summary": "SharpMind is a C# GGUF library plus CUI, not an HTTP model server. master SHA e0338f2225d79bc2a345cd27be9666701cb7f467."},
+    {"id": "A1-codesearch-zero", "surface": "A", "verdict": "FAIL", "summary": "tool_calls search returned 2 hits; /v1/ returned 1 hit. Zero-hit claim is false."},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "summary": "ProviderKind only OpenAI or OpenAICompatible; OpenAiCompatibleBrainSlotChatClient POSTs chat/completions."},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "summary": "No drop-in backend without HTTP wrapper or new IBrainSlotChatClient/ProviderKind."},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "summary": "PR 4 open/unmerged; RoPE on master still adjacent-only; Qwen before/after examples present."},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "summary": "README validated named sizes 135M-1.5B; not best-of-breed for Logic/AoT/Curiosity."},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "summary": "Do-not-adopt-now in session decision; only new analysis-window file is the stub receipt."},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "summary": "Implementer session and requestId exist; marker True; nonce recorded on implementer action 1."},
+    {"id": "A8", "surface": "A", "verdict": "PASS", "summary": "No planFile; no TODO completed after 2026-08-18T01:00Z; no integration."},
+    {"id": "B1-honesty", "surface": "B", "verdict": "FAIL", "summary": "Overstated zero-hit GitHub searches."},
+    {"id": "B2-receipts", "surface": "B", "verdict": "FAIL", "summary": "Named receipt is a 40-line stub (2383 bytes) without evidence."},
+    {"id": "B3-mcp-only", "surface": "B", "verdict": "PASS", "summary": "TODO.yaml last write 2026-07-10; no direct store edits."},
+    {"id": "B4-no-python", "surface": "B", "verdict": "PASS", "summary": "No implementer python use found; this review used pwsh only."},
+    {"id": "B5-look-before-delete", "surface": "B", "verdict": "PASS", "summary": "No deletes in analysis window."},
+    {"id": "B6-byrd", "surface": "B", "verdict": "N/A", "summary": "Byrd v4 not applied to class 2 analysis."},
+    {"id": "C1-requirements", "surface": "C", "verdict": "N/A", "summary": "Class 2; no product implementation."},
+    {"id": "D1-plan", "surface": "D", "verdict": "PASS", "summary": "No plan-step done claim; PLAN-QUADBRAIN-* remain Done=false."}
+  ],
+  "failList": [
+    "A1-codesearch-zero",
+    "B1-honesty",
+    "B2-receipts"
+  ],
+  "unknownList": [
+    "Implementer-time health.storage cannot be replayed; this review sees storage=unreachable while sessionlog reads.",
+    "llama3-small parameter count not stated in README.",
+    "SharpMind was not cloned locally."
+  ],
+  "filesWritten": [
+    "docs/receipts/hostile-validator-20260818T020339Z.md",
+    "docs/receipts/hostile-validator-20260818T020339Z.json"
+  ]
+}

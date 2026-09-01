@@ -1,0 +1,163 @@
+{
+  "TimestampUtc": "2026-08-19T23:28:40Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol",
+  "WorkClass": 1,
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/tempvol",
+  "GitSha": "9c7c3ec3c1e792a1476ca711392812a0ba29425a",
+  "DirtyCount": 0,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": "add-profile.grok.md"
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T232157Z-hostile-tempvol",
+    "requestId": "req-20260819T232157Z-001-hostile-validate-tempvol",
+    "beginTurnId": 42131,
+    "completeStatus": "completed",
+    "queryProof": "docs/receipts/_hv-s5-tempvol/session-query-proof.json",
+    "queryTotalCount": 2,
+    "queryTurnStatus": "completed",
+    "queryDialogCount": 4,
+    "queryDesignDecisionCount": 2,
+    "queryActionCount": 7
+  },
+  "Plugin": {
+    "sourceType": "GrokCode",
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.95.0",
+    "signatureOk": true,
+    "nonceMatch": true,
+    "nonce": "926c7647acb04b2686572d12a6275fd8",
+    "healthStorage": "reachable",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 14,
+    "FAIL": 2,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 94,
+  "Completeness": 90,
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "HEAD 9c7c3ec3 contains TEMPVOL helpers, session-start, wrapper, PluginTempVolume.Tests.ps1"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "TEMP aligned; failed move not success; PSGallery unpatched; templates keep same-volume TEMP"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "Independent Pester TEST-MCP-TEMPVOL-001 Passed 8 Failed 0 Skipped 0"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "title": "BUG-TRIAGE-117 and PLAN-TRIAGELEFTOVER-001 Done=false"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "No FR-vs-file timestamp FAIL"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "FAIL",
+      "title": "No S5 red-phase hostile AGREE"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "MCP-only storage"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "PowerShell only; no Python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "title": "Product claims match artifacts"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "FR-MCP-TEMPVOL-001 / TR / TEST exist"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "Structured AC exist"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "1:1 mapping"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS",
+      "title": "Pester covers FR/TR/TEST AC"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "FAIL",
+      "title": "Merge-if-AGREE without prior S5 H-red"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "title": "PLAN-TRIAGELEFTOVER-001 remains Done=false"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS",
+      "title": "Not S7; other leftover groups untouched"
+    }
+  ],
+  "FailList": [
+    "B2: No S5/G12 red-phase (H-red) hostile AGREE exists. First S5 hostile after tests+impl in 9c7c3ec3. Do not merge triage/tempvol. Do not mark BUG-TRIAGE-117 done.",
+    "D1: Plan G12 S5 merge gate requires H-red after tests then H-green after implementation. Parent brief asks for merge-if-AGREE without a prior S5 H-red AGREE."
+  ],
+  "PesterNamed": {
+    "Path": "plugins/core/test-fixtures/pester/PluginTempVolume.Tests.ps1",
+    "FullNameFilter": "*TEST-MCP-TEMPVOL-001*",
+    "Passed": 8,
+    "Failed": 0,
+    "Skipped": 0,
+    "NotRun": 0,
+    "Result": "Passed",
+    "Xml": "docs/receipts/_hv-s5-tempvol/pester.xml"
+  },
+  "Todos": {
+    "BUG-TRIAGE-117": false,
+    "PLAN-TRIAGELEFTOVER-001": false
+  }
+}

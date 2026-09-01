@@ -14,6 +14,42 @@
   Scope: layer-1+
 - TEST-GRAPHRAG-ADHOC-007: MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgent tool adapter exposes all 14 tools.
   Scope: layer-1+
+- TEST-HANDOFF-001: Cover documented request, result, draft, provenance, and diagnostic contracts, including typed-client serialization.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] All public handoff contract types round-trip through the typed client JSON context.
+  - [ ] Required contract types exist with complete XMLDocs and the documented enum values.
+- TEST-HANDOFF-002: Cover bounded readers, workspace containment, and rejection of missing, unsupported, oversized, traversal, external, and reparse-escaping sources.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO.
+  - [ ] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB.
+- TEST-HANDOFF-003: Cover versioned HandoffTodoDraft extraction and strict JSON parsing, including malformed AI output.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt.
+  - [ ] Malformed or compatibility JSON produces diagnostics and never creates a TODO.
+- TEST-HANDOFF-004: Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Invalid or conflicting draft fields produce field-specific diagnostics.
+  - [ ] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates.
+- TEST-HANDOFF-005: Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Successful creation produces exactly one TODO through ITodoService.
+  - [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true.
+  - [ ] ID collisions require review and are never silently renamed.
+- TEST-HANDOFF-006: Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill.
+  - [ ] Every surface delegates to IHandoffIngestionService and applies workspace isolation.
+- TEST-HANDOFF-007: Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+  - [ ] Persisted runs and logs do not contain raw credentials or source content.
 - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
   Scope: layer-1+
 - TEST-MCP-002: Given TODO API operations, when create/update/delete/query run, then contracts remain stable.
@@ -479,6 +515,10 @@
   Scope: layer-1+
 - TEST-MCP-194: Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
   Scope: layer-1+
+- TEST-MCP-195: Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog. (2) Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw. (3) Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays. (4) getFr EXIT 0 with body before 30s when a queued session_submit 503s.
+  Scope: layer-1+
+- TEST-MCP-196: C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+  Scope: layer-1+
 - TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with key server and subscriber mocked in-process and the coordinator as system under test; happy commit, mutation-abort+rollback, subscriber-unavailable degraded+rollback, and all published-message rejections.
   Scope: layer-1+
 - TEST-MCP-ACID-002: Same lifecycle commits with key server and subscriber as real spun-up WebApplicationFactory hosts torn down after the test; coordinator drives sign and commit over the HTTP transports.
@@ -539,6 +579,10 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
   - [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
   - [ ] The current-plus-prior gate reports zero failures and zero skips.
+- TEST-MCP-FAILSAFE-001: Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
 - TEST-MCP-FILETOOLS-001: Unit tests must cover repository discovery behavior, path safety, MCP schemas, client delegation, hosted-agent registration, QBAgent registration, and backward compatibility.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -667,6 +711,18 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Skill tests or repository checks verify every plugin bundle includes triage guidance.
+- TEST-MCP-PRODUCT-001: Unit tests for ProductEntity/membership CQRS handlers: isolation, PROD-* key accept (PROD-MCPSERVER) and reject (mcpserver, empty, missing prefix), unique key, soft-delete, owner add/remove, self-leave, unknown workspace rejected. Files: ProductEntityTests, CreateProductCommandHandlerTests, AddProductMemberCommandHandlerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-002: Unit tests for product effective-requirements share: union, productScope=local, id collision two origins, origin layer miss excludes, leave drops sibling, outsider cannot share. File: GetProductEffectiveRequirementsQueryHandlerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-003: Controller/API unit tests: 400 invalid key, 409 duplicate, 403 non-owner, 404 outsider get. File: ProductsControllerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-004: Client and MCP/REPL contract tests prove adapters dispatch CQRS only. File: ProductClientTests plus MCP/REPL allow-list tests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-005: Migration apply on empty and production-shaped DBs for SQLite, PostgreSQL, and SQL Server harnesses. Must not re-add unrelated SessionLogs agent-header columns. File: ProductMigrationApplyTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-006: Context pack/search: member includes sibling FR body with origin; does not include sibling .cs chunks; source type product-requirements filters to those chunks. File: ProductRequirementContextTests.
+  Scope: layer-1+
 - TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -933,6 +989,14 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-REQWS-001: Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
   Scope: layer-1+
+- TEST-MCP-SESSIONATTR-001: Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-SESSIONATTR-001 acceptance criteria
+- TEST-MCP-SESSIONEND-001: Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria
 - TEST-MCP-SESSIONLOG-001: Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError and SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-002: Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
@@ -941,6 +1005,24 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-005: Validates TR-MCP-SESSIONLOG-005. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: SetSessionTitleAsync unconditionally changes an existing session Title; SetTurnTitleAsync unconditionally changes an existing turn QueryTitle; both throw InvalidOperationException when the session or turn does not exist. Red before the methods exist, green after. Scope: layer-1+.
   Scope: layer-1+
+- TEST-MCP-SESSIONLOG-006: Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Round-trip planFile/todoId on persist and get.
+  - [ ] None sentinel persists and is never rewritten to null.
+  - [ ] New persist without fields is rejected.
+  - [ ] Relative, exact, and ~/ plan paths are accepted; .. is rejected.
+  - [ ] Query filter and text search match planFile and todoId.
+  - [ ] Backfill upgrades None from turn contents and ~ history.
+  - [ ] Import/ingest/federation persist a validated pair, never null.
+  - [ ] Validator rules covered by SessionLogTurnContextValidatorTests.
+  - [ ] Additive omit-preserve and replace-required covered by SessionLogServiceTurnContextTests.
+  - [ ] Extractor ranking covered by SessionLogTurnContextExtractorTests.
+  - [ ] Schema/migration covered by model and provider migration tests.
+  - [ ] Backfill None-only upgrades covered by SessionLogTurnContextBackfillTests.
+  - [ ] REST/MCP begin required fields covered by controller and tool tests.
+  - [ ] Client/agent/REPL carry fields covered by their session-log tests.
+  - [ ] Sanitizer clones new fields covered by SessionLogSanitizerTests.
 - TEST-MCP-SESSIONLOGSAN-001: Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -950,11 +1032,19 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] Executed current-plus-prior test scope reports zero failures and zero skips.
 - TEST-MCP-SESSIONLOGSAN-002: Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs: CreateTimeoutSanitizer now constructs SessionLogSanitizer with an injected RegexReplaceInvoker that raises RegexMatchTimeoutException deterministically for the catastrophic rule on large input (length>10000 + pattern match, no wall-clock). SanitizeString_WhenConfiguredRuleTimesOut_ReturnsTimeoutTokenAndDoesNotLogInput and SanitizeSessionLog_WhenOneFieldTimesOut_ContinuesSanitizingOtherFields verified 10/10 green across repeated isolated runs (previously flaked pass/pass/fail). Production path uses the default Regex.Replace invoker.
   Scope: layer-1+
+- TEST-MCP-STRICTCOUNT-001: Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria
 - TEST-MCP-SUBLOG-001: Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
   - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
+- TEST-MCP-TEMPVOL-001: Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
 - TEST-MCP-TODO-CLOSE-001: Unit tests cover REST and typed client close-by-id behavior, including timestamp creation and missing item failure.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1017,6 +1107,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-TRANSCRIPT-013: Validates FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010. Unit: a JSONL transcript line larger than the former 8 MiB ceiling is ingested without an InvalidDataException, replacing the assertion in IngestionService_RejectsOversizedJsonlLine which is retargeted to prove the int.MaxValue ceiling is still an enforced bound rather than an absent one. Unit: the streaming reader returns identical records to the previous ReadAllLinesAsync implementation for an existing multi-record fixture, proving no regression in parse behavior. Unit: peak allocation while reading a many-small-line transcript stays proportional to the largest line rather than to file size. Integration: retained hostile-archive guards still reject their fixtures at the unchanged values, specifically archive entry count above 10,000, compression ratio above 20, ZIP symlink entries, and path-traversal entries, each returning 413 or 400 as previously mapped.
   Scope: layer-1+
+- TEST-MCP-TRANSCRIPT-SEARCH-001: CodexTranscriptAdapterCoverageTests ingest inline JSONL for inter_agent_communication_metadata, tool_search_call, and tool_search_output with zero unknown diagnostics and persist cleanup. Validates TR-MCP-TRANSCRIPT-SEARCH-001 / BUG-TRIAGE-122.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-TRANSCRIPT-SEARCH-001 acceptance criteria
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1041,10 +1135,120 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Tests verify query filters and grouping scope never cross workspace boundaries.
+- TEST-MCP-TRIAGEERR-001: Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+- TEST-MCP-TRIAGEHELP-001: Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+- TEST-MCP-TRIAGEPLUGIN-001: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+- TEST-MCP-TRIAGEPLUGIN-002: ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+- TEST-MCP-TRIAGEPLUGIN-003: Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+- TEST-MCP-TRIAGEPLUGIN-004: beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+- TEST-MCP-TRIAGEPLUGIN-005: completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+- TEST-MCP-TRIAGEREQ-001: Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
 - TEST-MCP-TRIAGE-REQAC-001: Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
+- TEST-MCP-TRIAGESCHEMA-001: A fixture database missing the four agent header columns fails closed with pending-migration. Apply proofs: Sqlite MigrateAsync of 20260818205751_AddSessionLogTagsAndAgentSessionHeaders on a legacy SessionLogs table; SqlServer 20260818205807 captured Up() SQL on disposable LocalDB; Postgres 20260818205822 captured Up() SQL on disposable local PostgreSQL. After apply, sessionlog query with and without a text filter succeeds.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+- TEST-MCP-TRIAGESTORE-001: SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+- TEST-MCP-TRIAGESTORE-002: TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+- TEST-MCP-TRIAGESTORE-003: ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+- TEST-MCP-TRIAGESTORE-004: Turn status canceled and cancelled persist via submit and re-query with the same status.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Turn status canceled and cancelled persist via submit and re-query with the same status.
+- TEST-MCP-TRIAGESTORE-005: SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+- TEST-MCP-TRIAGESTORE-006: Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+- TEST-MCP-TRIAGESTORE-007: Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+- TEST-MCP-TRIAGETODO-001: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+- TEST-MCP-TRIAGETODO-002: GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+- TEST-MCP-USECASE-001: Unit tests cover schema creation, workspace isolation, soft-delete hide, FR string FK link uniqueness, and handler CRUD/link behaviors with zero skips in the executed gate scope.
+  Scope: layer-1+
+- TEST-MCP-USECASE-002: Controller unit tests for UseCasesController. Acceptance: Controller tests green 0 skip.
+  Scope: layer-1+
+- TEST-MCP-USECASE-003: Diagram golden tests mermaid and plantuml. Acceptance: Mermaid sequenceDiagram; plantuml @startuml.
+  Scope: layer-1+
+- TEST-MCP-USECASE-004: Client unit tests with live JSON shapes. Acceptance: Client UseCase filter green including coverage DTO.
+  Scope: layer-1+
+- TEST-MCP-USECASE-005: Coverage query tests. Acceptance: Coverage gap tests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-006: Migration apply empty and production-shaped. Acceptance: UseCaseMigrationApplyTests green 0 skip.
+  Scope: layer-1+
+- TEST-MCP-USECASE-007: Audit emission on UC mutations. Acceptance: Audit tests green for create/update/delete/link.
+  Scope: layer-1+
+- TEST-MCP-USECASE-008: UI asset REST-only tests. Acceptance: UseCaseUiAssetTests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-009: Approval and product hooks tests. Acceptance: Expanded scope approval/product tests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-010: Plugin-core usecase jest tests. Acceptance: usecase.test.ts green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-011: Deploy smoke after UpdateService. Acceptance: health, /usecases/, create/link/diagram/coverage smoke log green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-012: UML graph serialization goldens Mermaid schema v1 + PlantUML. Covers AC-013-*, AC-014-*, AC-T14-*.
+  Scope: layer-1+
+- TEST-MCP-USECASE-013: Diagram graph CQRS/storage get put isolation soft-delete invalid audit. Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
+  Scope: layer-1+
+- TEST-MCP-USECASE-014: Controller/client diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
+  Scope: layer-1+
+- TEST-MCP-USECASE-015: Canvas UI asset/contract tests palette canvas drag hooks REST-only. Covers AC-011-*, AC-T15-*.
+  Scope: layer-1+
+- TEST-MCP-USECASE-016: Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
+  Scope: layer-1+
+- TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
+  Scope: layer-1+
+- TEST-MCP-VERIFYWRAP-001: Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-VERIFYWRAP-001 acceptance criteria
 - TEST-MCP-WIKIEXPORT-001: Tests must cover docs/wiki.yaml loading, validation, renderer output, service integration, unchanged default behavior, and BDPv4 traceability for configured GitHub and Azure wiki exports.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1062,6 +1266,10 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
   - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
   - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
+- TEST-MCP-XAGENT-001: Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named tests cover TEST-MCP-XAGENT-001 acceptance criteria
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1148,77 +1356,3 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
-
-- TEST-MCP-USECASE-001: Handler unit tests cover UC CRUD, isolation, soft-delete, FR link.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Support FullyQualifiedName~UseCase filter 0 fail 0 skip for storage/handler cases
-- TEST-MCP-USECASE-002: Controller unit tests for UseCasesController.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Controller tests green 0 skip
-- TEST-MCP-USECASE-003: Diagram golden tests mermaid and plantuml.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Mermaid sequenceDiagram; plantuml @startuml
-- TEST-MCP-USECASE-004: Client unit tests with live JSON shapes.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Client UseCase filter green including coverage DTO
-- TEST-MCP-USECASE-005: Coverage query tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Coverage gap tests green
-- TEST-MCP-USECASE-006: Migration apply empty and production-shaped.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] UseCaseMigrationApplyTests green 0 skip
-- TEST-MCP-USECASE-007: Audit emission on UC mutations.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Audit tests green for create/update/delete/link
-- TEST-MCP-USECASE-008: UI asset REST-only tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] UseCaseUiAssetTests green
-- TEST-MCP-USECASE-009: Approval and product hooks tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Expanded scope approval/product tests green
-- TEST-MCP-USECASE-010: Plugin-core usecase jest tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] usecase.test.ts green
-- TEST-MCP-USECASE-011: Deploy smoke after UpdateService.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] health, /usecases/, create/link/diagram/coverage smoke log green
-- TEST-MCP-USECASE-012: UML graph serialization goldens (Mermaid schema v1 + PlantUML). Covers AC-013-*, AC-014-*, AC-T14-*.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] All Mermaid export ACs green via pure unit tests
-  - [ ] All PlantUML export ACs green via pure unit tests
-  - [ ] Service has no DbContext dependency (AC-T14-1)
-- TEST-MCP-USECASE-013: Diagram graph CQRS/storage (get/put, isolation, soft-delete, invalid, audit). Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Get empty/saved and put round-trip green
-  - [ ] Workspace isolation and soft-delete green
-  - [ ] Invalid graph rejected; audit on put green
-- TEST-MCP-USECASE-014: Controller/client for diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] REST routes green; client parity green; 0 skip
-- TEST-MCP-USECASE-015: Canvas UI asset/contract tests for palette, canvas, drag hooks, REST-only. Covers AC-011-*, AC-T15-*.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Structural tests for palette, umlCanvas, editor APIs, REST graph paths
-  - [ ] No McpDbContext in UI assets
-- TEST-MCP-USECASE-016: Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Empty and production-shaped migrate green; no SessionLogs ops in new migration
-- TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] HV receipt OverallVerdict AGREE for canvas claims (not form-only)

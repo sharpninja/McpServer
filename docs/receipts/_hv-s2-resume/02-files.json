@@ -1,0 +1,86 @@
+{
+  "TimestampUtc": "2026-08-19T20:30:41Z",
+  "Branch": "triage/plugin-core",
+  "Sha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "FileStats": [
+    {
+      "Rel": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T19:41:24.0882662Z",
+      "Length": 23894,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/McpPluginShim.psm1 | 54 \u001b[32m+++++++++++++++++++++++++++\u001b[m\u001b[31m-------\u001b[m  1 file changed, 44 insertions(+), 10 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/repl-invoke.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T20:14:39.3113624Z",
+      "Length": 96962,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/repl-invoke.ps1 | 91 \u001b[32m++++++++++++++++++++++++++++++++\u001b[m\u001b[31m-----\u001b[m  1 file changed, 79 insertions(+), 12 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T20:14:39.3113624Z",
+      "Length": 56391,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/plugin-hook.ps1 | 235 \u001b[32m+++++++++++++++++++++++++++++++++\u001b[m\u001b[31m---\u001b[m  1 file changed, 219 insertions(+), 16 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T19:38:37.7346120Z",
+      "Length": 13417,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/Invoke-McpPlugin.ps1 | 18 \u001b[32m+++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 17 insertions(+), 1 deletion(-)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T19:39:16.6439904Z",
+      "Length": 5492,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/resolve-cache-dir.ps1 | 1 \u001b[32m+\u001b[m  1 file changed, 1 insertion(+)"
+    },
+    {
+      "Rel": "plugins/core/lib-ps/cache-manager.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T20:14:08.0644449Z",
+      "Length": 4206,
+      "DiffStatVsDevelop": " plugins/core/lib-ps/cache-manager.ps1 | 8 \u001b[32m++++++\u001b[m\u001b[31m--\u001b[m  1 file changed, 6 insertions(+), 2 deletions(-)"
+    },
+    {
+      "Rel": "plugins/core/hooks-templates/wrapper.ps1.template",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T19:44:11.7062063Z",
+      "Length": 3692,
+      "DiffStatVsDevelop": " plugins/core/hooks-templates/wrapper.ps1.template | 70 \u001b[32m++++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 69 insertions(+), 1 deletion(-)"
+    },
+    {
+      "Rel": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T20:12:55.0518353Z",
+      "Length": 25810,
+      "DiffStatVsDevelop": " .../pester/TriagePluginIdentity.Tests.ps1          | 230 \u001b[32m+++++++++++++++++++++\u001b[m  1 file changed, 230 insertions(+)"
+    },
+    {
+      "Rel": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-08-19T20:15:08.4259372Z",
+      "Length": 253979,
+      "DiffStatVsDevelop": " .../pester/PluginPowerShellRuntime.Tests.ps1       | 356 \u001b[32m++++++++++++++++++++\u001b[m\u001b[31m-\u001b[m  1 file changed, 352 insertions(+), 4 deletions(-)"
+    }
+  ],
+  "IdentitySubmitTimeoutItLength": 4168,
+  "IdentitySubmitTimeoutStubsInvokeReplRaw": false,
+  "IdentitySubmitTimeoutInjectsPersistedFalse": true,
+  "IdentitySubmitTimeoutUsesHangingCmd": true,
+  "IdentitySubmitTimeoutDotsReplInvoke": true,
+  "IdentitySubmitTimeoutSleepStub": false,
+  "FlushOkItLength": 2676,
+  "FlushOkAssertsPendingGone": true,
+  "FlushFailItLength": 2238,
+  "FlushFailAssertsExit1": false,
+  "FlushFailAssertsFlushFailedToken": false,
+  "FlushFailOnlyNegatesEmptySuccess": true,
+  "DiskItAssertsAudit": true,
+  "ReplPersistTimeoutBranch": true,
+  "HookFlushFailedExit1": true,
+  "DiskFullHandlerMutatesFile": false
+}

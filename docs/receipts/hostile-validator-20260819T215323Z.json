@@ -1,0 +1,106 @@
+{
+  "TimestampUtc": "2026-08-19T21:53:23Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260819T214401Z-hostile-closeout-s4",
+  "RequestId": "req-20260819T214401Z-001-hostile-postgres-apply",
+  "TurnId": 42115,
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "Branch": "triage/closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyWorktree": true,
+  "AddProfile": {
+    "executed": true,
+    "nonSkillProfileMarkdownFilesRead": 18
+  },
+  "WorkClass": 1,
+  "Plugin": "mcpserver-grok-plugin 1.95.0",
+  "MarkerHmacValid": true,
+  "MarkerSignatureValue": "4E05C13374C6FC7BF14CEF5FF6BE7DF686FAA4E06F41C4F4B99F17AD98893FC2",
+  "HealthNonce": "c1681a864f9f4371a31bdde72bd23554",
+  "HealthNonceEchoed": true,
+  "OverallVerdict": "AGREE",
+  "DidMarkTodosDone": false,
+  "DidMerge": false,
+  "PriorDisagreeReceipt": "docs/receipts/hostile-validator-20260819T210204Z.md",
+  "Counts": {
+    "PASS": 19,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "FailList": [],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "summary": "Filter Failed 0 Passed 13 Skipped 0 EXIT 0 Duration 12s TRX 13/13/0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "summary": "Postgres apply test real initdb from PostgreSQL 17; SQL applied twice; TRX 3.619s; isolated rerun Passed 1" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "summary": "Native TR ac-1 and TEST Condition retargeted to disposable LocalDB/local captured SQL; no server-host bar" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "summary": "Worktree docs/Project 0 hits for 20260722214500 and requires a server host" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "summary": "Live sessionlog_query on F:\\GitHub\\McpServer returned this session; not Invalid column name" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "summary": "BUG-TRIAGE-116, 118, PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "summary": "Re-verified tests, CIM, MCP, greps" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "summary": "H-green gate; not timestamp archaeology" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "summary": "MCP-only storage; no done:true" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "summary": "pwsh.exe collectors; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "summary": "Implementer claims match artifacts" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "summary": "FR-MCP-TRIAGESCHEMA-001 exists; pending; ac-1 names provider IDs" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "summary": "TEST-MCP-TRIAGESCHEMA-001 Condition names disposable apply proofs" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "summary": "Mapping FR/TR/TEST TRIAGESCHEMA-001 present" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "summary": "Native AC no 20260722214500 or server-host bar" },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "summary": "docs/Project markdown leftovers closed" },
+    { "id": "C6", "surface": "C", "verdict": "PASS", "summary": "Prior Postgres compiled-Up-only FAIL closed" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "summary": "G2 closeout proof: host query plus unit fail-closed plus postgres apply" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "summary": "Did not mark TODOs done; did not merge" }
+  ],
+  "Ratings": {
+    "Accuracy": 9,
+    "Completeness": 9
+  },
+  "TestFilter": {
+    "exit": 0,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "trxPath": "docs/receipts/_hv-closeout-s4/SessionLogCloseoutFilter.trx",
+    "postgresApplyDuration": "00:00:03.6195703",
+    "postgresCaptureOnlyDuration": "00:00:00.0003267",
+    "sqlServerApplyDuration": "00:00:04.2361004"
+  },
+  "PostgresProcessWatch": {
+    "initdbExe": "C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\initdb.exe",
+    "postgresExe": "C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\postgres.exe",
+    "dataDirSample": "C:\\\\Users\\\\kingd\\\\AppData\\\\Local\\\\Temp\\\\mcp-test-pgdata-cd1ca8525e184afbac869b54e72ad895",
+    "mcpTestPostgresConnectionSet": false,
+    "isolatedRerunPassed": 1,
+    "isolatedRerunFailed": 0,
+    "isolatedRerunSkipped": 0
+  },
+  "NativeRequirements": {
+    "frId": "FR-MCP-TRIAGESCHEMA-001",
+    "trId": "TR-MCP-TRIAGESCHEMA-001",
+    "testId": "TEST-MCP-TRIAGESCHEMA-001",
+    "trAc1Contains20260722214500": false,
+    "trAc1ContainsRequiresServerHost": false,
+    "trAc1ContainsOnHostDatabases": false,
+    "trAc1ContainsLiveMigrateAsync": false,
+    "trAc1ContainsCapturedUp": true,
+    "trAc1ContainsDisposable": true,
+    "testConditionContainsRequiresServerHost": false,
+    "testConditionContainsOnHostDatabases": false,
+    "testConditionContainsLiveMigrateAsync": false
+  },
+  "Todos": {
+    "BUG-TRIAGE-116": { "Done": false },
+    "BUG-TRIAGE-118": { "Done": false },
+    "PLAN-TRIAGELEFTOVER-001": { "Done": false }
+  },
+  "MergePrecondition": "Commit worktree modifications before merging triage/closeout. HEAD 06200782 does not contain SessionLogAgentSessionHeaderMigrationTests.cs.",
+  "Persistence": {
+    "sessionId": "GrokCode-20260819T214401Z-hostile-closeout-s4",
+    "requestId": "req-20260819T214401Z-001-hostile-postgres-apply",
+    "turnId": 42115,
+    "turnStatus": "completed",
+    "lastUpdated": "2026-08-19T21:57:05.5757406+00:00",
+    "queryProof": "sessionlog_query agent=GrokCode from=2026-08-19T21:40:00Z todoId=PLAN-TRIAGELEFTOVER-001 totalCount=1 response starts with OverallVerdict AGREE"
+  }
+}

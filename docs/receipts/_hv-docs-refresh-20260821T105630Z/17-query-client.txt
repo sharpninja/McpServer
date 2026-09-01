@@ -1,0 +1,86 @@
+type: result
+payload:
+  requestId: req-20260821T110725Z-3e9b
+  result:
+    totalCount: 233
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T110036Z-plugin-session
+      agentSessionId: 01a023f5-d5cf-7752-9c5e-25fc1bad8301
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile validate docs refresh and wrap-up pause
+      model: grok
+      started: 2026-08-21T11:00:39.0000000+00:00
+      lastUpdated: 2026-08-21T11:07:22.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T110035Z-001-hostile-docs-refresh-wrapup
+        timestamp: 2026-08-21T11:00:39.0000000+00:00
+        queryText: Class 1 project documentation refresh plus class 2 wrap-up pause. Attack claims A1-A7. Do not commit. Do not mark TODOs.
+        queryTitle: Hostile validate docs refresh and wrap-up pause
+        response: 'Hostile class 1 docs refresh plus class 2 wrap-up pause. OverallVerdict DISAGREE. FAIL A2 and B5: session-log-schema.md L11 added hunk contains U+2014. Receipt docs/receipts/hostile-validator-20260821T110543Z.md. Did not mark TODOs. Did not commit.'
+        status: completed
+        planFile: docs/plans/sessionlog-remediate-001.md
+        todoId: PLAN-SESSIONLOGREMEDIATE-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: 'Plugin HMAC only: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available. Did not construct HMACSHA256.'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\marker-resolver.ps1
+        - order: 3
+          description: Live GET /health nonce match version 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8
+          type: edit
+          status: completed
+          filePath: AGENTS-README-FIRST.yaml
+        - order: 4
+          description: Re-read generateDocument stdout success true format wiki docType all; zip length 978095
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-refresh-docs-20260821T104955Z/generate-wiki-stdout.txt
+        - order: 5
+          description: Re-ran ./build.ps1 ValidateTraceability Succeeded findings=0
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-docs-refresh-20260821T105630Z/54-validate-traceability.txt
+        - order: 6
+          description: 'FAIL A2/B5: session-log-schema.md L11 added hunk contains U+2014'
+          type: design_decision
+          status: completed
+          filePath: docs/context/session-log-schema.md
+        - order: 7
+          description: 'Class 1 docs plus Class 2 pause: C covered by existing FR-MCP-170 SESSIONLOGSAN SESSIONLOGCTX; no TODO flip; no commit'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/sessionlog-remediate-001.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-21T11:04:42.7173661+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile markdown files (excluded add-profile.grok.md). HMAC via plugin Test-MarkerSignature=True Invoke-FullBootstrap=True Status available. Did not construct HMACSHA256.'
+          category: observation
+        - timestamp: 2026-08-21T11:04:42.7173661+00:00
+          role: model
+          content: 'Decision: classify as mixed Class 1 project documentation refresh plus Class 2 wrap-up pause. Consequence: Surface C applies to docs of shipped sanitizer/persist/planFile and is covered by existing FR-MCP-170 / SESSIONLOGSAN / SESSIONLOGCTX; do not FAIL missing new FR. Byrd TDD N/A for docs-only refresh. Alternatives rejected: treating wrap-up pause as product implementation; inventing a new FR gap.'
+          category: decision
+        - timestamp: 2026-08-21T11:04:42.7173661+00:00
+          role: model
+          content: 'Decision: FAIL A2 and B5 because git diff HEAD added line docs/context/session-log-schema.md L11 contains U+2014. Independent hex dump: U+2014 on that line. HEAD already had the em-dash; the wrap-up rewrote the line and kept it. Claim no em-dashes in those edits does not match the added hunk. Alternatives rejected: treating pre-existing character as out of scope for an added line.'
+          category: decision
+        - timestamp: 2026-08-21T11:04:42.7173661+00:00
+          role: model
+          content: 'Independent re-verify: live health 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8 nonce match; GitVersion.yml WT 1.4.30 HEAD 1.4.28; zip 978095 both paths; wiki.yaml schema mcp-wiki-export/v1 34 docs nav resolve; generateDocument success true format wiki docType all; ValidateTraceability Succeeded findings=0; git diff --check only Technical-Requirements source plus wiki twins trailing blank EOF; HEAD ee89cd63 uncommitted wrap-up; PLAN-SESSIONLOGREMEDIATE-001 done true not flipped; CLAUDE.md not in porcelain still .NET 9; wiki names github 37/37 azure 42/42 no removed.'
+          category: observation
+
+---
+

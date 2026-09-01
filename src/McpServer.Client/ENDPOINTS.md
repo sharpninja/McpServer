@@ -560,6 +560,21 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Response DTO/body: GraphRelationshipResult
   - Source: GraphRagClient.cs
 
+### Handoff
+
+- IngestHandoffAsync: POST /mcpserver/handoff/ingest
+  - Request DTO/body: HandoffIngestionRequest
+  - Response DTO/body: HandoffIngestionResult
+  - Source: HandoffClient.cs
+- GetHandoffRunAsync: GET /mcpserver/handoff/runs/{runId}
+  - Request DTO/body: none
+  - Response DTO/body: HandoffIngestionResult
+  - Source: HandoffClient.cs
+- ApproveHandoffAsync: POST /mcpserver/handoff/runs/{runId}/approve
+  - Request DTO/body: HandoffApprovalRequest
+  - Response DTO/body: HandoffIngestionResult
+  - Source: HandoffClient.cs
+
 ### Health
 
 - GetAliveAsync: GET /alive
@@ -632,6 +647,41 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Request DTO/body: MemoryUpdateRequest
   - Response DTO/body: MemoryMutationResult
   - Source: MemoryClient.cs
+
+### Products
+
+- CreateAsync: POST /mcpserver/products
+  - Request DTO/body: CreateProductRequest
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
+- ListAsync: GET /mcpserver/products
+  - Request DTO/body: none
+  - Response DTO/body: IReadOnlyList ProductDto
+  - Source: ProductClient.cs
+- GetAsync: GET /mcpserver/products/{key}
+  - Request DTO/body: none
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
+- UpdateAsync: PATCH /mcpserver/products/{key}
+  - Request DTO/body: UpdateProductRequest
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
+- DeleteAsync: DELETE /mcpserver/products/{key}
+  - Request DTO/body: none
+  - Response DTO/body: status
+  - Source: ProductClient.cs
+- ListMembersAsync: GET /mcpserver/products/{key}/members
+  - Request DTO/body: none
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
+- AddMemberAsync: PUT /mcpserver/products/{key}/members/{workspaceId}
+  - Request DTO/body: none
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
+- RemoveMemberAsync: DELETE /mcpserver/products/{key}/members/{workspaceId}
+  - Request DTO/body: none
+  - Response DTO/body: ProductDto
+  - Source: ProductClient.cs
 
 ### Repo
 

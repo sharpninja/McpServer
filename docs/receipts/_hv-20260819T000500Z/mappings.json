@@ -1,0 +1,93 @@
+[
+  {
+    "frId": "FR-MCP-TRIAGEERR-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGEERR-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGEERR-001"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGESTORE-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGESTORE-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGESTORE-001",
+      "TEST-MCP-TRIAGESTORE-002",
+      "TEST-MCP-TRIAGESTORE-003",
+      "TEST-MCP-TRIAGESTORE-004",
+      "TEST-MCP-TRIAGESTORE-005",
+      "TEST-MCP-TRIAGESTORE-006",
+      "TEST-MCP-TRIAGESTORE-007"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGESTORE-002",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGESTORE-002"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGESTORE-007"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGESCHEMA-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGESCHEMA-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGESCHEMA-001"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGEPLUGIN-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGEPLUGIN-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGEPLUGIN-001",
+      "TEST-MCP-TRIAGEPLUGIN-002",
+      "TEST-MCP-TRIAGEPLUGIN-003",
+      "TEST-MCP-TRIAGEPLUGIN-004",
+      "TEST-MCP-TRIAGEPLUGIN-005"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGETODO-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGETODO-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGETODO-001",
+      "TEST-MCP-TRIAGETODO-002"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGEREQ-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGEREQ-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGEREQ-001"
+    ]
+  },
+  {
+    "frId": "FR-MCP-TRIAGEHELP-001",
+    "found": true,
+    "trIds": [
+      "TR-MCP-TRIAGEHELP-001"
+    ],
+    "testIds": [
+      "TEST-MCP-TRIAGEHELP-001"
+    ]
+  }
+]

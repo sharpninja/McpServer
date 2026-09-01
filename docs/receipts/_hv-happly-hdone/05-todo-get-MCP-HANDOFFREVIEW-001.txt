@@ -1,0 +1,77 @@
+type: result
+payload:
+  requestId: req-20260820T125813Z-fe49
+  result:
+    id: MCP-HANDOFFREVIEW-001
+    title: Remediate independent adversarial review of MCP-HANDOFF-001
+    section: MCP Server
+    priority: high
+    done: false
+    estimate: 2-4d
+    description:
+    - 'Independent PowerShell.Mcp-only Codex review returned VERDICT: NOT APPROVED.'
+    - Remediate every product finding through BDPv4 Red -> Green -> Refactor, rerun all handoff gates serially, and obtain a fresh independent APPROVED verdict.
+    - 'Review evidence: C:\Users\kingd\AppData\Local\Temp\PowerShell.MCP.Output\pwsh_output_20260816_214119_608_0b1a5xex.qrj.txt'
+    technicalDetails:
+    - 'P1: Processing lease lacks renewal, atomic takeover, and fencing on terminal updates.'
+    - 'P1: Approval completion uses a stale tracked entity and lacks owner/version fencing.'
+    - 'P1: TODO heal compares only IdempotencyKey instead of the complete normalized payload.'
+    - 'P1: Commit ambiguity can be suppressed without positive durable receipt confirmation; cancellation recovery uses unbounded CancellationToken.None.'
+    - 'P1: Raw handoff source is retained and exposed by AgentPool rendered-prompt state and notifications.'
+    - 'P1: Handle containment fails open, uses a fixed buffer, and misnormalizes device UNC paths.'
+    - 'P1: Undefined/numeric modes can fall through to CreateWhenConfident and create TODOs.'
+    - 'P1: Native MCP scopes raw workspace paths inconsistently with the canonical service identity.'
+    - 'P2: Path and artifact readers allocate before enforcing the 8 MiB limit.'
+    - 'P2: Effective custom prompt identity/version is absent from provenance and replay identity.'
+    - 'P2: Persisted provenance strings are not uniformly sanitized.'
+    - 'P2: Controller maps every non-success to HTTP 400 instead of stable status classes.'
+    - 'P2: Commit ambiguity still relies on English provider-message fragments.'
+    - 'P2: Tests miss live lease expiry, changed-payload heal, oversized Path/Artifact, plugin invocation/sync parity, and end-to-end workspace isolation.'
+    - 'P3: ReplayOfRunId and HandoffReviewState.Approved are dead contracts and must be removed or implemented.'
+    - 'Scope note: unrelated sanitizer/requirements dirty changes are preserved and excluded from this remediation.'
+    implementationTasks:
+    - task: Add renewable processing lease, atomic takeover, and fencing tests/implementation
+      done: false
+    - task: Fence approval claims and terminal updates by owner/version
+      done: false
+    - task: Add one shared normalized TODO payload equality path and changed-payload collision coverage
+      done: false
+    - task: Require positive durable compensation confirmation with bounded tokens
+      done: false
+    - task: Add non-retained sensitive AgentPool prompt handling
+      done: false
+    - task: Make handle containment and bounded Path/Artifact reads fail closed
+      done: false
+    - task: Enforce strict enum and canonical workspace scopes across all transports
+      done: false
+    - task: Make prompt identity, provenance sanitization, HTTP mapping, and provider errors truthful/stable
+      done: false
+    - task: Remove dead handoff states/fields and update all provider migrations/snapshots
+      done: false
+    - task: Run complete BDPv4 gates serially and obtain independent APPROVED verdict
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open until current-plus-prior gates are zero-failure/zero-skip and a fresh independent hostile AGREE. Do not store-close.'
+    dependsOn:
+    - MCP-HANDOFF-001
+    - MCP-HANDOFFPLAN-001
+    functionalRequirements:
+    - FR-HANDOFF-001
+    - FR-HANDOFF-002
+    - FR-HANDOFF-003
+    - FR-HANDOFF-004
+    - FR-HANDOFF-005
+    - FR-HANDOFF-006
+    - FR-HANDOFF-007
+    technicalRequirements:
+    - TR-HANDOFF-CONTRACT-001
+    - TR-HANDOFF-SECURITY-001
+    - TR-HANDOFF-AGENT-001
+    - TR-HANDOFF-VALIDATE-001
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-TODO-001
+    - TR-HANDOFF-AUDIT-001
+    - TR-HANDOFF-SURFACE-001
+  deprecated: true
+
+---
+

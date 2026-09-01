@@ -1,0 +1,167 @@
+[
+  {
+    "FrId": "FR-MCP-SESSIONLOGCTX-001",
+    "TrIds": [
+      "TR-MCP-SESSIONLOG-006"
+    ],
+    "TestIds": [
+      "TEST-MCP-SESSIONLOG-006"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGE-001",
+    "TrIds": [
+      "TR-MCP-TRIAGE-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGE-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGE-002",
+    "TrIds": [
+      "TR-MCP-TRIAGE-002"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGE-002"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGE-003",
+    "TrIds": [
+      "TR-MCP-TRIAGE-003"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGE-003"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGE-004",
+    "TrIds": [
+      "TR-MCP-TRIAGE-004",
+      "TR-MCP-TRIAGE-005"
+    ],
+    "TestIds": [
+      "TEST-MCP-BUGTRIAGE-043",
+      "TEST-MCP-TRIAGE-004",
+      "TEST-MCP-TRIAGE-005",
+      "TEST-MCP-TRIAGE-006"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGEERR-001",
+    "TrIds": [
+      "TR-MCP-TRIAGEERR-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGEERR-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGEHELP-001",
+    "TrIds": [
+      "TR-MCP-TRIAGEHELP-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGEHELP-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGEPLUGIN-001",
+    "TrIds": [
+      "TR-MCP-TRIAGEPLUGIN-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGEPLUGIN-001",
+      "TEST-MCP-TRIAGEPLUGIN-002",
+      "TEST-MCP-TRIAGEPLUGIN-003",
+      "TEST-MCP-TRIAGEPLUGIN-004",
+      "TEST-MCP-TRIAGEPLUGIN-005"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGEREQ-001",
+    "TrIds": [
+      "TR-MCP-TRIAGEREQ-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGEREQ-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGESCHEMA-001",
+    "TrIds": [
+      "TR-MCP-TRIAGESCHEMA-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGESCHEMA-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGESTORE-001",
+    "TrIds": [
+      "TR-MCP-TRIAGESTORE-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGESTORE-001",
+      "TEST-MCP-TRIAGESTORE-002",
+      "TEST-MCP-TRIAGESTORE-003",
+      "TEST-MCP-TRIAGESTORE-004",
+      "TEST-MCP-TRIAGESTORE-005",
+      "TEST-MCP-TRIAGESTORE-006",
+      "TEST-MCP-TRIAGESTORE-007"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGESTORE-002",
+    "TrIds": [
+      "TR-MCP-TRIAGESTORE-002"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGESTORE-007"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-MCP-TRIAGETODO-001",
+    "TrIds": [
+      "TR-MCP-TRIAGETODO-001"
+    ],
+    "TestIds": [
+      "TEST-MCP-TRIAGETODO-001",
+      "TEST-MCP-TRIAGETODO-002"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-TRIAGE-001",
+    "TrIds": [
+      "TR-TRIAGE-CLIENT-001"
+    ],
+    "TestIds": [
+      "TEST-TRIAGE-001"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  },
+  {
+    "FrId": "FR-TRIAGE-002",
+    "TrIds": [
+      "TR-TRIAGE-CLIENT-002"
+    ],
+    "TestIds": [
+      "TEST-TRIAGE-002"
+    ],
+    "WorkspaceId": "F:\\GitHub\\McpServer"
+  }
+]

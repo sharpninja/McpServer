@@ -4,7 +4,9 @@ using System.Data.Common;
 using System.Text.Json;
 using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Storage.Entities;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace McpServer.Support.Mcp.Storage;
@@ -24,6 +26,18 @@ public sealed class McpDbContext : DbContext
         : base(options)
     {
         _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
+        RegisterSqliteSessionLogHeaderDdl();
+    }
+
+    /// <summary>TR-MCP-TRIAGESCHEMA-001: registers Sqlite header-column ADD helper used by 20260818205751.</summary>
+    private void RegisterSqliteSessionLogHeaderDdl()
+    {
+        var provider = Database.ProviderName ?? string.Empty;
+        if (!provider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            return;
+        if (Database.GetDbConnection() is not SqliteConnection sqlite)
+            return;
+        SqliteSessionLogHeaderDdl.Register(sqlite);
     }
 
     /// <summary>TR-MCP-MT-003: Gets the current workspace discriminator applied to this context instance.</summary>
@@ -31,6 +45,39 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
     public void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
+
+    /// <summary>
+    /// TR-HANDOFF-SURFACE-001: Pushes a workspace id and restores the previous value when disposed.
+    /// </summary>
+    /// <param name="workspaceId">Workspace discriminator to apply for the duration of the scope.</param>
+    /// <returns>A scope that restores the prior workspace id.</returns>
+    public IDisposable PushWorkspaceId(string workspaceId)
+    {
+        var previous = _workspaceId;
+        _workspaceId = workspaceId;
+        return new WorkspaceIdScope(this, previous);
+    }
+
+    private sealed class WorkspaceIdScope : IDisposable
+    {
+        private readonly McpDbContext _context;
+        private readonly string _previous;
+        private bool _disposed;
+
+        public WorkspaceIdScope(McpDbContext context, string previous)
+        {
+            _context = context;
+            _previous = previous;
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+            _disposed = true;
+            _context._workspaceId = _previous;
+        }
+    }
 
     /// <summary>TR-MCP-DB-001: Canonical database-authoritative workspace registry.</summary>
     public DbSet<WorkspaceEntity> Workspaces => Set<WorkspaceEntity>();
@@ -58,6 +105,9 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>TR-PLANNED-CORE-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
+
+    /// <summary>FR-MCP-TRIAGESTORE-001: Session-scoped tags.</summary>
+    public DbSet<SessionLogTagEntity> SessionLogTags => Set<SessionLogTagEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
@@ -203,6 +253,18 @@ public sealed class McpDbContext : DbContext
     /// <summary>FR-MCP-103: Conflicts created by stale proxy writes.</summary>
     public DbSet<FederationConflictEntity> FederationConflicts => Set<FederationConflictEntity>();
 
+    /// <summary>TR-HANDOFF-AUDIT-001: Normalized handoff ingestion runs.</summary>
+    public DbSet<HandoffIngestionRunEntity> HandoffIngestionRuns => Set<HandoffIngestionRunEntity>();
+
+    /// <summary>TR-HANDOFF-AUDIT-001: Normalized handoff diagnostics.</summary>
+    public DbSet<HandoffDiagnosticEntity> HandoffDiagnostics => Set<HandoffDiagnosticEntity>();
+
+    /// <summary>TR-MCP-PRODUCT-MODEL-001: Host-global products. No workspace query filter.</summary>
+    public DbSet<ProductEntity> Products => Set<ProductEntity>();
+
+    /// <summary>TR-MCP-PRODUCT-MODEL-001: Host-global product memberships. No workspace query filter.</summary>
+    public DbSet<ProductWorkspaceMembershipEntity> ProductWorkspaceMemberships => Set<ProductWorkspaceMembershipEntity>();
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -332,6 +394,15 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.SessionLogTurnId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<SessionLogTagEntity>(e =>
+        {
+            e.HasIndex(x => new { x.SessionLogId, x.Tag }).IsUnique();
+            e.HasOne(x => x.SessionLog)
+                .WithMany(x => x.Tags)
+                .HasForeignKey(x => x.SessionLogId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
@@ -876,6 +947,47 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
+        modelBuilder.Entity<HandoffIngestionRunEntity>(e =>
+        {
+            e.HasKey(x => x.RunId);
+            e.HasIndex(x => x.ReplayIdentity).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.ContentSha256, x.PromptVersion });
+            e.HasIndex(x => x.CreatedTodoId);
+            e.HasMany(x => x.Diagnostics)
+                .WithOne(x => x.Run)
+                .HasForeignKey(x => x.RunId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<HandoffDiagnosticEntity>(e =>
+        {
+            e.HasKey(x => x.DiagnosticId);
+            e.HasIndex(x => new { x.RunId, x.Ordinal });
+        });
+
+        modelBuilder.Entity<ProductEntity>(e =>
+        {
+            e.HasKey(x => x.ProductId);
+            e.HasIndex(x => x.Key)
+                .IsUnique()
+                .HasFilter(ProductKeyUniqueIndexFilter());
+            e.HasIndex(x => x.OwnerWorkspaceId);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.OwnerWorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Memberships)
+                .WithOne(x => x.Product)
+                .HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ProductWorkspaceMembershipEntity>(e =>
+        {
+            e.HasKey(x => new { x.ProductId, x.WorkspaceId });
+            e.HasIndex(x => x.WorkspaceId);
+        });
+
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
@@ -919,6 +1031,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TriageReportEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TriageGroupEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TriageResearchRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HandoffIngestionRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HandoffDiagnosticEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
         // Brain-slot definitions and their invocation audit rows are stored under the global workspace
         // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the
@@ -933,6 +1047,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<SessionLogTurnEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogActionEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogTurnTagEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogTagEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogTurnContextEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ToolDefinitionEntity>().HasIndex(e => e.WorkspaceId);
@@ -981,6 +1096,16 @@ public sealed class McpDbContext : DbContext
         ApplyWorkspaceForeignKeys(modelBuilder);
         ApplySoftDeleteMetadata(modelBuilder);
         ApplySoftDeleteQueryFilters(modelBuilder);
+    }
+
+    private string ProductKeyUniqueIndexFilter()
+    {
+        var providerName = Database.ProviderName ?? string.Empty;
+        if (providerName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase))
+            return "\"IsDeleted\" = FALSE";
+        if (providerName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+            return "[IsDeleted] = 0";
+        return "\"IsDeleted\" = 0";
     }
 
     private string BrainSlotEnabledUniqueIndexFilter()
@@ -1373,6 +1498,7 @@ public sealed class McpDbContext : DbContext
             SessionLogTurnEntity turn => FirstNonEmpty(turn.SessionLog?.WorkspaceId),
             SessionLogActionEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogTurnTagEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTagEntity child => FirstNonEmpty(child.SessionLog?.WorkspaceId),
             SessionLogTurnContextEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),

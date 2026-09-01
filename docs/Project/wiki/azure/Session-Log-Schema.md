@@ -6,16 +6,32 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 ## Endpoints
 
 - `POST /mcpserver/sessionlog` — create or update a session log
-- `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` — first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog
+- `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
+- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
+
+## Outbound sanitization (FR-MCP-SESSIONLOGSAN-001)
+
+Query, GET, MCP, and stdio reads clone the DTO and apply `Mcp:SessionLogSanitization` rules before the payload leaves the process. Raw storage is unchanged. Replacement tokens include the rule Id (for example `[REDACTED:example-internal-token]`). A secret in a stored turn still participates in text filtering and does not change paging metadata. Invalid or duplicate rule Ids fail options validation. Regex timeout redacts fail-closed and does not log the input.
+
+## Stale in_progress turns (BUG-TRIAGE-121)
+
+Forward-only. Do not mass-close historical `in_progress` turns. Recurrence of completed-then-canceled is the UserPromptSubmit isolation path: background briefs `reuse` an in-progress root work turn and `isolate-skip` a completed root turn.
+
+Operator listing of stale open turns (sessions that contain at least one matching turn; inspect `turns[].status` and `turns[].timestamp`; complete or fail individually):
+
+```
+GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=24
+```
+
+MCP tool `sessionlog_query` with the same fields: `turnStatus=in_progress`, `staleOlderThanHours=24` (any positive hour count). Omit either field to relax that half of the filter. Mass close is out of scope.
 
 ## Required turn context (normative)
 
 - First persist and replace of a turn require both `planFile` and `todoId`.
 - Accepted `planFile`: workspace-relative path, exact absolute path, `~/` home-relative path, or the exact sentinel `None` (case-sensitive). `..` is rejected.
 - Accepted `todoId`: canonical MCP TODO id (`PHASE-AREA-###` or `ISSUE-N`) or `None`. FR/TR/TEST ids are rejected.
-- Additive updates that omit either field keep the stored value. Replace that omits either field is rejected.
+- Additive updates that omit either field keep the stored value. Replace that omits either field is rejected, except the canceled/cancelled hook-supersede persist: when the incoming turn status is `canceled` or `cancelled` and either field is omitted or blank, the server stamps `None` then validates. That is the only first-persist omission path (FR-MCP-SESSIONLOGCTX-001 AC-003 plus STORE-006).
 - Reads never return null for these fields. Import, ingest, and federation persist a validated pair (`None` if extraction finds nothing).
 
 ## Naming Conventions (Normative)
@@ -46,7 +62,8 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
   "model": "string — AI model name (e.g. 'claude-sonnet-4-20250514')",
   "started": "string — ISO 8601 timestamp when session began",
   "lastUpdated": "string — ISO 8601 timestamp of latest activity",
-  "status": "string — 'in_progress' or 'completed'",
+  "status": "string — 'in_progress', 'completed', 'failed', 'canceled', or 'cancelled'",
+  "tags": ["string array — session-scoped tags; persist and return on query (not silently dropped)"],
   "turns": [ "array of RequestTurn objects (see below)" ]
 }
 ```
@@ -61,21 +78,32 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
   "queryTitle": "string — short summary of the query",
   "response": "string — your response text",
   "interpretation": "string — your understanding of what was asked",
-  "status": "string — 'completed' or 'in_progress'",
+  "status": "string — 'completed', 'in_progress', 'failed', 'canceled', or 'cancelled' (canceled/cancelled are first-class terminal statuses)",
   "model": "string — model used for this turn",
   "tokenCount": "integer|null — approximate token count",
   "tags": ["string array — e.g. 'refactor', 'bugfix', 'feature'"],
   "contextList": ["string array — files or resources referenced"],
   "designDecisions": ["string array — decisions made during this turn"],
   "requirementsDiscovered": ["string array — requirement IDs e.g. 'TR-MCP-001'"],
-  "filesModified": ["string array — file paths changed"],
+  "filesModified": ["string array - file paths changed. Paths that resolve outside the workspace root require a foreign: / foreign-repo: / cross-workspace: prefix or a turn tag foreign-repo / cross-workspace / foreign-workspace (FR-MCP-SESSIONATTR-001). Completeness audits can filter those prefixes and tags. Forward-only: historical turns are not rewritten."],
   "blockers": ["string array — issues preventing progress"],
   "actions": [ "array of Action objects (see below)" ],
   "processingDialog": [ "array of DialogItem objects (see below)" ],
   "planFile": "string — required on new persist and replace: current plan file path (workspace-relative, exact, or ~/...) or the exact sentinel None",
-  "todoId": "string — required on new persist and replace: canonical MCP TODO id (PHASE-AREA-### or ISSUE-N) or the exact sentinel None"
+  "todoId": "string - required on new persist and replace: canonical MCP TODO id (PHASE-AREA-### or ISSUE-N) or the exact sentinel None"
 }
 ```
+
+## Foreign filesModified and commits (FR-MCP-SESSIONATTR-001)
+
+A session-log turn for workspace W must not list `filesModified` or commit `filesChanged` paths that resolve outside W unless the turn explicitly marks them:
+
+- Item prefix on the path: `foreign:`, `foreign-repo:`, or `cross-workspace:`
+- Turn tags: `foreign-repo`, `cross-workspace`, or `foreign-workspace`
+
+Unmarked foreign paths are rejected with `validation_error`. Relative paths are resolved against the workspace root (`..` that escapes is foreign). Empty workspace context (import/ingest) skips this check. Forward-only: existing rows are not rewritten. Completeness audits filter the prefixes and tags above.
+
+Commit SHA/message without `filesChanged` cannot be proven foreign; mark the turn with `foreign-repo` when attributing another repository's commit.
 
 ## Action (each element in `actions`)
 

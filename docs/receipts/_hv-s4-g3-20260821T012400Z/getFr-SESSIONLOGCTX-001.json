@@ -1,0 +1,11 @@
+type: error
+payload:
+  requestId: req-20260821T012600Z-fde7
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  details:
+    methodName: workflow.requirements.getFr
+    errors:
+    - payload.params.id is required.
+
+---

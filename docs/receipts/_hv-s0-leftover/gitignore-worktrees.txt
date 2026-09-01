@@ -1,0 +1,2 @@
+534:# Agent worktrees for triage leftover slices
+535:.worktrees/

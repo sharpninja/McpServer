@@ -1,0 +1,82 @@
+UTCNOW=20260818T181033Z
+HOSTNAME=PAYTON-LEGION2
+SERVICE_NAME=McpServer
+SERVICE_STATUS=Running
+DEP_EXISTS=True
+DEP_GENERATEDBY=build/Build.UpdateService.cs
+DEP_GENERATEDUTC=08/18/2026 18:02:20
+DEP_OPERATION=update
+DEP_SERVICENAME=McpServer
+DEP_PORT=7147
+MARKER_STARTEDAT=2026-08-18T18:02:40.9427094+00:00
+MARKER_WRITTEN=2026-08-18T18:02:40.9427094+00:00
+MARKER_SERVERSTARTED=2026-08-18T18:02:22.3153271+00:00
+MARKER_PID=5832
+MARKER_PORT=7147
+MARKER_APIKEY_LEN=43
+MARKER_SIG_EXPECTED=DAB0AC6970CA8AF6D864E6057AAB3C4C788DF2AECFD0BBC6DDEB0AF4959840D3
+SIG_COMPUTED=304684C357DB752473751A546B696256B3DAA22342BF55C774633400E2AB8004
+SIG_MATCH=False
+NONCE=hv-deploy-ops-f76c604e7e204730b8b9d92725d14ac9
+HEALTH_TYPE=System.Management.Automation.PSCustomObject
+HEALTH_JSON={"status":"Healthy","version":"1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0118},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0063}],"nonce":"hv-deploy-ops-f76c604e7e204730b8b9d92725d14ac9","storage":"reachable"}
+HEALTH_NONCE_ECHO=hv-deploy-ops-f76c604e7e204730b8b9d92725d14ac9
+HEALTH_NONCE_MATCH=True
+HEALTH_STATUS=Healthy
+HEALTH_VERSION=1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e
+REPL_VERSION=1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e
+PLUGIN_VERSION|F:\GitHub\mcpserver-grok-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-claude-code-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-claude-cowork-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-cline-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-cline-v2-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-codex-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-copilot-plugin|1.94.0
+PLUGIN_VERSION|F:\GitHub\mcpserver-opencode-plugin|1.94.0
+CORE_CANDIDATE_EXISTS|F:\GitHub\mcpserver-grok-plugin\CORE-MANIFEST.yaml|True
+CORE_CANDIDATE_EXISTS|F:\GitHub\mcpserver-grok-plugin\lib\core-version.txt|False
+CORE_CANDIDATE_EXISTS|F:\GitHub\McpServer\plugins\core\.staged-plugin\CORE-MANIFEST.yaml|True
+RECEIPT|F:\GitHub\McpServer\docs\receipts\_deploy-install-repl-20260818T180300Z.txt|LEN=55230|UTC=2026-08-18T18:05:51.4299906Z
+RECEIPT|F:\GitHub\McpServer\docs\receipts\_deploy-sync-plugins-20260818T180600Z.txt|LEN=17509|UTC=2026-08-18T18:07:03.6358448Z
+RECEIPT|F:\GitHub\McpServer\docs\receipts\_deploy-update-service-20260818T180100Z.txt|LEN=16884|UTC=2026-08-18T18:08:11.8307008Z
+LOGFILE|build-attempt.log|SIZE=52|UTC=2026-08-18T18:07:03.6287458Z
+LOGHIT|build-attempt.log|2|SyncAgentPlugins
+LOGFILE|build.2026-08-18_12-32-07.log|SIZE=68351|UTC=2026-08-18T17:34:45.8381356Z
+LOGFILE|build.2026-08-18_12-37-37.log|SIZE=68354|UTC=2026-08-18T17:39:54.9614564Z
+LOGFILE|build.2026-08-18_12-41-00.log|SIZE=3077|UTC=2026-08-18T17:41:01.8840247Z
+LOGFILE|build.2026-08-18_13-00-49.log|SIZE=15378|UTC=2026-08-18T18:02:50.1669329Z
+LOGHIT|build.2026-08-18_13-00-49.log|37|V | UpdateService        | EventInvoker.OnTargetRunning (-3.4028235E+38)
+LOGHIT|build.2026-08-18_13-00-49.log|38|I | UpdateService        | >> 1/8  Stopping service 'McpServer' ...
+LOGHIT|build.2026-08-18_13-00-49.log|39|I | UpdateService        |   Service stopped.
+LOGHIT|build.2026-08-18_13-00-49.log|40|I | UpdateService        |   Deployment version: 1.4.26
+LOGHIT|build.2026-08-18_13-00-49.log|41|I | UpdateService        | >> 2/8  Backing up config and data files ...
+LOGHIT|build.2026-08-18_13-00-49.log|42|I | UpdateService        |   Data folder: C:\ProgramData\McpServer-Data
+LOGHIT|build.2026-08-18_13-00-49.log|43|I | UpdateService        |   Backed up data items: docs, graphrag-global, mcp-data, mcp.db, mcp.db.migrated, templates
+LOGHIT|build.2026-08-18_13-00-49.log|44|I | UpdateService        |   Backed up config files: appsettings.yaml
+LOGFILE|build.2026-08-18_13-03-07.log|SIZE=67106|UTC=2026-08-18T18:05:51.4299906Z
+LOGHIT|build.2026-08-18_13-03-07.log|678|V | InstallReplTool      | EventInvoker.OnTargetRunning (-3.4028235E+38)
+LOGHIT|build.2026-08-18_13-03-07.log|679|I | InstallReplTool      | Uninstalling existing SharpNinja.McpServer.Repl 1.4.26 before installing 1.4.26...
+LOGHIT|build.2026-08-18_13-03-07.log|680|I | InstallReplTool      | > "C:\Program Files\dotnet\dotnet.exe" tool uninstall --global SharpNinja.McpServer.Repl
+LOGHIT|build.2026-08-18_13-03-07.log|681|V | InstallReplTool      | @ F:\GitHub\McpServer
+LOGHIT|build.2026-08-18_13-03-07.log|682|D | InstallReplTool      | Tool 'sharpninja.mcpserver.repl' (version '1.4.26') was successfully uninstalled.
+LOGHIT|build.2026-08-18_13-03-07.log|683|I | InstallReplTool      | Installing SharpNinja.McpServer.Repl 1.4.26...
+LOGHIT|build.2026-08-18_13-03-07.log|684|I | InstallReplTool      | > "C:\Program Files\dotnet\dotnet.exe" tool install --global SharpNinja.McpServer.Repl --configfile "F:\GitHub\McpServer\local-packages\NuGet.LocalTool.config" --version 1.4.26
+LOGHIT|build.2026-08-18_13-03-07.log|685|V | InstallReplTool      | @ F:\GitHub\McpServer
+LOGFILE|build.2026-08-18_13-06-03.log|SIZE=19825|UTC=2026-08-18T18:07:03.6378676Z
+LOGHIT|build.2026-08-18_13-06-03.log|37|V | SyncAgentPlugins     | EventInvoker.OnTargetRunning (-3.4028235E+38)
+LOGHIT|build.2026-08-18_13-06-03.log|38|I | SyncAgentPlugins     | Syncing plugin core into F:\GitHub\McpServer\plugins\core\.staged-plugin
+LOGHIT|build.2026-08-18_13-06-03.log|39|I | SyncAgentPlugins     | > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+LOGHIT|build.2026-08-18_13-06-03.log|40|V | SyncAgentPlugins     | @ F:\GitHub\McpServer
+LOGHIT|build.2026-08-18_13-06-03.log|41|D | SyncAgentPlugins     | synced 14 core files into F:\GitHub\McpServer\plugins\core\.staged-plugin/lib (core 298c5fde)
+LOGHIT|build.2026-08-18_13-06-03.log|42|I | SyncAgentPlugins     | Generating claude-code PowerShell wrappers in F:\GitHub\McpServer\plugins\core\.staged-plugin
+LOGHIT|build.2026-08-18_13-06-03.log|43|I | SyncAgentPlugins     | > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+LOGHIT|build.2026-08-18_13-06-03.log|44|V | SyncAgentPlugins     | @ F:\GitHub\McpServer
+LOGFILE|build.log|SIZE=22405|UTC=2026-08-18T18:07:03.6378676Z
+LOGHIT|build.log|37|13:06:07.583 | V | SyncAgentPlugins     | EventInvoker.OnTargetRunning (-3.4028235E+38)
+LOGHIT|build.log|38|13:06:07.587 | I | SyncAgentPlugins     | Syncing plugin core into F:\GitHub\McpServer\plugins\core\.staged-plugin
+LOGHIT|build.log|39|13:06:07.979 | I | SyncAgentPlugins     | > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+LOGHIT|build.log|40|13:06:07.979 | V | SyncAgentPlugins     | @ F:\GitHub\McpServer
+LOGHIT|build.log|41|13:06:11.160 | D | SyncAgentPlugins     | synced 14 core files into F:\GitHub\McpServer\plugins\core\.staged-plugin/lib (core 298c5fde)
+LOGHIT|build.log|42|13:06:11.348 | I | SyncAgentPlugins     | Generating claude-code PowerShell wrappers in F:\GitHub\McpServer\plugins\core\.staged-plugin
+LOGHIT|build.log|43|13:06:11.561 | I | SyncAgentPlugins     | > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+LOGHIT|build.log|44|13:06:11.561 | V | SyncAgentPlugins     | @ F:\GitHub\McpServer

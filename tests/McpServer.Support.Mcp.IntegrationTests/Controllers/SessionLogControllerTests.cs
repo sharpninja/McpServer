@@ -238,6 +238,29 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGESTORE-001 / leftover BUG-TRIAGE-113: POST session-level tags
+    /// then GET by id through the hosted sanitizing pipeline must return those tags.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingSessionTagsThenGetBySessionIdReturnsTags()
+    {
+        var sessionId = BuildSessionId("Cursor", $"get-tags-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        dto.Tags = ["hostile-113", "cluster-closeout"];
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var response = await _client.GetAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var fetched = await response.Content.ReadFromJsonAsync<UnifiedSessionLogDto>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(fetched);
+        Assert.NotNull(fetched!.Tags);
+        Assert.Contains("hostile-113", fetched.Tags!);
+        Assert.Contains("cluster-closeout", fetched.Tags);
+    }
+
+    /// <summary>
     /// FR-SUPPORT-013: <c>GET</c> by sessionId returns 404 when the session is
     /// not found.
     /// </summary>
@@ -573,18 +596,24 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public async Task Query_FilterByTodoId_ReturnsOnlyMatches()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"q-todo-{Guid.NewGuid():N}");
+        var todoId = $"ISSUE-{Random.Shared.Next(100000, 999999)}";
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
         var requestId = NewRequestId("q-todo");
         var begin = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "filter", planFile = "None", todoId = "MCP-SESSIONLOG-002" },
+            new { queryTitle = "filter", planFile = "None", todoId },
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, begin.StatusCode);
+        var stored = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(todoId, Assert.Single(stored!.Turns!).TodoId);
 
         var hit = await _client.GetFromJsonAsync<SessionLogQueryResult>(
-            new Uri("/mcpserver/sessionlog?todoId=MCP-SESSIONLOG-002&limit=50", UriKind.Relative),
+            new Uri($"/mcpserver/sessionlog?todoId={Uri.EscapeDataString(todoId)}&limit=200", UriKind.Relative),
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains(hit!.Items, item => item.SessionId == sessionId);
+        Assert.All(hit.Items, item => Assert.Contains(item.Turns ?? [], turn => turn.TodoId == todoId));
 
         var miss = await _client.GetFromJsonAsync<SessionLogQueryResult>(
             new Uri("/mcpserver/sessionlog?todoId=PLAN-MISS-001&limit=50", UriKind.Relative),

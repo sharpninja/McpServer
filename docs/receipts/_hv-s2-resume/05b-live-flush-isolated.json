@@ -1,0 +1,31 @@
+{
+  "TimestampUtc": "2026-08-19T20:30:44Z",
+  "ParentEnv": {
+    "MCP_WORKSPACE_PATH": "",
+    "MCPSERVER_WORKSPACE_PATH": "",
+    "MCP_WORKSPACE_START_DIR": "",
+    "CLAUDE_PROJECT_DIR": "",
+    "MCP_CACHE_DIR_OVERRIDE": "",
+    "MCP_PLUGIN_ROOT": ""
+  },
+  "OkFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "OkPendingGone": false,
+  "OkPendingCount": 1,
+  "OkExit0Empty": true,
+  "FailFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "FailPendingStillThere": true,
+  "FailLooksEmptySuccess": true,
+  "FailHasFlushFailed": false,
+  "FailExitCode": 0,
+  "FailStdout": "{}"
+}

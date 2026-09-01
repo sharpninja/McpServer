@@ -1,0 +1,32 @@
+{
+  "TimestampUtc": "2026-08-19T20:33:21Z",
+  "Scratch": "C:\\Users\\kingd\\AppData\\Local\\Temp\\hv-s2-resume-flush-457f2d1190ac4075b97057efbe7b999a",
+  "Unresolved": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "UnresolvedExit0Empty": true,
+  "OkFlush": {
+    "ExitCode": 0,
+    "Stdout": "{}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "OkPendingGone": true,
+  "OkPendingCount": 0,
+  "OkExit0Empty": true,
+  "FailFlush": {
+    "ExitCode": 1,
+    "Stdout": "{\"status\":\"flush-failed\",\"flushed\":0,\"failed\":1,\"pending\":1}",
+    "Stderr": "",
+    "TimedOut": false
+  },
+  "FailPendingStillThere": true,
+  "FailLooksEmptySuccess": false,
+  "FailHasFlushFailed": true,
+  "FailExitCode": 1,
+  "FailStdout": "{\"status\":\"flush-failed\",\"flushed\":0,\"failed\":1,\"pending\":1}",
+  "FailMatchesClaim": true
+}

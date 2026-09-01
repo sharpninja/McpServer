@@ -1,0 +1,17 @@
+turnRequestId: req-20260821T103448Z-001-hostile-s6-nuke-redeploy
+queryTitle: Hostile S6 Nuke UpdateService live redeploy
+openedAt: 2026-08-21T10:34:53Z
+status: completed
+sessionId: GrokCode-20260821T103450Z-plugin-session
+codeEdits: 5
+lastBuildStatus: unknown
+auditActions: 5
+auditDialog: 3
+auditDecisions: 1
+auditFiles: 5
+auditCommits: 0
+queryText: Class 2 operator-directed Nuke UpdateService redeploy. Attack A1-A6 HMAC service version health gsudo GitVersion. Do not mark TODOs done. Do not commit.
+planFile: docs/plans/sessionlog-remediate-001.md
+todoId: PLAN-SESSIONLOGREMEDIATE-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-21T10:20:37.4844112Z

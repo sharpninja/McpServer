@@ -1,0 +1,29 @@
+{
+  "TimestampUtc": "2026-08-19T20:19:29Z",
+  "Query": {
+    "workspacePath": "F:\\GitHub\\McpServer",
+    "agent": "GrokCode",
+    "from": "2026-08-19T20:00:00Z",
+    "todoId": "PLAN-TRIAGELEFTOVER-001",
+    "limit": 10
+  },
+  "totalCount": 1,
+  "sessionId": "GrokCode-20260819T200847Z-hostile-closeout-s2",
+  "sourceType": "GrokCode",
+  "sessionStatus": "in_progress",
+  "turnCount": 1,
+  "started": "2026-08-19T20:10:23.3103843+00:00",
+  "lastUpdated": "2026-08-19T20:19:29.6579944+00:00",
+  "turn": {
+    "requestId": "req-20260819T200847Z-001-hostile-resume-claims",
+    "status": "completed",
+    "queryTitle": "Hostile validate triage closeout resume claims",
+    "responseStartsWith": "OverallVerdict DISAGREE",
+    "actionCount": 8,
+    "dialogCount": 4,
+    "designDecisionCount": 3,
+    "hasDesignDecisionAction": true,
+    "planFile": "docs/plans/triage-cluster-002.md",
+    "todoId": "PLAN-TRIAGELEFTOVER-001"
+  }
+}

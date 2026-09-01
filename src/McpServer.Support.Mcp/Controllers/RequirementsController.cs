@@ -1,5 +1,7 @@
 using System.IO.Compression;
 using System.Text;
+using McpServer.Cqrs;
+using McpServer.Support.Mcp.Products.Queries;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -30,6 +32,7 @@ public sealed class RequirementsController : ControllerBase
     private readonly ILogger<RequirementsController> _logger;
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
+    private readonly IDispatcher? _dispatcher;
 
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsController"/> class.</summary>
@@ -39,7 +42,8 @@ public sealed class RequirementsController : ControllerBase
         ITodoExecutionService todoExecution,
         ILogger<RequirementsController> logger,
         ITurnTransactionCoordinator? transactionCoordinator = null,
-        IOptions<TurnTransactionOptions>? transactionOptions = null)
+        IOptions<TurnTransactionOptions>? transactionOptions = null,
+        IDispatcher? dispatcher = null)
     {
         _logger = logger;
         _requirements = requirements;
@@ -48,6 +52,7 @@ public sealed class RequirementsController : ControllerBase
         _todoExecution = todoExecution ?? throw new ArgumentNullException(nameof(todoExecution));
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
+        _dispatcher = dispatcher;
     }
 
     /// <summary>Gets requirement scope layers for the active workspace.</summary>
@@ -115,12 +120,27 @@ public sealed class RequirementsController : ControllerBase
 
     /// <summary>Gets requirements effective at the workspace current layer or an explicit preview layer.</summary>
     [HttpGet("effective")]
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
     public async Task<ActionResult<EffectiveRequirementsResult>> GetEffectiveRequirementsAsync(
         [FromQuery] string? layerKey = null,
+        [FromQuery] string? productScope = "product",
         CancellationToken cancellationToken = default)
     {
         try
         {
+            if (_dispatcher is not null)
+            {
+                var queryResult = await _dispatcher.QueryAsync(
+                    new GetProductEffectiveRequirementsQuery(
+                        _workspaceContext.WorkspacePath ?? string.Empty,
+                        layerKey,
+                        string.IsNullOrWhiteSpace(productScope) ? "product" : productScope),
+                    cancellationToken).ConfigureAwait(false);
+                if (queryResult.IsFailure)
+                    return BadRequest(new { error = queryResult.Error });
+                return Ok(queryResult.Value);
+            }
+
             var result = await _requirements.GetEffectiveRequirementsAsync(layerKey, cancellationToken).ConfigureAwait(false);
             return Ok(result);
         }

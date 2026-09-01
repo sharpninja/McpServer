@@ -177,6 +177,69 @@ documents:
     platforms:
       - github
       - azure
+  - id: handoff-ingestion
+    title: Handoff Ingestion
+    source: docs/Handoff-Ingestion.md
+    target: Handoff-Ingestion.md
+    platforms:
+      - github
+      - azure
+  - id: byrd-todo-execution-spec
+    title: TODO-Centered Byrd Execution Spec
+    source: docs/byrd-todo-execution-spec.md
+    target: Byrd-Todo-Execution-Spec.md
+    platforms:
+      - github
+      - azure
+  - id: ops-tunnel-cloudflare
+    title: Cloudflare Tunnel
+    source: docs/Operations/Tunnel-Cloudflare.md
+    target: Operations/Tunnel-Cloudflare.md
+    platforms:
+      - github
+      - azure
+  - id: ops-tunnel-frp-railway
+    title: FRP Railway Tunnel
+    source: docs/Operations/Tunnel-FRP-Railway.md
+    target: Operations/Tunnel-FRP-Railway.md
+    platforms:
+      - github
+      - azure
+  - id: ops-tunnel-ngrok
+    title: Ngrok Tunnel
+    source: docs/Operations/Tunnel-Ngrok.md
+    target: Operations/Tunnel-Ngrok.md
+    platforms:
+      - github
+      - azure
+  - id: context-todo-schema
+    title: TODO Schema
+    source: docs/context/todo-schema.md
+    target: TODO-Schema.md
+    platforms:
+      - github
+      - azure
+  - id: context-action-types
+    title: Session Log Action Types
+    source: docs/context/action-types.md
+    target: Action-Types.md
+    platforms:
+      - github
+      - azure
+  - id: context-memory
+    title: MCP Memories
+    source: docs/context/memory.md
+    target: MCP-Memories.md
+    platforms:
+      - github
+      - azure
+  - id: context-federation
+    title: Federation
+    source: docs/context/federation.md
+    target: Federation.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -200,6 +263,7 @@ navigation:
       - document: repl-user-guide
       - document: repl-agent-guide
       - document: repl-migration-guide
+      - document: handoff-ingestion
   - title: Architecture
     path: Architecture
     children:
@@ -211,15 +275,23 @@ navigation:
       - document: usecase-extension-design-v3
       - document: usecase-diagram-mermaid-schema-v1
       - document: session-log-schema
+      - document: context-todo-schema
+      - document: context-action-types
+      - document: context-memory
+      - document: context-federation
   - title: Process
     path: Process
     children:
       - document: byrd-development-process
       - document: release-checklist
       - document: onboarding-human-ai-partnership
+      - document: byrd-todo-execution-spec
   - title: Operations
     path: Operations
     children:
       - document: azure-pipelines
+      - document: ops-tunnel-cloudflare
+      - document: ops-tunnel-frp-railway
+      - document: ops-tunnel-ngrok
 docfx:
   workflows: []

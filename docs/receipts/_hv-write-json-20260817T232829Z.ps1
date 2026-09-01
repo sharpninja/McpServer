@@ -1,0 +1,69 @@
+#Requires -Version 7.0
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$receipt = [ordered]@{
+    TimestampUtc = '2026-08-17T23:28:29Z'
+    ValidatorIdentity = 'GrokSubagentHostile'
+    Workspace = 'F:\GitHub\McpServer'
+    WorkClass = 'user-directed-general-action-class-2'
+    AddProfileExecuted = $true
+    ProfileFilesRead = 18
+    PluginRoot = 'F:\GitHub\mcpserver-grok-plugin'
+    PluginVersion = '1.93.0'
+    MarkerSignature = $true
+    HealthNonce = '2a9accd613e9415bb981dcc3726ac1cf'
+    HealthNonceEchoed = $true
+    SessionId = 'GrokCode-20260817T232250Z-hostile-effort'
+    RequestId = 'req-20260817T232250Z-001-hostile-validate-effort'
+    PlanFile = 'None'
+    TodoId = 'None'
+    OverallVerdict = 'AGREE'
+    FailList = @()
+    SurfacesNotEvaluated = @()
+    Accuracy = 95
+    Completeness = 95
+    Claims = @(
+        [ordered]@{ Id = 'A1'; Surface = 'A'; Verdict = 'PASS'; Claim = 'Class 2 ops; no product code change; no plan-step done' }
+        [ordered]@{ Id = 'A2'; Surface = 'A'; Verdict = 'PASS'; Claim = 'AgentHelpOptions has no effort property; HelperEffort YAML would be ignored' }
+        [ordered]@{ Id = 'A3'; Surface = 'A'; Verdict = 'PASS'; Claim = 'GrokCliAgentExecutionStrategy emits --effort high and --reasoning-effort high' }
+        [ordered]@{ Id = 'A4'; Surface = 'A'; Verdict = 'PASS'; Claim = 'Live ProgramData AgentHelp is grok-cli / grok-4.5' }
+        [ordered]@{ Id = 'A5'; Surface = 'A'; Verdict = 'PASS'; Claim = 'Deployed exe contains UTF-16 --effort and --reasoning-effort' }
+        [ordered]@{ Id = 'A6'; Surface = 'A'; Verdict = 'PASS'; Claim = 'Official docs: grok-4.5 high is default/ceiling; xhigh is 4.6+' }
+        [ordered]@{ Id = 'A7'; Surface = 'A'; Verdict = 'PASS'; Claim = 'Did not write unbound YAML key; did not change product code' }
+        [ordered]@{ Id = 'B1'; Surface = 'B'; Verdict = 'PASS'; Claim = 'Byrd v4 N/A for class 2' }
+        [ordered]@{ Id = 'B2'; Surface = 'B'; Verdict = 'PASS'; Claim = 'Receipts re-verified' }
+        [ordered]@{ Id = 'B3'; Surface = 'B'; Verdict = 'PASS'; Claim = 'MCP-only storage observed' }
+        [ordered]@{ Id = 'B4'; Surface = 'B'; Verdict = 'PASS'; Claim = 'PowerShell only; no Python' }
+        [ordered]@{ Id = 'B5'; Surface = 'B'; Verdict = 'PASS'; Claim = 'Honesty: briefed claims match artifacts' }
+        [ordered]@{ Id = 'C1'; Surface = 'C'; Verdict = 'N/A'; Claim = 'Requirements not applicable to class 2 ops' }
+        [ordered]@{ Id = 'D1'; Surface = 'D'; Verdict = 'N/A'; Claim = 'No plan-step completion claimed' }
+    )
+    Evidence = [ordered]@{
+        LiveYaml = [ordered]@{
+            Path = 'C:\ProgramData\McpServer\appsettings.yaml'
+            LastWriteTimeUtc = '2026-08-17T23:15:04.3549203Z'
+            DefaultExecutionStrategy = 'grok-cli'
+            HelperModel = 'grok-4.5'
+            EffortLikeKeys = @()
+        }
+        DeployedExe = [ordered]@{
+            Path = 'C:\ProgramData\McpServer\McpServer.Support.Mcp.exe'
+            Length = 208607591
+            LastWriteTimeUtc = '2026-08-12T21:55:30.4271605Z'
+            ProductVersion = '1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e'
+            Utf16EffortHits = 1
+            Utf16ReasoningEffortHits = 1
+            Utf8HighestEffortHits = 2
+            Utf8GrokHighestEffortHits = 1
+        }
+        OfficialDocs = @(
+            'https://docs.x.ai/developers/model-capabilities/text/reasoning'
+            'https://docs.x.ai/build/cli/reference'
+        )
+    }
+}
+
+$json = $receipt | ConvertTo-Json -Depth 8
+[System.IO.File]::WriteAllText('F:\GitHub\McpServer\docs\receipts\hostile-validator-20260817T232829Z.json', $json)
+Write-Output 'JSON_WRITTEN'

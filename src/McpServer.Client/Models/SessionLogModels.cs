@@ -67,6 +67,10 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("turns")]
     public List<UnifiedRequestEntryDto>? Turns { get; set; }
 
+    /// <summary>FR-MCP-TRIAGESTORE-001: session-scoped tags persisted and returned on query.</summary>
+    [JsonPropertyName("tags")]
+    public List<string>? Tags { get; set; }
+
     /// <summary>Total tokens across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
@@ -342,6 +346,14 @@ public sealed class SessionLogQueryRequest
     /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact todoId filter.</summary>
     [JsonPropertyName("todoId")]
     public string? TodoId { get; set; }
+
+    /// <summary>BUG-TRIAGE-121: Exact turn status filter (for example <c>in_progress</c>).</summary>
+    [JsonPropertyName("turnStatus")]
+    public string? TurnStatus { get; set; }
+
+    /// <summary>BUG-TRIAGE-121: Keep sessions with a matching turn older than this many hours.</summary>
+    [JsonPropertyName("staleOlderThanHours")]
+    public int? StaleOlderThanHours { get; set; }
 
     /// <summary>Page offset.</summary>
     [JsonPropertyName("offset")]

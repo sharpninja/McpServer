@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20260820T125829Z-0299
+  result:
+    id: FR-HANDOFF-005
+    title: Persist approved TODOs exclusively through the TODO service
+    description: Persist approved TODOs exclusively through the existing TODO service.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 TODO persistence.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-005-one
+      text: Successful creation produces exactly one TODO.
+      isSatisfied: false
+    - id: ac-fr-handoff-005-replay
+      text: Replay of the same workspace, content hash, and prompt version returns the existing receipt.
+      isSatisfied: false
+    - id: ac-fr-handoff-005-collision
+      text: ID collisions require review and are never silently renamed.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:30.4710652+00:00
+    updatedAt: 2026-08-20T12:58:30.4711711+00:00
+  deprecated: true
+
+---
+

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -38,11 +39,12 @@ public sealed class Iteration3IntegrationTests : IDisposable
             done: false);
 
         await SendCommandAndWaitAsync(queryEnvelope);
+        await WaitForResponseAsync(requestId, TimeSpan.FromSeconds(15));
 
-        var responseLine = _replProcess.StdoutLines.LastOrDefault();
+        var responseLine = FindLatestEnvelope(_replProcess.StdoutLines);
         Assert.NotNull(responseLine);
 
-        var response = _yamlDeserializer.Deserialize<Dictionary<string, object>>(responseLine!);
+        var response = DeserializeEnvelope(responseLine!);
         Assert.NotNull(response);
         Assert.True(response.ContainsKey("type") || response.ContainsKey("Type"));
     }
@@ -827,7 +829,7 @@ public sealed class Iteration3IntegrationTests : IDisposable
             if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
                 continue;
 
-            var envelope = _yamlDeserializer.Deserialize<Dictionary<string, object>>(line);
+            var envelope = DeserializeEnvelope(line);
             Assert.NotNull(envelope);
             Assert.True(envelope.ContainsKey("type") || envelope.ContainsKey("Type"));
         }
@@ -1180,6 +1182,51 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
+    }
+
+    /// <summary>Returns the newest stdout document that looks like a YAML or JSON envelope.</summary>
+    private static string? FindLatestEnvelope(IReadOnlyList<string> documents)
+    {
+        for (var index = documents.Count - 1; index >= 0; index--)
+        {
+            var trimmed = documents[index].Trim();
+            if (trimmed.StartsWith('{')
+                || trimmed.StartsWith("type:", StringComparison.Ordinal)
+                || trimmed.Contains("\"type\"", StringComparison.Ordinal))
+            {
+                return documents[index];
+            }
+        }
+
+        return documents.Count == 0 ? null : documents[^1];
+    }
+
+    /// <summary>Deserializes a REPL envelope that may be YAML, JSON, or a mixed stdout document.</summary>
+    private Dictionary<string, object> DeserializeEnvelope(string document)
+    {
+        var trimmed = document.Trim();
+        var jsonStart = trimmed.IndexOf('{');
+        if (jsonStart >= 0)
+        {
+            var jsonText = trimmed[jsonStart..];
+            try
+            {
+                var json = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonText);
+                if (json is not null)
+                {
+                    return json.ToDictionary(
+                        pair => pair.Key,
+                        pair => (object)pair.Value,
+                        StringComparer.OrdinalIgnoreCase);
+                }
+            }
+            catch (JsonException)
+            {
+                // Fall through to YAML when the brace is not a complete JSON envelope.
+            }
+        }
+
+        return _yamlDeserializer.Deserialize<Dictionary<string, object>>(trimmed);
     }
 
     private async Task SendCommandAndWaitAsync(object envelope)

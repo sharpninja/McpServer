@@ -1,0 +1,30 @@
+type: result
+payload:
+  requestId: req-20260821T111235Z-dc1a
+  result:
+    id: PLAN-SESSIONLOGREMEDIATE-001
+    title: Remediate session-log persist 503s, failsafe drain, sanitizer closeout, planFile/todoId
+    section: Session Logging
+    priority: high
+    done: true
+    estimate: 3d
+    description:
+    - Master tracker for docs/plans/sessionlog-remediate-001.md. Close BUG-TRIAGE-160,161,162,164 and MCP-SESSIONLOG-001, MCP-SESSIONLOG-002. New FR-MCP-170..172. Byrd v4. Hostile AGREE before any done:true. Do not change /health.
+    technicalDetails: &o0 []
+    implementationTasks: []
+    doneSummary: 'S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md (A10 rescore; prior 20260821T020355Z DISAGREE FAIL empty). Named tests Failed 0 Skipped 0: Pester TEST-MCP-195 4, unit sanitizer+persist 42, integration S15/S16 2, planFile/todoId 30, ValidateTraceability Succeeded. Persist merged 4605eab6/0e0c5763. Sanitizer merged ee89cd63/d54f4e32. Live planFile/todoId on hosted 20db61aa. Plugin HMAC 1.97.0. HEAD ee89cd63.'
+    remaining: Closed after S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md.
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-MCP-170
+    - FR-MCP-171
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PERSIST-001
+    - TR-MCP-PERSIST-002
+    - TR-MCP-PERSIST-003
+    - TR-MCP-PERSIST-004
+  deprecated: true
+
+---
+

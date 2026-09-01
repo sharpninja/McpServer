@@ -1,0 +1,121 @@
+[
+  {
+    "id": "FR-MCP-115",
+    "acCount": 2,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-115\",\"Title\":\"Session and compaction hook output schema compliance\",\"Body\":\"MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for their event type. Status-only SessionStart, SessionEnd, PreCompact, and PostCompact outcomes SHALL emit an empty JSON object; hooks that emit hookSpecificOutput SHALL include the matching hookEventName and only fields supported by that event. PostCompact SHALL NOT emit additionalContext because that event cannot inject context.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"\",\"text\":\"SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads.\",\"isSatisfied\":true,\"evidence\":\"Hook Bats suites assert exact {} output for the affected session and compact hooks.\"},{\"id\":\"\",\"text\":\"PostCompact does not emit additionalContext.\",\"isSatisfied\":true,\"evidence\":\"Hook Bats suites assert post-compact output is {} and does not contain additionalContext.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-FAILSAFE-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-FAILSAFE-001\",\"Title\":\"Failsafe drain treats 503 backend_unavailable as backend-down and can retry\",\"Body\":\"Session-log persist that hits the storage budget or a transient provider fault stays retryable HTTP 503 backend_unavailable with failsafe on disk. Drain aborts without incrementing drainAttempts or quarantining. After storage answers, a later drain in the same process can replay. BUG-TRIAGE-159.\\n- [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML\\n- [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable\\n- [ ] Drain does not latch failed=1 as permanently completed in-process\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-MEMORY-007",
+    "acCount": 5,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-MEMORY-007\",\"Title\":\"Agent plugin memory integration\",\"Body\":\"Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"\",\"text\":\"Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability.\",\"isSatisfied\":true,\"evidence\":\"Shell plugin Bats memory tests and TypeScript memory tests.\"},{\"id\":\"\",\"text\":\"Plugins with request-boundary injection hooks render REQUIRED MEMORIES on every supported user prompt boundary.\",\"isSatisfied\":true,\"evidence\":\"Plugin validation and marker memory injection coverage.\"},{\"id\":\"\",\"text\":\"Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection.\",\"isSatisfied\":true,\"evidence\":\"Plugin docs and validation expectations.\"},{\"id\":\"\",\"text\":\"Plugin validation identifies the host hook or fallback, workspace marker path, and example REQUIRED MEMORIES output.\",\"isSatisfied\":true,\"evidence\":\"Plugin validation coverage.\"},{\"id\":\"\",\"text\":\"Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement.\",\"isSatisfied\":true,\"evidence\":\"Shell Bats and TypeScript memory tests for mutation action append and failsafe cleanup.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-REPL-009",
+    "acCount": 4,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-REPL-009\",\"Title\":\"Degraded session-log persistence isolation\",\"Body\":\"The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"critical\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"FR-MCP-REPL-009-AC001\",\"text\":\"Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"FR-MCP-REPL-009-AC002\",\"text\":\"The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"FR-MCP-REPL-009-AC003\",\"text\":\"completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"FR-MCP-REPL-009-AC004\",\"text\":\"Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-REPL-011",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-REPL-011\",\"Title\":\"Plugin failsafe queue drains instead of accumulating\",\"Body\":\"BUG-TRIAGE-097. The MCP plugin PowerShell runtime writes every session-log submit to a failsafe queue on disk before calling the backend, so a crash or an unreachable server cannot lose the turn. Until now nothing ever replayed those records: the queue only grew, and plugin Status reported pendingCount 0 while captured turns sat undrained (33 records in F:/GitHub/McpServer as of 2026-07-20, oldest 2026-07-14, eight added in a single session). An agent or operator MUST be able to get queued turns into the session log once the backend is reachable again, automatically on the first proven-reachable call and on demand through an explicit drain verb, without ever losing a record: a record leaves the queue only after its submission is confirmed, a record the backend rejects does not block the newer records behind it, and a record that cannot be replayed at all is set aside for inspection rather than deleted or retried forever. Plugin Status MUST report the real queue depth.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-SESSIONATTR-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-SESSIONATTR-001\",\"Title\":\"Session-log foreign filesModified and commits are rejected or marked\",\"Body\":\"A session-log turn for workspace W never lists filesModified or commit artifacts that resolve outside W unless the turn explicitly marks them as cross-workspace or foreign-repo. Forward-only. BUG-TRIAGE-108.\\n- [ ] filesModified outside workspace root rejected or require foreign marker\\n- [ ] commit SHA/message/files from another repo require foreign marker or redirect\\n- [ ] Completeness audits can filter foreign artifacts\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-SESSIONEND-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-SESSIONEND-001\",\"Title\":\"SessionEnd emits empty object when cache cannot be resolved\",\"Body\":\"SessionEnd and pre-compact emit {} and exit 0 when Resolve-McpCacheDir cannot find a workspace. When cwd, CLAUDE_PROJECT_DIR, or hook payload identifies a workspace, flush that cache. No-op is not a hook failure. BUG-TRIAGE-140. FR-MCP-115.\\n- [ ] missing MCP_WORKSPACE_PATH SessionEnd exit 0 and {}\\n- [ ] identifiable workspace still flushes .mcpServer/<agent>\\n- [ ] no pending cache is a silent no-op\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-STRICTCOUNT-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-STRICTCOUNT-001\",\"Title\":\"updateTurn accepts omitted empty or scalar tags and contextList under StrictMode\",\"Body\":\"workflow.sessionlog.updateTurn succeeds when tags or contextList is omitted, empty, or a single scalar. Invoke-McpPlugin exits 0. No StrictMode Count throw. Success stdout stays silent. BUG-TRIAGE-158.\\n- [ ] omitted/empty/scalar tags and contextList persist\\n- [ ] exit 0 and no Count cannot be found\\n- [ ] appendActions/updateTurn emit no boolean on success\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TEMPVOL-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TEMPVOL-001\",\"Title\":\"Plugin wrappers align TEMP to the workspace volume\",\"Body\":\"Plugin session-start and wrapper entrypoints set TEMP and TMP to a writable directory on the workspace volume when they differ from the target volume. Prompt-template guidance stays. Failed replacement moves must not look like success. Do not patch PSGallery PowerShell.MCP. BUG-TRIAGE-117.\\n- [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive\\n- [ ] templates still document same-volume TEMP and verify-after-edit\\n- [ ] failed move is a visible error\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-003",
+    "acCount": 2,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRANSCRIPT-003\",\"Title\":\"Canonical session log projection\",\"Body\":\"The system shall project neutral transcript events directly into canonical Session Log YAML using the existing session-log serializer and model.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"high\",\"Status\":\"completed\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Canonical Session Log YAML is produced directly from neutral events through the existing session-log serializer/model.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_NormalizationWritesArtifactsWithoutSessionPersistence, IngestionService_PersistWritesRunArtifactsAndPendingFailsafeEnvelope, and TranscriptSessionLogPersisterTests.PersistAsync_SubmitsUnifiedSessionLogThroughSessionLogService.\"},{\"id\":\"ac-2\",\"text\":\"Compatibility profile output is optional and caller-selected for Claude, Codex, or Grok.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_EmitsCompatibilityJsonlWhenProfileRequested and Repl.Core NormalizeTranscripts tests.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-004",
+    "acCount": 2,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRANSCRIPT-004\",\"Title\":\"Idempotent import and recovery\",\"Body\":\"The system shall import transcript-derived Session Log YAML through the existing persistence path with write-ahead recovery and idempotent replay.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"high\",\"Status\":\"completed\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Repeated imports use deterministic idempotency data and persist through the existing session-log path.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by TranscriptSessionLogPersisterTests.PersistAsync_SubmitsUnifiedSessionLogThroughSessionLogService and HTTP ingest path persistence tests.\"},{\"id\":\"ac-2\",\"text\":\"A failsafe importRecovery envelope is retained unless persistence explicitly reports persisted=true and degraded=false.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_PersistWritesRunArtifactsAndPendingFailsafeEnvelope, IngestionService_PersistNamesFailsafeDocumentsByRootIdWithoutOverwrite, and TEST-MCP-REPL-025 plugin Pester failsafe tests.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-006",
+    "acCount": 2,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRANSCRIPT-006\",\"Title\":\"HTTP path and upload ingestion\",\"Body\":\"The system shall expose HTTP transcript ingestion for allowlisted server-local files/folders, multipart uploads, multi-file uploads, and ZIP uploads.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"high\",\"Status\":\"completed\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"POST /mcpserver/sessionlog/ingest/path accepts allowlisted file and folder paths and rejects unauthorized paths.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestPathAsync_WorkspaceRelativeCodexFixturePersistsAndDeletesFailsafe, IngestPathAsync_RealFixtureForEachAgentNormalizesThroughHttp, and unauthorized path tests.\"},{\"id\":\"ac-2\",\"text\":\"POST /mcpserver/sessionlog/ingest/upload accepts multipart files and ZIP bundles within documented limits.\",\"isSatisfied\":true,\"evidence\":\"Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestUploadAsync_ZipClaudeFixturePersistsAndDeletesStagingRun, IngestUploadAsync_RejectsDuplicateZipPaths, and controller ZIP traversal tests.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRANSCRIPT-SEARCH-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRANSCRIPT-SEARCH-001\",\"Title\":\"Codex transcript adapter handles tool_search and inter_agent records\",\"Body\":\"Ingesting Codex JSONL with inter_agent_communication_metadata, tool_search_call, and tool_search_output produces zero unknown diagnostics for those types, emits paired tool events or a documented info skip, and a successful Persist=true ingest deletes importRecovery with persisted=true degraded=false. BUG-TRIAGE-122.\\n- [ ] inter_agent_communication_metadata is normalized or documented info skip\\n- [ ] tool_search_call/output become paired events with call_id/name/status\\n- [ ] successful persist deletes importRecovery\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRIAGEPLUGIN-001",
+    "acCount": 1,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRIAGEPLUGIN-001\",\"Title\":\"Plugin root session, cache, console, and persist identity\",\"Body\":\"Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"high\",\"Status\":\"pending\",\"Notes\":\"Closes BUG-TRIAGE-111, 124, 126, 131, 143.\",\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-TRIAGESTORE-002",
+    "acCount": 1,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-TRIAGESTORE-002\",\"Title\":\"Storage-only outages fail fast without flipping health liveness\",\"Body\":\"Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"high\",\"Status\":\"pending\",\"Notes\":\"Closes BUG-TRIAGE-110. Do not change TR-MCP-HEALTH-003 liveness split.\",\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-VERIFYWRAP-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-VERIFYWRAP-001\",\"Title\":\"Code-verify reports disk-full and honors timeout without hanging\",\"Body\":\"code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.\\n- [ ] IOException disk full is typed and current-turn remains valid\\n- [ ] wrapper returns or fails within documented timeout\\n- [ ] no indefinite in-process hang after child dotnet exits\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  },
+  {
+    "id": "FR-MCP-XAGENT-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"FR-MCP-XAGENT-001\",\"Title\":\"CompleteTurn refuses cross-sourceType current-turn rebind\",\"Body\":\"When current-turn.yaml sessionId prefix differs from the active agent (Codex vs GrokCode vs ClaudeCode), CompleteTurn does not SubmitAsync as a new turn on the other session and does not return internal_server_error. Same-agent session rotation still rebinds. CompleteTurn never closes a different requestId. Empty title omits per TR-MCP-REPL-015. BUG-TRIAGE-106, BUG-TRIAGE-142.\\n- [ ] cross-sourceType mismatch refused or restored to originating cache\\n- [ ] same-agent rotation can complete without 500\\n- [ ] CompleteTurn does not hijack a concurrent other requestId\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null,\"LinkedUseCases\":[]}"
+  }
+]

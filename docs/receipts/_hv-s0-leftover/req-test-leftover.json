@@ -1,0 +1,163 @@
+[
+  {
+    "id": "TEST-MCP-155",
+    "acCount": 2,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-155\",\"Condition\":\"Given mocked successful and failed session/compact hook dependencies, when SessionStart, SessionEnd, PreCompact, and PostCompact scripts run, then each status-only path emits {} and PostCompact emits no additionalContext.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"\",\"text\":\"Hook regression tests assert exact {} output for session-start, session-end, pre-compact, and post-compact.\",\"isSatisfied\":true,\"evidence\":\"tests/hooks.bats passed in the affected plugin repositories with exact-output assertions.\"},{\"id\":\"\",\"text\":\"Copilot has hook regression coverage equivalent to the affected script surface.\",\"isSatisfied\":true,\"evidence\":\"Added F:\\\\GitHub\\\\mcpserver-copilot-plugin\\\\tests\\\\hooks.bats and passed 6/6.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-FAILSAFE-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-FAILSAFE-001\",\"Condition\":\"Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-012",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-PLUGIN-012\",\"Condition\":\"Validates TR-MCP-PLUGIN-012. mcpserver-claude-code-plugin/tests/CurrentTurnSessionRebind.Tests.ps1 dot-sources ..\\\\lib\\\\repl-invoke.ps1, seeds session-state.yaml (sessionId B) and current-turn.yaml (sessionId A, in_progress), calls Assert-ReplCurrentTurnFresh, and asserts it returns true and current-turn.yaml sessionId is now B. Red before the fix (stale-sessionId reject returned false), green after replacing the two sessionId hard-rejects with an active-session re-bind. ReplFailsafe.Tests.ps1 remain green (AC2).\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-025",
+    "acCount": 4,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-025\",\"Condition\":\"Mock-backed unit and real-filesystem integration tests SHALL prove primary and failsafe strategy isolation, non-terminal degradation isolation, terminal notification, replay artifact fidelity, V4 path scoping, atomic writes, cancellation, dual failure, and normal primary behavior with zero failures and zero skips.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"REPL session-log degraded persistence tests\",\"Priority\":\"critical\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"TEST-MCP-REPL-025-AC001\",\"text\":\"A failing primary mock does not fail non-terminal plugin persistence when the failsafe mock succeeds.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"TEST-MCP-REPL-025-AC002\",\"text\":\"Closing a degraded turn returns the exact failsafe path and the artifact round-trips the attempted turn payload.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"TEST-MCP-REPL-025-AC003\",\"text\":\"Primary success, explicit cancellation, and dual-failure paths are covered.\",\"isSatisfied\":false,\"evidence\":null},{\"id\":\"TEST-MCP-REPL-025-AC004\",\"text\":\"Current and prior McpServer.Repl.Core scopes complete with zero failures and zero skips.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-031",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-031\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1, Describe \\\"TEST-MCP-REPL-031 failsafe queue drain\\\". Fixture: a throwaway queue supplied through MCPSERVER_FAILSAFE_DIR plus MCP_CACHE_DIR_OVERRIDE, seeded with three synthetic client.SessionLog.SubmitAsync records stamped 20260714T154733Z, 20260716T112949Z, 20260720T230559Z; Invoke-ReplRaw is overridden to record the replay order and report success, so no backend and no real queue is touched. Asserts Invoke-ReplFailsafeDrain returns scanned 3, replayed 3, failed 0, quarantined 0, aborted false; that the three replays arrive in ascending timestamp order carrying the original requestIds; and that the queue directory is empty afterwards. Red before Invoke-ReplFailsafeDrain existed (CommandNotFoundException), green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-032",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-032\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: three synthetic records in a MCPSERVER_FAILSAFE_DIR sandbox; the overridden Invoke-ReplRaw returns a server-level \\\"type: error / code: validation_failed\\\" result for the middle record and success for the other two. Asserts all three records are attempted (the rejected one does not dam the queue), the summary reports replayed 2 and failed 1 and aborted false, the rejected record is still on disk while the other two are gone, and the retained record now carries drainAttempts 1. Red before the drain existed, green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-033",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-033\",\"Condition\":\"Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a MCPSERVER_FAILSAFE_DIR sandbox holding one deliberately unparseable YAML file plus one well-formed record; Invoke-ReplRaw is overridden to count submissions and report success. Asserts exactly one submission happens (the malformed record is never replayed), the summary reports quarantined 1 and replayed 1, the malformed file is gone from the queue root, the quarantine directory holds one .yaml plus one non-empty .reason.txt sidecar, and the queue root is empty. Red before the quarantine path existed, green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-034",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-034\",\"Condition\":\"Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a single synthetic record seeded with drainAttempts 5 in a MCPSERVER_FAILSAFE_DIR sandbox; Invoke-ReplRaw is overridden to count submissions. Asserts Invoke-ReplFailsafeDrain -MaxAttempts 5 makes zero submissions, reports quarantined 1 and replayed 0, removes the record from the queue root, and leaves exactly one record in the quarantine directory: an attempt-exhausted record is set aside, never retried forever and never deleted. Red before the attempt budget existed, green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-035",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-035\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: two synthetic records in a MCPSERVER_FAILSAFE_DIR sandbox; the overridden Invoke-ReplRaw returns Success false with the transport error \\\"MCP_UNTRUSTED: marker refresh failed before REPL request\\\". Asserts the drain stops after the first attempt rather than hammering the whole queue, reports aborted true with a non-empty abortReason and replayed 0 and quarantined 0, leaves both records on disk, and does not add a drainAttempts counter to the first record, so an outage cannot burn the attempt budget of good turns. Red before the drain existed, green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-036",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-036\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a record written through the production Write-ReplFailsafe into a MCPSERVER_FAILSAFE_DIR sandbox, so it is registered as in flight; Invoke-ReplRaw is overridden to count submissions. Asserts the drain makes zero submissions, reports skipped 1 and replayed 0, and leaves the in-flight record on disk so the owning submit still controls it; then asserts Clear-ReplFailsafe removes it, proving the in-flight registration is released on completion. Red before in-flight tracking existed, green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-037",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-037\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: Invoke-ReplFailsafeDrain overridden with a call counter. Asserts three consecutive Invoke-ReplFailsafeDrainOnFirstSuccess calls produce exactly one drain (the once-per-process latch holds even after the first pass), and asserts by source inspection that the body of Invoke-ReplRaw in plugins/core/lib-ps/repl-invoke.ps1 calls Invoke-ReplFailsafeDrainOnFirstSuccess, which is the wiring point that proves backend reachability before any replay. Red before the hook existed (CommandNotFoundException), green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-038",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-038\",\"Condition\":\"Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: Invoke-ReplFailsafeDrain and Invoke-ReplRaw both overridden with counters. Asserts Invoke-ReplMethod -Method workflow.failsafe.drain -ParamsYaml \\\"maxRecords: 7\\\" dispatches locally: the drain runs exactly once, receives MaxRecords 7 from the params, Invoke-ReplRaw is never called (no server round trip for a plugin-local verb), and the returned text contains the YAML drain summary an operator reads. Red before the verb existed (drain call count 0), green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-REPL-039",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-REPL-039\",\"Condition\":\"Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a sandbox failsafe directory holding two queued records plus one record already in the quarantine subdirectory; plugins/core/lib-ps/mcp-status.ps1 is run as a child pwsh process with MCPSERVER_FAILSAFE_DIR and MCP_CACHE_DIR_OVERRIDE pointed at the sandbox. Asserts the emitted JSON reports failsafeDir equal to the sandbox queue, failsafeCount 2, failsafeQuarantineCount 1, and pendingCount 2, so queue depth is truthful and quarantined records are excluded. Red before the status change (failsafeDir null), green after. Scope: layer-1+.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-SESSIONATTR-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-SESSIONATTR-001\",\"Condition\":\"Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-SESSIONEND-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-SESSIONEND-001\",\"Condition\":\"Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-STRICTCOUNT-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-STRICTCOUNT-001\",\"Condition\":\"Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-TEMPVOL-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-TEMPVOL-001\",\"Condition\":\"Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volume when they differ, and does not call PSGallery internals. Validates TR-MCP-TEMPVOL-001 / BUG-TRIAGE-117.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-005",
+    "acCount": 1,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-TRANSCRIPT-005\",\"Condition\":\"Unit tests verify idempotent replay keys, richer-field preservation, pre-submit failsafe creation, and retention/deletion based on precise persistence receipts.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"Import idempotency and failsafe semantics\",\"Priority\":\"high\",\"Status\":\"completed\",\"Notes\":\"Focused unit coverage proves pre-submit transcript failsafe files are distinct for multi-root ingestion and include the receipt rootId in each pending recovery filename. The test also asserts recovery file count equals receipt count and paths are unique case-insensitively. Evidence: TranscriptCorePipelineTests 17 passed/0 skipped; focused Support.Mcp scope 32 passed/0 skipped; Repl.Core requirements scope 4 passed/0 skipped; ValidateTraceability passed; build.ps1 Compile passed; build.ps1 Test passed.\",\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Failsafe files are deleted only when persisted=true and degraded=false.\",\"isSatisfied\":true,\"evidence\":\"2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: HTTP path persistence/deletion; pending failsafe envelope; root-id failsafe naming; TEST-MCP-REPL-025 Pester.\"}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-TRANSCRIPT-SEARCH-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-TRANSCRIPT-SEARCH-001\",\"Condition\":\"CodexTranscriptAdapterCoverageTests ingest inline JSONL for inter_agent_communication_metadata, tool_search_call, and tool_search_output with zero unknown diagnostics and persist cleanup. Validates TR-MCP-TRANSCRIPT-SEARCH-001 / BUG-TRIAGE-122.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "acCount": 1,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-TRIAGEPLUGIN-001\",\"Condition\":\"Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"Pester for root session cache console timeout and rebind\",\"Priority\":\"high\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "acCount": 1,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-TRIAGEPLUGIN-004\",\"Condition\":\"beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"beginTurn persist timeout is degraded/queued\",\"Priority\":\"high\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[{\"id\":\"ac-1\",\"text\":\"beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.\",\"isSatisfied\":false,\"evidence\":null}],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-VERIFYWRAP-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-VERIFYWRAP-001\",\"Condition\":\"Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TEST-MCP-XAGENT-001",
+    "acCount": 0,
+    "trIds": null,
+    "testIds": null,
+    "blob": "{\"Id\":\"TEST-MCP-XAGENT-001\",\"Condition\":\"Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142.\",\"WorkspaceId\":\"F:\\\\GitHub\\\\McpServer\",\"Title\":\"\",\"Priority\":\"medium\",\"Status\":\"pending\",\"Notes\":null,\"AcceptanceCriteria\":[],\"ScopeStartLayerKey\":\"layer-1\",\"ScopeEndLayerKey\":null}"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "elapsedMs": 21777,
+  "filter": "FullyQualifiedName~SessionLogTriageStoreTests|FullyQualifiedName~McpErrorClassifierTests|FullyQualifiedName~SessionLogControllerErrorTests|FullyQualifiedName~SessionLogSchemaGuardTests",
+  "log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g3-113\\named-unit.log",
+  "trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g3-113\\named-unit.trx"
+}

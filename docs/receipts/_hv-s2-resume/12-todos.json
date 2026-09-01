@@ -1,0 +1,17 @@
+{
+  "TimestampUtc": "2026-08-19T20:34:00Z",
+  "Source": "mcpserver__todo_get",
+  "WorkspacePath": "F:\\GitHub\\McpServer",
+  "Items": [
+    { "Id": "BUG-TRIAGE-158", "Done": false },
+    { "Id": "BUG-TRIAGE-159", "Done": false },
+    { "Id": "BUG-TRIAGE-140", "Done": false },
+    { "Id": "BUG-TRIAGE-142", "Done": false },
+    { "Id": "BUG-TRIAGE-106", "Done": false },
+    { "Id": "BUG-TRIAGE-125", "Done": false },
+    { "Id": "BUG-TRIAGE-130", "Done": false },
+    { "Id": "BUG-TRIAGE-120", "Done": false },
+    { "Id": "PLAN-TRIAGELEFTOVER-001", "Done": false }
+  ],
+  "AnyDoneTrue": false
+}

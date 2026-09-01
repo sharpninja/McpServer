@@ -133,6 +133,15 @@ function Sync-Tree {
 
 Sync-Tree (Join-Path $coreRoot 'lib-ps')
 
+$handoffSkillSource = Join-Path $coreRoot 'skills\handoff\SKILL.md'
+if (Test-Path -LiteralPath $handoffSkillSource) {
+    $handoffSkillDestDir = Join-Path $PluginRoot 'skills\handoff'
+    New-Item -ItemType Directory -Force $handoffSkillDestDir | Out-Null
+    $handoffSkillDest = Join-Path $handoffSkillDestDir 'SKILL.md'
+    Copy-CoreFile -SourcePath $handoffSkillSource -DestinationPath $handoffSkillDest
+    $manifestFiles['skills/handoff/SKILL.md'] = (Get-FileHash -Path $handoffSkillDest -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
 Import-YamlSerializer
 $manifestObject = [ordered]@{
     coreVersion = $coreVersion

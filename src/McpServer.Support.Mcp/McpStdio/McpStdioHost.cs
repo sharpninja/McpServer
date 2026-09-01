@@ -9,6 +9,7 @@ using McpServer.Common.AgentCli.Extensions;
 using McpServer.Cqrs;
 using McpServer.GraphRag;
 using McpServer.Support.Mcp.UseCases;
+using McpServer.Support.Mcp.Products;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Requirements;
@@ -61,6 +62,9 @@ public static class McpStdioHost
         builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
         builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
         builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
+        builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
+        builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+        builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
         builder.Services.AddOptions<SessionLogSanitizationOptions>()
             .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
             .ValidateOnStart();
@@ -232,6 +236,19 @@ public static class McpStdioHost
         builder.Services.AddAgentExecutionStrategies();
         builder.Services.AddAgentHelpServices(builder.Configuration);
         builder.Services.AddTriageServices();
+        builder.Services.AddSingleton<VoiceConversationService>();
+        builder.Services.AddSingleton<IVoiceConversationService>(sp =>
+            new TransactionGatedVoiceConversationService(
+                sp.GetRequiredService<VoiceConversationService>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>()));
+        builder.Services.AddSingleton<AgentPoolService>();
+        builder.Services.AddSingleton<IAgentPoolService>(sp =>
+            new TransactionGatedAgentPoolService(
+                sp.GetRequiredService<AgentPoolService>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>()));
+        builder.Services.AddHandoffServices();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ITranscriptSessionPersister, TranscriptSessionLogPersister>();
@@ -282,6 +299,7 @@ public static class McpStdioHost
         // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by usecase_* tools and handlers.
         builder.Services.AddCqrsDispatcher();
         builder.Services.AddUseCaseCqrs();
+        builder.Services.AddProductCqrs();
         DecorateGraphRagService(builder.Services);
         builder.Services.AddScoped<WorkspaceContext>();
         builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
@@ -296,18 +314,22 @@ public static class McpStdioHost
 
         var host = builder.Build();
 
-        using (var scope = host.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
-            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, cancellationToken).ConfigureAwait(false);
-            await SessionLogTurnContextBackfillStartup.TryRunAsync(
-                db,
-                scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
-                scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
-                cancellationToken).ConfigureAwait(false);
-        }
+        await StartupStorageBootstrap.TryInitializeAsync(
+            async ct =>
+            {
+                using var scope = host.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+                var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+                await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+                await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, ct).ConfigureAwait(false);
+                await SessionLogTurnContextBackfillStartup.TryRunAsync(
+                    db,
+                    scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+                    scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
+                    ct).ConfigureAwait(false);
+            },
+            host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("McpStdioHost"),
+            cancellationToken).ConfigureAwait(false);
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
     }

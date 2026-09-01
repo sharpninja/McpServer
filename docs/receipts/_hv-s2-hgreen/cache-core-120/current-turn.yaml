@@ -1,0 +1,17 @@
+turnRequestId: req-20260819T200139Z-001-hostile-s2-120-core
+queryTitle: Hostile S2 worktree-core live 120
+openedAt: 2026-08-19T20:01:46Z
+status: in_progress
+sessionId: Default-20260819T200141Z-plugin-session
+codeEdits: 0
+lastBuildStatus: unknown
+auditActions: 0
+auditDialog: 0
+auditDecisions: 0
+auditFiles: 0
+auditCommits: 0
+queryText: Attack BUG-TRIAGE-120 persist timeout on worktree plugin core copied into plugin lib layout
+planFile: docs/plans/triage-cluster-002.md
+todoId: BUG-TRIAGE-120
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-19T13:05:36.9456178Z

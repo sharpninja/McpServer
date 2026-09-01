@@ -1,0 +1,113 @@
+{
+  "TimestampUtc": "2026-08-18T00:53:49Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "user-directed-general-action-class-2",
+  "AddProfileExecuted": true,
+  "ProfileFilesRead": 18,
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersion": "1.93.0",
+  "MarkerSignature": true,
+  "HealthNonce": "5a05395663364549986a2f4092cbaf36",
+  "HealthNonceEchoed": true,
+  "HealthStorage": "reachable",
+  "ReadyStatus": 200,
+  "ReadyStorage": "reachable",
+  "RecheckNonce": "5df390959e074e26a9a658cc9d15f2bb",
+  "RecheckNonceEchoed": true,
+  "RecheckUtc": "2026-08-18T00:53:49.1685701Z",
+  "FullBootstrap": true,
+  "SessionId": "GrokCode-20260818T004041Z-hostile-slog-503",
+  "RequestId": "req-20260818T004041Z-001-hostile-validate-slog-503",
+  "ServerTurnId": 41616,
+  "PlanFile": "None",
+  "TodoId": "None",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "SurfacesNotEvaluated": [],
+  "Accuracy": 96,
+  "Completeness": 97,
+  "SessionLogQuery": {
+    "AgentFromTotalCount": 1,
+    "AgentFromSessionId": "GrokCode-20260818T004041Z-hostile-slog-503",
+    "AgentFromTurnRequestId": "req-20260818T004041Z-001-hostile-validate-slog-503",
+    "AgentFromTurnStatus": "completed",
+    "AgentFromTurnId": 41616,
+    "DialogCount": 0,
+    "ActionCount": 6,
+    "DesignDecisionCount": 3,
+    "DialogAppendHttpStatus": 503,
+    "DialogAppendError": "backend_unavailable",
+    "DialogAppendTraceId": "00-1415bdcea3ab4b3f2f5a4e33d67e2584-3cbb643a8882f5fb-01"
+  },
+  "ImplementerSessionQuery": {
+    "SessionId": "GrokCode-20260817T120000Z-agent-help-grok-cli",
+    "TurnRequestId": "req-20260818T003125Z-008-sessionlog-backend-unavailable",
+    "BeginTurnId": 41593,
+    "TurnStatus": "completed",
+    "TurnCountAtQuery": 9
+  },
+  "Service": {
+    "Name": "McpServer",
+    "State": "Running",
+    "StartMode": "Auto",
+    "StartName": "LocalSystem",
+    "PathName": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+    "ProcessId": 57744,
+    "ProcessCreationDateUtc": "2026-08-17T23:38:29.5863800Z"
+  },
+  "Marker": {
+    "Pid": 57744,
+    "PidMatchService": true,
+    "LastWriteTimeUtc": "2026-08-17T23:38:48.7976227Z",
+    "Version": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e"
+  },
+  "Failsafe": {
+    "Path": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\20260818T001252Z-session_submit-f830.yaml",
+    "LastDrainErrorMessage": "internal_server_error",
+    "ContainsBackendUnavailable": false,
+    "TurnStatus": "canceled",
+    "TurnHasPlanFile": false,
+    "TurnHasTodoId": false,
+    "TurnRequestId": "req-20260818T001140Z-prompt-e2bf"
+  },
+  "LogScan": {
+    "Path": "C:\\ProgramData\\McpServer\\logs\\mcp-20260817.log",
+    "PlanFileOmittedWindow": 18,
+    "PlanFileOmittedAfterRestart": 123,
+    "PrefixSessionlog503AfterRestart": 0,
+    "PrefixSessionlog503All": 0,
+    "PostRestartSessionlogStatuses": {
+      "200": 128,
+      "201": 146,
+      "400": 18
+    },
+    "BackendAfterRestartStatus503": 0,
+    "MorningBackendUnavailableLine": 53803,
+    "MorningSqlServer": "192.168.1.77",
+    "MorningDatabase": "McpServer_PAYTON_LEGION2",
+    "MorningTool": "requirements_update"
+  },
+  "Exe": {
+    "LastWriteTimeUtc": "2026-08-12T21:55:30.4271605Z",
+    "FileVersion": "1.4.26.0",
+    "ProductVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "Sha256": "A95B178712D30BE73CB55AEC8DF98127F44DDDEE4A62C932E52C1D3B09AF5529"
+  },
+  "Claims": {
+    "A1": "PASS",
+    "A2": "PASS",
+    "A3": "PASS",
+    "A4": "PASS",
+    "A5": "PASS",
+    "A6": "PASS",
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "B6": "PASS",
+    "C": "N/A",
+    "D": "N/A"
+  }
+}

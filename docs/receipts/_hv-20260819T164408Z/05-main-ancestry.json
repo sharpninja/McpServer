@@ -1,0 +1,9 @@
+{
+  "haveMainRemoteShaLocal": false,
+  "fetchAttempted": true,
+  "haveAfterFetch": true,
+  "mainLog": "HASH d14a23302a9bcdb8887033f56c4b4a652aed195a\r\nSUBJECT Merge pull request #40 from sharpninja/develop\r\nPARENTS b1615e9a29503cd415bb0bc830bc3e6127ec954d 7c4821ca9d0ce9e205482b6f68afbc9e058cfb28\r\n",
+  "c81OnMain": false,
+  "cbaeOnMain": false,
+  "f406OnMain": false
+}

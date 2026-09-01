@@ -1,0 +1,27 @@
+{
+  "Path": "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol\\plugins\\core\\test-fixtures\\pester\\PluginTempVolume.Tests.ps1",
+  "FilterFullName": "*TEST-MCP-TEMPVOL-001*",
+  "PesterVersion": "5.7.1",
+  "Result": "Passed",
+  "Passed": 8,
+  "Failed": 0,
+  "Skipped": 0,
+  "Inconclusive": 0,
+  "NotRun": 0,
+  "Total": 8,
+  "DurationSec": 0.819,
+  "XmlPath": "docs/receipts/_hv-s5-testgate/pester.xml",
+  "XmlCaseCount": 8,
+  "XmlResult": ["Success=8"],
+  "PassedNames": [
+    "defines Set-McpPluginSameVolumeTemp after sourcing resolve-cache-dir.ps1",
+    "leaves TEMP and TMP unchanged when they already share the target volume",
+    "sets TEMP and TMP to a writable directory on the workspace volume when they differ",
+    "does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error",
+    "treats a failed replacement move as a visible error and leaves the destination unchanged",
+    "session-start and wrapper entrypoints call Set-McpPluginSameVolumeTemp",
+    "keeps prompt-template same-volume TEMP and verify-after-edit guidance",
+    "does not patch PSGallery PowerShell.MCP internals"
+  ],
+  "NonTerminatingNoise": "Cannot find drive. A drive with the name Z does not exist. Tests still Result=Passed Failed 0 Skipped 0."
+}

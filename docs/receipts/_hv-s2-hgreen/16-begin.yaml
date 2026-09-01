@@ -1,0 +1,6 @@
+requestId: req-20260819T200139Z-001-hostile-s2-120-core
+queryTitle: Hostile S2 worktree-core live 120
+queryText: Attack BUG-TRIAGE-120 persist timeout on worktree plugin core copied into plugin lib layout
+planFile: docs/plans/triage-cluster-002.md
+todoId: BUG-TRIAGE-120
+

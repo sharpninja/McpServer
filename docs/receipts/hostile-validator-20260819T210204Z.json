@@ -1,0 +1,156 @@
+{
+  "TimestampUtc": "2026-08-19T21:02:04Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260819T205734Z-hostile-closeout-s3",
+  "RequestId": "req-20260819T205734Z-001-hostile-localdb-apply",
+  "TurnId": 42109,
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "Branch": "triage/closeout",
+  "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "AddProfile": {
+    "executed": true,
+    "nonSkillProfileMarkdownFilesRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "WorkClass": "class1",
+  "Plugin": {
+    "name": "mcpserver-grok-plugin",
+    "version": "1.95.0"
+  },
+  "MarkerHmacValid": true,
+  "HealthNonce": "hv-s3-444c7d08597e4636a93d8e9610b068c2",
+  "HealthNonceEchoed": true,
+  "OverallVerdict": "DISAGREE",
+  "DidMarkTodosDone": false,
+  "DidMerge": false,
+  "PriorDisagreeReceipt": "docs/receipts/hostile-validator-20260819T201639Z.md",
+  "TestRun": {
+    "cwd": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+    "filter": "FullyQualifiedName~SessionLogSchemaGuardTests|FullyQualifiedName~SessionLogAgentSessionHeaderMigrationTests",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 12,
+    "skipped": 0,
+    "total": 12,
+    "consoleDuration": "9 s",
+    "trxPath": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout\\docs\\receipts\\_hv-closeout-s3\\SessionLogCloseoutFilter.trx",
+    "trxCounters": {
+      "outcome": "Completed",
+      "total": 12,
+      "executed": 12,
+      "passed": 12,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "sqlServerLocalDbTest": {
+      "name": "SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+      "outcome": "Passed",
+      "duration": "00:00:04.2492019",
+      "startLocal": "2026-08-19T16:00:10.1010754-05:00"
+    },
+    "postgresCaptureTest": {
+      "name": "PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016832"
+    },
+    "sqliteAlreadyHasTest": {
+      "name": "SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds",
+      "outcome": "Passed",
+      "duration": "00:00:03.4312343"
+    }
+  },
+  "LocalDb": {
+    "name": "MSSQLLocalDB",
+    "version": "16.0.1000.6",
+    "stateAfterTest": "Running",
+    "lastStartTime": "8/19/2026 4:00:10 PM",
+    "mcpTestSqlServerConnectionSet": false
+  },
+  "DocsProject": {
+    "hits20260722214500": 0,
+    "hits20260818205751InFuncAndTechIncludingWiki": 12
+  },
+  "Todos": {
+    "BUG-TRIAGE-116": { "Done": false, "CompletedDate": null, "DoneSummary": null },
+    "BUG-TRIAGE-118": { "Done": false, "CompletedDate": null, "DoneSummary": null },
+    "PLAN-TRIAGELEFTOVER-001": { "Done": false, "CompletedDate": null, "DoneSummary": null }
+  },
+  "RequirementsNative": {
+    "FR-MCP-TRIAGESCHEMA-001": {
+      "status": "pending",
+      "ac1Contains20260722214500": false,
+      "ac1Contains20260818205751": true,
+      "isSatisfied": false
+    },
+    "TR-MCP-TRIAGESCHEMA-001": {
+      "status": "pending",
+      "ac1Contains20260722214500": false,
+      "ac1Contains20260818205751": true,
+      "isSatisfied": false,
+      "requiresApplyOnHostDatabasesIncludingPostgres": true
+    },
+    "TEST-MCP-TRIAGESCHEMA-001": {
+      "status": "pending",
+      "conditionNames20260818205751": true,
+      "conditionNames20260722214500": false,
+      "conditionDocumentsLiveMigrateAsyncHostGap": true
+    },
+    "mapping": {
+      "FrId": "FR-MCP-TRIAGESCHEMA-001",
+      "TrIds": ["TR-MCP-TRIAGESCHEMA-001"],
+      "TestIds": ["TEST-MCP-TRIAGESCHEMA-001"]
+    }
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "summary": "Filter tests Failed 0 Passed 12 Skipped 0 EXIT 0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "summary": "SqlServer LocalDB apply is real captured-SQL engine apply (4.249s; sqllocaldb start aligned)" },
+    { "id": "A3", "surface": "A", "verdict": "FAIL", "summary": "Postgres compiled-Up capture is not TR apply-on-legacy / apply-on-host-databases AC" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "summary": "docs/Project has 0 hits for 20260722214500 and names 20260818205751" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "summary": "Sqlite skip-if-present and already-has MigrateAsync still present and passing" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "summary": "Native FR/TR ac-1 do not contain 20260722214500" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "summary": "BUG-TRIAGE-116/118 and PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "summary": "Receipts re-verified independently" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "summary": "Byrd phase-order not failed via timestamps" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "summary": "MCP-only storage; no done:true" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "summary": "pwsh.exe only; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "summary": "Implementer claims match artifacts as worded" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "summary": "FR-MCP-TRIAGESCHEMA-001 exists with AC" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "summary": "TEST-MCP-TRIAGESCHEMA-001 exists" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "summary": "Mapping row present" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "summary": "Structured AC leftover 20260722214500 gone" },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "summary": "Markdown docs/Project leftover 20260722214500 gone" },
+    { "id": "C6", "surface": "C", "verdict": "FAIL", "summary": "Postgres TR apply AC unmet by compiled-Up capture" },
+    { "id": "D1", "surface": "D", "verdict": "FAIL", "summary": "G2 cannot close; no hostile AGREE; no live SQL Server workspace query proof" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "summary": "TODOs not flipped; no merge" }
+  ],
+  "PassCount": 18,
+  "FailCount": 3,
+  "UnknownCount": 0,
+  "FailList": [
+    "Postgres apply-on-legacy / apply-on-host-databases AC is not met. PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate is compiled-Up capture (TRX 1.68 ms). Native TR-MCP-TRIAGESCHEMA-001 ac-1 requires apply of Postgres 20260818205822 on host databases. Native TEST Condition still says live MigrateAsync for SqlServer/Postgres requires a server host.",
+    "G2 closeout cannot complete. Hostile AGREE is required before done:true. Plan closeout proof (live sessionlog_query 200 on a SQL Server workspace) was not produced. This receipt is DISAGREE."
+  ],
+  "ClosedFromPriorFailList": [
+    "SqlServer apply tests are no longer grep-only (disposable LocalDB executed captured Up() SQL twice; TRX 4.249 s; sqllocaldb last start 8/19/2026 4:00:10 PM matches TRX start).",
+    "Worktree docs/Project markdown no longer names 20260722214500 and names 20260818205751."
+  ],
+  "Accuracy": 9,
+  "Completeness": 8,
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260819T210204Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260819T210204Z.json",
+  "Persistence": {
+    "sessionlogQueryFrom": "2026-08-19T20:50:00Z",
+    "matchedSessionId": "GrokCode-20260819T205734Z-hostile-closeout-s3",
+    "sourceType": "GrokCode",
+    "turnCount": 1,
+    "turnRequestId": "req-20260819T205734Z-001-hostile-localdb-apply",
+    "turnStatus": "completed",
+    "lastUpdated": "2026-08-19T21:05:33.5969578+00:00",
+    "actionCount": 8,
+    "dialogCount": 2,
+    "designDecisionCount": 3,
+    "sessionStatus": "in_progress"
+  }
+}

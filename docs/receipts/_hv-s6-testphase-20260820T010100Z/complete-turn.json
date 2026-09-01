@@ -1,0 +1,35 @@
+{
+  "requestId": "req-20260820T010100Z-001-hostile-s6-test-phase-gate",
+  "queryTitle": "Hostile TEST-PHASE leftover S6 stale turns",
+  "status": "completed",
+  "interpretation": "Late class-1 TEST-PHASE gate for leftover S6 BUG-TRIAGE-121. Score AC-covering isolation and stale in_progress query tests. Mass cancel out of scope. Do not mark TODOs done or merge.",
+  "response": "OverallVerdict AGREE for TEST-PHASE only. Receipt docs/receipts/hostile-validator-20260820T010803Z.md. PASS 21 FAIL 0 UNKNOWN 0. FAIL list empty. Independent re-run: Pester 18/0/0, SessionLogTriageStoreTests 8/0/0, Client QueryAsync 1/0/0. No mass-cancel API. BUG-TRIAGE-121 and PLAN-TRIAGELEFTOVER-001 remain Done=false. Accuracy 96 Completeness 91. Not H-green, not merge, not TODO done.",
+  "planFile": "docs/plans/triage-cluster-002.md",
+  "todoId": "BUG-TRIAGE-121",
+  "tags": ["BUG-TRIAGE-121", "PLAN-TRIAGELEFTOVER-001", "TEST-PHASE", "TEST-MCP-TRIAGEPLUGIN-001", "hostile-validator"],
+  "contextList": [
+    "docs/plans/triage-cluster-002.md",
+    "docs/Project/Testing-Requirements.md",
+    "docs/receipts/hostile-validator-20260820T010803Z.md"
+  ],
+  "filesModified": [
+    "docs/receipts/hostile-validator-20260820T010803Z.md",
+    "docs/receipts/hostile-validator-20260820T010803Z.json",
+    "docs/receipts/_hv-s6-testphase-20260820T010100Z/run-s6-tests.ps1"
+  ],
+  "actions": [
+    { "order": 1, "type": "test", "status": "completed", "description": "Independent Pester TriagePluginIdentity.Tests.ps1 Passed 18 Failed 0 Skipped 0", "filePath": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1" },
+    { "order": 2, "type": "test", "status": "completed", "description": "Independent SessionLogTriageStoreTests Passed 8 Failed 0 Skipped 0", "filePath": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs" },
+    { "order": 3, "type": "test", "status": "completed", "description": "Independent Client QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours Passed 1 Failed 0 Skipped 0", "filePath": "tests/McpServer.Client.Tests/SessionLogClientTests.cs" },
+    { "order": 4, "type": "validation", "status": "completed", "description": "Confirmed no mass-cancel API; query filter is read-only; TODOs remain Done=false", "filePath": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs" },
+    { "order": 5, "type": "docs", "status": "completed", "description": "Wrote hostile TEST-PHASE receipt twin md and json", "filePath": "docs/receipts/hostile-validator-20260820T010803Z.md" }
+  ],
+  "designDecisions": [
+    "Classify as class 1 late TEST-PHASE only. Consequence: score leftover AC tests and mass-cancel absence; do not demand red tests; do not flip TODOs.",
+    "Treat MCP store versus markdown leftover-AC drift as observation, not TEST-PHASE FAIL. Plan S0 reused TEST-MCP-TRIAGEPLUGIN-001. This gate scores tests covering leftover AC on plan G10 and TEST markdown.",
+    "OverallVerdict AGREE for TEST-PHASE only. Consequence: parent may proceed to H-green; must not merge or set done:true on this receipt alone."
+  ],
+  "requirementsDiscovered": [
+    "TEST-MCP-TRIAGEPLUGIN-001 leftover isolate-skip, reuse, and stale query AC are on plan G10 and Testing-Requirements.md; MCP store Condition is still original plugin-identity text."
+  ]
+}

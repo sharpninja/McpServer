@@ -1,0 +1,172 @@
+{
+  "TimestampUtc": "2026-08-20T11:44:39Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project MCP-store hygiene S0 inventory freeze",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "SessionLog": {
+    "requestedSessionId": "GrokCode-20260820T114203Z-hostile-h0-s0",
+    "persistedSessionId": "GrokCode-20260820T113653Z-plugin-session",
+    "requestId": "req-20260820T114203Z-001-hostile-h0-s0-inventory",
+    "queryHistoryTitle": "Hostile H0 S0 inventory freeze",
+    "queryHistoryTurnCount": 1,
+    "queryHistoryStatus": "in_progress",
+    "localCurrentTurnStatus": "completed",
+    "isolatedFailsafeCount": 0
+  },
+  "Trust": {
+    "markerSignatureMatch": true,
+    "healthStatusCode": 200,
+    "healthNonceEchoed": true,
+    "healthNonce": "48b9f900d16d4a1084ee386f9e2940d6",
+    "serverVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 15,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 1
+  },
+  "FailList": [
+    "D1 S0 snapshot completeness: durable todo-audit receipts lack done-true counts, TR/TEST/mapping snapshots, and git status --short; s0-freeze.ps1 hardcodes leftoverDone and HEAD and reads cached MCP JSON instead of live leftover get/git"
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "PLAN-TODOALIGN-001 exists via MCP todo_get, Done=false",
+      "verdict": "PASS",
+      "evidence": "workflow.todo.get PLAN-TODOALIGN-001 done:false; live todo.query includes id"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "Durable plan file exists non-empty at docs/plans/todo-requirements-audit.md",
+      "verdict": "PASS",
+      "evidence": "File exists length 18060 bytes LastWriteTimeUtc 2026-08-20T11:15:41.3790136Z"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "S0 inventory JSON both paths, open count 40 (38 prior plus ALIGN and AUDIT), HEAD 20db61aa on develop",
+      "verdict": "PASS",
+      "evidence": "SHA256 9B84FCB93FF19E8C177D23BF1CB2974515714EF62656C7C7E4EAE4A5D8E09F59 both files; live query 40 ids set-equal; git HEAD 20db61aa0dd70f2d4f94da06d2a133ecfe6967a8 branch develop"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "PLAN-TRIAGELEFTOVER-001 Done=true; BUG-TRIAGE-160..163 Done=false in live open list",
+      "verdict": "PASS",
+      "evidence": "todo.get leftover done:true; leftover absent from open query; 160-163 done:false and present in live open ids"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "claim": "remainingHas0711Count 23; orphanLinkCount 23",
+      "verdict": "PASS",
+      "evidence": "Independent recount of s0-inventory.json todos remainingHas0711=23 orphanLinks=23; JSON field remaining0711Count"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "claim": "ALIGN not done:true; no QuadBrain/FILETOOLS/Handoff product code; freeze is pwsh not Python",
+      "verdict": "PASS",
+      "evidence": "ALIGN done false; git srcOrTestsTouched empty; s0-freeze.ps1 mentionsPython false"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "claim": "Session timer 01a01eeb67f0 prompt contains Complete PLAN-TODOALIGN-001",
+      "verdict": "PASS",
+      "evidence": "resources_state.json grok_build.Scheduler.tasks[0] id 01a01eeb67f0 prompt Complete PLAN-TODOALIGN-001 and when hostile validator allows closing it, delete this timer."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Byrd v4 product tests-first",
+      "verdict": "PASS",
+      "evidence": "N/A for S0 inventory freeze per parent lock; not scored as missing product tests"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "Receipts re-verified",
+      "verdict": "PASS",
+      "evidence": "Validator re-ran plugin todo, git, health, signature; freeze method completeness scored as D1"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "MCP-only storage",
+      "verdict": "PASS",
+      "evidence": "ALIGN via MCP todo_create; TODO.yaml not in git status"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "claim": "PowerShell / no Python",
+      "verdict": "PASS",
+      "evidence": "s0-freeze.ps1 pwsh ConvertTo-Json; mentionsPython false"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "claim": "Honesty",
+      "verdict": "PASS",
+      "evidence": "Live open set equals inventory 40; leftover and HEAD match live; freeze hardcoded leftover/HEAD is method smell not false live state"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "claim": "Reviewer session-log turn persisted",
+      "verdict": "PASS",
+      "evidence": "queryHistory GrokCode-20260820T113653Z-plugin-session turnCount 1 title Hostile H0 S0 inventory freeze"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "FR/TR completion",
+      "verdict": "N/A",
+      "evidence": "No FR/TR completed or ALIGN done claim in this S0 slice"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "S0 snapshot completeness for H0",
+      "verdict": "FAIL",
+      "evidence": "Durable receipts lack done-true counts, TR/TEST/mapping dumps, git status --short; freeze hardcodes leftoverDone and HEAD and reads cached MCP JSON"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "claim": "Not claiming full plan DoD S4-S7",
+      "verdict": "PASS",
+      "evidence": "S0 freeze claimed only; S4-S7 not required for H0"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "claim": "Leftover-27 stays closed; 160-163 stay open; no product implementation",
+      "verdict": "PASS",
+      "evidence": "Matches A4 and A6 live MCP and git status"
+    }
+  ],
+  "AccuracyRating": 92,
+  "CompletenessRating": 88,
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "GitBranch": "develop",
+  "LiveOpenCount": 40,
+  "InventoryOpenCount": 40,
+  "Remaining0711Count": 23,
+  "OrphanLinkCount": 23,
+  "ReceiptMd": "docs/receipts/hostile-validator-20260820T114439Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260820T114439Z.json"
+}

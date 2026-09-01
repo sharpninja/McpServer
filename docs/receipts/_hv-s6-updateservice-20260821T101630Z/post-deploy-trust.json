@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-08-21T10:21:14.6665820Z",
+  "NukeTarget": "UpdateService",
+  "GsudoExitCode": 0,
+  "Duration": "3:19",
+  "GitHead": "ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "VersionBump": "1.4.29 -> 1.4.30",
+  "LiveProductVersion": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "ServiceStatus": "Running",
+  "HealthStatus": "Healthy",
+  "Storage": "reachable",
+  "WorkspaceHealth": "38/38",
+  "TestMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "RolledOwnHmac": false,
+  "PluginVersion": "1.97.0",
+  "Archive": "C:\\Users\\kingd\\McpServer-Backups\\McpServer-backup-20260821-051736195.zip",
+  "MarkerPid": 16936,
+  "MarkerStartedAtUtc": "2026-08-21T10:20:37.3589553+00:00"
+}

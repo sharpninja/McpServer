@@ -1,0 +1,23 @@
+{
+  "lsRemoteDevelop": "cbae4dd6febf6cfab81b77a2578ff1b36a6a3499\trefs/heads/develop\r\n",
+  "lsRemoteDevelopExit": 0,
+  "lsRemoteMain": "d14a23302a9bcdb8887033f56c4b4a652aed195a\trefs/heads/main\r\n",
+  "lsRemoteMainExit": 0,
+  "lsRemoteWikiHead": "763c83803046a018107e06c9945e508551236d86\tHEAD\r\n",
+  "lsRemoteWikiHeadExit": 0,
+  "lsRemoteWikiMaster": "763c83803046a018107e06c9945e508551236d86\trefs/heads/master\r\n",
+  "lsRemoteWikiMasterExit": 0,
+  "remoteLines": [
+    "azure\thttps://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (fetch)",
+    "azure\thttps://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (push)",
+    "origin\thttps://github.com/sharpninja/McpServer.git (fetch)",
+    "origin\thttps://github.com/sharpninja/McpServer.git (push)"
+  ],
+  "azureRemoteLines": [
+    "azure\thttps://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (fetch)",
+    "azure\thttps://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer (push)"
+  ],
+  "lsRemoteAzureDevelop": "f4060f037e62e64974026aff9d24e11b2f481952\trefs/heads/develop\r\n",
+  "lsRemoteAzureMain": "b1615e9a29503cd415bb0bc830bc3e6127ec954d\trefs/heads/main\r\n",
+  "azureUrl": "https://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer"
+}

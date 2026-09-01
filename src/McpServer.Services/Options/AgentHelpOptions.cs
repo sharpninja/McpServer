@@ -106,5 +106,5 @@ public sealed class AgentHelpOptions
     /// <summary>
     /// When <see langword="true"/> and no execution strategy is available, the service echoes a deterministic helper response for tests.
     /// </summary>
-    public bool UseEchoHelperFallback { get; set; } = true;
+    public bool UseEchoHelperFallback { get; set; }
 }

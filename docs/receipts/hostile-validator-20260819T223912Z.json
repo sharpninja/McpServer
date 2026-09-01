@@ -1,0 +1,85 @@
+{
+  "TimestampUtc": "2026-08-19T22:39:12Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-session-store",
+  "Branch": "triage/session-store",
+  "HeadSha": "400d881b6599b2fbc696ba51b65a47b4b48cb9eb",
+  "WorkClass": "class 1",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.95.0"
+  },
+  "MarkerSignatureValid": true,
+  "HealthNonceMatch": true,
+  "HealthNonce": "71406a0565a34216a94b096c7371d017",
+  "HealthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "SessionId": "GrokCode-20260819T222946Z-hostile-g3s3",
+  "RequestId": "req-20260819T222946Z-001-hostile-validate-g3-s3",
+  "TurnId": 42121,
+  "PlanFile": "docs/plans/triage-cluster-002.md",
+  "TodoId": "PLAN-TRIAGELEFTOVER-001",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 93,
+  "Completeness": 92,
+  "Counts": {
+    "PASS": 20,
+    "FAIL": 1,
+    "UNKNOWN": 0
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "summary": "Unmarked outside-root filesModified/commits rejected; documented markers accepted; forward-only." },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "summary": "replace_section budgeted SaveChanges, tracker clear, HTTP/tool retryable true via McpErrorClassifier; no new availability, health, or global requestId unique." },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "summary": "Independent worktree filter Failed 0 Passed 11 Skipped 0 EXIT 0." },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "summary": "Independent worktree broad filter Failed 0 Passed 38 Skipped 0 EXIT 0." },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "summary": "BUG-TRIAGE-108, BUG-TRIAGE-144, PLAN-TRIAGELEFTOVER-001 Done=false." },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "summary": "plugins/core not in worktree dirty list or develop/HEAD diffs." },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "summary": "H0 leftover AGREE exists; tests independently green; no timestamp archaeology FAIL." },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "summary": "Collectors re-ran tests and store/source greps." },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "summary": "MCP-only TODO/session/requirements." },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "summary": "pwsh.exe collectors; no Python." },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "summary": "Implementer 11/38 counts matched this re-run." },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "summary": "No unexpected deletes." },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "summary": "SESSIONATTR FR/TR/TEST plus TRIAGEERR for 144 discovered from MCP list." },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "summary": "Structured AC present on SESSIONATTR and TRIAGEERR." },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "summary": "AC path-based and testable; SHA-only documented as unprovable." },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "summary": "Named tests cover SESSIONATTR path AC and 144 retryable envelopes." },
+    { "id": "C5", "surface": "C", "verdict": "PASS", "summary": "Mappings 1:1 SESSIONATTR and TRIAGEERR." },
+    { "id": "D1", "surface": "D", "verdict": "FAIL", "summary": "S3 product files are uncommitted; HEAD 400d881b merge would not ship 108/144." },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "summary": "113 not claimed done; PLAN remains open." },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "summary": "108/144/PLAN Done=false." },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "summary": "Named 11 and 38 filters match plan S3 named tests for 108/144." }
+  ],
+  "FailList": [
+    "D1: triage/session-store HEAD 400d881b does not contain the S3 product files. 108/144 live only as uncommitted worktree changes. Merge of the current branch tip would not ship SESSIONATTR validation or replace_section tracker-clear. Commit the dirty set before any merge or done:true."
+  ],
+  "UnknownList": [],
+  "TestNarrow": {
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 11,
+    "skipped": 0,
+    "log": "docs/receipts/_hv-g3s3-222946Z/tests-narrow.txt",
+    "trx": "docs/receipts/_hv-g3s3-222946Z/tests-narrow.trx"
+  },
+  "TestBroad": {
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 38,
+    "skipped": 0,
+    "log": "docs/receipts/_hv-g3s3-222946Z/tests-broad.txt",
+    "trx": "docs/receipts/_hv-g3s3-222946Z/tests-broad.trx"
+  },
+  "Todos": {
+    "BUG-TRIAGE-108": false,
+    "BUG-TRIAGE-144": false,
+    "PLAN-TRIAGELEFTOVER-001": false
+  },
+  "Markdown": "docs/receipts/hostile-validator-20260819T223912Z.md",
+  "Json": "docs/receipts/hostile-validator-20260819T223912Z.json"
+}

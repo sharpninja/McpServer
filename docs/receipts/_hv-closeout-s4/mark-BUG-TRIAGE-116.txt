@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260819T220108Z-3aa7
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-116
+      title: sessionlog_query and sessionlog_submit fail with SQL 'Invalid column name' errors (AgentExecutablePath/AgentExecutableVersion/AgentSessionId/AgentSessionTranscriptFile)
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - "Every call to mcp__mcpserver__sessionlog_query and mcp__mcpserver__sessionlog_submit for workspace F:\\GitHub\\TruckMate now fails immediately with the same SQL error: \"Invalid column name 'AgentExecutablePath'. Invalid column name 'AgentExecutableVersion'. Invalid column name 'AgentSessionId'. Invalid column name 'AgentSessionTranscriptFile'.\" This reproduces on a bare sessionlog_query with no filters at all, and on sessionlog_submit with a minimal single-turn payload plus a full-size payload, so it is not a payload-size or content issue - the underlying session-log store/table is missing columns that the current server code expects (looks like a pending EF migration that was never applied, or a migration that was applied against a different schema version). This completely blocks PLAN-SESSIONPARITY-001 turn-parity backfill work for session ClaudeCode-20260627T205942Z-todo-review-routing (and likely every other session in this workspace) since no session log read or write succeeds."
+      - 'Triage group: triage-group-fae84f788626beff'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Investigate and resolve the grouped triage report.'
+      - '- Add or update validation that proves the triage issue is fixed.'
+      - '- Verify the workflow no longer reproduces this triage report.'
+      - 'Implementation notes:'
+      - '- Fallback TODO created because successful triage research output contained no JSON object.'
+      - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+      - '- Raw triage research output is preserved on run triage-run-90b4273c25034cf2842249d3c9da4418.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T215323Z.md. Merged triage/closeout as 400d881b. Named tests 13/0/0 including Sqlite MigrateAsync, SqlServer LocalDB apply, Postgres initdb apply. Session GrokCode-20260819T214401Z-hostile-closeout-s4.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

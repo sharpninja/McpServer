@@ -1,0 +1,8 @@
+id: BUG-TRIAGE-107
+done: true
+doneSummary: >-
+  Closeout AGREE docs/receipts/hostile-validator-20260819T184513Z.md.
+  Build.SyncAgentPlugins.cs uses version-less sharpninja-mcpserver-plugin-core.tgz
+  and asserts npm pack against package.json. SyncAgentPluginsVendorNameTests 3/0/0.
+  Live npm pack --dry-run filename sharpninja-mcpserver-plugin-core-0.2.0.tgz.
+  Session GrokCode-20260819T183701Z-hostile-g11-closeout.

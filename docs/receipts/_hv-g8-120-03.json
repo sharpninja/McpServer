@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-08-19T18:51:38Z",
+  "CacheDir": "F:\\GitHub\\McpServer\\.mcpServer\\default",
+  "FailsafeDir": "F:\\GitHub\\McpServer\\.mcpServer\\default\\failsafe",
+  "QuarantineDir": "F:\\GitHub\\McpServer\\.mcpServer\\default\\failsafe\\quarantine",
+  "PendingDir": "F:\\GitHub\\McpServer\\.mcpServer\\default\\pending",
+  "PendingCount": 0,
+  "KindCounts": {
+    "session_submit": 0,
+    "503-or-backend_unavailable": 0,
+    "timeout": 0,
+    "other": 0
+  },
+  "Items": []
+}

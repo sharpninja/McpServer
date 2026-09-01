@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20260820T125827Z-dcf4
+  result:
+    id: FR-HANDOFF-004
+    title: Support DraftOnly, RequireReview, and CreateWhenConfident modes
+    description: Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+    status: in_progress
+    priority: high
+    area: HANDOFF
+    notes: MCP-HANDOFF-001 ingestion modes.
+    acceptanceCriteria:
+    - id: ac-fr-handoff-004-default
+      text: DraftOnly is the default and never mutates TODO state.
+      isSatisfied: false
+    - id: ac-fr-handoff-004-review
+      text: RequireReview persists an approvable run without creating a TODO.
+      isSatisfied: false
+    - id: ac-fr-handoff-004-create
+      text: CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-20T12:58:27.9046329+00:00
+    updatedAt: 2026-08-20T12:58:27.9047471+00:00
+  deprecated: true
+
+---
+

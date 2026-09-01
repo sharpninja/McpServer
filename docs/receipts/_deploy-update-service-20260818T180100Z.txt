@@ -1,0 +1,159 @@
+V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
+V |                      | HandleReSharperSurrogateArguments.OnBuildCreated (150)
+V |                      | InjectParameterValues.OnBuildCreated (100)
+V |                      | HandleShellCompletion.OnBuildCreated (75)
+V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
+V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
+V |                      | UpdateNotification.OnBuildCreated (10)
+V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
+V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
+V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
+V |                      | HandlePlanRequests.OnBuildInitialized (10)
+V |                      | HandleHelpRequests.OnBuildInitialized (5)
+V |                      | Telemetry.OnBuildInitialized (0)
+V |                      | Sending BuildStarted telemetry event ...
+V |                      |   build_components         = 
+V |                      |   build_type               = Project
+V |                      |   compile_time             = <null>
+V |                      |   config_generators        = 
+V |                      |   host                     = Terminal
+V |                      |   num_custom_components    = 0
+V |                      |   num_custom_extensions    = 0
+V |                      |   num_partitioned_targets  = 0
+V |                      |   num_secrets              = 0
+V |                      |   num_targets              = 33
+V |                      |   os_architecture          = X64
+V |                      |   os_platform              = Windows
+V |                      |   repo_branch              = develop
+V |                      |   repo_commit              = 594f74
+V |                      |   repo_provider            = GitHub
+V |                      |   repo_url                 = 5da037
+V |                      |   target_framework         = .NETCoreApp,Version=v10.0
+V |                      |   version_dotnet_sdk       = 10.0.400
+V |                      |   version_nuke_common      = 9.0.4
+V |                      |   version_nuke_global_tool = <null>
+V |                      | InjectNonParameterValues.OnBuildInitialized (-100)
+V |                      | EventInvoker.OnBuildInitialized (-3.4028235E+38)
+V | UpdateService        | EventInvoker.OnTargetRunning (-3.4028235E+38)
+I | UpdateService        | >> 1/8  Stopping service 'McpServer' ...
+I | UpdateService        |   Service stopped.
+I | UpdateService        |   Deployment version: 1.4.26
+I | UpdateService        | >> 2/8  Backing up config and data files ...
+I | UpdateService        |   Data folder: C:\ProgramData\McpServer-Data
+I | UpdateService        |   Backed up data items: docs, graphrag-global, mcp-data, mcp.db, mcp.db.migrated, templates
+I | UpdateService        |   Backed up config files: appsettings.yaml
+I | UpdateService        |   Archived to: C:\Users\kingd\McpServer-Backups\McpServer-backup-20260818-130051135.zip
+I | UpdateService        | >> 3/8  Publishing new build ...
+I | UpdateService        | > "C:\Program Files\dotnet\dotnet.exe" publish F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26 --output C:\Users\kingd\AppData\Local\Temp\McpServer-publish-stage
+V | UpdateService        | @ F:\GitHub\McpServer
+D | UpdateService        |   Determining projects to restore...
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Client\McpServer.Client.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 480 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 582 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 582 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Storage\McpServer.Storage.csproj (in 587 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 602 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 664 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 669 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj (in 675 ms).
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 675 ms).
+D | UpdateService        |   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Release\net10.0\McpServer.Common.AgentCli.dll
+D | UpdateService        |   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Release\net10.0\McpServer.Cqrs.dll
+D | UpdateService        |   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Release\net10.0\McpServer.ServiceDefaults.dll
+D | UpdateService        |   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Release\net10.0\McpServer.SessionLog.Transcripts.dll
+D | UpdateService        |   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Release\net10.0\McpServer.TransactionSecurity.dll
+D | UpdateService        |   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Release\net10.0\McpServer.Cqrs.Mvvm.dll
+D | UpdateService        |   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Release\net10.0\McpServer.Storage.dll
+D | UpdateService        |   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Release\net10.0\McpServer.Storage.SqliteMigrations.dll
+D | UpdateService        |   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Release\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+D | UpdateService        |   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Release\net10.0\McpServer.Storage.SqlServerMigrations.dll
+D | UpdateService        |   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Release\net10.0\McpServer.Client.dll
+D | UpdateService        |   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Release\net10.0\McpServer.Repl.Core.dll
+D | UpdateService        |   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Release\net10.0\McpServer.McpAgent.dll
+D | UpdateService        |   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Release\net10.0\McpServer.Services.dll
+D | UpdateService        |   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Release\net10.0\McpServer.GraphRag.dll
+D | UpdateService        |   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Release\net10.0\win-x64\McpServer.Support.Mcp.dll
+D | UpdateService        |   McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\McpServer-publish-stage\
+I | UpdateService        | > "C:\Program Files\dotnet\dotnet.exe" publish F:\GitHub\McpServer\src\McpServer.Launcher\McpServer.Launcher.csproj --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26 --output C:\Users\kingd\AppData\Local\Temp\McpServer-launcher-stage
+V | UpdateService        | @ F:\GitHub\McpServer
+D | UpdateService        |   Determining projects to restore...
+D | UpdateService        |   Restored F:\GitHub\McpServer\src\McpServer.Launcher\McpServer.Launcher.csproj (in 312 ms).
+D | UpdateService        |   McpServer.Launcher -> F:\GitHub\McpServer\src\McpServer.Launcher\bin\Release\net10.0-windows\win-x64\McpServer.Launcher.dll
+D | UpdateService        |   McpServer.Launcher -> C:\Users\kingd\AppData\Local\Temp\McpServer-launcher-stage\
+I | UpdateService        |   Cleaning stale files before copy ...
+I | UpdateService        |   Removed stale items: 4 file(s), 6 directories
+I | UpdateService        |   Brain-slot config deployed: C:\ProgramData\McpServer\config\brain-slots\quad-brain-slot-assignments.yaml
+I | UpdateService        |   Launcher sidecar present: C:\ProgramData\McpServer\McpServer.Launcher.exe
+I | UpdateService        |   Publish complete.
+I | UpdateService        | >> 4/8  Restoring config and data files ...
+I | UpdateService        |   Restored config files: appsettings.yaml
+I | UpdateService        |   Restored data folder: C:\ProgramData\McpServer-Data
+I | UpdateService        |   Restored data items: docs, graphrag-global, mcp-data, mcp.db, mcp.db.migrated, templates
+I | UpdateService        | >> 5/9  Ensuring service registration ...
+I | UpdateService        |   Deployment manifest: C:\ProgramData\McpServer\.mcpservice-deployment.json
+I | UpdateService        | >> 6/9  Starting service 'McpServer' ...
+I | UpdateService        |   Service status: Running
+I | UpdateService        | >> 7/9  Verifying health on port 7147 ...
+I | UpdateService        |   Health: HTTP 200 - {"status":"Healthy","version":"1.4.26\u002B298c5fde3d1438ff7741ebec82ced796b207433e","checks":[{"name":"self","status":"Healthy","description":null,"duration":1.1189},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":2.1955}],"storage":"reachable"}
+I | UpdateService        | >> 8/9  Verifying workspace health checks from deployed config ...
+I | UpdateService        |   Health: HTTP 200 - {"status":"Healthy","version":"1.4.26\u002B298c5fde3d1438ff7741ebec82ced796b207433e","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.1109},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0742}],"storage":"reachable"}
+I | UpdateService        |   OK Avalonia.RemoteControl [] F:\GitHub\Avalonia.RemoteControl
+I | UpdateService        |   OK BBCrawler [] F:\GitHub\BBCrawler
+I | UpdateService        |   OK BodyAndBrain.Engine [] F:\GitHub\BodyAndBrain.Engine
+I | UpdateService        |   OK C:\Users\kingd\OneDrive\Documents\PowerShell\Snippets [] C:\Users\kingd\OneDrive\Documents\PowerShell\Snippets
+I | UpdateService        |   OK CbmEngine [] F:\GitHub\CbmEngine
+I | UpdateService        |   OK EternalDiscord [] F:\GitHub\EternalDiscord
+I | UpdateService        |   OK EternalReddit [] F:\GitHub\EternalReddit
+I | UpdateService        |   OK EternalSocial [] F:\GitHub\EternalSocial
+I | UpdateService        |   OK EternalX.Blazor [] F:\GitHub\EternalX.Blazor
+I | UpdateService        |   OK F:\GitHub\aiUnit [] F:\GitHub\aiUnit
+I | UpdateService        |   OK F:\GitHub\bitnet-b1.58-sharp [] F:\GitHub\bitnet-b1.58-sharp
+I | UpdateService        |   OK F:\GitHub\FunWasHad [] F:\GitHub\FunWasHad
+I | UpdateService        |   OK F:\GitHub\MarkdownServer\AspNetServices [] F:\GitHub\MarkdownServer\AspNetServices
+I | UpdateService        |   OK F:\GitHub\McpServer [] F:\GitHub\McpServer
+I | UpdateService        |   OK F:\GitHub\McpServerManager [] F:\GitHub\McpServerManager
+I | UpdateService        |   OK F:\GitHub\TruckMate [] F:\GitHub\TruckMate
+I | UpdateService        |   OK F:\GitHub\vice-sharp [] F:\GitHub\vice-sharp
+I | UpdateService        |   OK FeatureFlags [] F:\GitHub\FeatureFlags
+I | UpdateService        |   OK global [] 
+I | UpdateService        |   OK GrokOS [] F:\GitHub\GrokOS
+I | UpdateService        |   OK ImageArchive [] F:\GitHub\ImageArchive
+I | UpdateService        |   OK LlamaDeck [] F:\GitHub\LlamaDeck
+I | UpdateService        |   OK LyftAuditTools [] F:\GitHub\LyftAuditTools
+I | UpdateService        |   OK McpServer [] C:\ProgramData\McpServer
+I | UpdateService        |   OK mcpserver-opencode-plugin [] F:\GitHub\mcpserver-opencode-plugin
+I | UpdateService        |   OK MouseKeyProxy [] F:\GitHub\MouseKeyProxy
+I | UpdateService        |   OK MouseKeyProxy-Fresh [] f:\github\MouseKeyProxy-Fresh
+I | UpdateService        |   OK NinjaTrader [] F:\GitHub\NinjaTrader
+I | UpdateService        |   OK RedditPublish [] F:\GitHub\RedditPublish
+I | UpdateService        |   OK repairs [] F:\GitHub\repairs
+I | UpdateService        |   OK RiskyStars [] F:\GitHub\RiskyStars
+I | UpdateService        |   OK RomM [] F:\GitHub\RomM
+I | UpdateService        |   OK SharpNinja.Valhalla [] F:\GitHub\SharpNinja.Valhalla
+I | UpdateService        |   OK SharpNinja.Valhalla.Avalonia [] F:\GitHub\SharpNinja.Valhalla.Avalonia
+I | UpdateService        |   OK SharpNinjaHome [] F:\GitHub\SharpNinjaHome
+I | UpdateService        |   OK TCS2 [] F:\GitHub\TCS2
+I | UpdateService        |   OK think-coach [] C:\Users\kingd\Downloads\think-coach
+I | UpdateService        |   OK valhalla-dotnet [] F:\github\valhalla-dotnet
+I | UpdateService        | >> 9/9  Cleanup ...
+I | UpdateService        |   Backup directory removed.
+I | UpdateService        | 
+I | UpdateService        | === Update complete ===
+I | UpdateService        |   Service : McpServer (Running)
+I | UpdateService        |   Path    : C:\ProgramData\McpServer
+I | UpdateService        |   Health  : OK
+I | UpdateService        |   WSHealth: OK (38/38)
+I | UpdateService        |   Config  : 1 restored, 1 backed up
+I | UpdateService        |   Data    : 6 restored item(s), 6 backed up item(s)
+I | UpdateService        |   Archive : C:\Users\kingd\McpServer-Backups\McpServer-backup-20260818-130051135.zip
+V | UpdateService        | Telemetry.OnTargetSucceeded (0)
+V | UpdateService        | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+V |                      | UpdateNotification.OnBuildFinished (10)
+V |                      | SerializeBuildServerState.OnBuildFinished (0)
+V |                      | EventInvoker.OnBuildFinished (-3.4028235E+38)

@@ -1,0 +1,17 @@
+turnRequestId: req-20260821T020907Z-001-s7-hdone-a10-rescore
+queryTitle: Hostile S7 H-done A10 rescore
+openedAt: 2026-08-21T02:09:24Z
+status: completed
+sessionId: GrokCode-20260821T020909Z-plugin-session
+codeEdits: 7
+lastBuildStatus: unknown
+auditActions: 7
+auditDialog: 4
+auditDecisions: 1
+auditFiles: 7
+auditCommits: 0
+queryText: Rescore A10 timer 01a0218b0965 from parent scheduler_list JSON. Do not mark any MCP TODO done true. Do not delete the timer.
+planFile: docs/plans/sessionlog-remediate-001.md
+todoId: PLAN-SESSIONLOGREMEDIATE-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-20T08:12:30.1326876Z

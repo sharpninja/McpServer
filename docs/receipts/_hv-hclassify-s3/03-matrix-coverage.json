@@ -1,0 +1,14 @@
+{
+  "invOpenCount": 40,
+  "invOpenIdsCount": 40,
+  "matrixCountField": 40,
+  "matrixItemsCount": 40,
+  "scratchMatrixCount": 40,
+  "scratchItemsCount": 40,
+  "missingFromMatrix": [],
+  "extraInMatrix": [],
+  "duplicateIds": [],
+  "leftoverInOpen": false,
+  "leftoverInMatrix": false,
+  "leftoverDoneFlagInInv": true
+}

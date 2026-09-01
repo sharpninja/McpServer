@@ -1,0 +1,45 @@
+id: MCP-SESSIONLOG-001
+done: true
+doneSummary: 'S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md (A10 rescore; prior 20260821T020355Z DISAGREE FAIL empty). Named tests Failed 0 Skipped 0: Pester TEST-MCP-195 4, unit sanitizer+persist 42, integration S15/S16 2, planFile/todoId 30, ValidateTraceability Succeeded. Persist merged 4605eab6/0e0c5763. Sanitizer merged ee89cd63/d54f4e32. Live planFile/todoId on hosted 20db61aa. Plugin HMAC 1.97.0. HEAD ee89cd63.'
+remaining: Closed after S7 H-done AGREE docs/receipts/hostile-validator-20260821T020957Z.md.
+implementationTasks:
+  - Task: S0 [Planning] Persist FR-MCP-SESSIONLOGSAN-001, TR-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-001, their mapping, and TODO requirement links through the MCP plugins.
+    Done: true
+  - Task: S1 [Red] Add SessionLogSanitizationOptionsValidatorTests
+    Done: true
+  - Task: S2 [Green] Add SessionLogSanitizationOptions and validator
+    Done: true
+  - Task: S3 [Red] Add SessionLogSanitizerTests
+    Done: true
+  - Task: S4 [Red] Add DTO graph tests
+    Done: true
+  - Task: S5 [Red] Add recursive payload tests
+    Done: true
+  - Task: S6 [Green] Define ISessionLogSanitizer
+    Done: true
+  - Task: S7 [Green] Implement SessionLogSanitizer
+    Done: true
+  - Task: S8 [Green] Implement explicit DTO cloning
+    Done: true
+  - Task: S9 [Red] Add timeout-path tests
+    Done: true
+  - Task: S10 [Green] On regex timeout redact fail-closed
+    Done: true
+  - Task: S11 [Red] Add SessionLogSanitizingServiceTests
+    Done: true
+  - Task: S12 [Green] Implement SessionLogSanitizingService decorator
+    Done: true
+  - Task: S13 [Red] Extend FederatedSessionLogService tests to prove local and remote items are both sanitized after merge
+    Done: true
+  - Task: S14 [Green] Register SessionLogSanitizingService as the outermost HTTP/federation decorator in Program.cs and as the outermost stdio decorator in McpStdioHost.cs
+    Done: true
+  - Task: S15 [Red] Extend SessionLogController integration tests with a raw secret fixture
+    Done: true
+  - Task: S16 [Red] Add query-semantics cases proving a secret-containing raw record still participates in text filtering
+    Done: true
+  - Task: S17 [Integration] Add stdio tools/list plus sessionlog query/get invocations and a federated remote fixture
+    Done: true
+  - Task: S18 [Config/Docs] Add Mcp:SessionLogSanitization configuration examples
+    Done: true
+  - Task: S19 [Gate] Run sanitizer/options/service tests, Support.Mcp tests, HTTP integration tests, stdio/federation scopes
+    Done: true

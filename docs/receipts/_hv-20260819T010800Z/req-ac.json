@@ -1,0 +1,326 @@
+{
+  "frs": [
+    {
+      "Id": "FR-MCP-SESSIONLOGCTX-001",
+      "Status": "pending",
+      "Priority": "medium",
+      "ac": [
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+          "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+          "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+          "text": "The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. No turn row is inserted.",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+          "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+          "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+          "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+          "isSatisfied": false
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+          "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGE-001",
+      "Status": "planned",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "FR-MCP-TRIAGE-001-AC001",
+          "text": "REST, client, REPL, and plugin tool paths all accept the same report contract.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-001-AC002",
+          "text": "Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-001-AC003",
+          "text": "Intake does not run research or create a TODO synchronously.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGE-002",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "FR-MCP-TRIAGE-002-AC001",
+          "text": "Groups are deterministic and workspace-isolated.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC002",
+          "text": "New matching reports reset the 15-minute quiet window.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC003",
+          "text": "A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC004",
+          "text": "Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-002-AC005",
+          "text": "MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGE-003",
+      "Status": "planned",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "FR-MCP-TRIAGE-003-AC001",
+          "text": "client.triage.* works through generic passthrough after adding McpServerClient.Triage.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-003-AC002",
+          "text": "workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-003-AC003",
+          "text": "YAML validation, error envelopes, and request/response shapes are covered.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGE-004",
+      "Status": "planned",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "FR-MCP-TRIAGE-004-AC001",
+          "text": "Each plugin skill bundle includes triage guidance.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-004-AC002",
+          "text": "Skills say to use triage for incidental bugs, not for the user active requested fix.",
+          "isSatisfied": false
+        },
+        {
+          "id": "FR-MCP-TRIAGE-004-AC003",
+          "text": "Skills explicitly say not to expect immediate resolution and to continue the current task after submission.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGEERR-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGEHELP-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGEPLUGIN-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGEREQ-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGESCHEMA-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGESTORE-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGESTORE-002",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.",
+          "isSatisfied": false
+        }
+      ]
+    },
+    {
+      "Id": "FR-MCP-TRIAGETODO-001",
+      "Status": "pending",
+      "Priority": "high",
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.",
+          "isSatisfied": false
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-001",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.",
+          "len": 207
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-002",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.",
+          "len": 156
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-003",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.",
+          "len": 148
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-004",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Turn status canceled and cancelled persist via submit and re-query with the same status.",
+          "len": 88
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-005",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.",
+          "len": 110
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-006",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.",
+          "len": 95
+        }
+      ]
+    },
+    {
+      "Id": "TEST-MCP-TRIAGESTORE-007",
+      "Status": "pending",
+      "isSatisfiedHint": false,
+      "ac": [
+        {
+          "id": "ac-1",
+          "text": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.",
+          "len": 121
+        }
+      ]
+    }
+  ]
+}

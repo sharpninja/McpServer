@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181823Z-f157
+  result:
+    id: TEST-MCP-STRICTCOUNT-001
+    title: Test TEST-MCP-STRICTCOUNT-001
+    description: Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-1
+      text: Named tests cover TEST-MCP-STRICTCOUNT-001 acceptance criteria
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:18:24.4263181+00:00
+    updatedAt: 2026-08-19T18:18:24.4264569+00:00
+  deprecated: true
+
+---

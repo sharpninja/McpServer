@@ -96,6 +96,15 @@ public interface IRequirementsWorkflow
     Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// FR-MCP-PRODUCT-003: Effective requirements with an explicit product scope.
+    /// </summary>
+    /// <param name="layerKey">Optional preview layer key.</param>
+    /// <param name="productScope"><c>product</c> (default) or <c>local</c>.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The effective requirements for the resolved layer and product scope.</returns>
+    Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey, string? productScope, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Lists all functional requirements with optional filtering.
     /// </summary>
     /// <param name="area">Optional area filter (e.g., "MCP", "AUTH", "API").</param>

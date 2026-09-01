@@ -1,0 +1,5 @@
+{
+  "StatusCode": 400,
+  "Body": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"Invalid turn payload.\",\"status\":400,\"detail\":\"Invalid session turn planFile/todoId: planFile is omitted. (Parameter 'planFile')\",\"traceId\":\"00-012650a7f0385f0b501ef87f5b51f256-b1b76e7e22a3dc4e-01\"}",
+  "Exception": "Response status code does not indicate success: 400 (Bad Request)."
+}

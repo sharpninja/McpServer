@@ -140,6 +140,11 @@ public interface IErrorPayload
     string Message { get; }
 
     /// <summary>
+    /// FR-MCP-TRIAGEERR-001: whether the caller should retry the command.
+    /// </summary>
+    bool Retryable { get; }
+
+    /// <summary>
     /// Gets optional additional error details or context.
     /// </summary>
     IReadOnlyDictionary<string, object?>? Details { get; }

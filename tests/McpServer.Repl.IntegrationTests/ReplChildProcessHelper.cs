@@ -805,15 +805,19 @@ public sealed class ReplChildProcessHelper : IDisposable
     }
 
     private static bool IsTopLevelDocumentStart(string line) =>
-        line.StartsWith("type:", StringComparison.Ordinal);
+        line.StartsWith("type:", StringComparison.Ordinal)
+        || line.StartsWith('{');
 
     private static bool IsFinalResponseForRequest(string document, string requestId)
     {
         return (document.Contains("type: result", StringComparison.Ordinal)
-                || document.Contains("type: error", StringComparison.Ordinal))
+                || document.Contains("type: error", StringComparison.Ordinal)
+                || document.Contains("\"type\":\"result\"", StringComparison.Ordinal)
+                || document.Contains("\"type\":\"error\"", StringComparison.Ordinal))
                && (document.Contains($"requestId: {requestId}", StringComparison.Ordinal)
                    || document.Contains($"requestId: \"{requestId}\"", StringComparison.Ordinal)
-                   || document.Contains($"requestId: '{requestId}'", StringComparison.Ordinal));
+                   || document.Contains($"requestId: '{requestId}'", StringComparison.Ordinal)
+                   || document.Contains($"\"requestId\":\"{requestId}\"", StringComparison.Ordinal));
     }
 
     private static int CountLeadingSpaces(string line)

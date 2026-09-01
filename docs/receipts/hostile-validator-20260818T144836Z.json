@@ -1,0 +1,190 @@
+{
+  "TimestampUtc": "2026-08-18T14:48:36Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 2 / H2-red only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 94,
+  "completenessRating": 93,
+  "sessionId": "GrokCode-20260818T144345Z-h2-red-products",
+  "requestId": "req-20260818T144345Z-001-hostile-h2-red-products",
+  "turnId": 41735,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.93.0",
+    "versionFile": "1.93.0"
+  },
+  "markerSignature": true,
+  "healthNonceThisReview": "f000132493204442bb61d5673b0d3a8d",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "productTestFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Products|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductEntityTests|FullyQualifiedName~McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests",
+    "utcStart": "2026-08-18T14:45:14.8561398Z",
+    "utcEnd": "2026-08-18T14:45:49.8039343Z",
+    "exitCode": 1,
+    "failed": 8,
+    "passed": 24,
+    "skipped": 0,
+    "total": 32,
+    "failureError": "not implemented",
+    "failedTests": [
+      "HandleAsync_ProductScope_UnionsSiblingRows",
+      "HandleAsync_LocalScope_HidesSiblings",
+      "HandleAsync_Collision_ReturnsTwoOrigins",
+      "HandleAsync_OriginLayerMiss_ExcludesSiblingRow",
+      "HandleAsync_AfterLeave_DropsSibling",
+      "HandleAsync_Outsider_IsLocalOnly",
+      "HandleAsync_LocalDeleteSiblingOnlyId_LeavesSiblingRow",
+      "HandleAsync_ZeroProductWorkspace_StaysLocal"
+    ]
+  },
+  "implementerCopyPath": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-18747a5af710\\implementer\\product-share-h2-red.txt",
+  "implementerCopyTrusted": false,
+  "priorH1GreenReceipt": "docs/receipts/hostile-validator-20260818T143053Z.md",
+  "priorH1GreenOverallVerdict": "AGREE",
+  "priorH1RedReceipt": "docs/receipts/hostile-validator-20260818T140630Z.md",
+  "priorH1RedOverallVerdict": "AGREE",
+  "h0Receipt": "docs/receipts/hostile-validator-20260818T132341Z.md",
+  "h0OverallVerdict": "AGREE",
+  "todoDone": false,
+  "approvedPlanSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "sessionPlanSha256": "0D73B5C6B754DEC494F4EAB445AD2A6EEB73D2F2923260366E07D4A9351FD92C",
+  "toolsListUniqueNameCount": 106,
+  "failList": [],
+  "unknownList": [
+    "Full ./build.ps1 Test not run; not required for H2-red.",
+    "Official FullyQualifiedName~Product filter not re-run; implementer claimed the focused three-clause filter.",
+    "Existing RequirementScopeLayerServiceTests not extended for zero-product; covered in the new handler-test file.",
+    "LocalDelete test does not issue a delete; FR-004 ac-3 update-fr remains untested and is not an H2-red named attack.",
+    "GetProductEffectiveRequirementsQueryHandler is not registered in AddProductCqrs; expected for a red stub."
+  ],
+  "claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Phase 2 red tests exist with the eight named cases; LocalDelete is a weaker no-mutation proxy."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Handler still Failure(not implemented); no share helper; implicit parameterless constructor."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Focused filter Failed 8 Passed 24 Skipped 0; eight share tests fail not implemented; 24 Phase 1 green."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "MCP-PRODUCTS-001 Done=false; Phase 3-5 files absent."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Honesty: claims match artifacts; DTO ProductKeys and stub ctor disclosed."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Receipts independently re-run."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP-only storage via native sessionlog_*/todo_*/requirements_*."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh.exe only; no Python."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No deletes."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Byrd H2-red: H0/H1-red/H1-green AGREE exist; share tests red for stub; share not implemented."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR/TR/TEST PRODUCT IDs exist in the store."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-003/004 structured ACs exist and remain unsatisfied."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "H2-red named ACs have red tests; FR-004 ac-3 update-fr not required at this gate."
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-003/004 mappings match the approved plan."
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Store statuses remain pending; not marked completed."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "H2-red checkpoint met; full DoD not claimed."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Phase 3-5 not started; TODO remains Done=false."
+    }
+  ],
+  "sessionLogProof": {
+    "queryTotalCount": 1,
+    "sessionId": "GrokCode-20260818T144345Z-h2-red-products",
+    "requestId": "req-20260818T144345Z-001-hostile-h2-red-products",
+    "turnId": 41735,
+    "turnStatus": "completed",
+    "sessionStatus": "in_progress",
+    "actionCount": 7,
+    "dialogCount": 4,
+    "decisionDialogCount": 1,
+    "responseStartsWith": "OverallVerdict AGREE"
+  }
+}

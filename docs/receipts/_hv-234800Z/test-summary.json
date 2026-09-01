@@ -1,0 +1,128 @@
+[
+  {
+    "log": "budget.log",
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0,
+    "total": 2,
+    "lastLines": "Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 5 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "build-cache.log",
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0,
+    "total": 2,
+    "lastLines": "Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 114 ms - Build.Tests.dll (net10.0)",
+    "length": 521
+  },
+  {
+    "log": "classifier.log",
+    "failed": 0,
+    "passed": 5,
+    "skipped": 0,
+    "total": 5,
+    "lastLines": "Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 46 ms - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2576
+  },
+  {
+    "log": "exec-help.log",
+    "failed": 0,
+    "passed": 4,
+    "skipped": 0,
+    "total": 4,
+    "lastLines": "Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "hung-save.log",
+    "failed": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1,
+    "lastLines": "Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 6 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "pester.log",
+    "failed": null,
+    "passed": null,
+    "skipped": null,
+    "total": null,
+    "lastLines": "",
+    "length": 1822
+  },
+  {
+    "log": "repl-classifier.log",
+    "failed": 0,
+    "passed": 10,
+    "skipped": 0,
+    "total": 10,
+    "lastLines": "Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 235 ms - McpServer.Repl.Core.Tests.dll (net10.0)",
+    "length": 892
+  },
+  {
+    "log": "req-tr.log",
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0,
+    "total": 2,
+    "lastLines": "Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 267 ms - McpServer.Repl.Core.Tests.dll (net10.0)",
+    "length": 892
+  },
+  {
+    "log": "rest.log",
+    "failed": 0,
+    "passed": 4,
+    "skipped": 0,
+    "total": 4,
+    "lastLines": "Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 217 ms - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2577
+  },
+  {
+    "log": "schema.log",
+    "failed": 0,
+    "passed": 4,
+    "skipped": 0,
+    "total": 4,
+    "lastLines": "Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 2 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "store.log",
+    "failed": 0,
+    "passed": 7,
+    "skipped": 0,
+    "total": 7,
+    "lastLines": "Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 7 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "tool-backend.log",
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0,
+    "total": 2,
+    "lastLines": "Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 1 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "tool-envelope.log",
+    "failed": 0,
+    "passed": 3,
+    "skipped": 0,
+    "total": 3,
+    "lastLines": "Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 1 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  },
+  {
+    "log": "triage-unreach.log",
+    "failed": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1,
+    "lastLines": "Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "length": 2574
+  }
+]

@@ -1,0 +1,5 @@
+Test run for F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: F:\GitHub\McpServer\docs\receipts\_hv-g3s3-224825Z\tests-11.trx
+
+Passed!  - Failed:     0, Passed:    11, Skipped:     0, Total:    11, Duration: 6 s - McpServer.Support.Mcp.Tests.dll (net10.0)

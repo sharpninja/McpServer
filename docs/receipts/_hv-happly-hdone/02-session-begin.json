@@ -1,0 +1,31 @@
+{
+  "utc": "20260820T125722Z",
+  "sessionId": "GrokCode-20260820T125722Z-happly-hdone-align",
+  "requestId": "req-20260820T125722Z-001-hostile-apply-done-align",
+  "steps": {
+    "bootstrap": {
+      "method": "workflow.sessionlog.bootstrap",
+      "exitCode": 0,
+      "stdout": "type: result\r\npayload:\r\n  requestId: req-20260820T125730Z-d1a5\r\n  result:\r\n    initialized: true\r\n  deprecated: true\r\n\r\n---\r\n",
+      "length": 125,
+      "isError": false,
+      "has503": false
+    },
+    "openSession": {
+      "method": "workflow.sessionlog.openSession",
+      "exitCode": 0,
+      "stdout": "",
+      "length": 0,
+      "isError": false,
+      "has503": false
+    },
+    "beginTurn": {
+      "method": "workflow.sessionlog.beginTurn",
+      "exitCode": 0,
+      "stdout": "",
+      "length": 0,
+      "isError": false,
+      "has503": false
+    }
+  }
+}

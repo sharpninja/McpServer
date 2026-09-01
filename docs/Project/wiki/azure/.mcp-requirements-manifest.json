@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-08-12T22:29:07.3883998+00:00",
+  "generatedAtUtc": "2026-08-21T11:09:04.4696574+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -27,6 +27,15 @@
     "Onboarding-Human-AI-Partnership.md",
     "Use-Case-Extension-Design-v3.md",
     "Use-Case-Diagram-Mermaid-Schema-v1.md",
-    "Session-Log-Schema.md"
+    "Session-Log-Schema.md",
+    "Handoff-Ingestion.md",
+    "Byrd-Todo-Execution-Spec.md",
+    "Operations/Tunnel-Cloudflare.md",
+    "Operations/Tunnel-FRP-Railway.md",
+    "Operations/Tunnel-Ngrok.md",
+    "TODO-Schema.md",
+    "Action-Types.md",
+    "MCP-Memories.md",
+    "Federation.md"
   ]
 }

@@ -4,10 +4,12 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
 /// <summary>
-/// TR-MCP-TRANSCRIPT-002 / TR-MCP-TRANSCRIPT-003 / TEST-MCP-TRANSCRIPT-011: Codex adapter coverage for
-/// tool-call, reasoning, turn-context, and UI-mirror record classes observed in real Codex CLI rollout
-/// files. Each test writes an inline JSONL fixture to a temp directory and normalizes it through
-/// <see cref="TranscriptIngestionService.CreateDefault"/> with persistence disabled.
+/// TR-MCP-TRANSCRIPT-002 / TR-MCP-TRANSCRIPT-003 / TEST-MCP-TRANSCRIPT-011 / FR-MCP-TRANSCRIPT-SEARCH-001 /
+/// TR-MCP-TRANSCRIPT-SEARCH-001 / TEST-MCP-TRANSCRIPT-SEARCH-001: Codex adapter coverage for tool-call,
+/// reasoning, turn-context, UI-mirror, tool_search, and inter_agent record classes observed in real Codex
+/// CLI rollout files. Each test writes an inline JSONL fixture to a temp directory and normalizes it
+/// through <see cref="TranscriptIngestionService.CreateDefault"/>. Persistence tests use a stub
+/// <see cref="ITranscriptSessionPersister"/>.
 /// </summary>
 public sealed class CodexTranscriptAdapterCoverageTests
 {
@@ -190,6 +192,119 @@ public sealed class CodexTranscriptAdapterCoverageTests
     }
 
     /// <summary>
+    /// TEST-MCP-TRANSCRIPT-SEARCH-001 / TEST-MCP-TRANSCRIPT-011: Verifies top-level
+    /// inter_agent_communication_metadata records from real Codex JSONL are skipped as non-conversation
+    /// metadata with one aggregate info diagnostic and zero unknown-record warnings.
+    /// Fixture shape taken from TruckMate rollout 019f5a3b-a22f-7f01-b440-b187484c35a7
+    /// (payload is only trigger_turn).
+    /// </summary>
+    [Fact]
+    public async Task IngestionService_CodexInterAgentMetadataSkippedWithInfoDiagnostic()
+    {
+        var session = await NormalizeAsync([
+            "{\"timestamp\":\"2026-07-18T11:57:31.848Z\",\"type\":\"inter_agent_communication_metadata\",\"payload\":{\"trigger_turn\":false}}",
+            "{\"timestamp\":\"2026-07-18T11:57:32.848Z\",\"type\":\"inter_agent_communication_metadata\",\"payload\":{\"trigger_turn\":true}}"
+        ]).ConfigureAwait(true);
+
+        Assert.Empty(session.Events);
+        Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Code == "codex_unknown_record");
+        Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Severity == "warning");
+        var aggregate = Assert.Single(session.Diagnostics, diagnostic => diagnostic.Code == "codex_nonconversation_skipped");
+        Assert.Equal("info", aggregate.Severity);
+        Assert.Contains("inter_agent_communication_metadata", aggregate.Message, StringComparison.Ordinal);
+        Assert.Contains("2", aggregate.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRANSCRIPT-SEARCH-001 / TEST-MCP-TRANSCRIPT-011: Verifies tool_search_call and
+    /// tool_search_output response_item payloads from real Codex JSONL normalize to paired assistant
+    /// tool-call and tool-role events with call_id/name/status metadata and zero unknown-response-item
+    /// diagnostics. Fixture shape taken from TruckMate rollout 019f5a3b-a22f-7f01-b440-b187484c35a7:
+    /// object arguments.query plus a truncated tools array (real output records are large namespace dumps).
+    /// </summary>
+    [Fact]
+    public async Task IngestionService_CodexToolSearchCallsBecomePairedAssistantAndToolEvents()
+    {
+        var session = await NormalizeAsync([
+            "{\"timestamp\":\"2026-07-16T11:30:57.816Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"tool_search_call\",\"id\":\"tsc-1\",\"call_id\":\"call-search-1\",\"status\":\"completed\",\"execution\":\"client\",\"arguments\":{\"query\":\"PowerShell.Mcp powershell execute command session\",\"limit\":10}}}",
+            "{\"timestamp\":\"2026-07-16T11:30:57.839Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"tool_search_output\",\"call_id\":\"call-search-1\",\"status\":\"completed\",\"execution\":\"client\",\"tools\":[{\"type\":\"namespace\",\"name\":\"mcp__powershell\",\"description\":\"Tools in the mcp__powershell namespace.\",\"tools\":[{\"type\":\"function\",\"name\":\"get_current_location\",\"description\":\"Retrieves the current location.\"}]}]}}"
+        ]).ConfigureAwait(true);
+
+        Assert.Equal(2, session.Events.Count);
+        Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Code == "codex_unknown_response_item");
+        Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Severity == "warning");
+        var call = session.Events[0];
+        Assert.Equal("assistant", call.Role);
+        Assert.Equal("tool_search_call", call.NativeType);
+        Assert.Equal("call-search-1", call.Metadata["call_id"]);
+        Assert.Equal("completed", call.Metadata["status"]);
+        Assert.Equal("tool_search_call", call.Metadata["name"]);
+        Assert.Contains("PowerShell.Mcp powershell execute command session", JoinText(call), StringComparison.Ordinal);
+        var output = session.Events[1];
+        Assert.Equal("tool", output.Role);
+        Assert.Equal("tool_search_output", output.NativeType);
+        Assert.Equal("call-search-1", output.Metadata["call_id"]);
+        Assert.Equal("completed", output.Metadata["status"]);
+        Assert.Contains("mcp__powershell", JoinText(output), StringComparison.Ordinal);
+        Assert.Contains("get_current_location", JoinText(output), StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRANSCRIPT-SEARCH-001: Verifies a successful Persist=true ingest of a fixture containing
+    /// inter_agent_communication_metadata, tool_search_call, and tool_search_output deletes the
+    /// importRecovery envelope and reports persisted=true degraded=false, with zero unknown diagnostics
+    /// for those record classes.
+    /// </summary>
+    [Fact]
+    public async Task IngestionService_CodexToolSearchAndInterAgentPersistDeletesImportRecovery()
+    {
+        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-search", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempWorkspace);
+        try
+        {
+            var persister = new SucceedingTranscriptPersister();
+            var result = await IngestAsync(
+                [
+                    "{\"timestamp\":\"2026-07-18T11:57:31.848Z\",\"type\":\"inter_agent_communication_metadata\",\"payload\":{\"trigger_turn\":false}}",
+                    "{\"timestamp\":\"2026-07-16T11:30:57.816Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"tool_search_call\",\"id\":\"tsc-1\",\"call_id\":\"call-search-1\",\"status\":\"completed\",\"execution\":\"client\",\"arguments\":{\"query\":\"PowerShell.Mcp powershell execute command session\",\"limit\":10}}}",
+                    "{\"timestamp\":\"2026-07-16T11:30:57.839Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"tool_search_output\",\"call_id\":\"call-search-1\",\"status\":\"completed\",\"execution\":\"client\",\"tools\":[{\"type\":\"namespace\",\"name\":\"mcp__powershell\",\"tools\":[{\"type\":\"function\",\"name\":\"get_current_location\"}]}]}}"
+                ],
+                persist: true,
+                persister,
+                tempWorkspace,
+                agent: "Codex").ConfigureAwait(true);
+
+            Assert.True(result.Persisted);
+            Assert.False(result.Degraded);
+            Assert.Empty(result.ImportRecoveryPaths);
+            var receipt = Assert.Single(result.Receipts);
+            Assert.Equal("persisted", receipt.Status);
+            Assert.True(persister.RecoveryExistedDuringPersist);
+            Assert.False(File.Exists(receipt.ImportRecoveryPath), receipt.ImportRecoveryPath);
+            var session = Assert.Single(result.Sessions);
+            Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Code == "codex_unknown_record");
+            Assert.DoesNotContain(session.Diagnostics, diagnostic => diagnostic.Code == "codex_unknown_response_item");
+            Assert.DoesNotContain(
+                session.Diagnostics,
+                diagnostic => diagnostic.Message.Contains("inter_agent_communication_metadata", StringComparison.Ordinal)
+                    && diagnostic.Code == "codex_unknown_record");
+            Assert.DoesNotContain(
+                session.Diagnostics,
+                diagnostic => diagnostic.Message.Contains("tool_search_call", StringComparison.Ordinal)
+                    && diagnostic.Code == "codex_unknown_response_item");
+            Assert.DoesNotContain(
+                session.Diagnostics,
+                diagnostic => diagnostic.Message.Contains("tool_search_output", StringComparison.Ordinal)
+                    && diagnostic.Code == "codex_unknown_response_item");
+        }
+        finally
+        {
+            if (Directory.Exists(tempWorkspace))
+                Directory.Delete(tempWorkspace, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// TEST-MCP-TRANSCRIPT-011: Verifies unknown response_item payload types warn once per distinct payload
     /// type instead of per record. Fixture: two ghost_snapshot response_item records.
     /// </summary>
@@ -213,8 +328,22 @@ public sealed class CodexTranscriptAdapterCoverageTests
 
     private static async Task<TranscriptSession> NormalizeAsync(string[] recordLines)
     {
-        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-coverage", Guid.NewGuid().ToString("N"));
+        var result = await IngestAsync(recordLines, persist: false, persister: null, workspacePath: null, agent: null).ConfigureAwait(true);
+        return Assert.Single(result.Sessions);
+    }
+
+    private static async Task<TranscriptIngestionResult> IngestAsync(
+        string[] recordLines,
+        bool persist,
+        ITranscriptSessionPersister? persister,
+        string? workspacePath,
+        string? agent)
+    {
+        var tempDirectory = persist
+            ? Path.Combine(workspacePath ?? throw new ArgumentNullException(nameof(workspacePath)), "transcripts")
+            : Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-coverage", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
+        var createdTempDirectory = !persist;
         try
         {
             var transcriptPath = Path.Combine(tempDirectory, "session.jsonl");
@@ -224,20 +353,36 @@ public sealed class CodexTranscriptAdapterCoverageTests
             };
             lines.AddRange(recordLines);
             await File.WriteAllLinesAsync(transcriptPath, lines, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            var service = TranscriptIngestionService.CreateDefault();
+            var service = TranscriptIngestionService.CreateDefault(persister);
 
-            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            return await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
             {
                 SourceKind = TranscriptSourceKind.Codex,
-                Persist = false
+                Persist = persist,
+                Agent = agent,
+                WorkspacePath = workspacePath,
+                RunId = persist ? "run-codex-search" : null
             }, TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-            return Assert.Single(result.Sessions);
         }
         finally
         {
-            if (Directory.Exists(tempDirectory))
+            if (createdTempDirectory && Directory.Exists(tempDirectory))
                 Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
+    private sealed class SucceedingTranscriptPersister : ITranscriptSessionPersister
+    {
+        public bool RecoveryExistedDuringPersist { get; private set; }
+
+        public Task<string> PersistAsync(
+            TranscriptIngestionRequest request,
+            TranscriptSession session,
+            TranscriptSessionReceipt receipt,
+            CancellationToken cancellationToken = default)
+        {
+            RecoveryExistedDuringPersist = File.Exists(receipt.ImportRecoveryPath);
+            return Task.FromResult("sessionLogId:codex-search-fixture");
         }
     }
 }

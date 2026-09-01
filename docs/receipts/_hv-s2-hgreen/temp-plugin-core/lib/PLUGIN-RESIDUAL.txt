@@ -1,0 +1,12 @@
+hooks/scripts/cache-flush.ps1
+hooks/scripts/code-verify.ps1
+hooks/scripts/health-check.ps1
+hooks/scripts/plan-approved.ps1
+hooks/scripts/plan-modified.ps1
+hooks/scripts/post-compact.ps1
+hooks/scripts/pre-compact.ps1
+hooks/scripts/session-end.ps1
+hooks/scripts/session-start.ps1
+hooks/scripts/stop-gate.ps1
+hooks/scripts/subagent-import.ps1
+hooks/scripts/user-prompt-submit.ps1

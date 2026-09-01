@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20260819T181856Z-dffc
+  result:
+    id: FR-MCP-XAGENT-001
+    title: CompleteTurn refuses cross-sourceType current-turn rebind
+    description: >-
+      When current-turn.yaml sessionId prefix differs from the active agent (Codex vs GrokCode vs ClaudeCode), CompleteTurn does not SubmitAsync as a new turn on the other session and does not return internal_server_error. Same-agent session rotation still rebinds. CompleteTurn never closes a different requestId. Empty title omits per TR-MCP-REPL-015. BUG-TRIAGE-106, BUG-TRIAGE-142.
+
+      - [ ] cross-sourceType mismatch refused or restored to originating cache
+
+      - [ ] same-agent rotation can complete without 500
+
+      - [ ] CompleteTurn does not hijack a concurrent other requestId
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: cross-sourceType mismatch refused or restored to originating cache
+      isSatisfied: false
+    - id: ac-2
+      text: same-agent rotation can complete without 500
+      isSatisfied: false
+    - id: ac-3
+      text: CompleteTurn does not hijack a concurrent other requestId
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:18:56.8071969+00:00
+    updatedAt: 2026-08-19T18:18:56.8072867+00:00
+  deprecated: true
+
+---

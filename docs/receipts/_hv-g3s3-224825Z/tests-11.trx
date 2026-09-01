@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1a77f57f-2b0b-441f-a40e-c0a697ab41c6" name="SYSTEM@PAYTON-LEGION2 2026-08-19 17:52:36" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-19T17:52:36.4607225-05:00" queuing="2026-08-19T17:52:36.4607228-05:00" start="2026-08-19T17:52:32.8689915-05:00" finish="2026-08-19T17:52:41.8254709-05:00" />
+  <TestSettings name="default" id="f9599046-a5f5-4820-95ca-325bb67dc0a5">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-08-19_17_52_36" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="1adea06d-d435-48da-9894-a36fbf5b2dd3" testId="a1f0bd23-f6a8-07fc-0099-29723153f84d" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0069334" startTime="2026-08-19T17:52:36.7090059-05:00" endTime="2026-08-19T17:52:36.7159807-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1adea06d-d435-48da-9894-a36fbf5b2dd3" />
+    <UnitTestResult executionId="8e49dae4-b424-4672-a5c2-79f21a546c30" testId="2cdabd8b-5b16-fa5b-73f8-cf9315d8d3a2" testName="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable" computerName="PAYTON-LEGION2" duration="00:00:06.7199323" startTime="2026-08-19T17:52:34.9090846-05:00" endTime="2026-08-19T17:52:41.6378982-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e49dae4-b424-4672-a5c2-79f21a546c30" />
+    <UnitTestResult executionId="8301b816-c7b9-436f-bc89-b7334161730c" testId="465ac5b0-44e2-1bc3-390b-2f58e3d659bb" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0082120" startTime="2026-08-19T17:52:36.7269693-05:00" endTime="2026-08-19T17:52:36.7352273-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8301b816-c7b9-436f-bc89-b7334161730c" />
+    <UnitTestResult executionId="a606422f-189e-4aa1-8a79-4ed02b280cc9" testId="af7b292e-f708-fad2-de9c-99605372f576" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_ForeignPrefixed_Persists" computerName="PAYTON-LEGION2" duration="00:00:00.0554322" startTime="2026-08-19T17:52:36.6531126-05:00" endTime="2026-08-19T17:52:36.7085961-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a606422f-189e-4aa1-8a79-4ed02b280cc9" />
+    <UnitTestResult executionId="4cd13d94-482f-41e9-9dff-b8595e69577a" testId="58506bc7-ace6-4ad0-ced0-e875bf21e6f6" testName="McpServer.Support.Mcp.Tests.McpStdio.McpToolBackendUnavailableErrorTests.SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue" computerName="PAYTON-LEGION2" duration="00:00:01.1737655" startTime="2026-08-19T17:52:34.9090809-05:00" endTime="2026-08-19T17:52:36.0870076-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4cd13d94-482f-41e9-9dff-b8595e69577a" />
+    <UnitTestResult executionId="26fac339-03f8-4bfa-aa92-f3cc0a7edb20" testId="1797e38e-5bd6-8273-2647-3b34398602b3" testName="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests.ReplaceTurnSectionAsync_StorageUnreachable_Returns503Retryable" computerName="PAYTON-LEGION2" duration="00:00:00.1655528" startTime="2026-08-19T17:52:34.9090976-05:00" endTime="2026-08-19T17:52:35.0846282-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26fac339-03f8-4bfa-aa92-f3cc0a7edb20" />
+    <UnitTestResult executionId="d84889f2-c8cf-4371-a079-60cbae759b55" testId="074cc8e9-3656-e482-7428-e4ca2573cb5f" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0102123" startTime="2026-08-19T17:52:36.7163343-05:00" endTime="2026-08-19T17:52:36.7265917-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d84889f2-c8cf-4371-a079-60cbae759b55" />
+    <UnitTestResult executionId="b4e3bacc-290a-4839-bb35-9b9b51525353" testId="001fe048-2e4f-984a-4fa7-d9b4ba361c32" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_ForeignTagged_Persists" computerName="PAYTON-LEGION2" duration="00:00:01.7153373" startTime="2026-08-19T17:52:34.9090937-05:00" endTime="2026-08-19T17:52:36.6283992-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4e3bacc-290a-4839-bb35-9b9b51525353" />
+    <UnitTestResult executionId="de06dc9c-999d-480b-b506-fadb2f1135fb" testId="e55addb0-e025-1d7f-297d-06efe2e0daff" testName="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_UnreachableStorage_IsRetryableAndTurnRemainsGettable" computerName="PAYTON-LEGION2" duration="00:00:00.0893811" startTime="2026-08-19T17:52:41.6416744-05:00" endTime="2026-08-19T17:52:41.7311093-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de06dc9c-999d-480b-b506-fadb2f1135fb" />
+    <UnitTestResult executionId="61684fbc-7b2e-4036-bb82-e4f79c24862f" testId="03aa0ea3-85d8-f5ee-5083-7d66bf8751ed" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_WorkspaceRelativeFilesModified_Persists" computerName="PAYTON-LEGION2" duration="00:00:00.0084143" startTime="2026-08-19T17:52:36.6443930-05:00" endTime="2026-08-19T17:52:36.6528354-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="61684fbc-7b2e-4036-bb82-e4f79c24862f" />
+    <UnitTestResult executionId="14f40e36-7fb5-4c8f-bdf5-8c2966b595e2" testId="c2ce3476-f5c6-9231-8bb3-284266498627" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_ForeignPrefixed_Persists" computerName="PAYTON-LEGION2" duration="00:00:00.0142203" startTime="2026-08-19T17:52:36.6297390-05:00" endTime="2026-08-19T17:52:36.6440272-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14f40e36-7fb5-4c8f-bdf5-8c2966b595e2" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="2cdabd8b-5b16-fa5b-73f8-cf9315d8d3a2">
+      <Execution id="8e49dae4-b424-4672-a5c2-79f21a546c30" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests" name="ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_WorkspaceRelativeFilesModified_Persists" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="03aa0ea3-85d8-f5ee-5083-7d66bf8751ed">
+      <Execution id="61684fbc-7b2e-4036-bb82-e4f79c24862f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_WorkspaceRelativeFilesModified_Persists" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.McpStdio.McpToolBackendUnavailableErrorTests.SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="58506bc7-ace6-4ad0-ced0-e875bf21e6f6">
+      <Execution id="4cd13d94-482f-41e9-9dff-b8595e69577a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.McpStdio.McpToolBackendUnavailableErrorTests" name="SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="074cc8e9-3656-e482-7428-e4ca2573cb5f">
+      <Execution id="d84889f2-c8cf-4371-a079-60cbae759b55" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="a1f0bd23-f6a8-07fc-0099-29723153f84d">
+      <Execution id="1adea06d-d435-48da-9894-a36fbf5b2dd3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="465ac5b0-44e2-1bc3-390b-2f58e3d659bb">
+      <Execution id="8301b816-c7b9-436f-bc89-b7334161730c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests.ReplaceTurnSectionAsync_StorageUnreachable_Returns503Retryable" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="1797e38e-5bd6-8273-2647-3b34398602b3">
+      <Execution id="26fac339-03f8-4bfa-aa92-f3cc0a7edb20" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests" name="ReplaceTurnSectionAsync_StorageUnreachable_Returns503Retryable" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_ForeignPrefixed_Persists" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="af7b292e-f708-fad2-de9c-99605372f576">
+      <Execution id="a606422f-189e-4aa1-8a79-4ed02b280cc9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_CommitFilesOutsideRoot_ForeignPrefixed_Persists" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_ForeignPrefixed_Persists" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="c2ce3476-f5c6-9231-8bb3-284266498627">
+      <Execution id="14f40e36-7fb5-4c8f-bdf5-8c2966b595e2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_FilesModifiedOutsideRoot_ForeignPrefixed_Persists" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_UnreachableStorage_IsRetryableAndTurnRemainsGettable" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="e55addb0-e025-1d7f-297d-06efe2e0daff">
+      <Execution id="de06dc9c-999d-480b-b506-fadb2f1135fb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests" name="ReplaceTurnSectionAsync_UnreachableStorage_IsRetryableAndTurnRemainsGettable" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_ForeignTagged_Persists" storage="f:\github\mcpserver\.worktrees\triage-session-store\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="001fe048-2e4f-984a-4fa7-d9b4ba361c32">
+      <Execution id="b4e3bacc-290a-4839-bb35-9b9b51525353" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-session-store\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests" name="SubmitAsync_FilesModifiedOutsideRoot_ForeignTagged_Persists" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a1f0bd23-f6a8-07fc-0099-29723153f84d" executionId="1adea06d-d435-48da-9894-a36fbf5b2dd3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2cdabd8b-5b16-fa5b-73f8-cf9315d8d3a2" executionId="8e49dae4-b424-4672-a5c2-79f21a546c30" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="465ac5b0-44e2-1bc3-390b-2f58e3d659bb" executionId="8301b816-c7b9-436f-bc89-b7334161730c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af7b292e-f708-fad2-de9c-99605372f576" executionId="a606422f-189e-4aa1-8a79-4ed02b280cc9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58506bc7-ace6-4ad0-ced0-e875bf21e6f6" executionId="4cd13d94-482f-41e9-9dff-b8595e69577a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1797e38e-5bd6-8273-2647-3b34398602b3" executionId="26fac339-03f8-4bfa-aa92-f3cc0a7edb20" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="074cc8e9-3656-e482-7428-e4ca2573cb5f" executionId="d84889f2-c8cf-4371-a079-60cbae759b55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="001fe048-2e4f-984a-4fa7-d9b4ba361c32" executionId="b4e3bacc-290a-4839-bb35-9b9b51525353" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e55addb0-e025-1d7f-297d-06efe2e0daff" executionId="de06dc9c-999d-480b-b506-fadb2f1135fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="03aa0ea3-85d8-f5ee-5083-7d66bf8751ed" executionId="61684fbc-7b2e-4036-bb82-e4f79c24862f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2ce3476-f5c6-9231-8bb3-284266498627" executionId="14f40e36-7fb5-4c8f-bdf5-8c2966b595e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="11" executed="11" passed="11" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.30]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.29]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.51]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:08.42]   Finished:    McpServer.Support.Mcp.Tests (ID = 'ad857fc4c65faec29911933013fbc4435b7b0758f34db5a54d15025bb1a917d6')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

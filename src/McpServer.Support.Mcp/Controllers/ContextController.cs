@@ -1,4 +1,6 @@
+using McpServer.Cqrs;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Products.Queries;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
@@ -31,6 +33,7 @@ public sealed class ContextController : ControllerBase
     private readonly IngestionCoordinator _ingestionCoordinator;
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
+    private readonly IDispatcher? _dispatcher;
 
     /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public ContextController(
@@ -40,7 +43,8 @@ public sealed class ContextController : ControllerBase
         IngestionCoordinator ingestionCoordinator,
         IOptions<GraphRagOptions> graphRagOptions,
         ITurnTransactionCoordinator? transactionCoordinator = null,
-        IOptions<TurnTransactionOptions>? transactionOptions = null)
+        IOptions<TurnTransactionOptions>? transactionOptions = null,
+        IDispatcher? dispatcher = null)
     {
         _db = db;
         _searchService = searchService;
@@ -49,6 +53,7 @@ public sealed class ContextController : ControllerBase
         _graphRagOptions = graphRagOptions.Value;
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
+        _dispatcher = dispatcher;
     }
 
     /// <summary>TR-PLANNED-CORE-013: Hybrid search with filters (context.search).</summary>
@@ -61,6 +66,18 @@ public sealed class ContextController : ControllerBase
         var query = (request?.Query ?? string.Empty).Trim();
         var limit = Math.Clamp(request?.Limit ?? 20, 1, 100);
         var sourceType = request?.SourceType;
+
+        if (string.Equals(sourceType, "product-requirements", StringComparison.OrdinalIgnoreCase)
+            && _dispatcher is not null)
+        {
+            var productChunks = await LoadProductRequirementChunksAsync(query, cancellationToken).ConfigureAwait(false);
+            return Ok(new
+            {
+                query,
+                chunks = productChunks.Take(limit).ToList(),
+                sourceKeys = productChunks.Select(c => c.DocumentId).Distinct().ToList(),
+            });
+        }
 
         if (_graphRagOptions.Enabled
             && _graphRagOptions.EnhanceContextSearch
@@ -159,10 +176,12 @@ public sealed class ContextController : ControllerBase
                 ? chunksQuery.Where(c => c.Content != null && EF.Functions.ILike(c.Content, $"%{query}%"))
                 : chunksQuery.Where(c => c.Content != null && c.Content.Contains(query));
         }
+        var productChunks = await LoadProductRequirementChunksAsync(query, cancellationToken).ConfigureAwait(false);
+        var remaining = Math.Max(0, limit - productChunks.Count);
         var chunkEntities = await chunksQuery
             .OrderBy(c => c.DocumentId)
             .ThenBy(c => c.ChunkIndex)
-            .Take(limit)
+            .Take(remaining)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
         var chunks = chunkEntities.Select(c => new ContextChunk
         {
@@ -174,12 +193,40 @@ public sealed class ContextController : ControllerBase
         }).ToList<ContextChunk>();
         var docIds = chunkEntities.Select(c => c.DocumentId).Distinct().ToList();
         var sourceKeys = await _db.Documents.Where(d => docIds.Contains(d.Id)).Select(d => d.SourceKey).ToListAsync(cancellationToken).ConfigureAwait(false);
+        if (productChunks.Count > 0)
+        {
+            chunks.AddRange(productChunks.Take(limit));
+            sourceKeys = sourceKeys.Concat(productChunks.Select(c => c.DocumentId)).Distinct().ToList();
+        }
+
         return Ok(new ContextPack
         {
             QueryId = queryId,
-            Chunks = chunks,
+            Chunks = chunks.Take(limit).ToList(),
             SourceKeys = sourceKeys
         });
+    }
+
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    private async Task<List<ContextChunk>> LoadProductRequirementChunksAsync(string query, CancellationToken cancellationToken)
+    {
+        if (_dispatcher is null)
+            return [];
+
+        var result = await _dispatcher.QueryAsync(
+            new GetProductRequirementContextQuery(_db.CurrentWorkspaceId, query, "product-requirements"),
+            cancellationToken).ConfigureAwait(false);
+        if (result.IsFailure || result.Value is null)
+            return [];
+
+        return result.Value.Select(c => new ContextChunk
+        {
+            Id = $"product-req:{c.OriginWorkspaceId}:{c.RequirementId}",
+            DocumentId = $"product-requirements:{c.OriginWorkspaceId}:{c.RequirementId}",
+            Content = c.Content,
+            TokenCount = Math.Max(1, c.Content.Length / 4),
+            ChunkIndex = 0,
+        }).ToList();
     }
 
     /// <summary>TR-PLANNED-CORE-013: List indexed sources (context.sources).</summary>

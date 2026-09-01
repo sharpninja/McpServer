@@ -127,6 +127,17 @@ function Get-PluginStartPath {
     return $currentPath
 }
 
+function Set-PluginWorkspaceIdentity {
+    param([string]$ResolvedPath)
+    if ([string]::IsNullOrWhiteSpace($ResolvedPath)) { return }
+    if (-not (Test-Path -LiteralPath $ResolvedPath -PathType Container)) { return }
+    $resolved = (Resolve-Path -LiteralPath $ResolvedPath).ProviderPath
+    $env:MCP_WORKSPACE_PATH = $resolved
+    $env:MCPSERVER_WORKSPACE_PATH = $resolved
+    $env:MCP_WORKSPACE_START_DIR = $resolved
+    try { Set-Location -LiteralPath $resolved } catch { }
+}
+
 function Get-YamlScalar {
     param(
         [Parameter(Mandatory)][string]$Path,
@@ -225,6 +236,13 @@ function Start-PluginSession {
     param([string]$StartPath)
 
     $start = Get-PluginStartPath -PreferredPath $StartPath
+    if (-not [string]::IsNullOrWhiteSpace($start)) {
+        $tempAlign = Set-McpPluginSameVolumeTemp -TargetPath $start
+        if ($tempAlign -and -not $tempAlign.Succeeded -and $tempAlign.Error) {
+            [Console]::Error.WriteLine([string]$tempAlign.Error)
+        }
+    }
+
     $cacheDir = Get-PluginCacheDir -StartPath $start
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     $markerSnapshot = $null
@@ -628,8 +646,69 @@ function Ensure-PluginMarkerFresh {
     }
 }
 
+function Test-PluginPromptIsBackgroundAgent {
+    <#
+    .SYNOPSIS
+        FR-MCP-TRIAGEPLUGIN-001: true when UserPromptSubmit is a background or hostile agent brief.
+    #>
+    param(
+        [string]$Prompt,
+        [string]$Payload
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($env:MCP_SUBAGENT_ID) -or
+        -not [string]::IsNullOrWhiteSpace($env:GROK_SUBAGENT_ID)) {
+        return $true
+    }
+
+    $text = [string]$Prompt
+    if ([string]::IsNullOrWhiteSpace($text) -and -not [string]::IsNullOrWhiteSpace($Payload)) {
+        if (Get-Command Get-HookPayloadValue -ErrorAction SilentlyContinue) {
+            $text = Get-HookPayloadValue -Payload $Payload -Name 'prompt'
+            foreach ($name in @('subagentId', 'subagent_id', 'agentType', 'agent_type')) {
+                $v = Get-HookPayloadValue -Payload $Payload -Name $name
+                if ($v -match 'subagent|background|hostile') { return $true }
+            }
+        }
+    }
+
+    if ($text -match 'You are the HOSTILE VALIDATOR') { return $true }
+    if ($text -match 'ValidatorIdentity:\s*GrokSubagentHostile') { return $true }
+    if ($text -match 'FIRST ACTION \(mandatory, before any validation\)') { return $true }
+    return $false
+}
+
+function Get-PluginRootTurnIsolationDecision {
+    <#
+    .SYNOPSIS
+        FR-MCP-TRIAGEPLUGIN-001: reuse or skip-open when a background prompt would clobber the root turn.
+    #>
+    param(
+        $OpenTurn,
+        [string]$IncomingPrompt,
+        [string]$Payload
+    )
+
+    if ($null -eq $OpenTurn) { return 'open-new' }
+
+    $status = ''
+    $requestId = ''
+    if ($OpenTurn -is [System.Collections.IDictionary]) {
+        if ($OpenTurn.Contains('status')) { $status = [string]$OpenTurn['status'] }
+        if ($OpenTurn.Contains('turnRequestId')) { $requestId = [string]$OpenTurn['turnRequestId'] }
+    }
+    if ([string]::IsNullOrWhiteSpace($requestId)) { return 'open-new' }
+    if (-not (Test-PluginPromptIsBackgroundAgent -Prompt $IncomingPrompt -Payload $Payload)) {
+        return 'open-new'
+    }
+    if ($status -eq 'in_progress') { return 'reuse' }
+    if ($status -eq 'completed') { return 'isolate-skip' }
+    return 'open-new'
+}
+
 function Open-PluginTurn {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
@@ -696,6 +775,24 @@ function Open-PluginTurn {
                         status = 'turn-already-open'
                         turnRequestId = $openRequestId
                         additionalContext = "session log turn $openRequestId is now active. Continue the current task after any incidental triage submission."
+                    }
+                })
+                return
+            }
+
+            $isolation = Get-PluginRootTurnIsolationDecision -OpenTurn $openTurn -IncomingPrompt $prompt -Payload $payload
+            if ($isolation -eq 'reuse' -or $isolation -eq 'isolate-skip') {
+                Write-PluginJson ([ordered]@{
+                    hookSpecificOutput = [ordered]@{
+                        hookEventName = 'UserPromptSubmit'
+                        status = $(if ($isolation -eq 'reuse') { 'turn-already-open' } else { 'root-turn-isolated' })
+                        turnRequestId = $openRequestId
+                        isolation = $isolation
+                        additionalContext = if ($isolation -eq 'reuse') {
+                            "session log turn $openRequestId remains active. Background UserPromptSubmit did not supersede the root work turn."
+                        } else {
+                            "root session log turn $openRequestId is completed. Background UserPromptSubmit did not rewrite current-turn.yaml."
+                        }
                     }
                 })
                 return
@@ -775,6 +872,7 @@ function Open-PluginTurn {
 
 function Close-PluginTurnIfNeeded {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     if ($env:CLAUDE_STOP_HOOK_ACTIVE -eq 'true') {
@@ -885,9 +983,142 @@ function Close-PluginTurnIfNeeded {
     Write-PluginJson ([ordered]@{})
 }
 
+function Test-PluginDiskFullException {
+    <#
+    .SYNOPSIS
+        TR-MCP-VERIFYWRAP-001: true when the exception is a disk-capacity IOException.
+    #>
+    param($Exception)
+
+    $ex = $Exception
+    while ($null -ne $ex) {
+        if ($ex -is [System.IO.IOException]) {
+            $message = [string]$ex.Message
+            if ($message -match 'not enough space|disk full|There is not enough space on the disk') {
+                return $true
+            }
+            # ERROR_DISK_FULL (0x70) as HRESULT 0x80070070.
+            if ($ex.HResult -eq -2147024784) {
+                return $true
+            }
+        }
+        $ex = $ex.InnerException
+    }
+
+    return $false
+}
+
+function Invoke-PluginCodeVerifyHandleDiskFull {
+    <#
+    .SYNOPSIS
+        TR-MCP-VERIFYWRAP-001: typed disk_full that does not mutate current-turn audit.
+    #>
+    param(
+        [string]$TurnFile = '',
+        $Exception
+    )
+
+    if (-not (Test-PluginDiskFullException -Exception $Exception)) {
+        throw $Exception
+    }
+
+    return (Get-PluginCodeVerifyFailureStatus -Exception $Exception)
+}
+
+function Get-PluginCodeVerifyFailureStatus {
+    <#
+    .SYNOPSIS
+        Maps a code-verify exception to a typed JSON status object.
+    #>
+    param($Exception)
+
+    if (Test-PluginDiskFullException -Exception $Exception) {
+        return [ordered]@{
+            status = 'failed'
+            code = 'disk_full'
+            message = [string]$Exception.Message
+        }
+    }
+
+    return [ordered]@{
+        status = 'failed'
+        code = 'io_error'
+        message = [string]$Exception.Message
+    }
+}
+
+function Get-PluginCodeVerifyTimeoutSeconds {
+    <#
+    .SYNOPSIS
+        Documented code-verify timeout. MCP_CODE_VERIFY_TIMEOUT_SECONDS or 60.
+    #>
+    $parsed = 60
+    if ($env:MCP_CODE_VERIFY_TIMEOUT_SECONDS) {
+        $value = 0
+        if ([int]::TryParse([string]$env:MCP_CODE_VERIFY_TIMEOUT_SECONDS, [ref]$value) -and $value -gt 0) {
+            $parsed = $value
+        }
+    }
+    return $parsed
+}
+
+function Invoke-PluginBoundedProcess {
+    <#
+    .SYNOPSIS
+        Starts a child process and kills the process tree when the timeout elapses.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$FileName,
+        [string[]]$Arguments = @(),
+        [int]$TimeoutSeconds = 60,
+        [string]$WorkingDirectory = ''
+    )
+
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $FileName
+    foreach ($argument in $Arguments) {
+        $psi.ArgumentList.Add($argument)
+    }
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    if (-not [string]::IsNullOrWhiteSpace($WorkingDirectory)) {
+        $psi.WorkingDirectory = $WorkingDirectory
+    }
+
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $timedOut = $false
+    $waitMs = [Math]::Max(1, $TimeoutSeconds) * 1000
+    if (-not $process.WaitForExit($waitMs)) {
+        $timedOut = $true
+        try { $process.Kill($true) } catch { }
+        try { [void]$process.WaitForExit(2000) } catch { }
+    }
+
+    $output = ''
+    try { $output = [string]$stdoutTask.Result } catch { }
+    try { $output += [string]$stderrTask.Result } catch { }
+
+    return [pscustomobject]@{
+        exitCode = $(if ($timedOut) { -1 } else { $process.ExitCode })
+        output = $output
+        timedOut = $timedOut
+    }
+}
+
 function Invoke-CodeVerify {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
-    $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    Set-PluginWorkspaceIdentity -ResolvedPath $startPath
+    $cacheDir = $null
+    try {
+        $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    } catch {
+        Write-PluginJson ([ordered]@{ status = 'skipped'; reason = 'no-cache' })
+        return
+    }
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     $payload = Read-HookInput
     $filePath = Get-HookPayloadValue -Payload $payload -Name 'file_path'
@@ -915,27 +1146,98 @@ function Invoke-CodeVerify {
     }
 
     $buildStatus = 'succeeded'
-    if ($project) {
-        $buildLog = Join-Path $cacheDir 'last-build.log'
-        $output = & dotnet build $project.FullName --nologo -clp:NoSummary 2>&1
-        $exitCode = $LASTEXITCODE
-        [System.IO.File]::WriteAllText($buildLog, ($output | Out-String))
-        if ($exitCode -ne 0) { $buildStatus = 'failed' }
-    }
+    try {
+        if ($project) {
+            $buildLog = Join-Path $cacheDir 'last-build.log'
+            $bounded = Invoke-PluginBoundedProcess `
+                -FileName 'dotnet' `
+                -Arguments @('build', $project.FullName, '--nologo', '-clp:NoSummary') `
+                -TimeoutSeconds (Get-PluginCodeVerifyTimeoutSeconds) `
+                -WorkingDirectory $project.DirectoryName
+            $output = $bounded.output
+            try {
+                [System.IO.File]::WriteAllText($buildLog, $output)
+            } catch {
+                if (Test-PluginDiskFullException -Exception $_.Exception) {
+                    Write-PluginJson (Invoke-PluginCodeVerifyHandleDiskFull -TurnFile $turnFile -Exception $_.Exception)
+                    return
+                }
+                throw
+            }
+            if ($bounded.timedOut) {
+                $buildStatus = 'failed'
+            } elseif ($bounded.exitCode -ne 0) {
+                $buildStatus = 'failed'
+            }
+        }
 
-    if (Test-Path -LiteralPath $turnFile) {
-        Set-YamlScalar -Path $turnFile -Key 'lastBuildStatus' -Value $buildStatus
-    }
+        if (Test-Path -LiteralPath $turnFile) {
+            Set-YamlScalar -Path $turnFile -Key 'lastBuildStatus' -Value $buildStatus
+        }
 
-    Write-PluginJson ([ordered]@{ status = $buildStatus })
+        Write-PluginJson ([ordered]@{ status = $buildStatus })
+    } catch {
+        if (Test-PluginDiskFullException -Exception $_.Exception) {
+            Write-PluginJson (Invoke-PluginCodeVerifyHandleDiskFull -TurnFile $turnFile -Exception $_.Exception)
+            return
+        }
+        throw
+    }
 }
 
 function Invoke-CacheFlushHook {
-    $result = & (Join-Path $script:ScriptDir 'cache-manager.ps1') -Action flush
-    if ($HookName -eq 'cache-flush') {
-        Write-Output $result
-    } else {
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    $identified = $false
+    try {
+        if (-not [string]::IsNullOrWhiteSpace($startPath)) {
+            Set-PluginWorkspaceIdentity -ResolvedPath $startPath
+            $null = Resolve-McpCacheDir -StartPath $startPath
+            $identified = $true
+        }
+    } catch {
+        $identified = $false
+    }
+
+    if (-not $identified) {
         Write-PluginJson ([ordered]@{})
+        return
+    }
+
+    try {
+        $result = & (Join-Path $script:ScriptDir 'cache-manager.ps1') -Action flush
+        $text = [string]($result | Out-String)
+        $flushed = 0
+        $failed = 0
+        $pending = 0
+        if ($text -match 'flushed=(\d+)') { $flushed = [int]$Matches[1] }
+        if ($text -match 'failed=(\d+)') { $failed = [int]$Matches[1] }
+        if ($text -match 'pending=(\d+)') { $pending = [int]$Matches[1] }
+        if ($failed -gt 0) {
+            Write-PluginJson ([ordered]@{
+                status = 'flush-failed'
+                flushed = $flushed
+                failed = $failed
+                pending = $pending
+            })
+            if ($HookName -eq 'session-end' -or $HookName -eq 'pre-compact') {
+                exit 1
+            }
+            return
+        }
+        if ($HookName -eq 'cache-flush') {
+            Write-Output $result
+        } else {
+            Write-PluginJson ([ordered]@{})
+        }
+    } catch {
+        if ($HookName -eq 'session-end' -or $HookName -eq 'pre-compact') {
+            Write-PluginJson ([ordered]@{
+                status = 'flush-failed'
+                message = [string]$_.Exception.Message
+            })
+            exit 1
+        }
+        throw
     }
 }
 
@@ -1115,6 +1417,14 @@ function Invoke-PlanModifiedHook {
     })
     Invoke-PluginRepl -Method 'client.Todo.UpdateAsync' -ParamsYaml $paramsYaml | Out-Null
     Write-PostToolUseOutput -Status 'updated'
+}
+
+$pluginTempTarget = Get-PluginStartPath -PreferredPath $WorkspacePath
+if (-not [string]::IsNullOrWhiteSpace($pluginTempTarget)) {
+    $pluginTempAlign = Set-McpPluginSameVolumeTemp -TargetPath $pluginTempTarget
+    if ($pluginTempAlign -and -not $pluginTempAlign.Succeeded -and $pluginTempAlign.Error) {
+        [Console]::Error.WriteLine([string]$pluginTempAlign.Error)
+    }
 }
 
 if (-not (Confirm-PowerShellMcpRuntime)) {

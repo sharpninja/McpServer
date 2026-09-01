@@ -1,0 +1,40 @@
+type: result
+payload:
+  requestId: req-20260821T020911Z-bbc6
+  result:
+    id: BUG-TRIAGE-160
+    title: SessionLog appendDialog persist 503s on full SubmitAsync upsert
+    section: Session Logging
+    priority: high
+    done: false
+    description:
+    - During hostile EXEC-TODO-007 review in TruckMate, query-mcp appendDialog failed after todo, requirements, and queryHistory succeeded. Plugin appendDialog does not call the incremental /dialog POST. It mutates the local turn and then POSTs a full client.SessionLog.SubmitAsync upsert to /mcpserver/sessionlog, writing failsafe 20260819T182737Z-session_submit-1d08.yaml first. That mutating call returned retryable HTTP 503 backend_unavailable (storage-unavailability / 5s SaveChanges budget class). The named failsafe is no longer on disk in TruckMate or McpServer failsafe dirs. Reads succeeding while the full upsert 503s is consistent with write-budget or lock contention, not auth or workspace targeting.
+    - 'Triage group: triage-group-90b8f8169cb935f7'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- workflow.sessionlog.appendDialog after a successful queryHistory, todo query, and requirements query persists the dialog items without HTTP 503 backend_unavailable when storage is reachable for those reads'
+    - '- A failed persist still returns the classified envelope code=backend_unavailable, retryable=true, HTTP 503 and retains a drainable session_submit failsafe'
+    - '- Incremental dialog append does not require a full-session SubmitAsync upsert that trips the SessionLogService 5s SaveChanges storage budget when the backend is otherwise healthy'
+    - 'Implementation notes:'
+    - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog calls Invoke-ReplPersistTurn, which Write-ReplFailsafe labels session_submit and then Invoke-ReplRaw method client.SessionLog.SubmitAsync'
+    - '- Prefer SessionLogClient.AppendDialogAsync POST mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog for incremental dialog instead of a full UnifiedSessionLogDto upsert'
+    - '- McpErrorClassifier maps StorageBackendUnavailability including StorageCommandBudgetExceededException to HTTP 503 backend_unavailable retryable true; SessionLogService SubmitAsync SaveChanges is wrapped in a 5s storage budget (TEST-MCP-TRIAGESTORE-007)'
+    - '- Named failsafe 20260819T182737Z-session_submit-1d08.yaml was not found at research time; contemporaneous TruckMate Claude failsafe 20260819T181412Z-session_submit-c337.yaml shows the same SubmitAsync persist path during the hostile EXEC-TODO-007 wave'
+    - '- Do not treat as a general MCP outage; todo, requirements, and queryHistory succeeded in the same review'
+    implementationTasks: []
+    remaining: 'PLAN-SESSIONLOGREMEDIATE-001 S0: linked FR-MCP-170..172 / TR-MCP-PERSIST-001..004. Do not store-close without H-done AGREE.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-170
+    - FR-MCP-171
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PERSIST-001
+    - TR-MCP-PERSIST-002
+    - TR-MCP-PERSIST-003
+    - TR-MCP-PERSIST-004
+  deprecated: true
+
+---
+

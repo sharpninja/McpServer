@@ -1,0 +1,43 @@
+{
+  "TimestampUtc": "2026-08-19T21:00:50Z",
+  "ProductClaimsReceipt": {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260819T203601Z.md",
+    "Exists": true,
+    "Length": 9863,
+    "LastWriteTimeUtc": "2026-08-19T20:37:37.9840603Z",
+    "OverallVerdict": "DISAGREE",
+    "FailListEmpty": false,
+    "FailItems": [
+      "1. B2: No S2 red-phase hostile AGREE exists. Leftover AC proofs do not close PLAN-TRIAGELEFTOVER-001 or the BUG-TRIAGE leftovers. Do not mark those TODOs done."
+    ],
+    "MentionsB2": true,
+    "MentionsRedPhase": true,
+    "MentionsTestPhase": false,
+    "JsonTwinExists": true,
+    "JsonOverallVerdict": "DISAGREE",
+    "JsonFailList": [
+      "B2: No S2 red-phase hostile AGREE exists. Leftover AC proofs do not close PLAN-TRIAGELEFTOVER-001 or the BUG-TRIAGE leftovers. Do not mark those TODOs done."
+    ],
+    "JsonFailCount": 1,
+    "MdJsonVerdictMatch": true
+  },
+  "TestPhaseReceipt": {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260819T205003Z.md",
+    "Exists": true,
+    "Length": 10106,
+    "LastWriteTimeUtc": "2026-08-19T20:53:53.6328218Z",
+    "OverallVerdict": "AGREE",
+    "FailListEmpty": true,
+    "FailItems": [],
+    "MentionsB2": true,
+    "MentionsRedPhase": true,
+    "MentionsTestPhase": true,
+    "JsonTwinExists": true,
+    "JsonOverallVerdict": "AGREE",
+    "JsonFailList": [],
+    "JsonFailCount": 0,
+    "MdJsonVerdictMatch": true
+  },
+  "TestPhaseAgreeAndEmptyFail": true,
+  "ProductClaimsDisagreeOnlyB2": true
+}

@@ -1,0 +1,53 @@
+{
+  "TimestampUtc": "2026-08-19T20:44:41Z",
+  "Stamp": "20260819T204441Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-plugin-core",
+  "Branch": "triage/plugin-core",
+  "Sha": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "DirtyCount": 9,
+  "DirtyPreview": [
+    " M plugins/core/hooks-templates/wrapper.ps1.template",
+    " M plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+    " M plugins/core/lib-ps/McpPluginShim.psm1",
+    " M plugins/core/lib-ps/cache-manager.ps1",
+    " M plugins/core/lib-ps/plugin-hook.ps1",
+    " M plugins/core/lib-ps/repl-invoke.ps1",
+    " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+    " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+    " M plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1"
+  ],
+  "DiffNameOnly": [
+    "plugins/core/hooks-templates/wrapper.ps1.template",
+    "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+    "plugins/core/lib-ps/McpPluginShim.psm1",
+    "plugins/core/lib-ps/cache-manager.ps1",
+    "plugins/core/lib-ps/plugin-hook.ps1",
+    "plugins/core/lib-ps/repl-invoke.ps1",
+    "plugins/core/lib-ps/resolve-cache-dir.ps1",
+    "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+    "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1"
+  ],
+  "Staged": [],
+  "Untracked": [],
+  "MarkerLastWriteUtc": "2026-08-19T13:05:36.9456178Z",
+  "SignatureOk": true,
+  "NonceSent": "hv-s2tg-20260819T204441Z-60860",
+  "NonceEcho": "hv-s2tg-20260819T204441Z-60860",
+  "NonceMatch": true,
+  "HealthStorage": "reachable",
+  "HealthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "HealthStatus": "Healthy",
+  "PluginJsonVersion": "1.95.0",
+  "PluginJsonName": "mcpserver",
+  "PluginDotVersion": "1.95.0",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ToolsSearchUri": "http://PAYTON-LEGION2:7147/mcpserver/tools/search?keyword=mcpserver-grok-plugin",
+  "ToolsSearchError": null,
+  "ToolsItemCount": 8,
+  "ExactNameCount": 1,
+  "ExactNames": [
+    "mcpserver-grok-plugin"
+  ],
+  "SuggestedSessionId": "GrokCode-20260819T204441Z-hostile-s2-testgate",
+  "SuggestedRequestId": "req-20260819T204441Z-001-hostile-s2-test-gate"
+}

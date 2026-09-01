@@ -1,0 +1,139 @@
+{
+  "TimestampUtc": "2026-08-19T14:55:33Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": "class-2-operator-directed-ops",
+  "WorkClassDetail": "resolve problems after wrap-up hostile DISAGREE; commit-sync still paused",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ],
+    "directory": "C:\\Users\\kingd\\.claude\\profile"
+  },
+  "ImplementerReceipt": "docs/receipts/wrap-up-20260819T134500Z.md",
+  "ReviewSession": {
+    "agent": "GrokCode",
+    "sessionId": "GrokCode-20260819T145213Z-hostile-resolve",
+    "requestId": "req-20260819T145213Z-001-hostile-resolve-fail-list",
+    "planFile": "None",
+    "todoId": "None",
+    "turnId": 42030,
+    "turnStatus": "completed",
+    "transport": "POST http://PAYTON-LEGION2:7147/mcp-transport tools/call",
+    "persistenceProof": "sessionlog_query agent=GrokCode from=2026-08-19T14:50:00Z totalCount=1 hit sessionId GrokCode-20260819T145213Z-hostile-resolve turn status=completed dialog=3 actions=8 designDecisions=1 planFile=None todoId=None response starts OverallVerdict DISAGREE"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 2
+  },
+  "AccuracyRating": 95,
+  "CompletenessRating": 90,
+  "FailList": [
+    "A3: turn req-20260819T143000Z-017-resolve-hostile-fail-list status=canceled (superseded by req-20260819T144644Z-prompt-9cc5), not in_progress. Dialog 2 and actions 5 persisted. Cache still says in_progress. 015 canceled and 016 completed match."
+  ],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "git diff --cached --name-only empty; GitVersion.yml working tree next-version 1.4.28; git status --short -- GitVersion.yml is unstaged M; HEAD f4060f037e62e64974026aff9d24e11b2f481952 on develop; origin https://github.com/sharpninja/McpServer.git; no new commit or push",
+      "evidence": "CACHED_COUNT=0. Status ' M GitVersion.yml'. next-version 1.4.28. HEAD equals origin/develop. left-right 0 0."
+    },
+    {
+      "id": "A2",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Plugin cache F:\\GitHub\\McpServer\\.mcpServer\\grok\\current-turn.yaml has turnRequestId 017, sessionId GrokCode-20260818T182741Z-plugin-session, status in_progress",
+      "evidence": "File contents match. Live MCP 017 is canceled; cache is stale. Scored on A3."
+    },
+    {
+      "id": "A3",
+      "group": "A Requested",
+      "verdict": "FAIL",
+      "claim": "Live sessionlog: 015 canceled, 016 completed, 017 in_progress with persisted dialog and actions, session in_progress",
+      "evidence": "sessionlog_query plugin-session: 015 canceled dlg3 act8; 016 completed dlg2 act4; 017 canceled dlg2 act5 superseded by req-20260819T144644Z-prompt-9cc5; session in_progress turnCount 18."
+    },
+    {
+      "id": "A4",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Wrap-up receipt has Resolve after DISAGREE section stating 017 live, 015 canceled, GitVersion.yml unstaged, no commit/push",
+      "evidence": "docs/receipts/wrap-up-20260819T134500Z.md line 82 section exists. LastWriteTimeUtc 2026-08-19T14:39:45.9632733Z."
+    },
+    {
+      "id": "A5",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Did not replay or delete the three failsafe files targeting canceled 015; they still exist",
+      "evidence": "4cbf, 1965, 2e5e still exist and contain 015. 015 still canceled. Fourth file 98d9 targets 017 canceled."
+    },
+    {
+      "id": "A6",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Did not mark PLAN-TRIAGECLUSTER-001 or BUG-TRIAGE-110..149 done in this resolve turn",
+      "evidence": "PLAN audit v7 Done=true at 2026-08-19T01:41:53. Sampled 110/111/149 last updates 00:26-00:27Z. 017 actions have no TODO mutation."
+    },
+    {
+      "id": "B-Byrd",
+      "group": "B Workspace rules",
+      "verdict": "N/A",
+      "claim": "Byrd v4 phase-order",
+      "evidence": "Class 2 ops. Not scored."
+    },
+    {
+      "id": "B-receipts",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Always bring the receipts",
+      "evidence": "Implementer wrap-up receipt present. This review re-ran live checks."
+    },
+    {
+      "id": "B-mcp-only",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "MCP-only TODO/session/requirements storage",
+      "evidence": "docs/Project/TODO.yaml LastWriteTimeUtc 2026-07-10. Native sessionlog/todo tools used. No hand-edit of session store."
+    },
+    {
+      "id": "B-powershell",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "PowerShell only / no Python",
+      "evidence": "pwsh.exe only. WRAP_PYTHON_HITS=0."
+    },
+    {
+      "id": "B-honesty",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Honesty / no fabricated results",
+      "evidence": "Git claims match. 017 in_progress miss scored as A3 live-state, not a repeat of the staged-add fabrication."
+    },
+    {
+      "id": "B-look-before-delete",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Look-before-delete",
+      "evidence": "015 failsafe files remain. GitVersion.yml unstaged not deleted. Plan file remains."
+    },
+    {
+      "id": "C",
+      "group": "C Requirements",
+      "verdict": "N/A",
+      "claim": "FR/TR/TEST/AC for claimed-complete product work",
+      "evidence": "Class 2 ops. No product-plan/FR complete claim."
+    },
+    {
+      "id": "D",
+      "group": "D Plan",
+      "verdict": "PASS",
+      "claim": "Did not falsely claim docs/plans/triage-cluster-001.md done in this resolve",
+      "evidence": "017 planFile None todoId None. PLAN done flip is audit v7 2026-08-19T01:41:53."
+    }
+  ]
+}

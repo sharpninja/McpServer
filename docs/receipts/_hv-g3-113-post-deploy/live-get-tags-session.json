@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "statusCode": 200,
+  "sessionId": "GrokCode-20260820T071556Z-hv113tags",
+  "tagsJsonField": "null",
+  "tagsJoin": "",
+  "turnStatus": "canceled",
+  "body": "{\"sourceType\":\"GrokCode\",\"sessionId\":\"GrokCode-20260820T071556Z-hv113tags\",\"agentDefinitionId\":null,\"agentSessionId\":null,\"agentSessionTranscriptFile\":null,\"agentExecutablePath\":null,\"agentExecutableVersion\":null,\"title\":\"Hostile 113 live tags after UpdateService\",\"model\":null,\"started\":\"2026-08-20T07:15:56.9480833+00:00\",\"lastUpdated\":\"2026-08-20T07:15:56.9480833+00:00\",\"status\":\"in_progress\",\"turnCount\":1,\"workspace\":null,\"turns\":[{\"requestId\":\"req-20260820T071556Z-entry-001\",\"timestamp\":\"2026-08-20T07:15:56.9480833+00:00\",\"queryText\":\"hostile 113 live tags persist check after Nuke UpdateService\",\"queryTitle\":\"Hostile 113 live tags after deploy\",\"response\":null,\"interpretation\":null,\"status\":\"canceled\",\"actions\":null,\"model\":null,\"modelProvider\":null,\"tokenCount\":null,\"tags\":null,\"contextList\":null,\"failureNote\":null,\"score\":null,\"isPremium\":null,\"rawContext\":null,\"originalEntry\":null,\"processingDialog\":null,\"commits\":null,\"designDecisions\":null,\"requirementsDiscovered\":null,\"filesModified\":null,\"blockers\":null,\"planFile\":\"None\",\"todoId\":\"None\"}],\"tags\":null,\"totalTokens\":null,\"cursorSessionLabel\":null,\"copilotStatistics\":null}"
+}

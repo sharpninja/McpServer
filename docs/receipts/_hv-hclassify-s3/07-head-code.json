@@ -1,0 +1,12 @@
+{
+  "renameFiles": [
+    "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260720170000_RenameQuadBrainRolesToCreativityLogic.cs",
+    "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260720170000_RenameQuadBrainRolesToCreativityLogic.cs",
+    "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260720170000_RenameQuadBrainRolesToCreativityLogic.cs"
+  ],
+  "repoFileServiceExists": true,
+  "repoFileTestsExist": true,
+  "mcpToolReadFileHits": [
+    "F:\\GitHub\\McpServer\\src\\McpServer.QBAgent.Tools\\QBAgentExternalToolSurface.cs:50:\"read_file\","
+  ]
+}

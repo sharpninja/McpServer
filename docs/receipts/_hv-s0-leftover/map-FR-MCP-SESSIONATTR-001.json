@@ -1,0 +1,3102 @@
+{
+  "type": "mapping",
+  "items": [
+    {
+      "FrId": "FR-HANDOFF-001",
+      "TrIds": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-001",
+        "TEST-HANDOFF-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-002",
+      "TrIds": [
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-CONTRACT-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-003",
+      "TrIds": [
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-004",
+      "TrIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-005",
+      "TrIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-006",
+      "TrIds": [
+        "TR-HANDOFF-AUDIT-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-HANDOFF-007",
+      "TrIds": [
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-LOC-001",
+      "TrIds": [
+        "TR-LOC-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-001",
+      "TrIds": [
+        "TR-MCP-CFG-001",
+        "TR-MCP-CFG-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-002",
+      "TrIds": [
+        "TR-MCP-API-001",
+        "TR-MCP-DATA-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-003",
+      "TrIds": [
+        "TR-MCP-DATA-001",
+        "TR-MCP-INGEST-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-004",
+      "TrIds": [
+        "TR-MCP-DATA-002",
+        "TR-MCP-DATA-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-005",
+      "TrIds": [
+        "TR-MCP-API-001",
+        "TR-MCP-INGEST-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-006",
+      "TrIds": [
+        "TR-MCP-INGEST-001",
+        "TR-MCP-INGEST-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-007",
+      "TrIds": [
+        "TR-MCP-ARCH-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-008",
+      "TrIds": [
+        "TR-MCP-OPS-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-009",
+      "TrIds": [
+        "TR-MCP-MT-001",
+        "TR-MCP-WS-002",
+        "TR-MCP-WS-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-011",
+      "TrIds": [
+        "TR-MCP-WS-003",
+        "TR-MCP-WS-007"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-012",
+      "TrIds": [
+        "TR-MCP-TR-001",
+        "TR-MCP-TR-002",
+        "TR-MCP-TR-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-013",
+      "TrIds": [
+        "TR-MCP-MT-002",
+        "TR-MCP-SEC-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-014",
+      "TrIds": [
+        "TR-MCP-SEC-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-015",
+      "TrIds": [
+        "TR-MCP-TUN-001",
+        "TR-MCP-TUN-002",
+        "TR-MCP-TUN-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-016",
+      "TrIds": [
+        "TR-MCP-HTTP-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-017",
+      "TrIds": [
+        "TR-MCP-SVC-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-018",
+      "TrIds": [
+        "TR-MCP-WS-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-019",
+      "TrIds": [
+        "TR-MCP-WS-006"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-020",
+      "TrIds": [
+        "TR-MCP-WS-007"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-021",
+      "TrIds": [
+        "TR-MCP-WS-008"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-022",
+      "TrIds": [
+        "TR-MCP-TR-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-023",
+      "TrIds": [
+        "TR-MCP-REQ-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-024",
+      "TrIds": [
+        "TR-MCP-INGEST-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-025",
+      "TrIds": [
+        "TR-MCP-WS-009"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-026",
+      "TrIds": [
+        "TR-MCP-AUTH-001",
+        "TR-MCP-AUTH-002",
+        "TR-MCP-AUTH-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-027",
+      "TrIds": [
+        "TR-MCP-AGENT-001",
+        "TR-MCP-AGENT-002",
+        "TR-MCP-AGENT-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-028",
+      "TrIds": [
+        "TR-MCP-AGENT-001",
+        "TR-MCP-AGENT-003",
+        "TR-MCP-AGENT-008"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-029",
+      "TrIds": [
+        "TR-MCP-CQRS-001",
+        "TR-MCP-CQRS-002",
+        "TR-MCP-CQRS-003",
+        "TR-MCP-CQRS-004",
+        "TR-MCP-CQRS-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-030",
+      "TrIds": [
+        "TR-MCP-DIR-001",
+        "TR-MCP-DIR-002",
+        "TR-MCP-DIR-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-031",
+      "TrIds": [
+        "TR-MCP-WS-UI-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-032",
+      "TrIds": [
+        "TR-MCP-GH-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-033",
+      "TrIds": [
+        "TR-MCP-POL-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-034",
+      "TrIds": [
+        "TR-MCP-COMP-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-035",
+      "TrIds": [
+        "TR-MCP-COMP-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-036",
+      "TrIds": [
+        "TR-MCP-AUDIT-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-037",
+      "TrIds": [
+        "TR-MCP-DIR-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-038",
+      "TrIds": [
+        "TR-MCP-COMP-003",
+        "TR-MCP-DTO-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-039",
+      "TrIds": [
+        "TR-MCP-CTX-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-040",
+      "TrIds": [
+        "TR-MCP-REQ-002",
+        "TR-MCP-REQ-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-041",
+      "TrIds": [
+        "TR-MCP-REQ-002",
+        "TR-MCP-REQ-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-042",
+      "TrIds": [
+        "TR-MCP-HTTP-001",
+        "TR-MCP-REQ-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-043",
+      "TrIds": [
+        "TR-MCP-MT-001",
+        "TR-MCP-MT-002",
+        "TR-MCP-SEC-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-044",
+      "TrIds": [
+        "TR-MCP-MT-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-045",
+      "TrIds": [
+        "TR-MCP-TODO-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-046",
+      "TrIds": [
+        "TR-MCP-AGENT-005",
+        "TR-MCP-VOICE-001",
+        "TR-MCP-VOICE-002",
+        "TR-MCP-VOICE-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-047",
+      "TrIds": [
+        "TR-MCP-DESKTOP-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-048",
+      "TrIds": [
+        "TR-MCP-CFG-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-049",
+      "TrIds": [
+        "TR-MCP-TPL-001",
+        "TR-MCP-TPL-002",
+        "TR-MCP-TPL-003",
+        "TR-MCP-TPL-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-050",
+      "TrIds": [
+        "TR-MCP-AGENT-008",
+        "TR-MCP-AGENT-009",
+        "TR-MCP-AGENT-010",
+        "TR-MCP-AGENT-011",
+        "TR-MCP-AGENT-012"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-051",
+      "TrIds": [
+        "TR-MCP-CFG-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-052",
+      "TrIds": [
+        "TR-MCP-AGENT-004",
+        "TR-MCP-AGENT-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-053",
+      "TrIds": [
+        "TR-MCP-AGENT-005",
+        "TR-MCP-API-002",
+        "TR-MCP-API-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-054",
+      "TrIds": [
+        "TR-MCP-AGENT-005",
+        "TR-MCP-API-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-055",
+      "TrIds": [
+        "TR-MCP-AGENT-004",
+        "TR-MCP-API-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-056",
+      "TrIds": [
+        "TR-MCP-API-002",
+        "TR-MCP-TPL-006"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-057",
+      "TrIds": [
+        "TR-MCP-API-003",
+        "TR-MCP-DIR-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-058",
+      "TrIds": [
+        "TR-MCP-API-003",
+        "TR-MCP-VOICE-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-059",
+      "TrIds": [
+        "TR-MCP-ARCH-002",
+        "TR-MCP-MT-001",
+        "TR-MCP-TUN-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-060",
+      "TrIds": [
+        "TR-MCP-DIR-005",
+        "TR-MCP-DIR-006",
+        "TR-MCP-DIR-007",
+        "TR-MCP-DIR-008"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-061",
+      "TrIds": [
+        "TR-MCP-LOG-002",
+        "TR-MCP-TODO-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-062",
+      "TrIds": [
+        "TR-MCP-EVT-001",
+        "TR-MCP-EVT-002",
+        "TR-MCP-EVT-003",
+        "TR-MCP-EVT-004",
+        "TR-MCP-EVT-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-063",
+      "TrIds": [
+        "TR-MCP-GH-001",
+        "TR-MCP-GH-002",
+        "TR-MCP-GH-003",
+        "TR-MCP-GH-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-064",
+      "TrIds": [
+        "TR-MCP-DOC-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-147"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-065",
+      "TrIds": [
+        "TR-MCP-API-001",
+        "TR-MCP-INGEST-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-066",
+      "TrIds": [
+        "TR-MCP-AGENT-006",
+        "TR-MCP-AGENT-007"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-067",
+      "TrIds": [
+        "TR-MCP-HTTP-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-068",
+      "TrIds": [
+        "TR-MCP-CFG-006"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-069",
+      "TrIds": [
+        "TR-MCP-GH-005",
+        "TR-MCP-TODO-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-070",
+      "TrIds": [
+        "TR-MCP-GH-006",
+        "TR-MCP-TODO-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-071",
+      "TrIds": [
+        "TR-MCP-GH-007"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-072",
+      "TrIds": [
+        "TR-MCP-TODO-005",
+        "TR-MCP-TODO-006"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-073",
+      "TrIds": [
+        "TR-MCP-LOG-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-074",
+      "TrIds": [
+        "TR-MCP-CI-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-075",
+      "TrIds": [
+        "TR-MCP-AGENT-013"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-076",
+      "TrIds": [
+        "TR-MCP-AGENT-014",
+        "TR-MCP-SEC-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-077",
+      "TrIds": [
+        "TR-MCP-CFG-007",
+        "TR-MCP-SEC-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-078",
+      "TrIds": [
+        "TR-GRAPHRAG-ADHOC-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-079",
+      "TrIds": [
+        "TR-GRAPHRAG-ADHOC-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-080",
+      "TrIds": [
+        "TR-GRAPHRAG-ADHOC-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-081",
+      "TrIds": [
+        "TR-MCP-BYRD-001",
+        "TR-MCP-BYRD-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-082",
+      "TrIds": [
+        "TR-MCP-BYRD-001",
+        "TR-MCP-BYRD-002",
+        "TR-MCP-BYRD-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-083",
+      "TrIds": [
+        "TR-MCP-BYRD-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-084",
+      "TrIds": [
+        "TR-MCP-REQ-004",
+        "TR-MCP-REQ-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-106",
+        "TEST-MCP-107",
+        "TEST-MCP-108",
+        "TEST-MCP-109"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-085",
+      "TrIds": [
+        "TR-MCP-QA-001",
+        "TR-MCP-QA-002",
+        "TR-MCP-QA-003",
+        "TR-MCP-QA-006",
+        "TR-MCP-QA-007",
+        "TR-MCP-QA-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-110",
+        "TEST-MCP-117",
+        "TEST-MCP-119"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-086",
+      "TrIds": [
+        "TR-MCP-QA-001",
+        "TR-MCP-QA-003",
+        "TR-MCP-QA-006",
+        "TR-MCP-QA-007",
+        "TR-MCP-QA-008",
+        "TR-MCP-QA-022"
+      ],
+      "TestIds": [
+        "TEST-MCP-111",
+        "TEST-MCP-117",
+        "TEST-MCP-128"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-087",
+      "TrIds": [
+        "TR-MCP-QA-005",
+        "TR-MCP-QA-006",
+        "TR-MCP-QA-011"
+      ],
+      "TestIds": [
+        "TEST-MCP-112",
+        "TEST-MCP-116"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-088",
+      "TrIds": [
+        "TR-MCP-QA-002",
+        "TR-MCP-QA-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-113"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-089",
+      "TrIds": [
+        "TR-MCP-QA-004",
+        "TR-MCP-QA-018",
+        "TR-MCP-QA-019",
+        "TR-MCP-QA-031",
+        "TR-MCP-QA-032",
+        "TR-MCP-QA-033",
+        "TR-MCP-QA-034"
+      ],
+      "TestIds": [
+        "TEST-MCP-114",
+        "TEST-MCP-127",
+        "TEST-MCP-133",
+        "TEST-MCP-134",
+        "TEST-MCP-135"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-090",
+      "TrIds": [
+        "TR-MCP-QA-001",
+        "TR-MCP-QA-006",
+        "TR-MCP-QA-018",
+        "TR-MCP-QA-019"
+      ],
+      "TestIds": [
+        "TEST-MCP-115",
+        "TEST-MCP-125"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-091",
+      "TrIds": [
+        "TR-MCP-QA-011",
+        "TR-MCP-QA-022"
+      ],
+      "TestIds": [
+        "TEST-MCP-116",
+        "TEST-MCP-128"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-092",
+      "TrIds": [
+        "TR-MCP-QA-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-118"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-093",
+      "TrIds": [
+        "TR-MCP-QA-001",
+        "TR-MCP-QA-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-119"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-094",
+      "TrIds": [
+        "TR-MCP-QA-007",
+        "TR-MCP-QA-010",
+        "TR-MCP-QA-012"
+      ],
+      "TestIds": [
+        "TEST-MCP-120",
+        "TEST-MCP-121"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-095",
+      "TrIds": [
+        "TR-MCP-QA-014",
+        "TR-MCP-QA-015"
+      ],
+      "TestIds": [
+        "TEST-MCP-122",
+        "TEST-MCP-123"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-096",
+      "TrIds": [
+        "TR-MCP-QA-017"
+      ],
+      "TestIds": [
+        "TEST-MCP-132"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-097",
+      "TrIds": [
+        "TR-MCP-QA-016",
+        "TR-MCP-QA-023",
+        "TR-MCP-QA-024"
+      ],
+      "TestIds": [
+        "TEST-MCP-124",
+        "TEST-MCP-129"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-098",
+      "TrIds": [
+        "TR-MCP-QA-018",
+        "TR-MCP-QA-019",
+        "TR-MCP-QA-020",
+        "TR-MCP-QA-021"
+      ],
+      "TestIds": [
+        "TEST-MCP-125",
+        "TEST-MCP-126",
+        "TEST-MCP-127"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-099",
+      "TrIds": [
+        "TR-MCP-QA-022",
+        "TR-MCP-QA-023",
+        "TR-MCP-QA-024"
+      ],
+      "TestIds": [
+        "TEST-MCP-129"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-100",
+      "TrIds": [
+        "TR-MCP-QA-025",
+        "TR-MCP-QA-026"
+      ],
+      "TestIds": [
+        "TEST-MCP-130"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-101",
+      "TrIds": [
+        "TR-MCP-QA-027",
+        "TR-MCP-QA-028"
+      ],
+      "TestIds": [
+        "TEST-MCP-131"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-102",
+      "TrIds": [
+        "TR-MCP-QA-029",
+        "TR-MCP-QA-030"
+      ],
+      "TestIds": [
+        "TEST-MCP-132"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-103",
+      "TrIds": [
+        "TR-MCP-FED-001",
+        "TR-MCP-FED-MEMORY-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-136",
+        "TEST-MCP-MEMORY-FED-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-104",
+      "TrIds": [
+        "TR-MCP-BYRD-005",
+        "TR-MCP-TPL-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-137",
+        "TEST-MCP-141"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-105",
+      "TrIds": [
+        "TR-MCP-DB-001",
+        "TR-MCP-DB-002",
+        "TR-MCP-DB-003",
+        "TR-MCP-DB-004",
+        "TR-MCP-DB-005",
+        "TR-MCP-DB-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-138",
+        "TEST-MCP-139",
+        "TEST-MCP-140",
+        "TEST-MCP-DB-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-106",
+      "TrIds": [
+        "TR-MCP-PLUGIN-008",
+        "TR-MCP-PLUGIN-011",
+        "TR-MCP-PLUGIN-012",
+        "TR-MCP-PLUGIN-013"
+      ],
+      "TestIds": [
+        "TEST-MCP-142",
+        "TEST-MCP-PLUGIN-011",
+        "TEST-MCP-PLUGIN-012",
+        "TEST-MCP-PLUGIN-013"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-107",
+      "TrIds": [
+        "TR-MCP-PLAN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-143"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-108",
+      "TrIds": [
+        "TR-MCP-TODO-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-144"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-109",
+      "TrIds": [
+        "TR-MCP-BATCH-109",
+        "TR-MCP-SCHEMA-109",
+        "TR-MCP-STDIO-109"
+      ],
+      "TestIds": [
+        "TEST-MCP-145",
+        "TEST-MCP-146"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-110",
+      "TrIds": [
+        "TR-MCP-NUKE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-148"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-111",
+      "TrIds": [
+        "TR-MCP-SKILLS-001",
+        "TR-MCP-SKILLS-002",
+        "TR-MCP-SKILLS-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-149",
+        "TEST-MCP-150",
+        "TEST-MCP-151"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-112",
+      "TrIds": [
+        "TR-MCP-REQEXPORT-001",
+        "TR-MCP-REQEXPORT-002",
+        "TR-MCP-REQEXPORT-003",
+        "TR-MCP-REQEXPORT-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-152",
+        "TEST-MCP-REQEXPORT-002",
+        "TEST-MCP-REQEXPORT-003",
+        "TEST-MCP-REQWS-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-113",
+      "TrIds": [
+        "TR-MCP-BATCH-001",
+        "TR-MCP-BATCHTS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-153"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-114",
+      "TrIds": [
+        "TR-MCP-TODO-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-154"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-115",
+      "TrIds": [
+        "TR-MCP-PLUGIN-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-155"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-116",
+      "TrIds": [
+        "TR-MCP-GH-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-156"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-117",
+      "TrIds": [
+        "TR-MCP-PLUGIN-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-157"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-118",
+      "TrIds": [
+        "TR-MCP-CRYPTO-001",
+        "TR-MCP-KEYSERVER-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-158",
+        "TEST-MCP-160",
+        "TEST-MCP-166"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-119",
+      "TrIds": [
+        "TR-MCP-CRYPTO-001",
+        "TR-MCP-SUBSCRIBER-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-159",
+        "TEST-MCP-160",
+        "TEST-MCP-167"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-120",
+      "TrIds": [
+        "TR-MCP-TXN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-161",
+        "TEST-MCP-168"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-121",
+      "TrIds": [
+        "TR-MCP-TXN-001",
+        "TR-MCP-TXNAUDIT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-161",
+        "TEST-MCP-169"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-122",
+      "TrIds": [
+        "TR-MCP-TXNBYRD-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-164"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-123",
+      "TrIds": [
+        "TR-MCP-QUAD-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-163",
+        "TEST-MCP-170",
+        "TEST-MCP-171"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-124",
+      "TrIds": [
+        "TR-MCP-TXNDIAGRAMS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-162",
+        "TEST-MCP-165"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-125",
+      "TrIds": [
+        "TR-MCP-TXNCOMPAT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-163"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-126",
+      "TrIds": [
+        "TR-MCP-TXNAIUNIT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-164"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-127",
+      "TrIds": [
+        "TR-MCP-TXNDIAGRAMS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-166",
+        "TEST-MCP-167",
+        "TEST-MCP-168"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-128",
+      "TrIds": [
+        "TR-MCP-TXNARCH-001",
+        "TR-MCP-TXNDESIGN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-172",
+        "TEST-MCP-173"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-129",
+      "TrIds": [
+        "TR-MCP-QUAD-001",
+        "TR-MCP-QUAD-002",
+        "TR-MCP-QUAD-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-174",
+        "TEST-MCP-175",
+        "TEST-MCP-176",
+        "TEST-MCP-177",
+        "TEST-MCP-178"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-130",
+      "TrIds": [
+        "TR-MCP-QUAD-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-178",
+        "TEST-MCP-179"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-131",
+      "TrIds": [
+        "TR-MCP-QUAD-004",
+        "TR-MCP-QUAD-005",
+        "TR-MCP-QUAD-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-174",
+        "TEST-MCP-180",
+        "TEST-MCP-181",
+        "TEST-MCP-183"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-132",
+      "TrIds": [
+        "TR-MCP-AUTH-010",
+        "TR-MCP-AUTH-011"
+      ],
+      "TestIds": [
+        "TEST-MCP-AUTH-010",
+        "TEST-MCP-AUTH-011",
+        "TEST-MCP-AUTH-012"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-133",
+      "TrIds": [
+        "TR-MCP-HEALTH-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-HEALTH-002",
+        "TEST-MCP-HEALTH-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-134",
+      "TrIds": [
+        "TR-MCP-QUAD-003",
+        "TR-MCP-QUAD-005",
+        "TR-MCP-QUAD-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-181",
+        "TEST-MCP-182",
+        "TEST-MCP-184",
+        "TEST-MCP-185"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-135",
+      "TrIds": [
+        "TR-MCP-QUAD-005",
+        "TR-MCP-QUAD-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-183",
+        "TEST-MCP-184",
+        "TEST-MCP-185"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-136",
+      "TrIds": [
+        "TR-MCP-AGENT-015",
+        "TR-MCP-TXN-001",
+        "TR-MCP-TXNAUDIT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-186"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-137",
+      "TrIds": [
+        "TR-MCP-AGENT-016"
+      ],
+      "TestIds": [
+        "TEST-MCP-187"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-138",
+      "TrIds": [
+        "TR-MCP-AIUNIT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-AIUNIT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-139",
+      "TrIds": [
+        "TR-MCP-QUALITY-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-AIUNIT-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-140",
+      "TrIds": [
+        "TR-MCP-SEC-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-189"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-141",
+      "TrIds": [
+        "TR-MCP-SVC-002",
+        "TR-MCP-TUN-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-190",
+        "TEST-MCP-191"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-142",
+      "TrIds": [
+        "TR-MCP-QB-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-193"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-143",
+      "TrIds": [
+        "TR-MCP-CLIENT-001",
+        "TR-MCP-HEALTH-003",
+        "TR-MCP-REPL-018",
+        "TR-MCP-REPL-019",
+        "TR-MCP-REPL-020",
+        "TR-MCP-SYNC-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-194",
+        "TEST-MCP-REPL-040"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-AGENT-PARITY-001",
+      "TrIds": [
+        "TR-MCP-AGENT-PARITY-010"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-AGENT-PARITY-002",
+      "TrIds": [
+        "TR-MCP-AGENT-PARITY-011"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-BATCH-001",
+      "TrIds": [
+        "TR-MCP-BATCH-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-BATCH-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-CLEARSESSION-001",
+      "TrIds": [
+        "TR-MCP-CLEARSESSION-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-CLEARSESSION-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-DOCFXWIKI-001",
+      "TrIds": [
+        "TR-MCP-DOCFXWIKI-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-DOCFXWIKI-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-FAILSAFE-001",
+      "TrIds": [
+        "TR-MCP-FAILSAFE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-FAILSAFE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-FILETOOLS-001",
+      "TrIds": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-FILETOOLS-001",
+        "TEST-MCP-FILETOOLSINT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-001",
+      "TrIds": [
+        "TR-MCP-HELP-002",
+        "TR-MCP-HELP-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-004",
+        "TEST-MCP-HELP-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-002",
+      "TrIds": [
+        "TR-MCP-HELP-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-002",
+        "TEST-MCP-HELP-SEC-001",
+        "TEST-MCP-HELP-SEC-002",
+        "TEST-MCP-HELP-SEC-003",
+        "TEST-MCP-HELP-SEC-004",
+        "TEST-MCP-HELP-SEC-005",
+        "TEST-MCP-HELP-SEC-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-003",
+      "TrIds": [
+        "TR-MCP-HELP-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-001",
+        "TEST-MCP-HELP-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-004",
+      "TrIds": [
+        "TR-MCP-HELP-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-003",
+        "TEST-MCP-HELP-SEC-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-005",
+      "TrIds": [
+        "TR-MCP-HELP-006",
+        "TR-MCP-HELP-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-006",
+      "TrIds": [
+        "TR-MCP-HELP-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-007",
+      "TrIds": [
+        "TR-MCP-HELP-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-008",
+      "TrIds": [
+        "TR-MCP-HELP-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-SEC-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-009",
+      "TrIds": [
+        "TR-MCP-HELP-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-008"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-010",
+      "TrIds": [
+        "TR-MCP-HELP-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-HELP-011",
+      "TrIds": [
+        "TR-MCP-HELP-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-HELP-008"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-LIVE-CODEX-20260603T2014Z",
+      "TrIds": [
+        "TR-MCP-REQ-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQACPLUGIN-LIVE"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-LIVE-CODEX-20260603T2015Z",
+      "TrIds": [
+        "TR-MCP-REQ-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQACPLUGIN-LIVE"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MARKER-004",
+      "TrIds": [
+        "TR-MCP-MARKER-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-MARKER-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-001",
+      "TrIds": [
+        "TR-MCP-MEMORY-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-002",
+      "TrIds": [
+        "TR-MCP-MEMORY-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-003",
+      "TrIds": [
+        "TR-MCP-MEMORY-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-004",
+      "TrIds": [
+        "TR-MCP-MEMORY-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-004",
+        "TEST-MCP-MEMORY-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-005",
+      "TrIds": [
+        "TR-MCP-MEMORY-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-006",
+      "TrIds": [
+        "TR-MCP-MEMORY-006",
+        "TR-MCP-MEMORY-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-008"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-007",
+      "TrIds": [
+        "TR-MCP-MEMORY-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-007",
+        "TEST-MCP-MEMORY-009"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-MEMORY-008",
+      "TrIds": [
+        "TR-MCP-FED-MEMORY-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-MEMORY-FED-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGIN-BATCH-001",
+      "TrIds": [
+        "TR-MCP-BATCH-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-BATCH-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGINCORE-001",
+      "TrIds": [
+        "TR-MCP-PLUGINCORE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGINCORE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGINCORE-002",
+      "TrIds": [
+        "TR-MCP-PLUGINCORE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGINCORE-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGINCORE-003",
+      "TrIds": [
+        "TR-MCP-PLUGINCORE-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGINCORE-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGINCORE-004",
+      "TrIds": [
+        "TR-MCP-PLUGINCORE-004",
+        "TR-MCP-PLUGINCORE-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGINCORE-004",
+        "TEST-MCP-PLUGINCORE-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGIN-HEADER-001",
+      "TrIds": [
+        "TR-MCP-PLUGIN-HEADER-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGIN-HEADER-002",
+        "TEST-MCP-PLUGIN-HEADER-003",
+        "TEST-MCP-PLUGIN-HEADER-004",
+        "TEST-MCP-PLUGIN-HEADER-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGININT-001",
+      "TrIds": [
+        "TR-MCP-PLUGININT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PLUGININT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PLUGIN-SKILLS-001",
+      "TrIds": [
+        "TR-MCP-PLUGIN-SKILLS-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PRODUCT-001",
+      "TrIds": [
+        "TR-MCP-PRODUCT-API-001",
+        "TR-MCP-PRODUCT-AUTH-001",
+        "TR-MCP-PRODUCT-MODEL-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PRODUCT-001",
+        "TEST-MCP-PRODUCT-003",
+        "TEST-MCP-PRODUCT-004",
+        "TEST-MCP-PRODUCT-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PRODUCT-002",
+      "TrIds": [
+        "TR-MCP-PRODUCT-AUTH-001",
+        "TR-MCP-PRODUCT-MODEL-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PRODUCT-001",
+        "TEST-MCP-PRODUCT-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PRODUCT-003",
+      "TrIds": [
+        "TR-MCP-PRODUCT-API-001",
+        "TR-MCP-PRODUCT-SHARE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PRODUCT-002",
+        "TEST-MCP-PRODUCT-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PRODUCT-004",
+      "TrIds": [
+        "TR-MCP-PRODUCT-AUTH-001",
+        "TR-MCP-PRODUCT-SHARE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PRODUCT-002",
+        "TEST-MCP-PRODUCT-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-PRODUCT-005",
+      "TrIds": [
+        "TR-MCP-PRODUCT-CTX-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-PRODUCT-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBAGENT-001",
+      "TrIds": [
+        "TR-MCP-QBAGENT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBAGENT-001",
+        "TEST-MCP-QBAGENTINT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBEXEC-001",
+      "TrIds": [
+        "TR-MCP-QBEXEC-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBEXEC-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBEXEC-002",
+      "TrIds": [
+        "TR-MCP-QBEXEC-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBEXEC-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBEXEC-003",
+      "TrIds": [
+        "TR-MCP-QBEXEC-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBEXEC-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBOLLAMA-002",
+      "TrIds": [
+        "TR-MCP-QBOLLAMA-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBOLLAMA-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBOPENAI-001",
+      "TrIds": [
+        "TR-MCP-QBOPENAI-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBINT-001",
+        "TEST-MCP-QBOPENAI-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBSEED-001",
+      "TrIds": [
+        "TR-MCP-QBSEED-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBSEED-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBSKILLS-001",
+      "TrIds": [
+        "TR-MCP-QBSKILLS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBSKILLS-001",
+        "TEST-MCP-QBSKILLS-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBSKILLS-002",
+      "TrIds": [
+        "TR-MCP-QBSKILLS-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBSKILLS-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBSKILLS-003",
+      "TrIds": [
+        "TR-MCP-QBSKILLS-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBSKILLS-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-001",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-001",
+        "TEST-MCP-QBTOOLSINT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-002",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-003",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-004",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-005",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-006",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-006",
+        "TR-MCP-QBTOOLS-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLS-004",
+        "TEST-MCP-QBTOOLS-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QBTOOLS-007",
+      "TrIds": [
+        "TR-MCP-QBTOOLS-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-QBTOOLSINT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-QUAD-SESSION-001",
+      "TrIds": [
+        "TR-MCP-QUAD-SESSION-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-QUAD-SESSION-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-001",
+      "TrIds": [
+        "TR-MCP-REPL-001",
+        "TR-MCP-REPL-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-002",
+      "TrIds": [
+        "TR-MCP-REPL-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-003",
+      "TrIds": [
+        "TR-MCP-REPL-004",
+        "TR-MCP-REPL-005"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-004",
+      "TrIds": [
+        "TR-MCP-REPL-006"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-005",
+      "TrIds": [
+        "TR-MCP-REPL-007"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-006",
+      "TrIds": [
+        "TR-MCP-REPL-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-007",
+      "TrIds": [
+        "TR-MCP-REPL-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-007-1",
+        "TEST-MCP-REPL-007-2",
+        "TEST-MCP-REPL-007-3"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-008",
+      "TrIds": [
+        "TR-MCP-REPL-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-018"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-009",
+      "TrIds": [
+        "TR-MCP-REPL-010",
+        "TR-MCP-REPL-011",
+        "TR-MCP-REPL-012",
+        "TR-MCP-REPL-013"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-025",
+        "TEST-MCP-REPL-026",
+        "TEST-MCP-REPL-027",
+        "TEST-MCP-REPL-028"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-010",
+      "TrIds": [
+        "TR-MCP-REPL-014",
+        "TR-MCP-REPL-015"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-029",
+        "TEST-MCP-REPL-030"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-011",
+      "TrIds": [
+        "TR-MCP-REPL-016",
+        "TR-MCP-REPL-017"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-031",
+        "TEST-MCP-REPL-032",
+        "TEST-MCP-REPL-033",
+        "TEST-MCP-REPL-034",
+        "TEST-MCP-REPL-035",
+        "TEST-MCP-REPL-036",
+        "TEST-MCP-REPL-037",
+        "TEST-MCP-REPL-038",
+        "TEST-MCP-REPL-039"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQAC-001",
+      "TrIds": [
+        "TR-MCP-REQAC-001",
+        "TR-MCP-REQAC-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQAC-001",
+        "TEST-MCP-REQAC-002",
+        "TEST-MCP-REQAC-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQAC-002",
+      "TrIds": [
+        "TR-MCP-REQAC-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQAC-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQAC-PLUGIN-001",
+      "TrIds": [
+        "TR-MCP-REQAC-PLUGIN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQAC-PLUGIN-BASH",
+        "TEST-MCP-REQAC-PLUGIN-TS"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQACPLUGIN-001",
+      "TrIds": [
+        "TR-MCP-REQACPLUGIN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQACPLUGIN-BASH",
+        "TEST-MCP-REQACPLUGIN-LIVE",
+        "TEST-MCP-REQACPLUGIN-TS"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQACPLUGIN-002",
+      "TrIds": [
+        "TR-MCP-REQACPLUGIN-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-REQACPLUGIN-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQSCOPE-001",
+      "TrIds": [
+        "TR-MCP-REQSCOPE-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQSCOPE-002",
+      "TrIds": [
+        "TR-MCP-REQSCOPE-002"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQSCOPE-003",
+      "TrIds": [
+        "TR-MCP-REQSCOPE-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REQSCOPE-004",
+      "TrIds": [
+        "TR-MCP-REQSCOPE-004"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONATTR-001",
+      "TrIds": [
+        "TR-MCP-SESSIONATTR-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONATTR-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONEND-001",
+      "TrIds": [
+        "TR-MCP-SESSIONEND-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONEND-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLOGCTX-001",
+      "TrIds": [
+        "TR-MCP-SESSIONLOG-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLOG-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLOGSAN-001",
+      "TrIds": [
+        "TR-MCP-SESSIONLOGSAN-001",
+        "TR-MCP-SESSIONLOGSAN-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLOGSAN-001",
+        "TEST-MCP-SESSIONLOGSAN-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-STRICTCOUNT-001",
+      "TrIds": [
+        "TR-MCP-STRICTCOUNT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-STRICTCOUNT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SUBLOG-001",
+      "TrIds": [
+        "TR-MCP-SUBLOG-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-SUBLOG-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TEMPVOL-001",
+      "TrIds": [
+        "TR-MCP-TEMPVOL-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TEMPVOL-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TODO-CLOSE-001",
+      "TrIds": [
+        "TR-MCP-TODO-CLOSE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TODO-CLOSE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-001",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-001",
+        "TR-MCP-TRANSCRIPT-002",
+        "TR-MCP-TRANSCRIPT-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-001",
+        "TEST-MCP-TRANSCRIPT-003",
+        "TEST-MCP-TRANSCRIPT-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-002",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-001",
+        "TR-MCP-TRANSCRIPT-002",
+        "TR-MCP-TRANSCRIPT-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-001",
+        "TEST-MCP-TRANSCRIPT-002",
+        "TEST-MCP-TRANSCRIPT-003",
+        "TEST-MCP-TRANSCRIPT-009"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-003",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-003",
+        "TR-MCP-TRANSCRIPT-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-002",
+        "TEST-MCP-TRANSCRIPT-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-004",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-005",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-006",
+        "TEST-MCP-TRANSCRIPT-010"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-006",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-006",
+        "TR-MCP-TRANSCRIPT-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-007",
+        "TEST-MCP-TRANSCRIPT-008"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-007",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-007"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-008"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-008",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-002",
+        "TR-MCP-TRANSCRIPT-003",
+        "TR-MCP-TRANSCRIPT-008",
+        "TR-MCP-TRANSCRIPT-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-001",
+        "TEST-MCP-TRANSCRIPT-009",
+        "TEST-MCP-TRANSCRIPT-010",
+        "TEST-MCP-TRANSCRIPT-011",
+        "TEST-MCP-TRANSCRIPT-012"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-009",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-013"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRANSCRIPT-SEARCH-001",
+      "TrIds": [
+        "TR-MCP-TRANSCRIPT-SEARCH-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRANSCRIPT-SEARCH-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGE-001",
+      "TrIds": [
+        "TR-MCP-TRIAGE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGE-002",
+      "TrIds": [
+        "TR-MCP-TRIAGE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGE-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGE-003",
+      "TrIds": [
+        "TR-MCP-TRIAGE-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGE-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGE-004",
+      "TrIds": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TRIAGE-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-BUGTRIAGE-043",
+        "TEST-MCP-TRIAGE-004",
+        "TEST-MCP-TRIAGE-005",
+        "TEST-MCP-TRIAGE-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEERR-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEERR-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEERR-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEHELP-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEHELP-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEHELP-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEPLUGIN-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEPLUGIN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEPLUGIN-001",
+        "TEST-MCP-TRIAGEPLUGIN-002",
+        "TEST-MCP-TRIAGEPLUGIN-003",
+        "TEST-MCP-TRIAGEPLUGIN-004",
+        "TEST-MCP-TRIAGEPLUGIN-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEREQ-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEREQ-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEREQ-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGESCHEMA-001",
+      "TrIds": [
+        "TR-MCP-TRIAGESCHEMA-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGESCHEMA-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGESTORE-001",
+      "TrIds": [
+        "TR-MCP-TRIAGESTORE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGESTORE-001",
+        "TEST-MCP-TRIAGESTORE-002",
+        "TEST-MCP-TRIAGESTORE-003",
+        "TEST-MCP-TRIAGESTORE-004",
+        "TEST-MCP-TRIAGESTORE-005",
+        "TEST-MCP-TRIAGESTORE-006",
+        "TEST-MCP-TRIAGESTORE-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGESTORE-002",
+      "TrIds": [
+        "TR-MCP-TRIAGESTORE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGESTORE-007"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-TRIAGETODO-001",
+      "TrIds": [
+        "TR-MCP-TRIAGETODO-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGETODO-001",
+        "TEST-MCP-TRIAGETODO-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-001",
+      "TrIds": [
+        "TR-MCP-USECASE-001",
+        "TR-MCP-USECASE-002",
+        "TR-MCP-USECASE-003",
+        "TR-MCP-USECASE-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-001",
+        "TEST-MCP-USECASE-002",
+        "TEST-MCP-USECASE-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-002",
+      "TrIds": [
+        "TR-MCP-USECASE-001",
+        "TR-MCP-USECASE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-003",
+      "TrIds": [
+        "TR-MCP-USECASE-001",
+        "TR-MCP-USECASE-002",
+        "TR-MCP-USECASE-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-001",
+        "TEST-MCP-USECASE-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-004",
+      "TrIds": [
+        "TR-MCP-USECASE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-005",
+      "TrIds": [
+        "TR-MCP-USECASE-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-003"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-006",
+      "TrIds": [
+        "TR-MCP-USECASE-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-007",
+      "TrIds": [
+        "TR-MCP-USECASE-005",
+        "TR-MCP-USECASE-007",
+        "TR-MCP-USECASE-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-008",
+        "TEST-MCP-USECASE-010",
+        "TEST-MCP-USECASE-011"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-008",
+      "TrIds": [
+        "TR-MCP-USECASE-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-009"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-009",
+      "TrIds": [
+        "TR-MCP-USECASE-008"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-009"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-010",
+      "TrIds": [
+        "TR-MCP-USECASE-009"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-011",
+      "TrIds": [
+        "TR-MCP-USECASE-015"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-015",
+        "TEST-MCP-USECASE-017"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-012",
+      "TrIds": [
+        "TR-MCP-USECASE-011",
+        "TR-MCP-USECASE-012",
+        "TR-MCP-USECASE-013",
+        "TR-MCP-USECASE-016"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-013",
+        "TEST-MCP-USECASE-014",
+        "TEST-MCP-USECASE-016"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-013",
+      "TrIds": [
+        "TR-MCP-USECASE-013",
+        "TR-MCP-USECASE-014"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-012",
+        "TEST-MCP-USECASE-014"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-USECASE-014",
+      "TrIds": [
+        "TR-MCP-USECASE-013",
+        "TR-MCP-USECASE-014"
+      ],
+      "TestIds": [
+        "TEST-MCP-USECASE-012",
+        "TEST-MCP-USECASE-014"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-VERIFYWRAP-001",
+      "TrIds": [
+        "TR-MCP-VERIFYWRAP-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-VERIFYWRAP-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-WIKIEXPORT-001",
+      "TrIds": [
+        "TR-MCP-WIKIEXPORT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-WIKIEXPORT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-WIKIEXPORT-002",
+      "TrIds": [
+        "TR-MCP-WIKIEXPORT-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-WIKIEXPORT-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-WORKSPACE-LAYER-001",
+      "TrIds": [
+        "TR-MCP-MT-003"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-XAGENT-001",
+      "TrIds": [
+        "TR-MCP-XAGENT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-XAGENT-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010",
+      "TrIds": [
+        "TR-MCP-API-001",
+        "TR-MCP-ARCH-001",
+        "TR-MCP-DATA-001",
+        "TR-MCP-INGEST-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010A",
+      "TrIds": [
+        "TR-MCP-MT-003A"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010A-1",
+        "TEST-SUPPORT-010A-2"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010B",
+      "TrIds": [],
+      "TestIds": [
+        "TEST-SUPPORT-010B-1",
+        "TEST-SUPPORT-010B-2"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010C",
+      "TrIds": [
+        "TR-MCP-MT-003A"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010C-1",
+        "TEST-SUPPORT-010C-2",
+        "TEST-SUPPORT-010C-3"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010E",
+      "TrIds": [
+        "TR-SUPPORT-010E"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010E"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-010F",
+      "TrIds": [
+        "TR-SUPPORT-010F"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010F"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-011",
+      "TrIds": [
+        "TR-MCP-MT-003A",
+        "TR-MCP-MT-004"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010A-1",
+        "TEST-SUPPORT-010A-2"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-012",
+      "TrIds": [
+        "TR-MCP-SESSIONLOG-001",
+        "TR-MCP-SESSIONLOG-002",
+        "TR-MCP-SESSIONLOG-003",
+        "TR-MCP-SESSIONLOG-005",
+        "TR-SUPPORT-LOG-010"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLOG-001",
+        "TEST-MCP-SESSIONLOG-002",
+        "TEST-MCP-SESSIONLOG-003",
+        "TEST-MCP-SESSIONLOG-005",
+        "TEST-SUPPORT-010B-1",
+        "TEST-SUPPORT-010B-2"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-013",
+      "TrIds": [
+        "TR-MCP-HTTP-002"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-010C-1",
+        "TEST-SUPPORT-010C-2",
+        "TEST-SUPPORT-010C-3"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-014",
+      "TrIds": [
+        "TR-SUPPORT-CORE-014"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-014"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-SUPPORT-015",
+      "TrIds": [
+        "TR-SUPPORT-010F",
+        "TR-SUPPORT-CORE-015"
+      ],
+      "TestIds": [
+        "TEST-SUPPORT-015"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-TEST-002",
+      "TrIds": [
+        "TR-TEST-001"
+      ],
+      "TestIds": [],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-TRIAGE-001",
+      "TrIds": [
+        "TR-TRIAGE-CLIENT-001"
+      ],
+      "TestIds": [
+        "TEST-TRIAGE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-TRIAGE-002",
+      "TrIds": [
+        "TR-TRIAGE-CLIENT-002"
+      ],
+      "TestIds": [
+        "TEST-TRIAGE-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    }
+  ]
+}

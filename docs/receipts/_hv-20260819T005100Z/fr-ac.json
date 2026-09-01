@@ -1,0 +1,101 @@
+[
+  {
+    "Id": "FR-MCP-TRIAGEERR-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Normalized error envelope for REST, MCP, REPL, and plugins",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.",
+    "Ac1Len": 296,
+    "BodyPreview": "Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping pros"
+  },
+  {
+    "Id": "FR-MCP-TRIAGESTORE-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Session-log persist is diagnosable and idempotent",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.",
+    "Ac1Len": 319,
+    "BodyPreview": "Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook tu"
+  },
+  {
+    "Id": "FR-MCP-TRIAGESTORE-002",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Storage-only outages fail fast without flipping health liveness",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.",
+    "Ac1Len": 248,
+    "BodyPreview": "Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate s"
+  },
+  {
+    "Id": "FR-MCP-TRIAGESCHEMA-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "SessionLogs missing AgentSession columns fail closed",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.",
+    "Ac1Len": 316,
+    "BodyPreview": "After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722"
+  },
+  {
+    "Id": "FR-MCP-TRIAGEPLUGIN-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Plugin root session, cache, console, and persist identity",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.",
+    "Ac1Len": 371,
+    "BodyPreview": "Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. begin"
+  },
+  {
+    "Id": "FR-MCP-TRIAGETODO-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "EXEC dual-store rehydrate and retry-clean plan create",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.",
+    "Ac1Len": 234,
+    "BodyPreview": "set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message."
+  },
+  {
+    "Id": "FR-MCP-TRIAGEREQ-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "listTr ids are getTr updateTr deleteTr able",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.",
+    "Ac1Len": 153,
+    "BodyPreview": "Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids."
+  },
+  {
+    "Id": "FR-MCP-TRIAGEHELP-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Agent Help is diagnosis or incomplete never completed echo",
+    "Priority": "high",
+    "AcCount": 1,
+    "Ac1Text": "Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.",
+    "Ac1Len": 290,
+    "BodyPreview": "Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow."
+  },
+  {
+    "Id": "FR-MCP-SESSIONLOGCTX-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Session turns record current plan file and MCP TODO id",
+    "Priority": "medium",
+    "AcCount": 7,
+    "Ac1Text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+    "Ac1Len": 141,
+    "BodyPreview": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive)"
+  }
+]

@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGETODO-001
+title: Durable EXEC rehydrate and retry-clean create
+description: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+    isSatisfied: false

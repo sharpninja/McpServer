@@ -1,0 +1,19 @@
+Pester Result=Passed Passed=18 Failed=0 Skipped=0 Total=18
+[Passed] Resolve-McpCacheDir uses hook workspace path when cwd is the user profile and env is empty
+[Passed] Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout
+[Passed] Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default
+[Passed] CacheScope.BackgroundOpenSession_DoesNotRebindRootActiveSession
+[Passed] PluginCache.ReplaceWhileTurnOpen_ResolvesOrNamedDrift
+[Passed] BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued
+[Passed] CompleteTurn.SessionIdRebind_PersistsAndClearsFailsafe
+[Passed] plugin hook re-asserts workspace identity from hook payload
+[Passed] plugin shim preserves classified retryable instead of collapsing to internal_server_error
+[Passed] UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn
+[Passed] UserPromptSubmit.LaterPrompt_DoesNotCancelCompletedRootTurn
+[Passed] UserPromptSubmit.BackgroundPrompt_DoesNotCancelInProgressRootWorkTurn
+[Passed] TEST-MCP-STRICTCOUNT-001 New-McpPluginTurnUpsertRequest accepts omitted empty null and scalar tags under StrictMode
+[Passed] TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn omitted empty and scalar tags stay silent under StrictMode
+[Passed] TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down
+[Passed] TEST-MCP-XAGENT-001 different sourceType prefixes are incompatible and same-agent prefixes rebind
+[Passed] TEST-MCP-VERIFYWRAP-001 disk-full IOException is typed and bounded process honors timeout
+[Passed] TEST-MCP-TRIAGEPLUGIN-004 PersistTurn.SubmitAsyncChildTimeout_ReturnsDegradedQueued

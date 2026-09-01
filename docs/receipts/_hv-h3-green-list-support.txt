@@ -1,0 +1,65 @@
+NAME=support
+PROJECT=tests/McpServer.Support.Mcp.Tests
+FILTER=ProductsControllerTests|Products|ProductEntityTests|ProductMigrationApplyTests
+START=2026-08-18T15:36:49.0000430Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+The following Tests are available:
+    McpServer.Support.Mcp.Tests.Storage.ProductEntityTests.Create_DuplicateProdMcpserverKey_FailsConflict
+    McpServer.Support.Mcp.Tests.Storage.ProductEntityTests.ProductEntities_DoNotHaveWorkspaceQueryFilters
+    McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.Migrate_FromEmpty_CreatesProductTables
+    McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.Migrate_FromPredecessor_WithSessionLogsAgentColumns_CreatesProductTables
+    McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_OwnerAddsRegisteredWorkspace_IncludesMember
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_UnknownWorkspace_Fails
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_NonOwner_FailsForbidden
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_OwnerRemovesMember_DropsMember
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_MemberLeavesSelf_RemovesOnlyCaller
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_MemberRemovesOther_FailsForbidden
+    McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_RemovedMember_LosesProductReads
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_ValidProdMcpserverKey_ReturnsOwnerAndKey
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "")
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "mcpserver")
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "prod-mcpserver")
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "MCP-SERVER")
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_HidesFromGet
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_OutsiderGet_IsNotFound
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_NonOwnerUpdate_FailsForbidden
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_NonOwnerDelete_FailsForbidden
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_OwnerUpdate_ChangesName
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_HidesFromDefaultList
+    McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_StopsMembershipReads
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_ProductScope_UnionsSiblingRows
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_LocalScope_HidesSiblings
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_Collision_ReturnsTwoOrigins
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_OriginLayerMiss_ExcludesSiblingRow
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_AfterLeave_DropsSibling
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_Outsider_IsLocalOnly
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_LocalDeleteSiblingOnlyId_LeavesSiblingRow
+    McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_ZeroProductWorkspace_StaysLocal
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenSuccess_ReturnsCreated
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenInvalidKey_ReturnsBadRequest
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenConflict_ReturnsConflict
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.GetAsync_WhenNotFound_ReturnsNotFound
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.DeleteAsync_WhenForbidden_ReturnsForbid
+    McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.RequirementsEffective_AcceptsProductScopeQuery
+EXIT=0
+END=2026-08-18T15:37:00.7960314Z

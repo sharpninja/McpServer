@@ -1,0 +1,15 @@
+command: pwsh.exe -NoProfile -NonInteractive
+cwd: F:\GitHub\McpServer\.worktrees\session-sanitizer
+dotnet test tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj -c Debug --filter FullyQualifiedName~SessionLogSanitizationControllerTests --logger trx;LogFileName=s15s16-sanitizer.trx --results-directory F:\GitHub\McpServer\docs\receipts\_hv-s3-sanitizer-red
+
+exitCode: 0
+
+Test run for F:\GitHub\McpServer\.worktrees\session-sanitizer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: F:\GitHub\McpServer\docs\receipts\_hv-s3-sanitizer-red\s15s16-sanitizer.trx
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 6 s - McpServer.Support.Mcp.IntegrationTests.dll (net10.0)
+
+S15: GREEN (Passed)
+S16: GREEN (Passed)
+verdict: already green; sanitizer is outermost; no product sanitizer edits

@@ -1,0 +1,83 @@
+{
+  "TimestampUtc": "2026-08-20T13:03:05Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "AddProfileExecuted": true,
+  "ProfileFileCount": 18,
+  "ExcludedSkillPorts": ["add-profile.grok.md"],
+  "WorkClass": "class1-mcp-store-hygiene-happly-hdone-align",
+  "ActivePlan": "docs/plans/todo-requirements-audit.md",
+  "SessionIdRequested": "GrokCode-20260820T125722Z-happly-hdone-align",
+  "SessionIdPersisted": "GrokCode-20260820T125730Z-plugin-session",
+  "RequestId": "req-20260820T125722Z-001-hostile-apply-done-align",
+  "PluginStatus": "available",
+  "HealthNonceOk": true,
+  "HealthNonce": "2f115ba5a41049b4b5895b7cbd4178ca",
+  "GitHead": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "LiveVersion": "1.4.29+20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "MarkerSignatureOk": true,
+  "OverallVerdict": "AGREE",
+  "PassCount": 17,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "Accuracy": 94,
+  "Completeness": 92,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "C: no FR completed claim; Handoff FR remain in_progress"
+  ],
+  "ParentMaySetDone": {
+    "todoId": "PLAN-TODOALIGN-001",
+    "cite": "docs/receipts/hostile-validator-20260820T130305Z.md"
+  },
+  "LiveCounts": {
+    "s0Open": 40,
+    "liveOpen": 41,
+    "missingDate": [],
+    "staleOnly": [],
+    "orphanBad": [],
+    "stillOpenDone": [],
+    "newOpenIds": ["BUG-TRIAGE-164"]
+  },
+  "Claims": [
+    { "id": "A1", "verdict": "PASS", "title": "Every S0-open Remaining cites 2026-08-20T101500Z; live todo_list missingDate empty" },
+    { "id": "A2", "verdict": "PASS", "title": "DELETE unlinked []; 160 P0+503; E1 rename admitted; FILETOOLS RepoFileService and missing read_file" },
+    { "id": "A3", "verdict": "PASS", "title": "leftover Done true; 160-163 Done false; Handoff TODOs Done false; FR-HANDOFF in_progress" },
+    { "id": "A4", "verdict": "PASS", "title": "TR-02..14 noted; [] not patchable; generate 2026-08-20T12:50:45.7597304Z; ValidateTraceability findings=0" },
+    { "id": "A5", "verdict": "PASS", "title": "PLAN-TODOALIGN-001 still Done false" },
+    { "id": "B1", "verdict": "PASS", "title": "Byrd product tests N/A for store-hygiene audit" },
+    { "id": "B2", "verdict": "PASS", "title": "receipts independently re-queried" },
+    { "id": "B3", "verdict": "PASS", "title": "MCP-only storage; no TODO.yaml write" },
+    { "id": "B4", "verdict": "PASS", "title": "pwsh only; no Python" },
+    { "id": "B5", "verdict": "PASS", "title": "honesty: ALIGN/160-163/leftover/Handoff flags match claims" },
+    { "id": "B6", "verdict": "PASS", "title": "reviewer session persisted; queryHistory title present; not 503" },
+    { "id": "C", "verdict": "N/A", "title": "no FR completed claim" },
+    { "id": "D1", "verdict": "PASS", "title": "remaining rewrite" },
+    { "id": "D2", "verdict": "PASS", "title": "placeholder note" },
+    { "id": "D3", "verdict": "PASS", "title": "generate markdown timestamps" },
+    { "id": "D4", "verdict": "PASS", "title": "leftover stays done" },
+    { "id": "D5", "verdict": "PASS", "title": "160-163 stay open" },
+    { "id": "D6", "verdict": "PASS", "title": "ALIGN not self-closed; no product implementation" }
+  ],
+  "Observations": [
+    "liveOpenCount 41 because BUG-TRIAGE-164 exists; S0 freeze was 40",
+    "TR-02..14 status still pending; assigned DoD is note not defer",
+    "plugin getTr [] is schema_validation_failed empty id, not native validation_error token",
+    "plugin persisted sessionId GrokCode-20260820T125730Z-plugin-session rather than the requested happly-hdone-align suffix"
+  ],
+  "Evidence": [
+    "docs/receipts/_hv-happly-hdone/01-trust-git.json",
+    "docs/receipts/_hv-happly-hdone/04-s0-remaining.json",
+    "docs/receipts/_hv-happly-hdone/05-spot-gets.json",
+    "docs/receipts/_hv-happly-hdone/05-native-leftover-align.json",
+    "docs/receipts/_hv-happly-hdone/06-handoff-fr.json",
+    "docs/receipts/_hv-happly-hdone/07-native-tr-placeholders.json",
+    "docs/receipts/_hv-happly-hdone/08-tools-list.json",
+    "docs/receipts/_hv-happly-hdone/09-markdown.json",
+    "docs/receipts/_hv-happly-hdone/11-validate-traceability.log",
+    "docs/receipts/_hv-happly-hdone/12-queryHistory.txt",
+    "docs/receipts/_hv-happly-hdone/13-todo-get-TR-AUDIT-001.txt"
+  ]
+}

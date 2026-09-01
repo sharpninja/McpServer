@@ -1,0 +1,27 @@
+{
+  "TimestampUtc": "2026-08-19T20:13:53Z",
+  "MarkerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "MarkerWrittenAtUtc": "2026-08-19T13:05:36.9456178Z",
+  "SignatureValid": true,
+  "HealthStatusCode": 200,
+  "Nonce": "hv-closeout-s2-fd32a84cbdd24dadb6eb7122442f9c4c",
+  "NonceEchoed": true,
+  "HealthBody": "{\"status\":\"Healthy\",\"version\":\"1.4.28\\u002Bf4060f037e62e64974026aff9d24e11b2f481952\",\"checks\":[{\"name\":\"self\",\"status\":\"Healthy\",\"description\":null,\"duration\":0.0008},{\"name\":\"upstream\",\"status\":\"Healthy\",\"description\":\"Federation disabled.\",\"duration\":0.0019}],\"nonce\":\"hv-closeout-s2-fd32a84cbdd24dadb6eb7122442f9c4c\",\"storage\":\"reachable\"}",
+  "PluginName": "mcpserver",
+  "PluginVersionJson": "1.95.0",
+  "PluginVersionFile": "1.95.0",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-closeout",
+  "Git": {
+    "StatusPorcelain": [
+      " M src/McpServer.Storage.SqliteMigrations/Migrations/20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+      " M src/McpServer.Storage/McpDbContext.cs",
+      " M src/McpServer.Storage/SessionLogSchemaGuard.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogSchemaGuardTests.cs",
+      "?? src/McpServer.Storage/Database/SqliteSessionLogHeaderDdl.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs"
+    ],
+    "Head": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+    "Plan002Exists": false,
+    "Branch": "triage/closeout"
+  }
+}

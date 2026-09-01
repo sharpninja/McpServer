@@ -243,6 +243,16 @@ public sealed record SessionLogQueryRequest
 
     /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact filter on turn todoId.</summary>
     public string? TodoId { get; init; }
+
+    /// <summary>BUG-TRIAGE-121: Exact turn status filter (for example <c>in_progress</c>).</summary>
+    public string? TurnStatus { get; init; }
+
+    /// <summary>
+    /// BUG-TRIAGE-121: Keep sessions that have a matching turn whose timestamp is
+    /// older than this many hours. Combined with <see cref="TurnStatus"/> to list
+    /// stale open turns. Does not close them.
+    /// </summary>
+    public int? StaleOlderThanHours { get; init; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Paginated result of a session log query.</summary>

@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGESCHEMA-001
+title: Missing AgentSession columns fail closed
+description: A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+    isSatisfied: false

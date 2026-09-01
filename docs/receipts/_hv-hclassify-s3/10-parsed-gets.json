@@ -1,0 +1,187 @@
+{
+  "timestampUtc": "2026-08-20T11:52:13.7596418Z",
+  "rows": [
+    {
+      "id": "BUG-TRIAGE-160",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "BUG-TRIAGE-161",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "BUG-TRIAGE-162",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "BUG-TRIAGE-163",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "MCP-HANDOFF-001",
+      "done": false,
+      "remaining": "Phase 0 complete: FR-HANDOFF-001..007, TR-HANDOFF-*-001, TEST-HANDOFF-001..007, mappings, and TODO links persisted. Focused tests: Client 5/5, Support.Mcp Handoff 19/19, Repl Handoff 1/1, zero skips. Implementation is in the worktree for Codex review. Do not mark done. Do not commit.",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "tr": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "notePreview": "Implementation and required validation are in the dirty worktree for Codex review. PLAN evidence 2026-08-16T20:54Z: required suites Failed 0 / Skipped 0. Do not mark this TODO done"
+    },
+    {
+      "id": "PLAN-DELETECOMPLIANCE-003",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 25% complete. Evidence: Some soft-delete/recycle-related code exists, but quarantine source evidence is absent and DELETE FROM occurrences remain. Missing: Reconcile requirements, classify/remediate migration deletes, add recycle/quarantine helper coverage, and static guard tests.",
+      "remainingHas0711": true,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "[]"
+      ],
+      "tr": [
+        "TR-MCP-DB-003"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "PLAN-FILETOOLS-001",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual shared IRepoDiscoveryService, RepoDiscovery, or server-owned discovery core evidence was found. Missing: Implement shared discovery core and Red-Green-Refactor read_file/list_dir/grep_files increments.",
+      "remainingHas0711": true,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "tr": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "notePreview": null
+    },
+    {
+      "id": "PLAN-QUADBRAIN-E1-001",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for rename core or migration work was found. Missing: Design and implement rename/migration path with compatibility tests.",
+      "remainingHas0711": true,
+      "remainingHasAuditDate": false,
+      "fr": [],
+      "tr": [],
+      "notePreview": "PARTIAL 2026-07-20, commit 2769ef24 on develop (40 files, +13584/-898). LANDED: rename core across constants, DTOs, client library, stdio contract, Node plugin schema, mcps tool de"
+    },
+    {
+      "id": "PLAN-TODOALIGN-001",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [],
+      "tr": [],
+      "notePreview": null
+    },
+    {
+      "id": "PLAN-TODOAUDIT-001",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [],
+      "tr": [],
+      "notePreview": null
+    },
+    {
+      "id": "PLAN-TRIAGELEFTOVER-001",
+      "done": true,
+      "remaining": "",
+      "remainingHas0711": false,
+      "remainingHasAuditDate": false,
+      "fr": [
+        "FR-MCP-SESSIONATTR-001",
+        "FR-MCP-FAILSAFE-001",
+        "FR-MCP-STRICTCOUNT-001",
+        "FR-MCP-XAGENT-001",
+        "FR-MCP-SESSIONEND-001",
+        "FR-MCP-VERIFYWRAP-001",
+        "FR-MCP-TRANSCRIPT-SEARCH-001",
+        "FR-MCP-TEMPVOL-001"
+      ],
+      "tr": [
+        "TR-MCP-SESSIONATTR-001",
+        "TR-MCP-FAILSAFE-001",
+        "TR-MCP-STRICTCOUNT-001",
+        "TR-MCP-XAGENT-001",
+        "TR-MCP-SESSIONEND-001",
+        "TR-MCP-VERIFYWRAP-001",
+        "TR-MCP-TRANSCRIPT-SEARCH-001",
+        "TR-MCP-TEMPVOL-001"
+      ],
+      "notePreview": "S7 H-done AGREE docs/receipts/hostile-validator-20260820T092641Z.md FAIL empty. Prior 091214Z DISAGREE D4 closed by Nuke SyncAgentPlugins (core 20db61aa, 8 plugins, grok/codex 1.96"
+    }
+  ],
+  "leftoverDone": [
+    true
+  ],
+  "e1Remaining0711": [
+    true
+  ],
+  "e1AuditDate": [
+    false
+  ],
+  "anyAuditDate": [],
+  "anyDoneTrue": [
+    "PLAN-TRIAGELEFTOVER-001"
+  ]
+}

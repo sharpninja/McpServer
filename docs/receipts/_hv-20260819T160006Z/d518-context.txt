@@ -1,0 +1,31 @@
+ok-cancel` and status `completed`.
+
+          4. Wrap-up receipt `docs/receipts/wrap-up-20260819T134500Z.md` includes the second hostile DISAGREE and the 018 complete note. Implementer does not claim 017 is still in_progress.
+
+          5. Implementer did not mark PLAN-TRIAGECLUSTER-001 done in this resolve.
+
+
+          Implementer receipt: docs/receipts/wrap-up-20260819T134500Z.md
+
+
+          Independently re-check git index, GitVersion.yml, sessionlog_query (do not rely on exact-requestId text search; it returns 0), current-turn.yaml, wrap-up receipt text, HEAD vs origin.
+
+
+          Return receipt path, OverallVerdict, PASS/FAIL/UNKNOWN counts, full FAIL list.
+        queryTitle: You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpSer
+        response: Superseded by req-20260819T154430Z-prompt-d518 before it was completed.
+        status: canceled
+        planFile: None
+        todoId: None
+        model: grok
+        tokenCount: 0
+      - requestId: req-20260819T153500Z-019-remediate-hook-cache-isolation
+        timestamp: 2026-08-19T15:48:30.6867485+00:00
+        queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'
+        queryTitle: Remediate hook cache isolation FAILs
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Red Pester: UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn failed because isola

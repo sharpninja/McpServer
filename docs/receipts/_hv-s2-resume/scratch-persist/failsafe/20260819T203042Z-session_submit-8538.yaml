@@ -1,0 +1,26 @@
+method: client.SessionLog.SubmitAsync
+label: session_submit
+timestamp: 20260819T203042Z
+params:
+  sessionLog:
+    turns:
+      - tokenCount: 0
+        status: in_progress
+        response: (turn opened)
+        planFile: docs/plans/triage-cluster-002.md
+        timestamp: 2026-08-19T00:00:01Z
+        todoId: BUG-TRIAGE-120
+        queryText: submit timeout
+        queryTitle: submit timeout
+        model: codex
+        requestId: req-20260819T000000Z-001-submit-timeout
+    lastUpdated: 2026-08-19T20:30:42Z
+    agentSessionId: 01a01bb0-3a6a-7e33-b430-95bcd88e5f26
+    sessionId: GrokCode-20260819T000000Z-plugin-session
+    agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+    agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+    sourceType: GrokCode
+    started: 2026-08-19T00:00:01Z
+    turnCount: 1
+    model: codex
+    status: in_progress

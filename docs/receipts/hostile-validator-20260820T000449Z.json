@@ -1,0 +1,97 @@
+{
+  "TimestampUtc": "2026-08-20T00:04:49Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation leftover G12 S5 TEMPVOL H-green implementation-exit",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/tempvol",
+  "GitSha": "9c7c3ec3c1e792a1476ca711392812a0ba29425a",
+  "DirtyCount": 0,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T235423Z-hostile-s5-hgreen",
+    "requestId": "req-20260819T235423Z-001-hostile-s5-hgreen",
+    "turnIdBegin": 42139,
+    "turnStatus": "completed",
+    "queryProof": "docs/receipts/_hv-s5-hgreen/14-query-proof.json",
+    "queryTotalCount": 1,
+    "queryDialogCount": 4,
+    "queryDesignDecisionCount": 2,
+    "queryActionCount": 7
+  },
+  "PluginIdentity": {
+    "sourceType": "GrokCode",
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginVersion": "1.95.0",
+    "markerSignatureOk": true,
+    "healthNonceSent": "hv-s5hg-20260819T235423Z-41905",
+    "healthNonceEcho": "hv-s5hg-20260819T235423Z-41905",
+    "healthNonceMatch": true,
+    "healthStorage": "reachable",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "toolsSearchExactNameCount": 1
+  },
+  "PesterNamed": {
+    "paths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol\\plugins\\core\\test-fixtures\\pester\\PluginTempVolume.Tests.ps1"
+    ],
+    "filter": ["*TEST-MCP-TEMPVOL-001*"],
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "notRun": 0,
+    "total": 8,
+    "elapsedSec": 1.187,
+    "result": "Passed",
+    "artifact": "docs/receipts/_hv-s5-hgreen/03-pester.json",
+    "xml": "docs/receipts/_hv-s5-hgreen/pester.xml"
+  },
+  "PriorTestPhase": {
+    "pathMd": "docs/receipts/hostile-validator-20260819T234306Z.md",
+    "pathJson": "docs/receipts/hostile-validator-20260819T234306Z.json",
+    "overallVerdict": "AGREE",
+    "failListMd": ["None."],
+    "failListJson": [],
+    "failCount": 0,
+    "hasDisagree": false
+  },
+  "PriorHGreenDisagree": "docs/receipts/hostile-validator-20260819T232840Z.md",
+  "OverallVerdict": "AGREE",
+  "AgreeScope": "leftover S5 H-green implementation-exit; parent may merge triage/tempvol and mark BUG-TRIAGE-117 done citing this receipt; do not mark PLAN-TRIAGELEFTOVER-001 done; this review did not merge and did not update TODOs",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 94,
+  "Completeness": 92,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Pester FullName=*TEST-MCP-TEMPVOL-001* PluginTempVolume.Tests.ps1 8/0/0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "HEAD 9c7c3ec3 has Set-McpPluginSameVolumeTemp, failed-move helper, wrapper/session-start alignment; PSGallery not patched" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "234306Z OverallVerdict AGREE FailList empty; tests not gone or red" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "BUG-TRIAGE-117 and PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "No FR createdAt vs LastWriteTime FAIL" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "S5 test-phase hostile AGREE exists (234306Z) and named tests 8/0/0" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/session/requirements storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "Honesty: artifacts match 8/0/0, HEAD helpers, Done=false, 234306Z AGREE FAIL-empty" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-MCP-TEMPVOL-001 TR-MCP-TEMPVOL-001 TEST-MCP-TEMPVOL-001 exist in MCP" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "Structured testable AC exist" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "FR maps to matching TR and TEST" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "Named Pester covers each leftover AC" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "S5 implementation-exit DoD met; parent may merge 117 citing this receipt; this review did not merge" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN-TRIAGELEFTOVER-001 remains Done=false" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "Not S7 / not leftover-plan closeout" }
+  ],
+  "DidNotMerge": true,
+  "DidNotMarkTodosDone": true
+}

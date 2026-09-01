@@ -1,0 +1,147 @@
+[
+  {
+    "Id": "TEST-MCP-TRIAGE-002",
+    "Condition": "Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "Triage grouping acceptance",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "TEST-MCP-TRIAGE-002-AC001",
+        "text": "Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "Condition": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "Pester for root session cache console timeout and rebind",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-002",
+    "Condition": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "ReplacePluginCache retain-or-rebind or named version-drift",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-003",
+    "Condition": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "Resolve-McpCacheDir uses hook workspace path",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "Condition": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "beginTurn persist timeout is degraded/queued",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-005",
+    "Condition": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "completeTurn persist identity uses current-turn sessionId",
+    "Priority": "high",
+    "Status": "pending",
+    "Notes": null,
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  },
+  {
+    "Id": "TEST-TRIAGE-002",
+    "Condition": "Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.",
+    "WorkspaceId": "F:\\GitHub\\McpServer",
+    "Title": "Triage-created TODO endpoint coverage",
+    "Priority": "high",
+    "Status": "completed",
+    "Notes": "Focused client and support triage tests pass with zero failures and zero skips.",
+    "AcceptanceCriteria": [
+      {
+        "id": "ac-1",
+        "text": "Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped.",
+        "isSatisfied": true,
+        "evidence": "TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext"
+      },
+      {
+        "id": "ac-2",
+        "text": "Controller tests verify the read-only endpoint returns the service result.",
+        "isSatisfied": true,
+        "evidence": "TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex"
+      },
+      {
+        "id": "ac-3",
+        "text": "Client tests verify the typed triage TODO method calls the expected URL with workspace filters.",
+        "isSatisfied": true,
+        "evidence": "TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter"
+      }
+    ],
+    "ScopeStartLayerKey": "layer-1",
+    "ScopeEndLayerKey": null
+  }
+]

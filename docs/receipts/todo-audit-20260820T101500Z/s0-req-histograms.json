@@ -1,0 +1,97 @@
+{
+  "timestampUtc": "2026-08-20T11:50:08Z",
+  "trCount": 422,
+  "testCount": 448,
+  "trByStatus": [
+    {
+      "status": "completed",
+      "count": 30
+    },
+    {
+      "status": "deferred",
+      "count": 13
+    },
+    {
+      "status": "in_progress",
+      "count": 8
+    },
+    {
+      "status": "pending",
+      "count": 366
+    },
+    {
+      "status": "planned",
+      "count": 5
+    }
+  ],
+  "testByStatus": [
+    {
+      "status": "completed",
+      "count": 50
+    },
+    {
+      "status": "in_progress",
+      "count": 7
+    },
+    {
+      "status": "pending",
+      "count": 382
+    },
+    {
+      "status": "planned",
+      "count": 8
+    },
+    {
+      "status": "satisfied",
+      "count": 1
+    }
+  ],
+  "placeholderTrIds": [
+    "[]",
+    "TR-01",
+    "TR-02",
+    "TR-03",
+    "TR-04",
+    "TR-05",
+    "TR-06",
+    "TR-07",
+    "TR-08",
+    "TR-09",
+    "TR-10",
+    "TR-11",
+    "TR-12",
+    "TR-13",
+    "TR-14"
+  ],
+  "leftoverGetSnippet": "type: error\r\npayload:\r\n  requestId: req-20260820T115006Z-04cd\r\n  code: schema_validation_failed\r\n  message: YAML request failed schema validation.\r\n  details:\r\n    methodName: workflow.todo.get\r\n    errors:\r\n    - payload.params.id is required.\r\n\r\n---\r\nException: C:\\Users\\kingd\\.grok\\installed-plugins\\f--github-mcpserver-grok-plugin-67f1f31f\\lib\\Invoke-McpPlugin.ps1:322\r\nLine |\r\n 322 |          th",
+  "leftoverDone": true,
+  "doneTrueCount": 253,
+  "doneTrueIdsSample": [
+    "agent-pool-runtime-orchestration",
+    "ARCH-GRAPHRAG-001",
+    "ARCH-SERVICES-001",
+    "ARCH-STORAGE-001",
+    "ARCH-SUPPORT-001",
+    "audit-di-ssot",
+    "MCP-AGENTFRAMEWORK-001",
+    "MCP-PRODUCTS-001",
+    "plan-audit-di-ssot-execution",
+    "web-ui-cqrs-mvvm-compliance-audit",
+    "PLAN-WEBUI-001",
+    "BUG-APPVISIBILITY-001",
+    "BUG-HOOKEVENTNAME-001",
+    "BUG-REQUPDATE-001",
+    "BUG-TRIAGE-003",
+    "BUG-TRIAGE-010",
+    "BUG-TRIAGE-015",
+    "BUG-TRIAGE-018",
+    "BUG-TRIAGE-020",
+    "BUG-TRIAGE-021"
+  ],
+  "mappingCount": 293,
+  "mappingFrIdCount": 293,
+  "sourceTrJson": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\mcp\\call-9c30b4d9-65b5-48e7-8ec6-46da971a11c2-106.json",
+  "sourceTestJson": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\mcp\\call-9c30b4d9-65b5-48e7-8ec6-46da971a11c2-107.json",
+  "sourceDoneJson": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\mcp\\call-4b22264e-b699-4775-876f-f9b77dad0500-164.json",
+  "sourceMapJson": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\mcp\\call-4b22264e-b699-4775-876f-f9b77dad0500-165.json"
+}

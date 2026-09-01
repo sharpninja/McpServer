@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20260819T190302Z-eba4
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-156
+      title: beginTurn SubmitAsync 500 when persisting a superseded hook turn without planFile/todoId
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - On TruckMate, Grok workflow.sessionlog.beginTurn tried to persist hook turn req-20260818T181330Z-prompt-5e12 as canceled after session rotation to GrokCode-20260818T181707Z-hostile-p6-close-gate. Invoke-ReplSupersedeCurrentTurnIfInProgress calls SubmitAsync with a single-turn payload that omits planFile and todoId. Because that requestId is new on the rotated session, SessionLogService.ApplyTurnContext runs ValidateForNewEntry and throws ArgumentException. SessionLogController.SubmitAsync does not map that to 400, so the client sees method_invocation_error/internal_server_error. The failsafe at 20260818T181715Z-session_submit-e942.yaml exhausted 5 drain attempts and was quarantined. beginTurn only logs the error and still leaves the new review session open.
+      - 'Triage group: triage-group-4f0a4edb3b0b5c81'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given an in-progress hook turn whose requestId is not already stored on the current session, workflow.sessionlog.beginTurn with a different requestId persists the old turn as status canceled and SubmitAsync does not return internal_server_error.'
+      - '- The persisted canceled turn includes a valid planFile and todoId pair, using None/None when the hook turn has no context.'
+      - '- After a successful superseded persist, the matching session_submit failsafe is removed and is not quarantined for this error.'
+      - '- beginTurn still opens the new requestId and the current session remains in_progress and usable.'
+      - 'Implementation notes:'
+      - '- Fix site: plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplSupersedeCurrentTurnIfInProgress. It currently calls Invoke-ReplPersistTurn with only RequestId, Title, Status=canceled, and ResponseText.'
+      - '- Forward planFile/todoId from current-turn state into the persist, defaulting omitted values to None/None the same way Invoke-WorkflowBeginTurn does for new turns.'
+      - '- Prefer persisting the superseded hook turn against the session that opened it. After session rotation the current sessionId makes the old requestId a new turn and trips FR-MCP-SESSIONLOGCTX new-entry validation.'
+      - '- SessionLogController.SubmitAsync should treat SessionLogTurnContextValidator ArgumentException as 400 ValidationProblem rather than an unhandled 500.'
+      - '- Quarantined evidence: F:\GitHub\TruckMate\.mcpServer\grok\failsafe\quarantine\20260818T181715Z-session_submit-e942.yaml. Payload has no planFile/todoId, status canceled, sessionId GrokCode-20260818T181707Z-hostile-p6-close-gate.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T184746Z.md. Canceled omitted planFile/todoId stamps None (STORE-006). Non-canceled first persist still rejects omitted fields. Named unit tests 36/0/0. Live canceled omit persisted None/None. Session GrokCode-20260819T183656Z-hostile-g1-closeout.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

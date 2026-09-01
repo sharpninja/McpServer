@@ -1,0 +1,38 @@
+{
+  "TimestampUtc": "2026-08-19T20:01:47Z",
+  "PluginExe": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\temp-plugin-core\\lib\\Invoke-McpPlugin.ps1",
+  "TempPlugin": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-s2-hgreen\\temp-plugin-core",
+  "SessionId": "GrokCode-20260819T200139Z-hostile-s2-120-core",
+  "RequestId": "req-20260819T200139Z-001-hostile-s2-120-core",
+  "Bootstrap": {
+    "Method": "workflow.sessionlog.bootstrap",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 2.711,
+    "StdOut": "type: result\r\npayload:\r\n  requestId: req-20260819T200141Z-5f15\r\n  result:\r\n    initialized: true\r\n  deprecated: true\r\n\r\n---\r\n",
+    "StdErr": "",
+    "TimeoutSecondsPassed": 20
+  },
+  "OpenSession": {
+    "Method": "workflow.sessionlog.openSession",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 1.9,
+    "StdOut": "",
+    "StdErr": "",
+    "TimeoutSecondsPassed": 20
+  },
+  "BeginTurn": {
+    "Method": "workflow.sessionlog.beginTurn",
+    "TimedOut": false,
+    "ExitCode": 0,
+    "ElapsedSec": 3.097,
+    "StdOut": "",
+    "StdErr": "",
+    "TimeoutSecondsPassed": 12
+  },
+  "BeginClassified": "completed-exit0",
+  "BeginHasCommandTimeout": false,
+  "BeginHasRetryableTrue": false,
+  "BeginExceeded30s": false
+}

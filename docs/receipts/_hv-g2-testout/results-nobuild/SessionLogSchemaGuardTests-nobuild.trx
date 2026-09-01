@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1c0be85b-6e2f-4e3c-b9e9-0ac20dc444f5" name="kingd@PAYTON-LEGION2 2026-08-19 13:42:58" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-19T13:42:58.9232268-05:00" queuing="2026-08-19T13:42:58.9232275-05:00" start="2026-08-19T13:42:54.9404215-05:00" finish="2026-08-19T13:43:00.0716055-05:00" />
+  <TestSettings name="default" id="cb9a7aeb-45a6-4f1d-b857-4524950f96dc">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-19_13_42_58" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="151f73c4-e52c-4f3b-a55d-515ca6fac3cb" testId="1c1cdeeb-4e2d-0f1f-c876-bf6540eec517" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" computerName="PAYTON-LEGION2" duration="00:00:01.6057223" startTime="2026-08-19T13:42:57.2535811-05:00" endTime="2026-08-19T13:42:58.8717686-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="151f73c4-e52c-4f3b-a55d-515ca6fac3cb" />
+    <UnitTestResult executionId="4a9ccd4e-5426-4039-8d97-4d09ec0d3e3b" testId="3b07b049-b0ee-2b00-2b70-c5774ccb3a9d" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" computerName="PAYTON-LEGION2" duration="00:00:00.0706915" startTime="2026-08-19T13:42:59.8743947-05:00" endTime="2026-08-19T13:42:59.9451275-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a9ccd4e-5426-4039-8d97-4d09ec0d3e3b" />
+    <UnitTestResult executionId="054b8e50-2908-48bb-a8f7-dced85bc757d" testId="7bad7c94-32d5-88f0-691e-a42b4632bf73" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError" computerName="PAYTON-LEGION2" duration="00:00:00.0079292" startTime="2026-08-19T13:42:59.8659332-05:00" endTime="2026-08-19T13:42:59.8739271-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="054b8e50-2908-48bb-a8f7-dced85bc757d" />
+    <UnitTestResult executionId="a9484875-740c-4787-aca6-18f2a1c8a4b3" testId="8db0fc20-8efa-d24c-47ff-a9bfa11489f8" testName="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds" computerName="PAYTON-LEGION2" duration="00:00:00.9844564" startTime="2026-08-19T13:42:58.8804823-05:00" endTime="2026-08-19T13:42:59.8650650-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9484875-740c-4787-aca6-18f2a1c8a4b3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="1c1cdeeb-4e2d-0f1f-c876-bf6540eec517">
+      <Execution id="151f73c4-e52c-4f3b-a55d-515ca6fac3cb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_AfterColumnsPresent_Succeeds" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="8db0fc20-8efa-d24c-47ff-a9bfa11489f8">
+      <Execution id="a9484875-740c-4787-aca6-18f2a1c8a4b3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="QueryAsync_AfterColumnsPresent_Succeeds" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.Classify_PendingMigration_IsPersistenceError" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="7bad7c94-32d5-88f0-691e-a42b4632bf73">
+      <Execution id="054b8e50-2908-48bb-a8f7-dced85bc757d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="Classify_PendingMigration_IsPersistenceError" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests.QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="3b07b049-b0ee-2b00-2b70-c5774ccb3a9d">
+      <Execution id="4a9ccd4e-5426-4039-8d97-4d09ec0d3e3b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.SessionLogSchemaGuardTests" name="QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1c1cdeeb-4e2d-0f1f-c876-bf6540eec517" executionId="151f73c4-e52c-4f3b-a55d-515ca6fac3cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3b07b049-b0ee-2b00-2b70-c5774ccb3a9d" executionId="4a9ccd4e-5426-4039-8d97-4d09ec0d3e3b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7bad7c94-32d5-88f0-691e-a42b4632bf73" executionId="054b8e50-2908-48bb-a8f7-dced85bc757d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8db0fc20-8efa-d24c-47ff-a9bfa11489f8" executionId="a9484875-740c-4787-aca6-18f2a1c8a4b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.47]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.73]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:04.52]   Finished:    McpServer.Support.Mcp.Tests (ID = 'fb6b7ca1b59a739774a8a8668e88283949ecc0192ba18c822eead5027e319992')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

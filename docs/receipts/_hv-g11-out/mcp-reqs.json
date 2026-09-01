@@ -1,0 +1,183 @@
+{
+  "Health": {
+    "RequestNonce": "664ac57ea1954d2e8e2b3941537f62bc",
+    "Echo": {
+      "status": "Healthy",
+      "version": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+      "checks": [
+        {
+          "name": "self",
+          "status": "Healthy",
+          "description": null,
+          "duration": 0.0036
+        },
+        {
+          "name": "upstream",
+          "status": "Healthy",
+          "description": "Federation disabled.",
+          "duration": 0.0031
+        }
+      ],
+      "nonce": "664ac57ea1954d2e8e2b3941537f62bc",
+      "storage": "reachable"
+    },
+    "NonceMatch": true
+  },
+  "HealthRawType": "System.Management.Automation.PSCustomObject",
+  "TR_SYNC": {
+    "id": "TR-MCP-SYNC-001",
+    "title": "Node core vendor package uses a version-less stable file name",
+    "body": "SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it. Rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package; the versioned name is also why the constant existed at all, since consumer package.json files reference the tarball path and a version bump would break the reference. The vendor step SHALL discover consumer vendor directories by matching any sharpninja-mcpserver-plugin-core*.tgz variant so first-run migration finds the legacy versioned files, copy the packed artifact to the stable name, delete superseded variants from the vendor directory, and rewrite the consumer package.json dependency reference file:vendor/sharpninja-mcpserver-plugin-core*.tgz to the stable name via a targeted in-place replacement that preserves the file's formatting. The step SHALL also assert that npm pack produced a tarball whose embedded version matches plugins/core/lib-node/package.json, so a silent pack-versus-manifest drift fails the sync instead of shipping.",
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  },
+  "TEST_194": {
+    "id": "TEST-MCP-194",
+    "condition": "Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.",
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "title": "",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  },
+  "FR_143": {
+    "id": "FR-MCP-143",
+    "title": "Session-log turns persist without a title and never lose a refined one",
+    "body": "A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.",
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null,
+    "linkedUseCases": []
+  },
+  "MAP_143": {
+    "frId": "FR-MCP-143",
+    "trIds": [
+      "TR-MCP-CLIENT-001",
+      "TR-MCP-HEALTH-003",
+      "TR-MCP-REPL-018",
+      "TR-MCP-REPL-019",
+      "TR-MCP-REPL-020",
+      "TR-MCP-SYNC-001"
+    ],
+    "testIds": [
+      "TEST-MCP-194",
+      "TEST-MCP-REPL-040"
+    ],
+    "workspaceId": "F:\\GitHub\\McpServer"
+  },
+  "FR_TRIAGE_002": {
+    "id": "FR-MCP-TRIAGE-002",
+    "title": "Async triage grouping and research",
+    "body": "Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.",
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "priority": "high",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [
+      {
+        "id": "FR-MCP-TRIAGE-002-AC001",
+        "text": "Groups are deterministic and workspace-isolated.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC002",
+        "text": "New matching reports reset the 15-minute quiet window.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC003",
+        "text": "A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC004",
+        "text": "Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "FR-MCP-TRIAGE-002-AC005",
+        "text": "MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null,
+    "linkedUseCases": []
+  },
+  "TR_TRIAGE_004": {
+    "id": "TR-MCP-TRIAGE-004",
+    "title": "Triage schema and TODO creation",
+    "body": "Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.",
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "priority": "high",
+    "status": "planned",
+    "notes": null,
+    "acceptanceCriteria": [
+      {
+        "id": "TR-MCP-TRIAGE-004-AC001",
+        "text": "Valid research output creates one backlog TODO and failed output creates none.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  },
+  "HealthObject": {
+    "status": "Healthy",
+    "version": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0036
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0031
+      }
+    ],
+    "nonce": "664ac57ea1954d2e8e2b3941537f62bc",
+    "storage": "reachable"
+  },
+  "ConsumerPackageJson": [
+    {
+      "Repo": "mcpserver-cline-plugin",
+      "PackageJson": "F:\\GitHub\\mcpserver-cline-plugin\\package.json",
+      "Exists": true,
+      "CoreDep": "file:vendor/sharpninja-mcpserver-plugin-core.tgz"
+    },
+    {
+      "Repo": "mcpserver-cline-v2-plugin",
+      "PackageJson": "F:\\GitHub\\mcpserver-cline-v2-plugin\\package.json",
+      "Exists": true,
+      "CoreDep": "file:vendor/sharpninja-mcpserver-plugin-core.tgz"
+    },
+    {
+      "Repo": "mcpserver-opencode-plugin",
+      "PackageJson": "F:\\GitHub\\mcpserver-opencode-plugin\\package.json",
+      "Exists": true,
+      "CoreDep": "file:vendor/sharpninja-mcpserver-plugin-core.tgz"
+    }
+  ]
+}

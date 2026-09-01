@@ -14,79 +14,79 @@ Scope: layer-1+
 
 ## TR-02
 
-**TR-02** — Placeholder requirement backfilled by DB-FK-001.
+**TR-02** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub; deferred in audit notes; plugin updateTr rejects non-canonical id.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-03
 
-**TR-03** — Placeholder requirement backfilled by DB-FK-001.
+**TR-03** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-04
 
-**TR-04** — Placeholder requirement backfilled by DB-FK-001.
+**TR-04** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-05
 
-**TR-05** — Placeholder requirement backfilled by DB-FK-001.
+**TR-05** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-06
 
-**TR-06** — Placeholder requirement backfilled by DB-FK-001.
+**TR-06** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-07
 
-**TR-07** — Placeholder requirement backfilled by DB-FK-001.
+**TR-07** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-08
 
-**TR-08** — Placeholder requirement backfilled by DB-FK-001.
+**TR-08** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-09
 
-**TR-09** — Placeholder requirement backfilled by DB-FK-001.
+**TR-09** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-10
 
-**TR-10** — Placeholder requirement backfilled by DB-FK-001.
+**TR-10** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-11
 
-**TR-11** — Placeholder requirement backfilled by DB-FK-001.
+**TR-11** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-12
 
-**TR-12** — Placeholder requirement backfilled by DB-FK-001.
+**TR-12** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-13
 
-**TR-13** — Placeholder requirement backfilled by DB-FK-001.
+**TR-13** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
 ## TR-14
 
-**TR-14** — Placeholder requirement backfilled by DB-FK-001.
+**TR-14** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
 
@@ -110,6 +110,87 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-080
 **Status:** pending
 Scope: layer-1+
+
+## TR-HANDOFF-AGENT-001
+
+**Versioned HandoffTodoDraft one-shot extraction** — Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
+**Covered by:** FR: FR-HANDOFF-002; TEST: TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft.
+- [ ] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO.
+
+## TR-HANDOFF-AUDIT-001
+
+**Normalized ingestion-run and diagnostic persistence** — Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
+**Covered by:** FR: FR-HANDOFF-006; TEST: TEST-HANDOFF-007
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every run stores normalized provenance and diagnostics independently of TODO rows.
+- [ ] Persisted records omit raw credentials and raw source content.
+
+## TR-HANDOFF-CONTRACT-001
+
+**Documented handoff contracts** — Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
+**Covered by:** FR: FR-HANDOFF-001, FR-HANDOFF-002; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002, TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs.
+- [ ] Contracts serialize and deserialize with the shared client JSON context without silent field loss.
+
+## TR-HANDOFF-MODES-001
+
+**Confidence gating, review approval, and idempotent replay** — Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
+**Covered by:** FR: FR-HANDOFF-004, FR-HANDOFF-005; TEST: TEST-HANDOFF-004, TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+- [ ] Approval revalidates the stored draft before TODO creation.
+- [ ] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true.
+
+## TR-HANDOFF-SECURITY-001
+
+**Bounded workspace-contained handoff readers** — Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
+**Covered by:** FR: FR-HANDOFF-001; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Readers refuse more than 8 MiB of decoded input and unsupported formats.
+- [ ] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+
+## TR-HANDOFF-SURFACE-001
+
+**Shared API, client, REPL, Director, MCP, and plugin delegation** — Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
+**Covered by:** FR: FR-HANDOFF-007; TEST: TEST-HANDOFF-006
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService.
+- [ ] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation.
+
+## TR-HANDOFF-TODO-001
+
+**Exclusive TODO-service persistence** — Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
+**Covered by:** FR: FR-HANDOFF-005; TEST: TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The only TODO mutation path is ITodoService.CreateAsync.
+- [ ] Existing TODO IDs require review and are never silently renamed.
+
+## TR-HANDOFF-VALIDATE-001
+
+**Pure draft validation and normalization** — Provide a pure draft validator and normalizer that emits field-specific diagnostics.
+**Covered by:** FR: FR-HANDOFF-003, FR-HANDOFF-004; TEST: TEST-HANDOFF-004
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validation and normalization have no TODO or run-store side effects.
+- [ ] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
 
 ## TR-LOC-001
 
@@ -852,6 +933,15 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-FAILSAFE-001
+
+**Failsafe drain abort markers include backend_unavailable and HTTP 503** — Test-ReplFailsafeBackendUnreachable matches backend_unavailable and HTTP 503. Invoke-ReplFailsafeDrainOnFirstSuccess does not set completed before a 503 pass and does not increment drainAttempts or quarantine on that abort. Covered by FR-MCP-FAILSAFE-001 TEST-MCP-FAILSAFE-001.
+**Covered by:** FR: FR-MCP-FAILSAFE-001; TEST: TEST-MCP-FAILSAFE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Failsafe drain abort markers include backend_unavailable and HTTP 503 and do not burn drainAttempts
+
 ## TR-MCP-FED-001
 
 **Hub Proxy Federation Contract** — Federation configuration SHALL include Role, HubBaseUrl, ProxyId, EnrollmentToken, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
@@ -1278,6 +1368,50 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-PERSIST-001
+
+**Plugin appendDialog uses incremental dialog POST** — Invoke-WorkflowAppendDialog SHALL call SessionLogClient.AppendDialogAsync (or equivalent POST .../dialog) when a current turn exists. Failsafe for incremental dialog SHALL replay the dialog POST, not a full-session SubmitAsync upsert.
+
+Acceptance Criteria:
+- Pester proves appendDialog does not invoke client.SessionLog.SubmitAsync for an existing turn.
+- Missing turn is not-found, retryable false.
+**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PERSIST-002
+
+**PersistTurn maps 503 to timeout degrade-queue** — Invoke-ReplPersistTurn SHALL treat HTTP 503 and payload code backend_unavailable the same as timeout|timed out|command_timeout: return false, set LastReplPersistenceDetails degraded/queued, retain failsafe, do not throw.
+
+Acceptance Criteria:
+- Pester PersistTurn 503 does not throw and leaves failsafe on disk.
+- current-turn.yaml remains in_progress.
+**Covered by:** FR: FR-MCP-171; TEST: TEST-MCP-195
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PERSIST-003
+
+**Failsafe drain inspects errors without Write-Error Stop skip** — Invoke-ReplFailsafeDrain SHALL inspect Invoke-ReplRaw failures without Write-Error under ErrorActionPreference Stop skipping Test-ReplFailsafeBackendUnreachable. Drain of SessionLog.SubmitAsync SHALL abort on timeout/503 without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted. Drain MUST NOT block the successful caller for the full 30s SubmitAsync timeout (bounded drain timeout or drain after return).
+
+Acceptance Criteria:
+- Pester: timeout/503 abort, no drain failed stderr, later replay works.
+- getFr returns before 30s when a queued session_submit 503s.
+**Covered by:** FR: FR-MCP-172; TEST: TEST-MCP-195
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PERSIST-004
+
+**SQLITE_BUSY under budget is persist contention not storage-down** — SessionLog SaveChanges SQLITE_BUSY or lock wait inside the storage command budget SHALL NOT be classified as backend_unavailable/storage-down when subsequent TODO/requirements reads succeed. Prefer SQLite busy-timeout/retry. GET /health remains process liveness plus nonce echo. Do not change /health liveness semantics.
+
+Acceptance Criteria:
+- Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the DB file is valid.
+- /health?nonce= still echoes the nonce.
+**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-PLAN-001
 
 **Safe session wrap-up and deploy sequencing** — Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
@@ -1409,6 +1543,41 @@ Scope: layer-1+
 **Status:** ✅ Complete
 
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-API-001
+
+**Product CQRS and adapters** — Commands/queries live under McpServer.Support.Mcp/Products/. REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only. No public IProductService facade. GET /mcpserver/requirements/effective gains productScope=product|local (default product). AC: controller/MCP/REPL tests prove dispatch-only; invalid key 400; duplicate 409.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-003; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-AUTH-001
+
+**Product authorization and transaction gating** — Authorization lives in CQRS handlers (or a helper used only by those handlers). Owner-only mutate except self-leave. Non-member get is 404. Mutating product commands fail closed when turn transactions are required and degraded. AC: non-owner update 403; outsider get 404; degraded transactions reject create/add-member.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-CTX-001
+
+**Product requirement context source** — Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows. Chunks are tagged with origin workspace. AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
+**Covered by:** FR: FR-MCP-PRODUCT-005; TEST: TEST-MCP-PRODUCT-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-MODEL-001
+
+**Product storage model** — Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter). Soft-delete. Unique Key matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ among non-deleted rows. FK to Workspaces. Audit rows on mutations (TR-MCP-DB-004). Migrations apply on SQLite, PostgreSQL, and SQL Server without re-adding unrelated columns. AC: unique filtered index on Key; membership composite PK ProductId+WorkspaceId; apply migrations on empty and production-shaped DBs.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-SHARE-001
+
+**Product requirement share query** — CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products. Layer filter uses the origin workspace catalog. Results include originWorkspaceId. Never merge two rows that share an id across origins. AC: union includes sibling in-scope rows; missing origin layer key excludes sibling; productScope=local is local-only.
+**Covered by:** FR: FR-MCP-PRODUCT-003, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003
+**Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-QA-001
@@ -2257,6 +2426,24 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-SESSIONATTR-001
+
+**Validate filesModified and commit paths against workspace root** — SessionLogService or turn append validates filesModified and commit paths against X-Workspace-Path. Outside-root paths require foreignRepo or equivalent or are rejected. Forward-only. Covered by FR-MCP-SESSIONATTR-001 TEST-MCP-SESSIONATTR-001.
+**Covered by:** FR: FR-MCP-SESSIONATTR-001; TEST: TEST-MCP-SESSIONATTR-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SessionLogService validates filesModified/commit paths against workspace root
+
+## TR-MCP-SESSIONEND-001
+
+**SessionEnd cache flush no-ops when cache cannot be resolved** — Invoke-CacheFlushHook and cache-manager do not throw on unresolved cache. CLAUDE_PROJECT_DIR is a Resolve-McpCacheDir fallback. Covered by FR-MCP-SESSIONEND-001 TEST-MCP-SESSIONEND-001.
+**Covered by:** FR: FR-MCP-SESSIONEND-001; TEST: TEST-MCP-SESSIONEND-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SessionEnd cache flush no-ops when cache cannot be resolved
+
 ## TR-MCP-SESSIONLOG-001
 
 **Session-log lifecycle tools return structured errors** — The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a valid or null turnJson still returns {success:true}. Origin: BUG-TRIAGE-070/075 (JsonSerializer.Deserialize and ApplyWorkspaceOverride were outside the try in FinalizeLifecycleTurnToolAsync/UpsertLifecycleTurnToolAsync, FwhMcpTools.SessionLog.cs). Validated by TEST-MCP-SESSIONLOG-001.
@@ -2350,6 +2537,15 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-STRICTCOUNT-001
+
+**Null-safe Count for updateTurn collection fields under StrictMode** — New-McpPluginTurnUpsertRequest and Invoke-WorkflowUpdateTurn enumerate tags and contextList with @() or equivalent under Set-StrictMode Latest. Covered by FR-MCP-STRICTCOUNT-001 TEST-MCP-STRICTCOUNT-001.
+**Covered by:** FR: FR-MCP-STRICTCOUNT-001; TEST: TEST-MCP-STRICTCOUNT-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] updateTurn collection fields use null-safe enumeration under StrictMode
+
 ## TR-MCP-SUBLOG-001
 
 **Subscriber message-log sink** — Parseable sink test
@@ -2385,6 +2581,15 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-TEMPVOL-001
+
+**Plugin entrypoints set TEMP TMP on the workspace volume** — session-start and wrapper entrypoints set TEMP and TMP to a workspace-drive directory when volumes differ. No PSGallery patch. Covered by FR-MCP-TEMPVOL-001 TEST-MCP-TEMPVOL-001.
+**Covered by:** FR: FR-MCP-TEMPVOL-001; TEST: TEST-MCP-TEMPVOL-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Plugin entrypoints set TEMP/TMP on the workspace volume
 
 ## TR-MCP-TODO-002
 
@@ -2648,6 +2853,15 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-TRANSCRIPT-SEARCH-001
+
+**CodexTranscriptAdapter cases for tool_search and inter_agent** — CodexTranscriptAdapter.NormalizeAsync handles inter_agent_communication_metadata, tool_search_call, and tool_search_output. Coverage tests use inline JSONL. Covered by FR-MCP-TRANSCRIPT-SEARCH-001 TEST-MCP-TRANSCRIPT-SEARCH-001.
+**Covered by:** FR: FR-MCP-TRANSCRIPT-SEARCH-001; TEST: TEST-MCP-TRANSCRIPT-SEARCH-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CodexTranscriptAdapter handles tool_search and inter_agent
+
 ## TR-MCP-TRIAGE-001
 
 **Durable triage storage** — Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
@@ -2691,6 +2905,78 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-TRIAGE-004; TEST: TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-TRIAGEERR-001
+
+**Shared error classifier and envelope** — One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+**Covered by:** FR: FR-MCP-TRIAGEERR-001; TEST: TEST-MCP-TRIAGEERR-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+
+## TR-MCP-TRIAGEHELP-001
+
+**Agent Help no completed echo and long timeout** — AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+**Covered by:** FR: FR-MCP-TRIAGEHELP-001; TEST: TEST-MCP-TRIAGEHELP-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+
+## TR-MCP-TRIAGEPLUGIN-001
+
+**Sticky root session cache rebind and degraded persist** — plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
+**Covered by:** FR: FR-MCP-TRIAGEPLUGIN-001; TEST: TEST-MCP-TRIAGEPLUGIN-001, TEST-MCP-TRIAGEPLUGIN-002, TEST-MCP-TRIAGEPLUGIN-003, TEST-MCP-TRIAGEPLUGIN-004, TEST-MCP-TRIAGEPLUGIN-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
+
+## TR-MCP-TRIAGEREQ-001
+
+**ValidateTrId create only** — RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+**Covered by:** FR: FR-MCP-TRIAGEREQ-001; TEST: TEST-MCP-TRIAGEREQ-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+
+## TR-MCP-TRIAGESCHEMA-001
+
+**Startup probe for AgentSession header columns** — Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+**Covered by:** FR: FR-MCP-TRIAGESCHEMA-001; TEST: TEST-MCP-TRIAGESCHEMA-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+
+## TR-MCP-TRIAGESTORE-001
+
+**Session-log merge tags replace supersede** — SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+**Covered by:** FR: FR-MCP-TRIAGESTORE-001; TEST: TEST-MCP-TRIAGESTORE-001, TEST-MCP-TRIAGESTORE-002, TEST-MCP-TRIAGESTORE-003, TEST-MCP-TRIAGESTORE-004, TEST-MCP-TRIAGESTORE-005, TEST-MCP-TRIAGESTORE-006, TEST-MCP-TRIAGESTORE-007
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+
+## TR-MCP-TRIAGESTORE-002
+
+**Five second intake and submit storage budget** — TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+**Covered by:** FR: FR-MCP-TRIAGESTORE-002; TEST: TEST-MCP-TRIAGESTORE-007
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+
+## TR-MCP-TRIAGETODO-001
+
+**Durable EXEC fallback and soft-delete id allocate** — TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+**Covered by:** FR: FR-MCP-TRIAGETODO-001; TEST: TEST-MCP-TRIAGETODO-001, TEST-MCP-TRIAGETODO-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
 
 ## TR-MCP-TUN-001
 
@@ -2896,6 +3182,15 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-VERIFYWRAP-001
+
+**code-verify catch disk-full and enforce wrapper timeout** — code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001.
+**Covered by:** FR: FR-MCP-VERIFYWRAP-001; TEST: TEST-MCP-VERIFYWRAP-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] code-verify catches disk-full and enforces wrapper timeout
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
@@ -3058,6 +3353,15 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-031
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-XAGENT-001
+
+**Assert-ReplCurrentTurnFresh refuses different sourceType prefixes** — Assert-ReplCurrentTurnFresh compares sessionId sourceType prefix. Different prefix refuses CompleteTurn persist. Same prefix still rebinds. persist identity keeps planFile/todoId. Covered by FR-MCP-XAGENT-001 TEST-MCP-XAGENT-001.
+**Covered by:** FR: FR-MCP-XAGENT-001; TEST: TEST-MCP-XAGENT-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Assert-ReplCurrentTurnFresh refuses different sourceType prefixes
 
 ## TR-PLANNED-013A
 

@@ -1,0 +1,133 @@
+METHOD client.SessionLog.QueryAsync file=F:\GitHub\McpServer\docs\receipts\_hv-20260819T160006Z\iso2-client-SessionLog-QueryAsync.txt chars=4515
+type: result
+payload:
+  requestId: req-20260819T161452Z-207b
+  result:
+    totalCount: 1
+    limit: 10
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260819T161322Z-hostile-triageplugin
+      agentSessionId: 01a01abb-a0fa-7a72-9dd0-8ebb6d2a3422
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      model: grok
+      started: 2026-08-19T16:14:38.0000000+00:00
+      lastUpdated: 2026-08-19T16:14:49.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T161322Z-001-hostile-validate-isolation
+        timestamp: 2026-08-19T16:14:38.0000000+00:00
+        queryText: Hostile validation of FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation remediATION claims.
+        queryTitle: Hostile validate TRIAGEPLUGIN isolation remediATION
+        response: >-
+          Hostile validation of TRIAGEPLUGIN isolation remediATION.
+
+          OverallVerdict: AGREE
+
+          Receipt: docs/receipts/hostile-validator-20260819T161322Z.md
+
+          add-profile: 18 non-skill profile files
+
+          Pester: 10 passed, 0 failed, 0 skipped
+
+          019 status in_progress on GrokCode-20260818T182741Z-plugin-session
+
+          current-turn.yaml still names req-20260819T153500Z-019-remediate-hook-cache-isolation
+
+          PLAN-TRIAGECLUSTER-001 done remains the 013000Z closeout (not flipped this remediATION)
+
+          HEAD f4060f037e62e64974026aff9d24e11b2f481952
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Independent Pester TriagePluginIdentity.Tests.ps1: Passed 10 Failed 0 Skipped 0 including UserPromptSubmi
+-----
+type: result
+payload:
+  requestId: req-20260819T161452Z-207b
+  result:
+    totalCount: 1
+    limit: 10
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260819T161322Z-hostile-triageplugin
+      agentSessionId: 01a01abb-a0fa-7a72-9dd0-8ebb6d2a3422
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      model: grok
+      started: 2026-08-19T16:14:38.0000000+00:00
+      lastUpdated: 2026-08-19T16:14:49.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T161322Z-001-hostile-validate-isolation
+        timestamp: 2026-08-19T16:14:38.0000000+00:00
+        queryText: Hostile validation of FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation remediATION claims.
+        queryTitle: Hostile validate TRIAGEPLUGIN isolation remediATION
+        response: >-
+          Hostile validation of TRIAGEPLUGIN isolation remediATION.
+
+          OverallVerdict: AGREE
+
+          Receipt: docs/receipts/hostile-validator-20260819T161322Z.md
+
+          add-profile: 18 non-skill profile files
+
+          Pester: 10 passed, 0 failed, 0 skipped
+
+          019 status in_progress on GrokCode-20260818T182741Z-plugin-session
+
+          current-turn.yaml still names req-20260819T153500Z-019-remediate-hook-cache-isolation
+
+          PLAN-TRIAGECLUSTER-001 done remains the 013000Z closeout (not flipped this remediATION)
+
+          HEAD f4060f037e62e64974026aff9d24e11b2f481952
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Independent Pester TriagePluginIdentity.Tests.ps1: Passed 10 Failed 0 Skipped 0 including UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn'
+          type: tool_call
+          status: completed
+          filePath: plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1
+        - order: 2
+          description: SHA256 equal for plugins/core/lib-ps/plugin-hook.ps1 and mcpserver-grok-plugin/lib/plugin-hook.ps1; isolation eval reuse/isolate-skip/open-new
+          type: edit
+          status: completed
+          filePath: plugins/core/lib-ps/plugin-hook.ps1
+        - order: 3
+          description: client.SessionLog.QueryAsync text=Remediate hook cache isolation shows 019 in_progress planFile None todoId None; current-turn.yaml still 019
+          type: tool_call
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\grok\current-turn.yaml
+        - order: 4
+          description: HEAD f4060f037e62e64974026aff9d24e11b2f481952 equals origin/develop; staged empty; no commit/push this remediATION
+          type: tool_call
+          status: completed
+          filePath: ''
+        - order: 5
+          description: 'AGREE: remediATION claims A1-A5 and applicable B/C/D re-verified. Isolation is existing FR-MCP-TRIAGEPLUGIN-001 AC, not a PLAN done flip.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T161322Z.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-19T16:14:41.0000000+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile markdown files. Independently re-ran Pester, hashed both plugin-hook.ps1 files, queried sessionlog without exact-requestId filter, read current-turn.yaml, verified git HEAD.'
+          category: observation
+        - timestamp: 2026-08-19T16:14:41.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict AGREE on the remediATION claims. Rationale: Pester 10/0/0 including UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn; both hook files define Test-PluginPromptIsBackgroundAgent and Get-PluginRootTurnIsolationDecision with reuse/isolate-skip/open-new; live 019 remains in_progress and current-turn.yaml still names 019 after this hostile UserPromptSubmit; PLAN-TRIAGECLUSTER-001 doneSummary still cites 013000Z; HEAD still f4060f037e62e64974026aff9d24e11b2f481952 with no commit/push. Alternatives rejected: DISAGREE because TEST-MCP-TRIAGEPLUGIN-001 markdown does not name the new It block (FR AC is covered by the new test); FAIL tests-first because red output was not independently captured (pester mtime 15:50:19Z precedes hook 15:51:14Z).'
+          category: decision
+
+---
+

@@ -1,0 +1,9 @@
+type: error
+payload:
+  code: command_timeout
+  message: Plugin command timed out after 40s.
+  retryable: true
+  details:
+    degraded: true
+    queued: true
+

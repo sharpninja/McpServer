@@ -1,0 +1,37 @@
+type: result
+payload:
+  requestId: req-20260819T211835Z-039f
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-142
+      title: CompleteTurn rebind after cross-agent current-turn rotation 500s SubmitAsync
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - Codex CompleteTurn reads the shared current-turn.yaml, sees a sessionId mismatch after GrokCode/ClaudeCode review rotated that cache, and Assert-ReplCurrentTurnFresh re-binds the turn to the active session (TR-MCP-PLUGIN-012). Invoke-ReplPersistTurn then posts client.SessionLog.SubmitAsync with omitted planFile/todoId. SessionLogService treats the rebound requestId as a new turn on the target session and ValidateForNewEntry throws ArgumentException, which SessionLogController does not map, so GlobalExceptionHandlerMiddleware returns 500 internal_server_error. A failsafe is written and current-turn.yaml stays in_progress.
+      - 'Triage group: triage-group-70fff31d335c802d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When current-turn.yaml sessionId is rotated to a different source-type session (GrokCode or ClaudeCode) while a Codex closeout is in progress, Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn does not call SessionLog SubmitAsync in a way that returns internal_server_error.'
+      - "- A sessionId mismatch whose agent prefix differs from the active session (Codex vs GrokCode vs ClaudeCode) is rejected or restored to the originating agent cache rather than rebound onto the other agent's session."
+      - '- After CompleteTurn succeeds for the originating turn, current-turn.yaml status is completed. After a refused or failed persist, current-turn.yaml remains in_progress and the error names the session mismatch and failsafe path.'
+      - '- A same-agent session rotation (new Codex session id, same source type) still re-binds and can complete without a 500.'
+      - 'Implementation notes:'
+      - '- Inspect plugins/core/lib-ps/repl-invoke.ps1 Assert-ReplCurrentTurnFresh: it already logs the re-bind and adopts session-state.yaml sessionId without comparing sourceType prefixes.'
+      - '- Inspect Invoke-WorkflowCompleteTurn and Invoke-ReplPersistTurn: persist uses Get-ReplSessionMeta (sourceType derived from sessionId prefix) and New-McpPluginTurnUpsertRequest omits empty planFile/todoId.'
+      - '- Inspect SessionLogService.SubmitAsync ApplyTurnContext plus SessionLogTurnContextValidator.ValidateForNewEntry: a rebound requestId that is new on the target session throws ArgumentException. SessionLogController.SubmitAsync lets that become 500 internal_server_error.'
+      - '- Keep TEST-MCP-BUGTRIAGE-041 behavior (do not mark completed when persist fails). Add a regression that seeds Codex current-turn, overwrites sessionId with a GrokCode/ClaudeCode session, runs completeTurn, and asserts no SubmitAsync 500 and no cross-agent rebind.'
+      - "- Do not treat per-agent cache folders (.mcpServer/codex vs .mcpServer/claude) as sufficient if review agents can still write the closeout agent's current-turn.yaml."
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

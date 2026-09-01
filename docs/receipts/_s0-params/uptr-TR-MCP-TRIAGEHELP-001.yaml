@@ -1,0 +1,8 @@
+id: TR-MCP-TRIAGEHELP-001
+title: Agent Help no completed echo and long timeout
+description: AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+priority: high
+acceptanceCriteria:
+  - id: ac-1
+    text: AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+    isSatisfied: false

@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260819T212023Z-d07d
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-130
+      title: Codex code-verify wrapper hangs after successful local build
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - 'Observation: In PowerShell.Mcp window 26152, two sequential code-verify.ps1 invocations were started for EdgeBinner.cs and GraphValidationParityTests.cs after reverting a rejected optimization. More than 300 seconds later the PowerShell pipeline remains busy. Process inspection shows no child dotnet, mcpserver-repl, or code-verify process under pwsh PID 26152, indicating the wrapper is blocked in-process after local build work. A separate PowerShell.Mcp console ran the same code-verify.ps1 once with explicit 1.85.0 path and returned {status:succeeded} in 3.40 seconds. Expected: each code-verify invocation should complete or fail within its documented timeout and must not indefinitely occupy the persistent console. The existing session-log service has also produced fixed 30-second client.SessionLog.SubmitAsync timeouts and 12 failsafe records in this workspace.'
+      - 'Triage group: triage-group-5b90e6c85f77ae9d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Investigate and resolve the grouped triage report.'
+      - '- Add or update validation that proves the triage issue is fixed.'
+      - '- Verify the workflow no longer reproduces this triage report.'
+      - 'Implementation notes:'
+      - '- Fallback TODO created because successful triage research output contained no JSON object.'
+      - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+      - '- Raw triage research output is preserved on run triage-run-91862cf439f348f8bbc9d41a0c8bb442.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260819T210624Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260819T205003Z.md. Merged triage/plugin-core as 55a2774d. Named Pester 15/0/0. Session GrokCode-20260819T210018Z-hostile-s2-hgreen.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

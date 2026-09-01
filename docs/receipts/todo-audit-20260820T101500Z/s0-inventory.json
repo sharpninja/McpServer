@@ -1,0 +1,819 @@
+{
+  "timestampUtc": "2026-08-20T101500Z",
+  "head": "20db61aa0dd70f2d4f94da06d2a133ecfe6967a8",
+  "branch": "develop",
+  "openTodoCount": 40,
+  "openTodoIds": [
+    "PLAN-QBCODE-001",
+    "PLAN-QBCODE-C1-001",
+    "PLAN-QBCODE-C2-001",
+    "PLAN-QBCODE-C3-001",
+    "PLAN-QBCODE-E1-001",
+    "PLAN-QBCODE-I1-001",
+    "PLAN-QBCODE-T1-001",
+    "PLAN-QUADBRAIN-001",
+    "PLAN-QUADBRAIN-C1-001",
+    "PLAN-QUADBRAIN-C2-001",
+    "PLAN-QUADBRAIN-C3-001",
+    "PLAN-QUADBRAIN-E1-001",
+    "PLAN-QUADBRAIN-I1-001",
+    "PLAN-QUADBRAIN-T1-001",
+    "TR-AUDIT-001",
+    "BUG-TRIAGE-160",
+    "BUG-TRIAGE-161",
+    "BUG-TRIAGE-162",
+    "PLAN-BYRDPROCESS-001",
+    "PLAN-DELETECOMPLIANCE-003",
+    "PLAN-OCTOPUS-001",
+    "BUG-TRIAGE-163",
+    "PLAN-FILETOOLS-001",
+    "PLAN-FILETOOLS-002",
+    "PLAN-FILETOOLS-003",
+    "PLAN-FILETOOLS-004",
+    "MCP-HANDOFF-001",
+    "MCP-HANDOFFPLAN-001",
+    "MCP-HANDOFFREVIEW-001",
+    "MCP-WIKIEXPORT-001",
+    "MCP-PLUGINCORE-004",
+    "PLAN-TODOALIGN-001",
+    "PLAN-TODOAUDIT-001",
+    "PLAN-LLMSTRATEGY-001",
+    "PLAN-SHARPMIND-001",
+    "MCP-HOSTILEREVIEW-001",
+    "MCP-SESSIONLOG-001",
+    "MCP-SESSIONLOG-002",
+    "MCP-PLUGININT-001",
+    "MCP-WORKSPACEHYGIENE-002"
+  ],
+  "leftoverDone": true,
+  "leftoverId": "PLAN-TRIAGELEFTOVER-001",
+  "trackerAlign": "PLAN-TODOALIGN-001",
+  "trackerAudit": "PLAN-TODOAUDIT-001",
+  "frCount": 293,
+  "frByStatus": [
+    {
+      "status": "completed",
+      "count": 27
+    },
+    {
+      "status": "deferred",
+      "count": 2
+    },
+    {
+      "status": "in_progress",
+      "count": 7
+    },
+    {
+      "status": "pending",
+      "count": 254
+    },
+    {
+      "status": "planned",
+      "count": 3
+    }
+  ],
+  "remaining0711Count": 23,
+  "orphanLinkCount": 23,
+  "todos": [
+    {
+      "id": "PLAN-QBCODE-001",
+      "title": "QBAgent QuadBrain coding uplift: master plan (RUP phases, playlist of iteration TODOs)",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 5% complete. Evidence: Existing QBAgent projects and external tool surface are present, but uplift-specific code terms for Byrd phase state machine, Arbiter gate evidence, escalation tiers, task profiles, research pre-pass, byrd-coding skill, and degradation UX are absent. Missing: Begin I1 requirements baseline and then implement the six planned uplift iterations.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 6,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-C1-001",
+      "title": "QBAgent uplift Construction C1: Byrd phase state machine and Arbiter gate evidence",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for a QBAgent Byrd phase state machine or Arbiter gate evidence surface was found. Missing: Add red tests and implementation for phase state, gate evidence capture, and Arbiter enforcement.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QBCODE-E1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-C2-001",
+      "title": "QBAgent uplift Construction C2: escalation tiers and task profiles",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for QBAgent escalation tiers or task profiles was found. Missing: Define task profile model, escalation tiers, routing behavior, and tests.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QBCODE-C1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-C3-001",
+      "title": "QBAgent uplift Construction C3: research pre-pass, byrd-coding skill, degradation UX, IOC milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for QBAgent research pre-pass, byrd-coding skill, or degradation UX was found. Missing: Implement research pre-pass, skill integration, degradation UX, tests, and IOC evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QBCODE-C2-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-E1-001",
+      "title": "QBAgent uplift Elaboration E1: architecture baseline and LCA milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 5% complete. Evidence: Existing QBAgent architecture/code is present, but no uplift-specific architecture baseline or LCA evidence was found. Missing: Create architecture baseline, requirements mapping, and LCA validation for the uplift.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QBCODE-I1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 6,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-I1-001",
+      "title": "QBAgent uplift Inception I1: requirements baseline and LCO milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual requirements-baseline code/docs evidence specific to PLAN-QBCODE-I1 was found. Missing: Create FR/TR/TEST baseline, mappings, acceptance criteria, and LCO evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 5,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QBCODE-T1-001",
+      "title": "QBAgent uplift Transition T1: deployment and Product Release milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual Product Release deployment evidence specific to the QBAgent uplift was found. Missing: Complete prior uplift phases, deploy, validate, and record Product Release evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QBCODE-C3-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-001",
+      "title": "QuadBrain revision: master plan (RUP phases, playlist of iteration TODOs)",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 15% complete. Evidence: Existing QuadBrain/BrainSlot services and tests are present, including LeftHemisphere, RightHemisphere, Curiosity, and Arbiter terms, but revision-specific terms for readiness split, ballot rejection, rename/migration, audit-side observer, and RUP milestones are absent. Missing: Execute the planned revision iterations against the existing core.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 6,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C1-001",
+      "title": "QuadBrain revision Construction C1: readiness split and Curiosity out of the happy path",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 5% complete. Evidence: Curiosity and Arbiter code exist in the current QuadBrain core, but no actual readiness split or Curiosity-out-of-happy-path implementation evidence was found. Missing: Implement readiness split behavior and tests.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QUADBRAIN-E1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 3,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C2-001",
+      "title": "QuadBrain revision Construction C2: ballot-based rejection protocol",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for ballot-based rejection or rejection protocol was found. Missing: Add ballot model, rejection protocol, Arbiter integration, and tests.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QUADBRAIN-C1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-C3-001",
+      "title": "QuadBrain revision Construction C3: Curiosity research tool loop and audit-side observer, IOC milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 5% complete. Evidence: Curiosity-related code exists, but no actual research tool loop, audit-side observer, or IOC evidence was found. Missing: Implement research loop, audit observer, IOC tests, and validation evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QUADBRAIN-C2-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 5,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-E1-001",
+      "title": "QuadBrain revision Elaboration E1: rename core, migrations, LCA milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual code evidence for rename core or migration work was found. Missing: Design and implement rename/migration path with compatibility tests.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QUADBRAIN-I1-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 6,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-I1-001",
+      "title": "QuadBrain revision Inception I1: requirements baseline and LCO milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual requirements-baseline code/docs evidence specific to PLAN-QUADBRAIN-I1 was found. Missing: Create FR/TR/TEST baseline, mappings, acceptance criteria, and LCO evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-QUADBRAIN-T1-001",
+      "title": "QuadBrain revision Transition T1: deployment and Product Release milestone",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual Product Release deployment evidence specific to the QuadBrain revision was found. Missing: Complete prior revision phases, deploy, validate, and record Product Release evidence.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-QUADBRAIN-C3-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "TR-AUDIT-001",
+      "title": "TR Audit",
+      "section": "Backlog",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 40% complete. Evidence: Traceability validation passes and prior DB/delete compliance slice evidence exists, but the full all-TR code compliance audit and duplicate/placeholder reconciliation are not complete. Missing: Finish all-TR code/test compliance audit and reconcile remaining mapping/matrix cleanup.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 2,
+      "tasksDone": 1
+    },
+    {
+      "id": "BUG-TRIAGE-160",
+      "title": "SessionLog appendDialog persist 503s on full SubmitAsync upsert",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "BUG-TRIAGE-161",
+      "title": "Failsafe drain times out SessionLog.SubmitAsync at 30s after successful getFr/getTr",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "BUG-TRIAGE-162",
+      "title": "SessionLog SubmitAsync HTTP 503 backend_unavailable during refresh-docs wrap-up",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-BYRDPROCESS-001",
+      "title": "Propose Byrd process revision: plan creation requirements + full RUP iteration terminology",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 45% complete. Evidence: Planning-standard guidance exists in templates and tests for decision-complete, FR/TR/TEST, expected red state, green criteria, and validation scope; docs v4 exists. Required RUP milestone terms LCO/LCA/IOC/Product Release were not found. Missing: Complete the RUP terminology recast and documentation contract coverage for the process document.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-104"
+      ],
+      "tr": [
+        "TR-MCP-BYRD-005"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 7,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-DELETECOMPLIANCE-003",
+      "title": "Reconcile delete-compliance docs, migrations, filesystem cleanup, and static guards",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 25% complete. Evidence: Some soft-delete/recycle-related code exists, but quarantine source evidence is absent and DELETE FROM occurrences remain. Missing: Reconcile requirements, classify/remediate migration deletes, add recycle/quarantine helper coverage, and static guard tests.",
+      "remainingHas0711": true,
+      "fr": [
+        "[]"
+      ],
+      "tr": [
+        "TR-MCP-DB-003"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-OCTOPUS-001",
+      "title": "Octopus Deploy Integration Prompt for McpServer",
+      "section": "Backlog",
+      "priority": "medium",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual Octopus or OctopusDeploy source, test, or doc evidence was found. Missing: Create the Octopus Deploy integration prompt/plan artifacts and any required requirements/tests.",
+      "remainingHas0711": true,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "BUG-TRIAGE-163",
+      "title": "avalonia-remote MCP handshake fails with pipe closed (os error 232)",
+      "section": "Backlog",
+      "priority": "low",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-TRIAGE-002"
+      ],
+      "tr": [
+        "TR-MCP-TRIAGE-004"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-FILETOOLS-001",
+      "title": "Implement shared repository discovery core",
+      "section": "Iteration Global File Tools",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual shared IRepoDiscoveryService, RepoDiscovery, or server-owned discovery core evidence was found. Missing: Implement shared discovery core and Red-Green-Refactor read_file/list_dir/grep_files increments.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "tr": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 5,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-FILETOOLS-002",
+      "title": "Expose global MCP transport and client tools",
+      "section": "Iteration Global File Tools",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual FwhMcpTools.Files or global MCP transport/client implementation evidence was found. Missing: Add REST/client models, RepoClient methods, and HTTP/stdio MCP tool registrations.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "tr": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "dependsOn": [
+        "PLAN-FILETOOLS-001"
+      ],
+      "orphanLinks": false,
+      "taskCount": 4,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-FILETOOLS-003",
+      "title": "Expose hosted-agent and QBAgent tools",
+      "section": "Iteration Global File Tools",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 10% complete. Evidence: QBAgent has existing external tool surface/read_file-related code, but no complete hosted-agent global registration or QBAgent list_dir/grep_files parity evidence was found. Missing: Register all three tools through hosted-agent adapter and QBAgent with duplicate-free merging and tests.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "tr": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "dependsOn": [
+        "PLAN-FILETOOLS-002"
+      ],
+      "orphanLinks": false,
+      "taskCount": 5,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-FILETOOLS-004",
+      "title": "Validate, document, and deploy global file tools",
+      "section": "Iteration Global File Tools",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 0% complete. Evidence: No actual integration/deployment evidence for global file tools was found; live tools/list and invocation verification remains missing. Missing: Add integration coverage, docs/regeneration, Compile/Test gates, UpdateService deploy, and live invocation receipts.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-FILETOOLS-001"
+      ],
+      "tr": [
+        "TR-MCP-FILETOOLS-001"
+      ],
+      "dependsOn": [
+        "PLAN-FILETOOLS-003"
+      ],
+      "orphanLinks": false,
+      "taskCount": 5,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-HANDOFF-001",
+      "title": "Create handoff ingestion feature that generates TODOs with one-shot AI",
+      "section": "MCP Server",
+      "priority": "high",
+      "done": false,
+      "remaining": "Phase 0 complete: FR-HANDOFF-001..007, TR-HANDOFF-*-001, TEST-HANDOFF-001..007, mappings, and TODO links persisted. Focused tests: Client 5/5, Support.Mcp Handoff 19/19, Repl Handoff 1/1, zero skips. Implementation is in the worktree for Codex review. Do not mark done. Do not commit.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "tr": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 11,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-HANDOFFPLAN-001",
+      "title": "Grok execution prompt: Implement MCP-HANDOFF-001",
+      "section": "MCP Server",
+      "priority": "high",
+      "done": false,
+      "remaining": "Phase 0 complete: FR-HANDOFF-001..007, TR-HANDOFF-*-001, TEST-HANDOFF-001..007, mappings, and TODO links persisted. Focused tests: Client 5/5, Support.Mcp Handoff 19/19, Repl Handoff 1/1, zero skips. Implementation is in the worktree for Codex review. Do not mark done. Do not commit.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "tr": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 9,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-HANDOFFREVIEW-001",
+      "title": "Remediate independent adversarial review of MCP-HANDOFF-001",
+      "section": "MCP Server",
+      "priority": "high",
+      "done": false,
+      "remaining": "Grok is remediating the findings in the same session. Keep this TODO open until all current-plus-prior gates are zero-failure/zero-skip and a fresh independent Codex review reports APPROVED.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-HANDOFF-001",
+        "FR-HANDOFF-002",
+        "FR-HANDOFF-003",
+        "FR-HANDOFF-004",
+        "FR-HANDOFF-005",
+        "FR-HANDOFF-006",
+        "FR-HANDOFF-007"
+      ],
+      "tr": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001",
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-VALIDATE-001",
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001",
+        "TR-HANDOFF-AUDIT-001",
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "dependsOn": [
+        "MCP-HANDOFF-001",
+        "MCP-HANDOFFPLAN-001"
+      ],
+      "orphanLinks": false,
+      "taskCount": 10,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-WIKIEXPORT-001",
+      "title": "Add workspace-keyed wiki export data dump and import hydration",
+      "section": "MCP Server",
+      "priority": "high",
+      "done": false,
+      "remaining": "Needs BDPv4 requirements, implementation plan, tests, docs, validation, todo.yaml deprecation plan, and workspace cleanup behavior before coding.",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 10,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-PLUGINCORE-004",
+      "title": "Repair plugin dialog parsing and add REPL degraded persistence",
+      "section": "Plugin Core",
+      "priority": "high",
+      "done": false,
+      "remaining": "Actual-code completion audit 2026-07-11: 25% complete. Evidence: Some plugin core code exists for CompleteTurn/current-turn.yaml/degraded persistence, and a dictionary-backed dialog parsing test exists, but no failsafe pending strategy, terminal degraded notification, full suite gate, synced plugin-core checksum evidence, or live replay evidence was found. Missing: Finish red tests, canonical parser fix, independent persistence strategies, plugin sync, zero-skip validation, and live replay.",
+      "remainingHas0711": true,
+      "fr": [
+        "FR-MCP-PLUGINCORE-004",
+        "FR-MCP-REPL-009"
+      ],
+      "tr": [
+        "TR-MCP-PLUGINCORE-004",
+        "TR-MCP-REPL-010"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 8,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-TODOALIGN-001",
+      "title": "Audit open TODOs against logged requirements and HEAD code",
+      "section": "Process",
+      "priority": "high",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-TODOAUDIT-001",
+      "title": "Audit open TODOs against logged requirements and HEAD code",
+      "section": "Process",
+      "priority": "high",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-LLMSTRATEGY-001",
+      "title": "Implement QuadBrain per-segment LLM strategy pattern",
+      "section": "QuadBrain",
+      "priority": "high",
+      "done": false,
+      "remaining": "",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "PLAN-SHARPMIND-001",
+      "title": "Test SharpMind as the turn Arbiter of Truth",
+      "section": "QuadBrain",
+      "priority": "medium",
+      "done": false,
+      "remaining": "Blocked on PLAN-LLMSTRATEGY-001. Do not start until the per-segment LLM strategy contract is implemented and gated.",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [
+        "PLAN-LLMSTRATEGY-001"
+      ],
+      "orphanLinks": true,
+      "taskCount": 0,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-HOSTILEREVIEW-001",
+      "title": "Create hostile review queue MCP tool and normalized results",
+      "section": "Review Automation",
+      "priority": "high",
+      "done": false,
+      "remaining": "Needs requirements-first BDPv4 plan, schema design, MCP tool implementation, normalized persistence, query/reporting surfaces, tests, and docs.",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 11,
+      "tasksDone": 0
+    },
+    {
+      "id": "MCP-SESSIONLOG-001",
+      "title": "Session Log Sanitizer for credentials and regex redaction on search endpoints",
+      "section": "Session Logging",
+      "priority": "high",
+      "done": false,
+      "remaining": "S11/S12 gate passed. Added SessionLogSanitizingServiceTests proving QueryAsync and GetAsync sanitize completed inner results while mutation/scalar methods delegate unchanged without invoking the sanitizer. Implemented SessionLogSanitizingService as an ISessionLogService decorator. Validation: initial decorator test failed red because SessionLogSanitizingService was missing; focused decorator tests passed 3/0/0; current-plus-prior sanitizer/decorator scope passed 27/0/0; code-verify succeeded for decorator service and tests. Next slice starts at S13/S14 federation and outermost DI registration.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-SESSIONLOGSAN-001"
+      ],
+      "tr": [
+        "TR-MCP-SESSIONLOGSAN-001"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 20,
+      "tasksDone": 13
+    },
+    {
+      "id": "MCP-SESSIONLOG-002",
+      "title": "Add required session-turn planFile and todoId fields with None sentinel and backfill",
+      "section": "Session Logging",
+      "priority": "high",
+      "done": false,
+      "remaining": "In-repo slices complete. Live UpdateService is a plan non-goal and was not run.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-SESSIONLOGCTX-001"
+      ],
+      "tr": [
+        "TR-MCP-SESSIONLOG-006"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 7,
+      "tasksDone": 7
+    },
+    {
+      "id": "MCP-PLUGININT-001",
+      "title": "Add Session Log workflow aiUnit Theory integration tests for each plugin",
+      "section": "Testing",
+      "priority": "high",
+      "done": false,
+      "remaining": "Second-round coding plan expanded to 21 tasks. P0 architecture/requirements work is complete; P1-P20 harness, adapter, cross-repo, and deployment validation work remain.",
+      "remainingHas0711": false,
+      "fr": [
+        "FR-MCP-PLUGININT-001"
+      ],
+      "tr": [
+        "TR-MCP-PLUGININT-001"
+      ],
+      "dependsOn": [],
+      "orphanLinks": false,
+      "taskCount": 21,
+      "tasksDone": 1
+    },
+    {
+      "id": "MCP-WORKSPACEHYGIENE-002",
+      "title": "Add workspace data-hygiene validation across Server, Director, REPL, and plugin",
+      "section": "Workspace Validation",
+      "priority": "high",
+      "done": false,
+      "remaining": "Keep open per owner instruction. Needs requirements-first design and implementation across server domain/API, Director, REPL/wrapper, synchronized plugin skill, and deterministic integration coverage.",
+      "remainingHas0711": false,
+      "fr": [],
+      "tr": [],
+      "dependsOn": [],
+      "orphanLinks": true,
+      "taskCount": 10,
+      "tasksDone": 0
+    }
+  ]
+}

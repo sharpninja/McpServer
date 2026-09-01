@@ -82,4 +82,20 @@ public sealed class StorageBackendUnavailabilityTests
     [Fact]
     public void Null_IsNotBackendUnavailable()
         => Assert.False(StorageBackendUnavailability.IsBackendUnavailable(null));
+
+    /// <summary>AC: SQL command timeout (-2) is a connection-class failure.</summary>
+    [Fact]
+    public void SqlTimeout_IsBackendUnavailable()
+        => Assert.True(StorageBackendUnavailability.IsBackendUnavailable(SqlExceptionFactory.Create(-2)));
+
+    /// <summary>
+    /// TR-MCP-HEALTH-003: SSL pre-login handshake timeout (the 1.4.27 service crash signature)
+    /// classifies even when SqlException.Number is not a well-known connection code.
+    /// </summary>
+    [Fact]
+    public void SqlSslPreLoginHandshake_IsBackendUnavailable()
+        => Assert.True(StorageBackendUnavailability.IsBackendUnavailable(
+            SqlExceptionFactory.Create(
+                233,
+                "A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: SSL Provider, error: 0 - The wait operation timed out)")));
 }

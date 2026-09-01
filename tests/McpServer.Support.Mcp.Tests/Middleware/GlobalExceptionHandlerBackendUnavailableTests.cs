@@ -61,6 +61,8 @@ public sealed class GlobalExceptionHandlerBackendUnavailableTests
             Assert.True(statusCode == StatusCodes.Status503ServiceUnavailable,
                 $"Expected 503 with typed backend_unavailable body; actual status {statusCode}, body: {body}");
             Assert.Equal("backend_unavailable", document.RootElement.GetProperty("error").GetString());
+            Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
+            Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
             Assert.Equal(StatusCodes.Status503ServiceUnavailable, document.RootElement.GetProperty("status").GetInt32());
             Assert.DoesNotContain("SQLite Error", body, StringComparison.Ordinal);
             Assert.DoesNotContain("unable to open database file", body, StringComparison.Ordinal);

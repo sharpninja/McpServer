@@ -1,0 +1,87 @@
+{
+  "TimestampUtc": "2026-08-19T23:43:06Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation leftover G12 S5 TEMPVOL late TEST-PHASE gate",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "GitBranch": "triage/tempvol",
+  "GitSha": "9c7c3ec3c1e792a1476ca711392812a0ba29425a",
+  "DirtyCount": 0,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "SessionLog": {
+    "sessionId": "GrokCode-20260819T233924Z-hostile-s5-testgate",
+    "requestId": "req-20260819T233924Z-001-hostile-s5-test-gate",
+    "turnIdBegin": 42133,
+    "turnStatus": "completed",
+    "queryProof": "docs/receipts/_hv-s5-testgate/14-query-proof.json",
+    "queryTotalCount": 1,
+    "queryDialogCount": 4,
+    "queryDesignDecisionCount": 2,
+    "queryActionCount": 7
+  },
+  "PluginIdentity": {
+    "sourceType": "GrokCode",
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginVersion": "1.95.0",
+    "markerSignatureOk": true,
+    "healthNonceSent": "hv-s5tg-20260819T233924Z-67998",
+    "healthNonceEcho": "hv-s5tg-20260819T233924Z-67998",
+    "healthNonceMatch": true,
+    "healthStorage": "reachable",
+    "healthVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "toolsSearchExactNameCount": 1
+  },
+  "PesterNamed": {
+    "paths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\triage-tempvol\\plugins\\core\\test-fixtures\\pester\\PluginTempVolume.Tests.ps1"
+    ],
+    "filter": ["*TEST-MCP-TEMPVOL-001*"],
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "notRun": 0,
+    "total": 8,
+    "elapsedSec": 0.819,
+    "result": "Passed",
+    "artifact": "docs/receipts/_hv-s5-testgate/03-pester.json"
+  },
+  "OverallVerdict": "AGREE",
+  "AgreeScope": "leftover S5 TEST-PHASE gate only; not TODO done; not merge; not implementation-exit",
+  "Counts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "Accuracy": 94,
+  "Completeness": 90,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Pester FullName=*TEST-MCP-TEMPVOL-001* PluginTempVolume.Tests.ps1 8/0/0" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "Named tests cover TEMP/TMP alignment, failed-move visibility, template guidance, no PSGallery patch" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "BUG-TRIAGE-117 and PLAN-TRIAGELEFTOVER-001 Done=false" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "Alignment and failed-move ACs are live helper invokes, not regex-only greps" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "No FR createdAt vs LastWriteTime FAIL" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "This receipt is the late leftover S5 test-phase gate; AC-covering tests exist; currently green allowed" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/session/requirements storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "Honesty: 8/0/0 and Done=false match artifacts" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-MCP-TEMPVOL-001 TR-MCP-TEMPVOL-001 TEST-MCP-TEMPVOL-001 exist in MCP" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "Structured testable AC exist" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "FR maps to matching TR and TEST" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "Named Pester covers each leftover AC" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "TEST-PHASE gate only; not merge" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "TODOs remain Done=false" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "Not S7 / not leftover-plan closeout" }
+  ],
+  "PriorDisagree": "docs/receipts/hostile-validator-20260819T232840Z.md",
+  "DidNotMerge": true,
+  "DidNotMarkTodosDone": true
+}

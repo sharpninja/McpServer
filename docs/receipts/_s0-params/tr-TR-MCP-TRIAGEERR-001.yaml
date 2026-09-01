@@ -1,0 +1,10 @@
+id: TR-MCP-TRIAGEERR-001
+title: Shared error classifier and envelope
+description: One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+priority: high
+area: MCP
+subarea: TRIAGEERR
+acceptanceCriteria:
+  - id: ac-1
+    text: One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+    isSatisfied: false

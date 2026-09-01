@@ -1,0 +1,92 @@
+UTC=2026-08-18T18:45:48.6297698Z
+WIKI_SCHEMA=mcp-wiki-export/v1
+WIKI_DOC_COUNT=26
+DOC id=home title=Home source=generated:home exists=False
+DOC id=functional title=Functional Requirements source=generated:functional exists=False
+DOC id=technical title=Technical Requirements source=generated:technical exists=False
+DOC id=testing title=Testing Requirements source=generated:testing exists=False
+DOC id=mapping title=Traceability Mapping source=generated:mapping exists=False
+DOC id=matrix title=Requirements Matrix source=generated:matrix exists=False
+DOC id=triage-plugin-code-quality-case-study title=Triage Plugin Code Quality Case Study source=docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md exists=True
+DOC id=user-guide title=User Guide source=docs/USER-GUIDE.md exists=True
+DOC id=faq title=FAQ source=docs/FAQ.md exists=True
+DOC id=client-integration title=Client Integration source=docs/CLIENT-INTEGRATION.md exists=True
+DOC id=repl-user-guide title=REPL User Guide source=docs/REPL-USER-GUIDE.md exists=True
+DOC id=repl-agent-guide title=REPL Agent Guide source=docs/REPL-AGENT-GUIDE.md exists=True
+DOC id=repl-migration-guide title=REPL Migration Guide source=docs/REPL-MIGRATION-GUIDE.md exists=True
+DOC id=mcp-server-guide title=MCP Server Operations Guide source=docs/MCP-SERVER.md exists=True
+DOC id=quadbrain title=QuadBrain Architecture source=docs/QUADBRAIN.md exists=True
+DOC id=qbagent title=QBAgent source=docs/QBAGENT.md exists=True
+DOC id=agent-plugin-availability title=Agent Plugin Availability source=docs/AGENT-PLUGIN-AVAILABILITY.md exists=True
+DOC id=agent-plugin-feature-matrix title=Agent Plugin Feature Matrix source=docs/AGENT-PLUGIN-FEATURE-MATRIX.md exists=True
+DOC id=byrd-development-process title=Byrd Development Process v4 source=docs/Development-Process-draft-v4.md exists=True
+DOC id=azure-pipelines title=Azure Pipelines source=docs/AZURE-PIPELINES.md exists=True
+DOC id=release-checklist title=Release Checklist source=docs/RELEASE-CHECKLIST.md exists=True
+DOC id=onboarding-human-ai-partnership title=Onboarding: Human and AI Partnership source=docs/Onboarding-Human-AI-Partnership.md exists=True
+DOC id=usecase-extension-design-v3 title=Use Case Extension Design v3 source=docs/McpServer-UseCase-Extension-Design-v3.0.md exists=True
+DOC id=usecase-diagram-mermaid-schema-v1 title=Use Case Diagram Mermaid Schema v1 source=docs/context/usecase-diagram-mermaid-schema-v1.md exists=True
+DOC id=session-log-schema title=Session Log Schema source=docs/context/session-log-schema.md exists=True
+DOC id=handoff-ingestion title=Handoff Ingestion source=docs/Handoff-Ingestion.md exists=True
+MISSING_COUNT=6
+NAV=[{"document":"home"},{"title":"Requirements","children":[{"document":"functional"},{"document":"technical"},{"document":"testing"},{"document":"mapping"},{"document":"matrix"}],"path":"Requirements"},{"title":"Case Studies","children":[{"document":"triage-plugin-code-quality-case-study"}],"path":"Case-Studies"},{"title":"User Guides","children":[{"document":"user-guide"},{"document":"faq"},{"document":"client-integration"},{"document":"repl-user-guide"},{"document":"repl-agent-guide"},{"document":"repl-migration-guide"},{"document":"handoff-ingestion"}],"path":"User-Guides"},{"title":"Architecture","children":[{"document":"mcp-server-guide"},{"document":"quadbrain"},{"document":"qbagent"},{"document":"agent-plugin-availability"},{"document":"agent-plugin-feature-matrix"},{"document":"usecase-extension-design-v3"},{"document":"usecase-diagram-mermaid-schema-v1"},{"document":"session-log-schema"}],"path":"Architecture"},{"title":"Process","children":[{"document":"byrd-development-process"},{"document":"release-checklist"},{"document":"onboarding-human-ai-partnership"}],"path":"Process"},{"title":"Operations","children":[{"document":"azure-pipelines"}],"path":"Operations"}]
+COMMIT_DELETED
+COMMIT_RENAMED
+COMMIT_WIKI_YAML_IN_COMMIT=0
+TEST_LOG_SEARCH
+RECEIPT 2026-08-18T15:00:39.2966868Z 1486 F:\GitHub\McpServer\docs\receipts\_hv-h2-green-tests-20260818T145627Z.ps1
+RECEIPT 2026-08-18T15:02:44.4070774Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h2-green-req-test.json
+RECEIPT 2026-08-18T15:18:27.7472418Z 2835 F:\GitHub\McpServer\docs\receipts\_hv-h3-red-tests.ps1
+RECEIPT 2026-08-18T15:23:55.3581585Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h3-red-req-test.json
+RECEIPT 2026-08-18T15:36:31.5714494Z 3166 F:\GitHub\McpServer\docs\receipts\_hv-h3-green-tests.ps1
+RECEIPT 2026-08-18T15:41:32.6456877Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h3-green-req-test.json
+RECEIPT 2026-08-18T15:48:40.4412751Z 2160 F:\GitHub\McpServer\docs\receipts\_hv-h4-red-tests.ps1
+RECEIPT 2026-08-18T15:49:55.1941426Z 8753 F:\GitHub\McpServer\docs\receipts\_hv-h4-red-test-output.txt
+RECEIPT 2026-08-18T15:51:09.9845558Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h4-red-req-test.json
+RECEIPT 2026-08-18T15:51:26.7347110Z 466 F:\GitHub\McpServer\docs\receipts\_hv-h4-red-tests2.ps1
+RECEIPT 2026-08-18T16:02:31.3157457Z 3862 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-tests.ps1
+RECEIPT 2026-08-18T16:03:14.2856260Z 3627 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-test-ctx.txt
+RECEIPT 2026-08-18T16:03:42.8057580Z 8856 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-test-product.txt
+RECEIPT 2026-08-18T16:04:48.5513832Z 1383 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-tests2.ps1
+RECEIPT 2026-08-18T16:05:15.4652690Z 2574 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-test-ctx-default.txt
+RECEIPT 2026-08-18T16:05:31.0080418Z 2574 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-test-product-default.txt
+RECEIPT 2026-08-18T16:05:38.8203321Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h4-green-req-test.json
+RECEIPT 2026-08-18T16:23:36.9252243Z 1749 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-tests.ps1
+RECEIPT 2026-08-18T16:24:49.3414059Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-req-test.json
+RECEIPT 2026-08-18T16:25:19.2588663Z 2574 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-test-product.txt
+RECEIPT 2026-08-18T16:25:32.3583940Z 3109 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-test-launch.txt
+RECEIPT 2026-08-18T16:25:36.9343885Z 3386 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-traceability.txt
+RECEIPT 2026-08-18T16:28:37.1070291Z 52118 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-full-test.txt
+RECEIPT 2026-08-18T16:29:02.9028570Z 872 F:\GitHub\McpServer\docs\receipts\_hv-h5-done-save-fulltest.ps1
+RECEIPT 2026-08-18T16:48:26.1170583Z 53001 F:\GitHub\McpServer\docs\receipts\_hv-h5-rerun-full-test.txt
+RECEIPT 2026-08-18T16:50:05.1774375Z 902 F:\GitHub\McpServer\docs\receipts\_hv-h5-rerun-tests.ps1
+RECEIPT 2026-08-18T16:54:11.4513422Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h5-rerun-req-test.json
+RECEIPT 2026-08-18T17:39:55.1138042Z 53002 F:\GitHub\McpServer\docs\receipts\_hv-h5-skeptic-full-test.txt
+RECEIPT 2026-08-18T17:40:08.1096354Z 365929 F:\GitHub\McpServer\docs\receipts\_hv-h5-skeptic-req-test.json
+RECEIPT 2026-08-18T17:43:37.2319292Z 440 F:\GitHub\McpServer\docs\receipts\_hv-h5-skeptic-focused-tests.txt
+RECEIPT 2026-08-18T18:31:56.1047271Z 27 F:\GitHub\McpServer\docs\receipts\_gendoc-wiki-params-20260818T183111Z.yaml
+RECEIPT 2026-08-18T18:32:00.8000410Z 119 F:\GitHub\McpServer\docs\receipts\_gendoc-wiki-20260818T183111Z.err.txt
+RECEIPT 2026-08-18T18:33:14.4354804Z 366 F:\GitHub\McpServer\docs\receipts\_gendoc-wiki-20260818T183111Z.yaml
+RECEIPT 2026-08-18T18:40:00.5325543Z 2791 F:\GitHub\McpServer\docs\receipts\wrap-up-20260818T183800Z.md
+RECEIPT 2026-08-18T18:40:25.3323894Z 3174 F:\GitHub\McpServer\docs\receipts\_wrap-up-turn-20260818T183800Z.json
+RECEIPT 2026-08-18T18:43:24.4245237Z 6925 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-collect-20260818.ps1
+RECEIPT 2026-08-18T18:43:43.1996417Z 2190 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-session-20260818.ps1
+RECEIPT 2026-08-18T18:44:10.4851094Z 3789 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-collect2-20260818.ps1
+RECEIPT 2026-08-18T18:44:48.9884506Z 125 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-bootstrap.json
+RECEIPT 2026-08-18T18:45:25.8806774Z 2630 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-git-20260818.ps1
+RECEIPT 2026-08-18T18:45:25.8816803Z 2078 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-session2-20260818.ps1
+RECEIPT 2026-08-18T18:45:48.5942379Z 135 F:\GitHub\McpServer\docs\receipts\_hv-wrapup-ids-20260818.txt
+IMPL_DIR=C:\Users\kingd\AppData\Local\Temp\grok-goal-18747a5af710\implementer
+IMPL 2026-08-18T18:01:54.6280325Z 124 update-service.txt
+N3_SCAN
+HIT=F:\GitHub\McpServer\.mcpServer\claude\current-turn.yaml
+HIT=F:\GitHub\McpServer\.mcpServer\grok\current-turn.yaml
+HIT=F:\GitHub\McpServer\docs\receipts\_hv-wrapup-collect-20260818.ps1
+HIT=F:\GitHub\McpServer\docs\receipts\_hv-wrapup-collect2-20260818.ps1
+N3_HIT_COUNT=4
+======= F:\GitHub\McpServer\docs\receipts\_hv-h3-green-collect.ps1 =======
+$apiKey = (Get-MarkerField -MarkerFile $marker -FieldName 'apiKey')
+$headers = @{ 'X-Api-Key' = $apiKey }
+======= F:\GitHub\McpServer\docs\receipts\_hv-h3-green-collect2.ps1 =======
+    $apiKey = (Get-MarkerField -MarkerFile $marker -FieldName 'apiKey')
+    $headers = @{ 'X-Api-Key' = $apiKey }
+UTC_END=2026-08-18T18:46:35.8347491Z

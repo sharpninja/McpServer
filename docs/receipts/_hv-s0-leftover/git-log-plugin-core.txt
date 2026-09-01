@@ -1,0 +1,8 @@
+c81abaf0193c393bfecffc07015962424a601dfe 2026-08-19T11:34:24-05:00 feat(triage): unified errors, session-log persist, hook isolation
+7c4821ca9d0ce9e205482b6f68afbc9e058cfb28 2026-08-12T17:31:22-05:00 feat(sessionlog): require planFile and todoId on session turns
+508b1690fec7fb911afad4667c76523b46b0530a 2026-07-23T11:58:22-05:00 fix(plugin): close the cached-value recurrence vector for agent header fields
+d22a154876ff95ed8a36b3e149f39faf7ad4baf6 2026-07-23T11:38:51-05:00 fix(plugin): stop agent runtime header fields fabricating values
+1fb065e8eea53215fc16a327bd8840f2fa768bb2 2026-07-22T18:54:59-05:00 fix: populate plugin session headers
+aeb03db626fd1a8c7443069956bbe1d520582e48 2026-07-22T18:27:59-05:00 feat: add agent session header metadata
+00a71449e04b826d61107153b4301d072c9a54ed 2026-07-21T10:28:11-05:00 fix(sessionlog): remediate the 13-defect session-log cluster (BUG-TRIAGE-086..101)
+b1615e9a29503cd415bb0bc830bc3e6127ec954d 2026-07-20T18:54:43-05:00 fix(security): mint a fresh signing key on party rename, and close the day's loose ends

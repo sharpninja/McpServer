@@ -1,0 +1,8 @@
+{
+  "markerSignature": true,
+  "nonce": "b8e868292de8c36e702119677739a17c",
+  "healthStatusCode": 200,
+  "healthBody": "{\"status\":\"Healthy\",\"version\":\"1.4.26\\u002B298c5fde3d1438ff7741ebec82ced796b207433e\",\"checks\":[{\"name\":\"self\",\"status\":\"Healthy\",\"description\":null,\"duration\":0.0006},{\"name\":\"upstream\",\"status\":\"Healthy\",\"description\":\"Federation disabled.\",\"duration\":0.0011}],\"nonce\":\"b8e868292de8c36e702119677739a17c\",\"storage\":\"reachable\"}",
+  "pluginJsonVersion": "1.94.0",
+  "pluginDotVersion": "1.94.0"
+}

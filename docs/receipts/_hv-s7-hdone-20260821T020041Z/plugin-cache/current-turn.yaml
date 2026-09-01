@@ -1,0 +1,17 @@
+turnRequestId: req-20260821T020041Z-001-s7-hdone-store-close-gate
+queryTitle: Hostile S7 H-done store-close gate
+openedAt: 2026-08-21T02:00:58Z
+status: completed
+sessionId: GrokCode-20260821T020043Z-plugin-session
+codeEdits: 7
+lastBuildStatus: unknown
+auditActions: 7
+auditDialog: 4
+auditDecisions: 2
+auditFiles: 7
+auditCommits: 0
+queryText: Class 1 S7 store-close gate. Attack A1-A12 and B/C/D. Do not mark any MCP TODO done true.
+planFile: docs/plans/sessionlog-remediate-001.md
+todoId: PLAN-SESSIONLOGREMEDIATE-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-20T08:12:30.1326876Z

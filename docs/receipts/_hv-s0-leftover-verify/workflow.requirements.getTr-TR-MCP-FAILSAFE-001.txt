@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T181614Z-a043
+  result:
+    id: TR-MCP-FAILSAFE-001
+    title: Failsafe drain abort markers include backend_unavailable and HTTP 503
+    description: Test-ReplFailsafeBackendUnreachable matches backend_unavailable and HTTP 503. Invoke-ReplFailsafeDrainOnFirstSuccess does not set completed before a 503 pass and does not increment drainAttempts or quarantine on that abort. Covered by FR-MCP-FAILSAFE-001 TEST-MCP-FAILSAFE-001.
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: FAILSAFE
+    acceptanceCriteria:
+    - id: ac-1
+      text: Failsafe drain abort markers include backend_unavailable and HTTP 503 and do not burn drainAttempts
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T18:16:15.2634949+00:00
+    updatedAt: 2026-08-19T18:16:15.2635992+00:00
+  deprecated: true
+
+---

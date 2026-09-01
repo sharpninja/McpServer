@@ -25,9 +25,9 @@ public sealed partial class FwhMcpTools
         if (_transcriptIngestionService is null)
             return JsonSerializer.Serialize(new { error = "Transcript ingestion service is not registered." }, s_camelCaseOptions);
 
-        ApplyWorkspaceOverride(workspacePath);
         try
         {
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var profile = ParseTranscriptEnum(compatibilityProfile, TranscriptCompatibilityProfile.None, nameof(compatibilityProfile));
             var request = new TranscriptIngestionRequest(path)
             {
@@ -64,9 +64,9 @@ public sealed partial class FwhMcpTools
         if (_transcriptIngestionService is null)
             return JsonSerializer.Serialize(new { error = "Transcript ingestion service is not registered." }, s_camelCaseOptions);
 
-        ApplyWorkspaceOverride(workspacePath);
         try
         {
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var profile = ParseTranscriptEnum(targetProfile, TranscriptCompatibilityProfile.None, nameof(targetProfile));
             if (profile == TranscriptCompatibilityProfile.None)
                 throw new ArgumentException("targetProfile must be Claude, Codex, or Grok.", nameof(targetProfile));

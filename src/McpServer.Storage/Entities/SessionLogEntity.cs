@@ -120,4 +120,7 @@ public sealed class SessionLogEntity
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to session log turns.</summary>
     public ICollection<SessionLogTurnEntity> Turns { get; } = new List<SessionLogTurnEntity>();
+
+    /// <summary>FR-MCP-TRIAGESTORE-001: session-scoped tags that round-trip on query.</summary>
+    public ICollection<SessionLogTagEntity> Tags { get; } = new List<SessionLogTagEntity>();
 }

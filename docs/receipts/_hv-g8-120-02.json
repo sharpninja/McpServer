@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-08-19T18:51:48Z",
+  "ExitCode": 0,
+  "ElapsedSec": 10.765,
+  "Filter": "FullyQualifiedName~ReplMcpErrorClassifierTests|FullyQualifiedName~SessionLogPersistenceDispatcherTests|FullyQualifiedName~SessionLogPersistenceStrategyTests|FullyQualifiedName~ContractCorrectnessTests",
+  "Summary": {
+    "Outcome": "Passed",
+    "Failed": 0,
+    "Passed": 34,
+    "Skipped": 0,
+    "Total": 34
+  },
+  "StdOut": "  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n  McpServer.Todo.Validation -> F:\\GitHub\\McpServer\\tests\\McpServer.Todo.Validation\\bin\\Debug\\net10.0\\McpServer.Todo.Validation.dll\r\n  McpServer.Client -> F:\\GitHub\\McpServer\\src\\McpServer.Client\\bin\\Debug\\net10.0\\McpServer.Client.dll\r\n  McpServer.Repl.Core -> F:\\GitHub\\McpServer\\src\\McpServer.Repl.Core\\bin\\Debug\\net10.0\\McpServer.Repl.Core.dll\r\n  McpServer.Repl.Core.Tests -> F:\\GitHub\\McpServer\\tests\\McpServer.Repl.Core.Tests\\bin\\Debug\\net10.0\\McpServer.Repl.Core.Tests.dll\r\nTest run for F:\\GitHub\\McpServer\\tests\\McpServer.Repl.Core.Tests\\bin\\Debug\\net10.0\\McpServer.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)\r\nA total of 1 test files matched the specified pattern.\r\nResults File: F:\\GitHub\\McpServer\\docs\\receipts\\_hv-g8-120-02.trx\r\n\r\nPassed!  - Failed:     0, Passed:    34, Skipped:     0, Total:    34, Duration: 416 ms - McpServer.Repl.Core.Tests.dll (net10.0)\r\n",
+  "StdErr": ""
+}

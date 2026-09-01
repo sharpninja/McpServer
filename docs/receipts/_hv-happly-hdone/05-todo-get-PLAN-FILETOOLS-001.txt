@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260820T125755Z-8a57
+  result:
+    id: PLAN-FILETOOLS-001
+    title: Implement shared repository discovery core
+    section: Iteration Global File Tools
+    priority: high
+    done: false
+    estimate: 6h
+    description:
+    - Define the public discovery contracts and write failing tests before implementation.
+    - Implement read_file, list_dir, and grep_files in one server-owned read-only core.
+    - Complete TEST-MCP-FILETOOLS-001 core behavior and path-safety coverage with zero failures and zero skips.
+    technicalDetails: &o0 []
+    implementationTasks:
+    - task: Write mock-backed consumer contracts and red RepoFileService tests
+      done: false
+    - task: Implement read_file Red-Green-Refactor increment
+      done: false
+    - task: Implement list_dir Red-Green-Refactor increment
+      done: false
+    - task: Implement grep_files Red-Green-Refactor increment
+      done: false
+    - task: Run current-plus-prior unit gate with zero failures and zero skips
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): shared core is RepoFileService (src/McpServer.Services/Services/RepoFileService.cs) plus RepoFileServiceTests, not IRepoDiscoveryService. FR-MCP-FILETOOLS-001 still requires MCP tools/list names read_file, list_dir, grep_files; those names are absent from *Tools*.cs. Remaining: expose the three tool names on the shared core. Do not store-close.'
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-MCP-FILETOOLS-001
+    technicalRequirements:
+    - TR-MCP-FILETOOLS-001
+  deprecated: true
+
+---
+

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="28" errors="0" failures="0" not-run="108" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-08-20" time="19:41:23">
+  <environment clr-version="10.0.10" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" user-domain="PAYTON-LEGION2" cwd="F:\GitHub\McpServer\.worktrees\session-persist" os-version="10.0.26200" user="kingd" machine-name="PAYTON-LEGION2" nunit-version="2.5.8.0" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="10.9329" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1" executed="True" result="Success" success="True" time="9.3673" asserts="0" description="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing" executed="True" result="Success" success="True" time="1.3889" asserts="0" description="TEST-MCP-PLUGINCORE-004 session-log dialog parsing">
+            <results>
+              <test-case description="parses dictionary-backed dialogItems YAML and property-backed JSON" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing.parses dictionary-backed dialogItems YAML and property-backed JSON" time="0.8352" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="persists multi-item appendDialog payloads and increments auditDialog" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing.persists multi-item appendDialog payloads and increments auditDialog" time="0.3309" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects appendDialog when no dialog items can be parsed" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing.rejects appendDialog when no dialog items can be parsed" time="0.1368" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary" executed="True" result="Success" success="True" time="2.2871" asserts="0" description="TEST-MCP-REPL-025 PowerShell REPL persistence boundary">
+            <results>
+              <test-case description="routes persistence through canonical client submit and enforces failsafe ordering" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.routes persistence through canonical client submit and enforces failsafe ordering" time="0.0252" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="writes a YAML failsafe before submit and clears it after durable success" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.writes a YAML failsafe before submit and clears it after durable success" time="0.3958" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="retains the YAML failsafe when MCP rejects the submit" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.retains the YAML failsafe when MCP rejects the submit" time="0.2687" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="reports degraded persistence and its failsafe path only when completeTurn closes the turn" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.reports degraded persistence and its failsafe path only when completeTurn closes the turn" time="0.167" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-BUGTRIAGE-041 repl-invoke reloads marker resolver in its own script scope" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.TEST-MCP-BUGTRIAGE-041 repl-invoke reloads marker resolver in its own script scope" time="0.0131" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-BUGTRIAGE-041 plugin hook checks REPL exit code instead of assignment success" name="TEST-MCP-REPL-025 PowerShell REPL persistence boundary.TEST-MCP-BUGTRIAGE-041 plugin hook checks REPL exit code instead of assignment success" time="0.0191" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-REPL-031 failsafe queue drain" executed="True" result="Success" success="True" time="2.7014" asserts="0" description="TEST-MCP-REPL-031 failsafe queue drain">
+            <results>
+              <test-case description="TEST-MCP-REPL-037 triggers exactly one queue drain after the first successful REPL call" name="TEST-MCP-REPL-031 failsafe queue drain.TEST-MCP-REPL-037 triggers exactly one queue drain after the first successful REPL call" time="0.1856" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-FAILSAFE-001 HTTP 503 abort does not increment drainAttempts and a later drain in the same process can replay" name="TEST-MCP-REPL-031 failsafe queue drain.TEST-MCP-FAILSAFE-001 HTTP 503 abort does not increment drainAttempts and a later drain in the same process can replay" time="0.2155" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-REPL-040 session-log turn persistence hardening" executed="True" result="Success" success="True" time="7.8843" asserts="0" description="TEST-MCP-REPL-040 session-log turn persistence hardening">
+            <results>
+              <test-case description="TEST-MCP-REPL-040 persists an appendDialog without queryTitle instead of failing the empty-title bind" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 persists an appendDialog without queryTitle instead of failing the empty-title bind" time="0.2174" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 populates agent runtime headers from session-state when env vars are absent" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 populates agent runtime headers from session-state when env vars are absent" time="1.3353" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 persists an incidental appendActions with the turn title omitted" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 persists an incidental appendActions with the turn title omitted" time="0.455" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 completes a turn without queryTitle instead of reporting a failed persist" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 completes a turn without queryTitle instead of reporting a failed persist" time="0.4172" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 supersede keeps a locally refined title without a server round trip" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 supersede keeps a locally refined title without a server round trip" time="0.4397" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 supersede prefers the refined server title over a raw prompt-derived local title" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 supersede prefers the refined server title over a raw prompt-derived local title" time="0.4283" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 supersede omits the title when the local default is raw and the server has none" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 supersede omits the title when the local default is raw and the server has none" time="0.4618" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 handles failTurn locally against cache-only state instead of falling through to the REPL" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 handles failTurn locally against cache-only state instead of falling through to the REPL" time="0.4829" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-REPL-040 rejects a failTurn without errorMessage locally and keeps the turn cache" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-REPL-040 rejects a failTurn without errorMessage locally and keeps the turn cache" time="0.1166" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation" time="0.4066" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle" name="TEST-MCP-REPL-040 session-log turn persistence hardening.TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle" time="0.4111" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-195 session-log incremental persist and failsafe drain" executed="True" result="Success" success="True" time="8.6604" asserts="0" description="TEST-MCP-195 session-log incremental persist and failsafe drain">
+            <results>
+              <test-case description="TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists" time="0.1624" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe" time="0.2797" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays" time="0.1922" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s" name="TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s" time="0.1322" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\TriagePluginIdentity.Tests.ps1" executed="True" result="Success" success="True" time="1.5656" asserts="0" description="F:\GitHub\McpServer\.worktrees\session-persist\plugins\core\test-fixtures\pester\TriagePluginIdentity.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TRIAGEPLUGIN identity and timeouts" executed="True" result="Success" success="True" time="1.5094" asserts="0" description="TRIAGEPLUGIN identity and timeouts">
+            <results>
+              <test-case description="TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down" name="TRIAGEPLUGIN identity and timeouts.TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down" time="0.0235" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-TRIAGEPLUGIN-004 PersistTurn.SubmitAsyncChildTimeout_ReturnsDegradedQueued" name="TRIAGEPLUGIN identity and timeouts.TEST-MCP-TRIAGEPLUGIN-004 PersistTurn.SubmitAsyncChildTimeout_ReturnsDegradedQueued" time="1.4567" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

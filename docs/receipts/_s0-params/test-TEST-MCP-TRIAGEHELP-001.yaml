@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGEHELP-001
+title: Agent Help progress-only and echo are not completed
+description: Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+    isSatisfied: false

@@ -1,0 +1,212 @@
+{
+  "TimestampUtc": "2026-08-18T15:24:30Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 3 / H3-red only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 95,
+  "completenessRating": 93,
+  "sessionId": "GrokCode-20260818T152309Z-h3-red-products",
+  "requestId": "req-20260818T152309Z-001-hostile-h3-red-products",
+  "turnId": 41766,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.93.0",
+    "versionFile": "1.93.0"
+  },
+  "markerSignature": true,
+  "healthNonceThisReview": "h3red23a90d8b31fb433b86c1edf54a99dd7b",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "controllerFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~ProductsControllerTests",
+    "utcStart": "2026-08-18T15:19:10.6195371Z",
+    "utcEnd": "2026-08-18T15:19:23.432962Z",
+    "exitCode": 1,
+    "failed": 6,
+    "passed": 0,
+    "skipped": 0,
+    "total": 6,
+    "compiled": true,
+    "failureReasons": [
+      "CreatedResult vs StatusCodeResult",
+      "BadRequestObjectResult vs StatusCodeResult",
+      "ConflictObjectResult vs StatusCodeResult",
+      "NotFoundObjectResult vs StatusCodeResult",
+      "ObjectResult vs StatusCodeResult",
+      "productScope missing on GetEffectiveRequirementsAsync"
+    ]
+  },
+  "clientFilter": {
+    "command": "dotnet test tests/McpServer.Client.Tests -c Debug --filter FullyQualifiedName~ProductClientTests",
+    "utcStart": "2026-08-18T15:19:26.4679266Z",
+    "utcEnd": "2026-08-18T15:19:30.0377233Z",
+    "exitCode": 1,
+    "failed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "total": 1,
+    "compiled": true,
+    "failureReason": "System.NotImplementedException : product client not implemented"
+  },
+  "replFilter": {
+    "command": "dotnet test tests/McpServer.Repl.Core.Tests -c Debug --filter FullyQualifiedName~GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients",
+    "utcStart": "2026-08-18T15:19:34.4236054Z",
+    "utcEnd": "2026-08-18T15:19:39.5080216Z",
+    "exitCode": 1,
+    "failed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "total": 1,
+    "compiled": true,
+    "failureReason": "Assert.Contains Products not found in advertised client names"
+  },
+  "priorH2GreenReceipt": "docs/receipts/hostile-validator-20260818T150200Z.md",
+  "priorH2GreenOverallVerdict": "AGREE",
+  "priorH2RedReceipt": "docs/receipts/hostile-validator-20260818T144836Z.md",
+  "priorH2RedOverallVerdict": "AGREE",
+  "priorH1GreenReceipt": "docs/receipts/hostile-validator-20260818T143053Z.md",
+  "priorH1GreenOverallVerdict": "AGREE",
+  "priorH1RedReceipt": "docs/receipts/hostile-validator-20260818T140630Z.md",
+  "priorH1RedOverallVerdict": "AGREE",
+  "h0Receipt": "docs/receipts/hostile-validator-20260818T132341Z.md",
+  "h0OverallVerdict": "AGREE",
+  "todoDone": false,
+  "approvedPlanSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "sessionPlanSha256": "0D73B5C6B754DEC494F4EAB445AD2A6EEB73D2F2923260366E07D4A9351FD92C",
+  "iProductServiceCsHits": 0,
+  "controllerDispatches": false,
+  "productClientThrowsNotImplemented": true,
+  "passthroughHasProductsCase": false,
+  "mcpServerClientHasProductsProperty": false,
+  "productCreateDispatches": false,
+  "productRequirementContextTestsPresent": false,
+  "toolsListUniqueNameCount": 106,
+  "failList": [],
+  "unknownList": [
+    "Full ./build.ps1 Test not run; not required for H3-red.",
+    "No dedicated FwhMcpTools product_create dispatch test; TEST-004 names ProductClientTests plus MCP/REPL allow-list tests.",
+    "ProductClient exposes only CreateAsync; remaining product_* MCP tools are absent. Expected for H3-red.",
+    "StatusCodeResult assertions do not print 501; source is Status501NotImplemented.",
+    "Plugin Node descriptor tests not evaluated."
+  ],
+  "claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    }
+  ],
+  "sessionProof": {
+    "queryFrom": "2026-08-18T15:20:00Z",
+    "totalCount": 1,
+    "sessionId": "GrokCode-20260818T152309Z-h3-red-products",
+    "sourceType": "GrokCode",
+    "turnCount": 1,
+    "requestId": "req-20260818T152309Z-001-hostile-h3-red-products",
+    "turnStatus": "completed",
+    "sessionStatus": "in_progress",
+    "actionCount": 9,
+    "dialogCount": 4,
+    "hasDecisionDialog": true,
+    "responseStartsWith": "OverallVerdict AGREE",
+    "turnId": 41766
+  }
+}

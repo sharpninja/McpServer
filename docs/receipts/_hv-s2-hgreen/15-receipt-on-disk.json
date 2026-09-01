@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-08-19T21:09:15Z",
+  "MdExists": true,
+  "JsonExists": true,
+  "MdBytes": 10245,
+  "JsonBytes": 4891,
+  "MdLastWriteUtc": "2026-08-19T21:07:18.7587028Z",
+  "JsonLastWriteUtc": "2026-08-19T21:07:18.7607034Z",
+  "MdVerdict": "AGREE",
+  "JsonVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPass": 19,
+  "JsonFail": 0,
+  "JsonUnknown": 0
+}

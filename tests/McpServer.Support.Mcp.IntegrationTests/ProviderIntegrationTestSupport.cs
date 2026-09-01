@@ -110,6 +110,7 @@ internal static class ProviderIntegrationTestSupport
 
         Assert.Contains(expectedProviderName, context.Database.ProviderName ?? string.Empty, StringComparison.OrdinalIgnoreCase);
 
+        context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
         await context.Database.MigrateAsync().ConfigureAwait(false);
 
         var appliedMigrations = await context.Database.GetAppliedMigrationsAsync().ConfigureAwait(false);
@@ -139,6 +140,69 @@ internal static class ProviderIntegrationTestSupport
         Assert.Equal("Provider integration test agent", loaded.DisplayName);
         Assert.Equal("dotnet", loaded.DefaultLaunchCommand);
         Assert.Equal(workspaceId, loaded.WorkspaceId);
+    }
+
+    /// <summary>
+    /// Asserts that AddHandoffIngestionStorage is applied and HandoffIngestionRuns/HandoffDiagnostics
+    /// can round-trip on the hosted provider database.
+    /// </summary>
+    internal static async Task AssertHandoffIngestionStorageAsync(WebApplicationFactory<McpApiEntryPoint> factory)
+    {
+        ArgumentNullException.ThrowIfNull(factory);
+        using var scope = factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var applied = await context.Database.GetAppliedMigrationsAsync().ConfigureAwait(false);
+        Assert.Contains(applied, name => name.Contains("AddHandoffIngestionStorage", StringComparison.Ordinal));
+
+        var workspaceId = string.IsNullOrWhiteSpace(context.CurrentWorkspaceId)
+            ? context.Workspaces.Select(item => item.WorkspaceId).FirstOrDefault() ?? "handoff-provider-test"
+            : context.CurrentWorkspaceId;
+        context.OverrideWorkspaceId(workspaceId);
+        if (!await context.Workspaces.AnyAsync(item => item.WorkspaceId == workspaceId).ConfigureAwait(false))
+        {
+            context.Workspaces.Add(new WorkspaceEntity
+            {
+                WorkspaceId = workspaceId,
+                WorkspacePath = workspaceId,
+                Name = "handoff-provider-test",
+                TodoPath = "docs/todo.yaml",
+                IsEnabled = true,
+            });
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var runId = $"handoff-run-{Guid.NewGuid():N}";
+        context.HandoffIngestionRuns.Add(new HandoffIngestionRunEntity
+        {
+            RunId = runId,
+            WorkspaceId = workspaceId,
+            SourceKind = "Content",
+            SourceLocator = "content",
+            ContentSha256 = new string('a', 64),
+            ExtractedAtUtc = DateTimeOffset.UtcNow,
+            PromptVersion = "handoff-todo-draft/v1",
+            Mode = "DraftOnly",
+            ReviewState = "None",
+            ReplayIdentity = Guid.NewGuid().ToString("N").PadRight(64, '0')[..64],
+            ProcessingState = "Terminal",
+            Succeeded = true,
+        });
+        context.HandoffDiagnostics.Add(new HandoffDiagnosticEntity
+        {
+            WorkspaceId = workspaceId,
+            RunId = runId,
+            Code = "provider_roundtrip",
+            Severity = "Info",
+            Message = "round-trip",
+            Ordinal = 0,
+        });
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        context.ChangeTracker.Clear();
+
+        var loadedRun = await context.HandoffIngestionRuns.IgnoreQueryFilters().SingleAsync(item => item.RunId == runId).ConfigureAwait(false);
+        var loadedDiagnostic = await context.HandoffDiagnostics.IgnoreQueryFilters().SingleAsync(item => item.RunId == runId).ConfigureAwait(false);
+        Assert.Equal("Content", loadedRun.SourceKind);
+        Assert.Equal("provider_roundtrip", loadedDiagnostic.Code);
     }
 
     private static McpDatabaseProviderOptions ResolveProviderOptions(IReadOnlyDictionary<string, string?> configuration)
@@ -340,5 +404,59 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
         }
 
         return stdout;
+    }
+}
+
+/// <summary>
+/// Adopts the repository PostgreSQL test cluster (MCP_TEST_POSTGRES_CONNECTION or ephemeral binaries)
+/// and creates uniquely named scratch databases for clean-head handoff migration tests.
+/// </summary>
+internal sealed class EphemeralPostgresSandbox : IAsyncDisposable
+{
+    private readonly McpServer.Support.Mcp.Tests.Storage.EphemeralPostgresFixture _fixture = new();
+
+    /// <summary>Creates a scratch database on the fixture server.</summary>
+    public void CreateDatabase(string databaseName)
+    {
+        using var admin = new Npgsql.NpgsqlConnection(_fixture.ServerConnectionString);
+        admin.Open();
+        using var create = admin.CreateCommand();
+        create.CommandText = $"CREATE DATABASE \"{databaseName}\";";
+        create.ExecuteNonQuery();
+    }
+
+    /// <summary>Returns a connection string targeting the scratch database.</summary>
+    public string GetDatabaseConnectionString(string databaseName)
+    {
+        var builder = new Npgsql.NpgsqlConnectionStringBuilder(_fixture.ServerConnectionString) { Database = databaseName };
+        return builder.ToString();
+    }
+
+    /// <summary>Drops the scratch database.</summary>
+    public void DropDatabase(string databaseName)
+    {
+        try
+        {
+            using var admin = new Npgsql.NpgsqlConnection(_fixture.ServerConnectionString);
+            admin.Open();
+            using var terminate = admin.CreateCommand();
+            terminate.CommandText =
+                $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{databaseName}' AND pid <> pg_backend_pid();";
+            terminate.ExecuteNonQuery();
+            using var drop = admin.CreateCommand();
+            drop.CommandText = $"DROP DATABASE IF EXISTS \"{databaseName}\";";
+            drop.ExecuteNonQuery();
+        }
+        catch (Npgsql.NpgsqlException)
+        {
+            // Best-effort cleanup; scratch names are unique.
+        }
+    }
+
+    /// <inheritdoc />
+    public ValueTask DisposeAsync()
+    {
+        _fixture.Dispose();
+        return ValueTask.CompletedTask;
     }
 }

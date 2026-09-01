@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-08-21T00:35:00Z",
+  "Worktree": "F:\\GitHub\\McpServer\\.worktrees\\session-persist",
+  "Branch": "sessionpersist/s1-red",
+  "Filter": "*TEST-MCP-195* *TEST-MCP-REPL-037* *TEST-MCP-FAILSAFE-001* *TEST-MCP-PLUGINCORE-004* *TEST-MCP-REPL-025* *TEST-MCP-REPL-040* PersistTurn.SubmitAsyncChildTimeout",
+  "PassedCount": 18,
+  "FailedCount": 0,
+  "SkippedCount": 0,
+  "Result": "Passed",
+  "Repl040Passed": 11,
+  "CsharpNamed": { "Failed": 0, "Passed": 2, "Skipped": 0 }
+}

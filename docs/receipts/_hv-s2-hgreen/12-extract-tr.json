@@ -1,0 +1,116 @@
+{
+  "TimestampUtc": "2026-08-19T19:57:38Z",
+  "ItemCount": 422,
+  "FoundIds": [
+    "TR-MCP-FAILSAFE-001",
+    "TR-MCP-SESSIONEND-001",
+    "TR-MCP-STRICTCOUNT-001",
+    "TR-MCP-TRIAGE-004",
+    "TR-MCP-TRIAGEPLUGIN-001",
+    "TR-MCP-VERIFYWRAP-001",
+    "TR-MCP-XAGENT-001"
+  ],
+  "Missing": [
+    "TR-MCP-TRIAGEPLUGIN-004"
+  ],
+  "Found": [
+    {
+      "Id": "TR-MCP-FAILSAFE-001",
+      "Title": "Failsafe drain abort markers include backend_unavailable and HTTP 503",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Failsafe drain abort markers include backend_unavailable and HTTP 503 and do not burn drainAttempts",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Test-ReplFailsafeBackendUnreachable matches backend_unavailable and HTTP 503. Invoke-ReplFailsafeDrainOnFirstSuccess does not set completed before a 503 pass and does not increment drainAttempts or quarantine on that abort. Covered by FR-MCP-FAILSAFE-001 TEST-MCP-FAILSAFE-001."
+    },
+    {
+      "Id": "TR-MCP-SESSIONEND-001",
+      "Title": "SessionEnd cache flush no-ops when cache cannot be resolved",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "SessionEnd cache flush no-ops when cache cannot be resolved",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Invoke-CacheFlushHook and cache-manager do not throw on unresolved cache. CLAUDE_PROJECT_DIR is a Resolve-McpCacheDir fallback. Covered by FR-MCP-SESSIONEND-001 TEST-MCP-SESSIONEND-001."
+    },
+    {
+      "Id": "TR-MCP-STRICTCOUNT-001",
+      "Title": "Null-safe Count for updateTurn collection fields under StrictMode",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "updateTurn collection fields use null-safe enumeration under StrictMode",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "New-McpPluginTurnUpsertRequest and Invoke-WorkflowUpdateTurn enumerate tags and contextList with @() or equivalent under Set-StrictMode Latest. Covered by FR-MCP-STRICTCOUNT-001 TEST-MCP-STRICTCOUNT-001."
+    },
+    {
+      "Id": "TR-MCP-TRIAGE-004",
+      "Title": "Triage schema and TODO creation",
+      "Status": "planned",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-TRIAGE-004-AC001",
+          "text": "Valid research output creates one backlog TODO and failed output creates none.",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs."
+    },
+    {
+      "Id": "TR-MCP-TRIAGEPLUGIN-001",
+      "Title": "Sticky root session cache rebind and degraded persist",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in r"
+    },
+    {
+      "Id": "TR-MCP-VERIFYWRAP-001",
+      "Title": "code-verify catch disk-full and enforce wrapper timeout",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "code-verify catches disk-full and enforces wrapper timeout",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001."
+    },
+    {
+      "Id": "TR-MCP-XAGENT-001",
+      "Title": "Assert-ReplCurrentTurnFresh refuses different sourceType prefixes",
+      "Status": "pending",
+      "AcCount": 1,
+      "AcceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "text": "Assert-ReplCurrentTurnFresh refuses different sourceType prefixes",
+          "isSatisfied": false
+        }
+      ],
+      "BodyPreview": "Assert-ReplCurrentTurnFresh compares sessionId sourceType prefix. Different prefix refuses CompleteTurn persist. Same prefix still rebinds. persist identity keeps planFile/todoId. Covered by FR-MCP-XAGENT-001 TEST-MCP-XAGENT-001."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "TimestampUtc": "2026-08-19T20:48:52Z",
+  "Dump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01bc2-6bd3-7ac2-aeaa-4cd605dd314c\\mcp\\call-3746a218-e436-4959-b041-a3c71945eee7-80.json",
+  "ItemCount": 448,
+  "FoundIds": [
+    "TEST-MCP-STRICTCOUNT-001",
+    "TEST-MCP-FAILSAFE-001",
+    "TEST-MCP-SESSIONEND-001",
+    "TEST-MCP-XAGENT-001",
+    "TEST-MCP-VERIFYWRAP-001",
+    "TEST-MCP-TRIAGEPLUGIN-004"
+  ],
+  "Missing": [],
+  "Found": [
+    {
+      "Id": "TEST-MCP-STRICTCOUNT-001",
+      "Title": "",
+      "Status": "pending",
+      "Condition": "Pester proves workflow.sessionlog.updateTurn succeeds for omitted, empty, and single scalar tags/contextList under StrictMode with exit 0. Validates TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158."
+    },
+    {
+      "Id": "TEST-MCP-FAILSAFE-001",
+      "Title": "",
+      "Status": "pending",
+      "Condition": "Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailable and HTTP 503, drain does not increment drainAttempts or quarantine on that abort, and a later drain in the same process can replay. Validates TR-MCP-FAILSAFE-001 / BUG-TRIAGE-159."
+    },
+    {
+      "Id": "TEST-MCP-SESSIONEND-001",
+      "Title": "",
+      "Status": "pending",
+      "Condition": "Pester proves SessionEnd with no MCP_WORKSPACE_PATH exits 0 and writes {}. Identifiable workspace still flushes. Validates TR-MCP-SESSIONEND-001 / BUG-TRIAGE-140."
+    },
+    {
+      "Id": "TEST-MCP-XAGENT-001",
+      "Title": "",
+      "Status": "pending",
+      "Condition": "Pester proves CompleteTurn refuses a GrokCode/ClaudeCode sessionId on a Codex current-turn and still completes a same-agent sessionId rotation without Submit 500. Validates TR-MCP-XAGENT-001 / BUG-TRIAGE-106 / BUG-TRIAGE-142."
+    },
+    {
+      "Id": "TEST-MCP-VERIFYWRAP-001",
+      "Title": "",
+      "Status": "pending",
+      "Condition": "Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130."
+    },
+    {
+      "Id": "TEST-MCP-TRIAGEPLUGIN-004",
+      "Title": "beginTurn persist timeout is degraded/queued",
+      "Status": "pending",
+      "Condition": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe."
+    }
+  ]
+}

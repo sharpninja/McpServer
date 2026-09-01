@@ -30,14 +30,19 @@ public sealed class TranscriptMcpStdioHostTests
         var dataRoot = Path.Combine(Path.GetTempPath(), "mcp-stdio-transcript-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(dataRoot);
         var dbPath = Path.Combine(dataRoot, "mcp.db");
+        var workspaceRoot = Path.Combine(dataRoot, "workspace");
+        var relativeFixture = Path.Combine("transcripts", "codex", "session.jsonl");
+        var workspaceFixture = Path.Combine(workspaceRoot, relativeFixture);
+        Directory.CreateDirectory(Path.GetDirectoryName(workspaceFixture)!);
+        File.Copy(fixturePath, workspaceFixture, overwrite: true);
 
-        using var process = StartStdioHost(executablePath, repositoryRoot, dataRoot, dbPath);
+        using var process = StartStdioHost(executablePath, workspaceRoot, dataRoot, dbPath);
         var stdout = new StringBuilder();
         var stderr = new StringBuilder();
         var stdoutTask = CaptureAsync(process.StandardOutput, stdout, TestContext.Current.CancellationToken);
         var stderrTask = CaptureAsync(process.StandardError, stderr, TestContext.Current.CancellationToken);
 
-        foreach (var message in CreateMessages(repositoryRoot, fixturePath))
+        foreach (var message in CreateMessages(workspaceRoot, relativeFixture))
         {
             await process.StandardInput.WriteLineAsync(message.AsMemory(), TestContext.Current.CancellationToken).ConfigureAwait(true);
             await process.StandardInput.FlushAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);

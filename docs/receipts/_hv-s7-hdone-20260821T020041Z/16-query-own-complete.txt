@@ -1,0 +1,85 @@
+type: result
+payload:
+  requestId: req-20260821T020551Z-7ada
+  result:
+    totalCount: 229
+    limit: 1
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T020043Z-plugin-session
+      agentSessionId: 01a02204-6c7b-7813-8fc0-9702601017c1
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile S7 H-done store-close gate
+      model: grok
+      started: 2026-08-21T02:00:58.0000000+00:00
+      lastUpdated: 2026-08-21T02:05:49.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T020041Z-001-s7-hdone-store-close-gate
+        timestamp: 2026-08-21T02:00:58.0000000+00:00
+        queryText: Class 1 S7 store-close gate. Attack A1-A12 and B/C/D. Do not mark any MCP TODO done true.
+        queryTitle: Hostile S7 H-done store-close gate
+        response: OverallVerdict DISAGREE. Explicit FAIL list empty. UNKNOWN A10 timer 01a0218b0965 not independently listed via scheduler_list. Named tests Failed 0 Skipped 0. Closeout TODOs remain Done=false. Do not store-close and do not delete the timer on this receipt. Receipt docs/receipts/hostile-validator-20260821T020355Z.md
+        status: completed
+        planFile: docs/plans/sessionlog-remediate-001.md
+        todoId: PLAN-SESSIONLOGREMEDIATE-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: 'Plugin HMAC only: Test-MarkerSignature True, Invoke-FullBootstrap True, Status available'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\lib\marker-resolver.ps1
+        - order: 3
+          description: Named S5 tests Failed 0 Skipped 0
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-s7-hdone-20260821T015338Z
+        - order: 4
+          description: workflow.todo.get all closeout IDs Done=false
+          type: edit
+          status: completed
+          filePath: docs/receipts/_hv-s7-hdone-20260821T020041Z
+        - order: 5
+          description: 'S6 skip justified: no live AC requires hosted ee89cd63'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/sessionlog-remediate-001.md
+        - order: 6
+          description: OverallVerdict DISAGREE because A10 timer scheduler_list UNKNOWN
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T020355Z.md
+        - order: 7
+          description: Wrote hostile receipt md+json twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T020355Z.md
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-21T02:00:58.0000000+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile files. Plugin HMAC Test-MarkerSignature True. Invoke-FullBootstrap True. Status available GrokCode 1.97.0 failsafeCount=52. Validator did not construct HMACSHA256.'
+          category: observation
+        - timestamp: 2026-08-21T02:03:55.0000000+00:00
+          role: model
+          content: 'S5 rerun: Pester TEST-MCP-195 4/0/0; unit sanitizer+persist 42/0/0; integration S15/S16 2/0/0; planFile/todoId 30/0/0; ValidateTraceability Succeeded. All closeout TODOs Done=false. Live parent turn has planFile and todoId.'
+          category: observation
+        - timestamp: 2026-08-21T02:03:55.0000000+00:00
+          role: model
+          content: 'Decision: S6 UpdateService skip is justified because git diff 20db61aa..ee89cd63 has no hosted-server product that a live AC requires. Alternatives: force UpdateService anyway. Rejected: plan says UpdateService only if live AC requires deployed bits. Consequence: A9 PASS skip-justified.'
+          category: decision
+        - timestamp: 2026-08-21T02:03:55.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict DISAGREE because A10 timer 01a0218b0965 nextFireAt was not independently listed (no scheduler_list tool). Empty FAIL list. Parent must not done:true or delete the timer on this receipt. Alternatives: treat parent turn text as existence proof. Rejected: that is narrative, not scheduler_list.'
+          category: decision
+
+---

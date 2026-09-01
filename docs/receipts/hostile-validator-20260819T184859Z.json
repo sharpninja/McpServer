@@ -1,0 +1,128 @@
+{
+  "TimestampUtc": "2026-08-19T18:48:59Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 1 project implementation closeout",
+  "ActivePlan": "docs/plans/triage-cluster-002.md",
+  "TodoIds": ["BUG-TRIAGE-113", "PLAN-TRIAGELEFTOVER-001"],
+  "GitBranch": "develop",
+  "GitHead": "0620078259d0be441d953fbaf457b0fdb670dbbc",
+  "LiveServerVersion": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "LiveServerCommit": "f4060f037e62e64974026aff9d24e11b2f481952",
+  "SessionLogTagEntityIntroducedIn": "c81abaf0193c393bfecffc07015962424a601dfe",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "trust": {
+    "signatureOk": true,
+    "nonce": "da8e8bbed7384a8baba04bc0c3527e6f",
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "mcpUntrusted": false
+  },
+  "SessionId": "GrokCode-20260819T183914Z-grok-code",
+  "TurnRequestId": "req-20260819T183914Z-001-hostile-validate-triage-113",
+  "TurnId": 42066,
+  "LockedRule": "Uniqueness stays (SessionLogId, RequestId). No global unique requestId required. Cross-session duplicate requestIds allowed.",
+  "overallVerdict": "DISAGREE",
+  "failClassA_clusterSubclaims": [
+    "Live session tags do not round-trip (GET tags null after POST 201 and MCP submit).",
+    "Session-tag AC has only InMemory unit coverage; live store re-query failed.",
+    "Plan G3/S1 cluster-covered tags closeout cannot AGREE."
+  ],
+  "failClassB_leftoverOnly": [],
+  "counts": {
+    "PASS": 20,
+    "FAIL": 4,
+    "UNKNOWN": 0,
+    "NA": 0
+  },
+  "failList": [
+    "A3 tags live round-trip FAIL (cluster a)",
+    "C3 session-tag AC coverage FAIL InMemory-only (cluster a)",
+    "D1 113 cluster tags closeout FAIL (cluster a)",
+    "D4 plan DoD for cluster-covered 113 tags FAIL (cluster a)"
+  ],
+  "unknownMandatorySurfaces": [],
+  "namedTests": {
+    "filter": "SessionLogTriageStoreTests|McpErrorClassifierTests|SessionLogControllerErrorTests|SessionLogSchemaGuardTests",
+    "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "trx": "docs/receipts/_hv-g3-113/named-unit.trx"
+  },
+  "claims": {
+    "A": {
+      "A1_schemaGuard": "PASS",
+      "A2_canceledNone": "PASS",
+      "A3_tagsLive": "FAIL",
+      "A4_replaceMissing404": "PASS",
+      "A5_unifiedEnvelope": "PASS",
+      "A6_namedTestsGreen": "PASS",
+      "A7_noGlobalUniqueRequestId": "PASS",
+      "A8_leftoverLargeQueryText": "PASS",
+      "A9_leftoverMergeVsReplaceDocs": "PASS",
+      "A10_bugTriage113DoneFalse": "PASS",
+      "A11_planTriageLeftover001DoneFalse": "PASS"
+    },
+    "B": {
+      "B1_byrdCloseout": "PASS",
+      "B2_receiptsRerun": "PASS",
+      "B3_mcpOnlyStorage": "PASS",
+      "B4_pwshNoPython": "PASS",
+      "B5_honesty": "PASS"
+    },
+    "C": {
+      "C1_frTrExist": "PASS",
+      "C2_acExist": "PASS",
+      "C3_acCoverageTagsSqlite": "FAIL",
+      "C4_mappings": "PASS"
+    },
+    "D": {
+      "D1_clusterTagsCloseout": "FAIL",
+      "D2_leftoversNotStillRed": "PASS",
+      "D3_uniquenessLock": "PASS",
+      "D4_planDod113Cluster": "FAIL"
+    }
+  },
+  "liveProbes": {
+    "replaceMissing": {
+      "httpStatus": 404,
+      "code": "not_found",
+      "retryable": false
+    },
+    "canceledStatus": "canceled",
+    "sessionTagsGet": null,
+    "largeQueryTextChars": 20013,
+    "largeQueryTextHttpStatus": 201,
+    "largeGenericEfText": false
+  },
+  "todos": {
+    "BUG-TRIAGE-113": { "Done": false },
+    "PLAN-TRIAGELEFTOVER-001": { "Done": false }
+  },
+  "accuracy": 93,
+  "completeness": 88,
+  "receiptMd": "docs/receipts/hostile-validator-20260819T184859Z.md",
+  "evidenceDir": "docs/receipts/_hv-g3-113",
+  "sessionLogPersistence": {
+    "beginTurnId": 42066,
+    "completeFirstAttempt": "backend_unavailable retryable true",
+    "completeRetry": "success status=completed",
+    "queryTodoId": "BUG-TRIAGE-113",
+    "queryTotalCount": 1,
+    "persistedRequestId": "req-20260819T183914Z-001-hostile-validate-triage-113",
+    "persistedTurnStatus": "completed",
+    "persistedResponsePrefix": "DISAGREE. Receipt docs/receipts/hostile-validator-20260819T184859Z.md.",
+    "persistedDesignDecisionsCount": 1,
+    "persistedActionsCount": 3,
+    "persistedDialogCount": 2,
+    "persistedTurnTags": ["hostile-validator", "BUG-TRIAGE-113", "DISAGREE"],
+    "persistedSessionTags": null
+  }
+}

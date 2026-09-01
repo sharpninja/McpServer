@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20260820T012946Z-3063
+  result:
+    success: true
+    item:
+      id: BUG-TRIAGE-121
+      title: Session audit finds completed turn canceled and 102 stale open turns
+      section: Backlog
+      priority: medium
+      done: true
+      description:
+      - TruckMate Codex audit returned 63 sessions, 26 sessions with open turns, and 102 in-progress turns. Current session req-20260723T003153Z-prompt-5b45 contains six actions for the completed business-plan work but is now marked canceled after a later UserPromptSubmit superseded stale current-turn state. Historical sessions contain many additional open turns. The plugin does not expose a safe evidence-based historical reconciliation surface.
+      - 'Triage group: triage-group-a3b0095f6d895af1'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Investigate and resolve the grouped triage report.'
+      - '- Add or update validation that proves the triage issue is fixed.'
+      - '- Verify the workflow no longer reproduces this triage report.'
+      - 'Implementation notes:'
+      - '- Fallback TODO created because successful triage research output contained no JSON object.'
+      - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+      - '- Raw triage research output is preserved on run triage-run-722c60295e694309bbb22ade0b1fa4ea.'
+      implementationTasks: []
+      doneSummary: Closeout AGREE docs/receipts/hostile-validator-20260820T012405Z.md. Test-phase AGREE docs/receipts/hostile-validator-20260820T010803Z.md. Merged triage/stale-turns. Forward-only stale query. Pester 18/0/0. No mass cancel.
+      dependsOn: []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

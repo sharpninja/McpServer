@@ -1,0 +1,74 @@
+{
+  "TimestampUtc": "2026-08-19T20:49:05Z",
+  "Dump": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01bc2-6bd3-7ac2-aeaa-4cd605dd314c\\mcp\\call-f2cbe273-6b8b-47ae-ae07-7daafbc1199a-85.json",
+  "ItemCount": 293,
+  "FoundIds": [
+    "FR-MCP-STRICTCOUNT-001",
+    "FR-MCP-FAILSAFE-001",
+    "FR-MCP-SESSIONEND-001",
+    "FR-MCP-XAGENT-001",
+    "FR-MCP-VERIFYWRAP-001",
+    "FR-MCP-TRIAGEPLUGIN-001"
+  ],
+  "Missing": [],
+  "Found": [
+    {
+      "FrId": "FR-MCP-STRICTCOUNT-001",
+      "TrIds": [
+        "TR-MCP-STRICTCOUNT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-STRICTCOUNT-001"
+      ]
+    },
+    {
+      "FrId": "FR-MCP-FAILSAFE-001",
+      "TrIds": [
+        "TR-MCP-FAILSAFE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-FAILSAFE-001"
+      ]
+    },
+    {
+      "FrId": "FR-MCP-SESSIONEND-001",
+      "TrIds": [
+        "TR-MCP-SESSIONEND-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONEND-001"
+      ]
+    },
+    {
+      "FrId": "FR-MCP-XAGENT-001",
+      "TrIds": [
+        "TR-MCP-XAGENT-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-XAGENT-001"
+      ]
+    },
+    {
+      "FrId": "FR-MCP-VERIFYWRAP-001",
+      "TrIds": [
+        "TR-MCP-VERIFYWRAP-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-VERIFYWRAP-001"
+      ]
+    },
+    {
+      "FrId": "FR-MCP-TRIAGEPLUGIN-001",
+      "TrIds": [
+        "TR-MCP-TRIAGEPLUGIN-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-TRIAGEPLUGIN-001",
+        "TEST-MCP-TRIAGEPLUGIN-002",
+        "TEST-MCP-TRIAGEPLUGIN-003",
+        "TEST-MCP-TRIAGEPLUGIN-004",
+        "TEST-MCP-TRIAGEPLUGIN-005"
+      ]
+    }
+  ]
+}

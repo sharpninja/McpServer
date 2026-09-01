@@ -1,0 +1,9 @@
+id: FR-MCP-TRIAGEERR-001
+title: Normalized error envelope for REST, MCP, REPL, and plugins
+description: Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+priority: high
+notes: Operator amendment 2026-08-18 to PLAN-TRIAGECLUSTER-001.
+acceptanceCriteria:
+  - id: ac-1
+    text: Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+    isSatisfied: false

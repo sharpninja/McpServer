@@ -1,0 +1,335 @@
+{
+  "product": [
+    {
+      "name": "McpErrorClassifier.cs",
+      "path": "src\\McpServer.Support.Mcp\\Services\\McpErrorClassifier.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:20:56.3153642Z",
+      "matches": [
+        {
+          "pattern": "ReasonDetails",
+          "found": true
+        },
+        {
+          "pattern": "backend_unavailable",
+          "found": true
+        },
+        {
+          "pattern": "validation",
+          "found": true
+        },
+        {
+          "pattern": "not_found",
+          "found": true
+        },
+        {
+          "pattern": "persistence",
+          "found": true
+        }
+      ]
+    },
+    {
+      "name": "SessionLogController.ClassifiedError",
+      "path": "src\\McpServer.Support.Mcp\\Controllers\\SessionLogController.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T22:48:00.7996328Z",
+      "matches": [
+        {
+          "pattern": "ClassifiedError",
+          "found": true
+        },
+        {
+          "pattern": "McpErrorClassifier",
+          "found": true
+        },
+        {
+          "pattern": "retryable",
+          "found": true
+        },
+        {
+          "pattern": "details",
+          "found": true
+        }
+      ]
+    },
+    {
+      "name": "McpToolErrors.Serialize",
+      "path": "src\\McpServer.Support.Mcp\\McpStdio\\McpToolErrors.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T20:22:43.0719597Z",
+      "matches": [
+        {
+          "pattern": "Serialize",
+          "found": true
+        },
+        {
+          "pattern": "McpErrorClassifier",
+          "found": true
+        },
+        {
+          "pattern": "Details",
+          "found": true
+        }
+      ]
+    },
+    {
+      "name": "ReplMcpErrorClassifier",
+      "path": "src\\McpServer.Repl.Core\\ReplMcpErrorClassifier.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:20:56.3153642Z",
+      "matches": [
+        {
+          "pattern": "FromException",
+          "found": true
+        },
+        {
+          "pattern": "backend_unavailable",
+          "found": true
+        },
+        {
+          "pattern": "retryable",
+          "found": true
+        }
+      ]
+    },
+    {
+      "name": "AgentStdioProtocol",
+      "path": "src\\McpServer.Repl.Core\\AgentStdioProtocol.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T22:27:33.0285233Z",
+      "matches": [
+        {
+          "pattern": "ReplMcpErrorClassifier.FromException",
+          "found": true
+        }
+      ]
+    },
+    {
+      "name": "SchemaGuard product",
+      "path": "src\\McpServer.Support.Mcp\\Services\\SessionLogSchemaGuard.cs",
+      "exists": false,
+      "lastWriteUtc": null,
+      "matches": []
+    },
+    {
+      "name": "StorageCommandBudget",
+      "path": "src\\McpServer.Support.Mcp\\Services\\StorageCommandBudget.cs",
+      "exists": false,
+      "lastWriteUtc": null,
+      "matches": []
+    }
+  ],
+  "testFiles": [
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:21:55.8302990Z",
+      "length": 6199
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\McpToolErrorEnvelopeTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:36:02.4421010Z",
+      "length": 9406
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\McpToolBackendUnavailableErrorTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:22:37.0610692Z",
+      "length": 9042
+    },
+    {
+      "path": "tests\\McpServer.Repl.Core.Tests\\ReplMcpErrorClassifierTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:21:55.8136614Z",
+      "length": 7409
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\Services\\McpErrorClassifierTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:21:55.8302990Z",
+      "length": 3335
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogSchemaGuardTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T22:30:07.7303517Z",
+      "length": 5575
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T22:51:04.1145595Z",
+      "length": 9383
+    },
+    {
+      "path": "tests\\McpServer.Support.Mcp.Tests\\Services\\StorageCommandBudgetTests.cs",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T20:44:07.8215156Z",
+      "length": 1523
+    },
+    {
+      "path": "plugins\\core\\test-fixtures\\pester\\TriagePluginIdentity.Tests.ps1",
+      "exists": true,
+      "lastWriteUtc": "2026-08-18T23:21:26.8951633Z",
+      "length": 10497
+    }
+  ],
+  "methods": [
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "SubmitAsync_HungSaveChanges",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "SubmitAsync_IdenticalActions",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "SubmitAsync_SessionTags",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "ReplaceTurnAsync_MissingRequestId",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "SubmitAsync_CanceledStatus",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+      "method": "UpsertTurnAsync_OmittedPlanFile",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogSchemaGuardTests.cs",
+      "method": "EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogSchemaGuardTests.cs",
+      "method": "QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogSchemaGuardTests.cs",
+      "method": "QueryAsync_AfterColumnsPresent_Succeeds",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogSchemaGuardTests.cs",
+      "method": "QueryAsync",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "method": "details.reason",
+      "exists": true,
+      "found": false
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "method": "validation",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "method": "backend_unavailable",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "method": "not_found",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\McpToolErrorEnvelopeTests.cs",
+      "method": "details.reason",
+      "exists": true,
+      "found": false
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\McpToolErrorEnvelopeTests.cs",
+      "method": "validation",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\McpToolErrorEnvelopeTests.cs",
+      "method": "not_found",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\Build.Tests\\BuildTargetTests.cs",
+      "method": "ReplacePluginCache_OpenTurn_RetainsExistingCache",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\Build.Tests\\BuildTargetTests.cs",
+      "method": "ReplacePluginCache_ReplacesReadOnlyExistingCache",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\TodoExecutionServiceTests.cs",
+      "method": "SetTestPlanAsync_DurableExecTodoMissingExecutionState_Rehydrates",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\TodoExecutionServiceTests.cs",
+      "method": "GenerateNextTodoIdAsync_SkipsSoftDeletedDurableId",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\TodoExecutionServiceTests.cs",
+      "method": "CreateTodosFromPlanAsync_InvalidDependsOn_FailsBeforeInsert",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Repl.Core.Tests\\RequirementsWorkflowMetadataTests.cs",
+      "method": "GetTrAsync_LegacyId_DoesNotRejectCanonicalFormat",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Repl.Core.Tests\\RequirementsWorkflowMetadataTests.cs",
+      "method": "CreateTrAsync_LegacyId_StillRejected",
+      "exists": true,
+      "found": true
+    },
+    {
+      "file": "tests\\McpServer.Support.Mcp.Tests\\Services\\AgentHelpConversationServiceTests.cs",
+      "method": "SubmitTurnAsync_StrategyReceivesFiniteHelperTimeout",
+      "exists": false,
+      "found": false
+    }
+  ],
+  "schemaFacts": {
+    "exists": true,
+    "hasAfterColumnsPresent": true,
+    "hasTextFilter": true
+  }
+}

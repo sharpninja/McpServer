@@ -87,11 +87,15 @@ retryCount: 0
 
             $method = $methodMatch.Groups[1].Value.Trim()
             $paramsYaml = Get-PendingParamsYaml -Content $content
+            $replPath = $scriptDir + '\repl-invoke.ps1'
+            if ($env:MCP_CACHE_FLUSH_REPL -and (Test-Path -LiteralPath $env:MCP_CACHE_FLUSH_REPL)) {
+                $replPath = $env:MCP_CACHE_FLUSH_REPL
+            }
             try {
                 if ($paramsYaml) {
-                    & "$scriptDir\repl-invoke.ps1" -Method $method -ParamsYaml $paramsYaml | Out-Null
+                    & $replPath -Method $method -ParamsYaml $paramsYaml | Out-Null
                 } else {
-                    & "$scriptDir\repl-invoke.ps1" -Method $method | Out-Null
+                    & $replPath -Method $method | Out-Null
                 }
 
                 Remove-Item $item.FullName -Force

@@ -1,0 +1,5 @@
+{
+  "timestampUtc": "2026-08-20T101500Z",
+  "createdTodos": [],
+  "reason": "S3 matrix missingTodos is empty. Do not explode 254 pending FRs into TODOs. No in_progress FR family lacks a TODO (Handoff already has MCP-HANDOFF-001)."
+}
