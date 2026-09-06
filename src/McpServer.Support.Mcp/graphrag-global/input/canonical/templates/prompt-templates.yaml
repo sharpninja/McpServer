@@ -467,18 +467,21 @@ templates:
       3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
       4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
-      ## PowerShell.Mcp Command Routing
+      ## PowerShell.MCP Command Routing
       For every PowerShell Core (`pwsh`) invocation on every operating system:
-      - Use the `PowerShell.Mcp` module from PSGallery as the command runner. Install it from PSGallery if the agent environment does not already provide it.
-      - Route `pwsh` commands through a `PowerShell.Mcp` session instead of launching ad hoc PowerShell processes. On Windows, keep one `PowerShell.Mcp` session open for the workspace and reuse it.
-      - On Windows, route all `node` invocations through the open `PowerShell.Mcp` session. Do not create fresh Node sessions or one-off Node shells per Node call.
-      - When `PowerShell.Mcp` must launch PowerShell Core directly, invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
+      - Use PowerShell.MCP 1.14.0 or newer from PSGallery as the command runner. Install or update it with `Install-PSResource PowerShell.MCP` when the agent environment does not provide a current version.
+      - `execute_command` is the primary MCP tool for PowerShell cmdlets, CLI tools, navigation, builds, tests, file-system work, and process management. Do not use the removed `invoke_expression` name. Host-qualified names depend on the configured server key: for example, `mcp__powershell__execute_command` for `powershell` and `mcp__pwsh__execute_command` for `pwsh`.
+      - Calling `start_console` first is optional because `execute_command` auto-starts or reuses a console. Call `start_console` explicitly only to pre-warm at `start_location`, show a banner, allocate a sub-agent console, or force an additional console by supplying `reason`; omit `reason` when reuse is preferred.
+      - Use `get_current_location` when the current PowerShell context matters. For a sub-agent, call `start_console` with `is_subagent=true`, retain the returned `agent_id`, and pass it on every later PowerShell.MCP tool call.
+      - When a command continues after the call returns, use `wait_for_completion` to retrieve the cached result instead of running `Start-Sleep`. Use `cancel` for an interruptible pipeline or native CLI, and `close_console` for a non-interruptible command or PowerShell host prompt. If `close_console` reports that a human is typing, only repeat the same PID call when confirming that the console should be closed.
+      - In 1.14.0, blocking timeouts are end-to-end deadlines and are capped at 170 seconds for Claude Code and 50 seconds for other or unidentified clients unless a lower limit applies. A timed-out command keeps running and its result is cached for a later tool call.
+      - Route `pwsh` commands through a PowerShell.MCP session instead of launching ad hoc PowerShell processes. On Windows, reuse one session for the workspace and route `node` invocations through it as well.
+      - When PowerShell.MCP must launch PowerShell Core directly, invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
       - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\"` escaping inside PowerShell command strings.
       - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
       - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
       - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
-      - Text-edit cmdlets (Add-LinesToFile, Update-LinesInFile, Update-MatchInFile, Remove-LinesFromFile) stage a replacement file and move it into place. That move fails when `TEMP`/`TMP` point at a different volume than the file being edited (cross-volume move). Before editing files on a non-system drive, set `TEMP` and `TMP` to a directory on the same volume as the target (for example an `F:` temp dir when editing `F:\...`), and always verify the edit landed afterward (re-read or diff), because a failed move can leave the requested edit unapplied while still previewing the diff. The PowerShell.MCP module is installed unpinned from PSGallery; if a fixed upstream version is later identified, pin it.
-
+      - For text reads and edits inside PowerShell.MCP, use `Show-TextFiles`, `Add-LinesToFile`, `Update-LinesInFile`, `Update-MatchInFile`, and `Remove-LinesFromFile`; pass literal content through `var1` to `var4`. Version 1.12.0 and newer stage replacements beside the target, so do not apply the obsolete same-volume `TEMP`/`TMP` workaround. Re-read or diff every edit before claiming it landed.
       ## Byrd Development Process
       `Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process` refer to `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`.
 
