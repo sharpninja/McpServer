@@ -515,6 +515,10 @@ _tmp*
 _temp*
 .version
 
+# Local HV/receipt helper scripts (read live marker; never track)
+docs/receipts/*.ps1
+docs/receipts/**/*.ps1
+
 AGENTS-README-FIRST.yaml
 
 # MCP Data
