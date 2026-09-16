@@ -75,7 +75,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
         proxy.UpdatedAtUtc = now;
 
         foreach (var workspace in request.Workspaces)
-            UpsertWorkspace(db, proxyId, workspace, now);
+            await UpsertWorkspaceAsync(db, proxyId, workspace, now, cancellationToken).ConfigureAwait(false);
 
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
@@ -118,7 +118,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
         proxy.MetadataJson = request.MetadataJson ?? proxy.MetadataJson;
 
         foreach (var workspace in request.Workspaces)
-            UpsertWorkspace(db, proxyId, workspace, now);
+            await UpsertWorkspaceAsync(db, proxyId, workspace, now, cancellationToken).ConfigureAwait(false);
 
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
@@ -142,7 +142,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
 
         await using var scope = _scopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var entity = UpsertWorkspace(db, proxyId, request, now);
+        var entity = await UpsertWorkspaceAsync(db, proxyId, request, now, cancellationToken).ConfigureAwait(false);
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
 
@@ -637,28 +637,38 @@ public sealed class FederationTopologyService : IFederationTopologyService
         }
     }
 
-    private static FederationWorkspaceEntity UpsertWorkspace(
+    /// <summary>
+    /// Registers or updates a federated workspace using bounded physical identity resolution.
+    /// </summary>
+    private static async Task<FederationWorkspaceEntity> UpsertWorkspaceAsync(
         McpDbContext db,
         string proxyId,
         FederationWorkspaceRegistrationRequest request,
-        DateTimeOffset now)
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(request.WorkspacePath);
+        var identity = await WorkspaceIdentity.ResolveAsync(
+                request.WorkspacePath,
+                TimeSpan.FromSeconds(5),
+                cancellationToken)
+            .ConfigureAwait(false);
+        var canonicalPath = identity.NormalizedPath;
         var globalWorkspaceId = string.IsNullOrWhiteSpace(request.GlobalWorkspaceId)
-            ? CreateGlobalWorkspaceId(proxyId, request.WorkspacePath)
+            ? CreateGlobalWorkspaceId(proxyId, identity.StorageKey)
             : request.GlobalWorkspaceId.Trim();
 
         var entity = db.FederationWorkspaces.Local.FirstOrDefault(w =>
                 string.Equals(w.ProxyId, proxyId, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(w.WorkspacePath, request.WorkspacePath, StringComparison.OrdinalIgnoreCase))
-            ?? db.FederationWorkspaces.FirstOrDefault(w => w.ProxyId == proxyId && w.WorkspacePath == request.WorkspacePath);
+                string.Equals(w.WorkspacePath, canonicalPath, StringComparison.OrdinalIgnoreCase))
+            ?? db.FederationWorkspaces.FirstOrDefault(w => w.ProxyId == proxyId && w.WorkspacePath == canonicalPath);
 
         if (entity is null)
         {
             entity = new FederationWorkspaceEntity
             {
                 ProxyId = proxyId,
-                WorkspacePath = request.WorkspacePath,
+                WorkspacePath = canonicalPath,
                 GlobalWorkspaceId = globalWorkspaceId,
                 CanonicalWorkspaceId = globalWorkspaceId,
                 CreatedAtUtc = now,
@@ -668,6 +678,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
 
         entity.GlobalWorkspaceId = globalWorkspaceId;
         entity.CanonicalWorkspaceId = globalWorkspaceId;
+        entity.WorkspacePath = canonicalPath;
         entity.WorkspaceName = request.WorkspaceName;
         entity.IsEnabled = request.IsEnabled;
         entity.Version = request.Version;

@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -126,6 +127,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     {
         return new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase(databaseName)
+            .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
     }
 

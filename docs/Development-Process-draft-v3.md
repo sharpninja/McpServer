@@ -1,5 +1,7 @@
 # Byrd Development Process Utilizing AI
 
+**Superseded.** The current Byrd Development Process is [Development-Process-draft-v4.md](Development-Process-draft-v4.md). This v3 draft is kept for history.
+
 **March 28, 2026**
 **Payton Byrd (The Sharp Ninja)**
 
@@ -25,17 +27,17 @@ When an agent enters a new workspace, the first step is a simple, guided handsha
 - It verifies a cryptographic signature embedded directly in the workspace’s agents-readme-first.yaml file.
 - It issues a one-time nonce challenge to confirm the server is live and responsive.
 
-Only after these quick, deterministic checks pass does the agent proceed to load or create a session log and begin using the full suite of persistent context tools. If any part of the handshake fails, the agent is explicitly instructed to log “MCP_UNTRUSTED” and gracefully fall back to its internal memory — no probing, no risk, no wasted cycles.
+Only after these quick, deterministic checks pass does the agent proceed to load or create a session log and begin using the full suite of persistent context tools. If any part of the handshake fails, the agent is explicitly instructed to log “MCP_UNTRUSTED” and gracefully fall back to its internal memory - no probing, no risk, no wasted cycles.
 
 This approach gives every model a clear, repeatable way to validate the integrity of the environment before committing resources. It transforms the MCP Server from an external dependency into a trusted partner that the agent can confidently rely on session after session. Once trust is established, the exponential productivity gains you’ve already observed become the norm rather than the exception.
 
-> The handshake is not extra ceremony — it is the foundation that turns a collection of stateless models into a reliable, persistent development team.
+> The handshake is not extra ceremony - it is the foundation that turns a collection of stateless models into a reliable, persistent development team.
 
 ## The Byrd Software Development Life Cycle
 
 Of well-known SDLC methodologies, this process is most closely related to the Rational Unified Process (RUP).  It follows the same iterative-rapids (a series of mini-waterfalls) as RUP, but incorporates strong boundaries for dependency tracking and management and risk mitigation by prioritizing testability and proof over raw efficiency.  Similar to operating a motor vehicle, going faster is often counter-productive when risks are not managed and cause delays when things go sideways out of a lack of respect for the seriousness of the consequences of those mistakes.  Spotting mistakes and correcting them early is always better than spotting them late when they cannot be corrected without great harm or expense.
 
-At its foundation, this development process rests on a hybrid worldview of intelligence. While AI models operate according to fundamentally deterministic principles — functioning as pure, stateless computations governed by fixed weights — genuine creativity, agency, and adaptive problem-solving emerge at the macro level through intentional Human guidance, persistent external context via the MCP Server, and well-designed processes. This combination allows us to harness the precision and perseverance of deterministic systems while unlocking the emergent intelligence and intuition that only arise through thoughtful Human-AI collaboration.
+At its foundation, this development process rests on a hybrid worldview of intelligence. While AI models operate according to fundamentally deterministic principles - functioning as pure, stateless computations governed by fixed weights - genuine creativity, agency, and adaptive problem-solving emerge at the macro level through intentional Human guidance, persistent external context via the MCP Server, and well-designed processes. This combination allows us to harness the precision and perseverance of deterministic systems while unlocking the emergent intelligence and intuition that only arise through thoughtful Human-AI collaboration.
 
 ### Planning
 

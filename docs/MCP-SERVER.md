@@ -5,6 +5,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 ## What This Server Provides
 
 - HTTP API with Swagger UI
+- MCP Streamable HTTP transport (`POST /mcp-transport`; no API key)
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
@@ -223,17 +224,18 @@ Track these operational indicators during rollout:
 Main endpoints:
 
 - `/mcpserver/todo`
-- `/mcpserver/handoff` — ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
+- `/mcpserver/handoff` - ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
 - `/mcpserver/sessionlog`
 - `/mcpserver/context`
 - `/mcpserver/repo`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
-- `/mcpserver/usecases` — use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
-- `/usecases/` — first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
-- `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
-- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
-- `/health` — liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
+- `/mcpserver/usecases` - use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
+- `/usecases/` - first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
+- `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
+- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import
+- `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
+- `/mcp-transport` - MCP Streamable HTTP JSON-RPC. No API key required.
 - `/swagger`
 
 ### Transcript Ingestion Limits
@@ -253,7 +255,7 @@ Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces toge
 
 ## Requirements Wiki Export
 
-`docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests.
+`docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests. `GenerateAllAsync` opens a workspace-contained export root (`WorkspaceContainedFileSystem.OpenExportRoot`) before reading the on-disk requirements matrix so export I/O stays pinned inside the workspace.
 
 The optional `docfx` section is disabled by default with an empty workflow list:
 
@@ -336,11 +338,11 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 
 Covers all API endpoints: Todo, Handoff, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+Source: `src/McpServer.Client/` - see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
 
 ## Health, storage, and errors
 
-`GET /health` is liveness. Observed live payload keys on 1.4.30: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+`GET /health` is liveness. Observed live payload keys on 1.4.37: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
 
 ## Session log sanitization and incremental persist
 

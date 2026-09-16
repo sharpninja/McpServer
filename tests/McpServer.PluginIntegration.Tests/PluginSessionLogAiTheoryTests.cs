@@ -7,9 +7,11 @@ namespace McpServer.PluginIntegration.Tests;
 /// PLAN-PLUGINHANDOFF-001 C-red-P16: companion AiTheory rows for TEST-MCP-PLUGININT-001 AC3.
 /// Fixture: isolated MCP host plus the catalog production entrypoint. The redacted receipt
 /// is built from the canonical plugin turn result, not from catalog metadata alone.
+/// Category=AiReview keeps live aiUnit rows on PluginSessionLogIntegration, not default Nuke Test.
 /// </summary>
 [Collection("PluginSessionLog")]
 [Trait("PluginInt", "AI")]
+[Trait("Category", "AiReview")]
 public sealed class PluginSessionLogAiTheoryTests
 {
     /// <summary>

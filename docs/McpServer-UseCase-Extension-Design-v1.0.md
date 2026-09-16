@@ -8,6 +8,8 @@ status: Ready for implementation
 
 # McpServer Use Case Extension – Full Design & Implementation Package
 
+**Superseded.** The active design of record is [McpServer-UseCase-Extension-Design-v3.0.md](McpServer-UseCase-Extension-Design-v3.0.md). This v1 package is kept for history.
+
 ## 1. Executive Summary (Your Preferences Applied)
 - **Default LinkType** when creating from FR: **Realizes**  
 - **Diagram format**: **Mermaid only**  

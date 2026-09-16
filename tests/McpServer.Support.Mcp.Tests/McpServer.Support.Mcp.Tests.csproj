@@ -31,5 +31,27 @@
   <ItemGroup>
     <Using Include="Xunit" />
     <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
+    <None Update="Fixtures\AgentHelp\**\*"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
+    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
+    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
+    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="!$([MSBuild]::IsOSPlatform('Windows')) And !$([MSBuild]::IsOSPlatform('Linux'))">
+    <Compile Remove="Storage\BugTriage139FifteenthWindowsNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthIdentityWindowsTests.cs" />
+    <Compile Remove="Storage\BugTriage139SixteenthLinuxTests.cs" />
+    <Compile Remove="Storage\BugTriage139EighteenthLinuxTests.cs" />
+    <Compile Remove="Services\RequirementsFourteenthLinuxNativeTests.cs" />
+    <Compile Remove="Documentation\BugTriage139SixteenthWindowsProcessTests.cs" />
   </ItemGroup>
 </Project>

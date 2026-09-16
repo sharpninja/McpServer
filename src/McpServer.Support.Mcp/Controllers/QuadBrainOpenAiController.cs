@@ -101,7 +101,7 @@ public sealed class QuadBrainOpenAiController : ControllerBase
                 SingleReader = true,
                 SingleWriter = false,
             });
-            request.Progress = new Progress<QuadBrainRoleProgress>(progress => channel.Writer.TryWrite(progress));
+            request.Progress = new ChannelRoleProgress(channel.Writer);
 
             var completeTask = chat.CompleteAsync(request, sessionId, turnId, http.RequestAborted);
             var drainTask = DrainRoleEventsAsync(response, channel.Reader, http.RequestAborted);
@@ -122,6 +122,14 @@ public sealed class QuadBrainOpenAiController : ControllerBase
             await WriteDataAsync(response, CreateTerminalChunk(completion, choice), http.RequestAborted).ConfigureAwait(false);
             await response.WriteAsync("data: [DONE]\n\n", http.RequestAborted).ConfigureAwait(false);
             await response.Body.FlushAsync(http.RequestAborted).ConfigureAwait(false);
+        }
+
+        /// <summary>Writes role progress onto the SSE channel on the reporting thread.</summary>
+        private sealed class ChannelRoleProgress(ChannelWriter<QuadBrainRoleProgress> writer)
+            : IProgress<QuadBrainRoleProgress>
+        {
+            /// <inheritdoc />
+            public void Report(QuadBrainRoleProgress value) => writer.TryWrite(value);
         }
 
         private static async Task DrainRoleEventsAsync(

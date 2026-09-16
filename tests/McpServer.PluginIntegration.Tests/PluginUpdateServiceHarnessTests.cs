@@ -26,20 +26,7 @@ public sealed class PluginUpdateServiceHarnessTests
         Assert.Equal(0, receipt.Skipped);
         Assert.False(string.IsNullOrWhiteSpace(receipt.Branch));
         Assert.Matches("^[0-9a-f]{40}$", receipt.Sha);
-        var psi = new System.Diagnostics.ProcessStartInfo
-        {
-            FileName = "git",
-            WorkingDirectory = repoRoot,
-            ArgumentList = { "rev-parse", "HEAD" },
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        using var git = System.Diagnostics.Process.Start(psi)
-            ?? throw new InvalidOperationException("Failed to start git rev-parse.");
-        var head = git.StandardOutput.ReadToEnd().Trim().ToLowerInvariant();
-        git.WaitForExit();
-        Assert.Equal(head, receipt.Sha);
+        PluginGitHistory.AssertShaIsAncestorOfHead(repoRoot, receipt.Sha);
         var logPath = Path.Combine(receipt.DirectoryPath, receipt.LogFile.Replace('/', Path.DirectorySeparatorChar));
         Assert.True(File.Exists(logPath), "P20 harness log is missing: " + receipt.LogFile);
         var log = File.ReadAllText(logPath);

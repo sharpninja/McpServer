@@ -120,12 +120,13 @@ public sealed class QuadBrainOrchestrationServiceTests
             });
         var service = CreateService(db, registry, invocation);
         var events = new ConcurrentQueue<QuadBrainRoleProgress>();
+        var progress = new SynchronousProgress<QuadBrainRoleProgress>(events.Enqueue);
 
         var response = await service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
         {
             Input = "decide this",
             TurnId = "turn-progress",
-            Progress = new Progress<QuadBrainRoleProgress>(events.Enqueue),
+            Progress = progress,
         }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
@@ -580,6 +581,13 @@ public sealed class QuadBrainOrchestrationServiceTests
         monitor.CurrentValue.Returns(value);
         monitor.Get(Arg.Any<string?>()).Returns(value);
         return monitor;
+    }
+
+    /// <summary>Captures progress on the calling thread so assertions see every role event.</summary>
+    private sealed class SynchronousProgress<T>(Action<T> handler) : IProgress<T>
+    {
+        /// <inheritdoc />
+        public void Report(T value) => handler(value);
     }
 
     private sealed class FakeTurnTransactionCoordinator : ITurnTransactionCoordinator

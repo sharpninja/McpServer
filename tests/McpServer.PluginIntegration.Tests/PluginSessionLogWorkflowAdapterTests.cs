@@ -283,9 +283,11 @@ public sealed class PluginSessionLogWorkflowAdapterTests
 
     /// <summary>
     /// P15 red: retry success deletes only the matching pending file.
+    /// Timeout is 240s because retry runs two plugin bootstraps and each session-start
+    /// now persist-opens a server session (TEST-MCP-BUGTRIAGE-199).
     /// </summary>
     /// <param name="hostKind">One of the eight catalog host kinds.</param>
-    [Theory(Timeout = 120000)]
+    [Theory(Timeout = 240000)]
     [InlineData(PluginHostKind.Codex)]
     [InlineData(PluginHostKind.ClaudeCode)]
     [InlineData(PluginHostKind.ClaudeCowork)]

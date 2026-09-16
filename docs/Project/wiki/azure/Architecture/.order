@@ -10,3 +10,9 @@ TODO-Schema
 Action-Types
 MCP-Memories
 Federation
+API-Capabilities
+Compliance-Rules
+Module-Bootstrap
+YAML-Object-Mutation
+Session-Log-Workflow-API
+Scratch-Workspace-Integration-Tests

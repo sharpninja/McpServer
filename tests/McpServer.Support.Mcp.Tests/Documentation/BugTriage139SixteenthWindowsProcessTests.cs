@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Text;
 using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -197,6 +198,133 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
             if (File.Exists(pidFile))
                 File.Delete(pidFile);
         }
+    }
+
+    /// <summary>
+    /// TEST-MCP-USECASE-020: raw <c>Arguments</c> must keep multiple tokens. Wrapping the entire
+    /// string as one quoted argument makes <c>git rev-parse --is-inside-work-tree</c> fail.
+    /// </summary>
+    [Fact]
+    public async Task ProcessRunner_RawArguments_PreservesMultipleTokens()
+    {
+        var runner = CreateRunner();
+        var overload = await runner
+            .RunAsync("git", "rev-parse --is-inside-work-tree", TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        var request = await runner
+            .RunAsync(
+                new ProcessRunRequest(
+                    "git",
+                    "rev-parse --is-inside-work-tree",
+                    WorkingDirectory: SourceRepositoryRoot()),
+                TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal(0, overload.ExitCode);
+        Assert.Equal(0, request.ExitCode);
+        Assert.Contains("true", overload.Stdout, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("true", request.Stdout, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TEST-MCP-USECASE-020: raw <c>Arguments</c> and <c>ArgumentList</c> must preserve separate
+    /// tokens, quoted spaces, empty arguments, embedded quotes, and trailing backslashes.
+    /// </summary>
+    [Fact]
+    public async Task ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries()
+    {
+        var helperAssembly = Path.Combine(
+            AppContext.BaseDirectory,
+            "McpServer.ProcessTree.TestHelper.dll");
+        var runtimeConfig = Path.Combine(
+            AppContext.BaseDirectory,
+            "McpServer.Support.Mcp.Tests.runtimeconfig.json");
+        Assert.True(File.Exists(helperAssembly), helperAssembly);
+        Assert.True(File.Exists(runtimeConfig), runtimeConfig);
+
+        var payload = new[]
+        {
+            "first",
+            "second space",
+            string.Empty,
+            "quote\"here",
+            @"trailing\",
+        };
+        var listResult = await CreateRunner()
+            .RunAsync(
+                new ProcessRunRequest(
+                    "dotnet",
+                    string.Empty,
+                    WorkingDirectory: SourceRepositoryRoot(),
+                    ArgumentList:
+                    [
+                        "exec",
+                        "--runtimeconfig",
+                        runtimeConfig,
+                        helperAssembly,
+                        "--argv-echo",
+                        .. payload,
+                    ]),
+                TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(0, listResult.ExitCode);
+        Assert.Equal(
+            payload,
+            System.Text.Json.JsonSerializer.Deserialize<string[]>(listResult.Stdout ?? string.Empty));
+
+        var raw = string.Join(
+            ' ',
+            new[] { "exec", "--runtimeconfig", QuoteWindowsArgument(runtimeConfig), QuoteWindowsArgument(helperAssembly), "--argv-echo" }
+                .Concat(payload.Select(QuoteWindowsArgument)));
+        var rawResult = await CreateRunner()
+            .RunAsync(
+                new ProcessRunRequest(
+                    "dotnet",
+                    raw,
+                    WorkingDirectory: SourceRepositoryRoot()),
+                TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(0, rawResult.ExitCode);
+        Assert.Equal(
+            payload,
+            System.Text.Json.JsonSerializer.Deserialize<string[]>(rawResult.Stdout ?? string.Empty));
+    }
+
+    private static string QuoteWindowsArgument(string argument)
+    {
+        if (argument.Length > 0 &&
+            argument.All(character => !char.IsWhiteSpace(character) && character != '"'))
+        {
+            return argument;
+        }
+
+        var quoted = new StringBuilder(argument.Length + 2);
+        quoted.Append('"');
+        var backslashes = 0;
+        foreach (var character in argument)
+        {
+            if (character == '\\')
+            {
+                backslashes++;
+                continue;
+            }
+
+            if (character == '"')
+            {
+                quoted.Append('\\', backslashes * 2 + 1);
+                quoted.Append('"');
+                backslashes = 0;
+                continue;
+            }
+
+            quoted.Append('\\', backslashes);
+            quoted.Append(character);
+            backslashes = 0;
+        }
+
+        quoted.Append('\\', backslashes * 2);
+        quoted.Append('"');
+        return quoted.ToString();
     }
 
     private static bool IsProcessGone(int processId)

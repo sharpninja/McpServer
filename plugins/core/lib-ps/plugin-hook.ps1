@@ -232,6 +232,41 @@ function Invoke-PluginRepl {
     $script:LastPluginReplExitCode = if ($null -ne $exitCodeVariable -and $null -ne $exitCodeVariable.Value) { [int]$exitCodeVariable.Value } else { 0 }
 }
 
+function Invoke-PluginOpenSession {
+    param([Parameter(Mandatory)][string]$ParamsYaml)
+
+    if ($env:MCP_PLUGIN_REPL_LOG) {
+        Invoke-PluginRepl -Method 'client.SessionLog.OpenSessionAsync' -ParamsYaml $ParamsYaml | Out-Null
+        return ($script:LastPluginReplExitCode -eq 0)
+    }
+
+    $pwsh = (Get-Command pwsh -ErrorAction Stop).Source
+    $repl = Join-Path $script:ScriptDir 'repl-invoke.ps1'
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $pwsh
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    $workspace = @(
+        $env:MCP_WORKSPACE_PATH,
+        $env:MCPSERVER_WORKSPACE_PATH,
+        (Get-Location).ProviderPath
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ($workspace) { $psi.WorkingDirectory = $workspace }
+    foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {
+        $psi.ArgumentList.Add($argument)
+    }
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $process.WaitForExit()
+    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
+    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
+    $script:LastPluginReplExitCode = [int]$process.ExitCode
+    return ($process.ExitCode -eq 0)
+}
+
 function Start-PluginSession {
     param([string]$StartPath)
 
@@ -290,9 +325,18 @@ function Start-PluginSession {
     $env:MCP_AGENT_EXECUTABLE_PATH = [string]$agentHeaders.agentExecutablePath
     $env:MCP_AGENT_EXECUTABLE_VERSION = [string]$agentHeaders.agentExecutableVersion
 
+    $agentName = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME } else { 'Agent' }
+    $openParams = ConvertTo-PluginParamsYaml -Params ([ordered]@{
+        agent = $agentName
+        sessionId = $sessionId
+        title = 'plugin-session'
+        model = $(if ($env:MCP_MODEL) { $env:MCP_MODEL } else { 'plugin' })
+    })
+    $opened = Invoke-PluginOpenSession -ParamsYaml $openParams
+
     $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     $sessionState = [ordered]@{
-        status = 'verified'
+        status = if ($opened) { 'verified' } else { 'persist-failed' }
         sessionId = $sessionId
         agent = $env:MCP_AGENT_NAME
         started = $now

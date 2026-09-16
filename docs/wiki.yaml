@@ -240,6 +240,69 @@ documents:
     platforms:
       - github
       - azure
+  - id: project-readme
+    title: Project README
+    source: README.md
+    target: Project-Readme.md
+    platforms:
+      - github
+      - azure
+  - id: docs-index
+    title: Documentation Index
+    source: docs/README.md
+    target: Documentation-Index.md
+    platforms:
+      - github
+      - azure
+  - id: claude-hook-validation-skill
+    title: Claude Hook Validation Skill
+    source: docs/claude-hook-validation-skill.md
+    target: Claude-Hook-Validation-Skill.md
+    platforms:
+      - github
+      - azure
+  - id: context-api-capabilities
+    title: API Capabilities
+    source: docs/context/api-capabilities.md
+    target: API-Capabilities.md
+    platforms:
+      - github
+      - azure
+  - id: context-compliance-rules
+    title: Compliance Rules
+    source: docs/context/compliance-rules.md
+    target: Compliance-Rules.md
+    platforms:
+      - github
+      - azure
+  - id: context-module-bootstrap
+    title: Module Bootstrap
+    source: docs/context/module-bootstrap.md
+    target: Module-Bootstrap.md
+    platforms:
+      - github
+      - azure
+  - id: context-yaml-object-mutation
+    title: YAML Object Mutation
+    source: docs/context/yaml-object-mutation.md
+    target: YAML-Object-Mutation.md
+    platforms:
+      - github
+      - azure
+  - id: context-session-log-workflow-api
+    title: Session Log Workflow API
+    source: docs/context/session-log-workflow-api.md
+    target: Session-Log-Workflow-API.md
+    platforms:
+      - github
+      - azure
+  - id: context-scratch-workspace-tests
+    title: Scratch Workspace Integration Tests
+    source: docs/context/scratch-workspace-integration-tests.md
+    target: Scratch-Workspace-Integration-Tests.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -264,6 +327,9 @@ navigation:
       - document: repl-agent-guide
       - document: repl-migration-guide
       - document: handoff-ingestion
+      - document: project-readme
+      - document: docs-index
+      - document: claude-hook-validation-skill
   - title: Architecture
     path: Architecture
     children:
@@ -279,6 +345,12 @@ navigation:
       - document: context-action-types
       - document: context-memory
       - document: context-federation
+      - document: context-api-capabilities
+      - document: context-compliance-rules
+      - document: context-module-bootstrap
+      - document: context-yaml-object-mutation
+      - document: context-session-log-workflow-api
+      - document: context-scratch-workspace-tests
   - title: Process
     path: Process
     children:

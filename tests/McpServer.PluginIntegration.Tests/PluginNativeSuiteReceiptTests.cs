@@ -59,7 +59,7 @@ public sealed class PluginNativeSuiteReceiptTests
     }
 
     /// <summary>
-    /// P19 red: receipt records git branch and SHA and unrelated commit count is zero.
+    /// P19 red: receipt records git branch and SHA on current history, unrelated commit count is zero.
     /// </summary>
     [Fact]
     public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()
@@ -68,8 +68,7 @@ public sealed class PluginNativeSuiteReceiptTests
         Assert.False(string.IsNullOrWhiteSpace(receipt.Branch));
         Assert.Matches("^[0-9a-f]{40}$", receipt.Sha);
         Assert.Equal(0, receipt.UnrelatedCommitCount);
-        var head = ReadGitHead(FindRepositoryRoot());
-        Assert.Equal(head, receipt.Sha);
+        PluginGitHistory.AssertShaIsAncestorOfHead(FindRepositoryRoot(), receipt.Sha);
         var gitPath = Path.Combine(receipt.DirectoryPath, "git.json");
         Assert.True(File.Exists(gitPath), "P19 git.json is missing.");
         var gitText = File.ReadAllText(gitPath);
@@ -123,30 +122,6 @@ public sealed class PluginNativeSuiteReceiptTests
         failed = int.Parse(failedLine[failedLine.Count - 1].Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
         skipped = int.Parse(skippedLine[skippedLine.Count - 1].Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
         return true;
-    }
-
-    private static string ReadGitHead(string repositoryRoot)
-    {
-        var psi = new System.Diagnostics.ProcessStartInfo
-        {
-            FileName = "git",
-            WorkingDirectory = repositoryRoot,
-            ArgumentList = { "rev-parse", "HEAD" },
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        using var process = System.Diagnostics.Process.Start(psi)
-            ?? throw new InvalidOperationException("Failed to start git rev-parse.");
-        var output = process.StandardOutput.ReadToEnd().Trim().ToLowerInvariant();
-        process.WaitForExit();
-        if (process.ExitCode != 0 || output.Length != 40)
-        {
-            throw new InvalidOperationException("git rev-parse HEAD failed: " + process.StandardError.ReadToEnd());
-        }
-
-        return output;
     }
 
     private static string FindRepositoryRoot()

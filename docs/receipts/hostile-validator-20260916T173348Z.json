@@ -1,0 +1,160 @@
+{
+  "TimestampUtc": "2026-09-16T17:42:12.0000000Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "AddProfile": {
+    "executed": true,
+    "fileCount": 19,
+    "excludedSkillPort": "add-profile.grok.md"
+  },
+  "WorkClass": 2,
+  "WorkClassDetail": "operator-directed /refresh-docs documentation reconcile; no product C#; no TODO done:true this turn; no freeze-plan completion claim",
+  "Gate": "refresh-docs",
+  "WorkspacePath": "F:\\GitHub\\McpServer",
+  "OverallVerdict": "AGREE",
+  "Accuracy": 99,
+  "Completeness": 98,
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "B1",
+    "C",
+    "D"
+  ],
+  "ClaimsA": [
+    {
+      "id": "A1",
+      "claim": "README.md current line is GitVersion next-version 1.4.37 and live health 1.4.37+08eaf2a506a0aa2db89766e6a547d9ae1c85f681",
+      "verdict": "PASS",
+      "evidence": "GitVersion.yml next-version 1.4.37; README.md line 5; live /health nonce fe34d6cfa8b8484bac5fd2c941a52b0f HTTP 200 version 1.4.37+08eaf2a506a0aa2db89766e6a547d9ae1c85f681"
+    },
+    {
+      "id": "A2",
+      "claim": "docs/MCP-SERVER.md health payload keys observed on 1.4.37 and Streamable HTTP /mcp-transport documented",
+      "verdict": "PASS",
+      "evidence": "MCP-SERVER.md L8 L238 L345; live keys status,version,checks,nonce,storage"
+    },
+    {
+      "id": "A3",
+      "claim": "docs/context/module-bootstrap.md describes single-line JSON envelopes not YAML-over-STDIO",
+      "verdict": "PASS",
+      "evidence": "module-bootstrap.md L7 JSON envelopes; workspace grep YAML-over-STDIO 0 matches"
+    },
+    {
+      "id": "A4",
+      "claim": "docs/wiki.yaml schema mcp-wiki-export/v1 has 43 documents, all sources exist, every id is in navigation",
+      "verdict": "PASS",
+      "evidence": "Read-McpYamlObject schema mcp-wiki-export/v1 docCount=43 navCount=43 missingNav=NONE sources exist"
+    },
+    {
+      "id": "A5",
+      "claim": "MCP requirements_generate format=wiki doc=all succeeded generatedAtUtc 2026-09-16T17:31:43.1906396+00:00 with 0 wiki page deletes",
+      "verdict": "PASS",
+      "evidence": "MCP json success=true format=wiki docType=all generatedAtUtc match; manifests LastWriteTimeUtc match; git diff -D empty; removedIds none"
+    },
+    {
+      "id": "A6",
+      "claim": "docs/requirements/requirements-wiki-documents.zip rewritten from MCP wiki outputRoot, 97 entries, all wiki.yaml targets present, 808610 bytes",
+      "verdict": "PASS",
+      "evidence": "length 808610 entries 97 missingTargets=NONE SHA256 zip==docs/Project/wiki 97/97"
+    },
+    {
+      "id": "A7",
+      "claim": "Superseded banners added to Development-Process-draft-v3 and UseCase design v1/v2; files not deleted",
+      "verdict": "PASS",
+      "evidence": "banners present; git status M not D"
+    },
+    {
+      "id": "A8",
+      "claim": "Skill did not commit or push",
+      "verdict": "PASS",
+      "evidence": "HEAD ef23467c; no new reflog commit after generate; refresh files unstaged; origin/develop still 08eaf2a5"
+    }
+  ],
+  "ClaimsB": [
+    {
+      "id": "B1",
+      "claim": "Byrd v4",
+      "verdict": "N/A",
+      "evidence": "Class 2 ops; Byrd not applied"
+    },
+    {
+      "id": "B2",
+      "claim": "Receipts",
+      "verdict": "PASS",
+      "evidence": "Independent re-verify of disk, health, MCP generate JSON, zip hashes, git"
+    },
+    {
+      "id": "B3",
+      "claim": "MCP-only storage",
+      "verdict": "PASS",
+      "evidence": "No TODO.yaml or session-log file edits; no todo_update; HV used MCP sessionlog tools"
+    },
+    {
+      "id": "B4",
+      "claim": "PowerShell / no Python",
+      "verdict": "PASS",
+      "evidence": "pwsh only; no python.exe in refresh-docs automation"
+    },
+    {
+      "id": "B5",
+      "claim": "Honesty",
+      "verdict": "PASS",
+      "evidence": "Claims match artifacts; live SHA vs HEAD disclosed"
+    },
+    {
+      "id": "B6",
+      "claim": "Look-before-delete",
+      "verdict": "PASS",
+      "evidence": "No wiki page deletes; zip rewrite of skill-named zips only"
+    }
+  ],
+  "ClaimsC": [
+    {
+      "id": "C",
+      "claim": "Requirement violations",
+      "verdict": "N/A",
+      "evidence": "Class 2 docs refresh; no new product behavior; do not invent FR/TR gap"
+    }
+  ],
+  "ClaimsD": [
+    {
+      "id": "D",
+      "claim": "Current plan holistically",
+      "verdict": "N/A",
+      "evidence": "No freeze C2/C12 or BUG-TRIAGE-139 completion claim in this turn"
+    }
+  ],
+  "Jsonl": {
+    "request": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260916T173348Z-refresh-docs.request.jsonl",
+    "response": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260916T173348Z-refresh-docs.response.jsonl"
+  },
+  "Receipt": {
+    "markdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260916T173348Z.md",
+    "json": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260916T173348Z.json"
+  },
+  "Session": {
+    "agent": "GrokSubagentHostile",
+    "sessionId": "GrokSubagentHostile-20260916T173348Z-hv-refresh-docs",
+    "requestId": "req-20260916T173348Z-001-hostile-validate-refresh-docs",
+    "turnId": 45107
+  },
+  "LiveHealth": {
+    "url": "http://PAYTON-LEGION2:7147/health?nonce=fe34d6cfa8b8484bac5fd2c941a52b0f",
+    "statusCode": 200,
+    "version": "1.4.37+08eaf2a506a0aa2db89766e6a547d9ae1c85f681",
+    "keys": [
+      "status",
+      "version",
+      "checks",
+      "nonce",
+      "storage"
+    ],
+    "nonceEchoed": true
+  },
+  "Residuals": [
+    "UseCase v2 still later says Implement only from this v2 document after the superseded banner",
+    "Implementer turn req-20260916T171000Z-018-refresh-docs still in_progress during HV",
+    "develop ahead 3 of origin/develop from earlier commits, not this skill",
+    "Live /health SHA 08eaf2a5 is deployed bits; workspace HEAD is ef23467c"
+  ]
+}

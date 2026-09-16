@@ -1894,6 +1894,10 @@ if ($Method -eq 'workflow.sessionlog.beginTurn') {
     exit 0
 }
 
+if ($Method -eq 'client.SessionLog.OpenSessionAsync') {
+    exit 0
+}
+
 throw "Unexpected method $Method"
 '@
         [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
@@ -2304,6 +2308,150 @@ param(
                 Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-199 session-start calls OpenSessionAsync before writing verified' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($markerPath, "workspacePath: $workspace`n")
+        $markerStub = @'
+#Requires -Version 7.0
+$script:MARKER_FILENAME = 'AGENTS-README-FIRST.yaml'
+function Find-MarkerFile { param([string]$StartDir = (Get-Location).Path); return (Join-Path $StartDir $script:MARKER_FILENAME) }
+function Get-MarkerFileSnapshot {
+    param([string]$StartDir = (Get-Location).Path)
+    $path = Find-MarkerFile -StartDir $StartDir
+    $item = Get-Item -LiteralPath $path
+    [ordered]@{ markerFilePath = $item.FullName; markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O') }
+}
+function Invoke-FullBootstrap { param([string]$StartDir = (Get-Location).Path); return $true }
+function Test-MarkerSignature { param([string]$MarkerFile); return $true }
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'marker-resolver.ps1'), $markerStub, [System.Text.UTF8Encoding]::new($false))
+
+        $replLog = Join-Path $cacheDir 'repl.log'
+        $sessionId = 'GrokCode-20260916T000000Z-plugin-session'
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-start', '-HostName', 'grok', '-WorkspacePath', $workspace) `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_PLUGIN_HOST = 'grok'
+                    MCP_AGENT_NAME = 'GrokCode'
+                    PLUGIN_AGENT_DEFAULT = 'GrokCode'
+                    MCP_CACHE_DIR_OVERRIDE = $cacheDir
+                    MCP_WORKSPACE_PATH = $workspace
+                    MCPSERVER_WORKSPACE_PATH = $workspace
+                    MCP_WORKSPACE_START_DIR = $workspace
+                    MCP_SESSION_ID = $sessionId
+                    MCP_PLUGIN_REPL_LOG = $replLog
+                    MCP_PLUGIN_REPL_RESPONSE = 'ok'
+                } `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            Test-Path -LiteralPath $replLog | Should -BeTrue
+            $log = [System.IO.File]::ReadAllText($replLog)
+            $log | Should -Match 'client\.SessionLog\.OpenSessionAsync'
+            $log | Should -Match $sessionId
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['status'] | Should -Be 'verified'
+            $state['sessionId'] | Should -Be $sessionId
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-199 session-start does not write verified when OpenSessionAsync fails' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($markerPath, "workspacePath: $workspace`n")
+        $markerStub = @'
+#Requires -Version 7.0
+$script:MARKER_FILENAME = 'AGENTS-README-FIRST.yaml'
+function Find-MarkerFile { param([string]$StartDir = (Get-Location).Path); return (Join-Path $StartDir $script:MARKER_FILENAME) }
+function Get-MarkerFileSnapshot {
+    param([string]$StartDir = (Get-Location).Path)
+    $path = Find-MarkerFile -StartDir $StartDir
+    $item = Get-Item -LiteralPath $path
+    [ordered]@{ markerFilePath = $item.FullName; markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O') }
+}
+function Invoke-FullBootstrap { param([string]$StartDir = (Get-Location).Path); return $true }
+function Test-MarkerSignature { param([string]$MarkerFile); return $true }
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'marker-resolver.ps1'), $markerStub, [System.Text.UTF8Encoding]::new($false))
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [string]$Method,
+    [string]$ParamsYaml = ''
+)
+$ErrorActionPreference = 'Stop'
+$log = Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'open-session.log'
+Add-Content -LiteralPath $log -Value $Method
+if ($Method -eq 'client.SessionLog.OpenSessionAsync') {
+    Write-Error 'open failed'
+    exit 1
+}
+exit 0
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $sessionId = 'GrokCode-20260916T000001Z-plugin-session'
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-start', '-HostName', 'grok', '-WorkspacePath', $workspace) `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_PLUGIN_HOST = 'grok'
+                    MCP_AGENT_NAME = 'GrokCode'
+                    PLUGIN_AGENT_DEFAULT = 'GrokCode'
+                    MCP_CACHE_DIR_OVERRIDE = $cacheDir
+                    MCP_WORKSPACE_PATH = $workspace
+                    MCPSERVER_WORKSPACE_PATH = $workspace
+                    MCP_WORKSPACE_START_DIR = $workspace
+                    MCP_SESSION_ID = $sessionId
+                } `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            $openLog = Join-Path $cacheDir 'open-session.log'
+            Test-Path -LiteralPath $openLog | Should -BeTrue
+            [System.IO.File]::ReadAllText($openLog) | Should -Match 'client\.SessionLog\.OpenSessionAsync'
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['status'] | Should -Be 'persist-failed'
+            $state['status'] | Should -Not -Be 'verified'
+            $state['sessionId'] | Should -Be $sessionId
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 

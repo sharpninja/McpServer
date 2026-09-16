@@ -1144,17 +1144,26 @@ public sealed class McpDbContext : DbContext
     }
 
     /// <inheritdoc />
+    public override int SaveChanges() => SaveChanges(acceptAllChangesOnSuccess: true);
+
+    /// <inheritdoc />
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        PrepareDbFkChanges();
+        PrepareDbFkChangesAsync(CancellationToken.None).GetAwaiter().GetResult();
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     /// <inheritdoc />
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+        SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken);
+
+    /// <inheritdoc />
+    public override async Task<int> SaveChangesAsync(
+        bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = default)
     {
-        PrepareDbFkChanges();
-        return base.SaveChangesAsync(cancellationToken);
+        await PrepareDbFkChangesAsync(cancellationToken).ConfigureAwait(false);
+        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
     }
 
     private static void ApplyDbFkConventions(ModelBuilder modelBuilder)
@@ -1258,6 +1267,16 @@ public sealed class McpDbContext : DbContext
             .Where(e => e.ClrType != typeof(DataAuditLogEntity))
             .Where(e => e.GetTableName() is not null)
             .Where(e => e.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal));
+    }
+
+    /// <summary>
+    /// Prepares tracked changes and honors caller cancellation before SaveChanges work begins.
+    /// </summary>
+    private Task PrepareDbFkChangesAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        PrepareDbFkChanges();
+        return Task.CompletedTask;
     }
 
     private void PrepareDbFkChanges()

@@ -8,11 +8,20 @@ namespace McpServer.ProcessTree.TestHelper;
 /// </summary>
 internal static class Program
 {
-    /// <summary>Runs the immediate-descendant probe.</summary>
-    /// <param name="arguments">Single output path for the descendant process identifier.</param>
-    /// <returns>Zero after the descendant identifier is durably recorded.</returns>
+    /// <summary>Runs the immediate-descendant probe or argv-echo mode.</summary>
+    /// <param name="arguments">Either <c>--argv-echo</c> plus payload, or a single descendant PID path.</param>
+    /// <returns>Zero after echoing arguments or recording the descendant identifier.</returns>
     private static int Main(string[] arguments)
     {
+        if (arguments.Length >= 1 &&
+            string.Equals(arguments[0], "--argv-echo", StringComparison.Ordinal))
+        {
+            var payload = new string[arguments.Length - 1];
+            Array.Copy(arguments, 1, payload, 0, payload.Length);
+            Console.Out.Write(System.Text.Json.JsonSerializer.Serialize(payload));
+            return 0;
+        }
+
         if (arguments.Length != 1)
             return 64;
 

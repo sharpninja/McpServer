@@ -115,82 +115,82 @@ Scope: layer-1+
 
 **Versioned HandoffTodoDraft one-shot extraction** — Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
 **Covered by:** FR: FR-HANDOFF-002; TEST: TEST-HANDOFF-003
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft.
-- [ ] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO.
+- [x] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-AUDIT-001
 
 **Normalized ingestion-run and diagnostic persistence** — Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
 **Covered by:** FR: FR-HANDOFF-006; TEST: TEST-HANDOFF-007
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Every run stores normalized provenance and diagnostics independently of TODO rows.
-- [ ] Persisted records omit raw credentials and raw source content.
+- [x] Every run stores normalized provenance and diagnostics independently of TODO rows. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Persisted records omit raw credentials and raw source content. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-CONTRACT-001
 
 **Documented handoff contracts** — Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
 **Covered by:** FR: FR-HANDOFF-001, FR-HANDOFF-002; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002, TEST-HANDOFF-003
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs.
-- [ ] Contracts serialize and deserialize with the shared client JSON context without silent field loss.
+- [x] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Contracts serialize and deserialize with the shared client JSON context without silent field loss. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-MODES-001
 
 **Confidence gating, review approval, and idempotent replay** — Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
 **Covered by:** FR: FR-HANDOFF-004, FR-HANDOFF-005; TEST: TEST-HANDOFF-004, TEST-HANDOFF-005
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
-- [ ] Approval revalidates the stored draft before TODO creation.
-- [ ] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true.
+- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Approval revalidates the stored draft before TODO creation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-SECURITY-001
 
 **Bounded workspace-contained handoff readers** — Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
 **Covered by:** FR: FR-HANDOFF-001; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Readers refuse more than 8 MiB of decoded input and unsupported formats.
-- [ ] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+- [x] Readers refuse more than 8 MiB of decoded input and unsupported formats. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-SURFACE-001
 
 **Shared API, client, REPL, Director, MCP, and plugin delegation** — Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
 **Covered by:** FR: FR-HANDOFF-007; TEST: TEST-HANDOFF-006
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService.
-- [ ] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation.
+- [x] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-TODO-001
 
 **Exclusive TODO-service persistence** — Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
 **Covered by:** FR: FR-HANDOFF-005; TEST: TEST-HANDOFF-005
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] The only TODO mutation path is ITodoService.CreateAsync.
-- [ ] Existing TODO IDs require review and are never silently renamed.
+- [x] The only TODO mutation path is ITodoService.CreateAsync. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Existing TODO IDs require review and are never silently renamed. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-VALIDATE-001
 
 **Pure draft validation and normalization** — Provide a pure draft validator and normalizer that emits field-specific diagnostics.
 **Covered by:** FR: FR-HANDOFF-003, FR-HANDOFF-004; TEST: TEST-HANDOFF-004
-**Status:** in_progress
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Validation and normalization have no TODO or run-store side effects.
-- [ ] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
+- [x] Validation and normalization have no TODO or run-store side effects. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-LOC-001
 
@@ -1139,65 +1139,67 @@ Scope: layer-1+
 
 **Hostile review request schema and storage** — Persist ReviewRequest and QueueItem in EF with three-provider migrations. Reject serialized request JSON over 1048576 bytes before insert. Enforce workspace isolation on submit.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-001; TEST: TEST-MCP-HOSTILEREVIEW-001
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] HostileReviewEntity round-trips on Sqlite, PostgreSQL, and SQL Server.
-- [ ] Valid submit creates a queued row with stable id.
-- [ ] Payload over 1048576 bytes is rejected with no queue row.
-- [ ] Foreign workspace is 403 with no row.
+- [x] HostileReviewEntity round-trips on Sqlite, PostgreSQL, and SQL Server. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Valid submit creates a queued row with stable id. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Payload over 1048576 bytes is rejected with no queue row. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Foreign workspace is 403 with no row. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HOSTILEREVIEW-002
 
 **Hostile review artifact resolver** — Resolver calls supported MCP APIs only. Diagnostics are stored on the request. Successful resolve stores identity and hash when available.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-002; TEST: TEST-MCP-HOSTILEREVIEW-002
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Missing link returns a diagnostic and does not omit silently.
-- [ ] Stale or unauthorized link returns a diagnostic.
-- [ ] Ambiguous link returns a diagnostic.
+- [x] Missing link returns a diagnostic and does not omit silently. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Stale or unauthorized link returns a diagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Ambiguous link returns a diagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Add AgentPoolOneShotContext.HostileReview. Extend OneShotSensitivePromptPolicy to protect both Handoff and hostile review. Hold raw resolved text only in a transient dispatch buffer and release it after the one-shot submission. Hash and delimit every artifact as untrusted input. Fail closed on changed hash, revoked access, workspace mismatch, secret-detection timeout, or unsafe content. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HOSTILEREVIEW-003
 
 **Hostile review execution capture** — ReviewExecution entity stores model string, effort, agent, plugin/source, template id/version, run id, start/end UTC. Token counts are optional and must not be invented.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-003; TEST: TEST-MCP-HOSTILEREVIEW-003
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Execution row records model, effort, agent, template, run id.
-- [ ] Missing token counts are omitted, not fabricated.
+- [x] Execution row records model, effort, agent, template, run id. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Missing token counts are omitted, not fabricated. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Implement the locked worker state machine and defaults. Use atomic compare-and-swap claim and fencing. Use a process-local attempt-to-pool-job correlation around the existing in-memory IAgentPoolService. Do not claim durable or exactly-once pool admission. Reuse a known live pool job only within the same process. After restart, truthfully orphan an expired nonterminal attempt and create a new fenced attempt only within the retry bound. Clean up process-local correlations and terminal pool jobs. Retry only classified transient failures. Do not replay terminal, cancelled, exhausted, unauthorized, or malformed requests. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HOSTILEREVIEW-004
 
 **Findings taxonomy and request-quality schema** — Finding.category is an enum of the seven classes. Verdict is AGREE|DISAGREE|UNKNOWN. RequestQualityAssessment has five explicit numeric or ordinal fields.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-004; TEST: TEST-MCP-HOSTILEREVIEW-004
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Get returns taxonomy-complete findings.
-- [ ] Request-quality scores the five dimensions.
+- [x] Get returns taxonomy-complete findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Request-quality scores the five dimensions. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HOSTILEREVIEW-005
 
 **Hostile review query indexes** — Query API applies AND across provided dimensions and returns empty list on no match, not an error.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-005; TEST: TEST-MCP-HOSTILEREVIEW-005
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Query by model and effort returns only matching runs.
-- [ ] Requester and target type AND.
-- [ ] No match is empty list.
+- [x] Query by model and effort returns only matching runs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Requester and target type AND. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] No match is empty list. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HOSTILEREVIEW-006
 
 **No auto-mutation and surface parity** — No apply/repair endpoint is registered. REST, REPL, Director, and plugin skill expose the four verbs only and do not write product files from verdicts.
 **Covered by:** FR: FR-MCP-HOSTILEREVIEW-006; TEST: TEST-MCP-HOSTILEREVIEW-006
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Default complete does not mutate product files.
-- [ ] REST REPL Director plugin skill parity for submit/status/get/query.
+- [x] Default complete does not mutate product files. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] REST REPL Director plugin skill parity for submit/status/get/query. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## TR-MCP-HTTP-001
 
@@ -1218,65 +1220,65 @@ Scope: layer-1+
 
 **Validation registry and result contract** — IWorkspaceValidationService returns a DTO with the required fields. Unknown rule codes emit diagnostics. Clean workspace returns zero findings.
 **Covered by:** FR: FR-MCP-HYGIENE-001; TEST: TEST-MCP-HYGIENE-001
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Result contract has required fields.
-- [ ] Clean workspace zero findings.
-- [ ] Unknown rule code diagnostic.
+- [x] Result contract has required fields. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Clean workspace zero findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Unknown rule code diagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## TR-MCP-HYGIENE-002
 
 **Traceability rule implementations** — Each rule emits a finding with record id and evidence. TEST exclusion only if a documented rule says so.
 **Covered by:** FR: FR-MCP-HYGIENE-002; TEST: TEST-MCP-HYGIENE-002
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Missing AC finding.
-- [ ] TR with no FR orphan.
-- [ ] FR missing TR or TEST orphan.
-- [ ] TEST with no FR orphan.
-- [ ] Broken or duplicate mapping finding.
+- [x] Missing AC finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] TR with no FR orphan. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] FR missing TR or TEST orphan. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] TEST with no FR orphan. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Broken or duplicate mapping finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## TR-MCP-HYGIENE-003
 
 **TODO consistency rule implementations** — Each mismatch emits a finding with the TODO id and evidence of the contradicting fields.
 **Covered by:** FR: FR-MCP-HYGIENE-003; TEST: TEST-MCP-HYGIENE-003
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Done true incomplete tasks.
-- [ ] Done false all tasks complete.
-- [ ] Done without doneSummary.
-- [ ] Remaining contradicts completion.
-- [ ] Missing dependency target.
-- [ ] Missing referenced requirement id.
+- [x] Done true incomplete tasks. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Done false all tasks complete. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Done without doneSummary. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Remaining contradicts completion. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Missing dependency target. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Missing referenced requirement id. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## TR-MCP-HYGIENE-004
 
 **Stale-turn clock and triage domain enum** — IUtcClock is injectable. Threshold default 48h. Triage states come from the live domain model. Auth, cancellation, and pagination are enforced.
 **Covered by:** FR: FR-MCP-HYGIENE-004; TEST: TEST-MCP-HYGIENE-004
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] In-progress turn older than 48h with injected clock.
-- [ ] Triage non-terminal uses live domain enum.
-- [ ] Override bounded authenticated recorded.
-- [ ] Auth required.
-- [ ] Cancellation honored.
-- [ ] Large workspace paginates.
+- [x] In-progress turn older than 48h with injected clock. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Triage non-terminal uses live domain enum. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Override bounded authenticated recorded. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Auth required. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Cancellation honored. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Large workspace paginates. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## TR-MCP-HYGIENE-005
 
 **Hygiene surface adapters and Director exit codes** — Four surfaces call the same service. Director maps Error/Critical to exit 1 and Warning-only to exit 0. JSON always written. No repair methods.
 **Covered by:** FR: FR-MCP-HYGIENE-005; TEST: TEST-MCP-HYGIENE-005
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Parity same rule codes and counts.
-- [ ] Director exit 1 when Error present.
-- [ ] Director exit 0 when Warning-only.
-- [ ] Validation never auto-repairs.
+- [x] Parity same rule codes and counts. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Director exit 1 when Error present. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Director exit 0 when Warning-only. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Validation never auto-repairs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## TR-MCP-INGEST-001
 
@@ -1306,6 +1308,17 @@ Scope: layer-1+
 
 **Covered by:** `McpServer.KeyServer`, `KeyServerController`, `KeyServerClient`, `HttpKeyServerManifestService`, `TransactionSecurityServices`, `TransactionSecurityOptions`, `TransactionSecurityServiceCollectionExtensions`, `TransactionSecurityStateStores`, `TransactionSecurityModels`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 Scope: layer-1+
+
+## TR-MCP-LLMSTRATEGY-001
+
+**Orchestration-to-strategy turn context seam** — Brain-slot factory SHALL select a completion strategy per slot provider kind so two roles can use two strategies in one process. Invocation and orchestration SHALL pass a BrainSlotTurnContext class instance by reference (original input, committed role evidence, session id, turn id, transaction id). OpenAI-compatible HTTP flattening SHALL include original input and turn identifiers in chat messages. Existing OpenAI, OpenAICompatible, and Cli providers remain flatteners. No new third-party agent-framework package is added for this TODO.
+**Covered by:** FR: FR-MCP-LLMSTRATEGY-001; TEST: TEST-MCP-LLMSTRATEGY-001
+**Status:** completed
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Factory create for two slots with different provider kinds returns two different strategy types in one process. (evidence: BrainSlotLlmStrategyTests.CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes)
+- [x] A stub strategy invoked twice in one turn receives the same BrainSlotTurnContext instance (object.ReferenceEquals). (evidence: QuadBrainLiveOrchestrationTests Assert.Same shared context; BrainSlotInvocationTransactionTests InvokeAsync_WhenTurnContextSupplied_PassesSameInstanceToStrategy)
+- [x] OpenAI-compatible request JSON includes original input and session/turn/transaction identifiers in messages when flattening context. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds)
 
 ## TR-MCP-LOG-001
 
@@ -1526,12 +1539,12 @@ Acceptance Criteria:
 - Pester: timeout/503 abort, no drain failed stderr, later replay works.
 - getFr returns before 30s when a queued session_submit 503s.
 **Covered by:** FR: FR-MCP-172; TEST: TEST-MCP-195
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Failsafe drain on SubmitAsync timeout or 503 aborts without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted.
-- [ ] getFr returns before 30s when a queued session_submit 503s.
-- [ ] Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync is REPL_FAILSAFE_DRAIN_TIMEOUT default 120, or REPL_TIMEOUT when greater, never hardcoded 2.
+- [x] Failsafe drain on SubmitAsync timeout or 503 aborts without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] getFr returns before 30s when a queued session_submit 503s. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync is REPL_FAILSAFE_DRAIN_TIMEOUT default 120, or REPL_TIMEOUT when greater, never hardcoded 2. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-PERSIST-004
 
@@ -1620,21 +1633,21 @@ Scope: layer-1+
 
 **Dictionary-safe plugin dialog parsing** — The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
 **Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output.
-- [ ] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed.
+- [x] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-PLUGINCORE-005
 
 **PowerShell.MCP cross-volume text-edit workaround documented** — Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets (Add-LinesToFile/Update-LinesInFile/Update-MatchInFile/Remove-LinesFromFile) stage a replacement file and move it into place, and that move fails when TEMP/TMP are on a different volume than the target; the fix is to set TEMP/TMP to a directory on the same volume as the edit target and to verify the edit landed afterward, since a failed move can leave the edit unapplied while still previewing the diff. Acceptance Criteria: (AC1) templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML; (AC2) the added guidance contains no em-dashes. Origin: BUG-TRIAGE-084 (third-party PowerShell.MCP module cross-volume replacement-move failure; prior art 054/056 resolved as an undocumented operational workaround). The module is unpinned in Confirm-PowerShellMcpRuntime; a version pin is a future option. Validated by TEST-MCP-PLUGINCORE-005.
 **Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML.
-- [ ] The added guidance contains no em-dashes.
+- [x] templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] The added guidance contains no em-dashes. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-PLUGIN-HEADER-001
 
@@ -1647,15 +1660,16 @@ Scope: layer-1+
 
 **Shared multi-plugin Session Log integration harness** — A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.
 **Covered by:** FR: FR-MCP-PLUGININT-001; TEST: TEST-MCP-PLUGININT-001
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins.
-- [ ] The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins.
-- [ ] PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST.
-- [ ] Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts.
-- [ ] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate.
-- [ ] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped.
+- [x] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Adapters capture executable, arguments, stdin, environment, cwd, timeout, exit, stdout, and stderr. Deterministic validation remains authoritative. Model and configuration failures are classified separately. Source revision and installed artifact hashes are recorded. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1968,17 +1982,25 @@ Scope: layer-1+
 
 ## TR-MCP-QBEXEC-001
 
-**QuadBrain internal-tool interception** — server-side execution and stripping seam.
+**QuadBrain internal-tool interception** — QuadBrain internal-tool interception: classify mcp_ as internal, execute all catalog mcp_* tools server-side, strip them from tool_calls, return service results as a normal assistant message when no external tools remain, and emit only non-mcp_ tools to QBAgent.
 **Covered by:** FR: FR-MCP-QBEXEC-001; TEST: TEST-MCP-QBEXEC-001
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
+**Acceptance Criteria:**
+- [x] RemainingToolCalls contains only non-mcp_ names. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs Interceptor_CatalogName_IsNotEmittedToAgent)
+- [x] When RemainingToolCalls is empty and internals succeeded, finish_reason is stop and content is the service result. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall)
 
 ## TR-MCP-QBEXEC-002
 
-**Internal-tool executor dispatch** — QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name, deserializes Arguments, calls the transaction-gated service for the capability, and maps results to InternalToolExecutionOutcome Ok/Fail/Unhandled; replaces NoopInternalToolExecutor in DI.
+**Internal-tool executor dispatch** — QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name for every mcp_* name in McpHostedAgentToolAdapter and QBAgentDefinition. It deserializes Arguments and calls the matching in-process application/CQRS or transaction-gated service. It maps results to InternalToolExecutionOutcome Ok/Fail/Unhandled. It replaces NoopInternalToolExecutor in DI. It does not HTTP-call MCP endpoints. Unknown catalog-absent mcp_ names return Unhandled.
 **Covered by:** FR: FR-MCP-QBEXEC-002; TEST: TEST-MCP-QBEXEC-002
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
+**Acceptance Criteria:**
+- [x] The executor switch/table includes every mcp_* name from McpHostedAgentToolAdapter.CreateFunctions and QBAgentDefinition AllowedTools plus BlockedTools. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Catalog_ContainsEveryHostedAgentPublishedName; tests/McpServer.McpAgent.Tests/McpHostedAgentAdapterTests.cs)
+- [x] Each handled name has a unit test that asserts a mock in-process service was called and that HttpClient was not used. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled AssertMatchingServiceInvokedAsync)
+- [x] A catalog-absent mcp_ name returns Unhandled and becomes a note, not RemainingToolCalls. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled; QuadBrainToolInterceptionTests Interceptor_UnhandledInternal_IsNoteNotAgentCommand)
+- [x] Those tests do not start, query, or depend on the McpServer Windows service. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs mocks only)
 
 ## TR-MCP-QBEXEC-003
 
@@ -1998,6 +2020,13 @@ Scope: layer-1+
 
 **OpenAI chat-completions surface over QuadBrain orchestration** — Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output. Subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming. QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
 **Covered by:** FR: FR-MCP-QBOPENAI-001; TEST: TEST-MCP-QBINT-001, TEST-MCP-QBOPENAI-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-QBPROGRESS-001
+
+**Role progress via orchestration IProgress and OpenAI SSE** — QuadBrainOrchestrationRequest carries a non-serialized IProgress of QuadBrainRoleProgress. InvokeRoleAsync reports phase started before the slot call and phase completed with output after. ExecuteAotReconciliationCoreAsync reports ArbiterOfTruth the same way. When POST /v1/chat/completions has stream=true, the controller writes SSE event quadbrain.role as those reports arrive, then the OpenAI chat.completion.chunk with the Arbiter assistant content, then data [DONE]. It does not buffer the entire orchestration before the first role event. QBAgent posts stream=true and prints each role event as a progress line while the turn is still running.
+**Covered by:** FR: FR-MCP-QBPROGRESS-001; TEST: TEST-MCP-QBPROGRESS-001
 **Status:** pending
 Scope: layer-1+
 
@@ -2200,11 +2229,12 @@ Scope: layer-1+
 - [x] CA1861 is not approved. Constant array arguments must be hoisted rather than suppressed. (evidence: src/McpServer.Storage/Migrations/20260212160034_AddSessionLogTables.cs and Storage project build)
 - [x] CA1062 is not approved. Public migration methods must validate migrationBuilder arguments rather than suppressing the rule. (evidence: session log migration files 20260212160034, 20260212165804, 20260212170806, and 20260212172109 plus Storage project build)
 - [x] CS0436 is not approved. Type conflict NoWarn entries must be removed once the conflict is no longer present. (evidence: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj and Support.Mcp project build)
-- [x] CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests. (evidence: Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.)
+- [ ] CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests. (evidence: REOPENED 2026-09-09T17:07:12Z: generated migration 612/618 pragmas recurred on candidate 808ec049 and current develop. Historical evidence retained. Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.)
 - [x] CA1055 is not approved. String return APIs must not advertise URI semantics. (evidence: src/McpServer.ServiceDefaults/RailwayConnectionStringBuilder.cs, src/McpServer.ServiceDefaults/PostgresConnectionStringResolver.cs, ServiceDefaults build, and resolver tests)
 - [x] NU5104 is not approved. Stable packages must not depend on prerelease packages or deprecated package metadata. (evidence: Directory.Packages.props stable Microsoft Agents versions, lib/NSubstitute.6.0.0/nsubstitute.nuspec, src/McpServer.McpAgent/McpServer.McpAgent.csproj, and dotnet pack McpServer.McpAgent)
 - [x] NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan. (evidence: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive)
 - [x] ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition. (evidence: Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.)
+- [ ] Correction of generated migration CS0612/CS0618 pragma pairs uses an explicit opt-in Nuke NormalizeGeneratedMigrationObsoletePragmas target. Compile, Test, and ValidateWarningSuppressions never invoke normalization or mutate source. Validation remains read-only and fails when exact generated-migration pragma pairs are present.
 
 ## TR-MCP-REPL-001
 
@@ -2285,43 +2315,43 @@ Scope: layer-1+
 
 **Independent REPL session-log persistence strategies** — McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Primary and failsafe persistence implementations are independently mockable and neither implementation contains fallback orchestration.
-- [ ] Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail.
-- [ ] Failsafe writes use an atomic replace or move and return the final absolute artifact path.
-- [ ] Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields.
+- [x] Primary and failsafe persistence implementations are independently mockable and neither implementation contains fallback orchestration. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Failsafe writes use an atomic replace or move and return the final absolute artifact path. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-REPL-011
 
 **PascalCase session-id agent + openSession persistence** — Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server sessionId regex ^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$; and workflow.sessionlog.openSession SHALL persist an explicit valid sessionId into session-state.yaml instead of being a success no-op. Acceptance Criteria: (AC1) Get-ReplCanonicalAgentName maps 'default' to 'Default' (regex-valid), 'claude-code'/'claudecode' to 'ClaudeCode', 'codex' to 'Codex', 'grok' to 'GrokCode', and its output always matches ^[A-Z][A-Za-z0-9]*$; New-ReplPluginSessionId composes the agent segment through it; (AC2) Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified + that sessionId into session-state.yaml and returns true. Origin: BUG-TRIAGE-085 (AgentName fell back to lowercase 'default' producing server-rejected ids; openSession never persisted an explicit id). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib; do not relax server validation. Validated by TEST-MCP-REPL-011.
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Get-ReplCanonicalAgentName maps default to Default, claude-code/claudecode to ClaudeCode, codex to Codex, grok to GrokCode, and output always matches ^[A-Z][A-Za-z0-9]*$.
-- [ ] Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified plus that sessionId into session-state.yaml and returns true.
+- [x] Get-ReplCanonicalAgentName maps default to Default, claude-code/claudecode to ClaudeCode, codex to Codex, grok to GrokCode, and output always matches ^[A-Z][A-Za-z0-9]*$. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified plus that sessionId into session-state.yaml and returns true. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-REPL-012
 
 **Per-method REPL invocation timeout** — REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget (REPL_LONG_TIMEOUT, default 300s) while all other methods keep the short default (REPL_TIMEOUT, default 30s). Acceptance Criteria: (AC1) Get-ReplMethodTimeoutSeconds returns >30 for analyzeRequirements/generateDocument and 30 for sessionlog methods; (AC2) REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds. Origin: BUG-TRIAGE-072 (workflow.todo.analyzeRequirements, which blocks on an external Copilot CLI, was killed at the flat 30s REPL_TIMEOUT). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-REPL-027.
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements/generateDocument and 30 for sessionlog workflow methods completeTurn and beginTurn.
-- [ ] REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds.
-- [ ] client.SessionLog.SubmitAsync while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater; this does not raise completeTurn/beginTurn above 30s.
+- [x] Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements/generateDocument and 30 for sessionlog workflow methods completeTurn and beginTurn. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] client.SessionLog.SubmitAsync while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater; this does not raise completeTurn/beginTurn above 30s. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-REPL-013
 
 **Marker-bearing current directory outranks inherited workspace env for repl resolution** — A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active workspace, so a hook launched from the correct repo binds to that repo's marker rather than a stale inherited MCP_WORKSPACE_PATH. AC1: with a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd. Guards BUG-TRIAGE-077 via TEST-MCP-REPL-028 (ReplWorkspaceResolution.Tests.ps1).
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] With a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd.
+- [x] With a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-REPL-014
 
@@ -3326,6 +3356,57 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-USECASE-017
+
+**Handle-relative containment, bounded providers, canonical identity, and hermetic evidence** — Normalize durable identifier strings before computing derived hashes. Use pinned-directory-relative Windows NT and POSIX operations for contained creation, open, replacement, rollback deletion, and empty-directory removal. Resolve physical paths through finite cancellable native operations used asynchronously by persistence and federation. Snapshot only regular files with no-follow nonblocking stat enforcement. Scope SQLite open and query work with exact restoration of managed, EF, connection-string, native timeout, and handler state; preserve real provider exceptions. Discover repository roots from stable assembly or source metadata and bound process plus pipe-drain lifetime for full process trees.
+**Covered by:** FR: FR-MCP-USECASE-015; TEST: TEST-MCP-USECASE-018
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] McpDbContext normalizes all durable identity fields before computing hashes, and every derived hash matches the exact final persisted value.
+- [ ] WorkspaceContainedFileSystem performs Windows creation/open/deletion and Linux contained mutation relative to pinned parents, validates the opened object, and never follows a reparse or symbolic link.
+- [ ] SaveChangesAsync and federation upsert await finite cancellation-aware physical-resolution APIs whose native implementations do not use abandoned Task.Run work, accumulating threads, or repeated uncancellable Directory.Exists calls.
+- [ ] Linux file open uses no-follow and nonblocking semantics plus descriptor stat/type checks so FIFOs, devices, sockets, and directories cannot block or enter snapshots.
+- [ ] SQLite scoped operations preserve and restore exact connection, EF, connection-string, native busy-timeout, and busy-handler state without deriving native state from DefaultTimeout.
+- [ ] SQLite opening is performed by a bounded owned worker/lifetime mechanism that covers pre-handle blocking and proves no worker, handle, pooled-state, callback, or interrupt leaks across cancellation and repeated calls.
+- [ ] Cancellation classification is based on provider cancellation evidence and exception type/state rather than token state alone for SQLite, SQL Server, and PostgreSQL.
+- [ ] Evidence tests resolve a validated root from assembly/source anchors without MCP_REPOSITORY_ROOT and process execution bounds parent exit, both stream drains, and the descendant process tree.
+- [ ] Evidence inventories are regenerated only after finalization and verified by an independent parsing pass with exact command-to-output and TRX outcome accounting.
+- [ ] Historical migration bytes and previously approved trust, preflight, cleanup, non-Windows, trailer, and line-ending guarantees remain unchanged.
+
+## TR-MCP-USECASE-018
+
+**Cross-platform bounded native I/O and deterministic evidence** — Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.
+**Covered by:** FR: FR-MCP-USECASE-016; TEST: TEST-MCP-USECASE-019
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Linux mkdirat restoration uses an owner-searchable mode and verifies descriptor-relative nested directory and regular-file recreation with exact expected contents and applicable permission bits.
+- [ ] Physical identity native work is performed outside the caller, has an owned finite lifetime, observes cancellation across native-open timing gaps, and cannot accumulate blocked probes or workers.
+- [ ] Cross-platform SQLite pre-handle open cancellation terminates the blocking native operation or its isolation boundary within deadline and reclaims every resource.
+- [ ] Cancellation translation requires a provider- or operation-specific cancellation marker and never relies on token state alone for IOException, ObjectDisposedException, or provider exceptions.
+- [ ] Deterministic CI builds embed a stable repository-root anchor consumed by external repository and Agent Help fixtures when CallerFilePath is mapped to /_/ and no root environment variable exists.
+- [ ] Platform-specific native tests use explicit applicable cases and assertions without runtime early-return or skip paths.
+- [ ] Unicode-dash persistence history is audited; any possibly deployed noncanonical identity receives an idempotent collision-diagnostic repair, otherwise evidence proves no deployment occurred.
+
+## TR-MCP-USECASE-019
+
+**Race-safe physical I/O, causal cancellation, and immutable evidence** — Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.
+**Covered by:** FR: FR-MCP-USECASE-017; TEST: TEST-MCP-USECASE-020
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Physical path resolution revalidates the physical target and mount identity at the operation boundary, rejects unsafe FUSE, NFS, and equivalent mounts reached through aliases or replacement, and exposes active worker state until the underlying native work has really terminated.
+- [ ] Windows physical resolution has a finite public and cleanup deadline even when CancelSynchronousIo fails, performs no unbounded join, and closes check-to-open races by keeping subsequent native blocking work cancellable or fail-fast within contract.
+- [ ] Every public physical-identity consumer, including use-case CQRS helpers, uses cancellable asynchronous resolution end to end; no public synchronous API performs uncancellable physical traversal.
+- [ ] SQLite path validation binds opening to a physically validated no-follow object or equally race-safe isolation boundary; cancellation and timeout cleanup have finite joins, accurate active-worker and handle accounting, and original state and exception causality.
+- [ ] PostgreSQL caller cancellation translation requires operation-scoped evidence that the caller cancellation mechanism actually issued or completed the cancel affecting that command; SQLSTATE 57014 alone plus token state is never sufficient.
+- [ ] Platform-native test projects or discovery filters expose only applicable executable cases and an inventory contract checks exact expected cases and results without source-string substitutes; containment race tests distinguish narrowly expected transients and require successful contained I/O.
+- [ ] Windows evidence helpers place the child in a kill-on-close job at creation or behind an equivalent suspended-start assignment boundary before user code can spawn descendants; all stream drains and cleanup joins share finite deadlines and non-Windows process groups remain correct.
+- [ ] Evidence uses an immutable two-phase candidate or retests the final commit after the last content and evidence change; every command cell is directly executable or fully reconstructable, SHA-256 inventories and TRX totals are independently checked, and historical receipts receive explicit non-destructive supersession notices.
+- [ ] Historical SQL Server migration bytes remain identical to the approved base. The real LocalDB provider harness applies semantics-preserving bounded execution-plan hints only at test execution time, without extending production timeouts; the existing 300-second allowance remains finite and test-only.
+- [ ] Opaque logical workspace identifiers that are not rooted filesystem paths, including ws:test-style storage keys, are normalized lexically and never sent to native physical traversal; rooted filesystem inputs continue through cancellable physical identity resolution.
+
 ## TR-MCP-VERIFYWRAP-001
 
 **code-verify catch disk-full and enforce wrapper timeout** — code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001.
@@ -3439,36 +3520,39 @@ Scope: layer-1+
 
 **Dump schema and export flag** — schemaVersion mcp-wiki-dump/v1. SHA-256 per table plus root hash. Flag default off. tables[] uses McpDbContext DbSet names.
 **Covered by:** FR: FR-MCP-WIKIEXPORT-003; TEST: TEST-MCP-WIKIEXPORT-003
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Without dump flag, export unchanged.
-- [ ] With flag, versioned JSON keyed by workspace.
-- [ ] Dump TODO rows and requirement links match store.
-- [ ] SHA-256 matches canonical UTF-8 JSON.
+- [x] Without dump flag, export unchanged. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] With flag, versioned JSON keyed by workspace. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Dump TODO rows and requirement links match store. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] SHA-256 matches canonical UTF-8 JSON. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Use the existing ISessionLogSanitizer.SanitizeString rules for text and a bounded recursive structured-value projector for non-session entities. Parse recognized JSON fields. Strip secret-key values. Decode bounded Base64 text before inspection. Omit uninspectable binary or malformed encoded payloads with non-echoing diagnostics. Record every allowed redaction as table, row identity hash, field path, and rule ID. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-WIKIEXPORT-004
 
 **Import remap and dump parameter binding** — Bind --dump to WorkspaceController.CreateAsync. Remap workspace id, paths, FKs. Idempotent re-import. Reject malformed dump, version mismatch, missing tables, unsafe path.
 **Covered by:** FR: FR-MCP-WIKIEXPORT-004; TEST: TEST-MCP-WIKIEXPORT-004
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Hydrates TODOs from dump not todo.yaml.
-- [ ] Old workspace id absent after remap.
-- [ ] Malformed dump rejected.
-- [ ] Idempotent reimport no duplicate TODOs.
+- [x] Hydrates TODOs from dump not todo.yaml. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] After remap, old source workspace IDs are absent from every destination operational column identified by the portability policy registry. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Malformed dump rejected. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Idempotent reimport no duplicate TODOs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Introduce durable WorkspaceImportReceipt and WorkspaceImportEntityMap storage. Reserve by destination canonical path plus dump root hash. Query an identical receipt before WorkspaceService.CreateDatabaseAsync duplicate handling or any fresh-import filesystem precondition. Stage receipt-owned import artifacts beneath <workspace>/.mcpServer/imports/<receiptId>. Place registration, hydration, remaps, entity maps, and transition to CommittedPendingActivation in one EF transaction. Run projection/init/start/notification as idempotent post-commit activation stages. Preflight only the specific service-owned generated/output paths each stage needs. Record stage, attempt, sanitized error code, and ownership plus final-byte hash for each generated path created by the receipt. Never overwrite an unknown or pre-existing marker/file, and never claim atomicity across the database, filesystem, and process manager. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Apply the portability matrix. Retain source keys only in immutable import provenance and explicitly historical audit fields. Remap destination operational IDs deterministically. Clear leases and executable ownership. Disable imported runtime configurations. Mark queued/replayable rows imported-inert. Require explicit post-import reconfiguration before any credentialed or executable feature can run. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-WIKIEXPORT-005
 
 **todo.yaml archive and conflict diagnostics** — Discovery classifies generated/shadow/deprecated. Archive is copy then optional remove with report. Conflict diagnostic includes both paths.
 **Covered by:** FR: FR-MCP-WIKIEXPORT-005; TEST: TEST-MCP-WIKIEXPORT-005
-**Status:** pending
+**Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] todo.yaml not source of truth when dump present.
-- [ ] Cleanup archives with evidence, no silent delete.
-- [ ] Dump and yaml conflict: dump wins, diagnostic names both.
+- [x] todo.yaml not source of truth when dump present. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Cleanup archives with evidence, no silent delete. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Dump and yaml conflict: dump wins, diagnostic names both. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-MCP-WS-002
 
@@ -3632,4 +3716,144 @@ Scope: layer-1+
 - [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+
+## TR-WEB-API-001
+
+**New REST only when existing APIs cannot meet AC** — Prefer Todo, AgentPool, SessionLog, Events, Workspace, Templates, and Memory APIs. Any new endpoint MUST be documented with FR/TR ids and covered by TEST-WEB tests.
+**Covered by:** FR: FR-WEB-013, FR-WEB-014; TEST: TEST-WEB-013, TEST-WEB-014
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A design note in the implementing PR lists reused endpoints versus new ones.
+- [ ] Each new endpoint has at least one TEST-WEB requirement mapping.
+
+## TR-WEB-BUDGET-001
+
+**Budget enforcement at enqueue** — Hourly, daily, and monthly USD caps SHALL be enforced server-side when dispatching. mcp-web only edits the caps. Client-side only checks are not sufficient.
+**Covered by:** FR: FR-WEB-020; TEST: TEST-WEB-020
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Enqueue returns a structured error when a cap is exceeded.
+- [ ] Bypassing mcp-web and calling the pool API still enforces the cap.
+
+## TR-WEB-CTX-001
+
+**Hierarchical context via templates and memories** — Workspace/agent/TODO context SHALL compose from existing template and memory APIs where they fit. New fields are allowed only when those APIs cannot represent persona text.
+**Covered by:** FR: FR-WEB-007, FR-WEB-008, FR-WEB-019; TEST: TEST-WEB-007, TEST-WEB-008, TEST-WEB-019
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Dispatch payload merge order is workspace, then agent, then TODO.
+- [ ] Persona text survives agent recycle.
+
+## TR-WEB-GIT-001
+
+**Commit linkage from session-log commit actions** — TODO-to-commit mapping SHALL read session-log actions with type commit. mcp-web SHALL NOT parse git logs as the primary source.
+**Covered by:** FR: FR-WEB-010, FR-WEB-015; TEST: TEST-WEB-010, TEST-WEB-015
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Cards bind to action type commit SHA fields.
+- [ ] Absence of commit actions shows no SHA.
+
+## TR-WEB-OBS-001
+
+**Burn and progress from session logs** — Token burn and daily progress SHALL be aggregated from session-log tokenCount, commit actions, and agent-pool working timestamps. Do not scrape git independently unless session-log data is missing, and then record the fallback in the UI.
+**Covered by:** FR: FR-WEB-009, FR-WEB-010; TEST: TEST-WEB-009, TEST-WEB-010
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Burn series is computed from session-log tokenCount grouped by hour.
+- [ ] Peak parallelism counts distinct agents in working status overlapping in time.
+
+## TR-WEB-ORCH-001
+
+**Fleet uses AgentPoolClient** — Start, stop, recycle, status, start-all, stop-all, and queue dispatch SHALL call /mcpserver/agent-pool via AgentPoolClient. mcp-web SHALL NOT spawn agent processes itself.
+**Covered by:** FR: FR-WEB-001, FR-WEB-002, FR-WEB-003, FR-WEB-005, FR-WEB-007, FR-WEB-012, FR-WEB-014, FR-WEB-019, FR-WEB-020; TEST: TEST-WEB-001, TEST-WEB-002, TEST-WEB-003, TEST-WEB-005, TEST-WEB-007, TEST-WEB-012, TEST-WEB-014, TEST-WEB-019, TEST-WEB-020
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Unit tests mock AgentPoolClient; production code has no Process.Start for coding agents.
+- [ ] Start All iterates pool start endpoints already defined on AgentPoolClient.
+
+## TR-WEB-PRIV-001
+
+**No prompt or file telemetry from mcp-web** — The mcp-web client bundle SHALL NOT send prompt text, file bodies, or diffs to hosts other than the configured MCP Server and the operator-configured model providers used by the pool.
+**Covered by:** FR: FR-WEB-016; TEST: TEST-WEB-016
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A static or unit test fails if analytics keys or prompt-post URLs are introduced.
+- [ ] Default config has telemetry disabled.
+
+## TR-WEB-SCHED-001
+
+**Recurring TODOs have a durable scheduler** — If MCP Server has no recurring TODO scheduler, add a server-side scheduler that creates/reopens TODOs. mcp-web only authors the schedule fields. Browser timers SHALL NOT be the source of truth.
+**Covered by:** FR: FR-WEB-006; TEST: TEST-WEB-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A schedule fires while mcp-web is closed.
+- [ ] Schedule definitions persist in MCP storage, not only in the browser.
+
+## TR-WEB-SEC-001
+
+**Reuse pairing and OIDC** — mcp-web SHALL authenticate with existing pairing (FR-MCP-014) and OIDC (FR-MCP-026). Do not add Prompter Hawk magic-link email auth.
+**Covered by:** FR: FR-WEB-016; TEST: TEST-WEB-016
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Unauthenticated cockpit requests redirect to the existing login/pairing flow.
+- [ ] No magic-link mailer is added for mcp-web.
+
+## TR-WEB-SEC-002
+
+**Allow/deny stored as workspace policy** — Tool and path rules SHALL persist through workspace policy APIs (FR-MCP-033 / WorkspacePolicyService), fail closed, and be editable from mcp-web.
+**Covered by:** FR: FR-WEB-013; TEST: TEST-WEB-013
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Saving rules calls the workspace policy API, not a new sidecar file format.
+- [ ] Missing policy fails closed for denied tools/paths.
+
+## TR-WEB-SESS-001
+
+**Live peek uses session log and events** — Live peek and fire-and-forget refresh SHALL use SessionLogClient and EventStreamClient (/mcpserver/events). Terminal scraping is forbidden.
+**Covered by:** FR: FR-WEB-005, FR-WEB-008, FR-WEB-009, FR-WEB-011, FR-WEB-015; TEST: TEST-WEB-005, TEST-WEB-008, TEST-WEB-009, TEST-WEB-011, TEST-WEB-015
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Live peek tests subscribe to a fake event stream and append dialog items.
+- [ ] No PTY or console-hook dependency exists in McpServer.Web.
+
+## TR-WEB-TODO-001
+
+**Task bank uses TodoClient only** — Task bank CRUD, lanes, assignment, and dependencies SHALL use MCP TODO APIs. Direct reads or writes of TODO.yaml / docs/todo.yaml are forbidden.
+**Covered by:** FR: FR-WEB-002, FR-WEB-004, FR-WEB-005, FR-WEB-006, FR-WEB-008, FR-WEB-011, FR-WEB-012, FR-WEB-018; TEST: TEST-WEB-002, TEST-WEB-004, TEST-WEB-005, TEST-WEB-006, TEST-WEB-008, TEST-WEB-011, TEST-WEB-012, TEST-WEB-018
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Web project has no File.Write for TODO.yaml.
+- [ ] Lane derivation is unit-tested against TODO status and tags.
+
+## TR-WEB-UI-001
+
+**Host orchestration UI in McpServer.Web** — The orchestration dashboard SHALL ship in src/McpServer.Web (mcp-web), extending FR-MCP-031. If the project is absent from the solution, restore or create it. Do not implement this UI inside Director.
+**Covered by:** FR: FR-WEB-001, FR-WEB-002; TEST: TEST-WEB-001, TEST-WEB-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] McpServer.sln contains McpServer.Web after Phase 1.
+- [ ] The cockpit route is served by that project, not by McpServer.Support.Mcp HTML pairing pages except for login.
+
+## TR-WEB-UI-002
+
+**Primer layout with desktop and mobile breakpoints** — mcp-web SHALL use the existing Primer CSS / Octicons visual language and MUST satisfy FR-WEB-017 breakpoints in automated UI tests.
+**Covered by:** FR: FR-WEB-001, FR-WEB-003, FR-WEB-004, FR-WEB-017; TEST: TEST-WEB-001, TEST-WEB-003, TEST-WEB-004, TEST-WEB-017
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Dashboard components reference Primer CSS or the current mcp-web design system, not a Prompter Hawk theme clone.
+- [ ] Layout tests execute at 1280px and 390px widths.
 

@@ -10,6 +10,8 @@ audit_basis: docs/receipts/usecase-design-tr-audit-20260807T141204Z.md
 
 # McpServer Use Case Extension – Design Package v2.0
 
+**Superseded.** The active design of record is [McpServer-UseCase-Extension-Design-v3.0.md](McpServer-UseCase-Extension-Design-v3.0.md). This v2 package is kept for history.
+
 ## 0. Document control
 
 | Item | Value |
@@ -20,7 +22,7 @@ audit_basis: docs/receipts/usecase-design-tr-audit-20260807T141204Z.md
 | Breaking to existing FR/TR/TEST APIs | **No** (additive domain + additive FR projection field) |
 | Breaking vs v1 design sketch | **Yes** (storage keys, lifecycle, CQRS surface, multi-provider) |
 
-v1 is retained for history. Implement **only** from this v2 document.
+v1 is retained for history. This v2 package is itself superseded; implement from v3, not from this document.
 
 ---
 

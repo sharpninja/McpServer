@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-08-22T04:30:35.3860771+00:00",
+  "generatedAtUtc": "2026-09-16T18:05:56.6649686+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -36,6 +36,15 @@
     "TODO-Schema.md",
     "Action-Types.md",
     "MCP-Memories.md",
-    "Federation.md"
+    "Federation.md",
+    "Project-Readme.md",
+    "Documentation-Index.md",
+    "Claude-Hook-Validation-Skill.md",
+    "API-Capabilities.md",
+    "Compliance-Rules.md",
+    "Module-Bootstrap.md",
+    "YAML-Object-Mutation.md",
+    "Session-Log-Workflow-API.md",
+    "Scratch-Workspace-Integration-Tests.md"
   ]
 }

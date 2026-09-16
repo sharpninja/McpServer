@@ -15,6 +15,9 @@
   - [REPL Agent Guide](REPL-Agent-Guide)
   - [REPL Migration Guide](REPL-Migration-Guide)
   - [Handoff Ingestion](Handoff-Ingestion)
+  - [Project README](Project-Readme)
+  - [Documentation Index](Documentation-Index)
+  - [Claude Hook Validation Skill](Claude-Hook-Validation-Skill)
 - Architecture
   - [MCP Server Operations Guide](MCP-Server-Operations)
   - [QuadBrain Architecture](QuadBrain)
@@ -28,6 +31,12 @@
   - [Session Log Action Types](Action-Types)
   - [MCP Memories](MCP-Memories)
   - [Federation](Federation)
+  - [API Capabilities](API-Capabilities)
+  - [Compliance Rules](Compliance-Rules)
+  - [Module Bootstrap](Module-Bootstrap)
+  - [YAML Object Mutation](YAML-Object-Mutation)
+  - [Session Log Workflow API](Session-Log-Workflow-API)
+  - [Scratch Workspace Integration Tests](Scratch-Workspace-Integration-Tests)
 - Process
   - [Byrd Development Process v4](Byrd-Development-Process)
   - [Release Checklist](Release-Checklist)

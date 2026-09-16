@@ -1,0 +1,650 @@
+UTC=20260916T200417Z
+ΓÇï
+ΓûêΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓûêΓûêΓûêΓûêΓòù┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬áΓûêΓûêΓòöΓò¥ΓûêΓûêΓòöΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓûêΓûêΓòöΓûêΓûêΓòù┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓûêΓûêΓûêΓòöΓò¥┬áΓûêΓûêΓûêΓûêΓûêΓòù┬á┬á
+ΓûêΓûêΓòæΓòÜΓûêΓûêΓòùΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòöΓòÉΓûêΓûêΓòù┬áΓûêΓûêΓòöΓòÉΓòÉΓò¥┬á┬á
+ΓûêΓûêΓòæ┬áΓòÜΓûêΓûêΓûêΓûêΓòæΓòÜΓûêΓûêΓûêΓûêΓûêΓûêΓòöΓò¥ΓûêΓûêΓòæ┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓò¥ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓÇï
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+ΓÇï
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Restore
+Γò¼ΓòÉΓòÉΓòÉ
+ΓÇï
+15:04:23 [INF] > "C:\Program Files\dotnet\dotnet.exe" restore F:\GitHub\McpServer\McpServer.sln
+15:04:24 [DBG]   Determining projects to restore...
+15:04:25 [DBG]   All projects are up-to-date for restore.
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Compile
+Γò¼ΓòÉΓòÉΓòÉ
+ΓÇï
+15:04:26 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Client\McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:33 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:04:34 [DBG] 
+15:04:34 [DBG] Build succeeded.
+15:04:34 [DBG]     0 Warning(s)
+15:04:34 [DBG]     0 Error(s)
+15:04:34 [DBG] 
+15:04:34 [DBG] Time Elapsed 00:00:06.85
+15:04:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:35 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:04:35 [DBG] 
+15:04:35 [DBG] Build succeeded.
+15:04:35 [DBG]     0 Warning(s)
+15:04:35 [DBG]     0 Error(s)
+15:04:35 [DBG] 
+15:04:35 [DBG] Time Elapsed 00:00:00.94
+15:04:35 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:36 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:04:36 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:04:36 [DBG] 
+15:04:36 [DBG] Build succeeded.
+15:04:36 [DBG]     0 Warning(s)
+15:04:36 [DBG]     0 Error(s)
+15:04:36 [DBG] 
+15:04:36 [DBG] Time Elapsed 00:00:01.14
+15:04:37 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Cqrs\McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:37 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:04:38 [DBG] 
+15:04:38 [DBG] Build succeeded.
+15:04:38 [DBG]     0 Warning(s)
+15:04:38 [DBG]     0 Error(s)
+15:04:38 [DBG] 
+15:04:38 [DBG] Time Elapsed 00:00:00.68
+15:04:38 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:39 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:04:39 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:04:39 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:04:39 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:04:39 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:04:39 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:04:40 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:04:40 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:04:44 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:04:44 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+15:04:45 [DBG] 
+15:04:45 [DBG] Build succeeded.
+15:04:45 [DBG]     0 Warning(s)
+15:04:45 [DBG]     0 Error(s)
+15:04:45 [DBG] 
+15:04:45 [DBG] Time Elapsed 00:00:06.67
+15:04:45 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.KeyServer\McpServer.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:46 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:04:46 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:04:47 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\src\McpServer.KeyServer\bin\Debug\net10.0\McpServer.KeyServer.dll
+15:04:47 [DBG] 
+15:04:47 [DBG] Build succeeded.
+15:04:47 [DBG]     0 Warning(s)
+15:04:47 [DBG]     0 Error(s)
+15:04:47 [DBG] 
+15:04:47 [DBG] Time Elapsed 00:00:01.75
+15:04:47 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Launcher\McpServer.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:48 [DBG]   McpServer.Launcher -> F:\GitHub\McpServer\src\McpServer.Launcher\bin\Debug\net10.0-windows\McpServer.Launcher.dll
+15:04:48 [DBG] 
+15:04:48 [DBG] Build succeeded.
+15:04:48 [DBG]     0 Warning(s)
+15:04:48 [DBG]     0 Error(s)
+15:04:48 [DBG] 
+15:04:48 [DBG] Time Elapsed 00:00:00.77
+15:04:48 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.McpAgent.SampleHost\McpServer.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:49 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:04:49 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:04:50 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:04:50 [DBG]   McpServer.McpAgent.SampleHost -> F:\GitHub\McpServer\src\McpServer.McpAgent.SampleHost\bin\Debug\net10.0\McpServer.McpAgent.SampleHost.dll
+15:04:50 [DBG] 
+15:04:50 [DBG] Build succeeded.
+15:04:50 [DBG]     0 Warning(s)
+15:04:50 [DBG]     0 Error(s)
+15:04:50 [DBG] 
+15:04:50 [DBG] Time Elapsed 00:00:01.91
+15:04:50 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.McpAgent\McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:53 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:04:54 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:04:54 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:04:54 [DBG] 
+15:04:54 [DBG] Build succeeded.
+15:04:54 [DBG]     0 Warning(s)
+15:04:54 [DBG]     0 Error(s)
+15:04:54 [DBG] 
+15:04:54 [DBG] Time Elapsed 00:00:03.31
+15:04:54 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:55 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+15:04:55 [DBG] 
+15:04:56 [DBG] Build succeeded.
+15:04:56 [DBG]     0 Warning(s)
+15:04:56 [DBG]     0 Error(s)
+15:04:56 [DBG] 
+15:04:56 [DBG] Time Elapsed 00:00:00.89
+15:04:56 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:04:59 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+15:04:59 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:04:59 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:04:59 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:04:59 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:00 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:00 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:05:00 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:01 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:05:03 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:05:11 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+15:05:11 [DBG] 
+15:05:11 [DBG] Build succeeded.
+15:05:11 [DBG]     0 Warning(s)
+15:05:11 [DBG]     0 Error(s)
+15:05:11 [DBG] 
+15:05:11 [DBG] Time Elapsed 00:00:14.59
+15:05:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.QBAgent\McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:13 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+15:05:13 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:05:13 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:13 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:13 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:05:14 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:14 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:14 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:14 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:05:15 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:05:15 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+15:05:16 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+15:05:16 [DBG] 
+15:05:16 [DBG] Build succeeded.
+15:05:16 [DBG]     0 Warning(s)
+15:05:16 [DBG]     0 Error(s)
+15:05:16 [DBG] 
+15:05:16 [DBG] Time Elapsed 00:00:05.25
+15:05:17 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:18 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:18 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:18 [DBG] 
+15:05:18 [DBG] Build succeeded.
+15:05:18 [DBG]     0 Warning(s)
+15:05:18 [DBG]     0 Error(s)
+15:05:18 [DBG] 
+15:05:18 [DBG] Time Elapsed 00:00:01.04
+15:05:18 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Repl.Host\McpServer.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:20 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:20 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:05:20 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:20 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
+15:05:21 [DBG] 
+15:05:21 [DBG] Build succeeded.
+15:05:21 [DBG]     0 Warning(s)
+15:05:21 [DBG]     0 Error(s)
+15:05:21 [DBG] 
+15:05:21 [DBG] Time Elapsed 00:00:01.92
+15:05:21 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:22 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:22 [DBG] 
+15:05:22 [DBG] Build succeeded.
+15:05:22 [DBG]     0 Warning(s)
+15:05:22 [DBG]     0 Error(s)
+15:05:22 [DBG] 
+15:05:22 [DBG] Time Elapsed 00:00:00.76
+15:05:22 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:23 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:23 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:05:23 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:23 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:23 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:05:23 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:24 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:24 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:05:24 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:05:24 [DBG] 
+15:05:24 [DBG] Build succeeded.
+15:05:24 [DBG]     0 Warning(s)
+15:05:24 [DBG]     0 Error(s)
+15:05:24 [DBG] 
+15:05:24 [DBG] Time Elapsed 00:00:02.05
+15:05:24 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:26 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+15:05:26 [DBG] 
+15:05:26 [DBG] Build succeeded.
+15:05:26 [DBG]     0 Warning(s)
+15:05:26 [DBG]     0 Error(s)
+15:05:26 [DBG] 
+15:05:26 [DBG] Time Elapsed 00:00:01.00
+15:05:26 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:27 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:27 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:27 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:28 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:30 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+15:05:30 [DBG] 
+15:05:30 [DBG] Build succeeded.
+15:05:30 [DBG]     0 Warning(s)
+15:05:30 [DBG]     0 Error(s)
+15:05:30 [DBG] 
+15:05:30 [DBG] Time Elapsed 00:00:03.47
+15:05:30 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:31 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:31 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:31 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:32 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:34 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+15:05:34 [DBG] 
+15:05:34 [DBG] Build succeeded.
+15:05:34 [DBG]     0 Warning(s)
+15:05:34 [DBG]     0 Error(s)
+15:05:34 [DBG] 
+15:05:34 [DBG] Time Elapsed 00:00:03.73
+15:05:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:35 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:35 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:35 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:35 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:37 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+15:05:37 [DBG] 
+15:05:37 [DBG] Build succeeded.
+15:05:37 [DBG]     0 Warning(s)
+15:05:37 [DBG]     0 Error(s)
+15:05:37 [DBG] 
+15:05:37 [DBG] Time Elapsed 00:00:02.87
+15:05:37 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Storage\McpServer.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:38 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:38 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:38 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:39 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:39 [DBG] 
+15:05:39 [DBG] Build succeeded.
+15:05:39 [DBG]     0 Warning(s)
+15:05:39 [DBG]     0 Error(s)
+15:05:39 [DBG] 
+15:05:39 [DBG] Time Elapsed 00:00:01.12
+15:05:39 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Subscriber\McpServer.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:40 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:05:40 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:41 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\src\McpServer.Subscriber\bin\Debug\net10.0\McpServer.Subscriber.dll
+15:05:41 [DBG] 
+15:05:41 [DBG] Build succeeded.
+15:05:41 [DBG]     0 Warning(s)
+15:05:41 [DBG]     0 Error(s)
+15:05:41 [DBG] 
+15:05:41 [DBG] Time Elapsed 00:00:01.54
+15:05:41 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:44 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:44 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:05:44 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:05:44 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:05:44 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+15:05:44 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:05:44 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:05:44 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:44 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:05:45 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:05:45 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+15:05:45 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+15:05:45 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+15:05:45 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:05:45 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+15:05:48 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+15:05:48 [DBG] 
+15:05:48 [DBG] Build succeeded.
+15:05:48 [DBG]     0 Warning(s)
+15:05:48 [DBG]     0 Error(s)
+15:05:48 [DBG] 
+15:05:48 [DBG] Time Elapsed 00:00:05.32
+15:05:49 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:49 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:05:50 [DBG] 
+15:05:50 [DBG] Build succeeded.
+15:05:50 [DBG]     0 Warning(s)
+15:05:50 [DBG]     0 Error(s)
+15:05:50 [DBG] 
+15:05:50 [DBG] Time Elapsed 00:00:00.70
+15:05:50 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Acid.IntegrationTests\McpServer.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:51 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:05:51 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:05:51 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:51 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\src\McpServer.Subscriber\bin\Debug\net10.0\McpServer.Subscriber.dll
+15:05:51 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\src\McpServer.KeyServer\bin\Debug\net10.0\McpServer.KeyServer.dll
+15:05:52 [DBG]   McpServer.Acid.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Acid.IntegrationTests\bin\Debug\net10.0\McpServer.Acid.IntegrationTests.dll
+15:05:52 [DBG] 
+15:05:52 [DBG] Build succeeded.
+15:05:52 [DBG]     0 Warning(s)
+15:05:52 [DBG]     0 Error(s)
+15:05:52 [DBG] 
+15:05:52 [DBG] Time Elapsed 00:00:02.10
+15:05:52 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:53 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:05:54 [DBG]   McpServer.Client.Tests -> F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+15:05:54 [DBG] 
+15:05:54 [DBG] Build succeeded.
+15:05:54 [DBG]     0 Warning(s)
+15:05:54 [DBG]     0 Error(s)
+15:05:54 [DBG] 
+15:05:54 [DBG] Time Elapsed 00:00:01.37
+15:05:54 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Context.Validation\McpServer.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:55 [DBG]   McpServer.Context.Validation -> F:\GitHub\McpServer\tests\McpServer.Context.Validation\bin\Debug\net10.0\McpServer.Context.Validation.dll
+15:05:55 [DBG] 
+15:05:55 [DBG] Build succeeded.
+15:05:55 [DBG]     0 Warning(s)
+15:05:55 [DBG]     0 Error(s)
+15:05:55 [DBG] 
+15:05:55 [DBG] Time Elapsed 00:00:00.81
+15:05:55 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Cqrs.Tests\McpServer.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:56 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:05:57 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:05:57 [DBG]   McpServer.Cqrs.Tests -> F:\GitHub\McpServer\tests\McpServer.Cqrs.Tests\bin\Debug\net10.0\McpServer.Cqrs.Tests.dll
+15:05:57 [DBG] 
+15:05:57 [DBG] Build succeeded.
+15:05:57 [DBG]     0 Warning(s)
+15:05:57 [DBG]     0 Error(s)
+15:05:57 [DBG] 
+15:05:57 [DBG] Time Elapsed 00:00:01.36
+15:05:57 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.GitHub.Validation\McpServer.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:58 [DBG]   McpServer.GitHub.Validation -> F:\GitHub\McpServer\tests\McpServer.GitHub.Validation\bin\Debug\net10.0\McpServer.GitHub.Validation.dll
+15:05:58 [DBG] 
+15:05:58 [DBG] Build succeeded.
+15:05:58 [DBG]     0 Warning(s)
+15:05:58 [DBG]     0 Error(s)
+15:05:58 [DBG] 
+15:05:58 [DBG] Time Elapsed 00:00:00.71
+15:05:58 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Launcher.Tests\McpServer.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:05:59 [DBG]   McpServer.Launcher -> F:\GitHub\McpServer\src\McpServer.Launcher\bin\Debug\net10.0-windows\McpServer.Launcher.dll
+15:05:59 [DBG]   McpServer.Launcher.Tests -> F:\GitHub\McpServer\tests\McpServer.Launcher.Tests\bin\Debug\net10.0-windows\McpServer.Launcher.Tests.dll
+15:05:59 [DBG] 
+15:05:59 [DBG] Build succeeded.
+15:05:59 [DBG]     0 Warning(s)
+15:05:59 [DBG]     0 Error(s)
+15:05:59 [DBG] 
+15:05:59 [DBG] Time Elapsed 00:00:00.91
+15:05:59 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.McpAgent.Tests\McpServer.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:00 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:01 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:01 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:06:01 [DBG]   McpServer.McpAgent.Tests -> F:\GitHub\McpServer\tests\McpServer.McpAgent.Tests\bin\Debug\net10.0\McpServer.McpAgent.Tests.dll
+15:06:01 [DBG] 
+15:06:01 [DBG] Build succeeded.
+15:06:01 [DBG]     0 Warning(s)
+15:06:01 [DBG]     0 Error(s)
+15:06:01 [DBG] 
+15:06:01 [DBG] Time Elapsed 00:00:01.60
+15:06:01 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.PlanReview.Tests\McpServer.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:02 [DBG]   McpServer.PlanReview.Tests -> F:\GitHub\McpServer\tests\McpServer.PlanReview.Tests\bin\Debug\net10.0\McpServer.PlanReview.Tests.dll
+15:06:02 [DBG] 
+15:06:02 [DBG] Build succeeded.
+15:06:02 [DBG]     0 Warning(s)
+15:06:02 [DBG]     0 Error(s)
+15:06:02 [DBG] 
+15:06:02 [DBG] Time Elapsed 00:00:00.72
+15:06:02 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:04 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:06:04 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:06:04 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+15:06:04 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:06:04 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:06:04 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:06:04 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:04 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:04 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:06:04 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:06:04 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+15:06:04 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+15:06:04 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+15:06:04 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:06:05 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+15:06:05 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+15:06:06 [DBG]   McpServer.PluginIntegration.Tests -> F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll
+15:06:06 [DBG] 
+15:06:06 [DBG] Build succeeded.
+15:06:06 [DBG]     0 Warning(s)
+15:06:06 [DBG]     0 Error(s)
+15:06:06 [DBG] 
+15:06:06 [DBG] Time Elapsed 00:00:03.09
+15:06:06 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.ProcessTree.TestHelper\McpServer.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:07 [DBG]   McpServer.ProcessTree.TestHelper -> F:\GitHub\McpServer\tests\McpServer.ProcessTree.TestHelper\bin\Debug\net10.0\McpServer.ProcessTree.TestHelper.dll
+15:06:07 [DBG] 
+15:06:07 [DBG] Build succeeded.
+15:06:07 [DBG]     0 Warning(s)
+15:06:07 [DBG]     0 Error(s)
+15:06:07 [DBG] 
+15:06:07 [DBG] Time Elapsed 00:00:00.75
+15:06:07 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\McpServer.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:08 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:08 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:06:08 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+15:06:08 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:06:08 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:06:08 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:06:08 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:08 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:06:08 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:06:09 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:06:09 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+15:06:09 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+15:06:10 [DBG]   McpServer.QBAgent.Tests -> F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\bin\Debug\net10.0\McpServer.QBAgent.Tests.dll
+15:06:10 [DBG] 
+15:06:10 [DBG] Build succeeded.
+15:06:10 [DBG]     0 Warning(s)
+15:06:10 [DBG]     0 Error(s)
+15:06:10 [DBG] 
+15:06:10 [DBG] Time Elapsed 00:00:02.47
+15:06:10 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:11 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:11 [DBG]   McpServer.Todo.Validation -> F:\GitHub\McpServer\tests\McpServer.Todo.Validation\bin\Debug\net10.0\McpServer.Todo.Validation.dll
+15:06:11 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:12 [DBG]   McpServer.Repl.Core.Tests -> F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll
+15:06:12 [DBG] 
+15:06:12 [DBG] Build succeeded.
+15:06:12 [DBG]     0 Warning(s)
+15:06:12 [DBG]     0 Error(s)
+15:06:12 [DBG] 
+15:06:12 [DBG] Time Elapsed 00:00:02.06
+15:06:12 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:13 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:06:13 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:13 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:14 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
+15:06:14 [DBG]   McpServer.Repl.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll
+15:06:14 [DBG] 
+15:06:14 [DBG] Build succeeded.
+15:06:14 [DBG]     0 Warning(s)
+15:06:14 [DBG]     0 Error(s)
+15:06:14 [DBG] 
+15:06:14 [DBG] Time Elapsed 00:00:01.47
+15:06:14 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Repo.Validation\McpServer.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:15 [DBG]   McpServer.Repo.Validation -> F:\GitHub\McpServer\tests\McpServer.Repo.Validation\bin\Debug\net10.0\McpServer.Repo.Validation.dll
+15:06:15 [DBG] 
+15:06:15 [DBG] Build succeeded.
+15:06:15 [DBG]     0 Warning(s)
+15:06:15 [DBG]     0 Error(s)
+15:06:15 [DBG] 
+15:06:15 [DBG] Time Elapsed 00:00:00.71
+15:06:15 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Review.Tests\McpServer.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:16 [DBG]   McpServer.Review.Tests -> F:\GitHub\McpServer\tests\McpServer.Review.Tests\bin\Debug\net10.0\McpServer.Review.Tests.dll
+15:06:16 [DBG] 
+15:06:16 [DBG] Build succeeded.
+15:06:16 [DBG]     0 Warning(s)
+15:06:16 [DBG]     0 Error(s)
+15:06:16 [DBG] 
+15:06:16 [DBG] Time Elapsed 00:00:00.72
+15:06:16 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.SessionLog.Validation\McpServer.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:17 [DBG]   McpServer.SessionLog.Validation -> F:\GitHub\McpServer\tests\McpServer.SessionLog.Validation\bin\Debug\net10.0\McpServer.SessionLog.Validation.dll
+15:06:17 [DBG] 
+15:06:17 [DBG] Build succeeded.
+15:06:17 [DBG]     0 Warning(s)
+15:06:17 [DBG]     0 Error(s)
+15:06:17 [DBG] 
+15:06:17 [DBG] Time Elapsed 00:00:00.74
+15:06:17 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:19 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:19 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+15:06:19 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:06:19 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+15:06:19 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:06:19 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:06:19 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:19 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:06:19 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:06:19 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:06:19 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:06:19 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
+15:06:19 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+15:06:19 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:06:19 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+15:06:19 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+15:06:20 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+15:06:20 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+15:06:20 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+15:06:20 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+15:06:21 [DBG]   McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
+15:06:21 [DBG] 
+15:06:21 [DBG] Build succeeded.
+15:06:21 [DBG]     0 Warning(s)
+15:06:21 [DBG]     0 Error(s)
+15:06:21 [DBG] 
+15:06:21 [DBG] Time Elapsed 00:00:03.85
+15:06:22 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:23 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+15:06:23 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+15:06:23 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:23 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+15:06:23 [DBG]   McpServer.ProcessTree.TestHelper -> F:\GitHub\McpServer\tests\McpServer.ProcessTree.TestHelper\bin\Debug\net10.0\McpServer.ProcessTree.TestHelper.dll
+15:06:23 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:06:23 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+15:06:23 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:06:23 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+15:06:23 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+15:06:23 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+15:06:23 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+15:06:23 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+15:06:23 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+15:06:24 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+15:06:24 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+15:06:24 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+15:06:28 [DBG]   McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+15:06:28 [DBG] 
+15:06:28 [DBG] Build succeeded.
+15:06:28 [DBG]     0 Warning(s)
+15:06:28 [DBG]     0 Error(s)
+15:06:28 [DBG] 
+15:06:28 [DBG] Time Elapsed 00:00:06.04
+15:06:28 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Todo.Validation\McpServer.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:29 [DBG]   McpServer.Todo.Validation -> F:\GitHub\McpServer\tests\McpServer.Todo.Validation\bin\Debug\net10.0\McpServer.Todo.Validation.dll
+15:06:29 [DBG] 
+15:06:29 [DBG] Build succeeded.
+15:06:29 [DBG]     0 Warning(s)
+15:06:29 [DBG]     0 Error(s)
+15:06:29 [DBG] 
+15:06:29 [DBG] Time Elapsed 00:00:00.72
+15:06:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.ToolRegistry.Validation\McpServer.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:30 [DBG]   McpServer.ToolRegistry.Validation -> F:\GitHub\McpServer\tests\McpServer.ToolRegistry.Validation\bin\Debug\net10.0\McpServer.ToolRegistry.Validation.dll
+15:06:30 [DBG] 
+15:06:30 [DBG] Build succeeded.
+15:06:30 [DBG]     0 Warning(s)
+15:06:30 [DBG]     0 Error(s)
+15:06:30 [DBG] 
+15:06:30 [DBG] Time Elapsed 00:00:00.70
+15:06:30 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.TransactionSecurity.IntegrationTests\McpServer.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:31 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+15:06:31 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+15:06:31 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+15:06:31 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\src\McpServer.Subscriber\bin\Debug\net10.0\McpServer.Subscriber.dll
+15:06:32 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\src\McpServer.KeyServer\bin\Debug\net10.0\McpServer.KeyServer.dll
+15:06:32 [DBG]   McpServer.TransactionSecurity.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.TransactionSecurity.IntegrationTests\bin\Debug\net10.0\McpServer.TransactionSecurity.IntegrationTests.dll
+15:06:32 [DBG] 
+15:06:32 [DBG] Build succeeded.
+15:06:32 [DBG]     0 Warning(s)
+15:06:32 [DBG]     0 Error(s)
+15:06:32 [DBG] 
+15:06:32 [DBG] Time Elapsed 00:00:01.88
+15:06:32 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\tests\McpServer.Workspace.Validation\McpServer.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.37 --property:Version=1.4.37 --property:InformationalVersion=1.4.37
+15:06:33 [DBG]   McpServer.Workspace.Validation -> F:\GitHub\McpServer\tests\McpServer.Workspace.Validation\bin\Debug\net10.0\McpServer.Workspace.Validation.dll
+15:06:33 [DBG] 
+15:06:33 [DBG] Build succeeded.
+15:06:33 [DBG]     0 Warning(s)
+15:06:33 [DBG]     0 Error(s)
+15:06:33 [DBG] 
+15:06:33 [DBG] Time Elapsed 00:00:00.76
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Test
+Γò¼ΓòÉΓòÉ
+ΓÇï
+15:06:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:06:35 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+15:06:35 [DBG] A total of 1 test files matched the specified pattern.
+15:08:11 [DBG] 
+15:08:11 [DBG] Passed!  - Failed:     0, Passed:  2430, Skipped:     0, Total:  2430, Duration: 1 m 33 s - McpServer.Support.Mcp.Tests.dll (net10.0)
+15:08:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:12 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:13 [DBG] A total of 1 test files matched the specified pattern.
+15:08:16 [DBG] 
+15:08:16 [DBG] Passed!  - Failed:     0, Passed:   288, Skipped:     0, Total:   288, Duration: 1 s - McpServer.Client.Tests.dll (net10.0)
+15:08:16 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.Cqrs.Tests\McpServer.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:17 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.Cqrs.Tests\bin\Debug\net10.0\McpServer.Cqrs.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:17 [DBG] A total of 1 test files matched the specified pattern.
+15:08:20 [DBG] 
+15:08:20 [DBG] Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 280 ms - McpServer.Cqrs.Tests.dll (net10.0)
+15:08:20 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.Launcher.Tests\McpServer.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:21 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.Launcher.Tests\bin\Debug\net10.0-windows\McpServer.Launcher.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:21 [DBG] A total of 1 test files matched the specified pattern.
+15:08:24 [DBG] 
+15:08:24 [DBG] Passed!  - Failed:     0, Passed:    20, Skipped:     0, Total:    20, Duration: 115 ms - McpServer.Launcher.Tests.dll (net10.0)
+15:08:24 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.McpAgent.Tests\McpServer.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:25 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.McpAgent.Tests\bin\Debug\net10.0\McpServer.McpAgent.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:25 [DBG] A total of 1 test files matched the specified pattern.
+15:08:36 [DBG] 
+15:08:36 [DBG] Passed!  - Failed:     0, Passed:    63, Skipped:     0, Total:    63, Duration: 8 s - McpServer.McpAgent.Tests.dll (net10.0)
+15:08:36 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:37 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:37 [DBG] A total of 1 test files matched the specified pattern.
+15:08:40 [DBG] 
+15:08:40 [DBG] Passed!  - Failed:     0, Passed:   849, Skipped:     0, Total:   849, Duration: 831 ms - McpServer.Repl.Core.Tests.dll (net10.0)
+15:08:40 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\McpServer.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:41 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\bin\Debug\net10.0\McpServer.QBAgent.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:41 [DBG] A total of 1 test files matched the specified pattern.
+15:08:43 [DBG] 
+15:08:43 [DBG] Passed!  - Failed:     0, Passed:    90, Skipped:     0, Total:    90, Duration: 232 ms - McpServer.QBAgent.Tests.dll (net10.0)
+15:08:43 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+15:08:44 [DBG] Test run for F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll (.NETCoreApp,Version=v10.0)
+15:08:44 [DBG] A total of 1 test files matched the specified pattern.
+15:19:58 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode) [2 m]
+15:19:58 [DBG]   Error Message:
+15:19:58 [DBG]    Test execution timed out after 120000 milliseconds
+15:19:58 [DBG]   Stack Trace:
+15:19:58 [DBG]   --- End of stack trace from previous location ---
+15:19:58 [ERR] [xUnit.net 00:11:13.82]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode) [FAIL]
+15:45:28 [DBG] 
+15:45:28 [DBG] Failed!  - Failed:     1, Passed:    93, Skipped:     0, Total:    94, Duration: 36 m 42 s - McpServer.PluginIntegration.Tests.dll (net10.0)
+15:45:29 [ERR] Target Test has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet.exe' exited with code 1.
+   > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\TestResults
+   @ F:\GitHub\McpServer
+Error output:
+   [xUnit.net 00:11:13.82]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode) [FAIL]
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+   at Build.<get_Test>b__121_1() in F:\GitHub\McpServer\build\Build.Test.cs:line 24
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ Errors & Warnings
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+[ERR] Test: [xUnit.net 00:11:13.82]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode) [FAIL]
+[ERR] Test: Target Test has thrown an exception
+ΓÇï
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Target┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áStatus┬á┬á┬á┬á┬á┬áDuration
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Restore┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á0:02
+Compile┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á2:08
+Test┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áFailed┬á┬á┬á┬á┬á┬á┬á┬á┬á38:54┬á┬á┬á// ProcessException: Process 'dotnet.exe' exited with code 1.
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Total┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á41:05
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+Build failed on 9/16/2026 3:45:29 PM. (Γò»┬░Γûí┬░∩╝ëΓò»∩╕╡ Γö╗ΓöüΓö╗
+EXIT=-1

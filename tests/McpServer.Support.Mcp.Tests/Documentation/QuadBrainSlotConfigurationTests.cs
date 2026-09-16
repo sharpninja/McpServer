@@ -21,49 +21,37 @@ public sealed class QuadBrainSlotConfigurationTests
         AssertSlot(
             slots,
             role: "ArbiterOfTruth",
-            roleAlias: "AoT",
-            assignedRuntime: "Grok Build",
-            modelId: "grok-build",
+            modelId: "grok-4.6",
             slotId: "brain-slot-arbiter-of-truth-grok-build",
-            endpoint: "http://127.0.0.1:8311/v1",
-            endpointEnvironmentVariable: "MCP_BRAIN_AOT_ENDPOINT",
-            credentialReference: "env:MCP_BRAIN_AOT_API_KEY",
+            endpoint: "cli://grok-cli",
+            credentialReference: "cli:interactive",
             partyId: "brain-slot:arbiter-of-truth");
 
         AssertSlot(
             slots,
             role: "CuriosityEngine",
-            roleAlias: "Researcher",
-            assignedRuntime: "Claude Code CLI",
-            modelId: "claude-code-cli-opus-4.8",
-            slotId: "brain-slot-curiosity-engine-claude-code-opus-4-8",
-            endpoint: "http://127.0.0.1:8312/v1",
-            endpointEnvironmentVariable: "MCP_BRAIN_CLAUDE_CODE_ENDPOINT",
-            credentialReference: "env:MCP_BRAIN_CLAUDE_CODE_API_KEY",
+            modelId: "gpt-5.6-sol",
+            slotId: "brain-slot-curiosity-engine-codex-cli",
+            endpoint: "cli://codex-cli",
+            credentialReference: "cli:interactive",
             partyId: "brain-slot:curiosity-engine");
 
         AssertSlot(
             slots,
             role: "Creativity",
-            roleAlias: "Creative",
-            assignedRuntime: "Claude Code CLI",
-            modelId: "claude-code-cli-opus-4.8",
-            slotId: "brain-slot-creativity-claude-code-opus-4-8",
-            endpoint: "http://127.0.0.1:8312/v1",
-            endpointEnvironmentVariable: "MCP_BRAIN_CLAUDE_CODE_ENDPOINT",
-            credentialReference: "env:MCP_BRAIN_CLAUDE_CODE_API_KEY",
+            modelId: "grok-4.6",
+            slotId: "brain-slot-creativity-grok-build",
+            endpoint: "cli://grok-cli",
+            credentialReference: "cli:interactive",
             partyId: "brain-slot:creativity");
 
         AssertSlot(
             slots,
             role: "Logic",
-            roleAlias: "Reasoner",
-            assignedRuntime: "Codex CLI",
-            modelId: "codex-cli-gpt-5.5",
-            slotId: "brain-slot-logic-codex-cli-gpt-5-5",
-            endpoint: "http://127.0.0.1:8313/v1",
-            endpointEnvironmentVariable: "MCP_BRAIN_CODEX_ENDPOINT",
-            credentialReference: "env:MCP_BRAIN_CODEX_API_KEY",
+            modelId: "gpt-5.6-sol",
+            slotId: "brain-slot-logic-codex-cli",
+            endpoint: "cli://codex-cli",
+            credentialReference: "cli:interactive",
             partyId: "brain-slot:logic");
     }
 
@@ -81,27 +69,18 @@ public sealed class QuadBrainSlotConfigurationTests
     private static void AssertRuntimeCompatibility(Dictionary<object, object?> document)
     {
         var compatibility = GetMap(document, "runtimeCompatibility");
-        Assert.Equal("OpenAICompatible", GetString(compatibility, "acceptedProviderKind"));
+        Assert.Equal("Cli", GetString(compatibility, "acceptedProviderKind"));
         Assert.Equal("Mcp:BrainSlots:ExecutionEnabled=true", GetString(compatibility, "requiresExecutionGate"));
-        Assert.Equal("Mcp:BrainSlots:AllowLoopbackEndpoints=true", GetString(compatibility, "requiresLoopbackGate"));
+        Assert.Equal("Mcp:TurnTransactions:Enabled=true", GetString(compatibility, "requiresTurnTransactions"));
 
         var appSettingsPatch = GetMap(document, "appSettingsPatch");
         var mcp = GetMap(appSettingsPatch, "Mcp");
         var brainSlots = GetMap(mcp, "BrainSlots");
         Assert.True(GetBool(brainSlots, "ExecutionEnabled"));
-        Assert.True(GetBool(brainSlots, "AllowLoopbackEndpoints"));
+        Assert.False(GetBool(brainSlots, "AllowLoopbackEndpoints"));
         Assert.Equal(180, GetInt(brainSlots, "DefaultTimeoutSeconds"));
         Assert.Equal(300, GetInt(brainSlots, "MaxTimeoutSeconds"));
-
-        var allowedHosts = GetSequence(brainSlots, "AllowedEndpointHosts")
-            .Select(ToInvariantString)
-            .ToArray();
-        Assert.Equal(["127.0.0.1", "localhost"], allowedHosts);
-
-        var environment = GetMap(document, "environment");
-        Assert.Equal("set outside source control", GetString(environment, "MCP_BRAIN_AOT_API_KEY"));
-        Assert.Equal("set outside source control", GetString(environment, "MCP_BRAIN_CLAUDE_CODE_API_KEY"));
-        Assert.Equal("set outside source control", GetString(environment, "MCP_BRAIN_CODEX_API_KEY"));
+        Assert.Equal("kingd", GetString(brainSlots, "CliRunAs"));
     }
 
     private static void AssertApplyOrder(Dictionary<object, object?> document)
@@ -113,9 +92,9 @@ public sealed class QuadBrainSlotConfigurationTests
         Assert.Equal(
             [
                 "brain-slot-arbiter-of-truth-grok-build",
-                "brain-slot-curiosity-engine-claude-code-opus-4-8",
-                "brain-slot-creativity-claude-code-opus-4-8",
-                "brain-slot-logic-codex-cli-gpt-5-5",
+                "brain-slot-creativity-grok-build",
+                "brain-slot-curiosity-engine-codex-cli",
+                "brain-slot-logic-codex-cli",
             ],
             applyOrder);
     }
@@ -123,41 +102,24 @@ public sealed class QuadBrainSlotConfigurationTests
     private static void AssertSlot(
         IReadOnlyList<Dictionary<object, object?>> slots,
         string role,
-        string roleAlias,
-        string assignedRuntime,
         string modelId,
         string slotId,
         string endpoint,
-        string endpointEnvironmentVariable,
         string credentialReference,
         string partyId)
     {
-        var slot = Assert.Single(slots, item => GetString(item, "role") == role);
+        var slot = Assert.Single(slots, item => GetString(item, "Role") == role);
 
-        Assert.Equal(slotId, GetString(slot, "slotId"));
-        Assert.Equal(roleAlias, GetString(slot, "roleAlias"));
-        Assert.Equal(assignedRuntime, GetString(slot, "assignedRuntime"));
-        Assert.Equal("OpenAICompatible", GetString(slot, "providerKind"));
-        Assert.Equal(modelId, GetString(slot, "modelId"));
-        Assert.Equal(endpoint, GetString(slot, "endpoint"));
-        Assert.Equal(endpointEnvironmentVariable, GetString(slot, "endpointEnvironmentVariable"));
-        Assert.Equal(credentialReference, GetString(slot, "credentialReference"));
-        Assert.Equal(partyId, GetString(slot, "partyId"));
-        Assert.StartsWith("env:", credentialReference, StringComparison.Ordinal);
-        Assert.True(GetBool(slot, "enabled"));
-        Assert.True(GetBool(slot, "replaceExisting"));
-
-        var request = GetMap(slot, "upsertRequest");
-        Assert.Equal(role, GetString(request, "role"));
-        Assert.Equal("OpenAICompatible", GetString(request, "providerKind"));
-        Assert.Equal(modelId, GetString(request, "modelId"));
-        Assert.Equal(endpoint, GetString(request, "endpoint"));
-        Assert.Equal(credentialReference, GetString(request, "credentialReference"));
-        Assert.Equal(partyId, GetString(request, "partyId"));
-        Assert.True(GetBool(request, "enabled"));
-        Assert.True(GetBool(request, "replaceExisting"));
-        Assert.Equal(180, GetInt(request, "timeoutSeconds"));
-        Assert.Equal(4096, GetInt(request, "maxOutputTokens"));
+        Assert.Equal(slotId, GetString(slot, "SlotId"));
+        Assert.Equal("Cli", GetString(slot, "ProviderKind"));
+        Assert.Equal(modelId, GetString(slot, "ModelId"));
+        Assert.Equal(endpoint, GetString(slot, "Endpoint"));
+        Assert.Equal(credentialReference, GetString(slot, "CredentialReference"));
+        Assert.Equal(partyId, GetString(slot, "PartyId"));
+        Assert.True(GetBool(slot, "Enabled"));
+        Assert.True(GetBool(slot, "ReplaceExisting"));
+        Assert.Equal(180, GetInt(slot, "TimeoutSeconds"));
+        Assert.Equal(4096, GetInt(slot, "MaxOutputTokens"));
     }
 
     private static Dictionary<object, object?> LoadAssignmentDocument()
@@ -168,16 +130,29 @@ public sealed class QuadBrainSlotConfigurationTests
     }
 
     private static Dictionary<object, object?> GetMap(Dictionary<object, object?> map, string key)
-        => Assert.IsType<Dictionary<object, object?>>(map[key]);
+        => Assert.IsType<Dictionary<object, object?>>(GetValue(map, key));
 
     private static List<object> GetSequence(Dictionary<object, object?> map, string key)
-        => Assert.IsType<List<object>>(map[key]);
+        => Assert.IsType<List<object>>(GetValue(map, key));
+
+    private static object? GetValue(Dictionary<object, object?> map, string key)
+    {
+        if (map.TryGetValue(key, out var exact))
+            return exact;
+
+        var match = map.Keys.OfType<string>().FirstOrDefault(
+            candidate => string.Equals(candidate, key, StringComparison.OrdinalIgnoreCase));
+        if (match is not null)
+            return map[match];
+
+        throw new InvalidOperationException($"Expected key '{key}'.");
+    }
 
     private static string GetString(Dictionary<object, object?> map, string key)
-        => Assert.IsType<string>(map[key]);
+        => Assert.IsType<string>(GetValue(map, key));
 
     private static bool GetBool(Dictionary<object, object?> map, string key)
-        => map[key] switch
+        => GetValue(map, key) switch
         {
             bool value => value,
             string value when bool.TryParse(value, out var parsed) => parsed,
@@ -185,9 +160,10 @@ public sealed class QuadBrainSlotConfigurationTests
         };
 
     private static int GetInt(Dictionary<object, object?> map, string key)
-        => map[key] switch
+        => GetValue(map, key) switch
         {
             int value => value,
+            long value => checked((int)value),
             string value when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsed) => parsed,
             var value => throw new InvalidOperationException($"Expected '{key}' to be an integer but found '{value?.GetType().FullName ?? "<null>"}'."),
         };
