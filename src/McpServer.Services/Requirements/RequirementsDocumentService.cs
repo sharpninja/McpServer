@@ -2,6 +2,7 @@ using System.Text;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements.Models;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Requirements;
@@ -600,12 +601,19 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     /// <inheritdoc />
     public async Task<RequirementsDocumentExportResult> GenerateAllAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
     {
+        using var exportRoot = WorkspaceContainedFileSystem.OpenExportRoot(outputRootPath);
         ct.ThrowIfCancellationRequested();
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(_frEntries, _trEntries, _testEntries, _mappings, ReadExistingMatrixForExport(outputRootPath));
+        var existingMatrix = await ReadExistingMatrixForExportAsync(exportRoot, ct).ConfigureAwait(false);
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(
+            _frEntries,
+            _trEntries,
+            _testEntries,
+            _mappings,
+            existingMatrix);
         return await RequirementsDocumentExportWriter.WriteAsync(
-            outputRootPath,
+            exportRoot,
             "markdown",
             "all",
             generated,
@@ -614,7 +622,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
-    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
+    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default, bool includeDump = false)
     {
         ct.ThrowIfCancellationRequested();
 
@@ -628,7 +636,8 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             _trEntries.ToArray(),
             _testEntries.ToArray(),
             _mappings.ToArray(),
-            ReadExistingMatrixForWikiExport(outputRootPath));
+            ReadExistingMatrixForWikiExport(outputRootPath),
+            includeDump);
         return await _wikiExportOrchestrator.ExportAsync(request, ct).ConfigureAwait(false);
     }
 
@@ -644,11 +653,17 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private async Task PersistMappingAsync(CancellationToken ct) =>
         await AtomicWriteAsync(_options.MappingPath, RequirementsDocumentRenderer.RenderMapping(_mappings), ct).ConfigureAwait(false);
 
-    private string? ReadExistingMatrixForExport(string outputRootPath)
-    {
-        var outputMatrix = Path.Combine(outputRootPath, RequirementsDocumentRenderer.MatrixFileName);
-        return ReadFileIfExists(outputMatrix) ?? ReadFileIfExists(_options.MatrixPath);
-    }
+    private Task<string?> ReadExistingMatrixForExportAsync(
+        WorkspaceContainedFileSystem.WorkspaceExportRoot exportRoot,
+        CancellationToken ct) =>
+        RequirementsExportMatrixReader.ReadExistingAsync(
+            async token => await exportRoot.OpenFileForReadBoundedAsync(
+                    RequirementsDocumentRenderer.MatrixFileName,
+                    TimeSpan.FromSeconds(5),
+                    token)
+                .ConfigureAwait(false),
+            () => ReadFileIfExists(_options.MatrixPath),
+            ct);
 
     private string? ReadExistingMatrixForWikiExport(string outputRootPath)
     {

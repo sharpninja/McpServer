@@ -67,6 +67,8 @@ public sealed partial class FwhMcpTools
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ITriageService? _triageService;
     private readonly IHandoffIngestionService? _handoffIngestionService;
+    private readonly IHostileReviewService? _hostileReviewService;
+    private readonly IWorkspaceValidationService? _workspaceValidationService;
     private readonly IAgentHelpConversationService _agentHelpService;
     private readonly ITranscriptIngestionService? _transcriptIngestionService;
     private readonly IDispatcher? _dispatcher;
@@ -105,7 +107,9 @@ public sealed partial class FwhMcpTools
         IAgentHelpConversationService? agentHelpService = null,
         ITranscriptIngestionService? transcriptIngestionService = null,
         IDispatcher? dispatcher = null,
-        IHandoffIngestionService? handoffIngestionService = null)
+        IHandoffIngestionService? handoffIngestionService = null,
+        IHostileReviewService? hostileReviewService = null,
+        IWorkspaceValidationService? workspaceValidationService = null)
     {
         _logger = logger;
         _db = db;
@@ -136,6 +140,8 @@ public sealed partial class FwhMcpTools
         _transactionOptions = transactionOptions;
         _triageService = triageService;
         _handoffIngestionService = handoffIngestionService;
+        _hostileReviewService = hostileReviewService;
+        _workspaceValidationService = workspaceValidationService;
         _agentHelpService = agentHelpService
             ?? throw new ArgumentNullException(nameof(agentHelpService));
         _transcriptIngestionService = transcriptIngestionService;

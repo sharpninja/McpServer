@@ -295,7 +295,10 @@ builder.Services.AddSingleton<Chunker>();
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
 builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
-builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
+builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator>(sp =>
+    new RequirementsWikiExportOrchestrator(
+        sp.GetRequiredService<IRequirementsDocFxWorkflowRunner>(),
+        sp.GetRequiredService<IServiceScopeFactory>()));
 builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, NoneAgentIsolationStrategy>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, WorktreeAgentIsolationStrategy>();
@@ -334,6 +337,7 @@ builder.Services.AddScoped<IRepoFileService>(sp =>
         sp.GetService<IOptions<TurnTransactionOptions>>());
 });
 builder.Services.AddScoped<DesktopLaunchService>();
+builder.Services.AddScoped<IDesktopLaunchService>(sp => sp.GetRequiredService<DesktopLaunchService>());
 builder.Services.AddSingleton<GitHubCliService>();
 builder.Services.AddSingleton<IGitHubCliService>(sp =>
     new TransactionGatedGitHubCliService(
@@ -387,6 +391,9 @@ builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddAgentHelpServices(builder.Configuration);
 builder.Services.AddTriageServices();
 builder.Services.AddHandoffServices();
+builder.Services.AddHostileReviewServices();
+builder.Services.AddWorkspaceValidationServices();
+builder.Services.AddScoped<IWikiDumpService, WikiDumpService>();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
     new TransactionGatedVoiceConversationService(
@@ -488,6 +495,7 @@ builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(Oid
 builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
+builder.Services.AddSingleton<CliBrainSlotSessionStore>();
 builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
 builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
 builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
@@ -499,6 +507,7 @@ builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestratio
 // FR-MCP-QBEXEC-002: concrete internal-tool executor routes QuadBrain's MCP-internal mutations through the
 // transaction-gated services; it is injected into the chat service's optional executor parameter, replacing the
 // NoopInternalToolExecutor fallback.
+builder.Services.AddScoped<IQuadBrainPowerShellSessions, InMemoryQuadBrainPowerShellSessions>();
 builder.Services.AddScoped<IQuadBrainInternalToolExecutor, QuadBrainInternalToolExecutor>();
 builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();

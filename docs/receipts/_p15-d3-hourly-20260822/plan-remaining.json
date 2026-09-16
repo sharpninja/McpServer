@@ -1,0 +1,6 @@
+{
+  "Id": "PLAN-PLUGINHANDOFF-001",
+  "Done": false,
+  "Remaining": "C-red-P14 AGREE docs/receipts/hostile-validator-20260822T041327Z.md. Adapter now sets PluginRootOverrideRejected when PLUGIN_ROOT_OVERRIDE is set. Next: C-green-P14 hostile then P15 red. Residual DISAGREE docs/receipts/hostile-validator-20260822T035559Z.md (P12 typed-client persist vs plugin bootstrap). D2-green AGREE docs/receipts/hostile-validator-20260822T033842Z.md. Next: D3 docs/wiki generateDocument then D4. PLAN done=false.",
+  "Note": "2026-08-22T04:20:08Z. Session GrokCode-20260822T042008Z-pluginhandoff-p14. D2 recorded. C-green-P14 hostile + D3 dispatched."
+}

@@ -31,6 +31,10 @@ public static class MarkerFileChangeObserver
         var beforeExists = File.Exists(markerPath);
         var beforeWrite = beforeExists ? File.GetLastWriteTimeUtc(markerPath) : DateTime.MinValue;
         var beforeLength = beforeExists ? new FileInfo(markerPath).Length : -1L;
+        string? beforeContent = null;
+        if (beforeExists)
+            beforeContent = TryReadShared(markerPath);
+
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         FileSystemEventHandler? changedHandler = null;
         FileSystemEventHandler? createdHandler = null;
@@ -73,12 +77,22 @@ public static class MarkerFileChangeObserver
                 linked.Token.ThrowIfCancellationRequested();
                 if (mode == Mode.RenamedAndPoll && File.Exists(markerPath))
                 {
-                    var write = File.GetLastWriteTimeUtc(markerPath);
-                    var length = new FileInfo(markerPath).Length;
-                    if (write > beforeWrite || length != beforeLength)
+                    var info = new FileInfo(markerPath);
+                    info.Refresh();
+                    if (info.LastWriteTimeUtc > beforeWrite || info.Length != beforeLength)
                     {
                         Complete();
                         break;
+                    }
+
+                    if (beforeContent is not null)
+                    {
+                        var current = TryReadShared(markerPath);
+                        if (current is not null && current != beforeContent)
+                        {
+                            Complete();
+                            break;
+                        }
                     }
                 }
 
@@ -91,6 +105,28 @@ public static class MarkerFileChangeObserver
         {
             Complete();
             throw new TimeoutException($"Marker file was not observed within {timeout.TotalSeconds:0} s at {markerPath}");
+        }
+    }
+
+    private static string? TryReadShared(string path)
+    {
+        try
+        {
+            using var stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite | FileShare.Delete);
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return null;
         }
     }
 }

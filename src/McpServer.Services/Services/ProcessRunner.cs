@@ -20,7 +20,7 @@ public sealed class ProcessRunnerOptions
 /// TR-PLANNED-CORE-013: Default process runner using System.Diagnostics.Process.
 /// Applies RunAs environment and GH_TOKEN via <see cref="IProcessEnvironmentService"/>.
 /// </summary>
-public sealed class ProcessRunner(
+public sealed partial class ProcessRunner(
     IProcessEnvironmentService processEnvironment,
     IOptions<ProcessRunnerOptions> options,
     ILogger<ProcessRunner> logger) : IProcessRunner
@@ -78,6 +78,11 @@ public sealed class ProcessRunner(
             process.StartInfo.FileName = processEnvironment.ResolveExecutable(process.StartInfo, request.FileName);
 
             logger.LogDebug("Running {FileName} {Arguments} (cwd: {WorkingDirectory})", request.FileName, request.Arguments, process.StartInfo.WorkingDirectory);
+            if (OperatingSystem.IsWindows())
+            {
+                return await RunWindowsJobContainedAsync(process.StartInfo, ct).ConfigureAwait(false);
+            }
+
             process.Start();
             var stdoutTask = process.StandardOutput.ReadToEndAsync(ct);
             var stderrTask = process.StandardError.ReadToEndAsync(ct);
@@ -85,6 +90,14 @@ public sealed class ProcessRunner(
             var stdout = await stdoutTask.ConfigureAwait(false);
             var stderr = await stderrTask.ConfigureAwait(false);
             return new ProcessRunResult(process.ExitCode, stdout, string.IsNullOrWhiteSpace(stderr) ? null : stderr);
+        }
+        catch (TimeoutException)
+        {
+            throw;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (System.ComponentModel.Win32Exception ex)
         {

@@ -98,20 +98,22 @@ Mcp:
     AllowedEndpointHosts: []       # explicit allowlist of custom endpoint hosts
     DefaultTimeoutSeconds: 30
     MaxTimeoutSeconds: 300
+    CliRunAs: ''                   # Windows profile used to spawn Cli slots (PATH + auth caches)
+    CliWorkingDirectory: ''
     Slots: []                      # the four brain definitions (see below)
 ```
 
-Each entry in `Slots` defines one brain:
+Each entry in `Slots` defines one brain. `ProviderKind` may be `OpenAI`, `OpenAICompatible`, or `Cli`.
 
 ```yaml
     Slots:
       - SlotId: brain-slot-creativity
         Role: Creativity           # Creativity | Logic | CuriosityEngine | ArbiterOfTruth
         DisplayName: Creativity
-        ProviderKind: OpenAICompatible # OpenAI | OpenAICompatible
-        ModelId: my-model
-        Endpoint: http://127.0.0.1:8312/v1   # optional; required for OpenAICompatible
-        CredentialReference: env:MY_CREATIVITY_API_KEY
+        ProviderKind: Cli          # OpenAI | OpenAICompatible | Cli
+        ModelId: grok-4.6
+        Endpoint: cli://grok-cli   # cli://grok-cli | cli://grok-build | cli://codex-cli
+        CredentialReference: cli:interactive
         Enabled: true
         TimeoutSeconds: 180
         MaxOutputTokens: 4096
@@ -120,9 +122,10 @@ Each entry in `Slots` defines one brain:
         ReplaceExisting: true
 ```
 
+`Cli` slots reuse the existing Grok Build CLI and Codex CLI strategies. Grok turns keep a stable `--session-id` and later `--resume` that session at `xhigh` effort. Codex turns start with `codex exec` and later `codex exec resume` at `model_reasoning_effort=xhigh`. Live invocation still requires `Mcp:BrainSlots:ExecutionEnabled: true` and `Mcp:TurnTransactions:Enabled: true`.
+
 A ready-to-use template for all four roles ships at
-`config/brain-slots/quad-brain-slot-assignments.yaml`; copy its `Slots` into your config and set the
-credential environment variables it references.
+`config/brain-slots/quad-brain-slot-assignments.yaml`; copy its `Slots` into your config.
 
 ### Credentials are referenced, never inlined
 
@@ -130,6 +133,7 @@ credential environment variables it references.
 
 - `env:NAME` - read from the environment variable `NAME`.
 - `config:Some:Key` - read from configuration at `Some:Key`.
+- `cli:interactive` - Cli slots; the CLI process uses the `CliRunAs` profile, not an API key.
 - `file:/path/to/secret` - read from a file.
 
 ### Endpoint policy

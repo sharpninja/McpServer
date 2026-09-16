@@ -1135,6 +1135,70 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-HOSTILEREVIEW-001
+
+**Hostile review request schema and storage** — Persist ReviewRequest and QueueItem in EF with three-provider migrations. Reject serialized request JSON over 1048576 bytes before insert. Enforce workspace isolation on submit.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-001; TEST: TEST-MCP-HOSTILEREVIEW-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HostileReviewEntity round-trips on Sqlite, PostgreSQL, and SQL Server.
+- [ ] Valid submit creates a queued row with stable id.
+- [ ] Payload over 1048576 bytes is rejected with no queue row.
+- [ ] Foreign workspace is 403 with no row.
+
+## TR-MCP-HOSTILEREVIEW-002
+
+**Hostile review artifact resolver** — Resolver calls supported MCP APIs only. Diagnostics are stored on the request. Successful resolve stores identity and hash when available.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-002; TEST: TEST-MCP-HOSTILEREVIEW-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Missing link returns a diagnostic and does not omit silently.
+- [ ] Stale or unauthorized link returns a diagnostic.
+- [ ] Ambiguous link returns a diagnostic.
+
+## TR-MCP-HOSTILEREVIEW-003
+
+**Hostile review execution capture** — ReviewExecution entity stores model string, effort, agent, plugin/source, template id/version, run id, start/end UTC. Token counts are optional and must not be invented.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-003; TEST: TEST-MCP-HOSTILEREVIEW-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Execution row records model, effort, agent, template, run id.
+- [ ] Missing token counts are omitted, not fabricated.
+
+## TR-MCP-HOSTILEREVIEW-004
+
+**Findings taxonomy and request-quality schema** — Finding.category is an enum of the seven classes. Verdict is AGREE|DISAGREE|UNKNOWN. RequestQualityAssessment has five explicit numeric or ordinal fields.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-004; TEST: TEST-MCP-HOSTILEREVIEW-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Get returns taxonomy-complete findings.
+- [ ] Request-quality scores the five dimensions.
+
+## TR-MCP-HOSTILEREVIEW-005
+
+**Hostile review query indexes** — Query API applies AND across provided dimensions and returns empty list on no match, not an error.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-005; TEST: TEST-MCP-HOSTILEREVIEW-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Query by model and effort returns only matching runs.
+- [ ] Requester and target type AND.
+- [ ] No match is empty list.
+
+## TR-MCP-HOSTILEREVIEW-006
+
+**No auto-mutation and surface parity** — No apply/repair endpoint is registered. REST, REPL, Director, and plugin skill expose the four verbs only and do not write product files from verdicts.
+**Covered by:** FR: FR-MCP-HOSTILEREVIEW-006; TEST: TEST-MCP-HOSTILEREVIEW-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Default complete does not mutate product files.
+- [ ] REST REPL Director plugin skill parity for submit/status/get/query.
+
 ## TR-MCP-HTTP-001
 
 **MCP Streamable HTTP Endpoint** — `app.MapMcp("/mcp-transport")` maps the native MCP protocol handler at a path separate from the REST routes (`/mcpserver/*`). The endpoint requires an `Accept: application/json, text/event-stream` header and returns HTTP 406 without it. Uses `ModelContextProtocol.AspNetCore` 0.9.0-preview.1.
@@ -1149,6 +1213,70 @@ Scope: layer-1+
 
 **Covered by:** `src/McpServer.Support.Mcp/Program.cs` `InvalidModelStateResponseFactory` (centralized RFC 7807 ProblemDetails emission for binder/validation failures, paired with `ValidationProblem` / `Problem` controller helpers for domain errors); `SessionLogController.SubmitAsync` and `GetByIdAsync` route through the centralized path. Sanitization defers to ASP.NET Core's default ProblemDetails serialization, which omits stack traces outside the Development environment.
 Scope: layer-1+
+
+## TR-MCP-HYGIENE-001
+
+**Validation registry and result contract** — IWorkspaceValidationService returns a DTO with the required fields. Unknown rule codes emit diagnostics. Clean workspace returns zero findings.
+**Covered by:** FR: FR-MCP-HYGIENE-001; TEST: TEST-MCP-HYGIENE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Result contract has required fields.
+- [ ] Clean workspace zero findings.
+- [ ] Unknown rule code diagnostic.
+
+## TR-MCP-HYGIENE-002
+
+**Traceability rule implementations** — Each rule emits a finding with record id and evidence. TEST exclusion only if a documented rule says so.
+**Covered by:** FR: FR-MCP-HYGIENE-002; TEST: TEST-MCP-HYGIENE-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Missing AC finding.
+- [ ] TR with no FR orphan.
+- [ ] FR missing TR or TEST orphan.
+- [ ] TEST with no FR orphan.
+- [ ] Broken or duplicate mapping finding.
+
+## TR-MCP-HYGIENE-003
+
+**TODO consistency rule implementations** — Each mismatch emits a finding with the TODO id and evidence of the contradicting fields.
+**Covered by:** FR: FR-MCP-HYGIENE-003; TEST: TEST-MCP-HYGIENE-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Done true incomplete tasks.
+- [ ] Done false all tasks complete.
+- [ ] Done without doneSummary.
+- [ ] Remaining contradicts completion.
+- [ ] Missing dependency target.
+- [ ] Missing referenced requirement id.
+
+## TR-MCP-HYGIENE-004
+
+**Stale-turn clock and triage domain enum** — IUtcClock is injectable. Threshold default 48h. Triage states come from the live domain model. Auth, cancellation, and pagination are enforced.
+**Covered by:** FR: FR-MCP-HYGIENE-004; TEST: TEST-MCP-HYGIENE-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] In-progress turn older than 48h with injected clock.
+- [ ] Triage non-terminal uses live domain enum.
+- [ ] Override bounded authenticated recorded.
+- [ ] Auth required.
+- [ ] Cancellation honored.
+- [ ] Large workspace paginates.
+
+## TR-MCP-HYGIENE-005
+
+**Hygiene surface adapters and Director exit codes** — Four surfaces call the same service. Director maps Error/Critical to exit 1 and Warning-only to exit 0. JSON always written. No repair methods.
+**Covered by:** FR: FR-MCP-HYGIENE-005; TEST: TEST-MCP-HYGIENE-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Parity same rule codes and counts.
+- [ ] Director exit 1 when Error present.
+- [ ] Director exit 0 when Warning-only.
+- [ ] Validation never auto-repairs.
 
 ## TR-MCP-INGEST-001
 
@@ -1400,6 +1528,10 @@ Acceptance Criteria:
 **Covered by:** FR: FR-MCP-172; TEST: TEST-MCP-195
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Failsafe drain on SubmitAsync timeout or 503 aborts without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted.
+- [ ] getFr returns before 30s when a queued session_submit 503s.
+- [ ] Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync is REPL_FAILSAFE_DRAIN_TIMEOUT default 120, or REPL_TIMEOUT when greater, never hardcoded 2.
 
 ## TR-MCP-PERSIST-004
 
@@ -1500,6 +1632,9 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML.
+- [ ] The added guidance contains no em-dashes.
 
 ## TR-MCP-PLUGIN-HEADER-001
 
@@ -2164,6 +2299,9 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Get-ReplCanonicalAgentName maps default to Default, claude-code/claudecode to ClaudeCode, codex to Codex, grok to GrokCode, and output always matches ^[A-Z][A-Za-z0-9]*$.
+- [ ] Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified plus that sessionId into session-state.yaml and returns true.
 
 ## TR-MCP-REPL-012
 
@@ -2171,6 +2309,10 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements/generateDocument and 30 for sessionlog workflow methods completeTurn and beginTurn.
+- [ ] REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds.
+- [ ] client.SessionLog.SubmitAsync while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater; this does not raise completeTurn/beginTurn above 30s.
 
 ## TR-MCP-REPL-013
 
@@ -2178,6 +2320,8 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] With a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd.
 
 ## TR-MCP-REPL-014
 
@@ -3290,6 +3434,41 @@ Scope: layer-1+
 - [x] Default wiki config is represented by typed or dictionary objects and serialized with the existing YamlDotNet serializer.
 - [x] The default config targets Home.md, Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, and Requirements-Matrix.md on both platforms.
 - [x] A failure to create the default wiki.yaml is logged through the marker writer warning path and does not leave a partially written file.
+
+## TR-MCP-WIKIEXPORT-003
+
+**Dump schema and export flag** — schemaVersion mcp-wiki-dump/v1. SHA-256 per table plus root hash. Flag default off. tables[] uses McpDbContext DbSet names.
+**Covered by:** FR: FR-MCP-WIKIEXPORT-003; TEST: TEST-MCP-WIKIEXPORT-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Without dump flag, export unchanged.
+- [ ] With flag, versioned JSON keyed by workspace.
+- [ ] Dump TODO rows and requirement links match store.
+- [ ] SHA-256 matches canonical UTF-8 JSON.
+
+## TR-MCP-WIKIEXPORT-004
+
+**Import remap and dump parameter binding** — Bind --dump to WorkspaceController.CreateAsync. Remap workspace id, paths, FKs. Idempotent re-import. Reject malformed dump, version mismatch, missing tables, unsafe path.
+**Covered by:** FR: FR-MCP-WIKIEXPORT-004; TEST: TEST-MCP-WIKIEXPORT-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Hydrates TODOs from dump not todo.yaml.
+- [ ] Old workspace id absent after remap.
+- [ ] Malformed dump rejected.
+- [ ] Idempotent reimport no duplicate TODOs.
+
+## TR-MCP-WIKIEXPORT-005
+
+**todo.yaml archive and conflict diagnostics** — Discovery classifies generated/shadow/deprecated. Archive is copy then optional remove with report. Conflict diagnostic includes both paths.
+**Covered by:** FR: FR-MCP-WIKIEXPORT-005; TEST: TEST-MCP-WIKIEXPORT-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] todo.yaml not source of truth when dump present.
+- [ ] Cleanup archives with evidence, no silent delete.
+- [ ] Dump and yaml conflict: dump wins, diagnostic names both.
 
 ## TR-MCP-WS-002
 

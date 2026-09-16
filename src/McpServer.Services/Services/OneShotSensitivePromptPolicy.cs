@@ -15,7 +15,7 @@ public static class OneShotSensitivePromptPolicy
 
     /// <summary>True when the one-shot context must not retain raw source text.</summary>
     public static bool MustRedact(AgentPoolOneShotContext? context)
-        => context == AgentPoolOneShotContext.HandoffTodoDraft;
+        => context is AgentPoolOneShotContext.HandoffTodoDraft or AgentPoolOneShotContext.HostileReview;
 
     /// <summary>Returns the published placeholder, or the original text when retention is allowed.</summary>
     public static string Publish(AgentPoolOneShotContext? context, string? rawPrompt)

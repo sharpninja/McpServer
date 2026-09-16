@@ -1,0 +1,105 @@
+{
+  "TimestampUtc": "2026-08-22T13:24:13Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN-PLUGINHANDOFF-001 Phase C-red-P20 only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.105.0",
+    "versionFile": "1.105.0",
+    "testMarkerSignature": true,
+    "invokeFullBootstrap": true,
+    "healthNonce": "nonce-hv-20260822131910-33917",
+    "healthNonceMatch": true,
+    "healthStatus": "Healthy"
+  },
+  "Session": {
+    "sessionId": "GrokSubagentHostile-20260822T131910Z-c-red-p20",
+    "requestId": "req-20260822T131910Z-001-hostile-c-red-p20",
+    "turnId": 42975,
+    "queryProof": "docs/receipts/_hv-c-red-p20/sl-query-sid.txt"
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "RequirementIds": [
+    "FR-MCP-PLUGININT-001",
+    "TR-MCP-PLUGININT-001",
+    "TEST-MCP-PLUGININT-001"
+  ],
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T104054Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p20/",
+  "ReceiptPair": [
+    "docs/receipts/hostile-validator-20260822T132413Z.md",
+    "docs/receipts/hostile-validator-20260822T132413Z.json"
+  ],
+  "OverallVerdict": "AGREE",
+  "PassCount": 16,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": {
+    "A1_namedTestsAndFiles": "PASS",
+    "A2_currentlyRedIndependentRerun": "PASS",
+    "A3_p20GreenAbsent": "PASS",
+    "A4_noLaterPhasesTodosRemainOpen": "PASS",
+    "A5_notSkippedDistinctFileNotFound": "PASS",
+    "B1_byrdRedGate": "PASS",
+    "B2_independentReceipts": "PASS",
+    "B3_mcpOnlyStorage": "PASS",
+    "B4_pwshNoPython": "PASS",
+    "B5_honesty": "PASS",
+    "C1_frTrTestAcExist": "PASS",
+    "C2_testsEncodeAc5DeployHalf": "PASS",
+    "C3_traceability": "PASS",
+    "D1_credP20OnlyNotGreenOrPlanDone": "PASS",
+    "D2_redGateThenExecute": "PASS",
+    "D3_fullPlanNotClaimedComplete": "PASS"
+  },
+  "IndependentNamedTests": {
+    "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginUpdateServiceHarnessTests --logger trx;LogFileName=p20-red.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p20\\results-p20-red --no-build",
+    "exitCode": 1,
+    "usedNoBuild": true,
+    "console": "Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 53 ms",
+    "trx": "docs/receipts/_hv-c-red-p20/results-p20-red/p20-red.trx",
+    "trxCounters": {
+      "total": 2,
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "notExecuted": 0
+    },
+    "outcomes": [
+      {
+        "name": "PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+        "outcome": "Failed",
+        "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p20-<utc> receipt directory exists."
+      },
+      {
+        "name": "PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+        "outcome": "Failed",
+        "message": "System.IO.FileNotFoundException : Build.PluginPromotion.cs is missing."
+      }
+    ]
+  },
+  "GreenAbsence": {
+    "buildPluginPromotionExists": false,
+    "pluginPromotionPolicyExists": false,
+    "pluginintP20DirCount": 0,
+    "plantedApprovalExists": false
+  },
+  "Todos": {
+    "PLAN-PLUGINHANDOFF-001": { "done": false, "p20TaskDone": false },
+    "MCP-PLUGININT-001": { "done": false, "p20TaskDone": false },
+    "MCP-WORKSPACEHYGIENE-002": { "done": false, "remaining": "keep open per owner" }
+  },
+  "GitLive": {
+    "branch": "develop",
+    "sha": "910a444959969a87099b800b4b6fe12c77c0aece"
+  }
+}

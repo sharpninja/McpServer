@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="63c00683-acd0-4d47-856a-f51d1a3b5c6f" name="kingd@PAYTON-LEGION2 2026-08-21 21:35:36" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T21:35:36.7993954-05:00" queuing="2026-08-21T21:35:36.7993959-05:00" start="2026-08-21T21:35:26.6710724-05:00" finish="2026-08-21T21:39:09.4547611-05:00" />
+  <TestSettings name="default" id="e7ffa165-b1cc-4cb3-aa3d-b9f6cc662a7f">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_21_35_36" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d5c99278-180e-4da5-9ff9-423b02ea5f47" testId="fe1e2581-0db8-bfeb-f883-f0781ea91e0c" testName="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.PostgreSql_HandoffMigration_DowngradeAndReupgrade" computerName="PAYTON-LEGION2" duration="00:00:14.4839036" startTime="2026-08-21T21:35:36.7612085-05:00" endTime="2026-08-21T21:35:51.2472327-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5c99278-180e-4da5-9ff9-423b02ea5f47" />
+    <UnitTestResult executionId="8398c317-686a-42ff-850f-141c585e38a2" testId="7245623a-f2b2-ea8a-0c50-4976981a3b4f" testName="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.Sqlite_HandoffMigration_DowngradeAndReupgrade" computerName="PAYTON-LEGION2" duration="00:00:07.6465629" startTime="2026-08-21T21:35:29.0883293-05:00" endTime="2026-08-21T21:35:36.7498740-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8398c317-686a-42ff-850f-141c585e38a2" />
+    <UnitTestResult executionId="f5921890-5e48-461e-a933-0926a8c3bea7" testId="28c4c11c-d4b3-ead6-3f73-e3e03e0b5a52" testName="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade" computerName="PAYTON-LEGION2" duration="00:03:17.8537097" startTime="2026-08-21T21:35:51.2537643-05:00" endTime="2026-08-21T21:39:09.1987431-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5921890-5e48-461e-a933-0926a8c3bea7">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.SqlClient.SqlException : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.&#xD;
+---- System.ComponentModel.Win32Exception : The wait operation timed out.</Message>
+          <StackTrace>   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.InternalEndExecuteNonQuery(IAsyncResult asyncResult, Boolean isInternal, String endMethod)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryAsync(IAsyncResult asyncResult)&#xD;
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)&#xD;
+--- End of stack trace from previous location ---&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.&lt;&gt;c.&lt;&lt;MigrateAsync&gt;b__22_1&gt;d.MoveNext()&#xD;
+--- End of stack trace from previous location ---&#xD;
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.AssertProviderCycleAsync(DbContextOptions`1 options, String precedingMigration, String handoffMigration) in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 93&#xD;
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 54&#xD;
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 54&#xD;
+--- End of stack trace from previous location ---&#xD;
+----- Inner Stack Trace -----&#xD;
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.Sqlite_HandoffMigration_DowngradeAndReupgrade" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.integrationtests\bin\debug\net10.0\mcpserver.support.mcp.integrationtests.dll" id="7245623a-f2b2-ea8a-0c50-4976981a3b4f">
+      <Execution id="8398c317-686a-42ff-850f-141c585e38a2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests" name="Sqlite_HandoffMigration_DowngradeAndReupgrade" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.integrationtests\bin\debug\net10.0\mcpserver.support.mcp.integrationtests.dll" id="28c4c11c-d4b3-ead6-3f73-e3e03e0b5a52">
+      <Execution id="f5921890-5e48-461e-a933-0926a8c3bea7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests" name="SqlServer_HandoffMigration_DowngradeAndReupgrade" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.PostgreSql_HandoffMigration_DowngradeAndReupgrade" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.integrationtests\bin\debug\net10.0\mcpserver.support.mcp.integrationtests.dll" id="fe1e2581-0db8-bfeb-f883-f0781ea91e0c">
+      <Execution id="d5c99278-180e-4da5-9ff9-423b02ea5f47" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests" name="PostgreSql_HandoffMigration_DowngradeAndReupgrade" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="fe1e2581-0db8-bfeb-f883-f0781ea91e0c" executionId="d5c99278-180e-4da5-9ff9-423b02ea5f47" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7245623a-f2b2-ea8a-0c50-4976981a3b4f" executionId="8398c317-686a-42ff-850f-141c585e38a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28c4c11c-d4b3-ead6-3f73-e3e03e0b5a52" executionId="f5921890-5e48-461e-a933-0926a8c3bea7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="2" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.54]   Discovering: McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:00:01.19]   Discovered:  McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:00:01.48]   Starting:    McpServer.Support.Mcp.IntegrationTests&#xD;
+[xUnit.net 00:03:41.72]       Microsoft.Data.SqlClient.SqlException : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.&#xD;
+[xUnit.net 00:03:41.72]       ---- System.ComponentModel.Win32Exception : The wait operation timed out.&#xD;
+[xUnit.net 00:03:41.72]       Stack Trace:&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.SqlCommand.InternalEndExecuteNonQuery(IAsyncResult asyncResult, Boolean isInternal, String endMethod)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryAsync(IAsyncResult asyncResult)&#xD;
+[xUnit.net 00:03:41.72]            at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)&#xD;
+[xUnit.net 00:03:41.72]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.&lt;&gt;c.&lt;&lt;MigrateAsync&gt;b__22_1&gt;d.MoveNext()&#xD;
+[xUnit.net 00:03:41.72]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:03:41.72]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs(93,0): at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.AssertProviderCycleAsync(DbContextOptions`1 options, String precedingMigration, String handoffMigration)&#xD;
+[xUnit.net 00:03:41.72]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs(54,0): at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade()&#xD;
+[xUnit.net 00:03:41.72]         F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs(54,0): at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade()&#xD;
+[xUnit.net 00:03:41.72]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:03:41.72]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:03:41.72]         &#xD;
+[xUnit.net 00:03:41.73]   Finished:    McpServer.Support.Mcp.IntegrationTests (ID = '7be753efa3ec5e129ddb1000abcf5617cfd9c9b93e60bc19efa26678fac8887f')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:39:09.2509665-05:00">
+        <Text>[xUnit.net 00:03:41.72]     McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,8 @@
+{
+  "dialogStatus": 200,
+  "dialogPayload": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\u0022success\\u0022:true,\\u0022totalDialogItems\\u0022:4}\"}]},\"id\":2,\"jsonrpc\":\"2.0\"}",
+  "actionsStatus": 200,
+  "actionsPayload": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\u0022code\\u0022:\\u0022internal_server_error\\u0022,\\u0022error\\u0022:\\u0022internal_server_error\\u0022,\\u0022message\\u0022:\\u0022The JSON value could not be converted to System.String. Path: $.designDecisions[0] | LineNumber: 0 | BytePositionInLine: 787.\\u0022,\\u0022retryable\\u0022:false,\\u0022details\\u0022:{\\u0022inner\\u0022:\\u0022Cannot get the value of a token type \\\\u0027StartObject\\\\u0027 as a string.\\u0022}}\"}]},\"id\":2,\"jsonrpc\":\"2.0\"}",
+  "decisionsStatus": 200,
+  "decisionsPayload": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\u0022code\\u0022:\\u0022internal_server_error\\u0022,\\u0022error\\u0022:\\u0022internal_server_error\\u0022,\\u0022message\\u0022:\\u0022The JSON value could not be converted to System.String. Path: $.designDecisions[0] | LineNumber: 0 | BytePositionInLine: 787.\\u0022,\\u0022retryable\\u0022:false,\\u0022details\\u0022:{\\u0022inner\\u0022:\\u0022Cannot get the value of a token type \\\\u0027StartObject\\\\u0027 as a string.\\u0022}}\"}]},\"id\":2,\"jsonrpc\":\"2.0\"}"
+}

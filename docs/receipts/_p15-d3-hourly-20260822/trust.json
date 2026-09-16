@@ -1,0 +1,9 @@
+{
+  "SignatureOk": true,
+  "NonceSent": "1aa82e81650840608f8f782c52a150ed",
+  "NonceEcho": "1aa82e81650840608f8f782c52a150ed",
+  "NonceMatch": true,
+  "Status": "Healthy",
+  "Storage": "reachable",
+  "Version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+}

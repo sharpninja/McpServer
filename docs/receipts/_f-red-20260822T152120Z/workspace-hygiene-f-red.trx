@@ -1,0 +1,592 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="af52894d-8736-4931-899c-24490a0749c4" name="SYSTEM@PAYTON-LEGION2 2026-08-22 10:31:18" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T10:31:18.6785307-05:00" queuing="2026-08-22T10:31:18.6785332-05:00" start="2026-08-22T10:31:03.6996374-05:00" finish="2026-08-22T10:31:19.1546419-05:00" />
+  <TestSettings name="default" id="8add0697-407f-401d-b22e-d0934b75befe">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-08-22_10_31_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0f8108fd-7ddf-459a-9e22-46e4dacdbc56" testId="8a719b3b-1a00-13fc-cec5-2d2b7c301dfa" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_NeverAutoRepairs" computerName="PAYTON-LEGION2" duration="00:00:00.1358431" startTime="2026-08-22T10:31:18.2730346-05:00" endTime="2026-08-22T10:31:18.4136539-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f8108fd-7ddf-459a-9e22-46e4dacdbc56">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_NeverAutoRepairs() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 684&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c61f9a7b-d5ff-4779-a987-b1c1185f3556" testId="77b1efb0-6dde-ef22-32a7-c861ba1b7bc3" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TrWithNoFr_Orphan" computerName="PAYTON-LEGION2" duration="00:00:00.0031124" startTime="2026-08-22T10:31:18.2675939-05:00" endTime="2026-08-22T10:31:18.2719297-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c61f9a7b-d5ff-4779-a987-b1c1185f3556">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TrWithNoFr_Orphan() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 129&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8551e7f7-b8d8-42fb-ad1c-9ead98df01dc" testId="370d184b-55f8-7e79-1cb8-6a88f906d7e3" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingReferencedRequirementId" computerName="PAYTON-LEGION2" duration="00:00:00.0015280" startTime="2026-08-22T10:31:19.0073107-05:00" endTime="2026-08-22T10:31:19.0095730-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8551e7f7-b8d8-42fb-ad1c-9ead98df01dc">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingReferencedRequirementId() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 361&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2410d634-c2a7-4c33-bb68-383157cbc731" testId="32ed00f4-3eac-ae6c-0731-80267624ea63" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_LargeWorkspace_Paginates" computerName="PAYTON-LEGION2" duration="00:00:00.0168895" startTime="2026-08-22T10:31:18.9767208-05:00" endTime="2026-08-22T10:31:18.9947926-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2410d634-c2a7-4c33-bb68-383157cbc731">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_LargeWorkspace_Paginates() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 529&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c5490532-a500-48f3-8b7a-a4756461837e" testId="860cc977-d3fe-8240-68b5-eb386f24eb4c" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord" computerName="PAYTON-LEGION2" duration="00:00:00.0013316" startTime="2026-08-22T10:31:18.4394632-05:00" endTime="2026-08-22T10:31:18.4418072-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5490532-a500-48f3-8b7a-a4756461837e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 104&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cdac82ac-ac07-4614-9487-650fc5854276" testId="f078944f-c5e8-a9b4-f180-1f809128923b" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_RemainingContradictsCompletion" computerName="PAYTON-LEGION2" duration="00:00:00.0013959" startTime="2026-08-22T10:31:18.9730451-05:00" endTime="2026-08-22T10:31:18.9757734-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cdac82ac-ac07-4614-9487-650fc5854276">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_RemainingContradictsCompletion() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 313&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bd7469ed-502c-4ae7-beb1-9984e79a1745" testId="5e4a389c-c2c1-e376-9932-98b5c5ae6d4e" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_UnknownRuleCode_Diagnostic" computerName="PAYTON-LEGION2" duration="00:00:00.0015524" startTime="2026-08-22T10:31:18.6136359-05:00" endTime="2026-08-22T10:31:18.6161059-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd7469ed-502c-4ae7-beb1-9984e79a1745">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_UnknownRuleCode_Diagnostic() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 80&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e19cd7ef-eac1-42b2-8f41-ac30e96b15a1" testId="231d121a-3089-b2d8-6deb-cd2a9df9b067" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts" computerName="PAYTON-LEGION2" duration="00:00:00.1612242" startTime="2026-08-22T10:31:18.4459677-05:00" endTime="2026-08-22T10:31:18.6089148-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e19cd7ef-eac1-42b2-8f41-ac30e96b15a1">
+      <Output>
+        <ErrorInfo>
+          <Message>C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Support.Mcp\Controllers\WorkspaceValidationController.cs</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 555&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e1fc11c5-d70a-45df-980d-22e88c480042" testId="1809c920-5130-38fa-5bba-e47963745b76" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneWithoutDoneSummary" computerName="PAYTON-LEGION2" duration="00:00:00.0013732" startTime="2026-08-22T10:31:18.4357042-05:00" endTime="2026-08-22T10:31:18.4383412-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e1fc11c5-d70a-45df-980d-22e88c480042">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneWithoutDoneSummary() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 288&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="64947d54-fea7-4252-a7ef-eb4e3a2390e9" testId="a774074c-d052-3e2d-d1c2-51158c87e3c5" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneFalse_AllTasksComplete" computerName="PAYTON-LEGION2" duration="00:00:00.0014047" startTime="2026-08-22T10:31:18.6099808-05:00" endTime="2026-08-22T10:31:18.6126361-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="64947d54-fea7-4252-a7ef-eb4e3a2390e9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneFalse_AllTasksComplete() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 265&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d21170c0-b5b4-4da6-ba73-3cefc814a85c" testId="c908ff39-bdff-b589-a596-192b20b4c540" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_AuthRequired" computerName="PAYTON-LEGION2" duration="00:00:00.0011841" startTime="2026-08-22T10:31:18.9666702-05:00" endTime="2026-08-22T10:31:18.9691629-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d21170c0-b5b4-4da6-ba73-3cefc814a85c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace validate HTTP surface is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationHttpGateway.ValidateAsync(Boolean authenticated, WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 84&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_AuthRequired() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 485&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="56ce7957-3176-419f-9dfa-c7002b964b25" testId="ee6fe417-d265-c6f7-4622-113e9ae346dc" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TriageNonTerminal_UsesLiveDomainEnum" computerName="PAYTON-LEGION2" duration="00:00:00.3232567" startTime="2026-08-22T10:31:18.6206562-05:00" endTime="2026-08-22T10:31:18.9454836-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="56ce7957-3176-419f-9dfa-c7002b964b25">
+      <Output>
+        <ErrorInfo>
+          <Message>Hygiene triage rule must consume a public live domain enum, not a copied string list.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TriageNonTerminal_UsesLiveDomainEnum() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 421&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1c4e0156-f76e-4e5f-bdd4-19c5249e5a65" testId="bb97d4aa-1cf0-fc3b-fd01-404aad533381" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrMissingTrOrTest_Orphan" computerName="PAYTON-LEGION2" duration="00:00:00.0012696" startTime="2026-08-22T10:31:18.4428808-05:00" endTime="2026-08-22T10:31:18.4450686-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c4e0156-f76e-4e5f-bdd4-19c5249e5a65">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrMissingTrOrTest_Orphan() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 152&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="54097a3a-26ba-437e-a16a-a6554ea69710" testId="427e622d-0afb-eabe-2125-aebd558713c6" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_BrokenOrDuplicateMapping" computerName="PAYTON-LEGION2" duration="00:00:00.0017987" startTime="2026-08-22T10:31:18.9499829-05:00" endTime="2026-08-22T10:31:18.9524636-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="54097a3a-26ba-437e-a16a-a6554ea69710">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_BrokenOrDuplicateMapping() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 216&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d64fe383-de16-4b9b-85e2-0d5c3526b2af" testId="8d0fc67f-4d30-3861-6147-5b98defd0f3b" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_ResultContract_HasRequiredFields" computerName="PAYTON-LEGION2" duration="00:00:00.0019010" startTime="2026-08-22T10:31:19.0039290-05:00" endTime="2026-08-22T10:31:19.0064268-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d64fe383-de16-4b9b-85e2-0d5c3526b2af">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_ResultContract_HasRequiredFields() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 29&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fe3d5d7c-c3e8-4bc7-b8d8-4e65972458f9" testId="d6a7bc0f-0e45-c2db-2026-4a0fcdda7a7b" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_InProgressTurn_OlderThan48h_UtcClock" computerName="PAYTON-LEGION2" duration="00:00:00.0021909" startTime="2026-08-22T10:31:18.9600808-05:00" endTime="2026-08-22T10:31:18.9636137-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe3d5d7c-c3e8-4bc7-b8d8-4e65972458f9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_InProgressTurn_OlderThan48h_UtcClock() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 393&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5ff265c8-59ea-4385-83bc-e6c5fb67c072" testId="730965ab-6ada-7f12-59f7-b04d09ed6dbd" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_CleanWorkspace_ZeroFindings" computerName="PAYTON-LEGION2" duration="00:00:00.0012518" startTime="2026-08-22T10:31:18.9700188-05:00" endTime="2026-08-22T10:31:18.9720385-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ff265c8-59ea-4385-83bc-e6c5fb67c072">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_CleanWorkspace_ZeroFindings() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 60&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7840dc5b-6a5d-4d21-9ae0-2466e4224511" testId="a05290d4-67f6-e2f8-b3f5-d4c9494853bb" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit1_WhenErrorSeverityPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0021802" startTime="2026-08-22T10:31:18.6171062-05:00" endTime="2026-08-22T10:31:18.6197823-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7840dc5b-6a5d-4d21-9ae0-2466e4224511">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Director validate-workspace is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationDirectorExit.Run(WorkspaceValidationResult result, String jsonOutputPath) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 103&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit1_WhenErrorSeverityPresent() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 623&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2b4d7778-5997-4289-8653-22088b15a1b3" testId="ca503deb-06e2-527c-5e7a-73ed730b01d4" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded" computerName="PAYTON-LEGION2" duration="00:00:00.0018769" startTime="2026-08-22T10:31:18.9955828-05:00" endTime="2026-08-22T10:31:18.9983473-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b4d7778-5997-4289-8653-22088b15a1b3">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 454&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="94043c39-dc40-4471-8c73-68c60a386bf4" testId="e7e74476-20da-3bd1-274d-10dced193557" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TestWithNoFr_Orphan" computerName="PAYTON-LEGION2" duration="00:00:00.0014883" startTime="2026-08-22T10:31:18.9990282-05:00" endTime="2026-08-22T10:31:19.0015876-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94043c39-dc40-4471-8c73-68c60a386bf4">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TestWithNoFr_Orphan() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 175&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="33fb271c-e744-40c6-810b-583354eb6fc6" testId="cb9dbdef-967c-7e70-7373-99ad8f6a057a" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit0_WhenWarningOnly" computerName="PAYTON-LEGION2" duration="00:00:00.0008736" startTime="2026-08-22T10:31:18.9644763-05:00" endTime="2026-08-22T10:31:18.9657993-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33fb271c-e744-40c6-810b-583354eb6fc6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Director validate-workspace is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationDirectorExit.Run(WorkspaceValidationResult result, String jsonOutputPath) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 103&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit0_WhenWarningOnly() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 653&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="278b9bf3-ab87-454e-9858-ddcfb496f0f2" testId="0158003e-c465-c257-e7a0-93c0ffd175a5" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingDependencyTarget" computerName="PAYTON-LEGION2" duration="00:00:00.0014735" startTime="2026-08-22T10:31:18.9464399-05:00" endTime="2026-08-22T10:31:18.9489463-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="278b9bf3-ab87-454e-9858-ddcfb496f0f2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingDependencyTarget() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 337&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="34b701fe-0874-4886-9506-1373c78dbf1b" testId="25895023-7e4e-c27f-d928-4a0ef3232b2e" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_CancellationHonored" computerName="PAYTON-LEGION2" duration="00:00:00.0117911" startTime="2026-08-22T10:31:18.4148004-05:00" endTime="2026-08-22T10:31:18.4346746-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34b701fe-0874-4886-9506-1373c78dbf1b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: Exception type was not compatible&#xD;
+Expected: typeof(System.OperationCanceledException)&#xD;
+Actual:   typeof(System.NotImplementedException)&#xD;
+---- System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_CancellationHonored() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 504&#xD;
+--- End of stack trace from previous location ---&#xD;
+----- Inner Stack Trace -----&#xD;
+   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.&lt;&gt;c__DisplayClass20_0.&lt;Validation_CancellationHonored&gt;b__0() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 505</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d98bdbb5-4801-4131-b584-4a69fca7b9a1" testId="46674db5-89f8-2b0e-6cf2-a629aac4d8d5" testName="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneTrue_IncompleteTasks" computerName="PAYTON-LEGION2" duration="00:00:00.3286695" startTime="2026-08-22T10:31:17.8507744-05:00" endTime="2026-08-22T10:31:18.2538454-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d98bdbb5-4801-4131-b584-4a69fca7b9a1">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs:line 40&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneTrue_IncompleteTasks() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs:line 242&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TrWithNoFr_Orphan" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="77b1efb0-6dde-ef22-32a7-c861ba1b7bc3">
+      <Execution id="c61f9a7b-d5ff-4779-a987-b1c1185f3556" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_TrWithNoFr_Orphan" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit0_WhenWarningOnly" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="cb9dbdef-967c-7e70-7373-99ad8f6a057a">
+      <Execution id="33fb271c-e744-40c6-810b-583354eb6fc6" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Director_Exit0_WhenWarningOnly" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="231d121a-3089-b2d8-6deb-cd2a9df9b067">
+      <Execution id="e19cd7ef-eac1-42b2-8f41-ac30e96b15a1" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneWithoutDoneSummary" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="1809c920-5130-38fa-5bba-e47963745b76">
+      <Execution id="e1fc11c5-d70a-45df-980d-22e88c480042" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_DoneWithoutDoneSummary" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_BrokenOrDuplicateMapping" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="427e622d-0afb-eabe-2125-aebd558713c6">
+      <Execution id="54097a3a-26ba-437e-a16a-a6554ea69710" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_BrokenOrDuplicateMapping" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="ca503deb-06e2-527c-5e7a-73ed730b01d4">
+      <Execution id="2b4d7778-5997-4289-8653-22088b15a1b3" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_CleanWorkspace_ZeroFindings" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="730965ab-6ada-7f12-59f7-b04d09ed6dbd">
+      <Execution id="5ff265c8-59ea-4385-83bc-e6c5fb67c072" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="WorkspaceValidation_CleanWorkspace_ZeroFindings" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_AuthRequired" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="c908ff39-bdff-b589-a596-192b20b4c540">
+      <Execution id="d21170c0-b5b4-4da6-ba73-3cefc814a85c" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Validation_AuthRequired" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_LargeWorkspace_Paginates" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="32ed00f4-3eac-ae6c-0731-80267624ea63">
+      <Execution id="2410d634-c2a7-4c33-bb68-383157cbc731" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Validation_LargeWorkspace_Paginates" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_NeverAutoRepairs" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="8a719b3b-1a00-13fc-cec5-2d2b7c301dfa">
+      <Execution id="0f8108fd-7ddf-459a-9e22-46e4dacdbc56" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Validation_NeverAutoRepairs" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneTrue_IncompleteTasks" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="46674db5-89f8-2b0e-6cf2-a629aac4d8d5">
+      <Execution id="d98bdbb5-4801-4131-b584-4a69fca7b9a1" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_DoneTrue_IncompleteTasks" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_CancellationHonored" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="25895023-7e4e-c27f-d928-4a0ef3232b2e">
+      <Execution id="34b701fe-0874-4886-9506-1373c78dbf1b" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Validation_CancellationHonored" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_ResultContract_HasRequiredFields" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="8d0fc67f-4d30-3861-6147-5b98defd0f3b">
+      <Execution id="d64fe383-de16-4b9b-85e2-0d5c3526b2af" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="WorkspaceValidation_ResultContract_HasRequiredFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneFalse_AllTasksComplete" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="a774074c-d052-3e2d-d1c2-51158c87e3c5">
+      <Execution id="64947d54-fea7-4252-a7ef-eb4e3a2390e9" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_DoneFalse_AllTasksComplete" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrMissingTrOrTest_Orphan" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="bb97d4aa-1cf0-fc3b-fd01-404aad533381">
+      <Execution id="1c4e0156-f76e-4e5f-bdd4-19c5249e5a65" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_FrMissingTrOrTest_Orphan" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit1_WhenErrorSeverityPresent" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="a05290d4-67f6-e2f8-b3f5-d4c9494853bb">
+      <Execution id="7840dc5b-6a5d-4d21-9ae0-2466e4224511" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Director_Exit1_WhenErrorSeverityPresent" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingDependencyTarget" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="0158003e-c465-c257-e7a0-93c0ffd175a5">
+      <Execution id="278b9bf3-ab87-454e-9858-ddcfb496f0f2" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_MissingDependencyTarget" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingReferencedRequirementId" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="370d184b-55f8-7e79-1cb8-6a88f906d7e3">
+      <Execution id="8551e7f7-b8d8-42fb-ad1c-9ead98df01dc" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_MissingReferencedRequirementId" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="860cc977-d3fe-8240-68b5-eb386f24eb4c">
+      <Execution id="c5490532-a500-48f3-8b7a-a4756461837e" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_UnknownRuleCode_Diagnostic" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="5e4a389c-c2c1-e376-9932-98b5c5ae6d4e">
+      <Execution id="bd7469ed-502c-4ae7-beb1-9984e79a1745" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="WorkspaceValidation_UnknownRuleCode_Diagnostic" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_InProgressTurn_OlderThan48h_UtcClock" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="d6a7bc0f-0e45-c2db-2026-4a0fcdda7a7b">
+      <Execution id="fe3d5d7c-c3e8-4bc7-b8d8-4e65972458f9" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_InProgressTurn_OlderThan48h_UtcClock" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TriageNonTerminal_UsesLiveDomainEnum" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="ee6fe417-d265-c6f7-4622-113e9ae346dc">
+      <Execution id="56ce7957-3176-419f-9dfa-c7002b964b25" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_TriageNonTerminal_UsesLiveDomainEnum" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TestWithNoFr_Orphan" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="e7e74476-20da-3bd1-274d-10dced193557">
+      <Execution id="94043c39-dc40-4471-8c73-68c60a386bf4" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_TestWithNoFr_Orphan" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_RemainingContradictsCompletion" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="f078944f-c5e8-a9b4-f180-1f809128923b">
+      <Execution id="cdac82ac-ac07-4614-9487-650fc5854276" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests" name="Rule_RemainingContradictsCompletion" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8a719b3b-1a00-13fc-cec5-2d2b7c301dfa" executionId="0f8108fd-7ddf-459a-9e22-46e4dacdbc56" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="77b1efb0-6dde-ef22-32a7-c861ba1b7bc3" executionId="c61f9a7b-d5ff-4779-a987-b1c1185f3556" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="370d184b-55f8-7e79-1cb8-6a88f906d7e3" executionId="8551e7f7-b8d8-42fb-ad1c-9ead98df01dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="32ed00f4-3eac-ae6c-0731-80267624ea63" executionId="2410d634-c2a7-4c33-bb68-383157cbc731" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="860cc977-d3fe-8240-68b5-eb386f24eb4c" executionId="c5490532-a500-48f3-8b7a-a4756461837e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f078944f-c5e8-a9b4-f180-1f809128923b" executionId="cdac82ac-ac07-4614-9487-650fc5854276" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e4a389c-c2c1-e376-9932-98b5c5ae6d4e" executionId="bd7469ed-502c-4ae7-beb1-9984e79a1745" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="231d121a-3089-b2d8-6deb-cd2a9df9b067" executionId="e19cd7ef-eac1-42b2-8f41-ac30e96b15a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1809c920-5130-38fa-5bba-e47963745b76" executionId="e1fc11c5-d70a-45df-980d-22e88c480042" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a774074c-d052-3e2d-d1c2-51158c87e3c5" executionId="64947d54-fea7-4252-a7ef-eb4e3a2390e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c908ff39-bdff-b589-a596-192b20b4c540" executionId="d21170c0-b5b4-4da6-ba73-3cefc814a85c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee6fe417-d265-c6f7-4622-113e9ae346dc" executionId="56ce7957-3176-419f-9dfa-c7002b964b25" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bb97d4aa-1cf0-fc3b-fd01-404aad533381" executionId="1c4e0156-f76e-4e5f-bdd4-19c5249e5a65" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="427e622d-0afb-eabe-2125-aebd558713c6" executionId="54097a3a-26ba-437e-a16a-a6554ea69710" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d0fc67f-4d30-3861-6147-5b98defd0f3b" executionId="d64fe383-de16-4b9b-85e2-0d5c3526b2af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d6a7bc0f-0e45-c2db-2026-4a0fcdda7a7b" executionId="fe3d5d7c-c3e8-4bc7-b8d8-4e65972458f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="730965ab-6ada-7f12-59f7-b04d09ed6dbd" executionId="5ff265c8-59ea-4385-83bc-e6c5fb67c072" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a05290d4-67f6-e2f8-b3f5-d4c9494853bb" executionId="7840dc5b-6a5d-4d21-9ae0-2466e4224511" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca503deb-06e2-527c-5e7a-73ed730b01d4" executionId="2b4d7778-5997-4289-8653-22088b15a1b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7e74476-20da-3bd1-274d-10dced193557" executionId="94043c39-dc40-4471-8c73-68c60a386bf4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cb9dbdef-967c-7e70-7373-99ad8f6a057a" executionId="33fb271c-e744-40c6-810b-583354eb6fc6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0158003e-c465-c257-e7a0-93c0ffd175a5" executionId="278b9bf3-ab87-454e-9858-ddcfb496f0f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25895023-7e4e-c27f-d928-4a0ef3232b2e" executionId="34b701fe-0874-4886-9506-1373c78dbf1b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46674db5-89f8-2b0e-6cf2-a629aac4d8d5" executionId="d98bdbb5-4801-4131-b584-4a69fca7b9a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="24" executed="24" passed="0" failed="24" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:06.84]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:08.94]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:09.28]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:09.82]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.82]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.82]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.82]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(242,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneTrue_IncompleteTasks()&#xD;
+[xUnit.net 00:00:09.82]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.94]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.94]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.94]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(129,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TrWithNoFr_Orphan()&#xD;
+[xUnit.net 00:00:09.94]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.96]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.96]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.96]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.96]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(684,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_NeverAutoRepairs()&#xD;
+[xUnit.net 00:00:09.96]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.98]       Assert.ThrowsAny() Failure: Exception type was not compatible&#xD;
+[xUnit.net 00:00:09.98]       Expected: typeof(System.OperationCanceledException)&#xD;
+[xUnit.net 00:00:09.98]       Actual:   typeof(System.NotImplementedException)&#xD;
+[xUnit.net 00:00:09.98]       ---- System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.98]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(504,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_CancellationHonored()&#xD;
+[xUnit.net 00:00:09.98]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.98]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(505,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.&lt;&gt;c__DisplayClass20_0.&lt;Validation_CancellationHonored&gt;b__0()&#xD;
+[xUnit.net 00:00:09.98]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.98]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(288,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneWithoutDoneSummary()&#xD;
+[xUnit.net 00:00:09.98]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.98]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.98]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.98]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(104,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord()&#xD;
+[xUnit.net 00:00:09.98]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.99]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:09.99]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.99]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.99]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(152,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrMissingTrOrTest_Orphan()&#xD;
+[xUnit.net 00:00:09.99]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.15]       C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Support.Mcp\Controllers\WorkspaceValidationController.cs&#xD;
+[xUnit.net 00:00:10.15]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.15]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(555,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()&#xD;
+[xUnit.net 00:00:10.15]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.16]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.16]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.16]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(265,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneFalse_AllTasksComplete()&#xD;
+[xUnit.net 00:00:10.16]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.18]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.18]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.18]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(80,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_UnknownRuleCode_Diagnostic()&#xD;
+[xUnit.net 00:00:10.18]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.18]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Director validate-workspace is not implemented.&#xD;
+[xUnit.net 00:00:10.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.18]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(103,0): at McpServer.Support.Mcp.Services.WorkspaceValidationDirectorExit.Run(WorkspaceValidationResult result, String jsonOutputPath)&#xD;
+[xUnit.net 00:00:10.18]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(623,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit1_WhenErrorSeverityPresent()&#xD;
+[xUnit.net 00:00:10.18]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:10.18]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:10.49]       Hygiene triage rule must consume a public live domain enum, not a copied string list.&#xD;
+[xUnit.net 00:00:10.49]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(421,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TriageNonTerminal_UsesLiveDomainEnum()&#xD;
+[xUnit.net 00:00:10.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.49]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.49]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(337,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingDependencyTarget()&#xD;
+[xUnit.net 00:00:10.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.50]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.50]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.50]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.50]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(216,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_BrokenOrDuplicateMapping()&#xD;
+[xUnit.net 00:00:10.50]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.50]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.50]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.50]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.50]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(393,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_InProgressTurn_OlderThan48h_UtcClock()&#xD;
+[xUnit.net 00:00:10.50]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.51]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Director validate-workspace is not implemented.&#xD;
+[xUnit.net 00:00:10.51]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(103,0): at McpServer.Support.Mcp.Services.WorkspaceValidationDirectorExit.Run(WorkspaceValidationResult result, String jsonOutputPath)&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(653,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit0_WhenWarningOnly()&#xD;
+[xUnit.net 00:00:10.51]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:10.51]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:10.51]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace validate HTTP surface is not implemented.&#xD;
+[xUnit.net 00:00:10.51]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(84,0): at McpServer.Support.Mcp.Services.WorkspaceValidationHttpGateway.ValidateAsync(Boolean authenticated, WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(485,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_AuthRequired()&#xD;
+[xUnit.net 00:00:10.51]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.51]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.51]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(60,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_CleanWorkspace_ZeroFindings()&#xD;
+[xUnit.net 00:00:10.51]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.52]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.52]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.52]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.52]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(313,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_RemainingContradictsCompletion()&#xD;
+[xUnit.net 00:00:10.52]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.54]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.54]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(529,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_LargeWorkspace_Paginates()&#xD;
+[xUnit.net 00:00:10.54]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.54]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.54]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(454,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded()&#xD;
+[xUnit.net 00:00:10.54]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.54]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.54]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.54]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(175,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TestWithNoFr_Orphan()&#xD;
+[xUnit.net 00:00:10.54]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.55]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.55]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.55]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(29,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_ResultContract_HasRequiredFields()&#xD;
+[xUnit.net 00:00:10.55]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.55]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 F-RED throw-stub. Workspace hygiene validation is not implemented.&#xD;
+[xUnit.net 00:00:10.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:10.55]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\src\McpServer.Services\Services\WorkspaceHygiene\WorkspaceValidationService.cs(40,0): at McpServer.Support.Mcp.Services.WorkspaceValidationService.ValidateAsync(WorkspaceValidationRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:10.55]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401\tests\McpServer.Support.Mcp.Tests\Services\WorkspaceHygieneNamedTests.cs(361,0): at McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingReferencedRequirementId()&#xD;
+[xUnit.net 00:00:10.55]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:10.57]   Finished:    McpServer.Support.Mcp.Tests (ID = '11290fdffb6b8416dc46937b46397a0d8902af90fe3f93ef23bdd94d106e9988')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.2770848-05:00">
+        <Text>[xUnit.net 00:00:09.81]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneTrue_IncompleteTasks [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4024201-05:00">
+        <Text>[xUnit.net 00:00:09.94]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TrWithNoFr_Orphan [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4172379-05:00">
+        <Text>[xUnit.net 00:00:09.96]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_NeverAutoRepairs [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4362194-05:00">
+        <Text>[xUnit.net 00:00:09.98]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_CancellationHonored [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4491013-05:00">
+        <Text>[xUnit.net 00:00:09.98]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneWithoutDoneSummary [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4601700-05:00">
+        <Text>[xUnit.net 00:00:09.98]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.4631113-05:00">
+        <Text>[xUnit.net 00:00:09.98]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_FrMissingTrOrTest_Orphan [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.6099018-05:00">
+        <Text>[xUnit.net 00:00:10.15]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.6220132-05:00">
+        <Text>[xUnit.net 00:00:10.16]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_DoneFalse_AllTasksComplete [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.7500185-05:00">
+        <Text>[xUnit.net 00:00:10.18]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_UnknownRuleCode_Diagnostic [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.7507701-05:00">
+        <Text>[xUnit.net 00:00:10.18]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit1_WhenErrorSeverityPresent [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9465245-05:00">
+        <Text>[xUnit.net 00:00:10.49]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TriageNonTerminal_UsesLiveDomainEnum [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9499033-05:00">
+        <Text>[xUnit.net 00:00:10.49]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingDependencyTarget [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9592043-05:00">
+        <Text>[xUnit.net 00:00:10.50]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_BrokenOrDuplicateMapping [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9646345-05:00">
+        <Text>[xUnit.net 00:00:10.50]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_InProgressTurn_OlderThan48h_UtcClock [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9665236-05:00">
+        <Text>[xUnit.net 00:00:10.51]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Director_Exit0_WhenWarningOnly [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9701263-05:00">
+        <Text>[xUnit.net 00:00:10.51]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_AuthRequired [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9729362-05:00">
+        <Text>[xUnit.net 00:00:10.51]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_CleanWorkspace_ZeroFindings [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9916501-05:00">
+        <Text>[xUnit.net 00:00:10.52]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_RemainingContradictsCompletion [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9958148-05:00">
+        <Text>[xUnit.net 00:00:10.53]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Validation_LargeWorkspace_Paginates [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:18.9993202-05:00">
+        <Text>[xUnit.net 00:00:10.54]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:19.0027199-05:00">
+        <Text>[xUnit.net 00:00:10.54]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_TestWithNoFr_Orphan [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:19.0074963-05:00">
+        <Text>[xUnit.net 00:00:10.55]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.WorkspaceValidation_ResultContract_HasRequiredFields [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:31:19.0104271-05:00">
+        <Text>[xUnit.net 00:00:10.55]     McpServer.Support.Mcp.Tests.Services.WorkspaceHygieneNamedTests.Rule_MissingReferencedRequirementId [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

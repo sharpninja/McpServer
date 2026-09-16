@@ -1,0 +1,19 @@
+{
+  "TimestampUtc": "2026-08-22T15:20:13.1051349Z",
+  "Stamp": "20260822T152013Z",
+  "SessionId": "GrokSubagentHostile-20260822T152013Z-g-red-hostile",
+  "RequestId": "req-20260822T152013Z-001-g-red-hostile-validate",
+  "Agent": "GrokSubagentHostile",
+  "MarkerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "MarkerSignatureOk": true,
+  "BaseUrl": "http://PAYTON-LEGION2:7147",
+  "HealthNonce": "b0e083c1a711474f986212582d190b14",
+  "HealthNonceEcho": "b0e083c1a711474f986212582d190b14",
+  "HealthNonceOk": true,
+  "HealthStatus": "Healthy",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersionFile": "1.105.0",
+  "PluginJsonName": "mcpserver-grok",
+  "PluginJsonVersion": "1.105.0",
+  "CacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\grok-subagent-hostile-g-red"
+}

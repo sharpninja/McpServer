@@ -223,6 +223,7 @@ Track these operational indicators during rollout:
 Main endpoints:
 
 - `/mcpserver/todo`
+- `/mcpserver/handoff` — ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
 - `/mcpserver/sessionlog`
 - `/mcpserver/context`
 - `/mcpserver/repo`
@@ -333,7 +334,7 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 });
 ```
 
-Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
+Covers all API endpoints: Todo, Handoff, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
 Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
 
@@ -351,6 +352,7 @@ Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, 
 
 ## Additional Documentation
 
+- Handoff ingestion: `Handoff-Ingestion.md`
 - User documentation: `USER-GUIDE.md`
 - Documentation index: `README.md`
 - FAQ: `FAQ.md`

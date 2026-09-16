@@ -213,13 +213,13 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
             ct);
 
     /// <inheritdoc />
-    public Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
+    public Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default, bool includeDump = false)
         => ExecuteExportMutationAsync(
             "requirements.export.generateWiki",
             new RequirementExportPayload("wiki", "all", outputRootPath, generatedAtUtc),
             outputRootPath,
             RequirementsExportSnapshotScope.Wiki,
-            token => _inner.GenerateWikiAsync(outputRootPath, generatedAtUtc, token),
+            token => _inner.GenerateWikiAsync(outputRootPath, generatedAtUtc, token, includeDump),
             ct);
 
     /// <inheritdoc />

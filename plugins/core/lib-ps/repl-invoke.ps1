@@ -599,7 +599,12 @@ function Get-ReplMethodTimeoutSeconds {
     $helper = if ($env:REPL_HELPER_TIMEOUT) { [int]$env:REPL_HELPER_TIMEOUT } else { 120 }
 
     if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
-        return 2
+        # TR-MCP-REPL-012 AC3 / TEST-MCP-195 AC5-7: drain SubmitAsync uses
+        # REPL_FAILSAFE_DRAIN_TIMEOUT (default 120s), or REPL_TIMEOUT when greater.
+        # Sessionlog workflow methods keep $default (30s). Nested drain stays deferred.
+        $drain = if ($env:REPL_FAILSAFE_DRAIN_TIMEOUT) { [int]$env:REPL_FAILSAFE_DRAIN_TIMEOUT } else { 120 }
+        if ($default -gt $drain) { return $default }
+        return $drain
     }
 
     switch -Wildcard ($Method) {
@@ -1557,11 +1562,12 @@ function Assert-ReplCurrentTurnFresh {
         }
     }
 
-    # TR-MCP-PLUGIN-012 / BUG-TRIAGE-143: persist identity stays the sessionId
-    # captured on the turn at open. Do not overwrite it with the rotated active
-    # session before completeTurn persist. Get-ReplCompleteTurnPersistSessionId
-    # prefers this original value.
-    if (-not $turnSessionId -and $activeSessionId) { $turnState['sessionId'] = $activeSessionId }
+    # TR-MCP-PLUGIN-012 AC1: session rotation rewrites current-turn.yaml sessionId
+    # to the active session. Persist still uses Get-ReplCompleteTurnPersistSessionId
+    # on the (now rebound) turn value. Fill an empty turn sessionId from active too.
+    if ($activeSessionId -and (($staleReasons -contains 'sessionId') -or -not $turnSessionId)) {
+        $turnState['sessionId'] = $activeSessionId
+    }
     if ($snapshot) {
         $turnState['markerFilePath'] = $snapshot.markerFilePath
         $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
@@ -1859,7 +1865,6 @@ function Invoke-WorkflowAppendDialog {
     }
 
     $null = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
-    Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $meta = Get-ReplSessionMeta
     if (-not $meta -or [string]::IsNullOrWhiteSpace($reqId)) {
@@ -1877,6 +1882,8 @@ function Invoke-WorkflowAppendDialog {
     $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
     $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
     if ($result.Success) {
+        # BUG-TRIAGE-165 / FR-MCP-PLUGINCORE-004: increment only after the server accepts the items.
+        Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
         return $true
     }
 

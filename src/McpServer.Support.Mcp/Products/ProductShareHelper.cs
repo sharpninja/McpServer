@@ -24,13 +24,21 @@ internal static class ProductShareHelper
         string productScope,
         CancellationToken cancellationToken)
     {
-        var workspace = await db.Workspaces
+        // Scalar AsNoTracking projection: a tracked Workspaces row from a captive CQRS
+        // DbContext must not hide a CurrentRequirementLayerKey written by another context
+        // (TEST-MCP-REQSCOPE-REPL-001 / HandleAsync_NullLayerKey_UsesPersistedCurrentLayerAfterExternalUpdate).
+        var persistedLayerKey = await db.Workspaces
             .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(w => w.WorkspaceId == callerWorkspaceId, cancellationToken)
+            .AsNoTracking()
+            .Where(w => w.WorkspaceId == callerWorkspaceId)
+            .Select(w => w.CurrentRequirementLayerKey)
+            .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 
         var resolvedLayerKey = string.IsNullOrWhiteSpace(layerKey)
-            ? workspace?.CurrentRequirementLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey
+            ? (string.IsNullOrWhiteSpace(persistedLayerKey)
+                ? RequirementScopeLayerDefaults.DefaultLayerKey
+                : persistedLayerKey.Trim())
             : layerKey.Trim();
 
         var localLayers = await LoadLayersAsync(db, callerWorkspaceId, cancellationToken).ConfigureAwait(false);

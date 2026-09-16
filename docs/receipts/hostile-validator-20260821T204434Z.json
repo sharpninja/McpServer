@@ -1,0 +1,109 @@
+{
+  "TimestampUtc": "2026-08-21T20:44:34Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-B TODO fidelity",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "RepoPlan": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T203017Z.md"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 94,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T204434Z-p0b-fidelity",
+    "requestId": "req-20260821T204434Z-001-hostile-p0b-todo-fidelity",
+    "turnId": 42736,
+    "openCreated": true,
+    "beginStatus": "in_progress",
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T20:40:00Z todoId=PLAN-PLUGINHANDOFF-001 totalCount=1 turn status=completed actions=4 designDecisions=3 dialog=4"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 2,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [
+    "A3: ImplementationTasks 31/31 but task 21 omits Validate_InvalidFields_ProduceFieldDiagnostics; task 29 drops `--dump` backticks",
+    "D: TechnicalRequirements missing TR-MCP-PLUGINCORE-005, TR-MCP-REPL-011, TR-MCP-REPL-013 versus plan union"
+  ],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "PLAN-PLUGINHANDOFF-001 exists. Done=false. Audit created 2026-08-21T20:36:37.6624242Z." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "Description join equals plan.md (19 sections, 68485 chars, not a stub)." },
+    { "id": "A3", "group": "A Requested", "verdict": "FAIL", "summary": "31 tasks in order; task 21 named-test omission; task 29 backtick strip." },
+    { "id": "A4", "group": "A Requested", "verdict": "PASS", "summary": "DependsOn is the eight child ids. All eight live todo_get Done=false." },
+    { "id": "A5", "group": "A Requested", "verdict": "PASS", "summary": "Both plan files SHA256 7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E." },
+    { "id": "A6", "group": "A Requested", "verdict": "PASS", "summary": "No product implementation. src/tests/plugins clean. Drain still return 2. HOSTILEREVIEW/HYGIENE FR null." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "PASS", "summary": "Live hashes, todo_get, audit, git porcelain, health nonce cited." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "P0-B is fidelity not implementation. P0-A AGREE predates create. Phase A not started." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "todo_audit created. TODO.yaml not dirty." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh only. No Python." },
+    { "id": "B5", "group": "B Workspace rules", "verdict": "PASS", "summary": "Done=false. Remaining text does not claim product start." },
+    { "id": "C", "group": "C Requirements", "verdict": "PASS", "summary": "Not an implementation-complete claim. Description still carries AC/named tests/gates." },
+    { "id": "D", "group": "D Plan", "verdict": "FAIL", "summary": "Description is full plan; TechnicalRequirements is not the union of all TR IDs; ImplementationTasks not byte-faithful to section 18." }
+  ],
+  "EvidenceAnchors": {
+    "planSha256": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E",
+    "planByteIdentical": true,
+    "descriptionJoinEqualNoTrail": true,
+    "descriptionChars": 68485,
+    "descriptionSections": 19,
+    "implementationTaskCount": 31,
+    "implementationTaskDiffs": [
+      {
+        "index": 21,
+        "plan": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+        "todo": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse. AgentPool redaction stays D0 reuse."
+      },
+      {
+        "index": 29,
+        "plan": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+        "todo": "G0 confirm WorkspaceClient.CreateAsync --dump binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile."
+      }
+    ],
+    "dependsOn": [
+      "MCP-PLUGINCORE-004",
+      "MCP-PLUGININT-001",
+      "MCP-HANDOFF-001",
+      "MCP-HANDOFFPLAN-001",
+      "MCP-HANDOFFREVIEW-001",
+      "MCP-HOSTILEREVIEW-001",
+      "MCP-WORKSPACEHYGIENE-002",
+      "MCP-WIKIEXPORT-001"
+    ],
+    "frTodoCount": 25,
+    "trTodoCount": 27,
+    "trMissing": [
+      "TR-MCP-PLUGINCORE-005",
+      "TR-MCP-REPL-011",
+      "TR-MCP-REPL-013"
+    ],
+    "frMissingVsExtractor": [
+      "FR-MCP-WIKIEXPORT-001"
+    ],
+    "todoCreatedUtc": "2026-08-21T20:36:37.6624242Z",
+    "p0aAgreeUtc": "2026-08-21T20:30:17Z",
+    "healthNonceEchoed": "34f02f107eda4fae88942ccad7b971dc",
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "pluginIntegrationDirExists": false,
+    "hostileReviewProductFiles": 0,
+    "srcTestsPluginsPorcelainCount": 0,
+    "planLastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "childrenDoneFalse": true
+  },
+  "ResidualsNotFail": [
+    "Plan header still forbids TODO create because Description is a full copy",
+    "docs/plans/PLAN-PLUGINHANDOFF-001.md untracked",
+    "TestingRequirements empty (section 14 does not require TEST array)",
+    "FR-MCP-WIKIEXPORT-001/002 omitted while 003-005 present (decision 15 remaining-work relink)"
+  ]
+}

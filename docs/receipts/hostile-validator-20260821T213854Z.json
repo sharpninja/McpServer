@@ -1,0 +1,79 @@
+{
+  "TimestampUtc": "2026-08-21T21:38:54Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "1",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.97.0",
+    "source": ".grok-plugin/plugin.json and .version"
+  },
+  "ActivePlan": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T212702Z.md",
+  "OverallVerdict": "AGREE",
+  "Collector": "docs/receipts/_hv-a6-20260821T213854Z/",
+  "Health": {
+    "status": "Healthy",
+    "storage": "reachable",
+    "nonceSent": "fecdc27482a544d8b7c79c421cdbbb72",
+    "nonceEcho": "fecdc27482a544d8b7c79c421cdbbb72",
+    "nonceMatch": true,
+    "signatureOk": true
+  },
+  "Session": {
+    "sessionId": "GrokSubagentHostile-20260821T213854Z-a6-reqs",
+    "requestId": "req-20260821T213854Z-001-phase-a-a6-reqs-gate",
+    "beginTurnId": 42765
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "FailList": [],
+  "ResidualNotFail": [
+    "MCP-HOSTILEREVIEW-001 Remaining still says OrphanReason no FR/TR family while arrays are 6/6",
+    "MCP-WORKSPACEHYGIENE-002 Remaining still says OrphanReason no FR/TR family while arrays are 5/5",
+    "New TEST records have one structured AC naming plan tests rather than one AC per FR bullet"
+  ],
+  "PassFailUnknownCounts": {
+    "PASS": 16,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "Claims": [
+    { "surface": "A", "id": "A1", "title": "New families 1:1 structured AC no placeholder", "verdict": "PASS" },
+    { "surface": "A", "id": "A2", "title": "WIKIEXPORT TODO linked 003-005", "verdict": "PASS" },
+    { "surface": "A", "id": "A3", "title": "TEST-MCP-195 AC1-7 TR-MCP-REPL-012 AC3 TR-MCP-PERSIST-003 AC3", "verdict": "PASS" },
+    { "surface": "A", "id": "A4", "title": "PLUGINCORE/REPL AC non-empty", "verdict": "PASS" },
+    { "surface": "A", "id": "A5", "title": "Drain IDs linked; no product impl; drain still return 2", "verdict": "PASS" },
+    { "surface": "A", "id": "A6", "title": "PLAN done=false and A6 DoD met", "verdict": "PASS" },
+    { "surface": "B", "id": "B1", "title": "Byrd v4 Phase A gate", "verdict": "PASS" },
+    { "surface": "B", "id": "B2", "title": "Receipts re-run", "verdict": "PASS" },
+    { "surface": "B", "id": "B3", "title": "MCP-only storage", "verdict": "PASS" },
+    { "surface": "B", "id": "B4", "title": "PowerShell only", "verdict": "PASS" },
+    { "surface": "B", "id": "B5", "title": "Honesty", "verdict": "PASS" },
+    { "surface": "C", "id": "C1", "title": "TR distinct from FR; TEST named tests", "verdict": "PASS" },
+    { "surface": "C", "id": "C2", "title": "FR-MCP-172 AC hydrated", "verdict": "PASS" },
+    { "surface": "C", "id": "C3", "title": "Child TODO FR/TR arrays linked", "verdict": "PASS" },
+    { "surface": "D", "id": "D1", "title": "Phase A A6 DoD", "verdict": "PASS" }
+  ],
+  "Accuracy": 96,
+  "Completeness": 97,
+  "LiveFacts": {
+    "planDone": false,
+    "planFrCount": 25,
+    "planTrCount": 30,
+    "hostilereviewFrCount": 6,
+    "hostilereviewTrCount": 6,
+    "hygieneFrCount": 5,
+    "hygieneTrCount": 5,
+    "frMcp172AcCount": 4,
+    "testMcp195AcCount": 7,
+    "trMcpRepl012Ac3Present": true,
+    "drainReturn2Line": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "testMcpRepl041": 404
+  }
+}

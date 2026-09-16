@@ -1,0 +1,98 @@
+{
+  "TimestampUtc": "2026-08-21T23:59:22Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P4",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T234422Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p4/",
+  "SessionId": "GrokSubagentHostile-20260821T235600Z-c-red-p4",
+  "RequestId": "req-20260821T235600Z-001-hostile-c-red-p4",
+  "TurnId": 42807,
+  "HealthNonce": "49d2da7c853647a3b72d361aa98bba42",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "OverallVerdict": "DISAGREE",
+  "FailCount": 2,
+  "UnknownCount": 0,
+  "PassCount": 24,
+  "Accuracy": 94,
+  "Completeness": 95,
+  "ExplicitFailList": [
+    "C3 TR-MCP-PLUGININT-001 AC1 not pinned: no typed entrypoint, environment variables, or cache folder name; UniqueAgentSourceCache uses AgentSourceType:RepositoryName",
+    "D5 TDD-per-AC: trivial JSON loader would green all six tests against current sibling plugin roots without TR AC1 fields"
+  ],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "Filter": "FullyQualifiedName~PluginSessionLogCatalogTests",
+    "CatalogFilterExitCode": 1,
+    "CatalogFilterPassed": 0,
+    "CatalogFilterFailed": 6,
+    "CatalogFilterSkippedConsole": 0,
+    "CatalogFilterTrxNotExecuted": 0,
+    "PluginAllExitCode": 1,
+    "PluginAllPassed": 1,
+    "PluginAllFailed": 6,
+    "PluginAllSkippedConsole": 0,
+    "PluginAllTrxNotExecuted": 0,
+    "NamedFailed": [
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled"
+    ],
+    "NamedPassedWholeProject": [
+      "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection"
+    ],
+    "FailureMessage": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P4": false
+  },
+  "Timestamps": {
+    "CGreenP1P3AgreeName": "2026-08-21T23:44:22Z",
+    "CGreenP1P3AgreeMdLastWriteTimeUtc": "2026-08-21T23:48:25.8177416Z",
+    "CatalogTestsLastWriteTimeUtc": "2026-08-21T23:50:27.8262663Z",
+    "CatalogCsLastWriteTimeUtc": "2026-08-21T23:50:27.8247435Z"
+  },
+  "CatalogGaps": {
+    "ScenarioHasCacheFolder": false,
+    "ScenarioHasEntrypoint": false,
+    "ScenarioHasEnvVars": false,
+    "JsonHasCacheFolderProperty": false,
+    "JsonHasEntrypointProperty": false,
+    "JsonHasEnvProperty": false,
+    "UniqueKeyUsesCache": false,
+    "SiblingAllEntrypointWouldPass": true,
+    "SiblingAllVersionWouldPass": true
+  },
+  "SessionQueryProof": {
+    "QueryFile": "docs/receipts/_hv-c-red-p4/sl-query-sid.txt",
+    "TurnStatus": "completed",
+    "TurnId": 42807,
+    "ActionCount": 6,
+    "DialogCount": 3,
+    "DesignDecisionCount": 2,
+    "ResponseContainsDisagree": true
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "TimestampUtc": "2026-08-22T15:21:38.1952446Z",
+  "Worktree": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033",
+  "Csproj": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033\\tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj",
+  "TestFile": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033\\tests\\McpServer.Support.Mcp.Tests\\Services\\WikiDumpPhaseGTests.cs",
+  "Filter": "FullyQualifiedName~WikiExport_WithoutDumpFlag_UnchangedBehavior|FullyQualifiedName~WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace|FullyQualifiedName~Dump_ContainsTodoRowsAndRequirementLinksMatchingStore|FullyQualifiedName~Dump_Sha256_MatchesCanonicalUtf8Json|FullyQualifiedName~AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml|FullyQualifiedName~Import_RemapsWorkspaceIdAndPaths_OldIdAbsent|FullyQualifiedName~Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected|FullyQualifiedName~Import_IdempotentReimport_NoDuplicateTodos|FullyQualifiedName~TodoYaml_NotSourceOfTruth_WhenDumpPresent|FullyQualifiedName~TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete|FullyQualifiedName~DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth|FullyQualifiedName~CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest",
+  "NamedOnDisk": [
+    {
+      "name": "WikiExport_WithoutDumpFlag_UnchangedBehavior",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "Dump_ContainsTodoRowsAndRequirementLinksMatchingStore",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "Dump_Sha256_MatchesCanonicalUtf8Json",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "Import_RemapsWorkspaceIdAndPaths_OldIdAbsent",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "Import_IdempotentReimport_NoDuplicateTodos",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "TodoYaml_NotSourceOfTruth_WhenDumpPresent",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth",
+      "onDisk": true,
+      "factAttribute": true
+    },
+    {
+      "name": "CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest",
+      "onDisk": true,
+      "factAttribute": true
+    }
+  ],
+  "NamedCount": 12,
+  "FactCount": 12,
+  "BuildExit": 0,
+  "TestExit": 1,
+  "TrxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hostile-g-red-20260822T151548Z\\hostile-g-red.trx",
+  "Counters": {
+    "total": 12,
+    "executed": 12,
+    "passed": 0,
+    "failed": 12,
+    "error": 0,
+    "timeout": 0,
+    "aborted": 0,
+    "inconclusive": 0,
+    "notExecuted": 0,
+    "skipped": 0
+  },
+  "Outcomes": [
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth",
+      "outcome": "Failed",
+      "duration": "00:00:00.9229245",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore",
+      "outcome": "Failed",
+      "duration": "00:00:05.2244330",
+      "message": "IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump)."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected",
+      "outcome": "Failed",
+      "duration": "00:00:00.0016331",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent",
+      "outcome": "Failed",
+      "duration": "00:00:00.0021175",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml",
+      "outcome": "Failed",
+      "duration": "00:00:00.0012998",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete",
+      "outcome": "Failed",
+      "duration": "00:00:00.0021924",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior",
+      "outcome": "Failed",
+      "duration": "00:00:00.3326638",
+      "message": "IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump)."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+      "outcome": "Failed",
+      "duration": "00:00:00.0020070",
+      "message": "IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump)."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json",
+      "outcome": "Failed",
+      "duration": "00:00:00.3745214",
+      "message": "IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump)."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent",
+      "outcome": "Failed",
+      "duration": "00:00:00.0015165",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest",
+      "outcome": "Failed",
+      "duration": "00:00:00.0008443",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos",
+      "outcome": "Failed",
+      "duration": "00:00:00.0017846",
+      "message": "Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync."
+    }
+  ],
+  "SrcHits": [],
+  "WorkspaceModelsDumpHits": [],
+  "ServiceCreateRequestDumpHits": [],
+  "FederationDumpHits": [],
+  "GenerateWikiAsyncLines": [
+    "35:Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default);"
+  ]
+}

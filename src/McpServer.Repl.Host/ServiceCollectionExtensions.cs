@@ -78,6 +78,18 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.HandoffWorkflow(clientFactory.Handoff);
         });
 
+        services.AddSingleton<IHostileReviewWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.HostileReviewWorkflow(clientFactory.HostileReview);
+        });
+
+        services.AddSingleton<IWorkspaceValidationWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.WorkspaceValidationWorkflow(clientFactory.WorkspaceValidation);
+        });
+
         // Register Agent Help workflow for the workflow.agenthelp namespace.
         services.AddSingleton<IAgentHelpWorkflow>(sp =>
         {
@@ -150,7 +162,9 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<IAgentHelpWorkflow>(),
                 sp.GetRequiredService<ISessionLogPersistenceStrategy>(),
                 sp.GetRequiredService<ITranscriptIngestionWorkflow>(),
-                sp.GetRequiredService<IHandoffWorkflow>()));
+                sp.GetRequiredService<IHandoffWorkflow>(),
+                sp.GetRequiredService<IHostileReviewWorkflow>(),
+                sp.GetRequiredService<IWorkspaceValidationWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

@@ -1,0 +1,480 @@
+{
+  "startedUtc": "2026-08-21T15:02:18Z",
+  "updatedUtc": "2026-08-21T15:05:16Z",
+  "completedUtc": "2026-08-21T15:05:16Z",
+  "posted": 47,
+  "failed": 0,
+  "remaining": 0,
+  "items": [
+    {
+      "file": "20260812T220155Z-session_submit-9ed4.yaml",
+      "startedUtc": "2026-08-21T15:02:18Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260812T220151Z-plugin-session",
+      "requestId": "req-20260812T214709Z-prompt-e362"
+    },
+    {
+      "file": "20260812T220901Z-session_submit-0a95.yaml",
+      "startedUtc": "2026-08-21T15:02:20Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260812T220750Z-hostile-nuke-deploy",
+      "requestId": "req-20260812T220151Z-prompt-9758"
+    },
+    {
+      "file": "20260816T174019Z-session_submit-4e3a.yaml",
+      "startedUtc": "2026-08-21T15:02:21Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T173957Z-plugin-session",
+      "requestId": "req-20260815T184942Z-prompt-0344"
+    },
+    {
+      "file": "20260816T191013Z-session_submit-d3ca.yaml",
+      "startedUtc": "2026-08-21T15:02:23Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T190951Z-plugin-session",
+      "requestId": "req-20260816T174013Z-prompt-0932"
+    },
+    {
+      "file": "20260816T200548Z-session_submit-e91c.yaml",
+      "startedUtc": "2026-08-21T15:02:25Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T200536Z-plugin-session",
+      "requestId": "req-20260816T191008Z-prompt-e7f7"
+    },
+    {
+      "file": "20260816T204641Z-session_submit-4a31.yaml",
+      "startedUtc": "2026-08-21T15:02:27Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T204623Z-plugin-session",
+      "requestId": "req-20260816T200544Z-prompt-6699"
+    },
+    {
+      "file": "20260816T205733Z-session_submit-edbb.yaml",
+      "startedUtc": "2026-08-21T15:02:28Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T205728Z-hostile-handoffplan",
+      "requestId": "req-20260816T205438Z-prompt-99b0"
+    },
+    {
+      "file": "20260816T221600Z-session_submit-ecc3.yaml",
+      "startedUtc": "2026-08-21T15:02:31Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T221548Z-plugin-session",
+      "requestId": "req-20260816T220433Z-prompt-7bbf"
+    },
+    {
+      "file": "20260816T224534Z-session_submit-1627.yaml",
+      "startedUtc": "2026-08-21T15:02:32Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260816T224522Z-plugin-session",
+      "requestId": "req-20260816T221555Z-prompt-0d6f"
+    },
+    {
+      "file": "20260817T015208Z-session_submit-2cb4.yaml",
+      "startedUtc": "2026-08-21T15:02:34Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260817T003937Z-plugin-session",
+      "requestId": "req-20260816T224529Z-prompt-58fb"
+    },
+    {
+      "file": "20260817T015802Z-session_submit-d7e4.yaml",
+      "startedUtc": "2026-08-21T15:02:36Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokSubagentHostile-20260817T015741Z-handoff-hostile",
+      "requestId": "req-20260817T015158Z-prompt-8bfb"
+    },
+    {
+      "file": "20260817T020859Z-session_submit-026f.yaml",
+      "startedUtc": "2026-08-21T15:02:38Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T020825Z-plugin-session",
+      "requestId": "req-20260817T015741Z-001-hostile-handoff-validation"
+    },
+    {
+      "file": "20260817T024328Z-session_submit-80d4.yaml",
+      "startedUtc": "2026-08-21T15:02:39Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260817T024311Z-plugin-session",
+      "requestId": "req-20260817T020857Z-prompt-ffce"
+    },
+    {
+      "file": "20260817T040044Z-session_submit-84d7.yaml",
+      "startedUtc": "2026-08-21T15:02:41Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260817T040029Z-plugin-session",
+      "requestId": "req-20260817T024321Z-prompt-dd11"
+    },
+    {
+      "file": "20260817T040405Z-session_submit-5ce5.yaml",
+      "startedUtc": "2026-08-21T15:02:43Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260817T040349Z-plugin-session",
+      "requestId": "req-20260817T040037Z-prompt-119d"
+    },
+    {
+      "file": "20260817T040741Z-session_submit-8c43.yaml",
+      "startedUtc": "2026-08-21T15:02:44Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T040725Z-plugin-session",
+      "requestId": "req-20260817T040358Z-prompt-22ab"
+    },
+    {
+      "file": "20260817T041241Z-session_submit-b25e.yaml",
+      "startedUtc": "2026-08-21T15:02:46Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T041233Z-plugin-session",
+      "requestId": "req-20260817T040734Z-prompt-e055"
+    },
+    {
+      "file": "20260817T054720Z-session_submit-85d1.yaml",
+      "startedUtc": "2026-08-21T15:02:47Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260817T054710Z-plugin-session",
+      "requestId": "req-20260817T041241Z-prompt-cda1"
+    },
+    {
+      "file": "20260817T082354Z-session_submit-55bf.yaml",
+      "startedUtc": "2026-08-21T15:02:49Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T082340Z-plugin-session",
+      "requestId": "req-20260817T054719Z-prompt-6d8a"
+    },
+    {
+      "file": "20260817T223822Z-session_submit-e7d7.yaml",
+      "startedUtc": "2026-08-21T15:02:50Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T223812Z-plugin-session",
+      "requestId": "req-20260817T082353Z-prompt-0386"
+    },
+    {
+      "file": "20260817T225245Z-session_submit-ab11.yaml",
+      "startedUtc": "2026-08-21T15:02:51Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T225157Z-plugin-session",
+      "requestId": "req-20260817T223821Z-prompt-d4f0"
+    },
+    {
+      "file": "20260817T230242Z-session_submit-2d6f.yaml",
+      "startedUtc": "2026-08-21T15:02:53Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T225637Z-plugin-session",
+      "requestId": "req-20260817T225238Z-prompt-8731"
+    },
+    {
+      "file": "20260817T230916Z-session_submit-bcb3.yaml",
+      "startedUtc": "2026-08-21T15:02:54Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T230903Z-plugin-session",
+      "requestId": "req-20260817T230237Z-prompt-687f"
+    },
+    {
+      "file": "20260817T231039Z-session_submit-c3ab.yaml",
+      "startedUtc": "2026-08-21T15:02:55Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCodeHostile-20260817T231027Z-hostile-agenthelp",
+      "requestId": "req-20260817T230915Z-prompt-b835"
+    },
+    {
+      "file": "20260817T231826Z-session_submit-60ec.yaml",
+      "startedUtc": "2026-08-21T15:02:56Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T231811Z-plugin-session",
+      "requestId": "req-20260817T231640Z-prompt-e80f"
+    },
+    {
+      "file": "20260817T233006Z-session_submit-0258.yaml",
+      "startedUtc": "2026-08-21T15:02:57Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T232250Z-hostile-effort",
+      "requestId": "req-20260817T232716Z-prompt-a5a1"
+    },
+    {
+      "file": "20260817T235651Z-session_submit-6202.yaml",
+      "startedUtc": "2026-08-21T15:02:59Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260817T235647Z-plugin-session",
+      "requestId": "req-20260817T233651Z-prompt-cf2f"
+    },
+    {
+      "file": "20260818T001239Z-session_submit-a650.yaml",
+      "startedUtc": "2026-08-21T15:03:00Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T001225Z-plugin-session",
+      "requestId": "req-20260818T001131Z-prompt-b813"
+    },
+    {
+      "file": "20260818T015128Z-session_submit-fedd.yaml",
+      "startedUtc": "2026-08-21T15:03:01Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 26,
+      "error": null,
+      "sessionId": "GrokCode-20260818T015054Z-plugin-session",
+      "requestId": "req-20260818T005606Z-prompt-e92b"
+    },
+    {
+      "file": "20260818T131957Z-session_submit-0acb.yaml",
+      "startedUtc": "2026-08-21T15:03:27Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T131946Z-plugin-session",
+      "requestId": "req-20260818T131744Z-prompt-b7bb"
+    },
+    {
+      "file": "20260818T132406Z-session_submit-6764.yaml",
+      "startedUtc": "2026-08-21T15:03:29Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T132352Z-plugin-session",
+      "requestId": "req-20260818T131956Z-prompt-fd0a"
+    },
+    {
+      "file": "20260818T134926Z-session_submit-b426.yaml",
+      "startedUtc": "2026-08-21T15:03:30Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T134917Z-plugin-session",
+      "requestId": "req-20260818T134659Z-prompt-3b27"
+    },
+    {
+      "file": "20260818T135117Z-session_submit-c1d4.yaml",
+      "startedUtc": "2026-08-21T15:03:31Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T134951Z-plugin-session",
+      "requestId": "req-20260818T134926Z-prompt-ba8c"
+    },
+    {
+      "file": "20260818T135906Z-session_submit-4c99.yaml",
+      "startedUtc": "2026-08-21T15:03:33Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T135321Z-plugin-session",
+      "requestId": "req-20260818T135112Z-prompt-b8df"
+    },
+    {
+      "file": "20260818T151257Z-session_submit-0783.yaml",
+      "startedUtc": "2026-08-21T15:03:34Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T151243Z-plugin-session",
+      "requestId": "req-20260818T145515Z-prompt-c727"
+    },
+    {
+      "file": "20260818T164546Z-session_submit-0b53.yaml",
+      "startedUtc": "2026-08-21T15:03:35Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T164052Z-plugin-session",
+      "requestId": "req-20260818T161914Z-prompt-1219"
+    },
+    {
+      "file": "20260818T175011Z-session_submit-1335.yaml",
+      "startedUtc": "2026-08-21T15:03:37Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T175000Z-plugin-session",
+      "requestId": "req-20260818T174815Z-prompt-69be"
+    },
+    {
+      "file": "20260818T180810Z-session_submit-88b0.yaml",
+      "startedUtc": "2026-08-21T15:03:38Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T180804Z-plugin-session",
+      "requestId": "req-20260818T175942Z-prompt-74eb"
+    },
+    {
+      "file": "20260818T184118Z-session_submit-59fe.yaml",
+      "startedUtc": "2026-08-21T15:03:39Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 81,
+      "error": null,
+      "sessionId": "GrokCode-20260818T182741Z-plugin-session",
+      "requestId": "req-20260818T182159Z-prompt-eb28"
+    },
+    {
+      "file": "20260818T184557Z-session_submit-6a60.yaml",
+      "startedUtc": "2026-08-21T15:05:00Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 5,
+      "error": null,
+      "sessionId": "GrokCode-20260818T184548Z-hostile-wrapup",
+      "requestId": "req-20260818T184113Z-prompt-b8af"
+    },
+    {
+      "file": "20260818T185412Z-session_submit-faef.yaml",
+      "startedUtc": "2026-08-21T15:05:04Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T185357Z-plugin-session",
+      "requestId": "req-20260818T184548Z-001-hostile-wrap-up-review"
+    },
+    {
+      "file": "20260818T200758Z-session_submit-bed1.yaml",
+      "startedUtc": "2026-08-21T15:05:07Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260818T200744Z-plugin-session",
+      "requestId": "req-20260818T195834Z-prompt-9d9a"
+    },
+    {
+      "file": "20260818T203143Z-session_submit-3f48.yaml",
+      "startedUtc": "2026-08-21T15:05:08Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T202910Z-plugin-session",
+      "requestId": "req-20260818T201831Z-prompt-4a00"
+    },
+    {
+      "file": "20260818T203148Z-session_submit-9bcb.yaml",
+      "startedUtc": "2026-08-21T15:05:09Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T202910Z-plugin-session",
+      "requestId": "req-20260818T201831Z-prompt-4a00"
+    },
+    {
+      "file": "20260818T221313Z-session_submit-1dbc.yaml",
+      "startedUtc": "2026-08-21T15:05:11Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T215528Z-plugin-session",
+      "requestId": "req-20260818T214947Z-turn-c203"
+    },
+    {
+      "file": "20260818T221318Z-session_submit-1e42.yaml",
+      "startedUtc": "2026-08-21T15:05:13Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T215528Z-plugin-session",
+      "requestId": "req-20260818T214947Z-turn-c203"
+    },
+    {
+      "file": "20260818T221318Z-session_submit-e96c.yaml",
+      "startedUtc": "2026-08-21T15:05:15Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "GrokCode-20260818T215528Z-plugin-session",
+      "requestId": "req-20260818T214947Z-turn-c203"
+    }
+  ]
+}

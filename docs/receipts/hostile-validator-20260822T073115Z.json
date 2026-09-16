@@ -1,0 +1,207 @@
+{
+  "TimestampUtc": "2026-08-22T07:31:15Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P16",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T071202Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p16/",
+  "SessionId": "GrokSubagentHostile-20260822T072515Z-pluginhandoff-p16red",
+  "RequestId": "req-20260822T072515Z-001-hostile-c-red-p16-aitheory",
+  "HealthNonce": "nonce-hv-20260822072516-9543",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "HomemadeMarkerSignature": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 20,
+  "Accuracy": 96,
+  "Completeness": 97,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "ListTestsCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+    "ListTestsExitCode": 0,
+    "ListTestsDurationMs": 14846,
+    "ListAiTheoryRequiresValidJsonFields": 8,
+    "ListP17Rejects": 0,
+    "ListP18NukeSkip": 0,
+    "ListTotalAvailable": 94,
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~AiTheory_Agent_RequiresValidJsonFields",
+    "FilterExitCode": 1,
+    "FilterConsolePassed": 0,
+    "FilterConsoleFailed": 8,
+    "FilterConsoleSkipped": 0,
+    "FilterConsoleTotal": 8,
+    "FilterConsoleDuration": "2.2379 Seconds",
+    "FilterDurationMs": 15093,
+    "FilterTrxExecuted": 8,
+    "FilterTrxPassed": 0,
+    "FilterTrxFailed": 8,
+    "FilterTrxNotExecuted": 0,
+    "FilterTrx": "docs/receipts/_hv-c-red-p16/results-20260822T072653Z/p16-filter.trx",
+    "FilterLog": "docs/receipts/_hv-c-red-p16/hv-dotnet-p16-filter.log",
+    "FilterResultsDirectory": "docs/receipts/_hv-c-red-p16/results-20260822T072653Z",
+    "UnimplementedEvaluateAsyncCount": 8,
+    "P16NamedTestsPresent": true,
+    "P16InlineDataCountPerTheory": 8,
+    "P16Passed": 0,
+    "P16Failed": 8,
+    "P16Skipped": 0,
+    "P17NamedTestsPresent": false,
+    "P18NamedTestsPresent": false,
+    "TestsLastWriteTimeUtc": "2026-08-22T07:16:45.1961926Z",
+    "EvaluateAsyncThrowsNotImplemented": true,
+    "AiStrategyEvaluationRequiredFields": [
+      "Valid",
+      "MissingFields",
+      "Contradictions"
+    ],
+    "StartsIsolated7147": false,
+    "SiblingResultsDirectoryNotUsed": "docs/receipts/_hv-c-red-p16/results-20260822T072615Z"
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P16": false,
+    "PLAN-combined-C-P16-P17-P18": false
+  },
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "C-green-P15 AGREE 071202Z with P15 24/0/0, full 86/0/0, P16 absent"
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "AiTheory_Agent_RequiresValidJsonFields eight InlineData rows; no Skip; P17/P18 names absent"
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "EvaluateAsync throws not implemented; required Valid/MissingFields/Contradictions; LastWriteTime after 071202Z"
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Independent P16 filter Failed 8 Passed 0 Skipped 0"
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Tests use catalog LoadAndValidate plus redacted receipt string; do not start 7147"
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false; P16 task done false; no todo_update done true"
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "P16 maps TEST-MCP-PLUGININT-001 AC3; isSatisfied false; AC5 not required"
+    },
+    {
+      "Id": "A8",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "This AGREE authorizes P17-P18 start only; not PLAN/PLUGININT closeout; not P19"
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Honesty and independent receipts"
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Byrd v4 red gate after C-green-P15 AGREE; EvaluateAsync unimplemented"
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "MCP-only TODO/session/requirements storage"
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "PowerShell-only; no Python invoked by this validator"
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "No fabricated results"
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Identified FR/TR/TEST PLUGININT-001 via live plugin get/listMappings"
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "TEST AC3 structured and testable; isSatisfied false"
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Eight red AiTheory rows encode AC3 companion fields"
+    },
+    {
+      "Id": "C4",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Mappings exist; requirements not marked complete"
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "C-red-P16 only; not plan closeout"
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Named P16 reds exist, currently failing, no Skip, no P17 mix-in"
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Combined PLAN task C P16 red + hostile then P17-P18 remains done false"
+    }
+  ]
+}

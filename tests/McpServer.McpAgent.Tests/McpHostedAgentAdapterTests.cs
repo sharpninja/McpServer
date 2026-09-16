@@ -109,6 +109,8 @@ public sealed class McpHostedAgentAdapterTests
         var chatClientAgent = hostedAgent.CreateChatClientAgent(new StubChatClient());
 
         Assert.Equal(expectedToolNames, registration.Functions.Select(static function => function.Name));
+        foreach (var name in QBAgentDefinition.Instance.AllowedToolNames.Concat(QBAgentDefinition.Instance.BlockedToolNames))
+            Assert.Contains(name, expectedToolNames);
         Assert.NotNull(hostedAgent.PowerShellSessions);
         Assert.True(baseFactoryCalled);
         var invokingClient = Assert.IsType<FunctionInvokingChatClient>(wrappedClient);

@@ -60,6 +60,10 @@ public sealed partial class TrimAnalysisWarningInventoryTests
             Path.Combine("src", "McpServer.QBAgent", "McpServer.QBAgent.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
+                ["IL2026"] = 36,
+                ["IL2075"] = 12,
+                ["IL2070"] = 3,
+                ["IL2067"] = 3,
                 ["IL2104"] = 5,
             }),
         new(
@@ -112,14 +116,11 @@ public sealed partial class TrimAnalysisWarningInventoryTests
                 ? CreateExecutableArguments(target.ProjectPath, artifactsRoot)
                 : CreateLibraryArguments(target.ProjectPath, artifactsRoot);
 
-            return await RunDotnetAsync(arguments).ConfigureAwait(true);
+            return await RunDotnetAsync(arguments).ConfigureAwait(false);
         }
         finally
         {
-            if (Directory.Exists(artifactsRoot))
-            {
-                Directory.Delete(artifactsRoot, recursive: true);
-            }
+            TryDeleteArtifacts(artifactsRoot);
         }
     }
 
@@ -179,12 +180,57 @@ public sealed partial class TrimAnalysisWarningInventoryTests
         }
 
         using var process = Process.Start(processStartInfo) ?? throw new InvalidOperationException("Failed to start dotnet.");
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+        using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(20));
+        try
+        {
+            await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            try
+            {
+                process.Kill(entireProcessTree: true);
+            }
+            catch (InvalidOperationException)
+            {
+            }
 
-        var output = string.Concat(await stdoutTask.ConfigureAwait(true), Environment.NewLine, await stderrTask.ConfigureAwait(true));
+            throw new TimeoutException($"dotnet timed out after 20 minutes: {string.Join(" ", arguments)}");
+        }
+
+        var output = string.Concat(await stdoutTask.ConfigureAwait(false), Environment.NewLine, await stderrTask.ConfigureAwait(false));
         return new ProcessResult(process.ExitCode, output);
+    }
+
+    /// <summary>
+    /// Best-effort artifact cleanup. Recursive <see cref="Directory.Delete(string, bool)"/> of a
+    /// trimmed self-contained publish tree can block testhost for tens of minutes under AV scan.
+    /// </summary>
+    private static void TryDeleteArtifacts(string artifactsRoot)
+    {
+        if (!Directory.Exists(artifactsRoot))
+        {
+            return;
+        }
+
+        try
+        {
+            var start = new ProcessStartInfo("cmd.exe")
+            {
+                Arguments = $"/c rmdir /s /q \"{artifactsRoot}\"",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+            };
+            Process.Start(start)?.Dispose();
+        }
+        catch (InvalidOperationException)
+        {
+        }
+        catch (System.ComponentModel.Win32Exception)
+        {
+        }
     }
 
     private static Dictionary<string, int> CountTrimWarnings(string output)

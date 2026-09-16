@@ -1121,6 +1121,14 @@ Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build
 
 Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog. (2) Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw. (3) Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays. (4) getFr EXIT 0 with body before 30s when a queued session_submit 503s.
 
+**Acceptance Criteria:**
+- [ ] Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog.
+- [ ] Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw.
+- [ ] Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays.
+- [ ] getFr EXIT 0 with body before 30s when a queued session_submit 503s.
+- [ ] Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync returns REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater, never 2.
+- [ ] A failsafe SubmitAsync that succeeds within that budget is replayed and the yaml is removed.
+- [ ] Nested drain while ReplRawInFlight is set is deferred; getFr still EXIT 0 with body before 30s when a queued session_submit 503s.
 
 ### TEST-MCP-196
 
@@ -1399,6 +1407,89 @@ Marker prompt template contains the Agent Help (MCP Server issues) section and r
 
 
 
+## TEST-MCP-HOSTILEREVIEW
+
+### TEST-MCP-HOSTILEREVIEW-001
+
+HostileReviewEntity_RoundTrip_SqlitePgSqlServer; HostileReviewSubmit_ValidRequest_CreatesQueueItem; HostileReviewSubmit_OversizedPayload_Rejected; HostileReviewSubmit_ForeignWorkspace_403.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReviewEntity_RoundTrip_SqlitePgSqlServer; HostileReviewSubmit_ValidRequest_CreatesQueueItem; HostileReviewSubmit_OversizedPayload_Rejected; HostileReviewSubmit_ForeignWorkspace_403.
+
+### TEST-MCP-HOSTILEREVIEW-002
+
+HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic.
+
+### TEST-MCP-HOSTILEREVIEW-003
+
+HostileReviewExecution_RecordsModelEffortAgentTemplateRunId; HostileReviewExecution_OmitsFabricatedTokenCounts.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReviewExecution_RecordsModelEffortAgentTemplateRunId; HostileReviewExecution_OmitsFabricatedTokenCounts.
+
+### TEST-MCP-HOSTILEREVIEW-004
+
+HostileReviewGet_NormalizedFindings_TaxonomyComplete; HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReviewGet_NormalizedFindings_TaxonomyComplete; HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext.
+
+### TEST-MCP-HOSTILEREVIEW-005
+
+HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns; HostileReviewQuery_ByRequesterAndTargetType_AndFilters; HostileReviewQuery_NoMatch_EmptyList.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns; HostileReviewQuery_ByRequesterAndTargetType_AndFilters; HostileReviewQuery_NoMatch_EmptyList.
+
+### TEST-MCP-HOSTILEREVIEW-006
+
+HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin.
+
+
+## TEST-MCP-HYGIENE
+
+### TEST-MCP-HYGIENE-001
+
+WorkspaceValidation_ResultContract_HasRequiredFields; WorkspaceValidation_CleanWorkspace_ZeroFindings; WorkspaceValidation_UnknownRuleCode_Diagnostic.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: WorkspaceValidation_ResultContract_HasRequiredFields; WorkspaceValidation_CleanWorkspace_ZeroFindings; WorkspaceValidation_UnknownRuleCode_Diagnostic.
+
+### TEST-MCP-HYGIENE-002
+
+Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord; Rule_TrWithNoFr_Orphan; Rule_FrMissingTrOrTest_Orphan; Rule_TestWithNoFr_Orphan; Rule_BrokenOrDuplicateMapping.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord; Rule_TrWithNoFr_Orphan; Rule_FrMissingTrOrTest_Orphan; Rule_TestWithNoFr_Orphan; Rule_BrokenOrDuplicateMapping.
+
+### TEST-MCP-HYGIENE-003
+
+Rule_DoneTrue_IncompleteTasks; Rule_DoneFalse_AllTasksComplete; Rule_DoneWithoutDoneSummary; Rule_RemainingContradictsCompletion; Rule_MissingDependencyTarget; Rule_MissingReferencedRequirementId.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: Rule_DoneTrue_IncompleteTasks; Rule_DoneFalse_AllTasksComplete; Rule_DoneWithoutDoneSummary; Rule_RemainingContradictsCompletion; Rule_MissingDependencyTarget; Rule_MissingReferencedRequirementId.
+
+### TEST-MCP-HYGIENE-004
+
+Rule_InProgressTurn_OlderThan48h_UtcClock; Rule_TriageNonTerminal_UsesLiveDomainEnum; Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded; Validation_AuthRequired; Validation_CancellationHonored; Validation_LargeWorkspace_Paginates.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: Rule_InProgressTurn_OlderThan48h_UtcClock; Rule_TriageNonTerminal_UsesLiveDomainEnum; Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded; Validation_AuthRequired; Validation_CancellationHonored; Validation_LargeWorkspace_Paginates.
+
+### TEST-MCP-HYGIENE-005
+
+Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts; Director_Exit1_WhenErrorSeverityPresent; Director_Exit0_WhenWarningOnly; Validation_NeverAutoRepairs.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts; Director_Exit1_WhenErrorSeverityPresent; Director_Exit0_WhenWarningOnly; Validation_NeverAutoRepairs.
+
+
 ## TEST-MCP-MARKER
 
 ### TEST-MCP-MARKER-004
@@ -1556,6 +1647,10 @@ Automated PowerShell runtime and plugin parity tests SHALL cover dictionary-back
 
 Validates TR-MCP-PLUGINCORE-005. Doc-presence + parse check (receipt captured 2026-07-16): ConvertFrom-Yaml parses both templates/prompt-templates.yaml and src/McpServer.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml; both contain the strings 'same volume as the target' and 'cross-volume move' in the PowerShell.Mcp Command Routing block; the added guidance text contains no em-dashes/en-dashes (pre-existing dashes elsewhere in the template are out of scope).
 
+**Acceptance Criteria:**
+- [ ] ConvertFrom-Yaml parses both templates/prompt-templates.yaml and the graphrag canonical prompt-templates.yaml.
+- [ ] Both contain the strings same volume as the target and cross-volume move in the PowerShell.Mcp Command Routing block.
+- [ ] The added guidance text contains no em-dashes or en-dashes.
 
 
 ## TEST-MCP-PLUGININT
@@ -2000,16 +2095,25 @@ Mock-backed unit and real-filesystem integration tests SHALL prove primary and f
 
 Validates TR-MCP-REPL-011 (PascalCase session-id agent + openSession persistence). mcpserver-claude-code-plugin/tests/SessionIdCanonicalAgent.Tests.ps1 dot-sources ..\lib\repl-invoke.ps1: asserts Get-ReplCanonicalAgentName('default')='Default' and matches ^[A-Z][A-Za-z0-9]*$, 'claude-code'/'claudecode'='ClaudeCode', 'codex'='Codex', 'grok'='GrokCode'; and Invoke-WorkflowOpenSession with 'sessionId: ClaudeCode-...-explicit' writes status=verified + that sessionId into session-state.yaml and returns true. Red before implementation (functions did not exist / openSession was a no-op), green after. Note: uses id 026 because TEST-MCP-REPL-011 was already taken.
 
+**Acceptance Criteria:**
+- [ ] Get-ReplCanonicalAgentName default is Default and matches PascalCase regex; claude-code is ClaudeCode; codex is Codex; grok is GrokCode.
+- [ ] Invoke-WorkflowOpenSession with explicit ClaudeCode sessionId writes status=verified and that sessionId into session-state.yaml and returns true.
 
 ### TEST-MCP-REPL-027
 
 Validates TR-MCP-REPL-012. mcpserver-claude-code-plugin/tests/ReplMethodTimeout.Tests.ps1 dot-sources ..\lib\repl-invoke.ps1: asserts Get-ReplMethodTimeoutSeconds returns >30 for workflow.todo.analyzeRequirements and workflow.requirements.generateDocument and exactly 30 for workflow.sessionlog.completeTurn/beginTurn; and with REPL_TIMEOUT=45/REPL_LONG_TIMEOUT=600 set, returns 45 for sessionlog and 600 for analyzeRequirements. Red before implementation (function absent), green after; Invoke-ReplRaw now uses Get-ReplMethodTimeoutSeconds.
 
+**Acceptance Criteria:**
+- [ ] Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements and generateDocument and exactly 30 for completeTurn and beginTurn.
+- [ ] With REPL_TIMEOUT=45 and REPL_LONG_TIMEOUT=600, sessionlog methods return 45 and analyzeRequirements returns 600.
+- [ ] Drain SubmitAsync timeout exception is covered by TEST-MCP-195 AC5-7 and does not change completeTurn/beginTurn expected 30s.
 
 ### TEST-MCP-REPL-028
 
 ReplWorkspaceResolution.Tests.ps1: a marker-bearing current directory outranks an inherited MCP_WORKSPACE_PATH when the repl bridge resolves the workspace. Validates TR-MCP-REPL-013 / BUG-TRIAGE-077.
 
+**Acceptance Criteria:**
+- [ ] A marker-bearing current directory outranks an inherited MCP_WORKSPACE_PATH when the repl bridge resolves the workspace.
 
 ### TEST-MCP-REPL-029
 
@@ -2770,6 +2874,27 @@ Tests must prove marker generation creates a valid default docs/wiki.yaml, prese
 - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
 - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
 - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
+
+### TEST-MCP-WIKIEXPORT-003
+
+WikiExport_WithoutDumpFlag_UnchangedBehavior; WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace; Dump_ContainsTodoRowsAndRequirementLinksMatchingStore; Dump_Sha256_MatchesCanonicalUtf8Json.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: WikiExport_WithoutDumpFlag_UnchangedBehavior; WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace; Dump_ContainsTodoRowsAndRequirementLinksMatchingStore; Dump_Sha256_MatchesCanonicalUtf8Json.
+
+### TEST-MCP-WIKIEXPORT-004
+
+AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml; Import_RemapsWorkspaceIdAndPaths_OldIdAbsent; Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected; Import_IdempotentReimport_NoDuplicateTodos.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml; Import_RemapsWorkspaceIdAndPaths_OldIdAbsent; Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected; Import_IdempotentReimport_NoDuplicateTodos.
+
+### TEST-MCP-WIKIEXPORT-005
+
+TodoYaml_NotSourceOfTruth_WhenDumpPresent; TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete; DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth.
+
+**Acceptance Criteria:**
+- [ ] Named tests exist: TodoYaml_NotSourceOfTruth_WhenDumpPresent; TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete; DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth.
 
 
 ## TEST-MCP-XAGENT

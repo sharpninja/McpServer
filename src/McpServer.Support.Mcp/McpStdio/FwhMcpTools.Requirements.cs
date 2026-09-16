@@ -86,6 +86,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Document selector: functional, technical, testing, mapping, matrix, or all")] string? doc = "all",
         [Description("Output format: markdown or wiki")] string? format = "markdown",
+        [Description("FR-MCP-WIKIEXPORT-003: when true, wiki export writes mcp-wiki-dump.json")] bool includeDump = false,
         CancellationToken cancellationToken = default)
     {
         using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
@@ -102,7 +103,8 @@ public sealed partial class FwhMcpTools
 
                 var export = await _requirementsDocumentService.GenerateWikiAsync(
                     Path.Combine(workspacePath, "docs", "Project", "wiki"),
-                    ct: cancellationToken).ConfigureAwait(false);
+                    ct: cancellationToken,
+                    includeDump: includeDump).ConfigureAwait(false);
                 return JsonSerializer.Serialize(export, s_camelCaseOptions);
             }
 

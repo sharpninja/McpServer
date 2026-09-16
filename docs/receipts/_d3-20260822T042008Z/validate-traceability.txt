@@ -1,0 +1,17 @@
+command: pwsh -NoProfile -File .\build.ps1 ValidateTraceability
+startedUtc: 2026-08-22T04:29:25.8939548Z
+endedUtc: 2026-08-22T04:29:42.2709562Z
+exitCode: 0
+--- stdout+stderr ---
+
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+
+Target: ValidateTraceability
+23:29:42 [INF] UseCaseFrLinks coverage source: F:\GitHub\McpServer\src\McpServer.Support.Mcp\mcp.db (findings=0)
+23:29:42 [INF] Traceability validation passed.
+
+Target                   Status      Duration
+ValidateTraceability     Succeeded      < 1sec
+Total                                   < 1sec
+
+Build succeeded on 8/21/2026 11:29:42 PM.

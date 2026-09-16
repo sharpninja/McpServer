@@ -1049,10 +1049,20 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var test = await GetAllTestAsync(ct).ConfigureAwait(false);
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
+        using var exportRoot = WorkspaceContainedFileSystem.OpenExportRoot(outputRootPath);
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(fr, tr, test, mapping, ReadExistingMatrixForExport(outputRootPath));
+        var existingMatrix = await RequirementsExportMatrixReader.ReadExistingAsync(
+                async token => await exportRoot.OpenFileForReadBoundedAsync(
+                        RequirementsDocumentRenderer.MatrixFileName,
+                        TimeSpan.FromSeconds(5),
+                        token)
+                    .ConfigureAwait(false),
+                () => ReadExistingMatrixForExport(null),
+                ct)
+            .ConfigureAwait(false);
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(fr, tr, test, mapping, existingMatrix);
         return await RequirementsDocumentExportWriter.WriteAsync(
-            outputRootPath,
+            exportRoot,
             "markdown",
             "all",
             generated,
@@ -1061,7 +1071,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
-    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
+    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default, bool includeDump = false)
     {
         var fr = await GetAllFrAsync(ct).ConfigureAwait(false);
         var tr = await GetAllTrAsync(ct).ConfigureAwait(false);
@@ -1078,7 +1088,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             tr,
             test,
             mapping,
-            ReadExistingMatrixForWikiExport(outputRootPath));
+            ReadExistingMatrixForWikiExport(outputRootPath),
+            includeDump);
         return await _wikiExportOrchestrator.ExportAsync(request, ct).ConfigureAwait(false);
     }
 

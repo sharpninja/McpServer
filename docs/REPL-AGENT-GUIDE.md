@@ -808,6 +808,23 @@ payload:
     message: Stream cancelled by user request
 ```
 
+## Handoff Workflow
+
+Handoff ingestion converts a workspace-scoped document into a TODO draft through `IHandoffIngestionService`. Use DraftOnly unless the operator asked to create a TODO. Do not edit TODO.yaml or handoff run rows. See `docs/Handoff-Ingestion.md` and `docs/handoffs/example.md`.
+
+```yaml
+type: request
+payload:
+  requestId: req-20260822T042008Z-handoff-ingest-001
+  method: workflow.handoff.ingest
+  params:
+    sourceKind: Path
+    path: docs/handoffs/example.md
+    mode: DraftOnly
+```
+
+Inspect with `workflow.handoff.get` (`runId`). Approve with `workflow.handoff.approve` (`runId`, `approved`, `reviewer`). Custom `promptTemplateId` values are rejected.
+
 ## Requirements Workflow
 
 ### List Functional Requirements
@@ -1472,6 +1489,7 @@ Every ~10 interactions:
 - **API Documentation**: `docs/context/api-capabilities.md`
 - **Session Log Schema**: `docs/context/session-log-schema.md`
 - **TODO Schema**: `docs/context/todo-schema.md`
+- **Handoff Ingestion**: `docs/Handoff-Ingestion.md`
 - **Module Bootstrap**: `docs/context/module-bootstrap.md`
 - **Action Types**: `docs/context/action-types.md`
 - **Compliance Rules**: `docs/context/compliance-rules.md`

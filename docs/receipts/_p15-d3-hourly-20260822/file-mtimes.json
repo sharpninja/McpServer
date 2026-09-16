@@ -1,0 +1,44 @@
+[
+  {
+    "Rel": "tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 15230
+  },
+  {
+    "Rel": "tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 9878
+  },
+  {
+    "Rel": "tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowResult.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 1549
+  },
+  {
+    "Rel": "docs\\receipts\\hostile-validator-20260822T044818Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T04:49:43.5921513Z",
+    "Length": 17244
+  },
+  {
+    "Rel": "docs\\receipts\\hostile-validator-20260822T050748Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:08:53.9385300Z",
+    "Length": 15792
+  },
+  {
+    "Rel": "docs\\receipts\\d3-docs-wiki-20260822T042008Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T04:32:22.2869011Z",
+    "Length": 5255
+  },
+  {
+    "Rel": "docs\\receipts\\plan-pluginhandoff-p14-d3-dispatch-20260822T042008Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T04:21:21.4974765Z",
+    "Length": 1393
+  }
+]

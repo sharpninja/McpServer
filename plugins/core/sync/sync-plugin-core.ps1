@@ -106,15 +106,10 @@ function Copy-CoreFile {
         [Parameter(Mandatory)][string]$DestinationPath
     )
 
-    $textExtensions = @('.ps1', '.psm1', '.psd1', '.sh', '.bash', '.yaml', '.yml', '.json', '.md', '.txt')
-    if ($textExtensions -contains [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()) {
-        $text = [System.IO.File]::ReadAllText($SourcePath)
-        $text = $text -replace "`r`n", "`n" -replace "`r", "`n"
-        [System.IO.File]::WriteAllText($DestinationPath, $text, [System.Text.UTF8Encoding]::new($false))
-        return
-    }
-
-    Copy-Item $SourcePath $DestinationPath -Force
+    # FR-MCP-PLUGINCORE-004 AC3: official plugin copies must be byte-identical to
+    # plugins/core/lib-ps so SyncAgentPlugins checksums match. Do not rewrite
+    # newlines or encodings during copy.
+    Copy-Item -LiteralPath $SourcePath -Destination $DestinationPath -Force
 }
 
 function Sync-Tree {
@@ -133,13 +128,15 @@ function Sync-Tree {
 
 Sync-Tree (Join-Path $coreRoot 'lib-ps')
 
-$handoffSkillSource = Join-Path $coreRoot 'skills\handoff\SKILL.md'
-if (Test-Path -LiteralPath $handoffSkillSource) {
+$handoffSkillSourceDir = Join-Path $coreRoot 'skills\handoff'
+if (Test-Path -LiteralPath $handoffSkillSourceDir) {
     $handoffSkillDestDir = Join-Path $PluginRoot 'skills\handoff'
     New-Item -ItemType Directory -Force $handoffSkillDestDir | Out-Null
-    $handoffSkillDest = Join-Path $handoffSkillDestDir 'SKILL.md'
-    Copy-CoreFile -SourcePath $handoffSkillSource -DestinationPath $handoffSkillDest
-    $manifestFiles['skills/handoff/SKILL.md'] = (Get-FileHash -Path $handoffSkillDest -Algorithm SHA256).Hash.ToLowerInvariant()
+    Get-ChildItem -LiteralPath $handoffSkillSourceDir -File | Sort-Object Name | ForEach-Object {
+        $dest = Join-Path $handoffSkillDestDir $_.Name
+        Copy-CoreFile -SourcePath $_.FullName -DestinationPath $dest
+        $manifestFiles["skills/handoff/$($_.Name)"] = (Get-FileHash -Path $dest -Algorithm SHA256).Hash.ToLowerInvariant()
+    }
 }
 
 Import-YamlSerializer

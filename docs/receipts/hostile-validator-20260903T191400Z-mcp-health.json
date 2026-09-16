@@ -1,0 +1,160 @@
+{
+  "TimestampUtc": "2026-09-03T19:19:20Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260903T191400Z-hostile-mcp-health",
+  "RequestId": "req-20260903T191400Z-001-hostile-validate-mcp-health",
+  "add-profile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "profileAllMdCount": 19,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "WorkClass": "class-2",
+  "WorkClassNote": "User-directed operator action: add-profile then MCP server health check. No product implementation and no plan-step done claim.",
+  "AccuracyRating": 99,
+  "CompletenessRating": 97,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 4
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "B5",
+    "B6",
+    "C",
+    "D"
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "18 non-skill profile files read; directory listing NonSkillCount=18 excluding add-profile.grok.md"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "HMAC-SHA256 match A8BDC9FDE3FBE2A95823938AFC3478AB6CCFCF3B8E5075F99FCFF50D0C81E4E5; Test-MarkerSignature true"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "GET health echoed nonce-20260903141400-14192; fresh nonce-20260903191840-20008 also echoed"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "status Healthy version 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8 storage reachable self+upstream Healthy Federation disabled"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "plugin-hook health-check HostName grok ExitCode 0 client.Health.GetAsync Healthy same version"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Marker LastWriteTimeUtc 2026-09-03T19:09:17.0272952Z"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Live CWD and hook WorkingDirectory F:\\GitHub\\McpServer"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Claims match live artifacts"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Independent re-run of HMAC health plugin-hook mtime listing CWD"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "No TODO/requirements file access; session log via MCP tools only"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh only; no python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "Byrd v4 not applied to class-2 ops"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "No deletes"
+    },
+    {
+      "id": "C",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Class-2 ops; not project requirement work"
+    },
+    {
+      "id": "D",
+      "surface": "D",
+      "verdict": "N/A",
+      "summary": "No plan-step completion claimed"
+    }
+  ],
+  "Evidence": {
+    "MarkerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+    "IndependentHmacComputed": "A8BDC9FDE3FBE2A95823938AFC3478AB6CCFCF3B8E5075F99FCFF50D0C81E4E5",
+    "IndependentHmacMatch": true,
+    "TestMarkerSignature": true,
+    "PayloadLength": 1202,
+    "PayloadHasCR": false,
+    "ClaimedNonce": "nonce-20260903141400-14192",
+    "ClaimedNonceMatch": true,
+    "FreshNonce": "nonce-20260903191840-20008",
+    "FreshNonceMatch": true,
+    "HealthStatus": "Healthy",
+    "HealthVersion": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "HealthStorage": "reachable",
+    "PluginHookScript": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\plugin-hook.ps1",
+    "PluginHookExitCode": 0,
+    "PluginHookStartedUtc": "2026-09-03T19:18:55.2048690Z",
+    "PluginHookEndedUtc": "2026-09-03T19:18:57.0954573Z",
+    "MarkerLastWriteTimeUtc": "2026-09-03T19:09:17.0272952Z",
+    "Cwd": "F:\\GitHub\\McpServer",
+    "BeginTurnId": 43175,
+    "SessionLogQuery": {
+      "agent": "GrokCode",
+      "from": "2026-09-03T19:00:00Z",
+      "sessionId": "GrokCode-20260903T191400Z-hostile-mcp-health",
+      "requestId": "req-20260903T191400Z-001-hostile-validate-mcp-health",
+      "turnStatus": "completed",
+      "turnId": 43175,
+      "actionCount": 7,
+      "designDecisionCount": 5,
+      "dialogCount": 6,
+      "lastUpdated": "2026-09-03T19:25:20.1393710+00:00"
+    }
+  }
+}

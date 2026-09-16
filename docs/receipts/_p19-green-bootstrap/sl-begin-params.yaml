@@ -1,0 +1,4 @@
+queryText: Replace subset Pester receipt with a complete-run native suite receipt covering every tests/*.Tests.ps1 and Jest npm test, SyncAgentPlugins rebind, then PluginNativeSuiteReceiptTests and C-green-P19 hostile only.
+requestId: req-20260822T103449Z-001-p19-complete-native-suites
+queryTitle: P19 complete native-suite green after DISAGREE
+

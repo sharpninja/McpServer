@@ -1,0 +1,39 @@
+{
+  "index": 4,
+  "name": "support-mcp-integration",
+  "exactCommand": "dotnet test tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj",
+  "capturedCommand": "dotnet test tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj --logger trx;LogFileName=04-support-mcp-integration.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z --nologo",
+  "startedUtc": "2026-08-22T15:26:14.3590280Z",
+  "endedUtc": "2026-08-22T15:30:49.0477973Z",
+  "durationSec": 274.689,
+  "exitCode": 0,
+  "passed": 281,
+  "failed": 0,
+  "skipped": 0,
+  "total": 281,
+  "countSource": "trx",
+  "logPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\04-support-mcp-integration.log",
+  "logSha256": "C28C4D04DE9B667E93C055A0FD0EAE4020F5C7DD5468F26F7509E52BE36E62CC",
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\04-support-mcp-integration.trx",
+  "trxSha256": "AFE5BA39E9B5CBDF1FB90BB17586EEA54B31CD52733248F1B6D055969AE92146",
+  "consoleCounts": {
+    "failed": 0,
+    "passed": 281,
+    "skipped": 0,
+    "total": 281,
+    "lines": 1
+  },
+  "trxCounts": {
+    "total": 281,
+    "executed": 281,
+    "passed": 281,
+    "failed": 0,
+    "notExecuted": 0,
+    "skipped": 0,
+    "skippedNames": [],
+    "failedNames": []
+  },
+  "gateFailed": false,
+  "gateSkipped": false,
+  "gateExitFail": false
+}

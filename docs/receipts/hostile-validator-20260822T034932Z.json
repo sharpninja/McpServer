@@ -1,0 +1,185 @@
+{
+  "TimestampUtc": "2026-08-22T03:49:32Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P11-P13",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T023808Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p11-p13/",
+  "SessionId": "GrokSubagentHostile-20260822T034932Z-c-green-p11-p13",
+  "RequestId": "req-20260822T034932Z-001-hostile-c-green-p11-p13",
+  "HealthNonce": "nonce-hv-20260822031548-53112",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 21,
+  "Accuracy": 97,
+  "Completeness": 96,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginSessionLogWorkflowAdapterTests",
+    "FilterExitCode": 0,
+    "FilterPassed": 24,
+    "FilterFailed": 0,
+    "FilterSkippedConsole": 0,
+    "FilterTrxNotExecuted": 0,
+    "FilterConsoleDuration": "7 m 20 s",
+    "FilterLog": "docs/receipts/_hv-c-green-p11-p13/dotnet-adapter-filter-20260822T033151Z.log",
+    "FilterTrx": "docs/receipts/_hv-c-green-p11-p13/trx-adapter-20260822T033151Z/adapter-filter.trx",
+    "AllCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "AllExitCode": 0,
+    "AllPassed": 54,
+    "AllFailed": 0,
+    "AllSkippedConsole": 0,
+    "AllTrxNotExecuted": 0,
+    "AllTotal": 54,
+    "AllConsoleDuration": "7 m 4 s",
+    "AllLog": "docs/receipts/_hv-c-green-p11-p13/dotnet-pluginintegration-all-20260822T034054Z.log",
+    "AllTrx": "docs/receipts/_hv-c-green-p11-p13/trx-all-20260822T034054Z/pluginintegration-all.trx",
+    "ExecuteCanonicalTurnAsyncThrowsNotImplemented": false,
+    "P11NamedTestsPresent": true,
+    "P11InlineDataCount": 8,
+    "P11Passed": 8,
+    "P12NamedTestsPresent": true,
+    "P12Passed": 8,
+    "P13NamedTestsPresent": true,
+    "P13Passed": 8,
+    "P14NamedTestsPresent": false
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P11": false,
+    "MCP-PLUGININT-001-P12": false,
+    "MCP-PLUGININT-001-P13": false,
+    "PLAN-combined-C-P7-P13": false
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS"
+    }
+  ],
+  "TurnId": 42875,
+  "OpenSessionCreated": true,
+  "QueryTurnStatus": "completed"
+}

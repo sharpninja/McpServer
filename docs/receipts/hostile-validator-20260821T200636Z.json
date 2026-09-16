@@ -1,0 +1,87 @@
+{
+  "TimestampUtc": "2026-08-21T20:06:36Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-A completeness",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T161800Z.md",
+    "docs/receipts/hostile-validator-20260821T171357Z.md",
+    "docs/receipts/hostile-validator-20260821T172735Z.md",
+    "docs/receipts/hostile-validator-20260821T173914Z.md"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 90,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T195919Z-p0a-plan",
+    "requestId": "req-20260821T195919Z-001-hostile-p0a-d0-d1-claims",
+    "turnId": 42719,
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T19:50:00Z totalCount=1 turn status=completed actions=6 designDecisions=4 dialog=3"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 10,
+    "FAIL": 5,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [
+    "A6: 173914Z FAIL list not closed; named covering tests now in D0/map but D0 remaining-gap inventory still incomplete (3 ingestion facts and AgentPool/Publish/PostgreSql_CleanDatabase tests have zero plan hits; task 21 still lists FR-HANDOFF-003 field diagnostics as D1 remaining)",
+    "A-expand: D0 is not the complete Handoff* inventory it claims; 21 facts collapsed to listed previously plus five names",
+    "B1: D0 remaining-gap classification still incomplete; AgentPool D1 name omits existing greens",
+    "C: covering-test fidelity still incomplete (UnknownSourceNotes, AgentPool redaction tests unmapped)",
+    "D: P0-A DoD complete inventory and cross-step task 21 consistency not met"
+  ],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "D0 names GetAndApprove_DelegateToSharedService, Validate_InvalidFields_ProduceFieldDiagnostics, PublicSurfaces_ExposeIngestGetAndApprove, Dispatcher_RoutesHandoffWorkflowMethods." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "TEST-HANDOFF-004 AC1 maps to Validate_InvalidFields, not eight HandoffDraft_Invalid* new reds." },
+    { "id": "A3", "group": "A Requested", "verdict": "PASS", "summary": "TEST-HANDOFF-006 AC1 maps API/client/REPL/Director/MCP covering tests plus remaining PluginHandoffSkill invoke red." },
+    { "id": "A4", "group": "A Requested", "verdict": "PASS", "summary": "D1 exact new-red names are the four claimed methods; tests/ grep ZERO for each." },
+    { "id": "A5", "group": "A Requested", "verdict": "PASS", "summary": "Hostile-after-red remains for C/E/F/G. Dual P0-A/P0-B remain. PLAN-PLUGINHANDOFF-001 not found." },
+    { "id": "A6", "group": "A Requested", "verdict": "FAIL", "summary": "173914Z FAIL class not closed: D0 remaining-gap inventory still incomplete against on-disk covering tests." },
+    { "id": "A-expand", "group": "A Requested", "verdict": "FAIL", "summary": "D0 complete-inventory contract fails: 3 of 21 ingestion facts absent from plan; AgentPool/Publish/PostgreSql_CleanDatabase Handoff tests absent." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "FAIL", "summary": "Remaining-gap classification untrustworthy while D0 omits on-disk greens." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "Section 3 matched live todo_get and on-disk grep." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "MCP-only storage instruction present." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh-only / no Python named and followed in this review." },
+    { "id": "C", "group": "C Requirements", "verdict": "FAIL", "summary": "Numbered TEST-HANDOFF 004/006 covering tests are now mapped; remaining covering tests (UnknownSourceNotes, AgentPool redaction) are not." },
+    { "id": "D", "group": "D Plan", "verdict": "FAIL", "summary": "P0-A DoD complete D0 inventory and task 21 vs D1 consistency not met." }
+  ],
+  "EvidenceAnchors": {
+    "pluginintLiveP0Done": true,
+    "pluginintLiveP1toP20Open": true,
+    "planPluginHandoffTodoExists": false,
+    "dbSetCount": 62,
+    "planDbSetCount": 62,
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "handoffIngestionServiceTestsFactCount": 21,
+    "healthNonceEchoed": "68fc152acf124eb999750c0394c30945",
+    "validateInvalidFieldsInPlan": true,
+    "getAndApproveInPlan": true,
+    "publicSurfacesInPlan": true,
+    "replDispatcherRoutesInPlan": true,
+    "handoffDraftInvalidAsNewRed": false,
+    "d1FourNamesOnDisk": false,
+    "unknownSourceNotesInPlan": false,
+    "extractorCancelledInPlan": false,
+    "artifactSourceInPlan": false,
+    "enqueueOneShotHandoffInPlan": false,
+    "publishHandoffContextInPlan": false,
+    "validateInvalidFieldsPath": "tests/McpServer.Support.Mcp.Tests/Services/HandoffTodoDraftValidatorTests.cs:13-42",
+    "getAndApprovePath": "tests/McpServer.Support.Mcp.Tests/Controllers/HandoffControllerTests.cs:34-53",
+    "publicSurfacesPath": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:79-109",
+    "replDispatcherPath": "tests/McpServer.Repl.Core.Tests/HandoffWorkflowTests.cs:15-48",
+    "agentPoolExistingGreenPath": "tests/McpServer.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs:222-254",
+    "publishHandoffPath": "tests/McpServer.Support.Mcp.Tests/Services/OneShotSensitivePromptPolicyTests.cs:12-19",
+    "task21Path": "plan.md:744",
+    "testingRequirementsAc": "docs/Project/Testing-Requirements.md:19-52",
+    "planAcMap": "plan.md:468-482"
+  }
+}

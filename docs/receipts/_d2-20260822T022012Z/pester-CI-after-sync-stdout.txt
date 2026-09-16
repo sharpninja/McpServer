@@ -1,0 +1,15 @@
+Pester v5.7.1
+
+Starting discovery in 1 files.
+Discovery found 1 tests in 202ms.
+Running tests.
+
+Running tests from 'F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1'
+Describing TEST-HANDOFF-006 plugin handoff skill-file invoke
+  [+] PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods 2.45s (2.41s|41ms)
+Tests completed in 3.2s
+Tests Passed: 1, Failed: 0, Skipped: 0, Inconclusive: 0, NotRun: 0
+PESTER_AFTER_SYNC_PASSED=1
+PESTER_AFTER_SYNC_FAILED=0
+PESTER_AFTER_SYNC_SKIPPED=0
+PESTER_AFTER_SYNC_TOTAL=1

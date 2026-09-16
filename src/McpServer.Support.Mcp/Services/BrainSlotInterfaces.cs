@@ -61,12 +61,29 @@ public interface IBrainSlotChatClient
 }
 
 /// <summary>
+/// FR-MCP-LLMSTRATEGY-001: Per-provider completion strategy that receives shared turn context by reference.
+/// </summary>
+public interface IBrainSlotCompletionStrategy
+{
+    /// <summary>Completes using the role prompt <paramref name="input"/> and the shared <paramref name="context"/>.</summary>
+    Task<string> CompleteAsync(
+        BrainSlotDefinitionEntity slot,
+        string input,
+        BrainSlotTurnContext context,
+        double? temperature,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>
 /// TR-MCP-QUAD-002: Creates external chat clients for configured brain slots.
 /// </summary>
 public interface IBrainSlotChatClientFactory
 {
     /// <summary>Creates a chat client for the supplied slot and resolved credential.</summary>
     IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential);
+
+    /// <summary>Creates the per-provider completion strategy for the supplied slot and credential.</summary>
+    IBrainSlotCompletionStrategy CreateStrategy(BrainSlotDefinitionEntity slot, string credential);
 }
 
 /// <summary>

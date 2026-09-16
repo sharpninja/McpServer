@@ -1,0 +1,218 @@
+{
+  "TimestampUtc": "2026-08-21T23:44:22Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P1-P3",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T232545Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p1-p3/",
+  "SessionId": "GrokSubagentHostile-20260821T234007Z-c-green-p1-p3",
+  "RequestId": "req-20260821T234007Z-001-hostile-c-green-p1-p3",
+  "TurnId": 42804,
+  "HealthNonce": "5558b6438b2e489fb0dc93b5e6619462",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 25,
+  "Accuracy": 96,
+  "Completeness": 95,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "BuildFilter": "FullyQualifiedName~PluginSessionLogIntegrationTargetTests",
+    "BuildExitCode": 0,
+    "BuildPassed": 3,
+    "BuildFailed": 0,
+    "BuildSkippedConsole": 0,
+    "BuildTrxNotExecuted": 0,
+    "PluginProject": "tests/McpServer.PluginIntegration.Tests",
+    "PluginExitCode": 0,
+    "PluginPassed": 1,
+    "PluginFailed": 0,
+    "PluginSkippedConsole": 0,
+    "PluginTrxNotExecuted": 0,
+    "NamedPassed": [
+      "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject",
+      "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+      "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios",
+      "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection"
+    ]
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGINCORE-004": true,
+    "MCP-WORKSPACEHYGIENE-002": false
+  },
+  "Catalog": {
+    "Path": "tests/McpServer.PluginIntegration.Tests/scenarios/plugin-sessionlog-scenarios.json",
+    "RootPathExists": false,
+    "RowCount": 8,
+    "EnabledCount": 8,
+    "HasClineV2": true,
+    "Names": [
+      "Codex",
+      "Claude Code",
+      "Claude Cowork",
+      "Copilot",
+      "Grok",
+      "Cline",
+      "Cline v2",
+      "OpenCode"
+    ]
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6a",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6b",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6c",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6d",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6e",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS"
+    }
+  ],
+  "SessionProof": {
+    "method": "client.SessionLog.QueryAsync",
+    "agent": "GrokSubagentHostile",
+    "totalCount": 21,
+    "thisSession": "GrokSubagentHostile-20260821T234007Z-c-green-p1-p3",
+    "turnStatus": "completed",
+    "turnId": 42804,
+    "actionCount": 6,
+    "dialogCount": 3,
+    "designDecisionCount": 2,
+    "file": "docs/receipts/_hv-c-green-p1-p3/sl-query-sid.txt"
+  }
+}

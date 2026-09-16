@@ -1,0 +1,5 @@
+DOTNET_EXIT=1
+Failed: 24, Passed: 0, Skipped: 0, Total: 24
+Filter: FullyQualifiedName~WorkspaceHygieneNamedTests
+TRX: docs/receipts/_f-red-20260822T152120Z/workspace-hygiene-f-red.trx
+Worktree: C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a02a08-d2d8-76b1-92d5-c79fe0c49401

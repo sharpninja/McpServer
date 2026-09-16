@@ -488,7 +488,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         public virtual Task<RequirementsDocumentExportResult> GenerateAllAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
             => Task.FromResult(new RequirementsDocumentExportResult { Success = true, OutputRoot = outputRootPath });
 
-        public virtual Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
+        public virtual Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default, bool includeDump = false)
             => Task.FromResult(new RequirementsDocumentExportResult { Success = true, OutputRoot = outputRootPath, Format = "wiki" });
     }
 
@@ -525,7 +525,8 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         public override async Task<RequirementsDocumentExportResult> GenerateWikiAsync(
             string outputRootPath,
             DateTimeOffset? generatedAtUtc = null,
-            CancellationToken ct = default)
+            CancellationToken ct = default,
+            bool includeDump = false)
         {
             var azure = Path.Combine(outputRootPath, "azure");
             Directory.CreateDirectory(azure);

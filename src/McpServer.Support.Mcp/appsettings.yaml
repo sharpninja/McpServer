@@ -120,10 +120,16 @@ Mcp:
   BrainSlots:
     ExecutionEnabled: false
     AllowLoopbackEndpoints: false
-    DefaultTimeoutSeconds: 30
+    DefaultTimeoutSeconds: 180
     MaxTimeoutSeconds: 300
     AllowedEndpointHosts: []
+    CliRunAs: ''
+    CliWorkingDirectory: ''
+    CliGitHubToken: ''
     Slots: []
+  TurnTransactions:
+    Enabled: false
+    RequiredForMutations: true
   TodoStorage:
     Provider: sqlite
     SqliteDataSource: mcp.db

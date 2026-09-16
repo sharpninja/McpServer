@@ -190,6 +190,8 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
                     success: false,
                     error: "Handoff ingestion is already in progress.",
                     errorCode: HandoffErrorCodes.InProgress,
+                    extraction.PromptVersion,
+                    extraction.TemplateVersion,
                     cancellationToken).ConfigureAwait(false);
             }
 
@@ -242,6 +244,8 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
                 success,
                 success ? null : errorDiagnostic?.Message,
                 success ? null : errorDiagnostic?.Code,
+                extraction.PromptVersion,
+                extraction.TemplateVersion,
                 cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
@@ -763,17 +767,26 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
         bool success,
         string? error,
         string? errorCode,
+        string? promptVersion,
+        string? templateVersion,
         CancellationToken cancellationToken)
     {
         var sanitizedDraft = SanitizeDraft(draft);
         var claimedVersion = entity.StateVersion;
+        var effectivePrompt = string.IsNullOrWhiteSpace(promptVersion)
+            ? HandoffPromptDefaults.PromptVersion
+            : promptVersion.Trim();
+        var effectiveTemplate = string.IsNullOrWhiteSpace(templateVersion)
+            ? HandoffPromptDefaults.TemplateId
+            : templateVersion.Trim();
         var fenced = await _db.HandoffIngestionRuns
             .Where(run => run.RunId == entity.RunId
                 && run.ProcessingOwner == _instanceId
                 && run.StateVersion == claimedVersion)
             .ExecuteUpdateAsync(
                 setters => setters
-                    .SetProperty(run => run.TemplateVersion, HandoffPromptDefaults.TemplateId)
+                    .SetProperty(run => run.PromptVersion, effectivePrompt)
+                    .SetProperty(run => run.TemplateVersion, effectiveTemplate)
                     .SetProperty(run => run.Agent, SanitizeText(agent))
                     .SetProperty(run => run.Model, SanitizeText(model))
                     .SetProperty(run => run.Confidence, sanitizedDraft?.Confidence)
@@ -793,7 +806,8 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
         if (fenced == 0)
             return InProgressResult(entity);
 
-        entity.TemplateVersion = HandoffPromptDefaults.TemplateId;
+        entity.PromptVersion = effectivePrompt;
+        entity.TemplateVersion = effectiveTemplate;
         entity.Agent = SanitizeText(agent);
         entity.Model = SanitizeText(model);
         entity.Confidence = sanitizedDraft?.Confidence;
@@ -975,12 +989,14 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(_lease.HeartbeatInterval, cancellationToken).ConfigureAwait(false);
+                await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);
                 var now = _time.GetUtcNow();
                 await using var db = CreateFreshContext();
                 var renewed = await db.HandoffIngestionRuns
                     .Where(run => run.RunId == entity.RunId
-                        && run.ProcessingOwner == _instanceId)
+                        && run.ProcessingOwner == _instanceId
+                        && run.ProcessingState == nameof(HandoffProcessingState.Processing)
+                        && run.StateVersion == entity.StateVersion)
                     .ExecuteUpdateAsync(
                         setters => setters
                             .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration)),
@@ -993,6 +1009,26 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
         }
         catch (OperationCanceledException)
         {
+        }
+    }
+
+    private async Task WaitForHeartbeatIntervalAsync(CancellationToken cancellationToken)
+    {
+        var due = _time.GetUtcNow() + _lease.HeartbeatInterval;
+        while (_time.GetUtcNow() < due)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var remaining = due - _time.GetUtcNow();
+            if (remaining <= TimeSpan.Zero)
+                return;
+
+            var wait = remaining > TimeSpan.FromMilliseconds(50)
+                ? TimeSpan.FromMilliseconds(50)
+                : remaining;
+            if (wait < TimeSpan.FromMilliseconds(1))
+                wait = TimeSpan.FromMilliseconds(1);
+
+            await Task.Delay(wait, cancellationToken).ConfigureAwait(false);
         }
     }
 

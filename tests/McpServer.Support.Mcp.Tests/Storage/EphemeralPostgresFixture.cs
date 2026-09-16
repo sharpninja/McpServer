@@ -44,8 +44,10 @@ public sealed class EphemeralPostgresFixture : IDisposable
         File.WriteAllText(passwordFile, password);
         try
         {
-            RunTool(Path.Combine(_pgBin, "initdb.exe"),
-                $"-D \"{_dataDir}\" -U mcptest --auth=scram-sha-256 --pwfile=\"{passwordFile}\" -E UTF8");
+            RunTool(
+                Path.Combine(_pgBin, "initdb.exe"),
+                $"-D \"{_dataDir}\" -U mcptest --auth=scram-sha-256 --pwfile=\"{passwordFile}\" -E UTF8",
+                captureOutput: true);
         }
         finally
         {
@@ -104,17 +106,61 @@ public sealed class EphemeralPostgresFixture : IDisposable
         return File.Exists(Path.Combine(toolsBin, "initdb.exe")) ? toolsBin : null;
     }
 
-    private static void RunTool(string fileName, string arguments)
+    private static void RunTool(string fileName, string arguments, bool captureOutput = false)
     {
-        var process = Process.Start(new ProcessStartInfo
+        var cwd = Path.GetDirectoryName(fileName);
+        if (string.IsNullOrWhiteSpace(cwd))
+        {
+            cwd = Environment.CurrentDirectory;
+        }
+
+        var capture = captureOutput
+            || Path.GetFileName(fileName).Equals("initdb.exe", StringComparison.OrdinalIgnoreCase);
+        var startInfo = new ProcessStartInfo
         {
             FileName = fileName,
             Arguments = arguments,
+            WorkingDirectory = cwd,
             UseShellExecute = false,
-        }) ?? throw new InvalidOperationException($"Failed to start {fileName}.");
+            RedirectStandardOutput = capture,
+            RedirectStandardError = capture,
+        };
+        var process = Process.Start(startInfo)
+            ?? throw new InvalidOperationException($"Failed to start {Path.GetFileName(fileName)}.");
+        var stdout = capture ? process.StandardOutput.ReadToEnd() : string.Empty;
+        var stderr = capture ? process.StandardError.ReadToEnd() : string.Empty;
         process.WaitForExit();
         if (process.ExitCode != 0)
-            throw new InvalidOperationException($"{Path.GetFileName(fileName)} failed with exit code {process.ExitCode}.");
+        {
+            var suffix = capture
+                ? $" arguments: {SanitizeEvidence(arguments)}. cwd: {SanitizeEvidence(cwd)}. stdout: {SanitizeEvidence(stdout)}. stderr: {SanitizeEvidence(stderr)}."
+                : string.Empty;
+            throw new InvalidOperationException(
+                $"{Path.GetFileName(fileName)} failed with exit code {process.ExitCode}.{suffix}");
+        }
+    }
+
+    private static string SanitizeEvidence(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return value;
+        }
+
+        var sanitized = value;
+        var profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (!string.IsNullOrWhiteSpace(profile))
+        {
+            sanitized = sanitized.Replace(profile, "<user-profile>", StringComparison.OrdinalIgnoreCase);
+        }
+
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        if (!string.IsNullOrWhiteSpace(localAppData))
+        {
+            sanitized = sanitized.Replace(localAppData, "<local-app-data>", StringComparison.OrdinalIgnoreCase);
+        }
+
+        return sanitized;
     }
 
     private static int GetFreeTcpPort()

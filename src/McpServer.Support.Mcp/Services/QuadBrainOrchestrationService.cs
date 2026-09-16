@@ -1,10 +1,12 @@
 using System.Text.Json;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -23,6 +25,8 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
     private readonly IOptionsMonitor<TurnTransactionOptions> _transactionOptions;
     private readonly ILogger<QuadBrainOrchestrationService> _logger;
     private readonly IBrainInteractionSessionLogger? _brainLogger;
+    private readonly IServiceScopeFactory? _scopeFactory;
+    private readonly WorkspaceContext? _workspaceContext;
 
     /// <summary>Initializes a new instance of the <see cref="QuadBrainOrchestrationService"/> class.</summary>
     public QuadBrainOrchestrationService(
@@ -32,7 +36,9 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         IOptionsMonitor<TurnTransactionOptions> transactionOptions,
         ILogger<QuadBrainOrchestrationService> logger,
         ITurnTransactionCoordinator? transactionCoordinator = null,
-        IBrainInteractionSessionLogger? brainLogger = null)
+        IBrainInteractionSessionLogger? brainLogger = null,
+        IServiceScopeFactory? scopeFactory = null,
+        WorkspaceContext? workspaceContext = null)
     {
         _db = db;
         _registry = registry;
@@ -41,6 +47,8 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         _logger = logger;
         _transactionCoordinator = transactionCoordinator;
         _brainLogger = brainLogger;
+        _scopeFactory = scopeFactory;
+        _workspaceContext = workspaceContext;
     }
 
     /// <inheritdoc />
@@ -64,17 +72,28 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         var roleResults = new List<QuadBrainRoleResult>();
         var creativitySlot = slots[BrainSlotRoles.Creativity];
         var logicSlot = slots[BrainSlotRoles.Logic];
+        request.Metadata.TryGetValue("sessionId", out var sessionId);
+        request.Metadata.TryGetValue("transactionId", out var upstreamTransactionId);
+        var turnContext = new BrainSlotTurnContext
+        {
+            OriginalInput = request.Input,
+            TurnId = request.TurnId,
+            SessionId = sessionId,
+            TransactionId = upstreamTransactionId,
+        };
         var creativityTask = InvokeRoleAsync(
                 creativitySlot,
                 BuildRolePrompt(BrainSlotRoles.Creativity, request.Input, slots[BrainSlotRoles.Creativity]),
                 request,
                 admitToGraphRag: false,
+                turnContext,
                 cancellationToken);
         var logicTask = InvokeRoleAsync(
                 logicSlot,
                 BuildRolePrompt(BrainSlotRoles.Logic, request.Input, slots[BrainSlotRoles.Logic]),
                 request,
                 admitToGraphRag: false,
+                turnContext,
                 cancellationToken);
         await Task.WhenAll(creativityTask, logicTask).ConfigureAwait(false);
 
@@ -94,23 +113,31 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
                     BuildCuriosityEscalationPrompt(request.Input, creativity, logic, slots[BrainSlotRoles.CuriosityEngine]),
                     request,
                     request.AdmitCuriosityToGraphRag,
+                    turnContext,
                     cancellationToken)
                 .ConfigureAwait(false);
             roleResults.Add(ToRoleResult(curiosity, slots[BrainSlotRoles.CuriosityEngine]));
+            if (IsTransactionCommitted(curiosity) && HasValidOutput(curiosity))
+                turnContext.SetCommittedEvidence(BrainSlotRoles.CuriosityEngine, curiosity.Output);
             return RejectOrchestration(
                 IsTransactionCommitted(curiosity) ? BrainSlotReasonCodes.OrchestrationFailed : curiosity.Reason,
                 started,
                 roleResults);
         }
 
-        var reconciliation = await ExecuteAotReconciliationAsync(new AotReconciliationRequest
+        if (HasValidOutput(creativity))
+            turnContext.SetCommittedEvidence(BrainSlotRoles.Creativity, creativity.Output);
+        if (HasValidOutput(logic))
+            turnContext.SetCommittedEvidence(BrainSlotRoles.Logic, logic.Output);
+
+        var reconciliation = await ExecuteAotReconciliationCoreAsync(new AotReconciliationRequest
         {
             Input = request.Input,
             CreativityOutput = creativity.Output ?? string.Empty,
             LogicOutput = logic.Output ?? string.Empty,
             TurnId = request.TurnId,
             Metadata = AddMetadata(request.Metadata, "quadOperation", "full-orchestration"),
-        }, cancellationToken).ConfigureAwait(false);
+        }, turnContext, request.Progress, cancellationToken).ConfigureAwait(false);
 
         roleResults.Add(ToRoleResult(reconciliation, slots[BrainSlotRoles.ArbiterOfTruth]));
 
@@ -118,17 +145,21 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             return RejectOrchestration(reconciliation.Reason, started, roleResults);
         if (IsAotSemanticRejection(reconciliation.Output))
         {
+            if (IsCommitted(reconciliation) && !string.IsNullOrWhiteSpace(reconciliation.Output))
+                turnContext.SetCommittedEvidence(BrainSlotRoles.ArbiterOfTruth, reconciliation.Output);
             var voteCreativityTask = InvokeRoleAsync(
                     creativitySlot,
                     BuildVotingPrompt(BrainSlotRoles.Creativity, request.Input, creativity.Output, logic.Output, reconciliation.Output, creativitySlot),
                     request,
                     admitToGraphRag: false,
+                    turnContext,
                     cancellationToken);
             var voteLogicTask = InvokeRoleAsync(
                     logicSlot,
                     BuildVotingPrompt(BrainSlotRoles.Logic, request.Input, creativity.Output, logic.Output, reconciliation.Output, logicSlot),
                     request,
                     admitToGraphRag: false,
+                    turnContext,
                     cancellationToken);
             await Task.WhenAll(voteCreativityTask, voteLogicTask).ConfigureAwait(false);
 
@@ -141,14 +172,18 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             if (!HasValidOutput(voteLogic))
                 return RejectOrchestration(voteLogic.Reason, started, roleResults);
 
-            reconciliation = await ExecuteAotReconciliationAsync(new AotReconciliationRequest
+            if (HasValidOutput(voteCreativity))
+                turnContext.SetCommittedEvidence(BrainSlotRoles.Creativity, voteCreativity.Output);
+            if (HasValidOutput(voteLogic))
+                turnContext.SetCommittedEvidence(BrainSlotRoles.Logic, voteLogic.Output);
+            reconciliation = await ExecuteAotReconciliationCoreAsync(new AotReconciliationRequest
             {
                 Input = request.Input,
                 CreativityOutput = voteCreativity.Output ?? string.Empty,
                 LogicOutput = voteLogic.Output ?? string.Empty,
                 TurnId = request.TurnId,
                 Metadata = AddMetadata(request.Metadata, "quadOperation", "voting-reconciliation"),
-            }, cancellationToken).ConfigureAwait(false);
+            }, turnContext, request.Progress, cancellationToken).ConfigureAwait(false);
             roleResults.Add(ToRoleResult(reconciliation, slots[BrainSlotRoles.ArbiterOfTruth]));
             if (!IsCommitted(reconciliation) || IsAotSemanticRejection(reconciliation.Output))
                 return RejectOrchestration(reconciliation.Reason, started, roleResults);
@@ -188,12 +223,35 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             return RejectAot(BrainSlotReasonCodes.ValidationFailed, started);
         }
 
+        request.Metadata.TryGetValue("sessionId", out var sessionId);
+        request.Metadata.TryGetValue("transactionId", out var transactionId);
+        var turnContext = new BrainSlotTurnContext
+        {
+            OriginalInput = request.Input,
+            TurnId = request.TurnId,
+            SessionId = sessionId,
+            TransactionId = transactionId,
+        };
+        turnContext.SetCommittedEvidence(BrainSlotRoles.Creativity, request.CreativityOutput);
+        turnContext.SetCommittedEvidence(BrainSlotRoles.Logic, request.LogicOutput);
+        turnContext.SetCommittedEvidence(BrainSlotRoles.CuriosityEngine, request.CuriosityOutput);
+        return await ExecuteAotReconciliationCoreAsync(request, turnContext, progress: null, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<AotReconciliationResponse> ExecuteAotReconciliationCoreAsync(
+        AotReconciliationRequest request,
+        BrainSlotTurnContext turnContext,
+        IProgress<QuadBrainRoleProgress>? progress,
+        CancellationToken cancellationToken)
+    {
+        var started = DateTimeOffset.UtcNow;
         var arbiter = await _registry.GetEnabledEntityForRoleAsync(BrainSlotRoles.ArbiterOfTruth, cancellationToken)
             .ConfigureAwait(false);
         if (arbiter is null)
             return RejectAot(BrainSlotReasonCodes.QuadNotReady, started);
 
         var prompt = BuildAotPrompt(request, arbiter);
+        progress?.Report(QuadBrainRoleProgress.Started(BrainSlotRoles.ArbiterOfTruth));
         var response = await _invocation.InvokeAsync(arbiter.SlotId, new BrainSlotInvokeRequest
         {
             Input = prompt,
@@ -201,11 +259,16 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             AdmitToGraphRag = false,
             Temperature = RoleTemperature(arbiter.Role),
             Metadata = AddMetadata(request.Metadata, "quadOperation", "aot-reconciliation"),
+            TurnContext = turnContext,
         }, cancellationToken).ConfigureAwait(false);
+        progress?.Report(QuadBrainRoleProgress.Completed(BrainSlotRoles.ArbiterOfTruth, response.Output));
 
         // FR-MCP-QBEXEC-003: log the Arbiter-of-Truth reconciliation prompt + output in full (best-effort).
         await LogBrainInteractionAsync(request.Metadata, request.TurnId, BrainSlotRoles.ArbiterOfTruth, prompt, response.Output, cancellationToken)
             .ConfigureAwait(false);
+        if (string.Equals(response.Status, "committed", StringComparison.OrdinalIgnoreCase)
+            && !string.IsNullOrWhiteSpace(response.Output))
+            turnContext.SetCommittedEvidence(BrainSlotRoles.ArbiterOfTruth, response.Output);
 
         return new AotReconciliationResponse
         {
@@ -327,21 +390,67 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         string prompt,
         QuadBrainOrchestrationRequest request,
         bool admitToGraphRag,
+        BrainSlotTurnContext turnContext,
         CancellationToken cancellationToken)
     {
-        var response = await _invocation.InvokeAsync(slot.SlotId, new BrainSlotInvokeRequest
+        // Parallel Creativity/Logic (and voting) must not share the request-scoped DbContext.
+        if (_scopeFactory is not null)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            CopyWorkspace(scope);
+            var invocation = scope.ServiceProvider.GetRequiredService<IBrainSlotInvocationService>();
+            return await InvokeOnAsync(invocation, slot, prompt, request, admitToGraphRag, turnContext, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        return await InvokeOnAsync(_invocation, slot, prompt, request, admitToGraphRag, turnContext, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private async Task<BrainSlotInvokeResponse> InvokeOnAsync(
+        IBrainSlotInvocationService invocation,
+        BrainSlotDefinitionEntity slot,
+        string prompt,
+        QuadBrainOrchestrationRequest request,
+        bool admitToGraphRag,
+        BrainSlotTurnContext turnContext,
+        CancellationToken cancellationToken)
+    {
+        request.Progress?.Report(QuadBrainRoleProgress.Started(slot.Role));
+        var response = await invocation.InvokeAsync(slot.SlotId, new BrainSlotInvokeRequest
         {
             Input = prompt,
             TurnId = request.TurnId,
             AdmitToGraphRag = admitToGraphRag,
             Temperature = RoleTemperature(slot.Role),
             Metadata = AddMetadata(request.Metadata, "quadRole", slot.Role),
+            TurnContext = turnContext,
         }, cancellationToken).ConfigureAwait(false);
+        request.Progress?.Report(QuadBrainRoleProgress.Completed(slot.Role, response.Output));
 
         // FR-MCP-QBEXEC-003: log the full prompt + output of this brain interaction (best-effort, secret-redacted).
         await LogBrainInteractionAsync(request.Metadata, request.TurnId, slot.Role, prompt, response.Output, cancellationToken)
             .ConfigureAwait(false);
         return response;
+    }
+
+    private void CopyWorkspace(IServiceScope scope)
+    {
+        if (_workspaceContext is null || string.IsNullOrWhiteSpace(_workspaceContext.WorkspacePath))
+            return;
+
+        var child = scope.ServiceProvider.GetService<WorkspaceContext>();
+        if (child is null)
+            return;
+
+        child.WorkspacePath = _workspaceContext.WorkspacePath;
+        child.WorkspaceName = _workspaceContext.WorkspaceName;
+        child.DataDirectory = _workspaceContext.DataDirectory;
+        child.TodoFilePath = _workspaceContext.TodoFilePath;
+        child.SessionsPath = _workspaceContext.SessionsPath;
+        child.ExternalDocsPath = _workspaceContext.ExternalDocsPath;
+        child.IsDefaultKey = _workspaceContext.IsDefaultKey;
+        scope.ServiceProvider.GetService<McpDbContext>()?.OverrideWorkspaceId(_workspaceContext.WorkspacePath);
     }
 
     /// <summary>FR-MCP-QBEXEC-003: best-effort full-text logging of a brain interaction to the session log.</summary>
@@ -428,7 +537,7 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
            {request.LogicOutput}
            {curiositySection}
 
-           Reconcile the evidence, enforce the user's directive, identify any material uncertainty, and return the final decision. You may return the creativity response, the logic response, or a combined response. If neither role response is valid enough to answer the user, begin the output with "REJECT:" so the runtime can start the voting/reconciliation mechanism.
+           Reconcile the evidence, enforce the user's directive, identify any material uncertainty, and return the final decision. You may return the creativity response, the logic response, or a combined response. Return ONLY a JSON object with an intent field of final, continue, tool_calls, or reject, plus content and optional tool_calls. Do not return prose without that envelope. If neither role response is valid enough to answer the user, use intent reject.
            """;
     }
 
@@ -671,6 +780,13 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         var trimmed = output.TrimStart();
         if (trimmed.StartsWith("REJECT", StringComparison.OrdinalIgnoreCase))
             return true;
+
+        var envelope = QuadBrainArbiterEnvelope.TryParse(output);
+        if (envelope is not null
+            && string.Equals(envelope.Intent, QuadBrainArbiterEnvelope.IntentReject, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
 
         if (!trimmed.StartsWith('{'))
             return false;

@@ -1,0 +1,85 @@
+{
+  "TimestampUtc": "2026-08-21T16:18:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.97.0"
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 88,
+  "Completeness": 72,
+  "SessionLog": {
+    "persisted": false,
+    "reason": "Hosted tool list did not include sessionlog_* or invoke_expression"
+  },
+  "UnknownSurfaces": [
+    "Live todo_get payloads for MCP-PLUGININT-001 P1-P20 task list",
+    "Reviewer MCP session-log turn persistence"
+  ],
+  "ExplicitFailTriggersFromBrief": {
+    "todoLacksPhase": false,
+    "acLackNamedTests": true,
+    "implementationAllowedBeforeP0B": false,
+    "wikiDumpReusesCompleted001002AsDumpAc": false,
+    "handoffplanTreatedAsSecondProduct": false
+  },
+  "FailList": [
+    "A1/D: PLUGININT Phase C exists but P1-P20 are not inlined; plan points at the TODO instead of a BDPv4 playlist",
+    "A2/B/D: no hostile after Handoff red tests; PLUGININT not sliced; mocks-first only Phase B",
+    "A2/B5: Phase B red-test list overlaps existing green parser and SessionLogPersistenceStrategyTests",
+    "A4/C: HOSTILEREVIEW 6 FR vs 5 TR/TEST; HYGIENE 5 FR vs 4 TR/TEST",
+    "A4/C: drain timeout already on TR-MCP-PERSIST-003/TEST-MCP-195; plan invents TEST-MCP-REPL-041 or next free id",
+    "A7/C/D: unnamed tests for PLUGININT, HYGIENE, WIKIEXPORT, HOSTILEREVIEW quality/execution/parity, REPL-009 non-terminal methods, nested drain deferral",
+    "A9/D: unlocked drain env, failsafe path vs existing V4 tests, wiki tables[] and add-workspace param, hygiene exit severity, eight plugins vs marker five, Codex vs hostile APPROVED, WIKIEXPORT TODO not relinked to 003-005"
+  ],
+  "PassList": [
+    "All eight TODOs have a phase letter",
+    "P0-A then create PLAN-PLUGINHANDOFF-001 then P0-B; no implementation before P0-B",
+    "Wiki dump AC proposed as FR-MCP-WIKIEXPORT-003..005 not completed 001/002",
+    "HANDOFFPLAN labeled execution prompt not second product",
+    "Drain 2s hardcoded return 2 is in-scope Phase B",
+    "No skip placeholders; done:true requires hostile AGREE",
+    "Nuke UpdateService, SyncAgentPlugins, three-provider migrations named"
+  ],
+  "Claims": [
+    {"id": "A1", "surface": "A", "title": "Plan covers all eight TODOs", "verdict": "FAIL"},
+    {"id": "A2", "surface": "A", "title": "BDPv4 order and hostile between phases", "verdict": "FAIL"},
+    {"id": "A3", "surface": "A", "title": "Dual pre-implementation gates P0-A and P0-B", "verdict": "PASS"},
+    {"id": "A4", "surface": "A", "title": "New FR families; existing reused not duplicated", "verdict": "FAIL"},
+    {"id": "A5", "surface": "A", "title": "Drain 2s timeout in-scope", "verdict": "PASS"},
+    {"id": "A6", "surface": "A", "title": "Handoff is remediation not rewrite", "verdict": "PASS"},
+    {"id": "A7", "surface": "A", "title": "Named tests for listed areas", "verdict": "FAIL"},
+    {"id": "A8", "surface": "A", "title": "No skipped-test placeholders; no done without AGREE", "verdict": "PASS"},
+    {"id": "A9", "surface": "A", "title": "Decision-complete contracts migrations Nuke plugin sync blast radius", "verdict": "FAIL"},
+    {"id": "B1", "surface": "B", "title": "Byrd v4 for class-1 plan", "verdict": "FAIL"},
+    {"id": "B2", "surface": "B", "title": "Plan current-state honesty", "verdict": "FAIL"},
+    {"id": "B3", "surface": "B", "title": "MCP-only storage instruction", "verdict": "PASS"},
+    {"id": "B4", "surface": "B", "title": "PowerShell / no Python", "verdict": "PASS"},
+    {"id": "C", "surface": "C", "title": "Plan captures FR/TR/TEST/AC", "verdict": "FAIL"},
+    {"id": "D", "surface": "D", "title": "This plan DoD", "verdict": "FAIL"}
+  ],
+  "Counts": {
+    "PASS": 6,
+    "FAIL": 9,
+    "UNKNOWN": 2
+  },
+  "EightTodoPhaseMap": {
+    "MCP-PLUGINCORE-004": "B",
+    "MCP-PLUGININT-001": "C",
+    "MCP-HANDOFF-001": "D",
+    "MCP-HANDOFFPLAN-001": "D",
+    "MCP-HANDOFFREVIEW-001": "D",
+    "MCP-HOSTILEREVIEW-001": "E",
+    "MCP-WORKSPACEHYGIENE-002": "F",
+    "MCP-WIKIEXPORT-001": "G"
+  }
+}

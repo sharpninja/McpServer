@@ -820,4 +820,41 @@ public sealed class FederationTopologyService : IFederationTopologyService
         var bytes = System.Text.Encoding.UTF8.GetBytes(raw);
         return Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(bytes));
     }
+
+    /// <summary>
+    /// TEST-MCP-USECASE-020: Distinguishes exact-caller-token cancellation from provider SQLSTATE
+    /// 57014 failures such as statement timeout or administrative cancel.
+    /// </summary>
+    private static async Task<T> ExecuteProviderCancelableAsync<T>(
+        Func<Task<T>> operation,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await operation().ConfigureAwait(false);
+        }
+        catch (Exception exception)
+            when (IsGenuineProviderCancellation(exception, cancellationToken))
+        {
+            throw new OperationCanceledException(
+                "The provider operation was cancelled by the caller.",
+                exception,
+                cancellationToken);
+        }
+    }
+
+    /// <summary>
+    /// Returns true only when the provider observed this caller token. PostgreSQL 57014 is not
+    /// treated as caller cancellation.
+    /// </summary>
+    private static bool IsGenuineProviderCancellation(
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        if (!cancellationToken.IsCancellationRequested)
+            return false;
+
+        return exception is OperationCanceledException operationCancellation &&
+               operationCancellation.CancellationToken == cancellationToken;
+    }
 }

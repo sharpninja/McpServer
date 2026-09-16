@@ -37,10 +37,12 @@
         "InstallReplTool",
         "InstallTestDependencies",
         "MigrationIntegrationTests",
+        "NormalizeGeneratedMigrationObsoletePragmas",
         "PackageMsix",
         "PackNuGet",
         "PackQBAgentTool",
         "PackReplTool",
+        "PluginSessionLogIntegration",
         "Publish",
         "PublishAgent",
         "PublishNuGet",
@@ -181,6 +183,14 @@
         "PackageVersion": {
           "type": "string",
           "description": "Package version for NuGet pack (defaults to GitVersion output)"
+        },
+        "PluginPromotionApproval": {
+          "type": "string",
+          "description": "Path to the operator approval artifact for Staging/Production plugin promotion"
+        },
+        "PluginPromotionEnvironment": {
+          "type": "string",
+          "description": "Plugin promotion environment: Development, Staging, or Production"
         },
         "Port": {
           "type": "integer",

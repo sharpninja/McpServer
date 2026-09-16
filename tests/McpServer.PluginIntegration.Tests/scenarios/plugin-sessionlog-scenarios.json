@@ -1,0 +1,12 @@
+{
+  "scenarios": [
+    { "name": "Codex", "hostKind": "Codex", "agentSourceType": "Codex", "repositoryName": "mcpserver-codex-plugin", "cacheFolder": "codex", "entrypoint": "Invoke-CodexMcpPlugin.ps1", "requiredEnvironmentVariables": ["CODEX_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Claude Code", "hostKind": "ClaudeCode", "agentSourceType": "ClaudeCode", "repositoryName": "mcpserver-claude-code-plugin", "cacheFolder": "claude", "entrypoint": "lib/Invoke-McpPlugin.ps1", "requiredEnvironmentVariables": ["CLAUDE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Claude Cowork", "hostKind": "ClaudeCowork", "agentSourceType": "ClaudeCowork", "repositoryName": "mcpserver-claude-cowork-plugin", "cacheFolder": "cowork", "entrypoint": "lib/Invoke-McpPlugin.ps1", "requiredEnvironmentVariables": ["CLAUDE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Copilot", "hostKind": "Copilot", "agentSourceType": "Copilot", "repositoryName": "mcpserver-copilot-plugin", "cacheFolder": "copilot", "entrypoint": "lib/Invoke-McpPlugin.ps1", "requiredEnvironmentVariables": ["COPILOT_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Grok", "hostKind": "Grok", "agentSourceType": "GrokCode", "repositoryName": "mcpserver-grok-plugin", "cacheFolder": "grok", "entrypoint": "lib/Invoke-McpPlugin.ps1", "requiredEnvironmentVariables": ["GROK_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Cline", "hostKind": "Cline", "agentSourceType": "Cline", "repositoryName": "mcpserver-cline-plugin", "cacheFolder": "cline", "entrypoint": "dist/index.js", "requiredEnvironmentVariables": ["CLINE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "Cline v2", "hostKind": "ClineV2", "agentSourceType": "Cline", "repositoryName": "mcpserver-cline-v2-plugin", "cacheFolder": "cline-v2", "entrypoint": "dist/index.js", "requiredEnvironmentVariables": ["CLINE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true },
+    { "name": "OpenCode", "hostKind": "OpenCode", "agentSourceType": "OpenCode", "repositoryName": "mcpserver-opencode-plugin", "cacheFolder": "opencode", "entrypoint": "dist/index.js", "requiredEnvironmentVariables": ["OPENCODE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME"], "enabled": true }
+  ]
+}

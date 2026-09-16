@@ -1,0 +1,44 @@
+D1 red-test commands and exit codes
+Workspace: F:\GitHub\McpServer
+Agent: GrokCode
+TODO: PLAN-PLUGINHANDOFF-001
+TimestampUtc: 2026-08-22T00:22:24Z (session open) / 2026-08-22T00:34:31Z (dotnet trx)
+
+1) Marker signature
+Command: . .\plugins\core\lib-ps\marker-resolver.ps1; Test-MarkerSignature -MarkerFile F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+Result: True
+ExitCode: 0
+
+2) Health nonce
+Command: Invoke-RestMethod http://PAYTON-LEGION2:7147/health?nonce=bc63f4415f664aa2b05e37f4e3db86a9
+NonceSent: bc63f4415f664aa2b05e37f4e3db86a9
+HealthNonce: bc63f4415f664aa2b05e37f4e3db86a9
+NonceMatch: True
+HealthStatus: Healthy
+HealthStorage: reachable
+ExitCode: 0
+
+3) Pester (NUnit xml via PesterConfiguration)
+Command: Invoke-Pester -Configuration (Path=plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1; TestResult.OutputPath=docs/receipts/_d1-20260822T002007Z/pester-PluginHandoffSkill.xml; OutputFormat=NUnitXml; Verbosity=Detailed)
+Result: Failed
+Total: 1
+Passed: 0
+Failed: 1
+Skipped: 0
+NotRun: 0
+Artifact: docs/receipts/_d1-20260822T002007Z/pester-PluginHandoffSkill.xml
+
+4) Pester gate requested by the spawn
+Command: pwsh.exe -NoProfile -NonInteractive -Command "Set-Location -LiteralPath 'F:\GitHub\McpServer'; Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1' -CI; exit $LASTEXITCODE"
+ExitCode: 1
+Stdout: docs/receipts/_d1-20260822T002007Z/pester-CI-stdout.txt
+NUnitXml copy: docs/receipts/_d1-20260822T002007Z/pester-CI-testResults.xml
+Counts: Passed 0, Failed 1, Skipped 0, NotRun 0
+
+5) xUnit v3 named tests
+Command: dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug --filter "FullyQualifiedName~ProcessingLease_RenewsAndFencesTerminalUpdates|FullyQualifiedName~Provenance_IncludesEffectiveCustomPromptIdentityAndVersion" --logger "trx;LogFileName=d1-handoff-csharp.trx" --results-directory F:\GitHub\McpServer\docs\receipts\_d1-20260822T002007Z --nologo
+ExitCode: 1
+DurationSec: 85.28 (includes compile)
+TRX: docs/receipts/_d1-20260822T002007Z/d1-handoff-csharp.trx
+TRX counters: total=2 executed=2 passed=0 failed=2 error=0 notExecuted=0 (skipped=0)
+Console: Failed!  - Failed: 2, Passed: 0, Skipped: 0, Total: 2

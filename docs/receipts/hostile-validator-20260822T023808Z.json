@@ -1,0 +1,180 @@
+{
+  "TimestampUtc": "2026-08-22T02:38:08Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P11",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T020756Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p11/",
+  "SessionId": "GrokSubagentHostile-20260822T023011Z-c-red-p11",
+  "RequestId": "req-20260822T023011Z-001-hostile-c-red-p11",
+  "TurnId": 42861,
+  "HealthNonce": "a7c9c9a58c2a42a9b7fdc5e7c2ad1aa9",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 21,
+  "Accuracy": 97,
+  "Completeness": 96,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Theory_EachScenario_FailsUntilAdapterOperational",
+    "FilterExitCode": 1,
+    "FilterPassed": 0,
+    "FilterFailed": 8,
+    "FilterSkippedConsole": 0,
+    "FilterTrxNotExecuted": 0,
+    "FilterDurationMs": 141819,
+    "FilterConsoleDuration": "1 m 53 s",
+    "AllCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "AllExitCode": 1,
+    "AllPassed": 30,
+    "AllFailed": 8,
+    "AllSkippedConsole": 0,
+    "AllTrxNotExecuted": 0,
+    "AllTotal": 38,
+    "AllDurationMs": 252604,
+    "AllConsoleDuration": "3 m 52 s",
+    "ExecuteCanonicalTurnAsyncThrowsNotImplemented": true,
+    "P11NamedTestsPresent": true,
+    "P11InlineDataCount": 8,
+    "P12NamedTestsPresent": false,
+    "P13NamedTestsPresent": false
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P11": false,
+    "MCP-PLUGININT-001-P12": false,
+    "MCP-PLUGININT-001-P13": false
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS"
+    }
+  ],
+  "PersistenceProof": "client.SessionLog.QueryAsync turn status completed; CompleteTurnAsync from this process failed because turn already completed",
+  "TurnStatus": "completed"
+}

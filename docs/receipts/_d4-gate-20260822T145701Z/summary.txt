@@ -1,0 +1,8 @@
+Client.Tests exit=0 elapsedSec=4
+Support.Mcp.Tests exit=0 elapsedSec=91
+Repl.Core.Tests exit=0 elapsedSec=9
+Repl.IntegrationTests exit=0 elapsedSec=678
+Compile exit=0 elapsedSec=174
+Nuke.Test exit=0 elapsedSec=1504
+ValidateTraceability exit=0 elapsedSec=6
+SyncAgentPlugins exit=0 elapsedSec=46

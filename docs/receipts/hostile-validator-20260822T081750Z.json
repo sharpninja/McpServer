@@ -1,0 +1,227 @@
+{
+  "TimestampUtc": "2026-08-22T08:17:50Z",
+  "ReceiptStamp": "20260822T081750Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P16-P18",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T073737Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p16-p18/",
+  "SessionId": "GrokSubagentHostile-20260822T075053Z-c-green-p16-p18",
+  "RequestId": "req-20260822T075053Z-001-hostile-c-green-p16-p18",
+  "TurnId": 42920,
+  "HealthNonce": "nonce-hv-20260822075054-40006",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "HomemadeMarkerSignature": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "DISAGREE",
+  "FailCount": 2,
+  "UnknownCount": 0,
+  "PassCount": 18,
+  "Accuracy": 94,
+  "Completeness": 95,
+  "ExplicitFailList": [
+    "C4. TR-MCP-PLUGININT-001 ac-6 aiUnit strategy preflight missing from Build.PluginSessionLogIntegration.cs",
+    "D2. P18 plan/TODO DoD unmet: no aiUnit strategy preflight; NukeTarget_SkipIsFailure only covers FailIfPluginSessionLogSkipped"
+  ],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "ListTestsCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+    "ListTestsExitCode": 0,
+    "ListP16": 8,
+    "ListP17": 1,
+    "ListP18InPluginInt": 0,
+    "ListP19": 0,
+    "AiFilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginSessionLogAiTheoryTests",
+    "AiFilterExitCode": 0,
+    "AiFilterDurationMs": 22914,
+    "AiConsoleTotal": 9,
+    "AiConsolePassed": 9,
+    "AiConsoleFailed": 0,
+    "AiConsoleSkipped": 0,
+    "AiTrxTotal": "9",
+    "AiTrxPassed": "9",
+    "AiTrxFailed": "0",
+    "AiTrxNotExecuted": "0",
+    "AiTrxP16Passed": 8,
+    "AiTrxP17Passed": 1,
+    "AiTrxP19Count": 0,
+    "AiTrx": "docs/receipts/_hv-c-green-p16-p18/results-ai-20260822T075433Z/ai-theory.trx",
+    "NukeFilterCommand": "dotnet test tests/Build.Tests -c Debug --filter FullyQualifiedName~NukeTarget_SkipIsFailure",
+    "NukeFilterExitCode": 0,
+    "NukeFilterDurationMs": 8818,
+    "NukeConsoleTotal": 1,
+    "NukeConsolePassed": 1,
+    "NukeConsoleFailed": 0,
+    "NukeConsoleSkipped": 0,
+    "NukeTrxPassed": "1",
+    "NukeTrxFailed": "0",
+    "NukeTrx": "docs/receipts/_hv-c-green-p16-p18/results-nuke-20260822T075433Z/nuke-skip.trx",
+    "FullCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "FullExitCode": 0,
+    "FullDurationMs": 1224065,
+    "FullConsoleTotal": 95,
+    "FullConsolePassed": 95,
+    "FullConsoleFailed": 0,
+    "FullConsoleSkipped": 0,
+    "FullTrxTotal": "95",
+    "FullTrxPassed": "95",
+    "FullTrxFailed": "0",
+    "FullTrxNotExecuted": "0",
+    "FullTrxAiPassed": 9,
+    "FullTrxP19Count": 0,
+    "FullTrx": "docs/receipts/_hv-c-green-p16-p18/results-full-20260822T075433Z/pluginint-all.trx",
+    "EvaluateAsyncImplemented": true,
+    "P16NamedTestsPresent": true,
+    "P17NamedTestsPresent": true,
+    "P18NamedTestsPresent": true,
+    "P19NamedTestsPresent": false,
+    "BuildTargetHasAiUnitPreflight": false,
+    "SkipHitCount": 0
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P16": false,
+    "MCP-PLUGININT-001-P17": false,
+    "MCP-PLUGININT-001-P18": false,
+    "PLAN-combined-C-P16": false
+  },
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "AiStrategyFixture.EvaluateAsync implemented with required string fields, status contradiction, deterministicFailure Valid=false, invalid JSON missing json / invalid-json, no override to Valid=true."
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Named tests exist with no Skip: 8-row AiTheory_Agent_RequiresValidJsonFields, AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure, NukeTarget_SkipIsFailure calling FailIfPluginSessionLogSkipped."
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Independent rerun AiTheory Failed 0 Passed 9 Skipped 0; NukeTarget_SkipIsFailure Failed 0 Passed 1 Skipped 0; full PluginIntegration Failed 0 Passed 95 Skipped 0."
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "P19 named tests absent from source, list-tests, and TRX."
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Live todo_get PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false."
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Prior C-red-P16 AGREE docs/receipts/hostile-validator-20260822T073737Z.md Failed 8 Passed 0, EvaluateAsync not implemented."
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "C-red-P16 AGREE exists; P17/P18 test and EvaluateAsync files LastWriteTime after that AGREE."
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Independent receipts under docs/receipts/_hv-c-green-p16-p18/."
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "MCP plugin used for TODO/session/requirements; TODO.yaml porcelain empty."
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "pwsh.exe only. Validator did not invoke Python."
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Named-test and count claims match artifacts. P18 preflight gap scored on C/D."
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "FR/TR/TEST PLUGININT-001 exist with AC and mappings."
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "TEST AC3 covered by 8-row AiTheory plus P17 invalid JSON / deterministicFailure assertions."
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "TEST AC5 focused-target half mapped to NukeTarget_SkipIsFailure which passed. Native suite is P19."
+    },
+    {
+      "Id": "C4",
+      "Surface": "C",
+      "Verdict": "FAIL",
+      "Text": "TR-MCP-PLUGININT-001 ac-6 aiUnit strategy preflight missing from PluginSessionLogIntegration target."
+    },
+    {
+      "Id": "C5",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Did not require native-suite AC5 half, P19/P20, or store isSatisfied true."
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "C-red-P16 AGREE then P17 green evaluator/tests after that AGREE."
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Verdict": "FAIL",
+      "Text": "P18 plan/TODO DoD unmet: no aiUnit strategy preflight on Build.PluginSessionLogIntegration.cs."
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Not plan closeout. PLAN and PLUGININT remain done false."
+    },
+    {
+      "Id": "D4",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "P19/P20 named tests not mixed in."
+    }
+  ]
+}

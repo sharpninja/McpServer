@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260822T103812Z-e9b6
+  result:
+    agent: GrokCode
+    sessionId: GrokCode-20260822T103449Z-pluginhandoff-p19green
+    requestId: req-20260822T103449Z-001-p19-complete-native-suites
+    totalDialogCount: 2
+
+---

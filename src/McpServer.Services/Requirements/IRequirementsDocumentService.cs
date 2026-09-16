@@ -31,8 +31,9 @@ public interface IRequirementsDocumentService : IRequirementsRepository
     /// <param name="outputRootPath">Directory where the generated wiki folders should be written.</param>
     /// <param name="generatedAtUtc">Optional manifest and file timestamp. Uses current UTC time when omitted.</param>
     /// <param name="ct">Cancellation token.</param>
+    /// <param name="includeDump">FR-MCP-WIKIEXPORT-003: when true, write mcp-wiki-dump.json under the export root.</param>
     /// <returns>Metadata for the workspace files written by the export.</returns>
-    Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default);
+    Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default, bool includeDump = false);
 }
 
 /// <summary>

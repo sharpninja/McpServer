@@ -933,11 +933,13 @@ public sealed class RequirementsController : ControllerBase
     /// <param name="doc">Document selector: functional, technical, testing, mapping, matrix, or all.</param>
     /// <param name="format">Output format: markdown or wiki.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="includeDump">FR-MCP-WIKIEXPORT-003: when true, wiki export writes mcp-wiki-dump.json.</param>
     [HttpGet("generate")]
     public async Task<IActionResult> GenerateAsync(
         [FromQuery] string doc = "all",
         [FromQuery] string format = "markdown",
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromQuery] bool includeDump = false)
     {
         if (!TryParseDocType(doc, out var docType))
             return BadRequest(new { error = $"Unsupported doc value '{doc}'. Expected functional|technical|testing|mapping|matrix|all." });
@@ -951,7 +953,7 @@ public sealed class RequirementsController : ControllerBase
             RequirementsDocumentExportResult wikiExport;
             try
             {
-                wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
+                wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken, includeDump: includeDump).ConfigureAwait(false);
             }
             catch (RequirementsConflictException ex)
             {

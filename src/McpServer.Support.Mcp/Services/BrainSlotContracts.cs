@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using McpServer.Support.Mcp.Models;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -117,6 +118,18 @@ public sealed class BrainSlotOptions
     /// when <see cref="ExecutionEnabled"/> is true. Empty disables startup provisioning.
     /// </summary>
     public List<BrainSlotSeedDefinition> Slots { get; set; } = [];
+
+    /// <summary>
+    /// Windows user whose profile PATH and CLI auth caches are applied when spawning Cli brain slots.
+    /// Empty inherits the service account environment.
+    /// </summary>
+    public string? CliRunAs { get; set; }
+
+    /// <summary>Working directory for Cli brain-slot processes. Empty uses the process current directory.</summary>
+    public string? CliWorkingDirectory { get; set; }
+
+    /// <summary>Optional GH_TOKEN forwarded to Cli brain-slot processes.</summary>
+    public string? CliGitHubToken { get; set; }
 }
 
 /// <summary>
@@ -371,6 +384,10 @@ public sealed class BrainSlotInvokeRequest
     /// <summary>Caller metadata preserved in transaction evidence.</summary>
     [JsonPropertyName("metadata")]
     public IReadOnlyDictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
+
+    /// <summary>In-process shared turn context. Not serialized on the HTTP contract.</summary>
+    [JsonIgnore]
+    public BrainSlotTurnContext? TurnContext { get; set; }
 }
 
 /// <summary>
@@ -443,6 +460,12 @@ public sealed class QuadBrainOrchestrationRequest
     /// <summary>Optional explicit, approved weight update to apply after the final decision commits.</summary>
     [JsonPropertyName("weightUpdate")]
     public QuadBrainWeightUpdateRequest? WeightUpdate { get; set; }
+
+    /// <summary>
+    /// FR-MCP-QBPROGRESS-001: live role progress sink. Not serialized on the REST body.
+    /// </summary>
+    [JsonIgnore]
+    public IProgress<QuadBrainRoleProgress>? Progress { get; set; }
 }
 
 /// <summary>

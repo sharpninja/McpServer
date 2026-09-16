@@ -1,0 +1,16 @@
+[95m
+[95mStarting discovery in 1 files.[0m
+[95mDiscovery found 124 tests in 746ms.[0m
+[95mRunning tests.[0m
+workflow.sessionlog.appendActions requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\b5afc9e785d94eb9ad016d5b6b93f86c\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.completeTurn requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\b5afc9e785d94eb9ad016d5b6b93f86c\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.appendDialog requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\ba00e520ba7b4a9281ce2c5bbe95b8e2\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.appendDialog requires at least one valid dialogItems or dialog entry.
+Failsafe queue drain: replayed=1 failed=0 quarantined=0 skipped=0 dir='C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\drain-9d89f6e2023a490a9f73615b27d75a2d\failsafe'.
+workflow.sessionlog.failTurn requires a non-empty errorMessage (or failureNote).
+workflow.sessionlog.completeTurn refused current-turn cache 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\turnshim-d7ad8749d3ab4ab3a891afee70fa462e\cache\current-turn.yaml' because sourceType prefix 'GrokCode' differs from active 'Codex'.
+workflow.sessionlog.completeTurn re-binding current-turn cache 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\turnshim-d7ad8749d3ab4ab3a891afee70fa462e\cache\current-turn.yaml' from rotated sessionId 'Codex-20260819T000000Z-plugin-session' to active sessionId 'Codex-20260819T010000Z-rotated'.
+workflow.sessionlog.completeTurn refused to close 'req-20260819T000000Z-999-other' because the current turn is 'req-20260819T000000Z-003-keep'.
+[32m[+] F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1[0m[90m 104s (102.12s|1.25s)[0m
+[97mTests completed in 104.04s[0m
+[32mTests Passed: 124, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m

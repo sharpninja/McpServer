@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f7758188-093a-4f82-80f0-16a3a87123ae" name="kingd@PAYTON-LEGION2 2026-08-22 10:21:32" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T10:21:32.4976641-05:00" queuing="2026-08-22T10:21:32.4976647-05:00" start="2026-08-22T10:21:21.2857810-05:00" finish="2026-08-22T10:21:38.0072648-05:00" />
+  <TestSettings name="default" id="2bd8bdbc-6cf8-487f-8d84-97b49577570e">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_10_21_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5dc4c3c9-4f7d-46a0-ae01-2a323014b7dc" testId="eee1f83f-1633-ff88-b554-d42a970e52ab" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth" computerName="PAYTON-LEGION2" duration="00:00:00.9229245" startTime="2026-08-22T10:21:30.9057503-05:00" endTime="2026-08-22T10:21:31.8842899-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5dc4c3c9-4f7d-46a0-ae01-2a323014b7dc">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 349&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="794ce8b5-eae3-453a-af3d-b3bdc3492c4e" testId="bd7f0251-dab7-9f5c-90f5-0b16511b8bf7" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore" computerName="PAYTON-LEGION2" duration="00:00:05.2244330" startTime="2026-08-22T10:21:32.2364270-05:00" endTime="2026-08-22T10:21:37.4631901-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="794ce8b5-eae3-453a-af3d-b3bdc3492c4e">
+      <Output>
+        <ErrorInfo>
+          <Message>IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 385&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.ExportDumpAsync(WikiDumpPhaseGFixture fx, Boolean includeDump) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 432&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 132&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f9ad3eff-ad84-41fd-8f1d-06457e553677" testId="74c9fead-6562-2335-0346-172768565af2" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected" computerName="PAYTON-LEGION2" duration="00:00:00.0016331" startTime="2026-08-22T10:21:37.8562816-05:00" endTime="2026-08-22T10:21:37.8587161-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9ad3eff-ad84-41fd-8f1d-06457e553677">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 247&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6ad082c3-3db2-4bd3-b418-f20e08da4e13" testId="57242ddf-5a6b-8c52-1ce5-33061bf0e7b0" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent" computerName="PAYTON-LEGION2" duration="00:00:00.0021175" startTime="2026-08-22T10:21:37.8622951-05:00" endTime="2026-08-22T10:21:37.8652485-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ad082c3-3db2-4bd3-b418-f20e08da4e13">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 221&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c50e04ea-7983-4aa4-8cc9-d1904ae35c99" testId="eb4be571-3e8e-a18b-7e6a-c6c7a83f98e5" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml" computerName="PAYTON-LEGION2" duration="00:00:00.0012998" startTime="2026-08-22T10:21:37.8595541-05:00" endTime="2026-08-22T10:21:37.8614798-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c50e04ea-7983-4aa4-8cc9-d1904ae35c99">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 200&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9650057b-09ba-4a5d-80c9-c685b7ca3b1d" testId="237bf986-9ed9-8146-bb2c-71048f2adaf2" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete" computerName="PAYTON-LEGION2" duration="00:00:00.0021924" startTime="2026-08-22T10:21:37.4702557-05:00" endTime="2026-08-22T10:21:37.4735082-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9650057b-09ba-4a5d-80c9-c685b7ca3b1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 317&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="98533881-9d5f-4205-ad02-a636b89f4705" testId="214fffe9-9176-b7b6-b845-fb1813f39a9e" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior" computerName="PAYTON-LEGION2" duration="00:00:00.3326638" startTime="2026-08-22T10:21:31.9012539-05:00" endTime="2026-08-22T10:21:32.2351592-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98533881-9d5f-4205-ad02-a636b89f4705">
+      <Output>
+        <ErrorInfo>
+          <Message>IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 385&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 72&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c00c2500-fc2a-433a-94ae-aa9872e35ae4" testId="fc5cd72b-35f7-037d-aa3e-3ef70b4346f2" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace" computerName="PAYTON-LEGION2" duration="00:00:00.0020070" startTime="2026-08-22T10:21:37.4744419-05:00" endTime="2026-08-22T10:21:37.4773716-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c00c2500-fc2a-433a-94ae-aa9872e35ae4">
+      <Output>
+        <ErrorInfo>
+          <Message>IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 385&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 97&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="414ba62b-4764-4cea-84c2-c0d7d2a96b80" testId="ca931fb5-1b5b-f454-3b4c-26a72f458a93" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json" computerName="PAYTON-LEGION2" duration="00:00:00.3745214" startTime="2026-08-22T10:21:37.4783905-05:00" endTime="2026-08-22T10:21:37.8539914-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="414ba62b-4764-4cea-84c2-c0d7d2a96b80">
+      <Output>
+        <ErrorInfo>
+          <Message>IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 385&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.ExportDumpAsync(WikiDumpPhaseGFixture fx, Boolean includeDump) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 432&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 165&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="89dc4fc7-ab31-48e1-9cda-44cd40e36e3b" testId="0630f13d-0fc4-a4c5-87ae-452b9638d80d" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0015165" startTime="2026-08-22T10:21:37.4664788-05:00" endTime="2026-08-22T10:21:37.4689414-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89dc4fc7-ab31-48e1-9cda-44cd40e36e3b">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 297&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7ae161a0-6eb2-4714-9139-b7f95ac502bf" testId="bffa90dc-665b-2036-5c04-bb79e4b0cec7" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest" computerName="PAYTON-LEGION2" duration="00:00:00.0008443" startTime="2026-08-22T10:21:31.8987517-05:00" endTime="2026-08-22T10:21:31.9001248-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ae161a0-6eb2-4714-9139-b7f95ac502bf">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 374&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2e52b596-e618-4fe5-b721-d34b15b253d4" testId="d94e467b-9135-ce01-d00a-6e63381dbf5b" testName="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos" computerName="PAYTON-LEGION2" duration="00:00:00.0017846" startTime="2026-08-22T10:21:31.8952134-05:00" endTime="2026-08-22T10:21:31.8981441-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e52b596-e618-4fe5-b721-d34b15b253d4">
+      <Output>
+        <ErrorInfo>
+          <Message>Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 412&#xD;
+   at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs:line 279&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="bd7f0251-dab7-9f5c-90f5-0b16511b8bf7">
+      <Execution id="794ce8b5-eae3-453a-af3d-b3bdc3492c4e" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="Dump_ContainsTodoRowsAndRequirementLinksMatchingStore" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="d94e467b-9135-ce01-d00a-6e63381dbf5b">
+      <Execution id="2e52b596-e618-4fe5-b721-d34b15b253d4" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="Import_IdempotentReimport_NoDuplicateTodos" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="eb4be571-3e8e-a18b-7e6a-c6c7a83f98e5">
+      <Execution id="c50e04ea-7983-4aa4-8cc9-d1904ae35c99" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="214fffe9-9176-b7b6-b845-fb1813f39a9e">
+      <Execution id="98533881-9d5f-4205-ad02-a636b89f4705" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="WikiExport_WithoutDumpFlag_UnchangedBehavior" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="237bf986-9ed9-8146-bb2c-71048f2adaf2">
+      <Execution id="9650057b-09ba-4a5d-80c9-c685b7ca3b1d" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="bffa90dc-665b-2036-5c04-bb79e4b0cec7">
+      <Execution id="7ae161a0-6eb2-4714-9139-b7f95ac502bf" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="74c9fead-6562-2335-0346-172768565af2">
+      <Execution id="f9ad3eff-ad84-41fd-8f1d-06457e553677" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="ca931fb5-1b5b-f454-3b4c-26a72f458a93">
+      <Execution id="414ba62b-4764-4cea-84c2-c0d7d2a96b80" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="Dump_Sha256_MatchesCanonicalUtf8Json" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="fc5cd72b-35f7-037d-aa3e-3ef70b4346f2">
+      <Execution id="c00c2500-fc2a-433a-94ae-aa9872e35ae4" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="eee1f83f-1633-ff88-b554-d42a970e52ab">
+      <Execution id="5dc4c3c9-4f7d-46a0-ae01-2a323014b7dc" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="57242ddf-5a6b-8c52-1ce5-33061bf0e7b0">
+      <Execution id="6ad082c3-3db2-4bd3-b418-f20e08da4e13" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="Import_RemapsWorkspaceIdAndPaths_OldIdAbsent" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="0630f13d-0fc4-a4c5-87ae-452b9638d80d">
+      <Execution id="89dc4fc7-ab31-48e1-9cda-44cd40e36e3b" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests" name="TodoYaml_NotSourceOfTruth_WhenDumpPresent" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="eee1f83f-1633-ff88-b554-d42a970e52ab" executionId="5dc4c3c9-4f7d-46a0-ae01-2a323014b7dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd7f0251-dab7-9f5c-90f5-0b16511b8bf7" executionId="794ce8b5-eae3-453a-af3d-b3bdc3492c4e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="74c9fead-6562-2335-0346-172768565af2" executionId="f9ad3eff-ad84-41fd-8f1d-06457e553677" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57242ddf-5a6b-8c52-1ce5-33061bf0e7b0" executionId="6ad082c3-3db2-4bd3-b418-f20e08da4e13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb4be571-3e8e-a18b-7e6a-c6c7a83f98e5" executionId="c50e04ea-7983-4aa4-8cc9-d1904ae35c99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="237bf986-9ed9-8146-bb2c-71048f2adaf2" executionId="9650057b-09ba-4a5d-80c9-c685b7ca3b1d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="214fffe9-9176-b7b6-b845-fb1813f39a9e" executionId="98533881-9d5f-4205-ad02-a636b89f4705" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc5cd72b-35f7-037d-aa3e-3ef70b4346f2" executionId="c00c2500-fc2a-433a-94ae-aa9872e35ae4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca931fb5-1b5b-f454-3b4c-26a72f458a93" executionId="414ba62b-4764-4cea-84c2-c0d7d2a96b80" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0630f13d-0fc4-a4c5-87ae-452b9638d80d" executionId="89dc4fc7-ab31-48e1-9cda-44cd40e36e3b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bffa90dc-665b-2036-5c04-bb79e4b0cec7" executionId="7ae161a0-6eb2-4714-9139-b7f95ac502bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d94e467b-9135-ce01-d00a-6e63381dbf5b" executionId="2e52b596-e618-4fe5-b721-d34b15b253d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="12" executed="12" passed="0" failed="12" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:05.28]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:07.11]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:07.63]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:08.75]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:08.75]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.75]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:08.75]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(349,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth()&#xD;
+[xUnit.net 00:00:08.75]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.77]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:08.77]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.77]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:08.77]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(279,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos()&#xD;
+[xUnit.net 00:00:08.77]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.78]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:08.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.78]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:08.78]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(374,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest()&#xD;
+[xUnit.net 00:00:08.78]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:08.78]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:09.09]       IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).&#xD;
+[xUnit.net 00:00:09.09]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.09]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(385,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces()&#xD;
+[xUnit.net 00:00:09.09]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(72,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior()&#xD;
+[xUnit.net 00:00:09.09]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.32]       IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).&#xD;
+[xUnit.net 00:00:14.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(385,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces()&#xD;
+[xUnit.net 00:00:14.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(432,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.ExportDumpAsync(WikiDumpPhaseGFixture fx, Boolean includeDump)&#xD;
+[xUnit.net 00:00:14.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(132,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore()&#xD;
+[xUnit.net 00:00:14.32]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.32]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:14.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:14.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(297,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent()&#xD;
+[xUnit.net 00:00:14.32]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.33]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:14.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:14.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(317,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete()&#xD;
+[xUnit.net 00:00:14.33]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.33]       IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).&#xD;
+[xUnit.net 00:00:14.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(385,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces()&#xD;
+[xUnit.net 00:00:14.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(97,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace()&#xD;
+[xUnit.net 00:00:14.33]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.71]       IRequirementsDocumentService.GenerateWikiAsync must bind includeDump (wiki --include-dump).&#xD;
+[xUnit.net 00:00:14.71]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.71]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(385,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertIncludeDumpBoundOnGenerateSurfaces()&#xD;
+[xUnit.net 00:00:14.71]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(432,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.ExportDumpAsync(WikiDumpPhaseGFixture fx, Boolean includeDump)&#xD;
+[xUnit.net 00:00:14.71]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(165,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json()&#xD;
+[xUnit.net 00:00:14.71]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.71]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:14.71]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.71]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:14.71]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(247,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected()&#xD;
+[xUnit.net 00:00:14.71]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.72]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:14.72]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.72]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:14.72]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(200,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml()&#xD;
+[xUnit.net 00:00:14.72]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.72]       Service WorkspaceCreateRequest.Dump must bind add-workspace --dump for CreateAsync.&#xD;
+[xUnit.net 00:00:14.72]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.72]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(412,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AssertDumpBoundOnCreateAsyncContract()&#xD;
+[xUnit.net 00:00:14.72]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e7-7453-b027-93176ddfd033\tests\McpServer.Support.Mcp.Tests\Services\WikiDumpPhaseGTests.cs(221,0): at McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent()&#xD;
+[xUnit.net 00:00:14.72]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:14.74]   Finished:    McpServer.Support.Mcp.Tests (ID = '60571f2aaef399fbc096a8917c1e2ea5d86b8f237f0beb7ee0c874beed8cdb71')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:31.8965374-05:00">
+        <Text>[xUnit.net 00:00:08.75]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:31.9202892-05:00">
+        <Text>[xUnit.net 00:00:08.77]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:31.9227347-05:00">
+        <Text>[xUnit.net 00:00:08.78]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:32.2366507-05:00">
+        <Text>[xUnit.net 00:00:09.09]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.4649420-05:00">
+        <Text>[xUnit.net 00:00:14.32]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.4705507-05:00">
+        <Text>[xUnit.net 00:00:14.32]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.4743846-05:00">
+        <Text>[xUnit.net 00:00:14.33]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.4783289-05:00">
+        <Text>[xUnit.net 00:00:14.33]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.8552370-05:00">
+        <Text>[xUnit.net 00:00:14.71]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.8594690-05:00">
+        <Text>[xUnit.net 00:00:14.71]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.8622420-05:00">
+        <Text>[xUnit.net 00:00:14.71]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T10:21:37.8661801-05:00">
+        <Text>[xUnit.net 00:00:14.72]     McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

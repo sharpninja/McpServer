@@ -1,0 +1,33 @@
+{
+  "utc": "20260822T141644Z",
+  "sessionId": "GrokCode-20260822T141644Z-pluginhandoff-d4-gate",
+  "requestId": "req-20260822T141644Z-001-pluginhandoff-d4-gate",
+  "mcpSession": "Rk1eZOhaOwyR_p5_tI_5iw",
+  "initStatus": 200,
+  "openStatus": 200,
+  "openText": "{\"success\":true,\"agent\":\"GrokCode\",\"sessionId\":\"GrokCode-20260822T141644Z-pluginhandoff-d4-gate\",\"created\":true}",
+  "beginStatus": 200,
+  "beginText": "{\"success\":true,\"turnId\":43015,\"agent\":\"GrokCode\",\"sessionId\":\"GrokCode-20260822T141644Z-pluginhandoff-d4-gate\",\"requestId\":\"req-20260822T141644Z-001-pluginhandoff-d4-gate\",\"status\":\"in_progress\"}",
+  "todos": {
+    "PLAN-PLUGINHANDOFF-001": {
+      "statusCode": 200,
+      "done": false,
+      "snippet": "{\"Id\":\"PLAN-PLUGINHANDOFF-001\",\"Title\":\"Implement plugin core, hostile review queue, plugin integration harness, workspace hygiene, handoff remediations, and wiki dump/import\",\"Section\":\"Planning\",\"Priority\":\"high\",\"Done\":false,\"Estimate\":\"multi-phase\",\"Note\":\"2026-08-22T14:12:00Z. Session GrokCode-20260822T141100Z-pluginhandoff-d4. C-green-P20 AGREE 134148Z. G0 bound=no 132429Z. D4 plus E-red/G-r"
+    },
+    "MCP-HANDOFF-001": {
+      "statusCode": 200,
+      "done": false,
+      "snippet": "{\"Id\":\"MCP-HANDOFF-001\",\"Title\":\"Create handoff ingestion feature that generates TODOs with one-shot AI\",\"Section\":\"MCP Server\",\"Priority\":\"high\",\"Done\":false,\"Estimate\":\"2-4d\",\"Note\":\"Implementation and required validation are in the dirty worktree for Codex review. PLAN evidence 2026-08-16T20:54Z: required suites Failed 0 / Skipped 0. Do not mark this TODO done. Do not commit.\",\"Description\":[\"C"
+    },
+    "MCP-HANDOFFPLAN-001": {
+      "statusCode": 200,
+      "done": false,
+      "snippet": "{\"Id\":\"MCP-HANDOFFPLAN-001\",\"Title\":\"Grok execution prompt: Implement MCP-HANDOFF-001\",\"Section\":\"MCP Server\",\"Priority\":\"high\",\"Done\":false,\"Estimate\":\"2-4d\",\"Note\":\"Independent Codex review VERDICT: NOT APPROVED. Remediating P1-1..P1-8, P2-1..P2-6, P3. Do not mark done. No commit. Unrelated sanitizer/requirements dirty work is preserved and is not handoff evidence. Historical SQL Server 4NF/rena"
+    },
+    "MCP-HANDOFFREVIEW-001": {
+      "statusCode": 200,
+      "done": false,
+      "snippet": "{\"Id\":\"MCP-HANDOFFREVIEW-001\",\"Title\":\"Remediate independent adversarial review of MCP-HANDOFF-001\",\"Section\":\"MCP Server\",\"Priority\":\"high\",\"Done\":false,\"Estimate\":\"2-4d\",\"Note\":null,\"Description\":[\"Independent PowerShell.Mcp-only Codex review returned VERDICT: NOT APPROVED.\",\"Remediate every product finding through BDPv4 Red -\\u003E Green -\\u003E Refactor, rerun all handoff gates serially, and o"
+    }
+  }
+}

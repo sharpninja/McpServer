@@ -81,6 +81,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IAgentHelpWorkflow? _agentHelpWorkflow;
     private readonly ITranscriptIngestionWorkflow? _transcriptIngestionWorkflow;
     private readonly IHandoffWorkflow? _handoffWorkflow;
+    private readonly IHostileReviewWorkflow? _hostileReviewWorkflow;
+    private readonly IWorkspaceValidationWorkflow? _workspaceValidationWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -98,6 +100,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="agentHelpWorkflow">The optional Agent Help workflow used to invoke <c>workflow.agenthelp.*</c> methods.</param>
     /// <param name="transcriptIngestionWorkflow">The optional transcript ingestion workflow used to invoke <c>repl.sessionlog.*Transcripts</c> methods.</param>
     /// <param name="handoffWorkflow">The optional handoff workflow used to invoke <c>workflow.handoff.*</c> methods.</param>
+    /// <param name="hostileReviewWorkflow">The optional hostile-review workflow used to invoke <c>workflow.hostileReview.*</c> methods.</param>
+    /// <param name="workspaceValidationWorkflow">The optional workspace-validation workflow used to invoke <c>workspace.validate</c>.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -110,7 +114,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         IAgentHelpWorkflow? agentHelpWorkflow = null,
         ISessionLogPersistenceStrategy? sessionLogPersistenceStrategy = null,
         ITranscriptIngestionWorkflow? transcriptIngestionWorkflow = null,
-        IHandoffWorkflow? handoffWorkflow = null)
+        IHandoffWorkflow? handoffWorkflow = null,
+        IHostileReviewWorkflow? hostileReviewWorkflow = null,
+        IWorkspaceValidationWorkflow? workspaceValidationWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -123,6 +129,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _agentHelpWorkflow = agentHelpWorkflow;
         _transcriptIngestionWorkflow = transcriptIngestionWorkflow;
         _handoffWorkflow = handoffWorkflow;
+        _hostileReviewWorkflow = hostileReviewWorkflow;
+        _workspaceValidationWorkflow = workspaceValidationWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -244,12 +252,23 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return MarkWorkflowDeprecated(await DispatchHandoffRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
+        if (method.StartsWith(HostileReviewCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return await DispatchHostileReviewRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (string.Equals(method, WorkspaceValidationCommandShapes.ValidateMethod, StringComparison.Ordinal)
+            || string.Equals(method, WorkspaceValidationCommandShapes.WorkflowValidateMethod, StringComparison.Ordinal))
+        {
+            return await DispatchWorkspaceValidationRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
-                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*, {HandoffCommandShapes.MethodNamespace}.*.");
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*, {HandoffCommandShapes.MethodNamespace}.*, {HostileReviewCommandShapes.MethodNamespace}.*, {WorkspaceValidationCommandShapes.ValidateMethod}.");
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogPersistenceRequestAsync(
@@ -346,15 +365,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 // Call workflow.Open to set local REPL state (_state) so subsequent beginTurn/appendActions (workflow.*) find active session.
                 // Also route via client for server-side open/submit (passthrough).
                 // agent/sessionId already validated non-empty above; no magic "Codex" default.
-                if (_sessionLogWorkflow is not null)
-                {
-                    await _sessionLogWorkflow.OpenSessionAsync(
+                await TryMirrorSessionLogWorkflowAsync(
+                    () => _sessionLogWorkflow!.OpenSessionAsync(
                         agent,
                         RequireString(args, "sessionId"),
                         RequireString(args, "title"),
                         GetString(args, "model") ?? "unknown",
-                        cancellationToken).ConfigureAwait(false);
-                }
+                        cancellationToken),
+                    cancellationToken).ConfigureAwait(false);
                 clientMethod = "OpenSessionAsync";
                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -369,16 +387,15 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             case SessionLogCommandShapes.BeginTurnMethod:
                 // Mirror to local workflow state so that subsequent appendActions (even if sent without ids)
                 // will find an active turn in _state. The client passthrough handles the server side.
-                if (_sessionLogWorkflow is not null)
-                {
-                    await _sessionLogWorkflow.BeginTurnAsync(
+                await TryMirrorSessionLogWorkflowAsync(
+                    () => _sessionLogWorkflow!.BeginTurnAsync(
                         RequireString(args, "requestId"),
                         RequireString(args, "queryTitle"),
                         RequireString(args, "queryText"),
                         cancellationToken,
                         GetString(args, "planFile") ?? "None",
-                        GetString(args, "todoId") ?? "None").ConfigureAwait(false);
-                }
+                        GetString(args, "todoId") ?? "None"),
+                    cancellationToken).ConfigureAwait(false);
                 clientMethod = "BeginTurnAsync";
                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -395,52 +412,90 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 break;
 
             case SessionLogCommandShapes.CompleteTurnMethod:
-                if (_sessionLogWorkflow is not null)
-                {
-                    // Mirror completion to clear local active turn for any follow-on legacy commands.
-                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
-                    var resp = GetString(args, "response") ?? "completed";
-                    await _sessionLogWorkflow.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);
-                }
+                await TryMirrorSessionLogWorkflowAsync(
+                    async () =>
+                    {
+                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);
+                        var resp = GetString(args, "response") ?? "completed";
+                        await _sessionLogWorkflow!.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);
+                    },
+                    cancellationToken).ConfigureAwait(false);
                 clientMethod = "CompleteTurnAsync";
                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "completed" };
                 break;
 
             case SessionLogCommandShapes.FailTurnMethod:
-                if (_sessionLogWorkflow is not null)
-                {
-                    var err = GetString(args, "errorMessage") ?? GetString(args, "failureNote") ?? "failed";
-                    await _sessionLogWorkflow.FailTurnAsync(err, GetString(args, "errorCode"), cancellationToken).ConfigureAwait(false);
-                }
+                await TryMirrorSessionLogWorkflowAsync(
+                    () =>
+                    {
+                        var err = GetString(args, "errorMessage") ?? GetString(args, "failureNote") ?? "failed";
+                        return _sessionLogWorkflow!.FailTurnAsync(err, GetString(args, "errorCode"), cancellationToken);
+                    },
+                    cancellationToken).ConfigureAwait(false);
                 clientMethod = "FailTurnAsync";
                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: GetString(args, "errorMessage") ?? GetString(args, "failureNote"));
                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "failed" };
                 break;
 
-            case SessionLogCommandShapes.AppendActionsMethod:
-                // When ids are present we can still honor appendActions by routing through the (now populated) local workflow state.
-                // This keeps the legacy append path working even after a begin that carried explicit ids.
-                if (_sessionLogWorkflow is not null)
-                {
-                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
-                    var acts = GetSessionActions(args, "actions");
-                    if (acts.Count > 0)
+            case SessionLogCommandShapes.UpdateTurnMethod:
+                await TryMirrorSessionLogWorkflowAsync(
+                    async () =>
                     {
-                        await _sessionLogWorkflow.AppendActionsAsync(acts, cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                // Return success directly (the workflow Submit already persisted the turn+actions).
-                return new YamlEnvelope
-                {
-                    Type = "result",
-                    Payload = new ResultPayload
-                    {
-                        RequestId = request.RequestId,
-                        Result = new Dictionary<string, object?> { ["appended"] = true },
-                        Deprecated = true,
+                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);
+                        await _sessionLogWorkflow!.UpdateTurnAsync(
+                            GetString(args, "response"),
+                            GetString(args, "interpretation"),
+                            GetInt(args, "tokenCount"),
+                            GetStringList(args, "tags"),
+                            GetStringList(args, "contextList"),
+                            cancellationToken).ConfigureAwait(false);
                     },
+                    cancellationToken).ConfigureAwait(false);
+
+                clientMethod = "PatchTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
+                resultShape = new Dictionary<string, object?> { ["updated"] = true };
+                break;
+
+            case SessionLogCommandShapes.AppendDialogMethod:
+                await TryMirrorSessionLogWorkflowAsync(
+                    () => _sessionLogWorkflow!.AppendDialogAsync(
+                        GetDialogItems(args, "dialogItems"),
+                        cancellationToken),
+                    cancellationToken).ConfigureAwait(false);
+
+                clientMethod = "AppendDialogAsync";
+                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["agent"] = agent,
+                    ["sessionId"] = sessionId,
+                    ["requestId"] = GetString(args, "requestId"),
+                    ["items"] = args.TryGetValue("dialogItems", out var dialogItems) ? dialogItems : Array.Empty<object>(),
                 };
+                resultShape = new Dictionary<string, object?> { ["appended"] = true };
+                break;
+
+            case SessionLogCommandShapes.AppendActionsMethod:
+                // FR-MCP-REPL-009 AC1: appendActions must use the same primary-then-failsafe
+                // coordinator path as open/begin/update/appendDialog. Do not return Type=result
+                // without invoking the Session Log client and PersistAsync on primary failure.
+                await TryMirrorSessionLogWorkflowAsync(
+                    async () =>
+                    {
+                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);
+                        var acts = GetSessionActions(args, "actions");
+                        if (acts.Count > 0)
+                        {
+                            await _sessionLogWorkflow!.AppendActionsAsync(acts, cancellationToken).ConfigureAwait(false);
+                        }
+                    },
+                    cancellationToken).ConfigureAwait(false);
+
+                clientMethod = "PatchTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
+                resultShape = new Dictionary<string, object?> { ["appended"] = true };
+                break;
 
             default:
                 return null;
@@ -465,6 +520,16 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
         catch (Exception ex)
         {
+            var persisted = await TryPersistSessionLogWhenPrimaryFailsAsync(
+                request,
+                args,
+                resultShape,
+                cancellationToken).ConfigureAwait(false);
+            if (persisted is not null)
+            {
+                return persisted;
+            }
+
             return BuildError(
                 requestId: request.RequestId,
                 code: "method_invocation_error",
@@ -474,6 +539,93 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     ["methodName"] = request.Method,
                     ["exceptionType"] = ex.GetType().FullName,
                 });
+        }
+    }
+
+    /// <summary>
+    /// Mirrors workflow.sessionlog state when a local workflow is registered.
+    /// Primary-client failures are swallowed when a persistence coordinator can
+    /// still write a failsafe snapshot.
+    /// </summary>
+    private async Task TryMirrorSessionLogWorkflowAsync(
+        Func<Task> action,
+        CancellationToken cancellationToken)
+    {
+        if (_sessionLogWorkflow is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await action().ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception) when (_sessionLogPersistenceStrategy is not null)
+        {
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-009: when the primary Session Log client fails, persist through the
+    /// registered coordinator so non-terminal methods stay successful and terminal
+    /// close reports the degraded strategy name plus absolute failsafe path.
+    /// </summary>
+    private async Task<IYamlEnvelope?> TryPersistSessionLogWhenPrimaryFailsAsync(
+        IRequestPayload request,
+        Dictionary<string, object?> args,
+        Dictionary<string, object?> resultShape,
+        CancellationToken cancellationToken)
+    {
+        if (_sessionLogPersistenceStrategy is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            var sessionLog = BuildSessionLogRecovery(args);
+            if (string.IsNullOrWhiteSpace(sessionLog.SourceType) || string.IsNullOrWhiteSpace(sessionLog.SessionId))
+            {
+                return null;
+            }
+
+            var persistence = await _sessionLogPersistenceStrategy
+                .PersistAsync(sessionLog, cancellationToken)
+                .ConfigureAwait(false);
+            if (!persistence.Persisted)
+            {
+                return null;
+            }
+
+            var result = new Dictionary<string, object?>(resultShape, StringComparer.OrdinalIgnoreCase)
+            {
+                ["persisted"] = persistence.Persisted,
+                ["degraded"] = persistence.Degraded,
+                ["persistenceStrategy"] = persistence.Strategy,
+                ["failsafePath"] = persistence.FailsafePath,
+                ["message"] = persistence.Message,
+            };
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception)
+        {
+            return null;
         }
     }
 
@@ -1123,6 +1275,116 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     requestId: request.RequestId,
                     code: "method_not_found",
                     message: $"Method '{request.Method}' is not routed by the triage workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchWorkspaceValidationRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_workspaceValidationWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Workspace validation workflow is not registered.");
+        }
+
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            var result = await _workspaceValidationWorkflow.ValidateAsync(args, cancellationToken).ConfigureAwait(false);
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchHostileReviewRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_hostileReviewWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Hostile review workflow is not registered.");
+        }
+
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                HostileReviewCommandShapes.SubmitMethod =>
+                    await _hostileReviewWorkflow.SubmitAsync(args, cancellationToken).ConfigureAwait(false),
+                HostileReviewCommandShapes.StatusMethod =>
+                    await _hostileReviewWorkflow.StatusAsync(RequireString(args, args, "requestId"), cancellationToken).ConfigureAwait(false),
+                HostileReviewCommandShapes.GetMethod =>
+                    await _hostileReviewWorkflow.GetAsync(RequireString(args, args, "requestId"), cancellationToken).ConfigureAwait(false),
+                HostileReviewCommandShapes.QueryMethod =>
+                    await _hostileReviewWorkflow.QueryAsync(args, cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the hostile-review workflow.");
             }
 
             return new YamlEnvelope

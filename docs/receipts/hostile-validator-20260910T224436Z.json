@@ -1,0 +1,86 @@
+{
+  "TimestampUtc": "2026-09-10T22:44:36Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation validation of QuadBrainInternalToolExecutor / QBExec MCP-tools compaction slice",
+  "AddProfileExecuted": true,
+  "AddProfileFileCount": 18,
+  "AddProfileExcluded": ["add-profile.grok.md"],
+  "McpTrust": {
+    "signatureOk": true,
+    "nonceSent": "vu9r4jbgz60omqdc7n2sfahi",
+    "nonceEchoed": true,
+    "plugin": "mcpserver-grok-plugin",
+    "pluginVersion": "1.106.0",
+    "sourceType": "GrokCode",
+    "workspacePath": "F:\\GitHub\\McpServer"
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260910T223605Z-hostile-qbexec",
+    "requestId": "req-20260910T223605Z-001-hostile-validate-qbexec",
+    "turnId": 44372
+  },
+  "OverallVerdict": "AGREE",
+  "Counts": { "PASS": 24, "FAIL": 0, "UNKNOWN": 0 },
+  "AccuracyRating": 92,
+  "CompletenessRating": 88,
+  "ExplicitFailList": [],
+  "ExplicitUnknownList": [],
+  "ResidualNotes": [
+    "Interceptor catalog theory uses FakeExecutor; TEST-MCP-QBEXEC-001 ac-4 remains isSatisfied false.",
+    "Catalog theory does not assert per-name mock Received(); TEST-MCP-QBEXEC-002 ac-2 remains isSatisfied false.",
+    "Completeness ACs remain unsatisfied; implementer did not claim they were flipped.",
+    "Slot yaml ProviderKind Cli at 2026-09-10T17:49:10Z is outside executor LastWriteTimeUtc 22:30:32Z.",
+    "Prior-turn continuity file admitted Python tomllib parse; this slice and this review used pwsh only."
+  ],
+  "Claims": [
+    { "id": "A1", "verdict": "PASS", "claim": "Continuity file processed as resume, not ingested as Handoff TODO." },
+    { "id": "A2", "verdict": "PASS", "claim": "Constructor is 10-arg; CreateSut matches." },
+    { "id": "A3", "verdict": "PASS", "claim": "Theory over QuadBrainMcpToolCatalog.All asserts Handled and Success with mocks." },
+    { "id": "A4", "verdict": "PASS", "claim": "ReturnsUnhandled replaced by RoutesThroughQuery in source." },
+    { "id": "A5", "verdict": "PASS", "claim": "OkJson, GetInt, CollectLinesAsync defined in production executor." },
+    { "id": "A6", "verdict": "PASS", "claim": "SessionLogQueryRequest uses Agent, not SourceType." },
+    { "id": "A7", "verdict": "PASS", "claim": "Stale Unhandled list/get comment replaced." },
+    { "id": "A8", "verdict": "PASS", "claim": "No new Graph*Request() CS9035 fallbacks." },
+    { "id": "A9", "verdict": "PASS", "claim": "Focused filter Failed 0 Passed 146 Skipped 0.", "evidence": "Independent dotnet test --no-restore: Passed! Failed: 0, Passed: 146, Skipped: 0, Total: 146, Duration: 431 ms" },
+    { "id": "A10", "verdict": "PASS", "claim": "QuadBrain filter 1 failure in slot yaml, not executor/helper files.", "evidence": "Independent: Failed 1 Passed 172 Skipped 0 Total 173; Expected OpenAICompatible Actual Cli; yaml LastWriteTimeUtc 17:49:10Z vs executor 22:30:32Z" },
+    { "id": "A11", "verdict": "PASS", "claim": "PLAN-LLMSTRATEGY-001 Done=false." },
+    { "id": "A12", "verdict": "PASS", "claim": "QBEXEC AC isSatisfied flags were not flipped this turn." },
+    { "id": "A13", "verdict": "PASS", "claim": "Non-claims: compact-before-submit, full AC-complete, live QBAgent, Update-McpService." },
+    { "id": "A14", "verdict": "PASS", "claim": "Interceptor_CatalogName_IsNotEmittedToAgent over QuadBrainMcpToolCatalog.All exists." },
+    { "id": "B1", "verdict": "PASS", "claim": "Honesty." },
+    { "id": "B2", "verdict": "PASS", "claim": "Receipts / always bring the receipts." },
+    { "id": "B3", "verdict": "PASS", "claim": "MCP-only storage." },
+    { "id": "B4", "verdict": "PASS", "claim": "Lab PowerShell / no Python this slice." },
+    { "id": "B5", "verdict": "PASS", "claim": "Look-before-delete N/A." },
+    { "id": "B6", "verdict": "PASS", "claim": "Byrd phase-order not failed post-hoc on timestamps." },
+    { "id": "C1", "verdict": "PASS", "claim": "Requirements exist; ACs not falsely marked satisfied; suite green not treated as AC coverage." },
+    { "id": "D1", "verdict": "PASS", "claim": "PLAN-LLMSTRATEGY-001 left open; no full QBEXEC family completion claim." }
+  ],
+  "TestRuns": {
+    "focused": {
+      "filter": "FullyQualifiedName~QuadBrainInternalToolExecutorTests|FullyQualifiedName~QuadBrainToolInterceptionTests|FullyQualifiedName~QuadBrainOpenAiChatServiceTests",
+      "noRestore": true,
+      "failed": 0,
+      "passed": 146,
+      "skipped": 0,
+      "total": 146
+    },
+    "quadBrain": {
+      "filter": "FullyQualifiedName~QuadBrain",
+      "noRestore": true,
+      "failed": 1,
+      "passed": 172,
+      "skipped": 0,
+      "total": 173,
+      "failure": "QuadBrainSlotConfigurationTests.QuadBrainSlotAssignments_ContainRequestedRuntimeAndModelMappings Expected OpenAICompatible Actual Cli"
+    }
+  },
+  "Store": {
+    "todoId": "PLAN-LLMSTRATEGY-001",
+    "todoDone": false,
+    "handoffSectionOpenCount": 0,
+    "qbexecCompletenessAcSatisfied": false
+  },
+  "ReceiptMd": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260910T224436Z.md"
+}

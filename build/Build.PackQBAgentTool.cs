@@ -4,9 +4,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Build and pack McpServer.QBAgent as a NuGet global tool.</summary>
+    /// <summary>
+    /// Pack McpServer.QBAgent as a NuGet global tool. <c>dotnet pack</c> on that project
+    /// builds only QBAgent and its referenced projects. Do not depend on solution Compile:
+    /// that target builds every test project and fails when testhosts lock those outputs.
+    /// </summary>
     public Target PackQBAgentTool => _ => _
-        .DependsOn(Compile)
         .Executes(() =>
         {
             var project = SourceDirectory / "McpServer.QBAgent" / "McpServer.QBAgent.csproj";

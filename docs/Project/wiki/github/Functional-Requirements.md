@@ -1200,6 +1200,11 @@ Acceptance Criteria:
 - ReplFailsafeDrainCompleted stays false on abort.
 - Next drain in-process replays after a stubbed success.
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503.
+- [ ] stderr has no Failsafe queue drain failed for that class.
+- [ ] ReplFailsafeDrainCompleted stays false on abort.
+- [ ] Next drain in-process replays after a stubbed success.
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
@@ -1308,6 +1313,116 @@ Scope: layer-1+
 
 Agent Help SHALL provide a Grok CLI execution strategy named grok-cli (with grok-build accepted as an alias) and SHALL use grok-cli as the default execution strategy when a caller does not specify one.
 Scope: layer-1+
+
+## FR-MCP-HOSTILEREVIEW-001 Enqueue bounded hostile review request
+
+An authenticated agent can enqueue a bounded hostile review request scoped to the active workspace. The request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, and optional acceptance criteria. Oversized payloads are rejected with no queue row. Foreign workspace is 403.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, optional AC list.
+- [ ] Serialized request JSON greater than 1048576 bytes is rejected with no queue row.
+- [ ] Authenticated workspace scope: foreign workspace is 403 and no queue row.
+- [ ] Valid request creates a QueueItem with stable id and status queued.
+
+## FR-MCP-HOSTILEREVIEW-002 Artifact links resolve through MCP APIs
+
+Artifact links resolve only through supported MCP APIs (TODO, FR/TR/TEST, session log, triage, plans, files, commits, generated docs). Missing, unauthorized, stale, or ambiguous links produce diagnostics, not silent omission.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Missing link produces a diagnostic, not silent omit.
+- [ ] Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit.
+- [ ] Successful resolve stores the resolved artifact identity and hash when available.
+
+## FR-MCP-HOSTILEREVIEW-003 Reviewer run records model effort identity
+
+Each reviewer execution records model, effort, agent identity, plugin/source, prompt template/version, run id, timestamps, and token/runtime metadata when available. Missing metadata is omitted with a diagnostic, never fabricated.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Execution row records model string, effort level, agent identity, plugin/source surface.
+- [ ] Execution row records prompt template id and version, run id, start/end UTC.
+- [ ] Token/runtime metadata stored when provided; omitted with diagnostic when not provided, not fabricated.
+
+## FR-MCP-HOSTILEREVIEW-004 Normalized findings and request quality
+
+Normalized findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, and uncertainty. Verdicts are AGREE, DISAGREE, or UNKNOWN. Request-quality scores disclosure, scope clarity, objective clarity, confidence, and enough-context.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, uncertainty.
+- [ ] Verdicts are AGREE, DISAGREE, or UNKNOWN only.
+- [ ] Request-quality scores disclosure, scope clarity, objective clarity, confidence, enough-context as explicit fields.
+
+## FR-MCP-HOSTILEREVIEW-005 Query failure modes by dimensions
+
+Query reports filter by workspace, model, effort, requesting agent, reviewer agent, target type, artifact type, severity, and category. Combined filters AND. Empty match is empty list.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Query with each dimension returns only matching runs.
+- [ ] Combined filters AND.
+- [ ] Empty match is empty list, not error.
+
+## FR-MCP-HOSTILEREVIEW-006 Default queue-and-record no auto mutation
+
+Default behavior is queue-and-record. Completing a review does not edit product files, requirements, or TODOs. Surfaces expose submit/status/get/query only.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Completing a review does not edit product files, requirements, or TODOs.
+- [ ] REST, REPL, Director, plugin skill expose submit/status/get/query only.
+- [ ] No hidden repair/apply endpoint is registered in this TODO.
+
+## FR-MCP-HYGIENE-001 Read-only workspace validation service
+
+A read-only workspace validation service uses a versioned rule registry and a shared result contract with rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, and summary counts.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Result contract has rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, summary counts.
+- [ ] Clean workspace produces zero findings.
+- [ ] Registry is versioned; unknown rule code is not silently skipped.
+
+## FR-MCP-HYGIENE-002 Traceability and missing-AC rules
+
+Rules identify FR/TR/TEST with no AC rows, TR with no FR, FR lacking TR/TEST, TEST with no FR, and broken or duplicate mappings.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] FR/TR (and TEST unless excluded by a documented rule) with no AC rows is a finding with record id and evidence.
+- [ ] TR mapped to no FR is a finding.
+- [ ] FR lacking required TR or TEST coverage is a finding.
+- [ ] TEST mapped to no FR is a finding.
+- [ ] Broken or duplicate mappings are findings.
+
+## FR-MCP-HYGIENE-003 TODO consistency rules
+
+Rules identify done=true with incomplete tasks, done=false with all tasks complete, completion without doneSummary, remaining vs completion contradiction, missing dependency targets, and missing referenced requirement IDs.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] done=true with any incomplete implementation task is a finding.
+- [ ] done=false with all implementation tasks complete is a finding.
+- [ ] done=true without doneSummary is a finding.
+- [ ] remaining text that contradicts completion is a finding.
+- [ ] missing dependency target ids are findings.
+- [ ] missing referenced requirement IDs are findings.
+
+## FR-MCP-HYGIENE-004 Stale turns and non-terminal triage
+
+Turns in_progress more than 48h after authoritative timestamp (injectable UTC clock) are findings. Triage reports in live non-terminal states are findings. Override threshold is positive, at most 168h, authenticated, recorded.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Turns in_progress more than 48h after the authoritative timestamp (injectable UTC clock) are findings.
+- [ ] Triage reports in live non-terminal states from the domain model are findings; processing failure is distinct from pending.
+- [ ] Threshold override must be positive, at most 168h, authenticated, and recorded on the run.
+- [ ] Unauthenticated validate is rejected.
+- [ ] Cancellation is honored.
+- [ ] Large workspaces paginate rather than unbounded load.
+
+## FR-MCP-HYGIENE-005 Surface parity and no auto-repair
+
+REST, Director, REPL, and plugin skill expose the same validation. Same rule codes, identities, severities, counts, and threshold. Never auto-repair. Director exit 1 on Error or Critical; exit 0 when empty or Warning-only.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Authenticated REST, Director command, REPL command, and plugin skill expose the same validation.
+- [ ] Parity: same rule codes, identities, severities, counts, and threshold.
+- [ ] Validation never auto-repairs or deletes records.
+- [ ] Director exit 1 when any finding has severity Error or Critical.
+- [ ] Director exit 0 when findings are empty or Warning-only; JSON is always written.
 
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
@@ -2207,6 +2322,33 @@ Scope: layer-1+
 - [x] The default wiki.yaml uses schema mcp-wiki-export/v1 and declares a complete flattened document list for generated home, functional, technical, testing, mapping, and matrix documents.
 - [x] The default navigation tree references every declared document exactly once and is valid for both GitHub and Azure wiki export.
 - [x] The generated default config is written through object serialization, not line-based YAML construction.
+
+## FR-MCP-WIKIEXPORT-003 Optional wiki export JSON dump
+
+Optional --include-dump on wiki export emits versioned JSON dump of MCP tables keyed by source workspace, including TODO rows and requirement links. No-flag behavior is unchanged.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Without flag, export is byte-equivalent to current wiki zip/tree behavior (no dump file).
+- [ ] With flag, dump has schemaVersion, exportedAtUtc, sourceWorkspaceKey, sourceWorkspacePath, tables[], todos[], todoRequirementLinks[], SHA-256 hashes, diagnostics.
+- [ ] Dump TODO rows and requirement links match store query for that workspace.
+
+## FR-MCP-WIKIEXPORT-004 add-workspace dump hydration
+
+add-workspace --dump on WorkspaceClient.CreateAsync / POST /mcpserver/workspace hydrates TODOs from dump, remaps workspace identity, rejects malformed dumps with no partial write.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Hydrated TODOs come from dump rows.
+- [ ] Old workspace id does not appear in the new store.
+- [ ] Malformed dump, version mismatch, missing tables, unsafe path: rejected, no partial write.
+
+## FR-MCP-WIKIEXPORT-005 todo.yaml deprecation
+
+todo.yaml is deprecated as TODO source of truth. When dump and todo.yaml both exist, dump wins and a diagnostic names both. Cleanup archives to .mcpServer/archive/todo-yaml/ with evidence. Never silent delete.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] todo.yaml is not used as TODO source when dump is present.
+- [ ] Cleanup archives to .mcpServer/archive/todo-yaml/ with evidence; never silent delete.
+- [ ] Conflict diagnostic names both paths.
 
 ## FR-MCP-WORKSPACE-LAYER-001 FR-MCP-WORKSPACE-LAYER-001
 

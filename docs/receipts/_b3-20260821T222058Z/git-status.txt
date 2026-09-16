@@ -1,0 +1,40 @@
+ [31mm[m .worktrees/triage-stale-turns
+ [31mm[m .worktrees/triage-transcript
+ [31mM[m plugins/core/lib-ps/agent-runtime-header.ps1
+ [31mM[m plugins/core/lib-ps/repl-invoke.ps1
+ [31mM[m plugins/core/lib-ps/resolve-cache-dir.ps1
+ [31mM[m plugins/core/skills/handoff/SKILL.md
+ [31mM[m plugins/core/sync/sync-plugin-core.ps1
+ [31mM[m plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
+ [31mM[m src/McpServer.Repl.Core/ReplCommandDispatcher.cs
+[31m??[m docs/plans/PLAN-PLUGINHANDOFF-001.md
+[31m??[m docs/receipts/_b3-20260821T222058Z/
+[31m??[m docs/receipts/_hv-20260821T113500Z/
+[31m??[m docs/receipts/_hv-a6-20260821T211938Z-collect-git.ps1
+[31m??[m docs/receipts/_hv-a6-20260821T211938Z-collect.ps1
+[31m??[m docs/receipts/_hv-a6-20260821T211938Z-extract-plan.ps1
+[31m??[m docs/receipts/_hv-a6-20260821T211938Z-extract-tasks.ps1
+[31m??[m docs/receipts/_hv-a6-20260821T211938Z/
+[31m??[m docs/receipts/_hv-a6-20260821T213730Z/
+[31m??[m docs/receipts/_hv-a6-20260821T213854Z/
+[31m??[m docs/receipts/_hv-a6-collect-todos.ps1
+[31m??[m docs/receipts/_hv-a6-extract-plan-todo.ps1
+[31m??[m docs/receipts/_hv-a6-reget-collect.ps1
+[31m??[m docs/receipts/_hv-b2-20260821T215535Z/
+[31m??[m docs/receipts/_hv-b2-stamp.txt
+[31m??[m docs/receipts/_hv-b5-20260821T224147Z/
+[31m??[m docs/receipts/_hv-b5-collect.ps1
+[31m??[m docs/receipts/_hv-failsafe-post-review/
+[31m??[m docs/receipts/_hv-ops-running-20260821/
+[31m??[m docs/receipts/_hv-p0a-d0-inventory.ps1
+[31m??[m docs/receipts/_hv-p0a-d0-out/
+[31m??[m docs/receipts/_hv-p0b-20260821-r2/
+[31m??[m docs/receipts/_hv-p0b-20260821/
+[31m??[m docs/receipts/_remaining-submit/
+[31m??[m docs/receipts/d0-handoff-inventory-20260821T222058Z.json
+[31m??[m docs/receipts/d0-handoff-inventory-20260821T222058Z.md
+[31m??[m docs/receipts/failsafe-continue-itemized-20260821T155934Z.json
+[31m??[m docs/receipts/failsafe-importrecovery-blocked-20260821T161241Z.json
+[31m??[m docs/receipts/failsafe-other-replay-20260821T150540Z.json
+[31m??[m docs/receipts/failsafe-post-all-summary-20260821T152147Z.json
+[31m??[m docs/receipts/failsafe-quarantine-replay-20260821T150140Z.json

@@ -160,7 +160,10 @@ public static class McpStdioHost
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
-        builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
+        builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator>(sp =>
+            new RequirementsWikiExportOrchestrator(
+                sp.GetRequiredService<IRequirementsDocFxWorkflowRunner>(),
+                sp.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
         builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
         builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
@@ -249,6 +252,9 @@ public static class McpStdioHost
                 sp.GetService<ITurnTransactionCoordinator>(),
                 sp.GetService<IOptions<TurnTransactionOptions>>()));
         builder.Services.AddHandoffServices();
+        builder.Services.AddHostileReviewServices();
+        builder.Services.AddWorkspaceValidationServices();
+        builder.Services.AddScoped<IWikiDumpService, WikiDumpService>();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ITranscriptSessionPersister, TranscriptSessionLogPersister>();
@@ -269,6 +275,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddScoped<DesktopLaunchService>();
+        builder.Services.AddScoped<IDesktopLaunchService>(sp => sp.GetRequiredService<DesktopLaunchService>());
         builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
         builder.Services.AddSingleton<SessionLogTurnContextExtractor>();
         builder.Services.AddScoped<ISessionLogTurnContextBackfill, SessionLogTurnContextBackfill>();
@@ -287,6 +294,7 @@ public static class McpStdioHost
         });
         builder.Services.AddScoped<IMemoryService, MemoryService>();
         builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
+        builder.Services.AddSingleton<CliBrainSlotSessionStore>();
         builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
         builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
         builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();

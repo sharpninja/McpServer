@@ -1,0 +1,11 @@
+{
+  "environment": "Development",
+  "deployTarget": "UpdateService",
+  "serviceName": "McpServer",
+  "sanitizedFixtures": true,
+  "failed": 0,
+  "skipped": 0,
+  "logFile": "harness.log",
+  "branch": "develop",
+  "sha": "08eaf2a506a0aa2db89766e6a547d9ae1c85f681"
+}

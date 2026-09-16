@@ -26,6 +26,7 @@ public sealed class BrainSlotCredentialResolver : IBrainSlotCredentialResolver
             "env" => NormalizeSecret(Environment.GetEnvironmentVariable(value)),
             "config" => NormalizeSecret(_configuration[value]),
             "file" => await ResolveFileAsync(value, cancellationToken).ConfigureAwait(false),
+            "cli" => "cli",
             _ => null,
         };
     }
@@ -34,7 +35,7 @@ public sealed class BrainSlotCredentialResolver : IBrainSlotCredentialResolver
     public bool IsSupportedReference(string credentialReference)
         => TrySplit(credentialReference, out var scheme, out var value)
             && value.Length > 0
-            && (scheme == "env" || scheme == "config" || scheme == "file");
+            && (scheme == "env" || scheme == "config" || scheme == "file" || scheme == "cli");
 
     private static async Task<string?> ResolveFileAsync(string path, CancellationToken cancellationToken)
     {

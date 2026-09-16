@@ -1,0 +1,19 @@
+2026-08-22T15:20:52Z START D4 remainder full 9-command gate
+2026-08-22T15:21:51Z START D4 remainder full 9-command gate
+2026-08-22T15:21:51Z START index=1 name=client-tests
+2026-08-22T15:22:14Z END index=1 exit=0 passed=284 failed=0 skipped=0
+2026-08-22T15:22:15Z WAIT reason=command 2 support-mcp-tests locks=1
+2026-08-22T15:22:30Z WAIT reason=command 2 support-mcp-tests locks=1
+2026-08-22T15:22:46Z WAIT reason=command 2 support-mcp-tests locks=1
+2026-08-22T15:23:01Z WAIT reason=command 2 support-mcp-tests locks=4
+2026-08-22T15:23:16Z START index=2 name=support-mcp-tests
+2026-08-22T15:26:00Z END index=2 exit=0 passed=2115 failed=0 skipped=0
+2026-08-22T15:26:01Z START index=3 name=repl-core-tests
+2026-08-22T15:26:13Z END index=3 exit=0 passed=847 failed=0 skipped=0
+2026-08-22T15:26:14Z START index=4 name=support-mcp-integration
+2026-08-22T15:30:49Z END index=4 exit=0 passed=281 failed=0 skipped=0
+2026-08-22T15:30:49Z START index=5 name=repl-integration
+2026-08-22T15:41:09Z END index=5 exit=0 passed=181 failed=0 skipped=0
+2026-08-22T15:41:10Z START index=6 name=compile
+2026-08-22T15:43:05Z END index=6 exit=0 passed=0 failed=0 skipped=0
+2026-08-22T15:43:06Z START index=7 name=test

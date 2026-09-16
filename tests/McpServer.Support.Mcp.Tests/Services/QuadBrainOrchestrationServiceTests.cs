@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -75,6 +77,69 @@ public sealed class QuadBrainOrchestrationServiceTests
             .Select(call => (string)call.GetArguments()[0]!)
             .ToArray();
         Assert.Equal(["creativity-main", "logic-main", "arbiteroftruth-main"], calledSlotIds);
+    }
+
+    /// <summary>TEST-MCP-QBPROGRESS-001: orchestration reports started/completed for each role as it runs.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_ReportsRoleProgressAsRolesRun()
+    {
+        using var db = CreateDbContext();
+        var registry = Substitute.For<IBrainSlotRegistryService>();
+        var invocation = Substitute.For<IBrainSlotInvocationService>();
+        var slots = BrainSlotRoles.All.Select(role => Slot(role)).ToDictionary(slot => slot.Role, StringComparer.Ordinal);
+        registry.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new BrainSlotStatusResponse
+            {
+                QuadReady = true,
+                RoleReadiness = BrainSlotRoles.All.ToDictionary(role => role, _ => true, StringComparer.Ordinal),
+            });
+        foreach (var pair in slots)
+        {
+            registry.GetEnabledEntityForRoleAsync(pair.Key, Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
+        }
+
+        invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var slotId = (string)call[0]!;
+                var slot = slots.Values.Single(item => item.SlotId == slotId);
+                return Task.FromResult(new BrainSlotInvokeResponse
+                {
+                    Status = "committed",
+                    Reason = BrainSlotReasonCodes.None,
+                    SlotId = slot.SlotId,
+                    Role = slot.Role,
+                    ModelId = slot.ModelId,
+                    TransactionId = "txn-" + slot.Role,
+                    DiffgramId = "diff-" + slot.Role,
+                    Output = slot.Role == BrainSlotRoles.ArbiterOfTruth ? "final decision" : slot.Role + " evidence",
+                    StartedAtUtc = DateTimeOffset.UtcNow,
+                    CompletedAtUtc = DateTimeOffset.UtcNow,
+                });
+            });
+        var service = CreateService(db, registry, invocation);
+        var events = new ConcurrentQueue<QuadBrainRoleProgress>();
+
+        var response = await service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-progress",
+            Progress = new Progress<QuadBrainRoleProgress>(events.Enqueue),
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal("committed", response.Status);
+        var list = events.ToArray();
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.Creativity && item.Phase == QuadBrainRoleProgress.PhaseStarted);
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.Creativity && item.Phase == QuadBrainRoleProgress.PhaseCompleted && item.Output == "Creativity evidence");
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.Logic && item.Phase == QuadBrainRoleProgress.PhaseStarted);
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.Logic && item.Phase == QuadBrainRoleProgress.PhaseCompleted && item.Output == "Logic evidence");
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.ArbiterOfTruth && item.Phase == QuadBrainRoleProgress.PhaseStarted);
+        Assert.Contains(list, item => item.Role == BrainSlotRoles.ArbiterOfTruth && item.Phase == QuadBrainRoleProgress.PhaseCompleted && item.Output == "final decision");
+        var arbiterStarted = Array.FindIndex(list, item => item.Role == BrainSlotRoles.ArbiterOfTruth && item.Phase == QuadBrainRoleProgress.PhaseStarted);
+        Assert.True(arbiterStarted > 0);
+        Assert.Contains(list.Take(arbiterStarted), item => item.Role == BrainSlotRoles.Creativity && item.Phase == QuadBrainRoleProgress.PhaseStarted);
+        Assert.Contains(list.Take(arbiterStarted), item => item.Role == BrainSlotRoles.Logic && item.Phase == QuadBrainRoleProgress.PhaseStarted);
     }
 
     /// <summary>TEST-MCP-QBLIVE-001: Creativity and Logic roles run in parallel, and AoT waits for both responses.</summary>

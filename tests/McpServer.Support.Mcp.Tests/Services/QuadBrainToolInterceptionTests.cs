@@ -20,27 +20,54 @@ public sealed class QuadBrainToolInterceptionTests
     public void Classifier_IdentifiesInternalTools(string toolName, bool expectedInternal)
         => Assert.Equal(expectedInternal, new QuadBrainToolClassifier().IsInternal(toolName));
 
-    /// <summary>Only external tools remain as commands; internal successes are stripped and internal non-successes are reported as failures, never emitted to the agent.</summary>
+    /// <summary>FR-MCP-QBEXEC-001: unhandled internals are notes, never agent tool commands. External calls remain.</summary>
     [Fact]
-    public async Task Interceptor_OnlyExternalRemains_InternalSuccessStripped_InternalNonSuccessFailed()
+    public async Task Interceptor_UnhandledInternal_IsNoteNotAgentCommand()
     {
         var interceptor = new QuadBrainToolInterceptor(
             new QuadBrainToolClassifier(),
             new FakeExecutor(handled: "mcp_todo_update"));
         var calls = new[]
         {
-            Call("mcp_todo_update"),     // internal, handled -> stripped (executed)
-            Call("mcp_repo_write"),      // internal, unhandled -> failure note (NOT a command)
-            Call("do_local_thing"),      // external -> remains as a command
+            Call("mcp_todo_update"),
+            Call("mcp_unknown_tool"),
+            Call("do_local_thing"),
         };
 
         var result = await interceptor.InterceptAsync(calls, turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("mcp_todo_update", Assert.Single(result.Executed).ToolCall.Function.Name);
         Assert.Equal("do_local_thing", Assert.Single(result.RemainingToolCalls).Function.Name);
-        var failed = Assert.Single(result.Failed);
-        Assert.Equal("mcp_repo_write", failed.ToolCall.Function.Name);
-        Assert.False(string.IsNullOrWhiteSpace(failed.Outcome.Error));
+        Assert.Equal("mcp_unknown_tool", Assert.Single(result.Failed).ToolCall.Function.Name);
+    }
+
+    /// <summary>TEST-MCP-QBEXEC-001 AC-4: no catalog mcp_* name remains in RemainingToolCalls (real executor).</summary>
+    [Theory]
+    [MemberData(nameof(CatalogToolNames))]
+    public async Task Interceptor_CatalogName_IsNotEmittedToAgent(string name)
+    {
+        var fixture = new QuadBrainExecutorTestFixture();
+        var executor = fixture.CreateExecutor();
+        var interceptor = new QuadBrainToolInterceptor(new QuadBrainToolClassifier(), executor);
+        var arguments = await QuadBrainExecutorTestFixture.CatalogArgumentsAsync(executor, name).ConfigureAwait(true);
+
+        var result = await interceptor.InterceptAsync(
+            [QuadBrainExecutorTestFixture.Call(name, arguments), Call("do_local_thing")],
+            turnId: null,
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.DoesNotContain(result.RemainingToolCalls, call => string.Equals(call.Function.Name, name, StringComparison.Ordinal));
+        Assert.Equal("do_local_thing", Assert.Single(result.RemainingToolCalls).Function.Name);
+        Assert.Empty(result.Failed);
+        Assert.Equal(name, Assert.Single(result.Executed).ToolCall.Function.Name);
+    }
+
+    public static TheoryData<string> CatalogToolNames()
+    {
+        var data = new TheoryData<string>();
+        foreach (var catalogName in QuadBrainMcpToolCatalog.All)
+            data.Add(catalogName);
+        return data;
     }
 
     /// <summary>A handled-but-failed internal tool is reported as a failure, not emitted to the agent.</summary>

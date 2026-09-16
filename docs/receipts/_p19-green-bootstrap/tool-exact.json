@@ -1,0 +1,19 @@
+{
+  "id": 7,
+  "name": "mcpserver-grok-plugin",
+  "description": "Clone or update the Grok CLI/TUI plugin repository for McpServer TODO, session log, requirements, GraphRAG, and workspace continuity.",
+  "tags": [
+    "graphrag",
+    "grok",
+    "mcp",
+    "plugin",
+    "requirements",
+    "session-log",
+    "todo"
+  ],
+  "parameterSchema": "{\"type\":\"object\",\"properties\":{\"targetParent\":{\"type\":\"string\",\"description\":\"Parent directory where the plugin repository should be cloned or updated\"}},\"required\":[\"targetParent\"]}",
+  "commandTemplate": "pwsh -NoLogo -NoProfile -NonInteractive -Command \"$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-grok-plugin'; $repo='https://github.com/sharpninja/mcpserver-grok-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }\"",
+  "workspacePath": null,
+  "dateTimeCreated": "2026-05-27T17:45:54.9977448-05:00",
+  "dateTimeModified": "2026-05-27T17:45:54.9977448-05:00"
+}

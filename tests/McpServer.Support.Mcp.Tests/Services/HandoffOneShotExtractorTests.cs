@@ -41,6 +41,43 @@ public sealed class HandoffOneShotExtractorTests
         Assert.Contains("handoffText", captured.Values!.Keys);
     }
 
+    /// <summary>
+    /// D5 / TR-HANDOFF-AGENT-001: the shipped extractor copies effective prompt/template
+    /// identity from the AgentPool enqueue result instead of hard-coding defaults.
+    /// </summary>
+    [Fact]
+    public async Task D5_ExtractAsync_PropagatesEffectivePromptIdentityFromEnqueue()
+    {
+        const string effectivePrompt = "handoff-todo-draft/v1-effective";
+        const string effectiveTemplate = "handoff-todo-draft-effective";
+        var pool = Substitute.For<IAgentPoolService>();
+        pool.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new AgentPoolEnqueueResult
+            {
+                Success = true,
+                JobId = "job-handoff-effective",
+                AgentName = "plan-agent",
+                Model = "test-model",
+                PromptVersion = effectivePrompt,
+                PromptTemplateId = effectiveTemplate,
+            });
+        pool.SubscribeJobStreamAsync("job-handoff-effective", Arg.Any<CancellationToken>())
+            .Returns(CompletedStream("job-handoff-effective", """{"id":"MCP-HANDOFFDEMO-019"}"""));
+        var sut = new HandoffOneShotExtractor(pool);
+
+        var result = await sut.ExtractAsync(
+            @"F:\GitHub\McpServer",
+            "handoff text",
+            agentName: "plan-agent",
+            promptTemplateId: null,
+            TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success);
+        Assert.Equal(effectivePrompt, result.PromptVersion);
+        Assert.Equal(effectiveTemplate, result.TemplateVersion);
+        Assert.Equal("test-model", result.Model);
+    }
+
     private static async IAsyncEnumerable<AgentPoolJobStreamEventDto> CompletedStream(string jobId, string text)
     {
         yield return new AgentPoolJobStreamEventDto

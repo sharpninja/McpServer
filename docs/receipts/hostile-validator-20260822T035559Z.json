@@ -1,0 +1,198 @@
+{
+  "TimestampUtc": "2026-08-22T03:55:59Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P11-P13",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T023808Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p11-p13/",
+  "SessionId": "GrokSubagentHostile-20260822T032633Z-c-green-p11-p13",
+  "RequestId": "req-20260822T032633Z-001-hostile-c-green-p11-p13",
+  "TurnId": 42874,
+  "HealthNonce": "a6f4a99ac05b4938ad16c7415d2dc4db",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "DISAGREE",
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "PassCount": 18,
+  "Accuracy": 96,
+  "Completeness": 95,
+  "ExplicitFailList": [
+    "A2-persist",
+    "C3",
+    "C5",
+    "D4"
+  ],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginSessionLogWorkflowAdapterTests",
+    "FilterFirstExitCode": -1,
+    "FilterFirstTrxExists": false,
+    "FilterRerunCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --no-build --filter FullyQualifiedName~PluginSessionLogWorkflowAdapterTests",
+    "FilterExitCode": 0,
+    "FilterPassed": 24,
+    "FilterFailed": 0,
+    "FilterSkippedConsole": 0,
+    "FilterTrxNotExecuted": 0,
+    "FilterDurationMs": 368816,
+    "FilterConsoleDuration": "6 m 5 s",
+    "AllCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "AllExitCode": 0,
+    "AllPassed": 54,
+    "AllFailed": 0,
+    "AllSkippedConsole": 0,
+    "AllTrxNotExecuted": 0,
+    "AllTotal": 54,
+    "AllDurationMs": 546674,
+    "AllConsoleDuration": "8 m 37 s",
+    "ExecuteCanonicalTurnAsyncThrowsNotImplemented": false,
+    "PersistViaCreateTrustedClient": true,
+    "LaunchResultDiscarded": true,
+    "SessionIdFabricatedInAdapter": true,
+    "P11NamedTestsPresent": true,
+    "P11InlineDataPerTheory": 8,
+    "P12NamedTestsPresent": true,
+    "P13NamedTestsPresent": true,
+    "P14NamedTestsPresent": false
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P11": false,
+    "MCP-PLUGININT-001-P12": false,
+    "MCP-PLUGININT-001-P13": false,
+    "MCP-PLUGININT-001-P14": false
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2a",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2-persist",
+      "surface": "A",
+      "verdict": "FAIL"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "FAIL"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "FAIL"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "FAIL"
+    }
+  ],
+  "PersistenceProof": "client.SessionLog.QueryAsync turn status completed; filesModified includes docs/receipts/hostile-validator-20260822T035559Z.md; CompleteTurnAsync turnId 42874",
+  "TurnStatus": "completed"
+}

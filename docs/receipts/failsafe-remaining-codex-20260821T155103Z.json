@@ -1,0 +1,43 @@
+{
+  "startedUtc": "2026-08-21T15:53:11Z",
+  "updatedUtc": "2026-08-21T15:53:14Z",
+  "completedUtc": "2026-08-21T15:53:14Z",
+  "posted": 0,
+  "failed": 3,
+  "remaining": 3,
+  "items": [
+    {
+      "file": "20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml",
+      "startedUtc": "2026-08-21T15:53:11Z",
+      "success": false,
+      "exitCode": null,
+      "elapsedSec": 0,
+      "error": "The property 'Count' cannot be found on this object. Verify that the property exists.",
+      "sessionId": "Codex-20260722T232402Z-plugin-session",
+      "requestId": null,
+      "repair": null
+    },
+    {
+      "file": "20260817T123057Z-session_submit-d5f9.yaml",
+      "startedUtc": "2026-08-21T15:53:11Z",
+      "success": false,
+      "exitCode": 1,
+      "elapsedSec": 2,
+      "error": "type: error payload: requestId: req-20260821T155312Z-8887 code: method_invocation_error message: \"JSON deserialization error for parameter 'sessionLog': cannot deserialize to UnifiedSessionLogDto. The JSON value could not be converted to System.Collections.Generic.List`1[McpServer.Client.Models.UnifiedRequestEntryDto]. Path: $.turns | LineNumber: 0 | BytePositionInLine: 221.\" details: clientName: ",
+      "sessionId": "GrokSubagentHostile-20260817T015741Z-handoff-hostile",
+      "requestId": null,
+      "repair": "turns-as-list plus planFile/todoId None"
+    },
+    {
+      "file": "20260817T123219Z-session_submit-9ad7.yaml",
+      "startedUtc": "2026-08-21T15:53:13Z",
+      "success": false,
+      "exitCode": 1,
+      "elapsedSec": 1,
+      "error": "type: error payload: requestId: req-20260821T155313Z-5d6b code: method_invocation_error message: \"JSON deserialization error for parameter 'sessionLog': cannot deserialize to UnifiedSessionLogDto. The JSON value could not be converted to System.Collections.Generic.List`1[McpServer.Client.Models.UnifiedRequestEntryDto]. Path: $.turns | LineNumber: 0 | BytePositionInLine: 192.\" details: clientName: ",
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": null,
+      "repair": "turns-as-list plus planFile/todoId None"
+    }
+  ]
+}

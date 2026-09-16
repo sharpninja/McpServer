@@ -123,6 +123,10 @@ public sealed class WorkspaceCreateRequest
     [JsonPropertyName("todoPath")]
     public string? TodoPath { get; set; }
 
+    /// <summary>FR-MCP-WIKIEXPORT-004: Dump file or folder for TODO hydration.</summary>
+    [JsonPropertyName("dumpPath")]
+    public string? DumpPath { get; set; }
+
     /// <summary>Override data directory.</summary>
     [JsonPropertyName("dataDirectory")]
     public string? DataDirectory { get; set; }

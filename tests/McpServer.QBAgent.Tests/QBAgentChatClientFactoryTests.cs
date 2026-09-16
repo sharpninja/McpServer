@@ -26,7 +26,7 @@ public sealed class QBAgentChatClientFactoryTests
     {
         using var client = QBAgentChatClientFactory.Create(new McpAgentOptions
         {
-            BaseUrl = new Uri("http://payton-legion2:7147"),
+            BaseUrl = new Uri("http://quadbrain.test:7147"),
             ApiKey = "marker-key",
         });
 
@@ -37,6 +37,23 @@ public sealed class QBAgentChatClientFactoryTests
     [Fact]
     public void ModelId_IsPublicQuadBrainModel()
         => Assert.Equal("QuadBrain", QBAgentChatClientFactory.ModelId);
+
+    /// <summary>Live CLI QuadBrain turns exceed the OpenAI SDK 100s default; floor the client timeout at 10 minutes.</summary>
+    [Fact]
+    public void ResolveNetworkTimeout_DefaultOptions_IsAtLeastTenMinutes()
+    {
+        var timeout = QBAgentChatClientFactory.ResolveNetworkTimeout(new McpAgentOptions());
+        Assert.True(timeout >= TimeSpan.FromMinutes(10), timeout.ToString());
+    }
+
+    /// <summary>A host that configures a longer timeout keeps that value.</summary>
+    [Fact]
+    public void ResolveNetworkTimeout_HonorsLargerConfiguredTimeout()
+    {
+        var timeout = QBAgentChatClientFactory.ResolveNetworkTimeout(
+            new McpAgentOptions { Timeout = TimeSpan.FromMinutes(15) });
+        Assert.Equal(TimeSpan.FromMinutes(15), timeout);
+    }
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-014): an unreachable QuadBrain endpoint propagates a clear transport failure without hanging QBAgent.</summary>
     [Fact]
@@ -51,6 +68,48 @@ public sealed class QBAgentChatClientFactoryTests
             .ConfigureAwait(true);
         Assert.NotNull(ex);
         Assert.Contains("QuadBrain endpoint unreachable", ex!.ToString(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task ProgressChatClient_EmitsProgressAroundInnerCall_WithoutNetwork()
+    {
+        var events = new List<string>();
+        var inner = new StubChatClient("ok");
+        using var client = new QBAgentProgressChatClient(inner, events.Add);
+
+        var response = await client.GetResponseAsync(
+            [new ChatMessage(ChatRole.User, "hello")],
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal("ok", response.Text);
+        Assert.Equal(["calling QuadBrain", "QuadBrain returned"], events);
+        Assert.Equal(1, inner.Calls);
+    }
+
+    private sealed class StubChatClient(string text) : IChatClient
+    {
+        public int Calls { get; private set; }
+
+        public Task<ChatResponse> GetResponseAsync(
+            IEnumerable<ChatMessage> messages,
+            ChatOptions? options = null,
+            CancellationToken cancellationToken = default)
+        {
+            Calls++;
+            return Task.FromResult(new ChatResponse([new ChatMessage(ChatRole.Assistant, text)]));
+        }
+
+        public IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(
+            IEnumerable<ChatMessage> messages,
+            ChatOptions? options = null,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public object? GetService(Type serviceType, object? serviceKey = null) => null;
+
+        public void Dispose()
+        {
+        }
     }
 
     private sealed class ThrowingHandler : HttpMessageHandler

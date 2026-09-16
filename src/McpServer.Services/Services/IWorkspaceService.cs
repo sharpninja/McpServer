@@ -81,6 +81,9 @@ public sealed record WorkspaceCreateRequest
 
     /// <summary>Individual names/handles whose code and libraries are banned.</summary>
     public List<string>? BannedIndividuals { get; init; }
+
+    /// <summary>FR-MCP-WIKIEXPORT-004: Optional dump file or folder used to hydrate TODOs.</summary>
+    public string? DumpPath { get; init; }
 }
 
 /// <summary>Request to update a workspace. Null fields are not changed.</summary>

@@ -128,21 +128,189 @@ function Resolve-McpCacheDir {
     throw "Unable to resolve the active workspace cache. Set MCP_WORKSPACE_PATH or MCP_CACHE_DIR_OVERRIDE; plugin install paths are not workspace caches."
 }
 
+function Get-McpFailsafeFileSha256Hex {
+    <#
+    .SYNOPSIS
+        SHA-256 of a file as uppercase hex, used for failsafe queue migration.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
+
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $stream = [System.IO.File]::OpenRead($Path)
+        try {
+            $hash = $sha.ComputeHash($stream)
+            return (([BitConverter]::ToString($hash) -replace '-', ''))
+        } finally {
+            $stream.Dispose()
+        }
+    } finally {
+        $sha.Dispose()
+    }
+}
+
+function Get-McpFailsafeAgentSegment {
+    <#
+    .SYNOPSIS
+        Agent path segment matching FilesystemSessionLogPersistenceStrategy.SanitizePathSegment.
+    #>
+    [CmdletBinding()]
+    param()
+
+    $agent = @(
+        $env:PLUGIN_AGENT_NAME,
+        $env:MCP_AGENT_NAME,
+        $env:PLUGIN_AGENT_DEFAULT,
+        $env:MCP_PLUGIN_HOST
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+
+    if (-not $agent) {
+        return (Get-McpCacheAgentKey)
+    }
+
+    $builder = New-Object System.Text.StringBuilder
+    foreach ($character in $agent.ToCharArray()) {
+        if ([char]::IsLetterOrDigit($character) -or $character -eq '-' -or $character -eq '_' -or $character -eq '.') {
+            [void]$builder.Append($character)
+        } else {
+            [void]$builder.Append('_')
+        }
+    }
+
+    $result = $builder.ToString().Trim('.')
+    if ([string]::IsNullOrWhiteSpace($result)) { return 'unknown' }
+    return $result
+}
+
+function Get-McpFailsafeWorkspaceKey {
+    <#
+    .SYNOPSIS
+        Workspace key matching FilesystemSessionLogPersistenceStrategy (base64url of UTF-8 full path).
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$WorkspacePath)
+
+    $full = [System.IO.Path]::GetFullPath($WorkspacePath)
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($full)
+    $b64 = [Convert]::ToBase64String($bytes)
+    return (($b64 -replace '\+', '-') -replace '/', '_').TrimEnd('=')
+}
+
+function Resolve-McpFailsafeWorkspacePath {
+    <#
+    .SYNOPSIS
+        Resolves the workspace root used for the V4 failsafe tree.
+    #>
+    [CmdletBinding()]
+    param([string]$StartPath)
+
+    if (-not [string]::IsNullOrWhiteSpace($StartPath) -and (Test-Path -LiteralPath $StartPath -PathType Container)) {
+        return [System.IO.Path]::GetFullPath($StartPath)
+    }
+
+    $configured = Get-McpWorkspaceFromEnvironment
+    if ($configured) { return $configured }
+
+    if (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue) {
+        $startCandidates = if (-not [string]::IsNullOrWhiteSpace($StartPath)) { @($StartPath) } else {
+            @(
+                $env:MCP_WORKSPACE_START_DIR,
+                $env:MCP_WORKSPACE_PATH,
+                $env:MCPSERVER_WORKSPACE_PATH,
+                (Get-Location).Path
+            ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+        }
+        foreach ($startDir in $startCandidates) {
+            try {
+                $markerFile = Find-MarkerFile -StartDir $startDir
+                if ($markerFile) {
+                    return [System.IO.Path]::GetFullPath((Split-Path -Parent $markerFile))
+                }
+            } catch {
+            }
+        }
+    }
+
+    throw "Unable to resolve the workspace root for the V4 failsafe queue. Set MCP_WORKSPACE_PATH or MCPSERVER_FAILSAFE_DIR."
+}
+
+function Invoke-McpFailsafeLegacyQueueMigration {
+    <#
+    .SYNOPSIS
+        Copy-then-delete legacy plugin failsafe YAML into the V4 pending directory after SHA-256 match.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$WorkspacePath,
+        [Parameter(Mandatory)][string]$PendingDir
+    )
+
+    $mcpRoot = Join-Path $WorkspacePath '.mcpServer'
+    if (-not (Test-Path -LiteralPath $mcpRoot -PathType Container)) {
+        return
+    }
+
+    [void][System.IO.Directory]::CreateDirectory($PendingDir)
+
+    $legacyDirs = New-Object System.Collections.Generic.List[string]
+    foreach ($child in [System.IO.Directory]::GetDirectories($mcpRoot)) {
+        $name = [System.IO.Path]::GetFileName($child)
+        if ([string]::Equals($name, 'failsafe', [System.StringComparison]::OrdinalIgnoreCase)) {
+            continue
+        }
+
+        $legacy = Join-Path $child 'failsafe'
+        if (Test-Path -LiteralPath $legacy -PathType Container) {
+            $legacyDirs.Add($legacy)
+        }
+    }
+
+    foreach ($legacy in $legacyDirs) {
+        $files = @(Get-ChildItem -LiteralPath $legacy -File -Filter '*.yaml' -ErrorAction SilentlyContinue)
+        foreach ($file in $files) {
+            $dest = Join-Path $PendingDir $file.Name
+            if (-not (Test-Path -LiteralPath $dest)) {
+                Copy-Item -LiteralPath $file.FullName -Destination $dest -Force
+            }
+
+            if (Test-Path -LiteralPath $dest) {
+                $sourceHash = Get-McpFailsafeFileSha256Hex -Path $file.FullName
+                $destHash = Get-McpFailsafeFileSha256Hex -Path $dest
+                if ($sourceHash -eq $destHash) {
+                    Remove-Item -LiteralPath $file.FullName -Force
+                }
+            }
+        }
+    }
+}
+
 function Get-McpFailsafeDir {
     <#
     .SYNOPSIS
-        TR-MCP-REPL-016: resolves the failsafe queue directory.
+        TR-MCP-REPL-016: resolves the V4 failsafe pending directory.
     .DESCRIPTION
         Single source of truth for the queue location so the writer (repl-invoke),
-        the drain, and the status reporter all agree. MCPSERVER_FAILSAFE_DIR and
-        MCP_FAILSAFE_DIR override the workspace cache for tests and recovery.
+        the drain, and the status reporter all agree with
+        FilesystemSessionLogPersistenceStrategy:
+        {workspace}/.mcpServer/failsafe/{agent}/workspaces/{workspace-key}/pending/.
+        MCPSERVER_FAILSAFE_DIR and MCP_FAILSAFE_DIR override for tests and recovery.
+        Legacy {workspace}/.mcpServer/{agent}/failsafe YAML is migrated by checksum
+        match then source delete.
     #>
     [CmdletBinding()]
     param([string]$StartPath)
 
     if ($env:MCPSERVER_FAILSAFE_DIR) { return $env:MCPSERVER_FAILSAFE_DIR }
     if ($env:MCP_FAILSAFE_DIR) { return $env:MCP_FAILSAFE_DIR }
-    return (Join-Path (Resolve-McpCacheDir -StartPath $StartPath) 'failsafe')
+
+    $workspace = Resolve-McpFailsafeWorkspacePath -StartPath $StartPath
+    $agent = Get-McpFailsafeAgentSegment
+    $key = Get-McpFailsafeWorkspaceKey -WorkspacePath $workspace
+    $pending = Join-Path $workspace (Join-Path '.mcpServer' (Join-Path 'failsafe' (Join-Path $agent (Join-Path 'workspaces' (Join-Path $key 'pending')))))
+    [void][System.IO.Directory]::CreateDirectory($pending)
+    Invoke-McpFailsafeLegacyQueueMigration -WorkspacePath $workspace -PendingDir $pending
+    return $pending
 }
 
 function Get-McpFailsafeQuarantineDir {

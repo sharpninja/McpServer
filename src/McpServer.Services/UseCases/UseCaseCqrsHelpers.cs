@@ -12,6 +12,42 @@ namespace McpServer.Support.Mcp.UseCases;
 /// </summary>
 internal static class UseCaseCqrsHelpers
 {
+    private static readonly TimeSpan s_workspaceIdentityResolutionTimeout =
+        TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// Resolves a command/query workspace through the repository-wide identity policy and
+    /// propagates caller cancellation into bounded physical resolution.
+    /// </summary>
+    public static async Task<ResolvedUseCaseWorkspace> ResolveWorkspaceAsync(
+        McpDbContext db,
+        WorkspaceContext workspaceContext,
+        string? workspacePath,
+        CancellationToken cancellationToken)
+    {
+        var resolved = !string.IsNullOrWhiteSpace(workspacePath)
+            ? workspacePath.Trim()
+            : workspaceContext.WorkspacePath;
+
+        if (string.IsNullOrWhiteSpace(resolved))
+            throw new InvalidOperationException("Workspace path is required for use case operations.");
+
+        var resolution = await WorkspaceIdentity.ResolveAsync(
+                resolved,
+                s_workspaceIdentityResolutionTimeout,
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        var workspaceId = resolution.NormalizedPath;
+        if (!string.Equals(db.CurrentWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase))
+            db.OverrideWorkspaceId(workspaceId);
+
+        return new ResolvedUseCaseWorkspace(
+            workspaceId,
+            resolution.NormalizedPath,
+            resolution.StorageKey);
+    }
+
     /// <summary>Applies optional command/query workspace path override onto the scoped DbContext.</summary>
     public static string ResolveWorkspaceId(McpDbContext db, WorkspaceContext workspaceContext, string? workspacePath)
     {

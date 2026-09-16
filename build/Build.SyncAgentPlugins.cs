@@ -32,6 +32,8 @@ partial class Build
     public Target SyncAgentPlugins => _ => _
         .Executes(() =>
         {
+            AssertPluginPromotionAllowed();
+
             var syncScript = RootDirectory / "plugins" / "core" / "sync" / "sync-plugin-core.ps1";
             if (!File.Exists(syncScript.ToString()))
                 throw new FileNotFoundException("Plugin core sync script was not found.", syncScript.ToString());

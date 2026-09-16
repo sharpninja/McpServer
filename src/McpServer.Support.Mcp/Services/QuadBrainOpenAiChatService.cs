@@ -29,6 +29,12 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
 {
     private const string DefaultSourceType = "QBAgent";
 
+    /// <summary>Max QuadBrain rounds in one HTTP completion (internals + deferred-intent continues).</summary>
+    internal const int MaxProcessingRounds = 8;
+
+    internal const string ContinueDirective =
+        "Continue now. Return ONLY JSON with intent (final, continue, tool_calls, or reject). Example: {\"intent\":\"tool_calls\",\"tool_calls\":[{\"name\":\"read_file\",\"arguments\":{\"path\":\"AGENTS-README-FIRST.yaml\"}}]} or {\"intent\":\"final\",\"content\":\"...\"}. Do not answer in prose without that envelope.";
+
     private readonly IQuadBrainOrchestrationService _orchestration;
     private readonly QuadBrainToolInterceptor _interceptor;
     private readonly IBrainInteractionSessionLogger? _interactionLogger;
@@ -84,62 +90,114 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             metadata["turnId"] = turnId.Trim();
 
         var promptTools = toolChoice.Kind == ToolChoiceKind.None ? null : request.Tools;
-        var orchestrationInput = BuildPrompt(request.Messages, promptTools, toolChoice);
-        if (TryGetExternalToolFailure(request.Messages, out var toolFailure))
+        var seedInput = BuildPrompt(request.Messages, promptTools, toolChoice);
+        var workingMessages = request.Messages.ToList();
+        var orchestrationInput = seedInput;
+        QuadBrainOrchestrationResponse? orchestration = null;
+        string? lastInternalSignature = null;
+        string? lastDeferred = null;
+        OpenAiChatResponseMessage message = new() { Role = "assistant" };
+        var finishReason = "stop";
+
+        for (var round = 0; round < MaxProcessingRounds; round++)
         {
-            var failedMessage = BuildExternalToolFailureResponse(toolFailure);
-            var failedResponse = CreateResponse(request, failedMessage, finishReason: "stop", orchestrationInput);
-            await CompleteSessionTurnAsync(sessionId, turnId, failedResponse, cancellationToken).ConfigureAwait(false);
-            return failedResponse;
-        }
+            orchestrationInput = BuildPrompt(workingMessages, promptTools, toolChoice);
+            orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
+                new QuadBrainOrchestrationRequest
+                {
+                    Input = orchestrationInput,
+                    TurnId = string.IsNullOrWhiteSpace(turnId) ? null : turnId.Trim(),
+                    Metadata = metadata,
+                    Progress = request.Progress,
+                },
+                cancellationToken).ConfigureAwait(false);
 
-        var orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
-            new QuadBrainOrchestrationRequest
+            if (IsFailedOrchestration(orchestration)
+                && !TryCollectToolCalls(orchestration, out _))
             {
-                Input = orchestrationInput,
-                TurnId = string.IsNullOrWhiteSpace(turnId) ? null : turnId.Trim(),
-                Metadata = metadata,
-            },
-            cancellationToken).ConfigureAwait(false);
-
-        var message = new OpenAiChatResponseMessage { Role = "assistant" };
-        string finishReason;
-        if (toolChoice.Kind != ToolChoiceKind.None && TryParseToolCalls(orchestration.Output, out var toolCalls))
-        {
-            // FR-MCP-QBEXEC-001: execute MCP-internal tools server-side and strip them; only external (and any
-            // unhandled internal) calls are emitted to the agent.
-            var interception = await _interceptor.InterceptAsync(toolCalls, turnId: null, cancellationToken).ConfigureAwait(false);
-            ValidateToolChoiceResult(toolChoice, interception.RemainingToolCalls, interception.Failed, orchestration.Output);
-
-            // FR-MCP-QBEXEC-001 (AC-5): internal tool failures are NOT emitted to the agent as tool commands; they
-            // are surfaced as a note AND recorded to the session log (best-effort) so the failure is durably captured.
-            await LogInternalToolFailuresAsync(interception.Failed, metadata, cancellationToken).ConfigureAwait(false);
-            var failureNote = BuildFailureNote(interception.Failed);
-            if (interception.RemainingToolCalls.Count > 0)
-            {
-                message.ToolCalls = [.. interception.RemainingToolCalls];
-                if (failureNote.Length > 0)
-                    message.Content = failureNote;
-                finishReason = "tool_calls";
-            }
-            else
-            {
-                // No external tool commands; surface any failure note (empty when all ran server-side).
-                message.Content = failureNote;
+                message.Content = TryRoleFinalContent(orchestration) ?? BuildNoDecisionMessage(orchestration);
                 finishReason = "stop";
+                break;
             }
-        }
-        else
-        {
-            message.Content = orchestration.Output ?? string.Empty;
-            finishReason = "stop";
+
+            if (toolChoice.Kind != ToolChoiceKind.None
+                && TryCollectToolCalls(orchestration, out var toolCalls))
+            {
+                var interception = await _interceptor.InterceptAsync(toolCalls, turnId: null, cancellationToken)
+                    .ConfigureAwait(false);
+                ValidateToolChoiceResult(toolChoice, interception.RemainingToolCalls, interception.Failed, orchestration.Output);
+                await LogInternalToolFailuresAsync(interception.Failed, metadata, cancellationToken).ConfigureAwait(false);
+                var failureNote = BuildFailureNote(interception.Failed);
+                var internalContent = BuildInternalSuccessContent(interception.Executed, failureNote);
+
+                if (interception.RemainingToolCalls.Count > 0)
+                {
+                    message.ToolCalls = [.. interception.RemainingToolCalls];
+                    if (internalContent.Length > 0)
+                        message.Content = internalContent;
+                    finishReason = "tool_calls";
+                    break;
+                }
+
+                if (interception.Executed.Count > 0)
+                {
+                    var signature = string.Join(",", interception.Executed.Select(static item => item.ToolCall.Function.Name));
+                    if (string.Equals(signature, lastInternalSignature, StringComparison.Ordinal))
+                    {
+                        message.Content = internalContent;
+                        finishReason = "stop";
+                        break;
+                    }
+
+                    lastInternalSignature = signature;
+                    workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = orchestration.Output });
+                    workingMessages.Add(new OpenAiChatMessage { Role = "tool", Content = internalContent });
+                    continue;
+                }
+
+                message.Content = internalContent;
+                finishReason = "stop";
+                break;
+            }
+
+            var output = string.IsNullOrWhiteSpace(orchestration.Output)
+                ? BuildNoDecisionMessage(orchestration)
+                : orchestration.Output;
             ValidateToolChoiceResult(toolChoice, [], [], orchestration.Output);
+            var envelope = QuadBrainArbiterEnvelope.TryParse(output);
+
+            if (toolChoice.Kind != ToolChoiceKind.None && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
+            {
+                if (string.Equals(output.Trim(), lastDeferred, StringComparison.Ordinal))
+                {
+                    message.Content = QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+                    if (string.IsNullOrWhiteSpace(message.Content))
+                        message.Content = output;
+                    finishReason = "stop";
+                    break;
+                }
+
+                lastDeferred = output.Trim();
+                workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = output });
+                workingMessages.Add(new OpenAiChatMessage { Role = "user", Content = ContinueDirective });
+                continue;
+            }
+
+            message.Content = envelope is { IsFinal: true }
+                ? envelope.Content ?? string.Empty
+                : QuadBrainArbiterEnvelope.FormatForDisplay(output, showIntent: false);
+            if (string.IsNullOrWhiteSpace(message.Content))
+                message.Content = output;
+            finishReason = "stop";
+            break;
         }
 
-        // FR-MCP-QBOPENAI-001 (G-019): QuadBrain orchestration does not surface real provider token counts, so
-        // usage is a documented best-effort estimate (~4 characters per token) over the folded prompt and the
-        // assistant content/tool-call output so OpenAI clients receive a non-zero usage block.
-        var response = CreateResponse(request, message, finishReason, orchestrationInput, orchestration.TransactionId);
+        var response = CreateResponse(
+            request,
+            message,
+            finishReason,
+            orchestrationInput,
+            orchestration?.TransactionId);
         await CompleteSessionTurnAsync(sessionId, turnId, response, cancellationToken).ConfigureAwait(false);
         return response;
     }
@@ -176,37 +234,6 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             },
         };
     }
-
-    private static bool TryGetExternalToolFailure(IReadOnlyList<OpenAiChatMessage> messages, out string failure)
-    {
-        foreach (var message in messages)
-        {
-            if (!string.Equals(message.Role, "tool", StringComparison.OrdinalIgnoreCase)
-                || string.IsNullOrWhiteSpace(message.Content))
-            {
-                continue;
-            }
-
-            var content = message.Content.Trim();
-            if (content.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
-                || content.Contains("Function failed", StringComparison.OrdinalIgnoreCase))
-            {
-                failure = content;
-                return true;
-            }
-        }
-
-        failure = string.Empty;
-        return false;
-    }
-
-    private static OpenAiChatResponseMessage BuildExternalToolFailureResponse(string toolFailure)
-        => new()
-        {
-            Role = "assistant",
-            Content = "QBAgent external tool execution failed; the requested action was not completed. "
-                      + toolFailure.Trim(),
-        };
 
     private async Task CompleteSessionTurnAsync(
         string? sessionId,
@@ -251,6 +278,14 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
     /// <summary>Best-effort token estimate (~4 characters per token); 0 for empty text.</summary>
     private static int EstimateTokens(string? text)
         => string.IsNullOrEmpty(text) ? 0 : (text.Length + 3) / 4;
+
+    private static string BuildNoDecisionMessage(QuadBrainOrchestrationResponse orchestration)
+    {
+        var reason = string.IsNullOrWhiteSpace(orchestration.Reason)
+            ? (string.IsNullOrWhiteSpace(orchestration.Status) ? "empty" : orchestration.Status.Trim())
+            : orchestration.Reason.Trim();
+        return $"QuadBrain returned no decision ({reason}).";
+    }
 
     private static string? SerializeToolCalls(List<OpenAiToolCall>? toolCalls)
         => toolCalls is { Count: > 0 }
@@ -341,6 +376,59 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         }
     }
 
+    internal static bool IsFailedOrchestration(QuadBrainOrchestrationResponse orchestration)
+    {
+        if (string.Equals(orchestration.Reason, BrainSlotReasonCodes.ProviderFailed, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return !string.Equals(orchestration.Status, "committed", StringComparison.OrdinalIgnoreCase)
+               && string.IsNullOrWhiteSpace(orchestration.Output);
+    }
+
+    internal static string? TryRoleFinalContent(QuadBrainOrchestrationResponse orchestration)
+    {
+        foreach (var role in new[] { BrainSlotRoles.Logic, BrainSlotRoles.Creativity, BrainSlotRoles.CuriosityEngine })
+        {
+            var result = orchestration.RoleResults.FirstOrDefault(item =>
+                string.Equals(item.Role, role, StringComparison.OrdinalIgnoreCase));
+            var envelope = QuadBrainArbiterEnvelope.TryParse(result?.Output);
+            if (envelope is { IsFinal: true } && !string.IsNullOrWhiteSpace(envelope.Content))
+                return envelope.Content;
+        }
+
+        return null;
+    }
+
+    private static bool TryCollectToolCalls(QuadBrainOrchestrationResponse orchestration, out List<OpenAiToolCall> toolCalls)
+    {
+        var envelope = QuadBrainArbiterEnvelope.TryParse(orchestration.Output);
+        if (envelope is { HasToolCalls: true })
+        {
+            toolCalls = [.. envelope.ToolCalls];
+            return true;
+        }
+
+        if (TryParseToolCalls(orchestration.Output, out toolCalls))
+            return true;
+
+        if (envelope is { IsFinal: true })
+            return false;
+
+        foreach (var role in new[] { BrainSlotRoles.Logic, BrainSlotRoles.Creativity, BrainSlotRoles.CuriosityEngine })
+        {
+            var result = orchestration.RoleResults.FirstOrDefault(item =>
+                string.Equals(item.Role, role, StringComparison.OrdinalIgnoreCase));
+            var roleEnvelope = QuadBrainArbiterEnvelope.TryParse(result?.Output);
+            if (roleEnvelope is { HasToolCalls: true })
+            {
+                toolCalls = [.. roleEnvelope.ToolCalls];
+                return true;
+            }
+        }
+
+        toolCalls = [];
+        return false;
+    }
+
     /// <summary>
     /// Detects QuadBrain's tool-call convention: an Arbiter output that is a JSON object with a
     /// <c>tool_calls</c> array of <c>{ "name": ..., "arguments": { ... } }</c> entries. When present these are
@@ -352,13 +440,13 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         if (string.IsNullOrWhiteSpace(output))
             return false;
 
-        var trimmed = output.Trim();
-        if (trimmed.Length == 0 || trimmed[0] != '{')
+        var json = ExtractToolCallsJson(output);
+        if (string.IsNullOrWhiteSpace(json))
             return false;
 
         try
         {
-            using var document = JsonDocument.Parse(trimmed);
+            using var document = JsonDocument.Parse(json);
             if (document.RootElement.ValueKind != JsonValueKind.Object ||
                 !document.RootElement.TryGetProperty("tool_calls", out var calls) ||
                 calls.ValueKind != JsonValueKind.Array)
@@ -397,6 +485,90 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Accepts a raw JSON object, a markdown-fenced JSON block, or prose that embeds a
+    /// <c>tool_calls</c> object. Arbiter often narrates and then emits JSON.
+    /// </summary>
+    private static string? ExtractToolCallsJson(string output)
+    {
+        var trimmed = output.Trim();
+        if (trimmed.Length == 0)
+            return null;
+
+        var fenced = ExtractFencedJson(trimmed);
+        if (!string.IsNullOrWhiteSpace(fenced))
+            trimmed = fenced;
+
+        if (trimmed[0] == '{')
+        {
+            var slice = SliceBalancedObject(trimmed, 0);
+            if (!string.IsNullOrWhiteSpace(slice))
+                return slice;
+        }
+
+        var marker = trimmed.IndexOf("\"tool_calls\"", StringComparison.Ordinal);
+        if (marker < 0)
+            return null;
+        var open = trimmed.LastIndexOf('{', marker);
+        return open < 0 ? null : SliceBalancedObject(trimmed, open);
+    }
+
+    private static string? ExtractFencedJson(string text)
+    {
+        var fence = text.IndexOf("```", StringComparison.Ordinal);
+        if (fence < 0)
+            return null;
+        var start = text.IndexOf('\n', fence);
+        if (start < 0)
+            return null;
+        var end = text.IndexOf("```", start + 1, StringComparison.Ordinal);
+        if (end < 0)
+            return null;
+        var inner = text[(start + 1)..end].Trim();
+        return inner.Length > 0 ? inner : null;
+    }
+
+    private static string? SliceBalancedObject(string text, int openIndex)
+    {
+        if (openIndex < 0 || openIndex >= text.Length || text[openIndex] != '{')
+            return null;
+
+        var depth = 0;
+        var inString = false;
+        var escape = false;
+        for (var i = openIndex; i < text.Length; i++)
+        {
+            var ch = text[i];
+            if (inString)
+            {
+                if (escape)
+                    escape = false;
+                else if (ch == '\\')
+                    escape = true;
+                else if (ch == '"')
+                    inString = false;
+                continue;
+            }
+
+            if (ch == '"')
+            {
+                inString = true;
+                continue;
+            }
+
+            if (ch == '{')
+                depth++;
+            else if (ch == '}')
+            {
+                depth--;
+                if (depth == 0)
+                    return text[openIndex..(i + 1)];
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -447,6 +619,25 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         return builder.ToString().TrimEnd();
     }
 
+    private static string BuildInternalSuccessContent(
+        IReadOnlyList<ExecutedInternalTool> executed,
+        string failureNote)
+    {
+        var builder = new StringBuilder();
+        if (failureNote.Length > 0)
+            builder.AppendLine(failureNote);
+
+        foreach (var item in executed)
+        {
+            if (!string.IsNullOrWhiteSpace(item.Outcome.ResultJson))
+                builder.AppendLine(item.Outcome.ResultJson);
+            else
+                builder.Append(item.ToolCall.Function.Name).AppendLine(" completed.");
+        }
+
+        return builder.ToString().TrimEnd();
+    }
+
     private static string BuildPrompt(
         IReadOnlyList<OpenAiChatMessage> messages,
         IReadOnlyList<OpenAiToolDefinition>? tools,
@@ -455,12 +646,17 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         var builder = new StringBuilder();
         foreach (var message in messages)
         {
-            if (string.IsNullOrWhiteSpace(message.Content))
+            if (string.IsNullOrWhiteSpace(message.Content) && message.ToolCalls is not { Count: > 0 })
                 continue;
             var role = string.IsNullOrWhiteSpace(message.Role) ? "user" : message.Role.Trim();
-            builder.Append(role.ToLower(CultureInfo.InvariantCulture))
-                   .Append(": ")
-                   .AppendLine(message.Content.Trim());
+            builder.Append(role.ToLower(CultureInfo.InvariantCulture));
+            if (!string.IsNullOrWhiteSpace(message.ToolCallId))
+                builder.Append(" [").Append(message.ToolCallId.Trim()).Append(']');
+            builder.Append(": ");
+            if (!string.IsNullOrWhiteSpace(message.Content))
+                builder.AppendLine(message.Content.Trim());
+            else
+                builder.AppendLine(SerializeToolCalls(message.ToolCalls));
         }
 
         if (tools is { Count: > 0 })
@@ -474,6 +670,11 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                 if (!string.IsNullOrWhiteSpace(tool.Function.Description))
                     builder.Append(": ").Append(tool.Function.Description);
                 builder.AppendLine();
+            }
+
+            if (tools.Any(static t => string.Equals(t.Function.Name, "mcp_todo_query", StringComparison.Ordinal)))
+            {
+                builder.AppendLine("If the user asks to list or query TODOs, you MUST call mcp_todo_query with done=false for open items. Respond with ONLY the tool_calls JSON. Do not describe the plan in prose.");
             }
 
             if (toolChoice.Kind == ToolChoiceKind.Required)

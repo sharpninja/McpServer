@@ -1,0 +1,38 @@
+{
+  "index": 1,
+  "name": "client-tests",
+  "exactCommand": "dotnet test tests\\McpServer.Client.Tests\\McpServer.Client.Tests.csproj",
+  "capturedCommand": "dotnet test tests\\McpServer.Client.Tests\\McpServer.Client.Tests.csproj --logger trx;LogFileName=01-client-tests.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T141644Z --nologo",
+  "startedUtc": "2026-08-22T14:21:04.5121417Z",
+  "endedUtc": "2026-08-22T14:21:12.8556280Z",
+  "durationSec": 8.343,
+  "exitCode": 0,
+  "passed": 284,
+  "failed": 0,
+  "skipped": 0,
+  "total": 284,
+  "countSource": "trx",
+  "logPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T141644Z\\01-client-tests.log",
+  "logSha256": "00A67D2958837D82B9D8C0BA0369E81790787894DBF88691A035C053D1CFBDDB",
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T141644Z\\01-client-tests.trx",
+  "trxSha256": "15CB1A4357C6CA29FCEC052DD05E77D1DE53C81103CFBCB1DEEC680E20BD5768",
+  "consoleCounts": {
+    "failed": 0,
+    "passed": 284,
+    "skipped": 0,
+    "total": 284,
+    "lines": 1
+  },
+  "trxCounts": {
+    "total": 284,
+    "executed": 284,
+    "passed": 284,
+    "failed": 0,
+    "notExecuted": 0,
+    "skipped": 0,
+    "skippedNames": []
+  },
+  "gateFailed": false,
+  "gateSkipped": false,
+  "gateExitFail": false
+}

@@ -1,0 +1,189 @@
+{
+  "TimestampUtc": "2026-08-22T07:37:37.0501957Z",
+  "ReceiptStamp": "20260822T073737Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P16",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T071202Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p16/",
+  "OwnedRerun": "docs/receipts/_hv-c-red-p16/hv-self/",
+  "SessionId": "GrokSubagentHostile-20260822T072417Z-c-red-p16",
+  "RequestId": "req-20260822T072417Z-001-hostile-c-red-p16",
+  "TurnId": 42917,
+  "HealthNonce": "nonce-hv-20260822072418-29083",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "HomemadeMarkerSignature": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 17,
+  "Accuracy": 92,
+  "Completeness": 95,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "ListTestsCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+    "ListTestsExitCode": 0,
+    "ListP16": 8,
+    "ListP17": 0,
+    "ListNukeTargetSkipIsFailure": 0,
+    "ListAiTheory": 8,
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~AiTheory_Agent_RequiresValidJsonFields",
+    "FilterExitCode": 1,
+    "FilterDurationMs": 16068,
+    "FilterConsoleTotalTests": "8",
+    "FilterConsoleFailed": "8",
+    "FilterConsolePassedPrinted": null,
+    "FilterConsoleSkippedPrinted": null,
+    "FilterTotalTime": "2.1296 Seconds",
+    "FilterTrxExecuted": "8",
+    "FilterTrxPassed": "0",
+    "FilterTrxFailed": "8",
+    "FilterTrxNotExecuted": "0",
+    "FilterTrxSkippedAttribute": null,
+    "FilterTrxP16Failed": 8,
+    "FilterTrxP16Passed": 0,
+    "FilterTrxP16Skipped": 0,
+    "FilterTrxP17Count": 0,
+    "FilterTrxNukeCount": 0,
+    "NotImplementedMessageCount": 8,
+    "FilterTrx": "docs/receipts/_hv-c-red-p16/hv-self/trx-p16-hv/p16-filter.trx",
+    "FilterLog": "docs/receipts/_hv-c-red-p16/hv-self/hv-dotnet-p16-filter.log",
+    "EvaluateAsyncImplemented": false,
+    "P16NamedTestsPresent": true,
+    "P17NamedTestsPresent": false,
+    "InlineDataCount": 8
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P16": false,
+    "PLAN-combined-C-P16": false
+  },
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Named test AiTheory_Agent_RequiresValidJsonFields is a Theory with eight PluginHostKind InlineData rows. No Skip. Maps TEST-MCP-PLUGININT-001 AC3."
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "EvaluateAsync throws InvalidOperationException not implemented. Independent filter Failed 8 Passed 0 Skipped 0. All eight hosts fail with that exception."
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "P17 AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure absent. NukeTarget_SkipIsFailure not mixed into this PluginIntegration filter. P1 SkipIsFailure source exists and is not a FAIL."
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Live todo_get after tests."
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Prior C-green-P15 AGREE docs/receipts/hostile-validator-20260822T071202Z.md Passed 86 Failed 0 Skipped 0; P16 AiTheory absent."
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Honesty and receipts. Independent hv-self TRX, not implementer narrative or sibling collector TRX."
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Byrd phase-order: C-green-P15 AGREE then C-red-P16 tests. This is the red gate, not green exit."
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "MCP-only TODO/session/requirements storage. No TODO.yaml edit."
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "PowerShell-only. No python/python3/py invoked by this validator."
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Claims match artifacts. Duration mismatch vs implementer 140 ms recorded as residual."
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Identified FR/TR/TEST-MCP-PLUGININT-001 via live getFr/getTr/getTest/listMappings."
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "TEST AC3 and TR AC5 exist and are testable. isSatisfied remains false."
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "P16 companion theory covers AC3 for this red gate and is currently failing."
+    },
+    {
+      "Id": "C4",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Not claiming FR/TR/TEST complete. Mappings exist. This review did not mark requirements satisfied."
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Scope is C-red-P16 only, not plan closeout."
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Plan P16 red exit: companion rows exist, currently Failed 8 Passed 0, EvaluateAsync unimplemented, P17 not mixed as greens."
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Combined PLAN task C P16 red + hostile then P17-P18 remains done false. MCP-PLUGININT-001 P16 remains done false."
+    }
+  ],
+  "SiblingCollision": {
+    "SharedCollectorOverwritten": true,
+    "SiblingSessionId": "GrokSubagentHostile-20260822T072515Z-pluginhandoff-p16red",
+    "OwnedEvidenceRoot": "docs/receipts/_hv-c-red-p16/hv-self/"
+  }
+}

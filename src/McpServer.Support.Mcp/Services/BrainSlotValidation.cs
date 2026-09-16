@@ -12,6 +12,7 @@ internal static class BrainSlotValidation
     {
         "OpenAI",
         "OpenAICompatible",
+        "Cli",
     };
 
     /// <summary>Normalizes a role or throws for unknown values.</summary>
@@ -28,7 +29,7 @@ internal static class BrainSlotValidation
     {
         var trimmed = providerKind?.Trim();
         if (string.IsNullOrWhiteSpace(trimmed) || !ProviderKinds.Contains(trimmed))
-            throw new BrainSlotValidationException("providerKind must be OpenAI or OpenAICompatible.");
+            throw new BrainSlotValidationException("providerKind must be OpenAI, OpenAICompatible, or Cli.");
         return ProviderKinds.First(item => string.Equals(item, trimmed, StringComparison.OrdinalIgnoreCase));
     }
 
@@ -61,6 +62,13 @@ internal static class BrainSlotValidation
 
         if (string.Equals(kind, "OpenAICompatible", StringComparison.OrdinalIgnoreCase) && trimmed is null)
             throw new BrainSlotValidationException("OpenAICompatible slots require endpoint.", BrainSlotReasonCodes.EndpointNotAllowed);
+
+        if (string.Equals(kind, "Cli", StringComparison.OrdinalIgnoreCase))
+        {
+            if (trimmed is null || !CliBrainSlotEndpoint.TryParse(trimmed, out _))
+                throw new BrainSlotValidationException("Cli slots require endpoint cli://grok-cli, cli://grok-build, or cli://codex-cli.", BrainSlotReasonCodes.EndpointNotAllowed);
+            return;
+        }
 
         if (trimmed is null)
             return;

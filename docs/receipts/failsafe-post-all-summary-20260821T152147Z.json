@@ -1,0 +1,23 @@
+{
+  "utc": "2026-08-21T15:22:14Z",
+  "grokLivePosted": 54,
+  "grokQuarantinePosted": 48,
+  "grokLiveRemaining": 0,
+  "grokQuarantineRemaining": 0,
+  "codexLivePosted": 12,
+  "codexQuarantinePosted": 12,
+  "codexQuarantineRemaining": 3,
+  "claudeQuarantinePosted": 41,
+  "claudeQuarantineRemaining": 0,
+  "submitAsyncPostedTotal": 167,
+  "remainingSubmitFailures": 3,
+  "remainingImportRecovery": 2,
+  "drainAbort": "workflow.failsafe.drain aborted: mcpserver-repl timed out after 2s",
+  "drainTriage": "triage-report-bb6214a43c40430da3285a530deec758",
+  "storage503Triage": "triage-report-972623438ab84b489e8195f977698a86",
+  "receipts": [
+    "docs/receipts/failsafe-replay-20260821T144010Z.json",
+    "docs/receipts/failsafe-quarantine-replay-20260821T150140Z.json",
+    "docs/receipts/failsafe-other-replay-20260821T150540Z.json"
+  ]
+}

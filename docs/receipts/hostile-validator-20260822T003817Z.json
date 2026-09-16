@@ -1,0 +1,95 @@
+{
+  "TimestampUtc": "2026-08-22T00:38:17Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P4",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T001811Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p4/",
+  "SessionId": "GrokSubagentHostile-20260822T003138Z-c-green-p4",
+  "RequestId": "req-20260822T003138Z-001-hostile-c-green-p4-catalog",
+  "TurnId": 42821,
+  "HealthNonce": "11b1ade28d1c4deabde11943538af051",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 27,
+  "Accuracy": 96,
+  "Completeness": 95,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "PluginAllExitCode": 0,
+    "PluginAllPassed": 7,
+    "PluginAllFailed": 0,
+    "PluginAllSkippedConsole": 0,
+    "PluginAllTrxNotExecuted": 0,
+    "NamedPassed": [
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds"
+    ],
+    "LoadAndValidateThrowsNotImplemented": false
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P4": false
+  },
+  "Timestamps": {
+    "CRedP4AgreeName": "2026-08-22T00:18:11Z",
+    "CatalogTestsLastWriteTimeUtc": "2026-08-22T00:06:51.8604136Z",
+    "CatalogCsLastWriteTimeUtc": "2026-08-22T00:23:02.8876623Z",
+    "ScenarioCsLastWriteTimeUtc": "2026-08-22T00:05:08.5000833Z",
+    "CatalogJsonLastWriteTimeUtc": "2026-08-22T00:22:35.5161797Z",
+    "CatalogCsAfterCRedP4Agree": true,
+    "CatalogJsonAfterCRedP4Agree": true
+  },
+  "CatalogFacts": {
+    "CodexEntrypoint": "Invoke-CodexMcpPlugin.ps1",
+    "CodexRootEntrypointExists": true,
+    "CodexLibEntrypointExists": false,
+    "ClineCacheFolder": "cline",
+    "ClineV2CacheFolder": "cline-v2",
+    "UniqueKeyIsAgentSourceCache": true,
+    "UniqueKeyIsRepositoryName": false,
+    "EnabledCount": 8,
+    "ThrowsMissingRepo": true,
+    "ThrowsMissingEntrypoint": true,
+    "ThrowsMissingVersion": true,
+    "ThrowsMissingAc1": true,
+    "ThrowsNonUnique": true,
+    "ThrowsEnabledCount": true
+  },
+  "Attacks": {
+    "StillThrowsNotImplemented": false,
+    "TestsSkipped": false,
+    "TrAc1FieldsIgnored": false,
+    "UniquenessStillRepositoryName": false,
+    "PlanDone": false
+  }
+}

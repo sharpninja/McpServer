@@ -64,6 +64,7 @@ Key tool categories:
 - **Desktop**: `desktop_launch`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`
+- **Handoff**: `handoff_ingest`, `handoff_get`, `handoff_approve` (see `docs/Handoff-Ingestion.md`)
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
 - **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
@@ -71,6 +72,25 @@ Key tool categories:
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
 - **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
 - **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
+
+## Typed client: Handoff
+
+`McpServerClient.Handoff` (`HandoffClient`) covers `/mcpserver/handoff`:
+
+```csharp
+var run = await client.Handoff.IngestHandoffAsync(new HandoffIngestionRequest
+{
+    SourceKind = HandoffSourceKind.Path,
+    Path = "docs/handoffs/example.md",
+    Mode = HandoffIngestionMode.DraftOnly,
+});
+var inspect = await client.Handoff.GetHandoffRunAsync(run.Provenance!.RunId);
+var approved = await client.Handoff.ApproveHandoffAsync(
+    inspect.Provenance!.RunId,
+    new HandoffApprovalRequest { Approved = true, Reviewer = "operator" });
+```
+
+DraftOnly never mutates TODO state. Custom `promptTemplateId` values are rejected. See `docs/Handoff-Ingestion.md`.
 
 ## Typed client: Products
 

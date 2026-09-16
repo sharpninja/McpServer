@@ -1,0 +1,14 @@
+[
+  {
+    "file": "ir1.json",
+    "success": false,
+    "elapsedSec": 1,
+    "head": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"Invalid sessionId.\",\"status\":400,\"detail\":\"SessionId must match -- (example: Copilot-20260304T113901Z-feature-audit).\",\"errors\":{},\"traceId\":\"00-d343df20227be41ff761173e3b6aa2e6-dfa46946899321c6-01\"}"
+  },
+  {
+    "file": "ir2.json",
+    "success": false,
+    "elapsedSec": 0,
+    "head": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"Invalid sessionId.\",\"status\":400,\"detail\":\"SessionId must match -- (example: Copilot-20260304T113901Z-feature-audit).\",\"errors\":{},\"traceId\":\"00-706317f70973048ad3eb875ee2c143c8-7a11647aa9b1c8b7-01\"}"
+  }
+]

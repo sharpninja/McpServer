@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f9b6d7e4-de92-4765-9bc8-42924cf0213c" name="SYSTEM@PAYTON-LEGION2 2026-08-21 17:36:29" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T17:36:29.6365759-05:00" queuing="2026-08-21T17:36:29.6365763-05:00" start="2026-08-21T17:36:24.6615646-05:00" finish="2026-08-21T17:36:29.8018923-05:00" />
+  <TestSettings name="default" id="2445fe06-c6bf-4f86-af0f-eacfaef6f804">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-08-21_17_36_29" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5a1aa94e-6db7-4fa8-8a33-e9e90d57de55" testId="e058db10-049b-afce-1ea3-f13a0e2fe11d" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0021256" startTime="2026-08-21T17:36:29.4119996-05:00" endTime="2026-08-21T17:36:29.4142196-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a1aa94e-6db7-4fa8-8a33-e9e90d57de55" />
+    <UnitTestResult executionId="e3b7d604-d6e4-4e2e-b4b4-d9de4e23f0e3" testId="63162962-80d3-eec1-a05d-745085414abc" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0032248" startTime="2026-08-21T17:36:29.3956574-05:00" endTime="2026-08-21T17:36:29.3990298-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3b7d604-d6e4-4e2e-b4b4-d9de4e23f0e3" />
+    <UnitTestResult executionId="8ace44e7-5c40-45ee-85a7-a3acc2f1cdb0" testId="8b3892ba-0e1c-700f-3244-f847e1d5846d" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0022866" startTime="2026-08-21T17:36:29.3997989-05:00" endTime="2026-08-21T17:36:29.4021441-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ace44e7-5c40-45ee-85a7-a3acc2f1cdb0" />
+    <UnitTestResult executionId="32ce16b9-e39f-442b-9e66-d1abcdd21e17" testId="cc1b6ced-f31d-fbfc-3070-d82cd1f71de5" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope" computerName="PAYTON-LEGION2" duration="00:00:00.4970042" startTime="2026-08-21T17:36:29.0707352-05:00" endTime="2026-08-21T17:36:29.5844578-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32ce16b9-e39f-442b-9e66-d1abcdd21e17" />
+    <UnitTestResult executionId="1368f028-2c57-407d-8011-65628cda2c5f" testId="dbcbabc2-46fb-a908-7efa-10c1d7cf36de" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.0022098" startTime="2026-08-21T17:36:29.4158593-05:00" endTime="2026-08-21T17:36:29.4181334-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1368f028-2c57-407d-8011-65628cda2c5f" />
+    <UnitTestResult executionId="bbab1e13-a917-4e6d-9e4f-fe1c716c801d" testId="1d758261-e9c8-b63e-4799-cf00fa6b22ae" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact" computerName="PAYTON-LEGION2" duration="00:00:00.0054779" startTime="2026-08-21T17:36:29.4307633-05:00" endTime="2026-08-21T17:36:29.4363266-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbab1e13-a917-4e6d-9e4f-fe1c716c801d" />
+    <UnitTestResult executionId="42c1ee13-2cb8-483c-9522-187225b44065" testId="92044359-be29-5ffe-19cc-dd5f50a0d818" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess" computerName="PAYTON-LEGION2" duration="00:00:00.2935445" startTime="2026-08-21T17:36:29.0707352-05:00" endTime="2026-08-21T17:36:29.3828665-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42c1ee13-2cb8-483c-9522-187225b44065" />
+    <UnitTestResult executionId="9fb4a9bf-2763-42d5-8160-6be414311673" testId="f9a20258-2cd7-9441-3168-caa874df12ce" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath" computerName="PAYTON-LEGION2" duration="00:00:00.0107368" startTime="2026-08-21T17:36:29.4190888-05:00" endTime="2026-08-21T17:36:29.4298966-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fb4a9bf-2763-42d5-8160-6be414311673" />
+    <UnitTestResult executionId="a28e8624-96e4-48d7-9d8f-6241cb613af7" testId="026e893f-deb4-b012-25c2-d0d643da2e51" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_PrimaryFails_ReturnsFailsafeResult" computerName="PAYTON-LEGION2" duration="00:00:00.0243660" startTime="2026-08-21T17:36:29.6036589-05:00" endTime="2026-08-21T17:36:29.6280970-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a28e8624-96e4-48d7-9d8f-6241cb613af7" />
+    <UnitTestResult executionId="28f8ee4d-90ea-460d-97b5-89d79ff0382f" testId="d408455e-73cd-eaa7-5352-3c1cf958c49f" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_CallerCancels_DoesNotInvokeFailsafe" computerName="PAYTON-LEGION2" duration="00:00:00.0049051" startTime="2026-08-21T17:36:29.6288569-05:00" endTime="2026-08-21T17:36:29.6338247-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28f8ee4d-90ea-460d-97b5-89d79ff0382f" />
+    <UnitTestResult executionId="b9bcc216-c061-40c1-8a52-f58b2b43ada4" testId="6e43af7b-1fe8-6a27-ea14-9a953264790c" testName="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_BothStrategiesFail_ThrowsPersistenceException" computerName="PAYTON-LEGION2" duration="00:00:00.0079792" startTime="2026-08-21T17:36:29.5949022-05:00" endTime="2026-08-21T17:36:29.6029817-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9bcc216-c061-40c1-8a52-f58b2b43ada4" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="92044359-be29-5ffe-19cc-dd5f50a0d818">
+      <Execution id="42c1ee13-2cb8-483c-9522-187225b44065" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="e058db10-049b-afce-1ea3-f13a0e2fe11d">
+      <Execution id="5a1aa94e-6db7-4fa8-8a33-e9e90d57de55" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="63162962-80d3-eec1-a05d-745085414abc">
+      <Execution id="e3b7d604-d6e4-4e2e-b4b4-d9de4e23f0e3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="f9a20258-2cd7-9441-3168-caa874df12ce">
+      <Execution id="9fb4a9bf-2763-42d5-8160-6be414311673" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="cc1b6ced-f31d-fbfc-3070-d82cd1f71de5">
+      <Execution id="32ce16b9-e39f-442b-9e66-d1abcdd21e17" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests" name="FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="dbcbabc2-46fb-a908-7efa-10c1d7cf36de">
+      <Execution id="1368f028-2c57-407d-8011-65628cda2c5f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_BothStrategiesFail_ThrowsPersistenceException" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="6e43af7b-1fe8-6a27-ea14-9a953264790c">
+      <Execution id="b9bcc216-c061-40c1-8a52-f58b2b43ada4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests" name="PersistAsync_BothStrategiesFail_ThrowsPersistenceException" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="8b3892ba-0e1c-700f-3244-f847e1d5846d">
+      <Execution id="8ace44e7-5c40-45ee-85a7-a3acc2f1cdb0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="1d758261-e9c8-b63e-4799-cf00fa6b22ae">
+      <Execution id="bbab1e13-a917-4e6d-9e4f-fe1c716c801d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests" name="Coordinator_PrimarySuccess_NoPendingFailsafeArtifact" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_CallerCancels_DoesNotInvokeFailsafe" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="d408455e-73cd-eaa7-5352-3c1cf958c49f">
+      <Execution id="28f8ee4d-90ea-460d-97b5-89d79ff0382f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests" name="PersistAsync_CallerCancels_DoesNotInvokeFailsafe" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.PersistAsync_PrimaryFails_ReturnsFailsafeResult" storage="f:\github\mcpserver\tests\mcpserver.repl.core.tests\bin\debug\net10.0\mcpserver.repl.core.tests.dll" id="026e893f-deb4-b012-25c2-d0d643da2e51">
+      <Execution id="a28e8624-96e4-48d7-9d8f-6241cb613af7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests" name="PersistAsync_PrimaryFails_ReturnsFailsafeResult" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e058db10-049b-afce-1ea3-f13a0e2fe11d" executionId="5a1aa94e-6db7-4fa8-8a33-e9e90d57de55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="63162962-80d3-eec1-a05d-745085414abc" executionId="e3b7d604-d6e4-4e2e-b4b4-d9de4e23f0e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b3892ba-0e1c-700f-3244-f847e1d5846d" executionId="8ace44e7-5c40-45ee-85a7-a3acc2f1cdb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cc1b6ced-f31d-fbfc-3070-d82cd1f71de5" executionId="32ce16b9-e39f-442b-9e66-d1abcdd21e17" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dbcbabc2-46fb-a908-7efa-10c1d7cf36de" executionId="1368f028-2c57-407d-8011-65628cda2c5f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d758261-e9c8-b63e-4799-cf00fa6b22ae" executionId="bbab1e13-a917-4e6d-9e4f-fe1c716c801d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92044359-be29-5ffe-19cc-dd5f50a0d818" executionId="42c1ee13-2cb8-483c-9522-187225b44065" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9a20258-2cd7-9441-3168-caa874df12ce" executionId="9fb4a9bf-2763-42d5-8160-6be414311673" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="026e893f-deb4-b012-25c2-d0d643da2e51" executionId="a28e8624-96e4-48d7-9d8f-6241cb613af7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d408455e-73cd-eaa7-5352-3c1cf958c49f" executionId="28f8ee4d-90ea-460d-97b5-89d79ff0382f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e43af7b-1fe8-6a27-ea14-9a953264790c" executionId="b9bcc216-c061-40c1-8a52-f58b2b43ada4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="11" executed="11" passed="11" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.56]   Discovering: McpServer.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:02.15]   Discovered:  McpServer.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:03.08]   Starting:    McpServer.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:03.79]   Finished:    McpServer.Repl.Core.Tests (ID = '4061b5a0920e19fe242d1de383755f13ab659ade97daf24a3a5e8760b3505c7d')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

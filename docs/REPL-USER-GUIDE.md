@@ -263,6 +263,30 @@ payload:
       technicalRequirements: [TR-AUTH-001]
 ```
 
+### workflow.handoff.*
+
+Handoff ingestion, run inspection, and approval. Every method delegates to `IHandoffIngestionService`. See `docs/Handoff-Ingestion.md` and `docs/handoffs/example.md`.
+
+**Common Methods:**
+- `workflow.handoff.ingest` — Ingest a Path, Content, or Artifact source
+- `workflow.handoff.get` — Inspect a persisted run by `runId`
+- `workflow.handoff.approve` — Revalidate the stored draft, then create or reject
+
+### Example: Ingest a Path source
+
+```yaml
+type: request
+payload:
+  requestId: req-20260822T042008Z-handoff-ingest-001
+  method: workflow.handoff.ingest
+  params:
+    sourceKind: Path
+    path: docs/handoffs/example.md
+    mode: DraftOnly
+```
+
+DraftOnly never mutates TODO state. Custom `promptTemplateId` values are rejected. Replay uses the effective prompt identity (`handoff-todo-draft/v1` by default) unless `force=true`.
+
 ### workflow.requirements.*
 
 Requirements management for functional (FR), technical (TR), and test (TEST) requirements with traceability matrices.
@@ -801,6 +825,7 @@ payload:
 - **API Documentation**: `docs/context/api-capabilities.md`
 - **Session Log Schema**: `docs/context/session-log-schema.md`
 - **TODO Schema**: `docs/context/todo-schema.md`
+- **Handoff Ingestion**: `docs/Handoff-Ingestion.md`
 - **Module Bootstrap**: `docs/context/module-bootstrap.md`
 - **Agent Guide**: `docs/REPL-AGENT-GUIDE.md`
 - **Agent Plugin Availability**: `docs/AGENT-PLUGIN-AVAILABILITY.md`

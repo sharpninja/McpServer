@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using McpServer.Support.Mcp.Notifications;
@@ -27,16 +28,18 @@ public sealed class WorkspaceService : IWorkspaceService
     private readonly McpDbContext? _db;
     private readonly IWorkspaceProjectionWriter? _projectionWriter;
     private readonly IChangeEventBus? _eventBus;
+    private readonly IWikiDumpService? _wikiDumpService;
     private readonly ILogger<WorkspaceService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceService"/> class.</summary>
-    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, IProcessRunner processRunner, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null)
+    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, IProcessRunner processRunner, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null, IWikiDumpService? wikiDumpService = null)
     {
         _configuration = configuration;
         _env = env;
         _processRunner = processRunner;
         _eventBus = eventBus;
         _logger = logger;
+        _wikiDumpService = wikiDumpService;
     }
 
     /// <summary>Initializes a new database-authoritative instance of the <see cref="WorkspaceService"/> class.</summary>
@@ -47,8 +50,9 @@ public sealed class WorkspaceService : IWorkspaceService
         McpDbContext db,
         IWorkspaceProjectionWriter projectionWriter,
         ILogger<WorkspaceService> logger,
-        IChangeEventBus? eventBus = null)
-        : this(configuration, env, processRunner, logger, eventBus)
+        IChangeEventBus? eventBus = null,
+        IWikiDumpService? wikiDumpService = null)
+        : this(configuration, env, processRunner, logger, eventBus, wikiDumpService)
     {
         _db = db;
         _projectionWriter = projectionWriter;
@@ -140,8 +144,13 @@ public sealed class WorkspaceService : IWorkspaceService
                 DateTimeCreated = now,
                 DateTimeModified = now,
             };
+            var yamlImportFailure = await TryImportDumpAsync(request.DumpPath, normalized, ct).ConfigureAwait(false);
+            if (yamlImportFailure is not null)
+                return yamlImportFailure;
+
             all.Add(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
+
             _logger.LogInformation("Workspace created: {Name} at {Path}", entry.Name, entry.WorkspacePath);
             await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entry, ct).ConfigureAwait(false));
@@ -334,7 +343,27 @@ public sealed class WorkspaceService : IWorkspaceService
                 entity = existing;
             }
 
-            await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+            await using var transaction = await _db.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            try
+            {
+                await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+                var importFailure = await TryImportDumpAsync(request.DumpPath, normalized, ct).ConfigureAwait(false);
+                if (importFailure is not null)
+                {
+                    await transaction.RollbackAsync(ct).ConfigureAwait(false);
+                    _db.ChangeTracker.Clear();
+                    return importFailure;
+                }
+
+                await transaction.CommitAsync(ct).ConfigureAwait(false);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(ct).ConfigureAwait(false);
+                _db.ChangeTracker.Clear();
+                throw;
+            }
+
             await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace created: {Name} at {Path}", entity.Name, entity.WorkspacePath);
             await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
@@ -344,6 +373,23 @@ public sealed class WorkspaceService : IWorkspaceService
         {
             s_writeLock.Release();
         }
+    }
+
+    /// <summary>FR-MCP-WIKIEXPORT-004: Import dump before the workspace create commits; null means no dump or success.</summary>
+    private async Task<WorkspaceMutationResult?> TryImportDumpAsync(string? dumpPath, string destinationWorkspacePath, CancellationToken ct)
+    {
+        if (_wikiDumpService is null || string.IsNullOrWhiteSpace(dumpPath))
+            return null;
+
+        var imported = await _wikiDumpService.ImportAsync(new WikiDumpImportRequest
+        {
+            DumpPath = dumpPath,
+            DestinationWorkspacePath = destinationWorkspacePath,
+        }, ct).ConfigureAwait(false);
+        if (imported.Success)
+            return null;
+
+        return new WorkspaceMutationResult(false, imported.Error ?? "Dump import failed.");
     }
 
     private async Task<WorkspaceMutationResult> UpdateDatabaseAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct)

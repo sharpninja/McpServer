@@ -1,0 +1,184 @@
+{
+  "TimestampUtc": "2026-09-10T23:33:11Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation validation of QBEXEC four-hole re-review",
+  "AddProfileExecuted": true,
+  "AddProfileFileCount": 18,
+  "AddProfileExcluded": [
+    "add-profile.grok.md"
+  ],
+  "McpTrust": {
+    "signatureOk": true,
+    "nonceSent": "ced0ae8ed6b44b24939ff4fee03534f1",
+    "nonceEchoed": true,
+    "plugin": "mcpserver-grok-plugin",
+    "pluginVersion": "1.106.0",
+    "sourceType": "GrokCode",
+    "workspacePath": "F:\\GitHub\\McpServer"
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260910T232808Z-hostile-qbexec-reval",
+    "requestId": "req-20260910T232808Z-001-hostile-reval-qbexec-holes",
+    "turnId": 44392
+  },
+  "PriorDisagree": "docs/receipts/hostile-validator-20260910T231152Z.md",
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 17,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "AccuracyRating": 96,
+  "CompletenessRating": 94,
+  "ExplicitFailList": [],
+  "ExplicitUnknownList": [],
+  "ResidualNotes": [
+    "CompleteAsync_McpTodoQuery_ReturnsNormalAssistantContent still uses HandlingExecutor; catalog theory uses real executor.",
+    "FakeExecutor remains on interceptor unhandled/failed paths.",
+    "McpStdioHost does not register IQuadBrainInternalToolExecutor or IQuadBrainPowerShellSessions.",
+    "InMemoryQuadBrainPowerShellSessions is not IHostedPowerShellSessionManager; Support.Mcp has no McpAgent reference.",
+    "Catalog All=50 published=42 PUB_NOT_IN_ALL empty.",
+    "mcp_client_invoke catalog theory still uses todo.query; unknown github is a dedicated Handled-Fail test.",
+    "IGenericClientPassthrough not added; HttpClient grep 0 in executor.",
+    "This review did not flip isSatisfied and did not mark PLAN-LLMSTRATEGY-001 done."
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Focused Support.Mcp filter Failed 0 Passed 201 Skipped 0.",
+      "evidence": "Independent dotnet test EXIT=0; TRX total=201 executed=201 passed=201 failed=0 notExecuted=0; 50/50/50 catalog theories Passed; LogInternalToolFailure=1 UnknownExternalClient=1 SessionQuery=1"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "CompleteAsync_CatalogName_StopsWithoutEmittingToolCall pins real executor ResultJson or name completed.",
+      "evidence": "QuadBrainOpenAiChatServiceTests.cs:516-544 fixture.CreateExecutor; 50 Passed"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "LogInternalToolFailure_AppendsDialogViaSessionLog asserts ISessionLogService.AppendProcessingDialogAsync for mcp_todo_update failure.",
+      "evidence": "BrainInteractionSessionLoggerTests.cs:43-61; TRX 1 Passed"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "mcp_client_invoke github.ListIssuesAsync Handled Fail; session.query via ISessionLogService; IGenericClientPassthrough not added.",
+      "evidence": "Executor tests 416-446; ClientInvokeAsync 524-552; HttpClient/IGenericClientPassthrough grep 0"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "PowerShell create/command/close through IQuadBrainPowerShellSessions with catalog Received(); no McpAgent reference.",
+      "evidence": "AssertMatchingServiceInvokedAsync 619-627; Program.cs:510; Support.Mcp.csproj no McpAgent"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Program.cs registers IQuadBrainPowerShellSessions and IQuadBrainInternalToolExecutor.",
+      "evidence": "Program.cs:510-511"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "PLAN-LLMSTRATEGY-001 Done=false. Completeness ACs still isSatisfied false.",
+      "evidence": "todo_get Done=false; live GET FR/TR/TEST-MCP-QBEXEC-001/002 completeness ACs false"
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Flipping unsatisfied completeness ACs after this AGREE would now be honest.",
+      "evidence": "Four prior DISAGREE holes closed by 201/0/0 tests plus source"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Honesty."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Always bring the receipts; independent re-run."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "MCP-only storage."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "PowerShell only / no Python this review."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Look-before-delete N/A."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Byrd phase-order not failed from FR createdAt versus file mtimes."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "claim": "Tests cover unsatisfied ACs well enough that flipping isSatisfied after AGREE would be honest.",
+      "evidence": "FR-001 ac-5/ac-7, TR-001 ac-2, TEST-002 ac-4, FR-002 ac-7 now proven"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "claim": "FR/TR/TEST-MCP-QBEXEC-001/002 exist with ACs and mappings; not flipped this turn.",
+      "evidence": "Live GET mapping 001->TR/TEST-001 and 002->TR/TEST-002"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "claim": "PLAN-LLMSTRATEGY-001 remains Done=false; no full LLM strategy done claim."
+    }
+  ],
+  "TestRuns": {
+    "focusedSupportMcp": {
+      "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+      "filter": "FullyQualifiedName~QuadBrainInternalToolExecutorTests|FullyQualifiedName~QuadBrainToolInterceptionTests|FullyQualifiedName~QuadBrainOpenAiChatServiceTests|FullyQualifiedName~BrainInteractionSessionLoggerTests.LogInternalToolFailure",
+      "failed": 0,
+      "passed": 201,
+      "skipped": 0,
+      "total": 201,
+      "exitCode": 0,
+      "trx": "docs/receipts/artifacts/hostile-qbexec-reval-20260910T232808Z.trx",
+      "catalogTheories": {
+        "Execute_CatalogName_IsHandled": 50,
+        "Interceptor_CatalogName_IsNotEmittedToAgent": 50,
+        "CompleteAsync_CatalogName_StopsWithoutEmittingToolCall": 50
+      },
+      "namedAdditions": {
+        "LogInternalToolFailure_AppendsDialogViaSessionLog": 1,
+        "Execute_McpClientInvoke_UnknownExternalClient_IsHandledFailure": 1,
+        "Execute_McpClientInvoke_SessionQuery_RoutesThroughSessionLog": 1
+      }
+    }
+  },
+  "DidNotFlipAcs": true,
+  "DidNotMarkPlanTodoDone": true
+}

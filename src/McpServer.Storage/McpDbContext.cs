@@ -265,6 +265,21 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-PRODUCT-MODEL-001: Host-global product memberships. No workspace query filter.</summary>
     public DbSet<ProductWorkspaceMembershipEntity> ProductWorkspaceMemberships => Set<ProductWorkspaceMembershipEntity>();
 
+    /// <summary>TR-MCP-HOSTILEREVIEW-001: Hostile-review requests.</summary>
+    public DbSet<HostileReviewRequestEntity> HostileReviewRequests => Set<HostileReviewRequestEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Hostile-review artifact identities.</summary>
+    public DbSet<HostileReviewArtifactLinkEntity> HostileReviewArtifactLinks => Set<HostileReviewArtifactLinkEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-003: Hostile-review executions.</summary>
+    public DbSet<HostileReviewExecutionEntity> HostileReviewExecutions => Set<HostileReviewExecutionEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-004: Hostile-review findings.</summary>
+    public DbSet<HostileReviewFindingEntity> HostileReviewFindings => Set<HostileReviewFindingEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Hostile-review diagnostics.</summary>
+    public DbSet<HostileReviewDiagnosticEntity> HostileReviewDiagnostics => Set<HostileReviewDiagnosticEntity>();
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -965,6 +980,52 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => new { x.RunId, x.Ordinal });
         });
 
+        modelBuilder.Entity<HostileReviewRequestEntity>(e =>
+        {
+            e.HasKey(x => x.RequestId);
+            e.HasIndex(x => new { x.WorkspaceId, x.CreatedUtc });
+            e.HasMany(x => x.Links)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Executions)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Findings)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Diagnostics)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<HostileReviewArtifactLinkEntity>(e =>
+        {
+            e.HasKey(x => x.LinkId);
+            e.HasIndex(x => new { x.RequestId, x.ArtifactType, x.ArtifactId });
+        });
+
+        modelBuilder.Entity<HostileReviewExecutionEntity>(e =>
+        {
+            e.HasKey(x => x.ExecutionId);
+            e.HasIndex(x => new { x.RequestId, x.Model, x.Effort });
+        });
+
+        modelBuilder.Entity<HostileReviewFindingEntity>(e =>
+        {
+            e.HasKey(x => x.FindingId);
+            e.HasIndex(x => new { x.RequestId, x.Category, x.Severity });
+        });
+
+        modelBuilder.Entity<HostileReviewDiagnosticEntity>(e =>
+        {
+            e.HasKey(x => x.DiagnosticId);
+            e.HasIndex(x => x.RequestId);
+        });
+
         modelBuilder.Entity<ProductEntity>(e =>
         {
             e.HasKey(x => x.ProductId);
@@ -1033,6 +1094,11 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TriageResearchRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<HandoffIngestionRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<HandoffDiagnosticEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewRequestEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewArtifactLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewExecutionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewFindingEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewDiagnosticEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
         // Brain-slot definitions and their invocation audit rows are stored under the global workspace
         // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the

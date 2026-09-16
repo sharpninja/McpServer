@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Channels;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -50,10 +51,13 @@ public sealed class QuadBrainOpenAiController : ControllerBase
 
         try
         {
-            var completion = await _chat.CompleteAsync(request, sessionId, turnId, cancellationToken).ConfigureAwait(false);
-            return request.Stream
-                ? new OpenAiChatCompletionStreamResult(completion)
-                : Ok(completion);
+            if (!request.Stream)
+            {
+                var completion = await _chat.CompleteAsync(request, sessionId, turnId, cancellationToken).ConfigureAwait(false);
+                return Ok(completion);
+            }
+
+            return new OpenAiChatCompletionLiveStreamResult(_chat, request, sessionId, turnId);
         }
         catch (ArgumentException ex)
         {
@@ -75,24 +79,66 @@ public sealed class QuadBrainOpenAiController : ControllerBase
         }
     }
 
-    private sealed class OpenAiChatCompletionStreamResult(OpenAiChatCompletionResponse completion) : IActionResult
+    /// <summary>
+    /// FR-MCP-QBPROGRESS-001: writes role SSE events as orchestration reports them, then the Arbiter chunk.
+    /// </summary>
+    private sealed class OpenAiChatCompletionLiveStreamResult(
+        IQuadBrainOpenAiChatService chat,
+        OpenAiChatCompletionRequest request,
+        string? sessionId,
+        string? turnId) : IActionResult
     {
         public async Task ExecuteResultAsync(ActionContext context)
         {
-            var response = context.HttpContext.Response;
+            var http = context.HttpContext;
+            var response = http.Response;
             response.StatusCode = StatusCodes.Status200OK;
             response.ContentType = "text/event-stream";
+            response.Headers["Cache-Control"] = "no-cache";
+
+            var channel = Channel.CreateUnbounded<QuadBrainRoleProgress>(new UnboundedChannelOptions
+            {
+                SingleReader = true,
+                SingleWriter = false,
+            });
+            request.Progress = new Progress<QuadBrainRoleProgress>(progress => channel.Writer.TryWrite(progress));
+
+            var completeTask = chat.CompleteAsync(request, sessionId, turnId, http.RequestAborted);
+            var drainTask = DrainRoleEventsAsync(response, channel.Reader, http.RequestAborted);
+            OpenAiChatCompletionResponse completion;
+            try
+            {
+                completion = await completeTask.ConfigureAwait(false);
+            }
+            finally
+            {
+                channel.Writer.TryComplete();
+            }
+
+            await drainTask.ConfigureAwait(false);
 
             var choice = completion.Choices.FirstOrDefault() ?? new OpenAiChatChoice();
-            await WriteEventAsync(response, CreateDeltaChunk(choice), context.HttpContext.RequestAborted)
-                .ConfigureAwait(false);
-            await WriteEventAsync(response, CreateTerminalChunk(choice), context.HttpContext.RequestAborted)
-                .ConfigureAwait(false);
-            await response.WriteAsync("data: [DONE]\n\n", context.HttpContext.RequestAborted).ConfigureAwait(false);
-            await response.Body.FlushAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
+            await WriteDataAsync(response, CreateDeltaChunk(completion, choice), http.RequestAborted).ConfigureAwait(false);
+            await WriteDataAsync(response, CreateTerminalChunk(completion, choice), http.RequestAborted).ConfigureAwait(false);
+            await response.WriteAsync("data: [DONE]\n\n", http.RequestAborted).ConfigureAwait(false);
+            await response.Body.FlushAsync(http.RequestAborted).ConfigureAwait(false);
         }
 
-        private object CreateDeltaChunk(OpenAiChatChoice choice)
+        private static async Task DrainRoleEventsAsync(
+            HttpResponse response,
+            ChannelReader<QuadBrainRoleProgress> reader,
+            CancellationToken cancellationToken)
+        {
+            await foreach (var progress in reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
+            {
+                await response.WriteAsync($"event: {QuadBrainRoleProgress.SseEventName}\n", cancellationToken)
+                    .ConfigureAwait(false);
+                await WriteDataAsync(response, progress, cancellationToken).ConfigureAwait(false);
+                await response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        private static object CreateDeltaChunk(OpenAiChatCompletionResponse completion, OpenAiChatChoice choice)
             => new
             {
                 id = completion.Id,
@@ -115,7 +161,7 @@ public sealed class QuadBrainOpenAiController : ControllerBase
                 },
             };
 
-        private object CreateTerminalChunk(OpenAiChatChoice choice)
+        private static object CreateTerminalChunk(OpenAiChatCompletionResponse completion, OpenAiChatChoice choice)
             => new
             {
                 id = completion.Id,
@@ -133,7 +179,7 @@ public sealed class QuadBrainOpenAiController : ControllerBase
                 },
             };
 
-        private static async Task WriteEventAsync(HttpResponse response, object payload, CancellationToken cancellationToken)
+        private static async Task WriteDataAsync(HttpResponse response, object payload, CancellationToken cancellationToken)
         {
             var json = JsonSerializer.Serialize(
                 payload,

@@ -344,7 +344,24 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             AgentName = snapshot.AgentName,
             RenderedPrompt = snapshot.RenderedPrompt,
             Model = resolvedDefinition?.AgentModel,
+            PromptVersion = resolution.PromptVersion,
+            PromptTemplateId = resolution.TemplateId,
         };
+    }
+
+    /// <summary>
+    /// TEST-HANDOFF-AGENT-001: test-only inspection of the in-memory raw execution prompt.
+    /// Returns null when the job is missing or the prompt was released after dispatch.
+    /// </summary>
+    internal string? PeekExecutionPrompt(string jobId)
+    {
+        if (string.IsNullOrWhiteSpace(jobId))
+            return null;
+
+        lock (_sync)
+        {
+            return _jobs.TryGetValue(jobId, out var state) ? state.ExecutionPrompt : null;
+        }
     }
 
     /// <inheritdoc />
@@ -366,6 +383,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             {
                 state.Status = "canceled";
                 state.CompletedUtc = DateTimeOffset.UtcNow;
+                ReleaseSensitiveExecutionPrompt(state);
                 _queuedJobIds.Remove(jobId);
                 updated = state.Clone();
             }
@@ -505,6 +523,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 Success = true,
                 PromptText = ApplyBraceTokenReplacement(rendered, variables),
                 TemplateId = template.Id,
+                PromptVersion = template.Id,
                 TemplateResolved = true,
             };
         }
@@ -530,11 +549,22 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
         var templateText = await GetContextTemplateAsync(request.Context.Value, cancellationToken).ConfigureAwait(false);
         var populated = ApplyBraceTokenReplacement(templateText, variables);
+        var isHandoff = request.Context.Value == AgentPoolOneShotContext.HandoffTodoDraft;
+        var isHostile = request.Context.Value == AgentPoolOneShotContext.HostileReview;
         return new AgentPoolPromptResolutionResult
         {
             Success = true,
             PromptText = populated,
-            TemplateId = request.Context.Value.ToString(),
+            TemplateId = isHandoff
+                ? HandoffPromptDefaults.TemplateId
+                : isHostile
+                    ? HostileReviewPromptDefaults.TemplateId
+                    : request.Context.Value.ToString(),
+            PromptVersion = isHandoff
+                ? HandoffPromptDefaults.PromptVersion
+                : isHostile
+                    ? HostileReviewPromptDefaults.PromptVersion
+                    : request.Context.Value.ToString(),
             TemplateResolved = true,
         };
     }
@@ -740,6 +770,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                             candidate.Status = "failed";
                             candidate.Error = "No agent name specified.";
                             candidate.CompletedUtc = DateTimeOffset.UtcNow;
+                            ReleaseSensitiveExecutionPrompt(candidate);
                             _queuedJobIds.Remove(queuedId);
                             PublishTerminalFailure(candidate);
                             continue;
@@ -758,6 +789,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                                 candidate.Status = "failed";
                                 candidate.Error = "No eligible pooled agent found.";
                                 candidate.CompletedUtc = DateTimeOffset.UtcNow;
+                                ReleaseSensitiveExecutionPrompt(candidate);
                                 _queuedJobIds.Remove(queuedId);
                                 PublishTerminalFailure(candidate);
                                 continue;
@@ -811,6 +843,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                             failedJob.Status = "failed";
                             failedJob.Error = start.Error ?? "Failed to start pooled agent.";
                             failedJob.CompletedUtc = DateTimeOffset.UtcNow;
+                            ReleaseSensitiveExecutionPrompt(failedJob);
                         }
 
                         if (_agents.TryGetValue(jobKey, out var failedAgent))
@@ -864,6 +897,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     finalAgent.Lifecycle = "idle";
 
                     finalJob.CompletedUtc = DateTimeOffset.UtcNow;
+                    ReleaseSensitiveExecutionPrompt(finalJob);
 
                     if (finalJob.CancelRequested)
                     {
@@ -1053,6 +1087,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             AgentPoolOneShotContext.Status => await _todoPromptProvider.GetStatusPromptAsync(cancellationToken).ConfigureAwait(false),
             AgentPoolOneShotContext.Implement => await _todoPromptProvider.GetImplementPromptAsync(cancellationToken).ConfigureAwait(false),
             AgentPoolOneShotContext.HandoffTodoDraft => HandoffPromptDefaults.Prompt,
+            AgentPoolOneShotContext.HostileReview => HostileReviewPromptDefaults.Prompt,
             _ => throw new InvalidOperationException("AdHoc context does not use context-template resolution."),
         };
     }
@@ -1133,6 +1168,12 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         });
     }
 
+    private static void ReleaseSensitiveExecutionPrompt(QueueJobState job)
+    {
+        if (OneShotSensitivePromptPolicy.MustRedact(job.Context))
+            job.ExecutionPrompt = null;
+    }
+
     private static AgentPoolAgentStatusDto MapAgent(AgentRuntimeState state)
         => new()
         {
@@ -1205,8 +1246,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
         public string? RenderedPrompt { get; init; }
 
-        /// <summary>Raw prompt used only by the in-process executor. Never copied to DTOs.</summary>
-        public string? ExecutionPrompt { get; init; }
+        /// <summary>Raw prompt used only by the in-process executor. Never copied to DTOs. Cleared after dispatch for protected contexts.</summary>
+        public string? ExecutionPrompt { get; set; }
 
         public string? ResponseText { get; set; }
 

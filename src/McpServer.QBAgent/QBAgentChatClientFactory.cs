@@ -1,9 +1,5 @@
-using System.ClientModel;
-using System.ClientModel.Primitives;
 using McpServer.McpAgent;
 using Microsoft.Extensions.AI;
-using OpenAIChatClient = OpenAI.Chat.ChatClient;
-using OpenAIClientOptions = OpenAI.OpenAIClientOptions;
 
 namespace McpServer.QBAgent;
 
@@ -17,10 +13,16 @@ public static class QBAgentChatClientFactory
     /// <summary>The model id advertised to the endpoint (QuadBrain orchestration backs every model id).</summary>
     public const string ModelId = "QuadBrain";
 
+    /// <summary>
+    /// Floor for the OpenAI client network timeout. Live CLI QuadBrain turns (Grok + Codex at xhigh)
+    /// exceed the SDK default of 100 seconds; integration tests already use 10 minutes.
+    /// </summary>
+    public static readonly TimeSpan MinimumNetworkTimeout = TimeSpan.FromMinutes(10);
+
     /// <summary>Creates an <see cref="IChatClient"/> bound to the QuadBrain OpenAI-compatible endpoint.</summary>
     /// <param name="options">Agent options carrying the marker-bound <see cref="McpAgentOptions.BaseUrl"/> and API key.</param>
     /// <returns>An OpenAI-compatible chat client targeting <c>{BaseUrl}/v1</c>.</returns>
-    public static IChatClient Create(McpAgentOptions options) => Create(options, transport: null);
+    public static IChatClient Create(McpAgentOptions options) => Create(options, httpClient: null, roleProgress: null);
 
     /// <summary>
     /// Creates an <see cref="IChatClient"/> bound to the QuadBrain endpoint over a caller-supplied
@@ -31,25 +33,37 @@ public static class QBAgentChatClientFactory
     /// <param name="httpClient">The HTTP client whose handler pipeline carries the request.</param>
     /// <returns>An OpenAI-compatible chat client targeting <c>{BaseUrl}/v1</c> over <paramref name="httpClient"/>.</returns>
     public static IChatClient Create(McpAgentOptions options, HttpClient httpClient)
-    {
-        ArgumentNullException.ThrowIfNull(httpClient);
-        return Create(options, new HttpClientPipelineTransport(httpClient));
-    }
+        => Create(options, httpClient, roleProgress: null);
 
-    private static IChatClient Create(McpAgentOptions options, PipelineTransport? transport)
+    /// <summary>
+    /// FR-MCP-QBPROGRESS-001: same as <see cref="Create(McpAgentOptions)"/> plus live brain-role progress.
+    /// </summary>
+    public static IChatClient Create(McpAgentOptions options, Action<string>? roleProgress)
+        => Create(options, httpClient: null, roleProgress);
+
+    /// <summary>
+    /// FR-MCP-QBPROGRESS-001: test/host overload with a caller-supplied transport and live brain-role progress.
+    /// </summary>
+    public static IChatClient Create(
+        McpAgentOptions options,
+        HttpClient? httpClient,
+        Action<string>? roleProgress,
+        bool showIntent = false)
     {
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(options.BaseUrl);
+        if (httpClient is not null)
+            return new QBAgentRoleStreamChatClient(options, httpClient, ownsHttp: false, roleProgress, showIntent);
 
-        var clientOptions = new OpenAIClientOptions { Endpoint = BuildEndpoint(options.BaseUrl) };
-        if (transport is not null)
-            clientOptions.Transport = transport;
+        var owned = new HttpClient { Timeout = ResolveNetworkTimeout(options) };
+        return new QBAgentRoleStreamChatClient(options, owned, ownsHttp: true, roleProgress, showIntent);
+    }
 
-        var chatClient = new OpenAIChatClient(
-            ModelId,
-            new ApiKeyCredential(options.ApiKey ?? string.Empty),
-            clientOptions);
-        return chatClient.AsIChatClient();
+    /// <summary>Resolves the OpenAI client timeout, never below <see cref="MinimumNetworkTimeout"/>.</summary>
+    public static TimeSpan ResolveNetworkTimeout(McpAgentOptions? options)
+    {
+        var configured = options?.Timeout ?? TimeSpan.Zero;
+        return configured > MinimumNetworkTimeout ? configured : MinimumNetworkTimeout;
     }
 
     /// <summary>Resolves the OpenAI endpoint base from the workspace base URL, appending <c>/v1</c> once.</summary>

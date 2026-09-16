@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>McpServer.PluginIntegration.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="SharpNinja.aiUnit" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scenarios\plugin-sessionlog-scenarios.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="invoke-node-plugin-export.mjs" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\McpServer.Review.Tests\aiunit-grok-json.cmd" Link="aiunit-grok-json.cmd" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\McpServer.Review.Tests\aiunit-grok-json.ps1" Link="aiunit-grok-json.ps1" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

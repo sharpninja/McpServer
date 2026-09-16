@@ -1,0 +1,238 @@
+{
+  "TimestampUtc": "2026-08-22T06:06:33Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P15",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.100.0",
+    "pluginJsonPath": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json"
+  },
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260822T044818Z.md",
+    "docs/receipts/hostile-validator-20260822T050748Z.md"
+  ],
+  "Collector": "docs/receipts/_hv-c-red-p15/hv2/",
+  "SessionId": "GrokSubagentHostile-20260822T052958Z-pluginhandoff-p15red",
+  "RequestId": "req-20260822T052958Z-001-hostile-c-red-p15-failsafe",
+  "HealthNonce": "nonce-hv2-20260822053004-22568",
+  "HealthNonceMatch": true,
+  "CoreTestMarkerSignature": true,
+  "CoreInvokeFullBootstrap": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "DISAGREE",
+  "FailCount": 5,
+  "UnknownCount": 0,
+  "PassCount": 20,
+  "Accuracy": 96,
+  "Completeness": 95,
+  "ExplicitFailList": [
+    "A3: current adapter no longer throws not-implemented; FailsafePathVerified is set true",
+    "A4: independent P15 filter Passed 24 Failed 0 Skipped 0; first isolated run 22 fail then crash",
+    "A8: FailedSubmit still does not assert root-id filename after the green rewrite",
+    "A9: this session does not AGREE C-red (current filter is green); does not authorize P16",
+    "C3: green tests still omit root-id filename on FailedSubmit"
+  ],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "ListTestsCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+    "ListTestsExitCode": 0,
+    "ListTestsFqnTotal": 86,
+    "P15SuccessListed": 8,
+    "P15FailedSubmitListed": 8,
+    "P15RetryListed": 8,
+    "P16Listed": 0,
+    "SkipListed": 0,
+    "FilterExpr": "FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending",
+    "FirstRunConsoleFailed": 22,
+    "FirstRunConsolePassed": 0,
+    "FirstRunConsoleSkipped": 0,
+    "FirstRunConsoleTotal": 22,
+    "FirstRunTrx": "docs/receipts/_hv-c-red-p15/hv2/trx-p15/kingd_PAYTON-LEGION2_2026-08-22_00_36_58_net10.0.trx",
+    "Run3ExitCode": 0,
+    "Run3ConsoleFailed": 0,
+    "Run3ConsolePassed": 24,
+    "Run3ConsoleSkipped": 0,
+    "Run3ConsoleTotal": 24,
+    "Run3DurationMs": 411077,
+    "Run3Trx": "docs/receipts/_hv-c-red-p15/hv2/trx-p15-run3/kingd_PAYTON-LEGION2_2026-08-22_00_57_54_net10.0.trx",
+    "P15NamedTestsPresent": true,
+    "P16NamedTestsPresent": false,
+    "AdapterLastWriteFirstReadUtc": "2026-08-22T05:15:12.711511Z",
+    "AdapterLastWriteAfterGreenUtc": "2026-08-22T05:40:18.7559535Z",
+    "TestsLastWriteAfterGreenUtc": "2026-08-22T05:40:18.7559535Z",
+    "ResultLastWriteUtc": "2026-08-22T05:15:12.711511Z"
+  },
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "C-green-P14 AGREE 044818Z and 050748Z; P14 Passed 8 Failed 0; P15 names absent"
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "P15 named tests exist; eight PluginHostKind InlineData each; no Skip"
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Text": "Adapter no longer throws not-implemented; FailsafePathVerified set true after 05:40:18 rewrite"
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Text": "Independent filter currently Passed 24 Failed 0; not 24-fail red for this session"
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Original P15 files 05:15:12 after C-green-P14; later 05:40:18 green rewrite noted; no FR-mtime B2 fail"
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "Fixture isolated temp DB; ReservedServicePort 7147 excluded"
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Verdict": "PASS",
+      "Text": "PLAN and PLUGININT done false; P15 task done false; combined C P14/P15 task done false; no todo_update"
+    },
+    {
+      "Id": "A8",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Text": "isSatisfied false; FailedSubmit still no root-id filename assert; AC greened during red gate"
+    },
+    {
+      "Id": "A9",
+      "Surface": "A",
+      "Verdict": "FAIL",
+      "Text": "This session DISAGREE; current filter is green; does not authorize P16"
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "No fabricated counts; peer 053539Z AGREEd red then green rewrite 05:40:18"
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Byrd phase-order: peer C-red AGREE 053539Z at 05:35:39 precedes green 05:40:18"
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Receipts: independent TRX, live MCP queries, timestamps"
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "MCP-only storage; TODO.yaml porcelain empty"
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "pwsh.exe only; no python invoked by this validator"
+    },
+    {
+      "Id": "B6",
+      "Surface": "B",
+      "Verdict": "PASS",
+      "Text": "Look-before-delete: only leftover PluginIntegration fixture/testhost PIDs killed"
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Live getFr/getTr/getTest/listMappings for PLUGININT-001"
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "Structured AC exist on FR/TR/TEST"
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Verdict": "FAIL",
+      "Text": "Red-gate AC coverage broken by green mix; root-id filename unasserted"
+    },
+    {
+      "Id": "C4",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "isSatisfied remains false on FR/TR/TEST AC"
+    },
+    {
+      "Id": "C5",
+      "Surface": "C",
+      "Verdict": "PASS",
+      "Text": "AC3/AC4/AC5 suite-green not required"
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Scope C-red-P15 not plan closeout"
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Combined PLAN C P14/P15 task done false"
+    },
+    {
+      "Id": "D3",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "Green after peer C-red AGREE 053539Z; this duplicate C-red still DISAGREE on current-red"
+    },
+    {
+      "Id": "D4",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "P16-P20 and D4/D5 not required"
+    },
+    {
+      "Id": "D5",
+      "Surface": "D",
+      "Verdict": "PASS",
+      "Text": "PLAN and PLUGININT remain done false"
+    }
+  ],
+  "Todo": {
+    "PlanDone": false,
+    "PluginIntDone": false,
+    "P15TaskDone": false,
+    "CombinedC14C15TaskDone": false,
+    "WroteDoneTrue": false
+  },
+  "DidNotImplementProductFeatures": true,
+  "PeerCRedAgree": "docs/receipts/hostile-validator-20260822T053539Z.md"
+}
