@@ -1,0 +1,39 @@
+{
+  "testId": "TEST-MCP-PLUGININT-001",
+  "testIsSatisfied": "false",
+  "testStatus": "pending",
+  "frId": "FR-MCP-PLUGININT-001",
+  "frIsSatisfied": "false",
+  "trId": "TR-MCP-PLUGININT-001",
+  "trIsSatisfied": "false",
+  "testHits": [
+    {
+      "line": 12,
+      "text": "acceptanceCriteria:"
+    },
+    {
+      "line": 26,
+      "text": "text: The focused target and each plugin native suite complete with zero failures and zero skips."
+    }
+  ],
+  "frHits": [],
+  "trHits": [],
+  "mapHits": [
+    {
+      "line": 6,
+      "text": "- frId: FR-MCP-PLUGININT-001"
+    },
+    {
+      "line": 7,
+      "text": "trId: TR-MCP-PLUGININT-001"
+    },
+    {
+      "line": 9,
+      "text": "- frId: FR-MCP-PLUGININT-001"
+    },
+    {
+      "line": 10,
+      "text": "testId: TEST-MCP-PLUGININT-001"
+    }
+  ]
+}

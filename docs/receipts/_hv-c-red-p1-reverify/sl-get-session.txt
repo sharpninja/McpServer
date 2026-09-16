@@ -1,0 +1,14 @@
+ERROR System.Management.Automation.RuntimeException: Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20260821T233514Z-6ee6
+  code: method_invocation_error
+  message: 'Unknown method: GetSessionAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync, UpsertTurnAsync'
+  details:
+    clientName: SessionLog
+    methodName: GetSessionAsync
+    exceptionType: System.InvalidOperationException
+
+---
+
+

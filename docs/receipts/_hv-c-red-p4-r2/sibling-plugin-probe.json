@@ -1,0 +1,170 @@
+[
+  {
+    "name": "Codex",
+    "hostKind": "Codex",
+    "agentSourceType": "Codex",
+    "repositoryName": "mcpserver-codex-plugin",
+    "cacheFolder": "codex",
+    "entrypoint": "lib/Invoke-CodexMcpPlugin.ps1",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": false,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "CODEX_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": false,
+    "uniqueKey": "Codex:codex"
+  },
+  {
+    "name": "Claude Code",
+    "hostKind": "ClaudeCode",
+    "agentSourceType": "ClaudeCode",
+    "repositoryName": "mcpserver-claude-code-plugin",
+    "cacheFolder": "claude",
+    "entrypoint": "lib/Invoke-McpPlugin.ps1",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "CLAUDE_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": false,
+    "uniqueKey": "ClaudeCode:claude"
+  },
+  {
+    "name": "Claude Cowork",
+    "hostKind": "ClaudeCowork",
+    "agentSourceType": "ClaudeCowork",
+    "repositoryName": "mcpserver-claude-cowork-plugin",
+    "cacheFolder": "cowork",
+    "entrypoint": "lib/Invoke-McpPlugin.ps1",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "CLAUDE_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": false,
+    "uniqueKey": "ClaudeCowork:cowork"
+  },
+  {
+    "name": "Copilot",
+    "hostKind": "Copilot",
+    "agentSourceType": "Copilot",
+    "repositoryName": "mcpserver-copilot-plugin",
+    "cacheFolder": "copilot",
+    "entrypoint": "lib/Invoke-McpPlugin.ps1",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "COPILOT_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": false,
+    "uniqueKey": "Copilot:copilot"
+  },
+  {
+    "name": "Grok",
+    "hostKind": "Grok",
+    "agentSourceType": "GrokCode",
+    "repositoryName": "mcpserver-grok-plugin",
+    "cacheFolder": "grok",
+    "entrypoint": "lib/Invoke-McpPlugin.ps1",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "GROK_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": false,
+    "uniqueKey": "GrokCode:grok"
+  },
+  {
+    "name": "Cline",
+    "hostKind": "Cline",
+    "agentSourceType": "Cline",
+    "repositoryName": "mcpserver-cline-plugin",
+    "cacheFolder": "cline",
+    "entrypoint": "dist/index.js",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "CLINE_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": true,
+    "uniqueKey": "Cline:cline"
+  },
+  {
+    "name": "Cline v2",
+    "hostKind": "ClineV2",
+    "agentSourceType": "Cline",
+    "repositoryName": "mcpserver-cline-v2-plugin",
+    "cacheFolder": "cline-v2",
+    "entrypoint": "dist/index.js",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "CLINE_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": true,
+    "uniqueKey": "Cline:cline-v2"
+  },
+  {
+    "name": "OpenCode",
+    "hostKind": "OpenCode",
+    "agentSourceType": "OpenCode",
+    "repositoryName": "mcpserver-opencode-plugin",
+    "cacheFolder": "opencode",
+    "entrypoint": "dist/index.js",
+    "enabled": true,
+    "dirExists": true,
+    "catalogEntrypointExists": true,
+    "entrypointHasDotDot": false,
+    "envCount": 2,
+    "envVars": [
+      "OPENCODE_PLUGIN_ROOT",
+      "PLUGIN_AGENT_NAME"
+    ],
+    "envAllNonEmpty": true,
+    "versionExists": true,
+    "packageJsonExists": true,
+    "uniqueKey": "OpenCode:opencode"
+  }
+]

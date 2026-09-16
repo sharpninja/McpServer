@@ -1,0 +1,7 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginIntegrationServerFixtureTests",
+  "ExitCode": 0,
+  "DurationMs": 141111,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p5-p6\\dotnet-fixture-filter.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p5-p6\\dotnet-fixture-filter.trx"
+}

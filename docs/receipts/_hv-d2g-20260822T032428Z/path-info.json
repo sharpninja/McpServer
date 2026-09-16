@@ -1,0 +1,72 @@
+[
+  {
+    "path": "F:\\GitHub\\McpServer\\plugins\\core\\skills\\handoff\\invoke.ps1",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T02:28:44.4236561Z",
+    "length": 3781,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D"
+  },
+  {
+    "path": "F:\\GitHub\\mcpserver-grok-plugin\\skills\\handoff\\invoke.ps1",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T02:28:44.4236561Z",
+    "length": 3781,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\plugins\\core\\skills\\handoff\\SKILL.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-21T22:24:57.5042504Z",
+    "length": 1694,
+    "sha256": "C475040B4924EDAA57A175A73FEAF88C76AF491EFBBA193C3AF541D3FE95C18E"
+  },
+  {
+    "path": "F:\\GitHub\\mcpserver-grok-plugin\\skills\\handoff\\SKILL.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-21T22:24:57.5042504Z",
+    "length": 1694,
+    "sha256": "C475040B4924EDAA57A175A73FEAF88C76AF491EFBBA193C3AF541D3FE95C18E"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\HandoffIngestionService.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T02:30:42.3956809Z",
+    "length": 57482,
+    "sha256": "5ADB2DAF0A2DCF4E9716926785032D8962A298F8DD108DCC6925057B8D156DD9"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\PluginHandoffSkill.Tests.ps1",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T02:33:29.3779096Z",
+    "length": 4952,
+    "sha256": "38AABAEB9FCAF28A526BEA44C113B8981FFAB2A06FCFB927F17ABB316365B8F3"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T00:32:01.3386085Z",
+    "length": 51868,
+    "sha256": "0C719A4EE419C60C67C28CF95B565DEE2891155FC5C1027A086289C55412CE6F"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T013032Z.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T01:33:29.0544873Z",
+    "length": 13908,
+    "sha256": "BDE03816E67E283991B26C6CCF6B5CB2864361F57805EF085635299399DB2F81"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T013032Z.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T01:33:29.2930181Z",
+    "length": 5163,
+    "sha256": "7BE88406E9BBC5BEEC6E5E2DFE93428239729279A4BA7F3D463CD5F47A65FCA5"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\d2-implement-20260822T022012Z.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T02:44:01.5289930Z",
+    "length": 4792,
+    "sha256": "5CA97F33AFB4F39E0041BB1F7C55F9F94E35049F05931338B705935D4A43A16A"
+  }
+]

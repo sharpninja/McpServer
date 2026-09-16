@@ -1,0 +1,27 @@
+{
+  "serviceName": "McpServer",
+  "serviceStatus": "Running",
+  "cimPid": 6220,
+  "cimPath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+  "cimStartMode": "Auto",
+  "processName": "McpServer.Support.Mcp",
+  "processStartUtc": null,
+  "claimedPid6220Alive": true,
+  "pid6220Name": "McpServer.Support.Mcp",
+  "listeners": [
+    {
+      "LocalAddress": "::",
+      "LocalPort": 7147,
+      "OwningProcess": 6220
+    }
+  ],
+  "listenerProcessCount": 1,
+  "listenerProcesses": [
+    {
+      "pid": 6220,
+      "processName": "McpServer.Support.Mcp",
+      "startTimeUtc": null
+    }
+  ],
+  "programDataExists": true
+}

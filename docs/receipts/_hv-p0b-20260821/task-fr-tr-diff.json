@@ -1,0 +1,427 @@
+{
+  "utc": "2026-08-21T20:40:55Z",
+  "planTaskCount": 31,
+  "todoTaskCount": 31,
+  "taskDiffs": [
+    {
+      "index": 21,
+      "plan": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+      "todo": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse. AgentPool redaction stays D0 reuse.",
+      "equal": false,
+      "todoDone": false
+    },
+    {
+      "index": 29,
+      "plan": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+      "todo": "G0 confirm WorkspaceClient.CreateAsync --dump binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+      "equal": false,
+      "todoDone": false
+    }
+  ],
+  "planTasks": [
+    {
+      "N": 1,
+      "Text": "P0-A: hostile AGREE on this plan."
+    },
+    {
+      "N": 2,
+      "Text": "P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan."
+    },
+    {
+      "N": 3,
+      "Text": "A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays."
+    },
+    {
+      "N": 4,
+      "Text": "A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings."
+    },
+    {
+      "N": 5,
+      "Text": "A3: create HYGIENE FR/TR/TEST 001-005 and mappings."
+    },
+    {
+      "N": 6,
+      "Text": "A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001."
+    },
+    {
+      "N": 7,
+      "Text": "A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003."
+    },
+    {
+      "N": 8,
+      "Text": "A6: hostile AGREE on requirements; no product code."
+    },
+    {
+      "N": 9,
+      "Text": "B1: write new red tests listed in section 6; do not relabel existing green."
+    },
+    {
+      "N": 10,
+      "Text": "B2: hostile after red."
+    },
+    {
+      "N": 11,
+      "Text": "B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins."
+    },
+    {
+      "N": 12,
+      "Text": "B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0."
+    },
+    {
+      "N": 13,
+      "Text": "B5: hostile after green."
+    },
+    {
+      "N": 14,
+      "Text": "C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6."
+    },
+    {
+      "N": 15,
+      "Text": "C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13."
+    },
+    {
+      "N": 16,
+      "Text": "C P14 red + hostile then green; P15 red + hostile then green."
+    },
+    {
+      "N": 17,
+      "Text": "C P16 red + hostile then P17-P18."
+    },
+    {
+      "N": 18,
+      "Text": "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts."
+    },
+    {
+      "N": 19,
+      "Text": "C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact."
+    },
+    {
+      "N": 20,
+      "Text": "D0 inventory of Handoff findings vs on-disk tests."
+    },
+    {
+      "N": 21,
+      "Text": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse."
+    },
+    {
+      "N": 22,
+      "Text": "D1.5 hostile after red."
+    },
+    {
+      "N": 23,
+      "Text": "D2 implement remediations + three-provider migrations."
+    },
+    {
+      "N": 24,
+      "Text": "D3 docs/wiki generateDocument."
+    },
+    {
+      "N": 25,
+      "Text": "D4 HANDOFFPLAN gate commands Failed 0 Skipped 0."
+    },
+    {
+      "N": 26,
+      "Text": "D5 Codex APPROVED and hostile AGREE."
+    },
+    {
+      "N": 27,
+      "Text": "E all reds + hostile, then implement, then E-green hostile."
+    },
+    {
+      "N": 28,
+      "Text": "F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts."
+    },
+    {
+      "N": 29,
+      "Text": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile."
+    },
+    {
+      "N": 30,
+      "Text": "H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code."
+    },
+    {
+      "N": 31,
+      "Text": "I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary."
+    }
+  ],
+  "todoTaskTexts": [
+    "P0-A: hostile AGREE on this plan.",
+    "P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.",
+    "A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.",
+    "A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.",
+    "A3: create HYGIENE FR/TR/TEST 001-005 and mappings.",
+    "A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.",
+    "A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.",
+    "A6: hostile AGREE on requirements; no product code.",
+    "B1: write new red tests listed in section 6; do not relabel existing green.",
+    "B2: hostile after red.",
+    "B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.",
+    "B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.",
+    "B5: hostile after green.",
+    "C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.",
+    "C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.",
+    "C P14 red + hostile then green; P15 red + hostile then green.",
+    "C P16 red + hostile then P17-P18.",
+    "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.",
+    "C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+    "D0 inventory of Handoff findings vs on-disk tests.",
+    "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse. AgentPool redaction stays D0 reuse.",
+    "D1.5 hostile after red.",
+    "D2 implement remediations + three-provider migrations.",
+    "D3 docs/wiki generateDocument.",
+    "D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.",
+    "D5 Codex APPROVED and hostile AGREE.",
+    "E all reds + hostile, then implement, then E-green hostile.",
+    "F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.",
+    "G0 confirm WorkspaceClient.CreateAsync --dump binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+    "H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.",
+    "I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary."
+  ],
+  "todoTasksAnyDone": false,
+  "frPlan": [
+    "FR-HANDOFF-001",
+    "FR-HANDOFF-002",
+    "FR-HANDOFF-003",
+    "FR-HANDOFF-004",
+    "FR-HANDOFF-005",
+    "FR-HANDOFF-006",
+    "FR-HANDOFF-007",
+    "FR-MCP-172",
+    "FR-MCP-HOSTILEREVIEW-001",
+    "FR-MCP-HOSTILEREVIEW-002",
+    "FR-MCP-HOSTILEREVIEW-003",
+    "FR-MCP-HOSTILEREVIEW-004",
+    "FR-MCP-HOSTILEREVIEW-005",
+    "FR-MCP-HOSTILEREVIEW-006",
+    "FR-MCP-HYGIENE-001",
+    "FR-MCP-HYGIENE-002",
+    "FR-MCP-HYGIENE-003",
+    "FR-MCP-HYGIENE-004",
+    "FR-MCP-HYGIENE-005",
+    "FR-MCP-PLUGINCORE-004",
+    "FR-MCP-PLUGININT-001",
+    "FR-MCP-REPL-009",
+    "FR-MCP-WIKIEXPORT-001",
+    "FR-MCP-WIKIEXPORT-003",
+    "FR-MCP-WIKIEXPORT-004",
+    "FR-MCP-WIKIEXPORT-005"
+  ],
+  "trPlan": [
+    "TR-HANDOFF-AGENT-001",
+    "TR-HANDOFF-AUDIT-001",
+    "TR-HANDOFF-CONTRACT-001",
+    "TR-HANDOFF-MODES-001",
+    "TR-HANDOFF-SECURITY-001",
+    "TR-HANDOFF-SURFACE-001",
+    "TR-HANDOFF-TODO-001",
+    "TR-HANDOFF-VALIDATE-001",
+    "TR-MCP-HOSTILEREVIEW-001",
+    "TR-MCP-HOSTILEREVIEW-002",
+    "TR-MCP-HOSTILEREVIEW-003",
+    "TR-MCP-HOSTILEREVIEW-004",
+    "TR-MCP-HOSTILEREVIEW-005",
+    "TR-MCP-HOSTILEREVIEW-006",
+    "TR-MCP-HYGIENE-001",
+    "TR-MCP-HYGIENE-002",
+    "TR-MCP-HYGIENE-003",
+    "TR-MCP-HYGIENE-004",
+    "TR-MCP-HYGIENE-005",
+    "TR-MCP-PERSIST-003",
+    "TR-MCP-PLUGINCORE-004",
+    "TR-MCP-PLUGINCORE-005",
+    "TR-MCP-PLUGININT-001",
+    "TR-MCP-REPL-010",
+    "TR-MCP-REPL-011",
+    "TR-MCP-REPL-012",
+    "TR-MCP-REPL-013",
+    "TR-MCP-WIKIEXPORT-003",
+    "TR-MCP-WIKIEXPORT-004",
+    "TR-MCP-WIKIEXPORT-005"
+  ],
+  "testPlan": [
+    "TEST-HANDOFF-001",
+    "TEST-HANDOFF-002",
+    "TEST-HANDOFF-003",
+    "TEST-HANDOFF-004",
+    "TEST-HANDOFF-005",
+    "TEST-HANDOFF-006",
+    "TEST-HANDOFF-007",
+    "TEST-MCP-195",
+    "TEST-MCP-HOSTILEREVIEW-001",
+    "TEST-MCP-HOSTILEREVIEW-002",
+    "TEST-MCP-HOSTILEREVIEW-003",
+    "TEST-MCP-HOSTILEREVIEW-004",
+    "TEST-MCP-HOSTILEREVIEW-005",
+    "TEST-MCP-HOSTILEREVIEW-006",
+    "TEST-MCP-HYGIENE-001",
+    "TEST-MCP-HYGIENE-002",
+    "TEST-MCP-HYGIENE-003",
+    "TEST-MCP-HYGIENE-004",
+    "TEST-MCP-HYGIENE-005",
+    "TEST-MCP-PLUGINCORE-004",
+    "TEST-MCP-PLUGINCORE-005",
+    "TEST-MCP-PLUGININT-001",
+    "TEST-MCP-REPL-025",
+    "TEST-MCP-REPL-026",
+    "TEST-MCP-REPL-027",
+    "TEST-MCP-REPL-028",
+    "TEST-MCP-REPL-031",
+    "TEST-MCP-REPL-041",
+    "TEST-MCP-WIKIEXPORT-003",
+    "TEST-MCP-WIKIEXPORT-004",
+    "TEST-MCP-WIKIEXPORT-005"
+  ],
+  "frTodo": [
+    "FR-MCP-PLUGINCORE-004",
+    "FR-MCP-REPL-009",
+    "FR-MCP-PLUGININT-001",
+    "FR-HANDOFF-001",
+    "FR-HANDOFF-002",
+    "FR-HANDOFF-003",
+    "FR-HANDOFF-004",
+    "FR-HANDOFF-005",
+    "FR-HANDOFF-006",
+    "FR-HANDOFF-007",
+    "FR-MCP-HOSTILEREVIEW-001",
+    "FR-MCP-HOSTILEREVIEW-002",
+    "FR-MCP-HOSTILEREVIEW-003",
+    "FR-MCP-HOSTILEREVIEW-004",
+    "FR-MCP-HOSTILEREVIEW-005",
+    "FR-MCP-HOSTILEREVIEW-006",
+    "FR-MCP-HYGIENE-001",
+    "FR-MCP-HYGIENE-002",
+    "FR-MCP-HYGIENE-003",
+    "FR-MCP-HYGIENE-004",
+    "FR-MCP-HYGIENE-005",
+    "FR-MCP-WIKIEXPORT-003",
+    "FR-MCP-WIKIEXPORT-004",
+    "FR-MCP-WIKIEXPORT-005",
+    "FR-MCP-172"
+  ],
+  "trTodo": [
+    "TR-MCP-PLUGINCORE-004",
+    "TR-MCP-REPL-010",
+    "TR-MCP-PLUGININT-001",
+    "TR-HANDOFF-CONTRACT-001",
+    "TR-HANDOFF-SECURITY-001",
+    "TR-HANDOFF-AGENT-001",
+    "TR-HANDOFF-VALIDATE-001",
+    "TR-HANDOFF-MODES-001",
+    "TR-HANDOFF-TODO-001",
+    "TR-HANDOFF-AUDIT-001",
+    "TR-HANDOFF-SURFACE-001",
+    "TR-MCP-HOSTILEREVIEW-001",
+    "TR-MCP-HOSTILEREVIEW-002",
+    "TR-MCP-HOSTILEREVIEW-003",
+    "TR-MCP-HOSTILEREVIEW-004",
+    "TR-MCP-HOSTILEREVIEW-005",
+    "TR-MCP-HOSTILEREVIEW-006",
+    "TR-MCP-HYGIENE-001",
+    "TR-MCP-HYGIENE-002",
+    "TR-MCP-HYGIENE-003",
+    "TR-MCP-HYGIENE-004",
+    "TR-MCP-HYGIENE-005",
+    "TR-MCP-WIKIEXPORT-003",
+    "TR-MCP-WIKIEXPORT-004",
+    "TR-MCP-WIKIEXPORT-005",
+    "TR-MCP-PERSIST-003",
+    "TR-MCP-REPL-012"
+  ],
+  "frMissing": [
+    "FR-MCP-WIKIEXPORT-001"
+  ],
+  "frExtra": [],
+  "trMissing": [
+    "TR-MCP-PLUGINCORE-005",
+    "TR-MCP-REPL-011",
+    "TR-MCP-REPL-013"
+  ],
+  "trExtra": [],
+  "probeHits": [
+    {
+      "probe": "Gate P0-A",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "Gate P0-B",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "## 19. Inter-phase hostile checklist",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "Validate_InvalidFields_ProduceFieldDiagnostics",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "TEST-MCP-195",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "AC5-7",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "Failed 0",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "Skipped 0",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "REPL_FAILSAFE_DRAIN_TIMEOUT",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "Get-McpFailsafeDir",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "WorkspaceClient.CreateAsync",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "--include-dump",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "FR-MCP-HOSTILEREVIEW-006",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "FR-MCP-HYGIENE-005",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "tests/McpServer.PluginIntegration.Tests",
+      "inDescription": true,
+      "inPlan": true
+    },
+    {
+      "probe": "AddHandoffIngestionStorage",
+      "inDescription": true,
+      "inPlan": true
+    }
+  ]
+}

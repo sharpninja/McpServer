@@ -1,0 +1,22 @@
+{
+  "Command": "nuke-skip-filter",
+  "ExitCode": 0,
+  "DurationMs": 8818,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18\\hv-dotnet-nuke-filter.log",
+  "FinishedUtc": "2026-08-22T07:55:04.7476623Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "DotnetArgs": [
+    "test",
+    "tests/Build.Tests",
+    "-c",
+    "Debug",
+    "--filter",
+    "FullyQualifiedName~NukeTarget_SkipIsFailure",
+    "--logger",
+    "trx;LogFileName=nuke-skip.trx",
+    "--logger",
+    "console;verbosity=detailed",
+    "--results-directory",
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18\\results-nuke-20260822T075433Z"
+  ]
+}

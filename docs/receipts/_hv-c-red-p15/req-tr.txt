@@ -1,0 +1,36 @@
+type: result
+payload:
+  requestId: req-20260822T052848Z-1c2c
+  result:
+    id: TR-MCP-PLUGININT-001
+    title: Shared multi-plugin Session Log integration harness
+    description: A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: PLUGININT
+    acceptanceCriteria:
+    - id: ac-1
+      text: A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins.
+      isSatisfied: false
+    - id: ac-2
+      text: The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins.
+      isSatisfied: false
+    - id: ac-3
+      text: PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST.
+      isSatisfied: false
+    - id: ac-4
+      text: Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts.
+      isSatisfied: false
+    - id: ac-5
+      text: AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate.
+      isSatisfied: false
+    - id: ac-6
+      text: The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-22T05:28:49.7595900+00:00
+    updatedAt: 2026-08-22T05:28:49.7596945+00:00
+  deprecated: true
+
+---

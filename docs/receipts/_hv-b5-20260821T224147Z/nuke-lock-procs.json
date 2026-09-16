@@ -1,0 +1,44 @@
+[
+  {
+    "ProcessId": 73232,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T15:50:33.1152-05:00",
+    "CommandLine": "pwsh.exe -NoExit -Command \"chcp 65001 | Out-Null; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $global:PowerShellMCPProxyPid = 32732; $global:PowerShellMCPAgentId = 'sa-befe02ea'; Import-Module PowerShell.MCP -Force; Import-Module PSReadLine; Write-Host 'P0-B fidelity collector' -ForegroundColor Green; Write-Host ''; Write-Host 'Reason: Hostile P0-B collector isolated to McpServer' -ForegroundColor DarkYellow; Write-Host ''\""
+  },
+  {
+    "ProcessId": 24976,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T17:24:46.520975-05:00",
+    "CommandLine": "pwsh.exe -NoExit -Command \"chcp 65001 | Out-Null; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $global:PowerShellMCPProxyPid = 32732; $global:PowerShellMCPAgentId = 'sa-246aa8a3'; Import-Module PowerShell.MCP -Force; Import-Module PSReadLine; Write-Host 'B3 implementer: receipts before claims.' -ForegroundColor Green; Write-Host ''; Write-Host 'Reason: Phase B3 McpServer dedicated console' -ForegroundColor DarkYellow; Write-Host ''\""
+  },
+  {
+    "ProcessId": 62588,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T18:03:53.533102-05:00",
+    "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-b5-20260821T224147Z\\who-locks-nuke.ps1\""
+  },
+  {
+    "ProcessId": 28988,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T18:03:54.148742-05:00",
+    "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh -NoLogo -NoProfile -NonInteractive -File \\\"C:\\Users\\kingd\\.claude\\hooks\\mcpserver\\claude-mcp-hook-bridge.ps1\\\" -ScriptName \\\"code-verify.ps1\\\" -PluginRootHint \\\"F:\\GitHub\\mcpserver-claude-code-plugin\\\"\""
+  },
+  {
+    "ProcessId": 16504,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T18:03:54.202685-05:00",
+    "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-b5-20260821T224147Z\\who-locks-nuke.ps1"
+  },
+  {
+    "ProcessId": 8072,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T18:03:54.820167-05:00",
+    "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoLogo -NoProfile -NonInteractive -File C:\\Users\\kingd\\.claude\\hooks\\mcpserver\\claude-mcp-hook-bridge.ps1 -ScriptName code-verify.ps1 -PluginRootHint F:\\GitHub\\mcpserver-claude-code-plugin"
+  },
+  {
+    "ProcessId": 60688,
+    "Name": "pwsh.exe",
+    "CreationDate": "2026-08-21T18:03:56.061923-05:00",
+    "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoLogo -NoProfile -NonInteractive -File F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\plugin-hook.ps1 -HookName code-verify -HostName claude-code -CacheMode scoped \"\""
+  }
+]

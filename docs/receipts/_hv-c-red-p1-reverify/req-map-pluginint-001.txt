@@ -1,0 +1,2133 @@
+type: result
+payload:
+  requestId: req-20260821T232746Z-a510
+  result:
+  - frId: FR-HANDOFF-001
+    trIds:
+    - TR-HANDOFF-CONTRACT-001
+    - TR-HANDOFF-SECURITY-001
+    testIds:
+    - TEST-HANDOFF-001
+    - TEST-HANDOFF-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-002
+    trIds:
+    - TR-HANDOFF-AGENT-001
+    - TR-HANDOFF-CONTRACT-001
+    testIds:
+    - TEST-HANDOFF-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-003
+    trIds:
+    - TR-HANDOFF-VALIDATE-001
+    testIds:
+    - TEST-HANDOFF-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-004
+    trIds:
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-VALIDATE-001
+    testIds:
+    - TEST-HANDOFF-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-005
+    trIds:
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-TODO-001
+    testIds:
+    - TEST-HANDOFF-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-006
+    trIds:
+    - TR-HANDOFF-AUDIT-001
+    testIds:
+    - TEST-HANDOFF-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-HANDOFF-007
+    trIds:
+    - TR-HANDOFF-SURFACE-001
+    testIds:
+    - TEST-HANDOFF-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-LOC-001
+    trIds:
+    - TR-LOC-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-001
+    trIds:
+    - TR-MCP-CFG-001
+    - TR-MCP-CFG-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-002
+    trIds:
+    - TR-MCP-API-001
+    - TR-MCP-DATA-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-003
+    trIds:
+    - TR-MCP-DATA-001
+    - TR-MCP-INGEST-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-004
+    trIds:
+    - TR-MCP-DATA-002
+    - TR-MCP-DATA-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-005
+    trIds:
+    - TR-MCP-API-001
+    - TR-MCP-INGEST-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-006
+    trIds:
+    - TR-MCP-INGEST-001
+    - TR-MCP-INGEST-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-007
+    trIds:
+    - TR-MCP-ARCH-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-008
+    trIds:
+    - TR-MCP-OPS-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-009
+    trIds:
+    - TR-MCP-MT-001
+    - TR-MCP-WS-002
+    - TR-MCP-WS-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-011
+    trIds:
+    - TR-MCP-WS-003
+    - TR-MCP-WS-007
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-012
+    trIds:
+    - TR-MCP-TR-001
+    - TR-MCP-TR-002
+    - TR-MCP-TR-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-013
+    trIds:
+    - TR-MCP-MT-002
+    - TR-MCP-SEC-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-014
+    trIds:
+    - TR-MCP-SEC-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-015
+    trIds:
+    - TR-MCP-TUN-001
+    - TR-MCP-TUN-002
+    - TR-MCP-TUN-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-016
+    trIds:
+    - TR-MCP-HTTP-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-017
+    trIds:
+    - TR-MCP-SVC-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-018
+    trIds:
+    - TR-MCP-WS-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-019
+    trIds:
+    - TR-MCP-WS-006
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-020
+    trIds:
+    - TR-MCP-WS-007
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-021
+    trIds:
+    - TR-MCP-WS-008
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-022
+    trIds:
+    - TR-MCP-TR-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-023
+    trIds:
+    - TR-MCP-REQ-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-024
+    trIds:
+    - TR-MCP-INGEST-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-025
+    trIds:
+    - TR-MCP-WS-009
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-026
+    trIds:
+    - TR-MCP-AUTH-001
+    - TR-MCP-AUTH-002
+    - TR-MCP-AUTH-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-027
+    trIds:
+    - TR-MCP-AGENT-001
+    - TR-MCP-AGENT-002
+    - TR-MCP-AGENT-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-028
+    trIds:
+    - TR-MCP-AGENT-001
+    - TR-MCP-AGENT-003
+    - TR-MCP-AGENT-008
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-029
+    trIds:
+    - TR-MCP-CQRS-001
+    - TR-MCP-CQRS-002
+    - TR-MCP-CQRS-003
+    - TR-MCP-CQRS-004
+    - TR-MCP-CQRS-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-030
+    trIds:
+    - TR-MCP-DIR-001
+    - TR-MCP-DIR-002
+    - TR-MCP-DIR-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-031
+    trIds:
+    - TR-MCP-WS-UI-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-032
+    trIds:
+    - TR-MCP-GH-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-033
+    trIds:
+    - TR-MCP-POL-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-034
+    trIds:
+    - TR-MCP-COMP-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-035
+    trIds:
+    - TR-MCP-COMP-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-036
+    trIds:
+    - TR-MCP-AUDIT-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-037
+    trIds:
+    - TR-MCP-DIR-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-038
+    trIds:
+    - TR-MCP-COMP-003
+    - TR-MCP-DTO-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-039
+    trIds:
+    - TR-MCP-CTX-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-040
+    trIds:
+    - TR-MCP-REQ-002
+    - TR-MCP-REQ-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-041
+    trIds:
+    - TR-MCP-REQ-002
+    - TR-MCP-REQ-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-042
+    trIds:
+    - TR-MCP-HTTP-001
+    - TR-MCP-REQ-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-043
+    trIds:
+    - TR-MCP-MT-001
+    - TR-MCP-MT-002
+    - TR-MCP-SEC-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-044
+    trIds:
+    - TR-MCP-MT-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-045
+    trIds:
+    - TR-MCP-TODO-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-046
+    trIds:
+    - TR-MCP-AGENT-005
+    - TR-MCP-VOICE-001
+    - TR-MCP-VOICE-002
+    - TR-MCP-VOICE-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-047
+    trIds:
+    - TR-MCP-DESKTOP-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-048
+    trIds:
+    - TR-MCP-CFG-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-049
+    trIds:
+    - TR-MCP-TPL-001
+    - TR-MCP-TPL-002
+    - TR-MCP-TPL-003
+    - TR-MCP-TPL-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-050
+    trIds:
+    - TR-MCP-AGENT-008
+    - TR-MCP-AGENT-009
+    - TR-MCP-AGENT-010
+    - TR-MCP-AGENT-011
+    - TR-MCP-AGENT-012
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-051
+    trIds:
+    - TR-MCP-CFG-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-052
+    trIds:
+    - TR-MCP-AGENT-004
+    - TR-MCP-AGENT-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-053
+    trIds:
+    - TR-MCP-AGENT-005
+    - TR-MCP-API-002
+    - TR-MCP-API-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-054
+    trIds:
+    - TR-MCP-AGENT-005
+    - TR-MCP-API-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-055
+    trIds:
+    - TR-MCP-AGENT-004
+    - TR-MCP-API-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-056
+    trIds:
+    - TR-MCP-API-002
+    - TR-MCP-TPL-006
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-057
+    trIds:
+    - TR-MCP-API-003
+    - TR-MCP-DIR-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-058
+    trIds:
+    - TR-MCP-API-003
+    - TR-MCP-VOICE-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-059
+    trIds:
+    - TR-MCP-ARCH-002
+    - TR-MCP-MT-001
+    - TR-MCP-TUN-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-060
+    trIds:
+    - TR-MCP-DIR-005
+    - TR-MCP-DIR-006
+    - TR-MCP-DIR-007
+    - TR-MCP-DIR-008
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-061
+    trIds:
+    - TR-MCP-LOG-002
+    - TR-MCP-TODO-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-062
+    trIds:
+    - TR-MCP-EVT-001
+    - TR-MCP-EVT-002
+    - TR-MCP-EVT-003
+    - TR-MCP-EVT-004
+    - TR-MCP-EVT-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-063
+    trIds:
+    - TR-MCP-GH-001
+    - TR-MCP-GH-002
+    - TR-MCP-GH-003
+    - TR-MCP-GH-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-064
+    trIds:
+    - TR-MCP-DOC-001
+    testIds:
+    - TEST-MCP-147
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-065
+    trIds:
+    - TR-MCP-API-001
+    - TR-MCP-INGEST-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-066
+    trIds:
+    - TR-MCP-AGENT-006
+    - TR-MCP-AGENT-007
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-067
+    trIds:
+    - TR-MCP-HTTP-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-068
+    trIds:
+    - TR-MCP-CFG-006
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-069
+    trIds:
+    - TR-MCP-GH-005
+    - TR-MCP-TODO-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-070
+    trIds:
+    - TR-MCP-GH-006
+    - TR-MCP-TODO-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-071
+    trIds:
+    - TR-MCP-GH-007
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-072
+    trIds:
+    - TR-MCP-TODO-005
+    - TR-MCP-TODO-006
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-073
+    trIds:
+    - TR-MCP-LOG-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-074
+    trIds:
+    - TR-MCP-CI-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-075
+    trIds:
+    - TR-MCP-AGENT-013
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-076
+    trIds:
+    - TR-MCP-AGENT-014
+    - TR-MCP-SEC-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-077
+    trIds:
+    - TR-MCP-CFG-007
+    - TR-MCP-SEC-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-078
+    trIds:
+    - TR-GRAPHRAG-ADHOC-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-079
+    trIds:
+    - TR-GRAPHRAG-ADHOC-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-080
+    trIds:
+    - TR-GRAPHRAG-ADHOC-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-081
+    trIds:
+    - TR-MCP-BYRD-001
+    - TR-MCP-BYRD-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-082
+    trIds:
+    - TR-MCP-BYRD-001
+    - TR-MCP-BYRD-002
+    - TR-MCP-BYRD-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-083
+    trIds:
+    - TR-MCP-BYRD-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-084
+    trIds:
+    - TR-MCP-REQ-004
+    - TR-MCP-REQ-005
+    testIds:
+    - TEST-MCP-106
+    - TEST-MCP-107
+    - TEST-MCP-108
+    - TEST-MCP-109
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-085
+    trIds:
+    - TR-MCP-QA-001
+    - TR-MCP-QA-002
+    - TR-MCP-QA-003
+    - TR-MCP-QA-006
+    - TR-MCP-QA-007
+    - TR-MCP-QA-008
+    testIds:
+    - TEST-MCP-110
+    - TEST-MCP-117
+    - TEST-MCP-119
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-086
+    trIds:
+    - TR-MCP-QA-001
+    - TR-MCP-QA-003
+    - TR-MCP-QA-006
+    - TR-MCP-QA-007
+    - TR-MCP-QA-008
+    - TR-MCP-QA-022
+    testIds:
+    - TEST-MCP-111
+    - TEST-MCP-117
+    - TEST-MCP-128
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-087
+    trIds:
+    - TR-MCP-QA-005
+    - TR-MCP-QA-006
+    - TR-MCP-QA-011
+    testIds:
+    - TEST-MCP-112
+    - TEST-MCP-116
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-088
+    trIds:
+    - TR-MCP-QA-002
+    - TR-MCP-QA-007
+    testIds:
+    - TEST-MCP-113
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-089
+    trIds:
+    - TR-MCP-QA-004
+    - TR-MCP-QA-018
+    - TR-MCP-QA-019
+    - TR-MCP-QA-031
+    - TR-MCP-QA-032
+    - TR-MCP-QA-033
+    - TR-MCP-QA-034
+    testIds:
+    - TEST-MCP-114
+    - TEST-MCP-127
+    - TEST-MCP-133
+    - TEST-MCP-134
+    - TEST-MCP-135
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-090
+    trIds:
+    - TR-MCP-QA-001
+    - TR-MCP-QA-006
+    - TR-MCP-QA-018
+    - TR-MCP-QA-019
+    testIds:
+    - TEST-MCP-115
+    - TEST-MCP-125
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-091
+    trIds:
+    - TR-MCP-QA-011
+    - TR-MCP-QA-022
+    testIds:
+    - TEST-MCP-116
+    - TEST-MCP-128
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-092
+    trIds:
+    - TR-MCP-QA-009
+    testIds:
+    - TEST-MCP-118
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-093
+    trIds:
+    - TR-MCP-QA-001
+    - TR-MCP-QA-003
+    testIds:
+    - TEST-MCP-119
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-094
+    trIds:
+    - TR-MCP-QA-007
+    - TR-MCP-QA-010
+    - TR-MCP-QA-012
+    testIds:
+    - TEST-MCP-120
+    - TEST-MCP-121
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-095
+    trIds:
+    - TR-MCP-QA-014
+    - TR-MCP-QA-015
+    testIds:
+    - TEST-MCP-122
+    - TEST-MCP-123
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-096
+    trIds:
+    - TR-MCP-QA-017
+    testIds:
+    - TEST-MCP-132
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-097
+    trIds:
+    - TR-MCP-QA-016
+    - TR-MCP-QA-023
+    - TR-MCP-QA-024
+    testIds:
+    - TEST-MCP-124
+    - TEST-MCP-129
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-098
+    trIds:
+    - TR-MCP-QA-018
+    - TR-MCP-QA-019
+    - TR-MCP-QA-020
+    - TR-MCP-QA-021
+    testIds:
+    - TEST-MCP-125
+    - TEST-MCP-126
+    - TEST-MCP-127
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-099
+    trIds:
+    - TR-MCP-QA-022
+    - TR-MCP-QA-023
+    - TR-MCP-QA-024
+    testIds:
+    - TEST-MCP-129
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-100
+    trIds:
+    - TR-MCP-QA-025
+    - TR-MCP-QA-026
+    testIds:
+    - TEST-MCP-130
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-101
+    trIds:
+    - TR-MCP-QA-027
+    - TR-MCP-QA-028
+    testIds:
+    - TEST-MCP-131
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-102
+    trIds:
+    - TR-MCP-QA-029
+    - TR-MCP-QA-030
+    testIds:
+    - TEST-MCP-132
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-103
+    trIds:
+    - TR-MCP-FED-001
+    - TR-MCP-FED-MEMORY-001
+    testIds:
+    - TEST-MCP-136
+    - TEST-MCP-MEMORY-FED-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-104
+    trIds:
+    - TR-MCP-BYRD-005
+    - TR-MCP-TPL-007
+    testIds:
+    - TEST-MCP-137
+    - TEST-MCP-141
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-105
+    trIds:
+    - TR-MCP-DB-001
+    - TR-MCP-DB-002
+    - TR-MCP-DB-003
+    - TR-MCP-DB-004
+    - TR-MCP-DB-005
+    - TR-MCP-DB-006
+    testIds:
+    - TEST-MCP-138
+    - TEST-MCP-139
+    - TEST-MCP-140
+    - TEST-MCP-DB-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-106
+    trIds:
+    - TR-MCP-PLUGIN-008
+    - TR-MCP-PLUGIN-011
+    - TR-MCP-PLUGIN-012
+    - TR-MCP-PLUGIN-013
+    testIds:
+    - TEST-MCP-142
+    - TEST-MCP-PLUGIN-011
+    - TEST-MCP-PLUGIN-012
+    - TEST-MCP-PLUGIN-013
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-107
+    trIds:
+    - TR-MCP-PLAN-001
+    testIds:
+    - TEST-MCP-143
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-108
+    trIds:
+    - TR-MCP-TODO-009
+    testIds:
+    - TEST-MCP-144
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-109
+    trIds:
+    - TR-MCP-BATCH-109
+    - TR-MCP-SCHEMA-109
+    - TR-MCP-STDIO-109
+    testIds:
+    - TEST-MCP-145
+    - TEST-MCP-146
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-110
+    trIds:
+    - TR-MCP-NUKE-001
+    testIds:
+    - TEST-MCP-148
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-111
+    trIds:
+    - TR-MCP-SKILLS-001
+    - TR-MCP-SKILLS-002
+    - TR-MCP-SKILLS-003
+    testIds:
+    - TEST-MCP-149
+    - TEST-MCP-150
+    - TEST-MCP-151
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-112
+    trIds:
+    - TR-MCP-REQEXPORT-001
+    - TR-MCP-REQEXPORT-002
+    - TR-MCP-REQEXPORT-003
+    - TR-MCP-REQEXPORT-004
+    testIds:
+    - TEST-MCP-152
+    - TEST-MCP-REQEXPORT-002
+    - TEST-MCP-REQEXPORT-003
+    - TEST-MCP-REQWS-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-113
+    trIds:
+    - TR-MCP-BATCH-001
+    - TR-MCP-BATCHTS-001
+    testIds:
+    - TEST-MCP-153
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-114
+    trIds:
+    - TR-MCP-TODO-010
+    testIds:
+    - TEST-MCP-154
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-115
+    trIds:
+    - TR-MCP-PLUGIN-009
+    testIds:
+    - TEST-MCP-155
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-116
+    trIds:
+    - TR-MCP-GH-008
+    testIds:
+    - TEST-MCP-156
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-117
+    trIds:
+    - TR-MCP-PLUGIN-010
+    testIds:
+    - TEST-MCP-157
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-118
+    trIds:
+    - TR-MCP-CRYPTO-001
+    - TR-MCP-KEYSERVER-001
+    testIds:
+    - TEST-MCP-158
+    - TEST-MCP-160
+    - TEST-MCP-166
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-119
+    trIds:
+    - TR-MCP-CRYPTO-001
+    - TR-MCP-SUBSCRIBER-001
+    testIds:
+    - TEST-MCP-159
+    - TEST-MCP-160
+    - TEST-MCP-167
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-120
+    trIds:
+    - TR-MCP-TXN-001
+    testIds:
+    - TEST-MCP-161
+    - TEST-MCP-168
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-121
+    trIds:
+    - TR-MCP-TXN-001
+    - TR-MCP-TXNAUDIT-001
+    testIds:
+    - TEST-MCP-161
+    - TEST-MCP-169
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-122
+    trIds:
+    - TR-MCP-TXNBYRD-001
+    testIds:
+    - TEST-MCP-164
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-123
+    trIds:
+    - TR-MCP-QUAD-001
+    testIds:
+    - TEST-MCP-163
+    - TEST-MCP-170
+    - TEST-MCP-171
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-124
+    trIds:
+    - TR-MCP-TXNDIAGRAMS-001
+    testIds:
+    - TEST-MCP-162
+    - TEST-MCP-165
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-125
+    trIds:
+    - TR-MCP-TXNCOMPAT-001
+    testIds:
+    - TEST-MCP-163
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-126
+    trIds:
+    - TR-MCP-TXNAIUNIT-001
+    testIds:
+    - TEST-MCP-164
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-127
+    trIds:
+    - TR-MCP-TXNDIAGRAMS-001
+    testIds:
+    - TEST-MCP-166
+    - TEST-MCP-167
+    - TEST-MCP-168
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-128
+    trIds:
+    - TR-MCP-TXNARCH-001
+    - TR-MCP-TXNDESIGN-001
+    testIds:
+    - TEST-MCP-172
+    - TEST-MCP-173
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-129
+    trIds:
+    - TR-MCP-QUAD-001
+    - TR-MCP-QUAD-002
+    - TR-MCP-QUAD-003
+    testIds:
+    - TEST-MCP-174
+    - TEST-MCP-175
+    - TEST-MCP-176
+    - TEST-MCP-177
+    - TEST-MCP-178
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-130
+    trIds:
+    - TR-MCP-QUAD-003
+    testIds:
+    - TEST-MCP-178
+    - TEST-MCP-179
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-131
+    trIds:
+    - TR-MCP-QUAD-004
+    - TR-MCP-QUAD-005
+    - TR-MCP-QUAD-007
+    testIds:
+    - TEST-MCP-174
+    - TEST-MCP-180
+    - TEST-MCP-181
+    - TEST-MCP-183
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-132
+    trIds:
+    - TR-MCP-AUTH-010
+    - TR-MCP-AUTH-011
+    testIds:
+    - TEST-MCP-AUTH-010
+    - TEST-MCP-AUTH-011
+    - TEST-MCP-AUTH-012
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-133
+    trIds:
+    - TR-MCP-HEALTH-002
+    testIds:
+    - TEST-MCP-HEALTH-002
+    - TEST-MCP-HEALTH-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-134
+    trIds:
+    - TR-MCP-QUAD-003
+    - TR-MCP-QUAD-005
+    - TR-MCP-QUAD-006
+    testIds:
+    - TEST-MCP-181
+    - TEST-MCP-182
+    - TEST-MCP-184
+    - TEST-MCP-185
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-135
+    trIds:
+    - TR-MCP-QUAD-005
+    - TR-MCP-QUAD-007
+    testIds:
+    - TEST-MCP-183
+    - TEST-MCP-184
+    - TEST-MCP-185
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-136
+    trIds:
+    - TR-MCP-AGENT-015
+    - TR-MCP-TXN-001
+    - TR-MCP-TXNAUDIT-001
+    testIds:
+    - TEST-MCP-186
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-137
+    trIds:
+    - TR-MCP-AGENT-016
+    testIds:
+    - TEST-MCP-187
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-138
+    trIds:
+    - TR-MCP-AIUNIT-001
+    testIds:
+    - TEST-MCP-AIUNIT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-139
+    trIds:
+    - TR-MCP-QUALITY-001
+    testIds:
+    - TEST-MCP-AIUNIT-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-140
+    trIds:
+    - TR-MCP-SEC-005
+    testIds:
+    - TEST-MCP-189
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-141
+    trIds:
+    - TR-MCP-SVC-002
+    - TR-MCP-TUN-004
+    testIds:
+    - TEST-MCP-190
+    - TEST-MCP-191
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-142
+    trIds:
+    - TR-MCP-QB-001
+    testIds:
+    - TEST-MCP-193
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-143
+    trIds:
+    - TR-MCP-CLIENT-001
+    - TR-MCP-HEALTH-003
+    - TR-MCP-REPL-018
+    - TR-MCP-REPL-019
+    - TR-MCP-REPL-020
+    - TR-MCP-SYNC-001
+    testIds:
+    - TEST-MCP-194
+    - TEST-MCP-REPL-040
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-170
+    trIds:
+    - TR-MCP-PERSIST-001
+    - TR-MCP-PERSIST-004
+    testIds:
+    - TEST-MCP-195
+    - TEST-MCP-196
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-171
+    trIds:
+    - TR-MCP-PERSIST-002
+    testIds:
+    - TEST-MCP-195
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-172
+    trIds:
+    - TR-MCP-PERSIST-003
+    testIds:
+    - TEST-MCP-195
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-AGENT-PARITY-001
+    trIds:
+    - TR-MCP-AGENT-PARITY-010
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-AGENT-PARITY-002
+    trIds:
+    - TR-MCP-AGENT-PARITY-011
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-BATCH-001
+    trIds:
+    - TR-MCP-BATCH-001
+    testIds:
+    - TEST-MCP-BATCH-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-CLEARSESSION-001
+    trIds:
+    - TR-MCP-CLEARSESSION-001
+    testIds:
+    - TEST-MCP-CLEARSESSION-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-DOCFXWIKI-001
+    trIds:
+    - TR-MCP-DOCFXWIKI-001
+    testIds:
+    - TEST-MCP-DOCFXWIKI-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-FAILSAFE-001
+    trIds:
+    - TR-MCP-FAILSAFE-001
+    testIds:
+    - TEST-MCP-FAILSAFE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-FILETOOLS-001
+    trIds:
+    - TR-MCP-FILETOOLS-001
+    testIds:
+    - TEST-MCP-FILETOOLS-001
+    - TEST-MCP-FILETOOLSINT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-001
+    trIds:
+    - TR-MCP-HELP-002
+    - TR-MCP-HELP-007
+    testIds:
+    - TEST-MCP-HELP-004
+    - TEST-MCP-HELP-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-002
+    trIds:
+    - TR-MCP-HELP-004
+    testIds:
+    - TEST-MCP-HELP-002
+    - TEST-MCP-HELP-SEC-001
+    - TEST-MCP-HELP-SEC-002
+    - TEST-MCP-HELP-SEC-003
+    - TEST-MCP-HELP-SEC-004
+    - TEST-MCP-HELP-SEC-005
+    - TEST-MCP-HELP-SEC-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-003
+    trIds:
+    - TR-MCP-HELP-003
+    testIds:
+    - TEST-MCP-HELP-001
+    - TEST-MCP-HELP-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-004
+    trIds:
+    - TR-MCP-HELP-005
+    testIds:
+    - TEST-MCP-HELP-003
+    - TEST-MCP-HELP-SEC-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-005
+    trIds:
+    - TR-MCP-HELP-006
+    - TR-MCP-HELP-008
+    testIds:
+    - TEST-MCP-HELP-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-006
+    trIds:
+    - TR-MCP-HELP-009
+    testIds:
+    - TEST-MCP-HELP-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-007
+    trIds:
+    - TR-MCP-HELP-009
+    testIds:
+    - TEST-MCP-HELP-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-008
+    trIds:
+    - TR-MCP-HELP-002
+    testIds:
+    - TEST-MCP-HELP-SEC-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-009
+    trIds:
+    - TR-MCP-HELP-009
+    testIds:
+    - TEST-MCP-HELP-008
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-010
+    trIds:
+    - TR-MCP-HELP-001
+    testIds:
+    - TEST-MCP-HELP-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HELP-011
+    trIds:
+    - TR-MCP-HELP-010
+    testIds:
+    - TEST-MCP-HELP-008
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-001
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-001
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-002
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-002
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-003
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-003
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-004
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-004
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-005
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-005
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HOSTILEREVIEW-006
+    trIds:
+    - TR-MCP-HOSTILEREVIEW-006
+    testIds:
+    - TEST-MCP-HOSTILEREVIEW-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HYGIENE-001
+    trIds:
+    - TR-MCP-HYGIENE-001
+    testIds:
+    - TEST-MCP-HYGIENE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HYGIENE-002
+    trIds:
+    - TR-MCP-HYGIENE-002
+    testIds:
+    - TEST-MCP-HYGIENE-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HYGIENE-003
+    trIds:
+    - TR-MCP-HYGIENE-003
+    testIds:
+    - TEST-MCP-HYGIENE-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HYGIENE-004
+    trIds:
+    - TR-MCP-HYGIENE-004
+    testIds:
+    - TEST-MCP-HYGIENE-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-HYGIENE-005
+    trIds:
+    - TR-MCP-HYGIENE-005
+    testIds:
+    - TEST-MCP-HYGIENE-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-LIVE-CODEX-20260603T2014Z
+    trIds:
+    - TR-MCP-REQ-005
+    testIds:
+    - TEST-MCP-REQACPLUGIN-LIVE
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-LIVE-CODEX-20260603T2015Z
+    trIds:
+    - TR-MCP-REQ-005
+    testIds:
+    - TEST-MCP-REQACPLUGIN-LIVE
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MARKER-004
+    trIds:
+    - TR-MCP-MARKER-004
+    testIds:
+    - TEST-MCP-MARKER-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-001
+    trIds:
+    - TR-MCP-MEMORY-001
+    testIds:
+    - TEST-MCP-MEMORY-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-002
+    trIds:
+    - TR-MCP-MEMORY-002
+    testIds:
+    - TEST-MCP-MEMORY-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-003
+    trIds:
+    - TR-MCP-MEMORY-003
+    testIds:
+    - TEST-MCP-MEMORY-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-004
+    trIds:
+    - TR-MCP-MEMORY-004
+    testIds:
+    - TEST-MCP-MEMORY-004
+    - TEST-MCP-MEMORY-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-005
+    trIds:
+    - TR-MCP-MEMORY-005
+    testIds:
+    - TEST-MCP-MEMORY-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-006
+    trIds:
+    - TR-MCP-MEMORY-006
+    - TR-MCP-MEMORY-007
+    testIds:
+    - TEST-MCP-MEMORY-008
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-007
+    trIds:
+    - TR-MCP-MEMORY-007
+    testIds:
+    - TEST-MCP-MEMORY-007
+    - TEST-MCP-MEMORY-009
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-MEMORY-008
+    trIds:
+    - TR-MCP-FED-MEMORY-001
+    testIds:
+    - TEST-MCP-MEMORY-FED-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGIN-BATCH-001
+    trIds:
+    - TR-MCP-BATCH-001
+    testIds:
+    - TEST-MCP-BATCH-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGINCORE-001
+    trIds:
+    - TR-MCP-PLUGINCORE-001
+    testIds:
+    - TEST-MCP-PLUGINCORE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGINCORE-002
+    trIds:
+    - TR-MCP-PLUGINCORE-002
+    testIds:
+    - TEST-MCP-PLUGINCORE-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGINCORE-003
+    trIds:
+    - TR-MCP-PLUGINCORE-003
+    testIds:
+    - TEST-MCP-PLUGINCORE-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGINCORE-004
+    trIds:
+    - TR-MCP-PLUGINCORE-004
+    - TR-MCP-PLUGINCORE-005
+    testIds:
+    - TEST-MCP-PLUGINCORE-004
+    - TEST-MCP-PLUGINCORE-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGIN-HEADER-001
+    trIds:
+    - TR-MCP-PLUGIN-HEADER-001
+    testIds:
+    - TEST-MCP-PLUGIN-HEADER-002
+    - TEST-MCP-PLUGIN-HEADER-003
+    - TEST-MCP-PLUGIN-HEADER-004
+    - TEST-MCP-PLUGIN-HEADER-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGININT-001
+    trIds:
+    - TR-MCP-PLUGININT-001
+    testIds:
+    - TEST-MCP-PLUGININT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PLUGIN-SKILLS-001
+    trIds:
+    - TR-MCP-PLUGIN-SKILLS-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PRODUCT-001
+    trIds:
+    - TR-MCP-PRODUCT-API-001
+    - TR-MCP-PRODUCT-AUTH-001
+    - TR-MCP-PRODUCT-MODEL-001
+    testIds:
+    - TEST-MCP-PRODUCT-001
+    - TEST-MCP-PRODUCT-003
+    - TEST-MCP-PRODUCT-004
+    - TEST-MCP-PRODUCT-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PRODUCT-002
+    trIds:
+    - TR-MCP-PRODUCT-AUTH-001
+    - TR-MCP-PRODUCT-MODEL-001
+    testIds:
+    - TEST-MCP-PRODUCT-001
+    - TEST-MCP-PRODUCT-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PRODUCT-003
+    trIds:
+    - TR-MCP-PRODUCT-API-001
+    - TR-MCP-PRODUCT-SHARE-001
+    testIds:
+    - TEST-MCP-PRODUCT-002
+    - TEST-MCP-PRODUCT-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PRODUCT-004
+    trIds:
+    - TR-MCP-PRODUCT-AUTH-001
+    - TR-MCP-PRODUCT-SHARE-001
+    testIds:
+    - TEST-MCP-PRODUCT-002
+    - TEST-MCP-PRODUCT-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-PRODUCT-005
+    trIds:
+    - TR-MCP-PRODUCT-CTX-001
+    testIds:
+    - TEST-MCP-PRODUCT-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBAGENT-001
+    trIds:
+    - TR-MCP-QBAGENT-001
+    testIds:
+    - TEST-MCP-QBAGENT-001
+    - TEST-MCP-QBAGENTINT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBEXEC-001
+    trIds:
+    - TR-MCP-QBEXEC-001
+    testIds:
+    - TEST-MCP-QBEXEC-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBEXEC-002
+    trIds:
+    - TR-MCP-QBEXEC-002
+    testIds:
+    - TEST-MCP-QBEXEC-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBEXEC-003
+    trIds:
+    - TR-MCP-QBEXEC-003
+    testIds:
+    - TEST-MCP-QBEXEC-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBOLLAMA-002
+    trIds:
+    - TR-MCP-QBOLLAMA-002
+    testIds:
+    - TEST-MCP-QBOLLAMA-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBOPENAI-001
+    trIds:
+    - TR-MCP-QBOPENAI-001
+    testIds:
+    - TEST-MCP-QBINT-001
+    - TEST-MCP-QBOPENAI-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBSEED-001
+    trIds:
+    - TR-MCP-QBSEED-002
+    testIds:
+    - TEST-MCP-QBSEED-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBSKILLS-001
+    trIds:
+    - TR-MCP-QBSKILLS-001
+    testIds:
+    - TEST-MCP-QBSKILLS-001
+    - TEST-MCP-QBSKILLS-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBSKILLS-002
+    trIds:
+    - TR-MCP-QBSKILLS-003
+    testIds:
+    - TEST-MCP-QBSKILLS-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBSKILLS-003
+    trIds:
+    - TR-MCP-QBSKILLS-002
+    testIds:
+    - TEST-MCP-QBSKILLS-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-001
+    trIds:
+    - TR-MCP-QBTOOLS-001
+    testIds:
+    - TEST-MCP-QBTOOLS-001
+    - TEST-MCP-QBTOOLSINT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-002
+    trIds:
+    - TR-MCP-QBTOOLS-002
+    testIds:
+    - TEST-MCP-QBTOOLS-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-003
+    trIds:
+    - TR-MCP-QBTOOLS-003
+    testIds:
+    - TEST-MCP-QBTOOLS-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-004
+    trIds:
+    - TR-MCP-QBTOOLS-004
+    testIds:
+    - TEST-MCP-QBTOOLS-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-005
+    trIds:
+    - TR-MCP-QBTOOLS-005
+    testIds:
+    - TEST-MCP-QBTOOLS-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-006
+    trIds:
+    - TR-MCP-QBTOOLS-006
+    - TR-MCP-QBTOOLS-007
+    testIds:
+    - TEST-MCP-QBTOOLS-004
+    - TEST-MCP-QBTOOLS-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QBTOOLS-007
+    trIds:
+    - TR-MCP-QBTOOLS-008
+    testIds:
+    - TEST-MCP-QBTOOLSINT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-QUAD-SESSION-001
+    trIds:
+    - TR-MCP-QUAD-SESSION-001
+    testIds:
+    - TEST-MCP-QUAD-SESSION-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-001
+    trIds:
+    - TR-MCP-REPL-001
+    - TR-MCP-REPL-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-002
+    trIds:
+    - TR-MCP-REPL-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-003
+    trIds:
+    - TR-MCP-REPL-004
+    - TR-MCP-REPL-005
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-004
+    trIds:
+    - TR-MCP-REPL-006
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-005
+    trIds:
+    - TR-MCP-REPL-007
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-006
+    trIds:
+    - TR-MCP-REPL-006
+    testIds:
+    - TEST-MCP-REPL-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-007
+    trIds:
+    - TR-MCP-REPL-008
+    testIds:
+    - TEST-MCP-REPL-007-1
+    - TEST-MCP-REPL-007-2
+    - TEST-MCP-REPL-007-3
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-008
+    trIds:
+    - TR-MCP-REPL-009
+    testIds:
+    - TEST-MCP-REPL-018
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-009
+    trIds:
+    - TR-MCP-REPL-010
+    - TR-MCP-REPL-011
+    - TR-MCP-REPL-012
+    - TR-MCP-REPL-013
+    testIds:
+    - TEST-MCP-REPL-025
+    - TEST-MCP-REPL-026
+    - TEST-MCP-REPL-027
+    - TEST-MCP-REPL-028
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-010
+    trIds:
+    - TR-MCP-REPL-014
+    - TR-MCP-REPL-015
+    testIds:
+    - TEST-MCP-REPL-029
+    - TEST-MCP-REPL-030
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REPL-011
+    trIds:
+    - TR-MCP-REPL-016
+    - TR-MCP-REPL-017
+    testIds:
+    - TEST-MCP-REPL-031
+    - TEST-MCP-REPL-032
+    - TEST-MCP-REPL-033
+    - TEST-MCP-REPL-034
+    - TEST-MCP-REPL-035
+    - TEST-MCP-REPL-036
+    - TEST-MCP-REPL-037
+    - TEST-MCP-REPL-038
+    - TEST-MCP-REPL-039
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQAC-001
+    trIds:
+    - TR-MCP-REQAC-001
+    - TR-MCP-REQAC-002
+    testIds:
+    - TEST-MCP-REQAC-001
+    - TEST-MCP-REQAC-002
+    - TEST-MCP-REQAC-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQAC-002
+    trIds:
+    - TR-MCP-REQAC-001
+    testIds:
+    - TEST-MCP-REQAC-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQAC-PLUGIN-001
+    trIds:
+    - TR-MCP-REQAC-PLUGIN-001
+    testIds:
+    - TEST-MCP-REQAC-PLUGIN-BASH
+    - TEST-MCP-REQAC-PLUGIN-TS
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQACPLUGIN-001
+    trIds:
+    - TR-MCP-REQACPLUGIN-001
+    testIds:
+    - TEST-MCP-REQACPLUGIN-BASH
+    - TEST-MCP-REQACPLUGIN-LIVE
+    - TEST-MCP-REQACPLUGIN-TS
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQACPLUGIN-002
+    trIds:
+    - TR-MCP-REQACPLUGIN-002
+    testIds:
+    - TEST-MCP-REQACPLUGIN-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQSCOPE-001
+    trIds:
+    - TR-MCP-REQSCOPE-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQSCOPE-002
+    trIds:
+    - TR-MCP-REQSCOPE-002
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQSCOPE-003
+    trIds:
+    - TR-MCP-REQSCOPE-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-REQSCOPE-004
+    trIds:
+    - TR-MCP-REQSCOPE-004
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-SESSIONATTR-001
+    trIds:
+    - TR-MCP-SESSIONATTR-001
+    testIds:
+    - TEST-MCP-SESSIONATTR-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-SESSIONEND-001
+    trIds:
+    - TR-MCP-SESSIONEND-001
+    testIds:
+    - TEST-MCP-SESSIONEND-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-SESSIONLOGCTX-001
+    trIds:
+    - TR-MCP-SESSIONLOG-006
+    testIds:
+    - TEST-MCP-SESSIONLOG-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-SESSIONLOGSAN-001
+    trIds:
+    - TR-MCP-SESSIONLOGSAN-001
+    - TR-MCP-SESSIONLOGSAN-002
+    testIds:
+    - TEST-MCP-SESSIONLOGSAN-001
+    - TEST-MCP-SESSIONLOGSAN-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-STRICTCOUNT-001
+    trIds:
+    - TR-MCP-STRICTCOUNT-001
+    testIds:
+    - TEST-MCP-STRICTCOUNT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-SUBLOG-001
+    trIds:
+    - TR-MCP-SUBLOG-001
+    testIds:
+    - TEST-MCP-SUBLOG-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TEMPVOL-001
+    trIds:
+    - TR-MCP-TEMPVOL-001
+    testIds:
+    - TEST-MCP-TEMPVOL-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TODO-CLOSE-001
+    trIds:
+    - TR-MCP-TODO-CLOSE-001
+    testIds:
+    - TEST-MCP-TODO-CLOSE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-001
+    trIds:
+    - TR-MCP-TRANSCRIPT-001
+    - TR-MCP-TRANSCRIPT-002
+    - TR-MCP-TRANSCRIPT-006
+    testIds:
+    - TEST-MCP-TRANSCRIPT-001
+    - TEST-MCP-TRANSCRIPT-003
+    - TEST-MCP-TRANSCRIPT-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-002
+    trIds:
+    - TR-MCP-TRANSCRIPT-001
+    - TR-MCP-TRANSCRIPT-002
+    - TR-MCP-TRANSCRIPT-003
+    testIds:
+    - TEST-MCP-TRANSCRIPT-001
+    - TEST-MCP-TRANSCRIPT-002
+    - TEST-MCP-TRANSCRIPT-003
+    - TEST-MCP-TRANSCRIPT-009
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-003
+    trIds:
+    - TR-MCP-TRANSCRIPT-003
+    - TR-MCP-TRANSCRIPT-004
+    testIds:
+    - TEST-MCP-TRANSCRIPT-002
+    - TEST-MCP-TRANSCRIPT-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-004
+    trIds:
+    - TR-MCP-TRANSCRIPT-004
+    testIds:
+    - TEST-MCP-TRANSCRIPT-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-005
+    trIds:
+    - TR-MCP-TRANSCRIPT-005
+    testIds:
+    - TEST-MCP-TRANSCRIPT-006
+    - TEST-MCP-TRANSCRIPT-010
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-006
+    trIds:
+    - TR-MCP-TRANSCRIPT-006
+    - TR-MCP-TRANSCRIPT-007
+    testIds:
+    - TEST-MCP-TRANSCRIPT-007
+    - TEST-MCP-TRANSCRIPT-008
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-007
+    trIds:
+    - TR-MCP-TRANSCRIPT-007
+    testIds:
+    - TEST-MCP-TRANSCRIPT-008
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-008
+    trIds:
+    - TR-MCP-TRANSCRIPT-002
+    - TR-MCP-TRANSCRIPT-003
+    - TR-MCP-TRANSCRIPT-008
+    - TR-MCP-TRANSCRIPT-009
+    testIds:
+    - TEST-MCP-TRANSCRIPT-001
+    - TEST-MCP-TRANSCRIPT-009
+    - TEST-MCP-TRANSCRIPT-010
+    - TEST-MCP-TRANSCRIPT-011
+    - TEST-MCP-TRANSCRIPT-012
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-009
+    trIds:
+    - TR-MCP-TRANSCRIPT-010
+    testIds:
+    - TEST-MCP-TRANSCRIPT-013
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRANSCRIPT-SEARCH-001
+    trIds:
+    - TR-MCP-TRANSCRIPT-SEARCH-001
+    testIds:
+    - TEST-MCP-TRANSCRIPT-SEARCH-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGE-001
+    trIds:
+    - TR-MCP-TRIAGE-001
+    testIds:
+    - TEST-MCP-TRIAGE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGE-002
+    trIds:
+    - TR-MCP-TRIAGE-002
+    testIds:
+    - TEST-MCP-TRIAGE-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGE-003
+    trIds:
+    - TR-MCP-TRIAGE-003
+    testIds:
+    - TEST-MCP-TRIAGE-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGE-004
+    trIds:
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-005
+    testIds:
+    - TEST-MCP-BUGTRIAGE-043
+    - TEST-MCP-TRIAGE-004
+    - TEST-MCP-TRIAGE-005
+    - TEST-MCP-TRIAGE-006
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGEERR-001
+    trIds:
+    - TR-MCP-TRIAGEERR-001
+    testIds:
+    - TEST-MCP-TRIAGEERR-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGEHELP-001
+    trIds:
+    - TR-MCP-TRIAGEHELP-001
+    testIds:
+    - TEST-MCP-TRIAGEHELP-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGEPLUGIN-001
+    trIds:
+    - TR-MCP-TRIAGEPLUGIN-001
+    testIds:
+    - TEST-MCP-TRIAGEPLUGIN-001
+    - TEST-MCP-TRIAGEPLUGIN-002
+    - TEST-MCP-TRIAGEPLUGIN-003
+    - TEST-MCP-TRIAGEPLUGIN-004
+    - TEST-MCP-TRIAGEPLUGIN-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGEREQ-001
+    trIds:
+    - TR-MCP-TRIAGEREQ-001
+    testIds:
+    - TEST-MCP-TRIAGEREQ-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGESCHEMA-001
+    trIds:
+    - TR-MCP-TRIAGESCHEMA-001
+    testIds:
+    - TEST-MCP-TRIAGESCHEMA-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGESTORE-001
+    trIds:
+    - TR-MCP-TRIAGESTORE-001
+    testIds:
+    - TEST-MCP-TRIAGESTORE-001
+    - TEST-MCP-TRIAGESTORE-002
+    - TEST-MCP-TRIAGESTORE-003
+    - TEST-MCP-TRIAGESTORE-004
+    - TEST-MCP-TRIAGESTORE-005
+    - TEST-MCP-TRIAGESTORE-006
+    - TEST-MCP-TRIAGESTORE-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGESTORE-002
+    trIds:
+    - TR-MCP-TRIAGESTORE-002
+    testIds:
+    - TEST-MCP-TRIAGESTORE-007
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-TRIAGETODO-001
+    trIds:
+    - TR-MCP-TRIAGETODO-001
+    testIds:
+    - TEST-MCP-TRIAGETODO-001
+    - TEST-MCP-TRIAGETODO-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-001
+    trIds:
+    - TR-MCP-USECASE-001
+    - TR-MCP-USECASE-002
+    - TR-MCP-USECASE-003
+    - TR-MCP-USECASE-005
+    testIds:
+    - TEST-MCP-USECASE-001
+    - TEST-MCP-USECASE-002
+    - TEST-MCP-USECASE-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-002
+    trIds:
+    - TR-MCP-USECASE-001
+    - TR-MCP-USECASE-002
+    testIds:
+    - TEST-MCP-USECASE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-003
+    trIds:
+    - TR-MCP-USECASE-001
+    - TR-MCP-USECASE-002
+    - TR-MCP-USECASE-006
+    testIds:
+    - TEST-MCP-USECASE-001
+    - TEST-MCP-USECASE-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-004
+    trIds:
+    - TR-MCP-USECASE-002
+    testIds:
+    - TEST-MCP-USECASE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-005
+    trIds:
+    - TR-MCP-USECASE-004
+    testIds:
+    - TEST-MCP-USECASE-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-006
+    trIds:
+    - TR-MCP-USECASE-006
+    testIds:
+    - TEST-MCP-USECASE-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-007
+    trIds:
+    - TR-MCP-USECASE-005
+    - TR-MCP-USECASE-007
+    - TR-MCP-USECASE-010
+    testIds:
+    - TEST-MCP-USECASE-008
+    - TEST-MCP-USECASE-010
+    - TEST-MCP-USECASE-011
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-008
+    trIds:
+    - TR-MCP-USECASE-008
+    testIds:
+    - TEST-MCP-USECASE-009
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-009
+    trIds:
+    - TR-MCP-USECASE-008
+    testIds:
+    - TEST-MCP-USECASE-009
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-010
+    trIds:
+    - TR-MCP-USECASE-009
+    testIds:
+    - TEST-MCP-USECASE-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-011
+    trIds:
+    - TR-MCP-USECASE-015
+    testIds:
+    - TEST-MCP-USECASE-015
+    - TEST-MCP-USECASE-017
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-012
+    trIds:
+    - TR-MCP-USECASE-011
+    - TR-MCP-USECASE-012
+    - TR-MCP-USECASE-013
+    - TR-MCP-USECASE-016
+    testIds:
+    - TEST-MCP-USECASE-013
+    - TEST-MCP-USECASE-014
+    - TEST-MCP-USECASE-016
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-013
+    trIds:
+    - TR-MCP-USECASE-013
+    - TR-MCP-USECASE-014
+    testIds:
+    - TEST-MCP-USECASE-012
+    - TEST-MCP-USECASE-014
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-USECASE-014
+    trIds:
+    - TR-MCP-USECASE-013
+    - TR-MCP-USECASE-014
+    testIds:
+    - TEST-MCP-USECASE-012
+    - TEST-MCP-USECASE-014
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-VERIFYWRAP-001
+    trIds:
+    - TR-MCP-VERIFYWRAP-001
+    testIds:
+    - TEST-MCP-VERIFYWRAP-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WIKIEXPORT-001
+    trIds:
+    - TR-MCP-WIKIEXPORT-001
+    testIds:
+    - TEST-MCP-WIKIEXPORT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WIKIEXPORT-002
+    trIds:
+    - TR-MCP-WIKIEXPORT-002
+    testIds:
+    - TEST-MCP-WIKIEXPORT-002
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WIKIEXPORT-003
+    trIds:
+    - TR-MCP-WIKIEXPORT-003
+    testIds:
+    - TEST-MCP-WIKIEXPORT-003
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WIKIEXPORT-004
+    trIds:
+    - TR-MCP-WIKIEXPORT-004
+    testIds:
+    - TEST-MCP-WIKIEXPORT-004
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WIKIEXPORT-005
+    trIds:
+    - TR-MCP-WIKIEXPORT-005
+    testIds:
+    - TEST-MCP-WIKIEXPORT-005
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-WORKSPACE-LAYER-001
+    trIds:
+    - TR-MCP-MT-003
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-MCP-XAGENT-001
+    trIds:
+    - TR-MCP-XAGENT-001
+    testIds:
+    - TEST-MCP-XAGENT-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010
+    trIds:
+    - TR-MCP-API-001
+    - TR-MCP-ARCH-001
+    - TR-MCP-DATA-001
+    - TR-MCP-INGEST-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010A
+    trIds:
+    - TR-MCP-MT-003A
+    testIds:
+    - TEST-SUPPORT-010A-1
+    - TEST-SUPPORT-010A-2
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010B
+    trIds: []
+    testIds:
+    - TEST-SUPPORT-010B-1
+    - TEST-SUPPORT-010B-2
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010C
+    trIds:
+    - TR-MCP-MT-003A
+    testIds:
+    - TEST-SUPPORT-010C-1
+    - TEST-SUPPORT-010C-2
+    - TEST-SUPPORT-010C-3
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010E
+    trIds:
+    - TR-SUPPORT-010E
+    testIds:
+    - TEST-SUPPORT-010E
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-010F
+    trIds:
+    - TR-SUPPORT-010F
+    testIds:
+    - TEST-SUPPORT-010F
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-011
+    trIds:
+    - TR-MCP-MT-003A
+    - TR-MCP-MT-004
+    testIds:
+    - TEST-SUPPORT-010A-1
+    - TEST-SUPPORT-010A-2
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-012
+    trIds:
+    - TR-MCP-SESSIONLOG-001
+    - TR-MCP-SESSIONLOG-002
+    - TR-MCP-SESSIONLOG-003
+    - TR-MCP-SESSIONLOG-005
+    - TR-SUPPORT-LOG-010
+    testIds:
+    - TEST-MCP-SESSIONLOG-001
+    - TEST-MCP-SESSIONLOG-002
+    - TEST-MCP-SESSIONLOG-003
+    - TEST-MCP-SESSIONLOG-005
+    - TEST-SUPPORT-010B-1
+    - TEST-SUPPORT-010B-2
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-013
+    trIds:
+    - TR-MCP-HTTP-002
+    testIds:
+    - TEST-SUPPORT-010C-1
+    - TEST-SUPPORT-010C-2
+    - TEST-SUPPORT-010C-3
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-014
+    trIds:
+    - TR-SUPPORT-CORE-014
+    testIds:
+    - TEST-SUPPORT-014
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-SUPPORT-015
+    trIds:
+    - TR-SUPPORT-010F
+    - TR-SUPPORT-CORE-015
+    testIds:
+    - TEST-SUPPORT-015
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-TEST-002
+    trIds:
+    - TR-TEST-001
+    testIds: []
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-TRIAGE-001
+    trIds:
+    - TR-TRIAGE-CLIENT-001
+    testIds:
+    - TEST-TRIAGE-001
+    workspaceId: F:\GitHub\McpServer
+  - frId: FR-TRIAGE-002
+    trIds:
+    - TR-TRIAGE-CLIENT-002
+    testIds:
+    - TEST-TRIAGE-002
+    workspaceId: F:\GitHub\McpServer
+
+---

@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-08-22T05:46:45.6261294Z",
+  "KilledCount": 2,
+  "KeptCount": 0,
+  "Killed": [
+    {
+      "ProcessId": 86248,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending --lo",
+      "Killed": true
+    },
+    {
+      "ProcessId": 59180,
+      "Name": "testhost.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginInt",
+      "Killed": true
+    }
+  ],
+  "Kept": []
+}

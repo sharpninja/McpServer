@@ -1,0 +1,30 @@
+{
+  "TimestampUtc": "2026-08-22T08:33:28.4033462Z",
+  "LeftoverCount": 4,
+  "Processes": [
+    {
+      "Pid": 82440,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 03:27:01",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests -c Debug --logger trx;LogFileName=pluginint-all.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_p18-preflight-20260822T082521Z\\trx-all --logger console;verbosity=normal"
+    },
+    {
+      "Pid": 51780,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 03:27:16",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --logger:\"trx;LogFileName=pluginint-all.trx\" --logger:\"console;verbosity=normal\" --resultsDirectory:F:\\GitHub\\McpServer\\docs\\receipts\\_p18-preflight-20260822T082521Z\\trx-all F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll --nologo --artifactsProcessingMode-collect --testSessionCorrelationId:82440_315be868-d406-4ac1-ac19-dac00f785d4e"
+    },
+    {
+      "Pid": 49188,
+      "Name": "testhost.exe",
+      "CreationDate": "08/22/2026 03:27:17",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.deps.json\" --port 53139 --endpoint 127.0.0.1:053139 --role client --parentprocessid 51780 --telemetryoptedin false"
+    },
+    {
+      "Pid": 25732,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 03:33:27",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    }
+  ]
+}

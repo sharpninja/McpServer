@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5a1dc74c-1b3a-4ff4-b0e3-e647842f345f" name="kingd@PAYTON-LEGION2 2026-08-22 05:38:14" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T05:38:14.8677646-05:00" queuing="2026-08-22T05:38:14.8677649-05:00" start="2026-08-22T05:38:12.0817549-05:00" finish="2026-08-22T05:38:14.8745714-05:00" />
+  <TestSettings name="default" id="e7f9da17-860f-40cf-90e6-2865d471f07e">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_05_38_14" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8a0a569c-2d01-4f09-b5b1-19747665aafb" testId="1e85bb3b-0ec5-ee92-f4d0-634715996a1f" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" computerName="PAYTON-LEGION2" duration="00:00:00.0012223" startTime="2026-08-22T05:38:14.7459063-05:00" endTime="2026-08-22T05:38:14.7471667-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a0a569c-2d01-4f09-b5b1-19747665aafb" />
+    <UnitTestResult executionId="9100775b-52b9-49c0-9d59-21080a329b53" testId="79270821-abce-65f2-c58f-b6cc3cece44f" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" computerName="PAYTON-LEGION2" duration="00:00:00.1060315" startTime="2026-08-22T05:38:14.6132355-05:00" endTime="2026-08-22T05:38:14.7346235-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9100775b-52b9-49c0-9d59-21080a329b53" />
+    <UnitTestResult executionId="c8e99d58-cce1-4ba0-b51d-6eb127246d03" testId="a0de7389-e5b9-42e1-e4a6-72ab822afe7c" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" computerName="PAYTON-LEGION2" duration="00:00:00.0033453" startTime="2026-08-22T05:38:14.7420864-05:00" endTime="2026-08-22T05:38:14.7455313-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8e99d58-cce1-4ba0-b51d-6eb127246d03" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a0de7389-e5b9-42e1-e4a6-72ab822afe7c">
+      <Execution id="c8e99d58-cce1-4ba0-b51d-6eb127246d03" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1e85bb3b-0ec5-ee92-f4d0-634715996a1f">
+      <Execution id="8a0a569c-2d01-4f09-b5b1-19747665aafb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="79270821-abce-65f2-c58f-b6cc3cece44f">
+      <Execution id="9100775b-52b9-49c0-9d59-21080a329b53" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1e85bb3b-0ec5-ee92-f4d0-634715996a1f" executionId="8a0a569c-2d01-4f09-b5b1-19747665aafb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79270821-abce-65f2-c58f-b6cc3cece44f" executionId="9100775b-52b9-49c0-9d59-21080a329b53" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0de7389-e5b9-42e1-e4a6-72ab822afe7c" executionId="c8e99d58-cce1-4ba0-b51d-6eb127246d03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.47]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.07]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.45]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.71]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

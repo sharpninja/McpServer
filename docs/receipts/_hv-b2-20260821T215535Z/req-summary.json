@@ -1,0 +1,74 @@
+[
+  {
+    "Id": "FR-MCP-REPL-009",
+    "Http": 200,
+    "Title": "Degraded session-log persistence isolation",
+    "AcCount": 4,
+    "Ac": [
+      "Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.",
+      "The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.",
+      "completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.",
+      "Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence."
+    ]
+  },
+  {
+    "Id": "FR-MCP-PLUGINCORE-004",
+    "Http": 200,
+    "Title": "Reliable plugin session-log dialog parsing",
+    "AcCount": 3,
+    "Ac": [
+      "Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count.",
+      "Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.",
+      "The canonical parsing fix propagates to every official plugin distribution without checksum drift."
+    ]
+  },
+  {
+    "Id": "FR-MCP-172",
+    "Http": 200,
+    "Title": "Failsafe drain does not poison successful plugin calls",
+    "AcCount": 4,
+    "Ac": [
+      "getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503.",
+      "stderr has no Failsafe queue drain failed for that class.",
+      "ReplFailsafeDrainCompleted stays false on abort.",
+      "Next drain in-process replays after a stubbed success."
+    ]
+  },
+  {
+    "Id": "TR-MCP-REPL-012",
+    "Http": 200,
+    "Title": "Per-method REPL invocation timeout",
+    "AcCount": 3,
+    "Ac": [
+      "Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements/generateDocument and 30 for sessionlog workflow methods completeTurn and beginTurn.",
+      "REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds.",
+      "client.SessionLog.SubmitAsync while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater; this does not raise completeTurn/beginTurn above 30s."
+    ]
+  },
+  {
+    "Id": "TR-MCP-PERSIST-003",
+    "Http": 200,
+    "Title": "Failsafe drain inspects errors without Write-Error Stop skip",
+    "AcCount": 3,
+    "Ac": [
+      "Failsafe drain on SubmitAsync timeout or 503 aborts without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted.",
+      "getFr returns before 30s when a queued session_submit 503s.",
+      "Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync is REPL_FAILSAFE_DRAIN_TIMEOUT default 120, or REPL_TIMEOUT when greater, never hardcoded 2."
+    ]
+  },
+  {
+    "Id": "TEST-MCP-195",
+    "Http": 200,
+    "Title": "",
+    "AcCount": 7,
+    "Ac": [
+      "Invoke-WorkflowAppendDialog for an existing current-turn does not call client.SessionLog.SubmitAsync and does call AppendDialogAsync or POST dialog.",
+      "Invoke-ReplPersistTurn on HTTP 503 backend_unavailable returns false, sets degraded/queued details, leaves failsafe, does not throw.",
+      "Failsafe drain on SubmitAsync timeout/503 aborts without drainAttempts increment, without ReplFailsafeDrainCompleted latch, without Failsafe queue drain failed on stderr, and a later drain replays.",
+      "getFr EXIT 0 with body before 30s when a queued session_submit 503s.",
+      "Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync returns REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater, never 2.",
+      "A failsafe SubmitAsync that succeeds within that budget is replayed and the yaml is removed.",
+      "Nested drain while ReplRawInFlight is set is deferred; getFr still EXIT 0 with body before 30s when a queued session_submit 503s."
+    ]
+  }
+]

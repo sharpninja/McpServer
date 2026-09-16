@@ -1,0 +1,11 @@
+{
+  "mdExists": true,
+  "mdOverallAgree": true,
+  "mdFailListNone": true,
+  "jsonOverallVerdict": "AGREE",
+  "jsonFailCount": 0,
+  "jsonPassCount": 24,
+  "jsonUnknownCount": 0,
+  "jsonP20NamesInPluginIntegrationTests": 0,
+  "jsonValidatorIdentity": "GrokSubagentHostile"
+}

@@ -1,0 +1,10 @@
+{
+  "credMdExists": true,
+  "credMdOverall": "AGREE",
+  "credJsonOverall": "AGREE",
+  "credJsonFailCount": 0,
+  "credTrxFileNotFoundCount": 6,
+  "credTrxFailed": "3",
+  "credTrxPassed": "0",
+  "credTrxMessage": true
+}

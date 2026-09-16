@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\hv-dotnet-nuke-filter.log",
+  "successful": true,
+  "failedBang": false,
+  "totalTests": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "totalTime": null,
+  "failedResultLines": 0,
+  "length": 1147,
+  "lastWriteTimeUtc": "2026-08-22T08:41:08.3327890Z"
+}

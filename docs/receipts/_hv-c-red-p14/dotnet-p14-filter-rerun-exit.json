@@ -1,0 +1,8 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --no-build --filter FullyQualifiedName~Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty",
+  "ExitCode": 1,
+  "DurationMs": 156947,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p14\\dotnet-p14-filter-rerun.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p14\\trx-p14-rerun\\p14-filter-rerun.trx",
+  "FinishedUtc": "2026-08-22T04:12:52.7784766Z"
+}

@@ -1,0 +1,51 @@
+type: result
+payload:
+  requestId: req-20260821T225425Z-d6a5
+  result:
+    id: MCP-PLUGINCORE-004
+    title: Repair plugin dialog parsing and add REPL degraded persistence
+    section: Plugin Core
+    priority: high
+    done: false
+    estimate: 4h
+    description:
+    - Repair the Claude Code appendDialog dictionary parsing silent no-op.
+    - Implement independent primary MCP and filesystem failsafe persistence strategies inside McpServer.Repl.Core.
+    - Keep plugins isolated from MCP Session Log degradation until terminal turn close reports the failsafe path.
+    - Propagate the canonical plugin parser fix and validate the Agent Help final-answer repair.
+    technicalDetails:
+    - 'Plugin source: plugins/core/lib-ps/repl-invoke.ps1'
+    - 'REPL source: src/McpServer.Repl.Core session-log persistence strategy and dispatcher surfaces'
+    - 'Plugin requirements: FR-MCP-PLUGINCORE-004, TR-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-004'
+    - 'REPL requirements: FR-MCP-REPL-009, TR-MCP-REPL-010, TEST-MCP-REPL-025'
+    implementationTasks:
+    - task: Add red plugin tests for dictionary-backed dialog parsing and fail-closed empty payloads.
+      done: false
+    - task: Implement and validate the canonical PowerShell plugin parser fix.
+      done: false
+    - task: Add red REPL tests for independently mockable primary and failsafe persistence strategies.
+      done: false
+    - task: Add red workflow and dispatcher tests for non-terminal isolation and terminal degraded-path notification.
+      done: false
+    - task: Implement REPL persistence strategies, atomic V4-scoped recovery artifacts, and failover coordination.
+      done: false
+    - task: Run current and prior plugin and McpServer.Repl.Core suites with zero failures and zero skips.
+      done: false
+    - task: Sync canonical plugin core to every official plugin distribution and verify checksums.
+      done: false
+    - task: Validate the existing Agent Help final-answer fix with focused tests, deployment, and live replay.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): plugin core CompleteTurn/current-turn.yaml/degraded persistence code exists. FR-MCP-PLUGINCORE-004 and FR-MCP-REPL-009 still pending. Remaining: dialog parsing reliability and REPL degraded persistence closeout with tests. Do not store-close.'
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-PLUGINCORE-004
+    - FR-MCP-REPL-009
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PLUGINCORE-004
+    - TR-MCP-REPL-010
+    - TR-MCP-PERSIST-003
+    - TR-MCP-REPL-012
+  deprecated: true
+
+---

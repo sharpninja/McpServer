@@ -1,0 +1,1818 @@
+type: result
+payload:
+  requestId: req-20260821T230247Z-1e23
+  result:
+    totalCount: 18
+    limit: 20
+    offset: 0
+    items:
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T224147Z-b5-green
+      title: Hostile B5 green gate PLAN-PLUGINHANDOFF-001 Phase B
+      model: grok-4-1-fast
+      started: 2026-08-21T23:00:59.3103794+00:00
+      lastUpdated: 2026-08-21T23:01:15.4128035+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T224147Z-001-phase-b5-green-gate
+        timestamp: 2026-08-21T23:01:15.4128035+00:00
+        queryText: Independent hostile validation of PLAN-PLUGINHANDOFF-001 Phase B5 green gate claims for plugin core dialog parse, REPL degraded persistence, drain timeout, V4 failsafe path, and SyncAgentPlugins checksums.
+        queryTitle: Hostile B5 green gate Phase B
+        response: Hostile B5 review recorded. Receipt docs/receipts/hostile-validator-20260821T224147Z.md. Verdict written after remaining Compile finish and sessionlog_query proof.
+        interpretation: Validate Phase B3+B4 green claims for B5 AGREE so Phase C may start. Do not implement.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Verified health nonce echo and marker signature True
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Confirmed B2 OverallVerdict AGREE on disk
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\docs\receipts\hostile-validator-20260821T220115Z.md
+        - order: 4
+          description: Re-ran coordinator isolation tests 7/0/0
+          type: test
+          status: completed
+          filePath: tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs
+        - order: 5
+          description: Re-ran checksum test 1/0/0 and hashed official plugin libs mismatchCount=0
+          type: test
+          status: completed
+          filePath: tests/Build.Tests/SyncAgentPluginsChecksumTests.cs
+        - order: 6
+          description: Chose to treat cited Test 165 as real and independently re-run named gates rather than trust chat
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-4-1-fast
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGINCORE-004
+        - B5
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - plugins/core/lib-ps/repl-invoke.ps1
+        - src/McpServer.Repl.Core/ReplCommandDispatcher.cs
+        processingDialog:
+        - timestamp: 2026-08-21T23:00:44.7349443+00:00
+          role: model
+          content: add-profile executed. 18 non-skill profile files read. Work class 1. Surfaces A+B+C+D apply.
+          category: observation
+        - timestamp: 2026-08-21T23:00:44.7349443+00:00
+          role: model
+          content: 'Decision: score B5 on independently re-run tests and live store, not implementer chat. Consequence: AGREE only if A+B+C+D all PASS. Alternatives rejected: trusting cited logs without re-run; treating markdown projection as store.'
+          category: decision
+        - timestamp: 2026-08-21T23:00:44.7349443+00:00
+          role: model
+          content: B2 receipt OverallVerdict AGREE still on disk. Drain return 2 absent. Get-McpFailsafeDir V4 pending path. Copy-CoreFile Copy-Item. Coordinator tests 7/0/0. Checksum 1/0/0. Persist reuse 13/0/0. Focused Pester 6/0/0. Full Pester 124/0/0. Repl.Core 847/0/0. TODOs PLAN and PLUGINCORE Done=false.
+          category: observation
+        designDecisions:
+        - Score B5 from independently re-run tests and live MCP store, not implementer narrative.
+        - Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGINCORE-004 done from this review; that is parent duty after AGREE.
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T215535Z-b2-red
+      title: Hostile B2 red-test gate PLAN-PLUGINHANDOFF-001
+      model: grok-4.6
+      started: 2026-08-21T21:56:21.7443775+00:00
+      lastUpdated: 2026-08-21T22:03:20.6279003+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T215535Z-001-phase-b2-red-test-gate
+        timestamp: 2026-08-21T22:03:20.6279003+00:00
+        queryText: Class 1 Phase B2 red-test gate for PLAN-PLUGINHANDOFF-001. Review only. Do not implement. AGREE only if remaining unsatisfied AC have currently failing new tests.
+        queryTitle: Hostile B2 red-test gate PLUGINHANDOFF
+        response: 'OverallVerdict AGREE. Receipt docs/receipts/hostile-validator-20260821T220115Z.md. Remaining unsatisfied Phase B ACs have failing new tests. Drain still return 2. Two residuals: Coordinator_AppendActions green; nested-drain green. B3 may start. Do not mark PLAN or MCP-PLUGINCORE-004 done.'
+        interpretation: 'Class 1 Phase B2 red-test gate: AGREE only if remaining unsatisfied Phase B ACs have currently failing new tests and existing greens were not relabeled.'
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Read add-profile skill and 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\claude\profile
+        - order: 2
+          description: Read PLAN-PLUGINHANDOFF-001 Phase B and prior A6 receipt
+          type: read
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - order: 3
+          description: Grep and read B1 named tests and product drain/failsafe/dispatcher
+          type: read
+          status: completed
+          filePath: plugins/core/lib-ps/repl-invoke.ps1
+        - order: 4
+          description: Run focused Coordinator, checksum, existing green, and Pester filters
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-b2-20260821T215535Z
+        - order: 5
+          description: GET Phase B FR/TR/TEST AC and todo_get PLAN-PLUGINHANDOFF-001
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-b2-20260821T215535Z/req-summary.json
+        - order: 6
+          description: Write hostile B2 receipt md and json twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T220115Z.md
+        - order: 7
+          description: B2 red-test gate AGREE; B3 may start; do not mark PLAN or PLUGINCORE done
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T220115Z.md
+        model: grok-4.6
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - B2
+        - red-test-gate
+        - FR-MCP-REPL-009
+        - FR-MCP-PLUGINCORE-004
+        - TEST-MCP-195
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - docs/receipts/hostile-validator-20260821T213854Z.md
+        - plugins/core/lib-ps/repl-invoke.ps1
+        - tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T21:55:35.0000000+00:00
+          role: model
+          content: Opened hostile B2 red-test gate. Profile loaded 18 non-skill files. Health nonce 632c3fbec35648738c30b81ee6f7f630 echoed. Marker signature True. Session opened created=true turnId 42774.
+          category: observation
+        - timestamp: 2026-08-21T21:56:40.0000000+00:00
+          role: model
+          content: Phase B new tests exist on disk. Product drain still return 2. Get-McpFailsafeDir still Join-Path cache failsafe. Dispatcher uses persistence strategy only on PersistTurn. Git shows test files plus Pester +129, no src product diffs.
+          category: observation
+        - timestamp: 2026-08-21T22:01:15.0000000+00:00
+          role: model
+          content: 'B2 gate verdict AGREE. Remaining unsatisfied Phase B ACs have currently failing new tests. Existing greens were not relabeled. Drain still return 2. Two residuals: Coordinator_AppendActions already green; nested-drain already green.'
+          category: decision
+        designDecisions:
+        - 'B2 AGREE is AC-level: remaining unsatisfied Phase B ACs have currently failing new tests even though Coordinator_AppendActions and nested-drain new tests are already green.'
+        - Do not treat Coordinator_AppendActions green as isolation complete; dispatcher returns result without failsafe PersistAsync.
+        - B3 may start. Do not mark PLAN-PLUGINHANDOFF-001, MCP-PLUGINCORE-004, or B2/B5 done on this receipt.
+        requirementsDiscovered:
+        - FR-MCP-REPL-009
+        - FR-MCP-PLUGINCORE-004
+        - FR-MCP-172
+        - TEST-MCP-195
+        - TR-MCP-REPL-012
+        - TR-MCP-PERSIST-003
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T220115Z.md
+        - docs/receipts/hostile-validator-20260821T220115Z.json
+        - docs/receipts/_hv-b2-20260821T215535Z/health.txt
+        - docs/receipts/_hv-b2-20260821T215535Z/dotnet-coordinator.txt
+        - docs/receipts/_hv-b2-20260821T215535Z/pester-b1-new.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T213854Z-a6-reqs
+      title: Hostile A6 requirements gate re-GET PLAN-PLUGINHANDOFF-001
+      model: grok-4
+      started: 2026-08-21T21:40:47.6159974+00:00
+      lastUpdated: 2026-08-21T21:45:08.2822878+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T213854Z-001-phase-a-a6-reqs-gate
+        timestamp: 2026-08-21T21:45:08.2822878+00:00
+        queryText: Class 1 Phase A A6 requirements gate for PLAN-PLUGINHANDOFF-001. Review only. Re-GET live store. AGREE only if ALL PASS against prior DISAGREE docs/receipts/hostile-validator-20260821T212702Z.md.
+        queryTitle: Hostile A6 requirements gate re-GET
+        response: OverallVerdict AGREE. Receipt docs/receipts/hostile-validator-20260821T213854Z.md. PASS 16 FAIL 0 UNKNOWN 0. Prior placeholder, empty FR-MCP-172 AC, unlinked HOSTILEREVIEW/HYGIENE arrays, and missing drain IDs on PLUGINCORE-004/BUG-TRIAGE-170 are closed on live GET. Drain still return 2. PLAN Done=false. Residual stale Remaining text on two child TODOs is not a FAIL. Phase B red tests may start. Do not mark PLAN or children done on this receipt.
+        interpretation: Independent Class 1 Phase A A6 re-GET of live requirements and TODO store against prior DISAGREE 20260821T212702Z. AGREE only if all prior FAILs closed and A+B+C+D pass.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Live GET /health nonce echo and Test-MarkerSignature
+          type: web_reference
+          status: completed
+          filePath: docs/receipts/_hv-a6-20260821T213854Z/health-meta.json
+        - order: 2
+          description: Live GET /mcpserver/requirements fr/tr/test/mapping by id
+          type: web_reference
+          status: completed
+          filePath: docs/receipts/_hv-a6-20260821T213854Z/summary.tsv
+        - order: 3
+          description: Live todo_get PLAN HOSTILEREVIEW HYGIENE WIKIEXPORT PLUGINCORE-004 BUG-TRIAGE-170
+          type: web_reference
+          status: completed
+          filePath: docs/receipts/_hv-a6-20260821T213854Z/todo-link-summary.tsv
+        - order: 4
+          description: Wrote hostile A6 AGREE receipt markdown
+          type: edit
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T213854Z.md
+        - order: 5
+          description: Wrote hostile A6 AGREE receipt json twin
+          type: edit
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T213854Z.json
+        - order: 6
+          description: 'AGREE Phase A A6: prior placeholder/unlink/empty-AC FAILs closed on live GET; residual Remaining text is not unlink'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        tags:
+        - PLAN-PLUGINHANDOFF-001
+        - hostile-validator
+        - phase-a
+        - A6
+        - AGREE
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - docs/receipts/hostile-validator-20260821T212702Z.md
+        - docs/receipts/_hv-a6-20260821T213854Z/
+        processingDialog:
+        - timestamp: 2026-08-21T21:38:54.0000000+00:00
+          role: system
+          content: Health nonce fecdc27482a544d8b7c79c421cdbbb72 echoed. Marker signature True. Storage reachable. Collector docs/receipts/_hv-a6-20260821T213854Z.
+          category: observation
+        - timestamp: 2026-08-21T21:39:20.0000000+00:00
+          role: model
+          content: 'Live GET: new FR/TR Placeholder=false. FR-MCP-HOSTILEREVIEW-001 title Enqueue bounded hostile review request. TR bodies schema/storage distinct. FR-MCP-172 AC count 4. TEST-MCP-195 AC count 7. TR-MCP-REPL-012 AC3 present. Drain return 2 at repl-invoke.ps1:602.'
+          category: observation
+        - timestamp: 2026-08-21T21:40:10.0000000+00:00
+          role: model
+          content: 'todo_get: PLAN Done=false FrCount=25 TrCount=30. HOSTILEREVIEW FR/TR 6/6. HYGIENE 5/5. PLUGINCORE-004 includes FR-MCP-172 TR-MCP-PERSIST-003 TR-MCP-REPL-012. BUG-TRIAGE-170 includes FR-MCP-172 TR-MCP-PERSIST-003 TR-MCP-REPL-012. Tasks 3-8 A1-A6 still Done=false.'
+          category: observation
+        - timestamp: 2026-08-21T21:41:00.0000000+00:00
+          role: model
+          content: 'Conclusion: prior DISAGREE FAILs are closed on live store. Residual HOSTILEREVIEW/HYGIENE Remaining still says no FR/TR family but arrays are linked; not A6 DoD. OverallVerdict AGREE. Consequence: Phase B red tests may start. Do not mark PLAN or children done on this receipt.'
+          category: decision
+        designDecisions:
+        - 'AGREE on Phase A A6 because live GET shows non-placeholder FR/TR, TR schema/storage distinct from FR, TEST named tests, FR-MCP-172 AC4, child TODO arrays 6/6 and 5/5, drain IDs on PLUGINCORE-004 and BUG-TRIAGE-170, TEST-MCP-195 AC1-7 and TR-MCP-REPL-012 AC3 present, drain still return 2, PLAN Done=false. Consequence: Phase B red tests may start. Do not mark PLAN or children done:true on this receipt.'
+        - 'Residual HOSTILEREVIEW-001 and HYGIENE-002 Remaining still say no FR/TR family. Judgment: arrays are the A2/A3 link surface; Remaining is stale HEAD text and is not a FAIL of A6 DoD. Consequence: optional later Remaining rewrite; does not block Phase B.'
+        requirementsDiscovered:
+        - FR-MCP-HOSTILEREVIEW-001
+        - FR-MCP-HYGIENE-001
+        - FR-MCP-WIKIEXPORT-003
+        - FR-MCP-172
+        - TR-MCP-PERSIST-003
+        - TR-MCP-REPL-012
+        - TEST-MCP-195
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T213854Z.md
+        - docs/receipts/hostile-validator-20260821T213854Z.json
+        - docs/receipts/_hv-a6-reget-collect.ps1
+        - docs/receipts/_hv-a6-extract-plan-todo.ps1
+        - docs/receipts/_hv-a6-collect-todos.ps1
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T211938Z-a6-reqs
+      title: Hostile A6 Phase A requirements gate PLAN-PLUGINHANDOFF-001
+      model: grok-4
+      started: 2026-08-21T21:20:28.0518387+00:00
+      lastUpdated: 2026-08-21T21:30:03.2581507+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T211938Z-001-phase-a-requirements-gate
+        timestamp: 2026-08-21T21:30:03.2581507+00:00
+        queryText: Class 1 Phase A requirements gate (PLAN-PLUGINHANDOFF-001 A6). Surfaces A+B+C+D. Review only. Attack claims about HOSTILEREVIEW/HYGIENE/WIKIEXPORT families, WIKIEXPORT TODO relink, TEST-MCP-195 AC5-7, previously empty AC hydration, no product implementation, PLAN done=false.
+        queryTitle: Hostile A6 Phase A requirements gate
+        response: OverallVerdict DISAGREE. Receipt docs/receipts/hostile-validator-20260821T212702Z.md. 10 PASS, 8 FAIL, 0 UNKNOWN. Do not start Phase B. Do not mark PLAN task 8 or child TODOs done.
+        interpretation: Class 1 Phase A A6 gate. Attack claimed new FR/TR/TEST families, WIKIEXPORT relink, drain AC, previously empty AC, no product impl, PLAN done=false, plus B/C/D.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Live GET /health nonce 15c3ffbfc3e74c2a8b87da8242ae0601 echoed Healthy
+          type: web_reference
+          status: completed
+        - order: 2
+          description: Live GET /mcpserver/requirements fr/tr/test/mapping for HOSTILEREVIEW HYGIENE WIKIEXPORT drain and existing families
+          type: web_reference
+          status: completed
+          filePath: docs/receipts/_hv-a6-20260821T211938Z/summary.tsv
+        - order: 3
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 MCP-WIKIEXPORT-001 MCP-HOSTILEREVIEW-001 MCP-WORKSPACEHYGIENE-002 MCP-PLUGINCORE-004 BUG-TRIAGE-170
+          type: web_reference
+          status: completed
+        - order: 4
+          description: Hostile A6 receipt markdown
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T212702Z.md
+        - order: 5
+          description: Hostile A6 receipt json twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T212702Z.json
+        - order: 6
+          description: 'OverallVerdict DISAGREE: placeholder FR/TR bodies, empty FR-MCP-172 AC, unlinked HOSTILEREVIEW/HYGIENE TODOs, A5 child links missing'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T212702Z.md
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - A6
+        - DISAGREE
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - docs/receipts/_hv-a6-20260821T211938Z/summary.tsv
+        - docs/receipts/hostile-validator-20260821T212702Z.md
+        processingDialog:
+        - timestamp: 2026-08-21T21:20:46.7035878+00:00
+          role: assistant
+          content: 'Opened hostile A6 review session. add-profile completed (18 non-skill profile files). Class 1 project implementation Phase A requirements gate. Live todo_get PLAN-PLUGINHANDOFF-001 Done=false. MCP-WIKIEXPORT-001 FR 003-005. HOSTILEREVIEW and HYGIENE TODOs still have null FunctionalRequirements arrays. Next: live GET fr/tr/test/mapping.'
+        - timestamp: 2026-08-21T21:27:02.0000000+00:00
+          role: assistant
+          content: Verdict DISAGREE on Phase A A6. New FR/TR IDs exist with 1:1 mappings and AC arrays, but 28 FR+TR bodies remain Placeholder requirement backfilled. FR-MCP-172 structured AC empty. HOSTILEREVIEW and HYGIENE TODOs unlinked. A5 drain not linked to PLUGINCORE-004 or BUG-TRIAGE-170. Drain still return 2 is acceptable for this phase. Do not start Phase B.
+          category: decision
+        - timestamp: 2026-08-21T21:27:02.0000000+00:00
+          role: assistant
+          content: Live GET health nonce 15c3ffbfc3e74c2a8b87da8242ae0601 echoed. TEST-MCP-195 AC count 7. TR-MCP-REPL-012 AC3 present. MCP-WIKIEXPORT-001 relinked to 003-005. PLAN Done=false. Tasks 3-8 false.
+          category: observation
+        designDecisions:
+        - 'Phase A A6 inadequate: placeholder FR/TR bodies, empty FR-MCP-172 AC, unlinked HOSTILEREVIEW/HYGIENE TODOs, A5 child links missing. Consequence: DISAGREE; do not start Phase B.'
+        - 'ID-level 1:1 mappings are not enough when FR/TR bodies remain auto-backfill placeholders. Consequence: claim 1 FAIL. Alternative rejected: pass on IDs only.'
+        requirementsDiscovered:
+        - FR-MCP-HOSTILEREVIEW-001
+        - FR-MCP-HYGIENE-001
+        - FR-MCP-WIKIEXPORT-003
+        - FR-MCP-172
+        - TEST-MCP-195
+        - TR-MCP-REPL-012
+        - TR-MCP-PERSIST-003
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T212702Z.md
+        - docs/receipts/hostile-validator-20260821T212702Z.json
+        blockers:
+        - 'Phase A A6 DoD not met: placeholder FR/TR bodies, empty FR-MCP-172 AC, unlinked HOSTILEREVIEW/HYGIENE TODOs, A5 child links missing'
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T205114Z-p0b-fidelity-r2
+      title: Hostile P0-B TODO fidelity re-review PLAN-PLUGINHANDOFF-001
+      model: grok-4
+      started: 2026-08-21T20:51:40.8868887+00:00
+      lastUpdated: 2026-08-21T20:57:53.9599482+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T205114Z-001-hostile-p0b-todo-fidelity
+        timestamp: 2026-08-21T20:57:53.9599482+00:00
+        queryText: Class 1 P0-B TODO fidelity. Surfaces A+B+C+D. Review only. Prior DISAGREE docs/receipts/hostile-validator-20260821T204434Z.md FAIL A3 task 21 missing Validate_InvalidFields_ProduceFieldDiagnostics; task 29 missing --dump backticks. FAIL D TechnicalRequirements missed TR-MCP-PLUGINCORE-005, TR-MCP-REPL-011, TR-MCP-REPL-013. Implementer claims those are now patched on live PLAN-PLUGINHANDOFF-001. Re-run todo_get. Compare implementationTasks to plan section 18. Confirm TR array includes the three IDs. Confirm description still full plan. done=false. No product implementation. Write NEW receipt. AGREE only if ALL PASS.
+        queryTitle: Hostile P0-B TODO fidelity re-review
+        response: OverallVerdict AGREE. Prior A3 and D FAILs are gone on live todo_get after audit v2 2026-08-21T20:48:45Z. TaskDiffs empty (31/31). TR unique 30 includes the three IDs. Description join equals plan 68485 chars. Done=false. No product start. Receipt docs/receipts/hostile-validator-20260821T205114Z.md. This AGREE authorizes Phase A requirements only.
+        interpretation: Re-verify live PLAN-PLUGINHANDOFF-001 after claimed patch of prior P0-B DISAGREE. Class 1 fidelity only. AGREE only if A3 task strings match section 18, TR array includes PLUGINCORE-005 REPL-011 REPL-013, Description is the full plan, Done=false, and no product implementation.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile markdown files plus add-profile and hostile-validator skills'
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 Done=false Description 773 lines 19 sections
+          type: read
+          status: completed
+          filePath: None
+        - order: 3
+          description: todo_audit v1 created 20:36:37Z v2 updated 20:48:45Z patched tasks 21 and 29 plus three TRs
+          type: read
+          status: completed
+          filePath: None
+        - order: 4
+          description: OverallVerdict AGREE. Prior A3 and D FAILs patched. No product implementation.
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T205114Z.md
+        - order: 5
+          description: Wrote P0-B re-review receipt and JSON twin plus collector compare/scan
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T205114Z.md
+        model: grok-4
+        tags:
+        - hostile-validator
+        - P0-B
+        - PLAN-PLUGINHANDOFF-001
+        - fidelity
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - docs/receipts/hostile-validator-20260821T204434Z.md
+        - docs/receipts/hostile-validator-20260821T203017Z.md
+        processingDialog:
+        - timestamp: 2026-08-21T20:51:14.0000000+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile files. Health nonce bcae718d4fef4486962cde2915d1c9cd echoed. Live todo_get PLAN-PLUGINHANDOFF-001 Done=false.'
+          category: observation
+        - timestamp: 2026-08-21T20:52:30.0000000+00:00
+          role: model
+          content: Audit v2 2026-08-21T20:48:45.9510484Z updated after prior DISAGREE 20:44:34Z. TaskDiffs empty. TR unique 30 includes PLUGINCORE-005 REPL-011 REPL-013. Description join equals plan 68485 chars.
+          category: observation
+        - timestamp: 2026-08-21T20:53:30.0000000+00:00
+          role: model
+          content: Verdict AGREE. Prior A3 and D FAILs are patched on the live TODO. No product implementation. Phase A requirements are next, not product tests.
+          category: decision
+        - timestamp: 2026-08-21T20:54:00.0000000+00:00
+          role: model
+          content: FR-MCP-WIKIEXPORT-001 omission from master FR array remains residual per decision 15, not FAIL. Naive TR-AUDIT regex hit is not a plan-union miss.
+          category: decision
+        designDecisions:
+        - 'AGREE because live ImplementationTasks match section 18 including task 21 named test and task 29 dump backticks, and TechnicalRequirements set-equals the 30-ID union including the three previously missing TRs. Consequence: Phase A requirements capture may start; product tests and implementation stay blocked until A6 then B2 hostile AGREE.'
+        - 'FR-MCP-WIKIEXPORT-001 remains omitted from the master FR array. Consequence: residual per locked decision 15 (remaining work is 003-005), not a P0-B FAIL.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T205114Z.md
+        - docs/receipts/hostile-validator-20260821T205114Z.json
+        - docs/receipts/_hv-p0b-20260821-r2/compare.json
+        - docs/receipts/_hv-p0b-20260821-r2/scan.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T204434Z-p0b-fidelity
+      title: Hostile P0-B TODO fidelity PLAN-PLUGINHANDOFF-001
+      model: grok-4
+      started: 2026-08-21T20:44:48.6257291+00:00
+      lastUpdated: 2026-08-21T20:46:53.7558696+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T204434Z-001-hostile-p0b-todo-fidelity
+        timestamp: 2026-08-21T20:46:53.7558696+00:00
+        queryText: Class 1 P0-B TODO fidelity. Surfaces A+B+C+D. Attack whether PLAN-PLUGINHANDOFF-001 faithfully contains the approved plan.
+        queryTitle: Hostile P0-B TODO fidelity vs approved plan
+        response: OverallVerdict DISAGREE. Description is a full plan copy. ImplementationTasks task 21 omits Validate_InvalidFields_ProduceFieldDiagnostics. TechnicalRequirements missing TR-MCP-PLUGINCORE-005, TR-MCP-REPL-011, TR-MCP-REPL-013. Receipt docs/receipts/hostile-validator-20260821T204434Z.md.
+        interpretation: P0-B is fidelity of live TODO payload vs approved plan files. Not an implementation-done claim.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: OverallVerdict DISAGREE on P0-B TODO fidelity. A3 and D FAIL.
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T204434Z.md
+        - order: 2
+          description: Wrote hostile markdown receipt.
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T204434Z.md
+        - order: 3
+          description: Wrote hostile JSON twin.
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T204434Z.json
+        - order: 4
+          description: Compared live todo_get payload to plan SHA256 7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E.
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-4
+        tags:
+        - hostile-validator
+        - P0-B
+        - PLAN-PLUGINHANDOFF-001
+        - DISAGREE
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - docs/receipts/hostile-validator-20260821T203017Z.md
+        - docs/receipts/hostile-validator-20260821T204434Z.md
+        - AGENTS.md
+        processingDialog:
+        - timestamp: 2026-08-21T20:44:34.0000000+00:00
+          role: model
+          content: 'add-profile first: 18 non-skill profile markdown files read in full.'
+          category: observation
+        - timestamp: 2026-08-21T20:44:50.0000000+00:00
+          role: model
+          content: 'P0-B fidelity: Description join equals plan.md (19 sections). DependsOn eight children. SHA256 match. Done=false. No product start.'
+          category: observation
+        - timestamp: 2026-08-21T20:45:10.0000000+00:00
+          role: model
+          content: 'FAIL A3: ImplementationTasks task 21 omits Validate_InvalidFields_ProduceFieldDiagnostics. Task 29 drops --dump backticks.'
+          category: decision
+        - timestamp: 2026-08-21T20:45:20.0000000+00:00
+          role: model
+          content: 'FAIL D: TechnicalRequirements missing TR-MCP-PLUGINCORE-005, TR-MCP-REPL-011, TR-MCP-REPL-013 versus plan union. OverallVerdict DISAGREE.'
+          category: decision
+        designDecisions:
+        - 'DISAGREE P0-B because ImplementationTasks is not a faithful section 18 copy and TechnicalRequirements is not the union of all plan TR IDs. Description join equality is not enough when section 14 structured fields are incomplete. Consequence: Phase A must not start until those two payload holes are fixed.'
+        - 'Do not FAIL missing FR-MCP-WIKIEXPORT-001/002 on the master array because decision 15 relinks remaining work to 003/004/005. Consequence: residual only.'
+        - 'Score no-product-start as PASS from git porcelain, greps, drain return 2, and child FR arrays still null. Consequence: A6 PASS does not salvage D/A3.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T204434Z.md
+        - docs/receipts/hostile-validator-20260821T204434Z.json
+        blockers:
+        - P0-B DISAGREE blocks Phase A until task 21 named test is restored on ImplementationTasks and TechnicalRequirements includes TR-MCP-PLUGINCORE-005, TR-MCP-REPL-011, TR-MCP-REPL-013.
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T202646Z-p0a-plan
+      title: Hostile P0-A D0 SecretInDraft inventory
+      model: grok-4
+      started: 2026-08-21T20:27:58.8274296+00:00
+      lastUpdated: 2026-08-21T20:32:33.3903851+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T202646Z-001-hostile-p0a-d0-secretindraft
+        timestamp: 2026-08-21T20:32:33.3903851+00:00
+        queryText: 'Class 1 P0-A Surfaces A+B+C+D. Re-grep tests/**/*Handoff*.cs Fact/Theory vs D0. Claims: D0 Audit includes IngestAsync_SecretInDraft_IsRedactedOnPersist; mechanical inventory zero missing except Dispose/Advance/SeedExisting; dual P0-A/P0-B remain; PLAN-PLUGINHANDOFF-001 not in store; 201813Z FAIL list closed. AGREE only if ALL PASS.'
+        queryTitle: Hostile P0-A D0 SecretInDraft inventory
+        response: OverallVerdict AGREE. D0 Audit line names SecretInDraft with six sibling audit facts. Mechanical tests/**/*Handoff*.cs Fact/Theory vs D0 is 113/113 missing 0. PLAN-PLUGINHANDOFF-001 not in store. Dual P0-A/P0-B remain. 201813Z FAIL list closed. Receipt docs/receipts/hostile-validator-20260821T203017Z.md. This AGREE does not create the PLAN TODO and does not start Phase A.
+        interpretation: Independent P0-A hostile validation of PLAN-PLUGINHANDOFF-001 draft after 201813Z DISAGREE. Attack claims that D0 Audit now names IngestAsync_SecretInDraft_IsRedactedOnPersist, that Handoff* Fact/Theory inventory vs D0 has zero missing methods, that dual P0-A/P0-B remain with PLAN TODO absent, and that the 201813Z FAIL list is closed. Surfaces B/C/D also apply.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: Read add-profile skill and 18 non-skill profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\claude\profile
+        - order: 2
+          description: Health GET /health with nonce f82551e85ed9474fa762ae76b2bd8406 echoed Healthy
+          type: test
+          status: completed
+          filePath: ''
+        - order: 3
+          description: 'Mechanical D0 vs tests/**/*Handoff*.cs Fact/Theory inventory: 113/113 missing 0'
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-p0a-d0-inventory.ps1
+        - order: 4
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 not found; eight child TODOs retrieved
+          type: todo
+          status: completed
+          filePath: ''
+        - order: 5
+          description: Wrote hostile receipt md and json twin with OverallVerdict AGREE
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T203017Z.md
+        - order: 6
+          description: 'Design decision: P0-A AGREE does not create PLAN-PLUGINHANDOFF-001 or start Phase A'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T203017Z.md
+        tags:
+        - hostile-validator
+        - p0-a
+        - handoff
+        - d0-inventory
+        - agree
+        contextList:
+        - docs/receipts/hostile-validator-20260821T201813Z.md
+        - C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T20:26:46.0000000+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile md files read in full; add-profile.grok.md excluded.'
+          category: observation
+        - timestamp: 2026-08-21T20:28:00.0000000+00:00
+          role: tool
+          content: 'D0 inventory pwsh: classified=113 d0Names=116 missing=0 secretOnAuditLine=True files=20. First parse missed Class.Method; rematch used leaf method names.'
+          category: tool_result
+        - timestamp: 2026-08-21T20:28:30.0000000+00:00
+          role: tool
+          content: todo_get PLAN-PLUGINHANDOFF-001 not found. Eight child TODOs retrieved. Health nonce f82551e85ed9474fa762ae76b2bd8406 echoed, status Healthy.
+          category: tool_result
+        - timestamp: 2026-08-21T20:30:17.0000000+00:00
+          role: model
+          content: 'Conclusion: D0 Audit names SecretInDraft; Handoff* Fact/Theory inventory is complete vs D0; 201813Z FAIL list closed; dual P0-A/P0-B remain. OverallVerdict AGREE for P0-A only.'
+          category: decision
+        designDecisions:
+        - 'P0-A OverallVerdict AGREE: D0 Audit names IngestAsync_SecretInDraft_IsRedactedOnPersist and Handoff* Fact/Theory inventory is 113/113 missing 0. Consequence: plan completeness gate is met; PLAN TODO create is still forbidden until operator approval then P0-B.'
+        - 'Class.Method D0 names (HandoffControllerTests.IngestAsync_DelegatesToSharedService, HandoffTodoDraftValidatorTests.Validate_InvalidFields_ProduceFieldDiagnostics) count as naming those methods. Consequence: a naive identifier-only backtick parse is not a FAIL of D0 completeness.'
+        - 'Wiki tables[] last name ProductWorkspaceMemberships has a trailing period; the plan text has 62/62 DbSets. Consequence: naive comma-split missing the last name is an extractor artifact, not a plan hole.'
+        - 201813Z FAIL list is closed by the SecretInDraft Audit-line edit. Residual MarkerPromptTemplate and UnknownSourceNotes AC-map gaps remain residuals, not FAIL.
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T203017Z.md
+        - docs/receipts/hostile-validator-20260821T203017Z.json
+        - docs/receipts/_hv-p0a-d0-inventory.ps1
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T201324Z-p0a-plan
+      title: Hostile P0-A plan completeness after 200636Z
+      model: grok-code
+      started: 2026-08-21T20:13:54.7465876+00:00
+      lastUpdated: 2026-08-21T20:21:22.6878812+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T201324Z-001-hostile-p0a-closed-fails
+        timestamp: 2026-08-21T20:21:22.6878812+00:00
+        queryText: Class 1 P0-A plan completeness. Surfaces A+B+C+D. Prior DISAGREE docs/receipts/hostile-validator-20260821T200636Z.md. Implementer claims those FAILs are closed by inlining all 21 HandoffIngestionServiceTests facts, AgentPool/one-shot redaction tests, PostgreSql_CleanDatabase_AppliesHandoffMigrationAndPersistsEntity, dropping AgentPool new-red, and rewriting section 18 task 21. AGREE only if ALL PASS. Prefer DISAGREE. Review only.
+        queryTitle: Hostile P0-A after 200636Z closed-FAIL claims
+        response: 'OverallVerdict DISAGREE. Named 200636Z omissions are in D0 or rewritten. FAIL class remains: D0 Audit omits IngestAsync_SecretInDraft_IsRedactedOnPersist. Receipt docs/receipts/hostile-validator-20260821T201813Z.md. PASS 8 FAIL 4 UNKNOWN 0. Do not create PLAN-PLUGINHANDOFF-001.'
+        interpretation: Class 1 P0-A plan completeness after 200636Z DISAGREE. Attack whether D0 named the six covering tests, AgentPool is reuse not a D1 new red, task 21 dropped FR-HANDOFF-003 field diagnostics as remaining reds, dual P0-A/P0-B remain with PLAN-PLUGINHANDOFF-001 absent, and the 200636Z FAIL list is closed. Surfaces A+B+C+D required.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: add-profile skill plus 18 non-skill profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\skills\add-profile\SKILL.md
+        - order: 2
+          description: GET /health?nonce=59813eb01c4b4ddbb53289d951ec89ca returned 200 Healthy and echoed nonce
+          type: http_request
+          status: completed
+          filePath: http://PAYTON-LEGION2:7147/health
+        - order: 3
+          description: Opened session GrokSubagentHostile-20260821T201324Z-p0a-plan created=true then beginTurn turnId 42724
+          type: mcp_call
+          status: completed
+          filePath: mcpserver__sessionlog_open
+        - order: 4
+          description: Re-read current plan.md D0 D1 section 18 and P0 gates; plan mtime 2026-08-21T20:11:55Z
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - order: 5
+          description: todo_get PLAN-PLUGINHANDOFF-001 not found; eight child TODOs retrieved
+          type: mcp_call
+          status: completed
+          filePath: mcpserver__todo_get
+        - order: 6
+          description: 'pwsh D0 vs *Handoff*.cs inventory: 112 present 1 missing SecretInDraft; D1 three new-red names zero on disk'
+          type: command
+          status: completed
+          filePath: tests
+        - order: 7
+          description: Wrote hostile receipt md plus json twin OverallVerdict DISAGREE
+          type: write
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T201813Z.md
+        tags:
+        - hostile-validator
+        - P0-A
+        - DISAGREE
+        - PLAN-PLUGINHANDOFF-001
+        - TEST-HANDOFF-007
+        contextList:
+        - C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - docs/receipts/hostile-validator-20260821T200636Z.md
+        - docs/Project/Testing-Requirements.md
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T20:14:54.2842836+00:00
+          role: model
+          content: Session opened created=true. beginTurn turnId 42724 in_progress. Health GET /health?nonce=59813eb01c4b4ddbb53289d951ec89ca returned 200 Healthy and echoed nonce. PLAN-PLUGINHANDOFF-001 not found. Plan LastWriteTimeUtc 2026-08-21T20:11:55Z after prior receipt 20:06:36Z. D0 line 437 inlines 21 ingestion facts including UnknownSourceNotes, ExtractorCancelled, ArtifactSource. Lines 438-439 name AgentPool/one-shot and PostgreSql empty-db tests. D1 line 463 forbids AgentPool_DoesNotRetain as new red.
+          category: observation
+        - timestamp: 2026-08-21T20:14:54.2842843+00:00
+          role: model
+          content: HandoffAuditDefectTests has IngestAsync_SecretInDraft_IsRedactedOnPersist at Services/HandoffAuditDefectTests.cs. D0 audit line 442 lists six audit facts and omits SecretInDraft. SecretInDraft appears only in TEST-HANDOFF-007 AC2 map line 485. D0 contract line 427 still requires complete Handoff* inventory.
+          category: observation
+        - timestamp: 2026-08-21T20:14:54.2842845+00:00
+          role: model
+          content: Default A-expand and 200636Z FAIL-class closure to FAIL until a mechanical tests/ vs D0 name diff proves completeness. Prefer DISAGREE. Do not treat AC-map presence as D0 inventory.
+          category: decision
+        - timestamp: 2026-08-21T20:21:10.0353002+00:00
+          role: model
+          content: OverallVerdict DISAGREE. Named 200636Z items closed. FAIL class remains because D0 Audit omits IngestAsync_SecretInDraft_IsRedactedOnPersist. Receipt docs/receipts/hostile-validator-20260821T201813Z.md.
+          category: decision
+        - timestamp: 2026-08-21T20:21:10.0353005+00:00
+          role: model
+          content: Receipt files on disk MD_LEN=14210 JS_LEN=5450 JS_VERDICT=DISAGREE JS_FAILCOUNT=4. Session actions replaced=true.
+          category: observation
+        designDecisions:
+        - 'Named 200636Z omissions can PASS while the 200636Z FAIL class stays FAIL: D0 contract and 200636Z A6 required a complete Handoff* inventory. Consequence: OverallVerdict DISAGREE; do not create PLAN-PLUGINHANDOFF-001. Affected TEST-HANDOFF-007 / FR-HANDOFF-006.'
+        - 'AgentPool_DoesNotRetain is reuse not a remaining red: D1 new-red list is three names and line 463 forbids the AgentPool new-red. Consequence: claim 2 PASS; does not save D0 completeness. Affected FR-HANDOFF-002.'
+        - 'Surface C PASS this pass: 200636Z C holes (UnknownSourceNotes zero hits; AgentPool unmapped vs invented D1 name) are now D0 reuse. Residual AC-map omission of UnknownSourceNotes is not FAIL. Affected TEST-HANDOFF-001..007.'
+        - 'Prefer DISAGREE on one omitted D0 audit fact: same class as listed-previously. D0 Audit lists six of seven HandoffAuditDefectTests facts. Consequence: A5 A-expand B1 D FAIL; AGREE blocked. Affected TEST-HANDOFF-007.'
+        requirementsDiscovered:
+        - TEST-HANDOFF-007
+        - FR-HANDOFF-006
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T201813Z.md
+        - docs/receipts/hostile-validator-20260821T201813Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T195919Z-p0a-plan
+      title: Hostile P0-A D0/D1 Handoff inventory validation
+      model: grok-4
+      started: 2026-08-21T19:59:35.9526449+00:00
+      lastUpdated: 2026-08-21T20:09:38.2489754+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T195919Z-001-hostile-p0a-d0-d1-claims
+        timestamp: 2026-08-21T20:09:38.2489754+00:00
+        queryText: Hostile validate PLAN-PLUGINHANDOFF-001 P0-A after implementer claimed 173914Z FAILs closed by rewriting D0 as complete Handoff test inventory and mapping TEST-HANDOFF AC to covering methods. Attack D0 completeness, TEST-HANDOFF-004/006 maps, D1 four new reds, dual P0-A/P0-B, PLAN TODO absence, and 173914Z FAIL closure.
+        queryTitle: Hostile P0-A D0 D1 inventory claims
+        response: OverallVerdict DISAGREE. Receipt docs/receipts/hostile-validator-20260821T200636Z.md. PASS 10 FAIL 5 UNKNOWN 0. 173914Z named covering tests are now in D0/map; D0 remaining-gap inventory is still incomplete (3 ingestion facts and AgentPool/Publish/PostgreSql_CleanDatabase tests missing; task 21 still lists FR-HANDOFF-003 field diagnostics as a D1 remaining red). Dual P0-A/P0-B remain. PLAN-PLUGINHANDOFF-001 not in store.
+        interpretation: Independent P0-A hostile review of whether 173914Z FAILs are closed by D0 rewrite and TEST-HANDOFF AC remapping.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: 'add-profile: read 18 non-skill profile markdown files under C:\Users\kingd\.claude\profile'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Live todo_get eight children plus PLAN-PLUGINHANDOFF-001 not found; health nonce 68fc152acf124eb999750c0394c30945 echoed
+          type: edit
+          status: completed
+          filePath: AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Compared D0/D1 plan.md substrings to on-disk Handoff Fact/Theory names; 3 of 21 ingestion facts absent from plan; four D1 names ZERO on disk
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - order: 4
+          description: Wrote hostile receipt markdown
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T200636Z.md
+        - order: 5
+          description: Wrote hostile receipt JSON twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T200636Z.json
+        - order: 6
+          description: 'Decision: DISAGREE P0-A. 173914Z named covering tests closed; D0 complete-inventory FAIL class remains. Do not create PLAN-PLUGINHANDOFF-001.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T200636Z.md
+        tags:
+        - hostile-validator
+        - P0-A
+        - PLAN-PLUGINHANDOFF-001
+        - TEST-HANDOFF-004
+        - TEST-HANDOFF-006
+        - DISAGREE
+        contextList:
+        - C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - docs/receipts/hostile-validator-20260821T173914Z.md
+        - docs/Project/Testing-Requirements.md
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffTodoDraftValidatorTests.cs
+        - tests/McpServer.Support.Mcp.Tests/Controllers/HandoffControllerTests.cs
+        - tests/McpServer.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T19:59:19.0000000+00:00
+          role: model
+          content: 'Hostile P0-A review started. add-profile executed: 18 non-skill profile markdown files. Session opened. PLAN-PLUGINHANDOFF-001 not in store. Default FAIL until D0 vs on-disk Handoff* methods, TEST-HANDOFF AC map, D1 four names, and 173914Z FAIL closure are re-proven.'
+          category: reasoning
+        - timestamp: 2026-08-21T20:06:36.0000000+00:00
+          role: model
+          content: 'Observation: 173914Z named covering tests GetAndApprove, Validate_InvalidFields, PublicSurfaces, Dispatcher are now in D0 and TEST-HANDOFF-004/006 maps. D1 HandoffDraft_Invalid* new reds are gone. Four claimed D1 names have zero tests/ matches. PLAN-PLUGINHANDOFF-001 is still not in store.'
+          category: observation
+        - timestamp: 2026-08-21T20:06:36.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict DISAGREE. The 173914Z FAIL class (D0 remaining-gap inventory incomplete against on-disk covering tests) is not closed. D0 says complete Handoff* inventory but uses dangling listed previously and omits UnknownSourceNotes, ExtractorCancelled, ArtifactSource, AgentPool/Publish redaction greens, and PostgreSql_CleanDatabase Handoff persist. Task 21 still lists FR-HANDOFF-003 field diagnostics as a D1 remaining red. Consequence: do not create PLAN-PLUGINHANDOFF-001; do not treat P0-A as AGREE.'
+          category: decision
+        designDecisions:
+        - 'DISAGREE P0-A: 173914Z named covering tests (GetAndApprove, Validate_InvalidFields, PublicSurfaces, Dispatcher) are in D0/map, but the FAIL class remaining-gap inventory incomplete is not closed. Consequence: no PLAN-PLUGINHANDOFF-001 create, no P0-A AGREE.'
+        - D0 complete-inventory contract is the gate, not the including-clause for four names. Dangling listed previously plus three missing HandoffIngestionServiceTests facts is enough to FAIL B1/C/D.
+        - AgentPool_DoesNotRetainRawHandoffSourceInPromptState cannot be treated as a remaining-gap red until D0 classifies EnqueueOneShotAsync_HandoffContext_ExecutorGetsRawPromptAndSurfacesStayRedacted and Publish_HandoffContext_RedactsRawSource. Those greens lock executor-gets-raw plus surface redaction.
+        - Task 21 still listing FR-HANDOFF-003 field diagnostics as a D1 remaining red is a cross-step consistency FAIL even after D1 dropped HandoffDraft_Invalid* names.
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T200636Z.md
+        - docs/receipts/hostile-validator-20260821T200636Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T173330Z-p0a-plan
+      title: Hostile P0-A plan completeness after claimed 172735Z FAIL close
+      model: grok-subagent-hostile
+      started: 2026-08-21T17:35:17.2690895+00:00
+      lastUpdated: 2026-08-21T17:42:06.3183959+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T173330Z-001-hostile-p0a-plan-completeness
+        timestamp: 2026-08-21T17:42:06.3183959+00:00
+        queryText: Hostile validator P0-A re-check of PLAN-PLUGINHANDOFF-001 after implementer claimed 172735Z FAIL list closed. Attack TEST-HANDOFF AC-to-method map, D0 HandoffIngestionServiceTests inventory, B1 30s-while-drain named test, dual P0-A/P0-B, PLAN TODO absence, skip placeholders, reuse vs new reds.
+        queryTitle: Hostile P0-A after claimed 172735Z FAIL close
+        response: 'OverallVerdict DISAGREE. 10 PASS, 5 FAIL, 0 UNKNOWN. The four named 172735Z omissions and the B1 30s-while-drain test are now in the plan. The 172735Z FAIL class is not closed: TEST-HANDOFF-004 AC1 and TEST-HANDOFF-006 AC1 still omit on-disk covering tests, including GetAndApprove_DelegateToSharedService. Receipt docs/receipts/hostile-validator-20260821T173914Z.md.'
+        interpretation: Independent hostile P0-A re-check of PLAN-PLUGINHANDOFF-001 after the implementer claimed the 172735Z FAIL list was closed. Attack TEST-HANDOFF AC-to-method map, D0 HandoffIngestionServiceTests inventory, B1 30s-while-drain test, dual P0 gates, PLAN TODO absence, skip placeholders, and reuse vs new reds.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: Executed add-profile. Read 18 non-skill profile markdown files under C:\Users\kingd\.claude\profile.
+          type: design_decision
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 not found. Live todo_get succeeded for eight child TODOs.
+          type: design_decision
+          status: completed
+          filePath: None
+        - order: 3
+          description: Extracted 21 HandoffIngestionServiceTests facts and compared to plan D0 line 440.
+          type: design_decision
+          status: completed
+          filePath: tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs
+        - order: 4
+          description: Compared TEST-HANDOFF-001..007 AC bullets in Testing-Requirements.md to plan method map. Found unmapped covering tests Validate_InvalidFields, GetAndApprove, PublicSurfaces, Dispatcher_RoutesHandoff, IngestAsync_DelegatesToSharedService.
+          type: design_decision
+          status: completed
+          filePath: docs/Project/Testing-Requirements.md
+        - order: 5
+          description: 'Compared plan locked tables to McpDbContext DbSets: 62/62 after stripping sentence period on ProductWorkspaceMemberships.'
+          type: design_decision
+          status: completed
+          filePath: src/McpServer.Storage/McpDbContext.cs
+        - order: 6
+          description: Wrote hostile receipts docs/receipts/hostile-validator-20260821T173914Z.md and .json. OverallVerdict DISAGREE.
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T173914Z.md
+        tags:
+        - hostile-validator
+        - P0-A
+        - PLAN-PLUGINHANDOFF-001
+        - TEST-HANDOFF
+        contextList:
+        - C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - docs/Project/Testing-Requirements.md
+        - docs/receipts/hostile-validator-20260821T172735Z.md
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffTodoDraftValidatorTests.cs
+        - tests/McpServer.Support.Mcp.Tests/Controllers/HandoffControllerTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T17:33:30.0000000+00:00
+          role: system
+          content: add-profile executed. 18 non-skill profile markdown files read in full from C:\Users\kingd\.claude\profile. Excluded add-profile.grok.md.
+          category: observation
+        - timestamp: 2026-08-21T17:35:00.0000000+00:00
+          role: model
+          content: 'Observation: current plan.md maps TEST-HANDOFF-002 AC2 to IngestAsync_SupportedFormats_AreAccepted and TEST-HANDOFF-005 AC2 to IngestAsync_ForceTrue_ExtractsAgain. Observation: D0 line 440 lists all 21 HandoffIngestionServiceTests facts. Observation: B1 line 305 includes Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout. Observation: todo_get PLAN-PLUGINHANDOFF-001 not found. Inference: the four 172735Z named omissions are closed. Observation: plan grep of Validate_InvalidFields_ProduceFieldDiagnostics, GetAndApprove_DelegateToSharedService, PublicSurfaces_ExposeIngestGetAndApprove, Dispatcher_RoutesHandoffWorkflowMethods, IngestAsync_DelegatesToSharedService is zero hits. Inference: D0 remaining-gap inventory and TEST-HANDOFF-004 AC1 / TEST-HANDOFF-006 AC1 maps are still incomplete.'
+          category: reasoning
+        - timestamp: 2026-08-21T17:39:14.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict DISAGREE. Judgment: 172735Z FAIL list is not closed because TEST-HANDOFF-006 AC1 still omits on-disk get/approve/REPL/API covering tests named in 172735Z AGREE extras, and TEST-HANDOFF-004 AC1 invents eight D1 new reds instead of classifying existing Validate_InvalidFields_ProduceFieldDiagnostics as reuse. Consequence: P0-A AGREE is withheld; PLAN-PLUGINHANDOFF-001 must not be created.'
+          category: decision
+        designDecisions:
+        - 'Judgment: every TEST-HANDOFF-001..007 AC bullet now has at least one method name, including SupportedFormats, ForceTrue, AmbiguousHandoff, and TodoServiceFailure. Consequence: the 172735Z zero-hit examples are closed, but that is not full AC mapping.'
+        - 'Judgment: D0 inventories all 21 HandoffIngestionServiceTests facts. Consequence: implementer claim 2 PASS for that class only.'
+        - 'Judgment: B1 now includes Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout. Consequence: 172735Z B1 30s omission is closed.'
+        - 'Judgment: TEST-HANDOFF-004 AC1 still invents eight D1 new reds while Validate_InvalidFields_ProduceFieldDiagnostics already covers id, title, section, priority, estimate, dependsOn, requirement links, and implementationTasks. TEST-HANDOFF-006 AC1 still omits GetAndApprove_DelegateToSharedService, PublicSurfaces_ExposeIngestGetAndApprove, Dispatcher_RoutesHandoffWorkflowMethods, and IngestAsync_DelegatesToSharedService. Consequence: 172735Z FAIL class not fully mapped / D0 incomplete remains open. OverallVerdict DISAGREE. Do not create PLAN-PLUGINHANDOFF-001.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T173914Z.md
+        - docs/receipts/hostile-validator-20260821T173914Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T172329Z-p0a-plan
+      title: Hostile P0-A plan completeness review PLAN-PLUGINHANDOFF-001
+      model: grok-code
+      started: 2026-08-21T17:24:26.5955811+00:00
+      lastUpdated: 2026-08-21T17:30:37.1954438+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T172329Z-001-hostile-p0a-plan-completeness
+        timestamp: 2026-08-21T17:30:37.1954438+00:00
+        queryText: Hostile validator P0-A completeness gate on current plan.md after implementer claims the 171357Z 7 FAILs are closed. Class 1 project implementation plan. Surfaces A/B/C/D required.
+        queryTitle: Hostile P0-A plan completeness PLAN-PLUGINHANDOFF-001
+        response: 'OverallVerdict DISAGREE. PASS 11 FAIL 5 UNKNOWN 0. Remaining FAIL: TEST-HANDOFF AC map and D0 inventory omit on-disk IngestAsync_SupportedFormats_AreAccepted and IngestAsync_ForceTrue_ExtractsAgain; B1 omits A5 30s-while-drain named test. Closed: mixed hostiles, P19/P20 names, copy 1-19, WorkspaceClient dump bind, TR-MCP-REPL-012 exception text, HYGIENE numbered AC. Do not create PLAN-PLUGINHANDOFF-001.'
+        interpretation: Independent adversarial P0-A review of the current plan.md. Default FAIL until re-verified. Attack implementer claims and 171357Z remainder.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Executed add-profile: read 18 non-skill profile markdown files under C:/Users/kingd/.claude/profile/'
+          type: web_reference
+          status: completed
+          filePath: C:/Users/kingd/.claude/profile/PROFILE.md
+        - order: 2
+          description: Re-read current P0-A plan.md in full and prior hostile receipts 161800Z and 171357Z
+          type: edit
+          status: completed
+          filePath: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        - order: 3
+          description: Live todo_get of eight child TODOs; PLAN-PLUGINHANDOFF-001 not found
+          type: edit
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Wrote hostile receipt pair after independent greps of Handoff tests, WorkspaceController, drain timeout, and DbSet compare
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T172735Z.md
+        - order: 5
+          description: 'Verdict: DISAGREE. TEST-HANDOFF AC map and D0 inventory remain open. Mixed hostiles closed.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T172735Z.md
+        model: grok-code
+        tags:
+        - hostile-validator
+        - p0-a
+        - plan-completeness
+        - foreign-repo
+        contextList:
+        - docs/receipts/hostile-validator-20260821T171357Z.md
+        - docs/receipts/hostile-validator-20260821T161800Z.md
+        - 'foreign-repo: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md'
+        - docs/Project/wiki/github/Testing-Requirements.md
+        - src/McpServer.Support.Mcp/Controllers/WorkspaceController.cs
+        - tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T17:23:29.0000000+00:00
+          role: model
+          content: 'Classified work as class 1 project implementation P0-A plan completeness. add-profile executed: 18 non-skill profile files. Default all claims FAIL/UNKNOWN until re-verified.'
+          category: reasoning
+        - timestamp: 2026-08-21T17:27:00.0000000+00:00
+          role: model
+          content: 'Conclusion: 171357Z mixed-hostile, P19/P20 names, copy range 1-19, WorkspaceClient dump bind, TR-MCP-REPL-012 exception text, and HYGIENE numbered AC are closed in the current plan. Remaining FAIL is TEST-HANDOFF AC map and D0 inventory omitting on-disk SupportedFormats and ForceTrue tests, plus B1 omitting the A5 30s-while-drain named test.'
+          category: decision
+        - timestamp: 2026-08-21T17:27:35.0000000+00:00
+          role: model
+          content: OverallVerdict DISAGREE. Do not create PLAN-PLUGINHANDOFF-001. Do not mark P0-A complete.
+          category: decision
+        designDecisions:
+        - 'Class 1 P0-A plan-completeness gate: surface C applies to plan capture of FR/TR/TEST/AC. Consequence: unmapped TEST-HANDOFF AC is FAIL, not N/A.'
+        - 171357Z mixed-hostile FAIL is closed by current C-red/C-green and E/F/G all-tests-first text. Remaining DISAGREE is TEST-HANDOFF map/D0 omissions plus B1 omitting the A5 30s-while-drain named test.
+        - D0 omission of IngestAsync_SupportedFormats_AreAccepted and IngestAsync_ForceTrue_ExtractsAgain is the same defect class as 171357Z DraftOnly omission, so claim 9 (171357Z items closed) FAILs.
+        - PLAN-PLUGINHANDOFF-001 must not be created until a later P0-A AGREE.
+        requirementsDiscovered:
+        - TEST-HANDOFF-002
+        - TEST-HANDOFF-005
+        - TR-MCP-REPL-012
+        - FR-MCP-HYGIENE-003
+        - FR-MCP-HYGIENE-004
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T172735Z.md
+        - docs/receipts/hostile-validator-20260821T172735Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T170652Z-p0a-plan
+      title: Hostile P0-A review of PLAN-PLUGINHANDOFF-001 revised plan
+      model: grok-4
+      started: 2026-08-21T17:07:12.3487652+00:00
+      lastUpdated: 2026-08-21T17:15:01.0179727+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T170652Z-001-p0a-pluginhandoff-plan
+        timestamp: 2026-08-21T17:15:01.0179727+00:00
+        queryText: Attack the REVISED plan against prior hostile-validator-20260821T161800Z.md DISAGREE (9 FAIL). Work class 1 P0-A plan completeness. Surfaces A-D required.
+        queryTitle: Hostile P0-A review of revised PLAN-PLUGINHANDOFF-001
+        response: 'OverallVerdict DISAGREE. Receipt docs/receipts/hostile-validator-20260821T171357Z.md. Explicit FAILs: A2/B1 grouped red+green hostiles; A5 P19/P20 and TEST-HANDOFF unmapped; A7 wrong add-workspace surface, copy range 1-18 omits 19, TR-MCP-REPL-012 unamended; A10 prior FAIL list not fully closed; C and D fail with those gaps.'
+        interpretation: Independent P0-A attack of the revised plan against prior hostile-validator-20260821T161800Z.md DISAGREE (9 FAIL). Work class 1. Surfaces A-D required.
+        status: completed
+        planFile: C:/Users/kingd/.grok/sessions/F%3A%5CGitHub%5CMcpServer/01a02413-e4ee-7513-bd22-9eddd82adb73/plan.md
+        todoId: None
+        actions:
+        - order: 1
+          description: Classified work as class 1 P0-A plan completeness. Surface C applies to FR/TR/TEST/AC capture. Surface D applies to this plan DoD.
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 2
+          description: Re-read current plan.md and prior receipt hostile-validator-20260821T161800Z.md. Did not treat old receipt as proof.
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - order: 3
+          description: Live todo_get of eight child TODOs plus PLAN-PLUGINHANDOFF-001 not found. Compared PLUGININT P1-P20 to inlined Phase C.
+          type: edit
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Verified reuse test method names on disk, DbSet lock 62/62, Get-McpFailsafeDir vs V4 envelope path, drain return 2, WorkspaceController.CreateAsync vs federation RegisterWorkspaceAsync.
+          type: edit
+          status: completed
+          filePath: src/McpServer.Storage/McpDbContext.cs
+        tags:
+        - hostile-validator
+        - P0-A
+        - PLAN-PLUGINHANDOFF-001
+        contextList:
+        - C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        - docs/receipts/hostile-validator-20260821T161800Z.md
+        - docs/Development-Process-draft-v4.md
+        processingDialog:
+        - timestamp: 2026-08-21T17:06:52.0000000+00:00
+          role: model
+          content: 'add-profile executed first: 18 non-skill profile md files under C:\Users\kingd\.claude\profile. Class 1 P0-A plan completeness. Default claims FAIL until re-verified.'
+          category: reasoning
+        - timestamp: 2026-08-21T17:08:00.0000000+00:00
+          role: tool
+          content: Live todo_get retrieved all eight child TODOs. PLAN-PLUGINHANDOFF-001 not found. PLUGININT P1-P20 present in store; P0 Done=true; P1-P20 Done=false.
+          category: tool_result
+        - timestamp: 2026-08-21T17:13:00.0000000+00:00
+          role: model
+          content: 'Verdict DISAGREE. Prior 161800Z FAIL list is not fully closed: grouped PLUGININT/E/F/G hostiles still mix red and green before after-red AGREE; TEST-HANDOFF AC mapping is a D1 instruction not a P0-A map; add-workspace --dump is locked to FederationClient.RegisterWorkspaceAsync instead of WorkspaceController.CreateAsync / WorkspaceClient.CreateAsync; PLAN TODO copy range 1-18 omits section 19; drain timeout does not amend conflicting TR-MCP-REPL-012.'
+          category: decision
+        designDecisions:
+        - 'OverallVerdict DISAGREE: AGREE blocked until after-red hostiles precede green in C/E/F/G, TEST-HANDOFF AC are mapped now, add-workspace dump binds WorkspaceClient.CreateAsync not federation proxy register, PLAN TODO copy includes section 19, and TR-MCP-REPL-012 is amended or explicitly excepted for drain SubmitAsync.'
+        - 'Reuse classification in D0/B1 is honest: named Handoff and SessionLogPersistenceStrategy tests exist on disk and are not relabeled as new reds.'
+        - 'FederationClient.RegisterWorkspaceAsync is the wrong add-workspace surface: live create is POST /mcpserver/workspace via WorkspaceClient.CreateAsync.'
+        requirementsDiscovered:
+        - FR-MCP-PLUGININT-001
+        - FR-MCP-REPL-009
+        - TR-MCP-REPL-012
+        - TEST-MCP-195
+        - TEST-HANDOFF-001
+        filesModified:
+        - docs/receipts/hostile-validator-20260821T171357Z.md
+        - docs/receipts/hostile-validator-20260821T171357Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260819T013000Z-hgoal
+      title: Hostile full goal-state review PLAN-TRIAGECLUSTER-001
+      model: grok-4
+      started: 2026-08-19T01:31:22.7872573+00:00
+      lastUpdated: 2026-08-19T01:41:21.1185431+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T013000Z-001-hgoal-full-closeout
+        timestamp: 2026-08-19T01:41:21.1185431+00:00
+        queryText: FULL GOAL-STATE REVIEW of PLAN-TRIAGECLUSTER-001. Re-score entire goal DoD. Surfaces A+B+C+D. Do not mark TODO done. Write docs/receipts/hostile-validator-20260819T013000Z.md + json twin.
+        queryTitle: Hostile full goal-state review PLAN-TRIAGECLUSTER-001
+        response: OverallVerdict AGREE. FAIL 0. FailList empty. Receipt docs/receipts/hostile-validator-20260819T013000Z.md and matching json twin. Parent may mark PLAN-TRIAGECLUSTER-001 done citing this receipt. This review did not flip any TODO.
+        interpretation: Full goal-state hostile review of PLAN-TRIAGECLUSTER-001. Class 1. Restore-gate 010800Z AGREE does not complete the plan. Re-score A+B+C+D and the entire goal DoD. Do not mark any TODO done.
+        status: completed
+        planFile: docs/plans/triage-cluster-001.md
+        todoId: PLAN-TRIAGECLUSTER-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile md files'
+          type: file_read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Test-MarkerSignature True; health nonce echoed
+          type: command
+          status: completed
+          filePath: docs/receipts/_hv-20260819T013000Z-trust.ps1
+        - order: 3
+          description: todo_get PLAN-TRIAGECLUSTER-001 Done=false and 16 BUG-TRIAGE Done=true citing 000500Z
+          type: todo_query
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Re-read H0/H-red/H-green/H9/H-done/005100Z/010800Z plus nuke-test and validate-traceability logs
+          type: file_read
+          status: completed
+          filePath: docs/receipts
+        - order: 5
+          description: leftover 19/0/0; named Support 20/0/0; Pester 9/0/0; Repl 17/0/0; HELP/TODO 3/0/0
+          type: test_run
+          status: completed
+          filePath: docs/receipts/_hv-20260819T013000Z
+        - order: 6
+          description: Wrote hostile receipt md+json twin
+          type: file_write
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T013000Z.md
+        tags:
+        - hostile-validator
+        - PLAN-TRIAGECLUSTER-001
+        - goal-closeout
+        - FR-MCP-SESSIONLOGCTX-001
+        contextList:
+        - docs/plans/triage-cluster-001.md
+        - docs/receipts/hostile-validator-20260819T000500Z.md
+        - docs/receipts/hostile-validator-20260819T005100Z.md
+        - docs/receipts/hostile-validator-20260819T010800Z.md
+        processingDialog:
+        - timestamp: 2026-08-19T01:31:35.5120198+00:00
+          role: model
+          content: 'add-profile executed: 18 non-skill profile md files read. Marker signature True. Health nonce 956db7490fc044e9a52fe6c1f8160070 echoed. Host version 1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e. Class 1 project implementation. Full goal-state review starting.'
+          category: observation
+        - timestamp: 2026-08-19T01:31:35.5120203+00:00
+          role: model
+          content: Default all A/B/C/D claims to FAIL/UNKNOWN until independently re-verified. Restore-gate 010800Z AGREE does not complete PLAN-TRIAGECLUSTER-001.
+          category: decision
+        - timestamp: 2026-08-19T01:40:48.5793980+00:00
+          role: model
+          content: 'OverallVerdict AGREE. The six 005100Z FAILs are gone. Decision 5 and FR-MCP-SESSIONLOGCTX-001 AC-003 hold. Full goal AC 1-5 and plan S10 ledger items were independently re-verified. Consequence: parent may mark PLAN-TRIAGECLUSTER-001 done citing docs/receipts/hostile-validator-20260819T013000Z.md. This review did not flip any TODO.'
+          category: decision
+        - timestamp: 2026-08-19T01:40:48.5793981+00:00
+          role: model
+          content: 'Independent this-review runs: leftover+STORE-006+validator 19/0/0; named Support 20/0/0; Pester 9/0/0; Repl 17/0/0; HELP/TODO 3/0/0. nuke-test.log TEST_EXIT=0 at 2026-08-19T01:29:13Z. ValidateTraceability findings=0. TruckMate sessionlog_query totalCount=230 with AgentSession columns.'
+          category: observation
+        designDecisions:
+        - 'Score this as a full S10/H-goal review, not a restore-gate replay. Consequence: 010800Z AGREE is evidence, not closeout.'
+        - OverallVerdict AGREE with empty FailList after independent re-proof of 005100Z FAIL list, leftover throw tests, nuke-test.log, and TRIAGE AC coverage.
+        - Do not flip PLAN-TRIAGECLUSTER-001 or any BUG-TRIAGE TODO from this review. Parent marks done only after AGREE.
+        requirementsDiscovered:
+        - FR-MCP-SESSIONLOGCTX-001
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - TEST-MCP-TRIAGESTORE-006
+        filesModified:
+        - docs/receipts/hostile-validator-20260819T013000Z.md
+        - docs/receipts/hostile-validator-20260819T013000Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260819T010800Z-hrestore
+      title: Hostile restore-gate first-persist reject
+      model: grok-4
+      started: 2026-08-19T01:08:18.2156929+00:00
+      lastUpdated: 2026-08-19T01:18:32.0409452+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T010800Z-001-hrestore-first-persist
+        timestamp: 2026-08-19T01:18:32.0409452+00:00
+        queryText: Restore gate after docs/receipts/hostile-validator-20260819T005100Z.md DISAGREE (FAIL 6). Attack whether those six FAILs are actually fixed. Also attack full goal DoD. Do not AGREE the whole PLAN done if any of those six still fail or if decision 5 / AC-003 is still bypassed.
+        queryTitle: Hostile restore-gate first-persist reject
+        response: OverallVerdict AGREE. PASS 24 FAIL 0 UNKNOWN 0 N/A 2. Explicit FAIL list none. Six 005100Z FAILs gone. Decision 5 and FR-MCP-SESSIONLOGCTX-001 AC-003 hold. PLAN-TRIAGECLUSTER-001 remains Done=false. Receipt docs/receipts/hostile-validator-20260819T010800Z.md
+        interpretation: Restore-gate after 005100Z DISAGREE FAIL 6. Independently re-verify first-persist reject, leftover tests, STORE-006, and whether decision 5 / AC-003 remain bypassed. Do not mark PLAN done.
+        status: completed
+        planFile: docs/plans/triage-cluster-001.md
+        todoId: PLAN-TRIAGECLUSTER-001
+        actions:
+        - order: 1
+          description: 'add-profile: 18 non-skill profile md files read'
+          type: validation
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Marker HMAC True; health nonce 44d170cf09d74d3c826905642542cea8 echoed; HTTP 200 Healthy 1.4.26
+          type: validation
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Inspected ApplyTurnContext, ReplaceTurnAsync, IsSupersededHookPersist, leftover tests, validator, plan decision 5
+          type: file_read
+          status: completed
+          filePath: F:\GitHub\McpServer\src\McpServer.Services\Services\SessionLogService.cs
+        - order: 4
+          description: todo_get PLAN-TRIAGECLUSTER-001 Done=false plus 16 BUG-TRIAGE Done=true citing H-done 000500Z
+          type: validation
+          status: completed
+          filePath: PLAN-TRIAGECLUSTER-001
+        - order: 5
+          description: Focused leftover+STORE-006+validator Total 19 Passed 19 EXIT=0
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T010800Z/leftover-store006-validator.log
+        - order: 6
+          description: Support.Mcp.Tests --no-build Failed 0 Passed 2078 Skipped 0 EXIT=0
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T010800Z/support-mcp-tests.log
+        - order: 7
+          description: Restore-gate AGREE; do not mark PLAN done; AC-003 reject except canceled STORE-006
+          type: design_decision
+          status: completed
+          filePath: docs/plans/triage-cluster-001.md
+        - order: 8
+          description: Wrote hostile restore-gate receipt md+json
+          type: file_write
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T010800Z.md
+        tags:
+        - hostile-validator
+        - restore-gate
+        - PLAN-TRIAGECLUSTER-001
+        - FR-MCP-SESSIONLOGCTX-001
+        - TEST-MCP-TRIAGESTORE-006
+        contextList:
+        - docs/plans/triage-cluster-001.md
+        - docs/receipts/hostile-validator-20260819T005100Z.md
+        - docs/receipts/hostile-validator-20260819T000500Z.md
+        - FR-MCP-SESSIONLOGCTX-001 AC-003
+        - TEST-MCP-TRIAGESTORE-006
+        processingDialog:
+        - timestamp: 2026-08-19T01:08:00.0000000+00:00
+          role: validator
+          content: Hostile restore-gate after 005100Z DISAGREE FAIL 6. Class 1. Attack whether first-persist reject is actually restored, leftover tests throw, STORE-006 still holds, and full goal DoD / decision 5 / AC-003 are no longer bypassed.
+          category: interpretation
+        - timestamp: 2026-08-19T01:08:20.0000000+00:00
+          role: validator
+          content: Default every claim FAIL/UNKNOWN until independently re-verified. Do not AGREE whole PLAN done if any of the six FAILs remain or AC-003/decision 5 is still bypassed. Do not mark PLAN done.
+          category: decision
+        - timestamp: 2026-08-19T01:12:00.0000000+00:00
+          role: validator
+          content: 'Independent focused filter leftover+STORE-006+validator: Total 19 Passed 19 EXIT=0. Support.Mcp.Tests --no-build: Failed 0 Passed 2078 Skipped 0 EXIT=0. ApplyTurnContext stamps None only when canceled/cancelled.'
+          category: evidence
+        - timestamp: 2026-08-19T01:15:38.0000000+00:00
+          role: validator
+          content: 'Conclusion: six 005100Z FAILs are gone. Decision 5 and AC-003 are not bypassed. OverallVerdict AGREE for this restore-gate only. Consequence: do not mark PLAN-TRIAGECLUSTER-001 done. 16 BUG-TRIAGE ids stay Done=true citing H-done 000500Z.'
+          category: decision
+        designDecisions:
+        - Class 1 restore-gate after 005100Z DISAGREE FAIL 6. Attack those six FAILs and full goal DoD; do not treat AGREE as PLAN done.
+        - Canceled-only None stamp is the STORE-006 / decision 5 exception to AC-003. Non-canceled first persist must still reject omitted/empty/whitespace.
+        - 'Independent Support.Mcp.Tests count is 2078/0/0. Score A5 PASS on green, not on the 2037 figure. Consequence: PLAN stays Done=false.'
+        requirementsDiscovered:
+        - FR-MCP-SESSIONLOGCTX-001
+        - TEST-MCP-TRIAGESTORE-006
+        - FR-MCP-TRIAGESTORE-001
+        - TEST-MCP-TRIAGESTORE-001
+        filesModified:
+        - docs/receipts/hostile-validator-20260819T010800Z.md
+        - docs/receipts/hostile-validator-20260819T010800Z.json
+        - docs/receipts/_hv-20260819T010800Z/trust.json
+        - docs/receipts/_hv-20260819T010800Z/req-ac.json
+        - docs/receipts/_hv-20260819T010800Z/leftover-store006-validator.log
+        - docs/receipts/_hv-20260819T010800Z/support-mcp-tests.log
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260819T005100Z-hgoal
+      title: Hostile full goal-state closeout PLAN-TRIAGECLUSTER-001
+      model: grok-4
+      started: 2026-08-19T00:53:36.3831023+00:00
+      lastUpdated: 2026-08-19T01:01:06.8157189+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T005100Z-001-hgoal-full-closeout
+        timestamp: 2026-08-19T01:01:06.8157189+00:00
+        queryText: FULL GOAL-STATE hostile review of the 16-item BUG-TRIAGE remediation (PLAN-TRIAGECLUSTER-001). Surfaces A+B+C+D. Attack implementer closeout claims, workspace rules, requirements, and plan DoD S0-S10 plus H-done plus full Test.
+        queryTitle: Hostile full goal-state closeout of PLAN-TRIAGECLUSTER-001
+        response: 'OverallVerdict DISAGREE. PASS 19 FAIL 6 UNKNOWN 0 N/A 2. Sixteen BUG-TRIAGE ids are Done=true citing H-done AGREE and PLAN is still Done=false. Full Nuke Test and ValidateTraceability logs match the claimed green counts. Leftover five tests invert FR-MCP-SESSIONLOGCTX-001 AC-003 first-persist reject and are not TEST-MCP-TRIAGESTORE-006. Plan decision 5 is violated. Do not mark PLAN-TRIAGECLUSTER-001 done. Receipt: docs/receipts/hostile-validator-20260819T005100Z.md'
+        interpretation: Full goal-state hostile review of the 16-item BUG-TRIAGE remediation. Attack implementer closeout claims plus workspace rules, requirements, and plan DoD S0-S10 plus H-done plus full Test.
+        status: completed
+        planFile: docs/plans/triage-cluster-001.md
+        todoId: PLAN-TRIAGECLUSTER-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 non-skill profile files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Verified marker HMAC and health nonce echo
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T005100Z/trust.json
+        - order: 3
+          description: Queried PLAN-TRIAGECLUSTER-001 and 16 BUG-TRIAGE ids via todo_get
+          type: mcp_query
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Extracted TRIAGE FR/TEST/mapping and SESSIONLOGCTX AC-003 from store
+          type: mcp_query
+          status: completed
+          filePath: docs/receipts/_hv-20260819T005100Z/sessionlogctx-ac.json
+        - order: 5
+          description: Re-read nuke-test.log and validate-traceability.log
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\AppData\Local\Temp\grok-goal-01353e344a72\implementer\nuke-test.log
+        - order: 6
+          description: Reran leftover five plus validator tests 7/0/0 and named Support 20/0/0
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T005100Z/leftover-five.log
+        - order: 7
+          description: Reran Pester TriagePluginIdentity 9/0/0
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T005100Z/pester.log
+        - order: 8
+          description: Independent live replace-turn 400 without code/retryable
+          type: test
+          status: completed
+          filePath: docs/receipts/_hv-20260819T005100Z/live-replace.json
+        - order: 9
+          description: Wrote hostile receipt MD and JSON twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T005100Z.md
+        tags:
+        - hostile-validation
+        - PLAN-TRIAGECLUSTER-001
+        - goal-closeout
+        - DISAGREE
+        - FR-MCP-SESSIONLOGCTX-001
+        contextList:
+        - docs/plans/triage-cluster-001.md
+        - docs/receipts/hostile-validator-20260819T000500Z.md
+        - FR-MCP-SESSIONLOGCTX-001
+        - TEST-MCP-TRIAGESTORE-006
+        - AGENTS-README-FIRST.yaml
+        processingDialog:
+        - timestamp: 2026-08-19T00:51:00.0000000+00:00
+          role: system
+          content: 'Class 1 full goal-state hostile review of PLAN-TRIAGECLUSTER-001. add-profile 18 files. Trust: marker HMAC true, health nonce d4b3c04ea889454b92d19f921433c11b echoed, host 1.4.26.'
+          category: observation
+        - timestamp: 2026-08-19T01:05:00.0000000+00:00
+          role: model
+          content: Sixteen BUG-TRIAGE ids are Done=true citing H-done AGREE. PLAN remains Done=false. nuke-test.log TEST_EXIT=0 with claimed counts. ValidateTraceability findings=0.
+          category: observation
+        - timestamp: 2026-08-19T01:12:00.0000000+00:00
+          role: model
+          content: 'Decision: leftover five tests are first-persist persist-None, not TEST-MCP-TRIAGESTORE-006 superseded+canceled. Working-tree ApplyTurnContext defaults omitted/whitespace to None, violating FR-MCP-SESSIONLOGCTX-001 AC-003 and plan decision 5.'
+          category: decision
+        - timestamp: 2026-08-19T01:18:00.0000000+00:00
+          role: model
+          content: 'Decision: OverallVerdict DISAGREE. Do not mark PLAN-TRIAGECLUSTER-001 done. Restore first-persist reject; keep STORE-006 on superseded hook persist only.'
+          category: decision
+        designDecisions:
+        - 'Class 1 full goal-state review: score S0-S10 plus H-done plus full Test, not only the last Nuke run.'
+        - Leftover persist-None tests do not implement TEST-MCP-TRIAGESTORE-006; that AC is superseded hook persist plus canceled only.
+        - Working-tree ApplyTurnContext prefill violates FR-MCP-SESSIONLOGCTX-001 AC-003 and plan decision 5; OverallVerdict DISAGREE. Do not mark PLAN-TRIAGECLUSTER-001 done.
+        requirementsDiscovered:
+        - FR-MCP-SESSIONLOGCTX-001
+        - TEST-MCP-TRIAGESTORE-006
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        filesModified:
+        - docs/receipts/hostile-validator-20260819T005100Z.md
+        - docs/receipts/hostile-validator-20260819T005100Z.json
+        - docs/receipts/_hv-20260819T005100Z/trust.json
+        - docs/receipts/_hv-20260819T005100Z/test-ac.json
+        - docs/receipts/_hv-20260819T005100Z/fr-ac.json
+        - docs/receipts/_hv-20260819T005100Z/mappings.json
+        - docs/receipts/_hv-20260819T005100Z/sessionlogctx-ac.json
+        - docs/receipts/_hv-20260819T005100Z/leftover-five.log
+        - docs/receipts/_hv-20260819T005100Z/named-spot.log
+        - docs/receipts/_hv-20260819T005100Z/pester.log
+        - docs/receipts/_hv-20260819T005100Z/live-replace.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260819T000500Z-hdone
+      title: H-done closeout PLAN-TRIAGECLUSTER-001
+      model: grok-4
+      started: 2026-08-19T00:07:03.5147058+00:00
+      lastUpdated: 2026-08-19T00:16:40.6538239+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T000500Z-001-hdone-closeout-triagecluster
+        timestamp: 2026-08-19T00:16:40.6538239+00:00
+        queryText: Class 1 H-done closeout for PLAN-TRIAGECLUSTER-001. If AGREE, parent will mark BUG-TRIAGE-110,111,112,114,115,119,123,124,126,128,131,132,139,143,148,149 done citing this receipt. If any applicable hole remains, DISAGREE. Re-verify those 16 plus PLAN-TRIAGECLUSTER-001 are done=false. Re-read H0/H-red/H-green/H9 AGREE receipts. Re-run named Support/Repl/Pester subset if possible. Do not mark TODOs. Unit/Pester AC for the 16 is the closeout bar used by H-red/H-green/H9. Live UpdateService is not claimed. D5 live deploy is N/A unless the 16 cannot close without live deploy.
+        queryTitle: H-done closeout PLAN-TRIAGECLUSTER-001 sixteen TODOs
+        response: OverallVerdict AGREE. Receipt docs/receipts/hostile-validator-20260819T000500Z.md and .json twin. PASS 20 FAIL 0 UNKNOWN 0 N/A 3. Parent may mark BUG-TRIAGE-110,111,112,114,115,119,123,124,126,128,131,132,139,143,148,149 done citing this receipt. Do not mark PLAN-TRIAGECLUSTER-001. This review marked no TODOs.
+        interpretation: Class 1 H-done closeout. Parent will mark 16 BUG-TRIAGE ids only if this review AGREEs. Closeout bar is unit/Pester AC used by H-red/H-green/H9. Live UpdateService not claimed.
+        status: completed
+        planFile: docs/plans/triage-cluster-001.md
+        todoId: PLAN-TRIAGECLUSTER-001
+        actions:
+        - order: 1
+          description: Executed add-profile skill; read SKILL.md
+          type: file_read
+          status: completed
+          filePath: C:\Users\kingd\.claude\skills\add-profile\SKILL.md
+        - order: 2
+          description: Read 18 non-skill profile markdown files in full
+          type: file_read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 3
+          description: todo_get PLAN-TRIAGECLUSTER-001 and 16 BUG-TRIAGE ids; all Done=false
+          type: mcp_query
+          status: completed
+          filePath: None
+        - order: 4
+          description: Re-read H0 AGREE receipt
+          type: file_read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T193842Z.md
+        - order: 5
+          description: Re-read late H-red AGREE receipt PASS 27 FAIL 0
+          type: file_read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T233800Z.md
+        - order: 6
+          description: Re-read late H-green AGREE receipt FAIL 0
+          type: file_read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T234800Z.md
+        - order: 7
+          description: Re-read H9 139 original AC AGREE receipt
+          type: file_read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T221600Z.md
+        - order: 8
+          description: Named Support 39/0/0, Repl 18/0/0, Pester 9/0/0, Build 2/0/0; VT findings=0
+          type: test_run
+          status: completed
+          filePath: docs/receipts/_hv-20260819T000500Z/support-named.log
+        - order: 9
+          description: Wrote H-done hostile receipt md+json twin
+          type: file_write
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260819T000500Z.md
+        tags:
+        - hostile-validation
+        - H-done
+        - PLAN-TRIAGECLUSTER-001
+        - AGREE
+        - GrokSubagentHostile
+        contextList:
+        - docs/plans/triage-cluster-001.md
+        - docs/receipts/hostile-validator-20260818T193842Z.md
+        - docs/receipts/hostile-validator-20260818T233800Z.md
+        - docs/receipts/hostile-validator-20260818T234800Z.md
+        - docs/receipts/hostile-validator-20260818T221600Z.md
+        - AGENTS-README-FIRST.yaml
+        processingDialog:
+        - timestamp: 2026-08-19T00:09:12.1011957+00:00
+          role: model
+          content: 'Class 1 H-done closeout. add-profile executed: 18 non-skill profile files read. PLAN plus 16 BUG-TRIAGE ids queried done=false. Four AGREE receipts re-read. TruckMate sessionlog_query returned 230 items with AgentSession header fields populated.'
+          category: analysis
+        - timestamp: 2026-08-19T00:09:12.1011961+00:00
+          role: model
+          content: Closeout bar is unit/Pester AC used by H-red/H-green/H9. D5 live UpdateService scored N/A unless a listed TODO cannot close without deploy. 114/115 live TruckMate query succeeded on host 1.4.26, so schema live AC is not a deploy blocker.
+          category: decision
+        - timestamp: 2026-08-19T00:16:40.5821629+00:00
+          role: model
+          content: OverallVerdict AGREE. Parent may mark the 16 BUG-TRIAGE ids done citing docs/receipts/hostile-validator-20260819T000500Z.md. Do not mark PLAN-TRIAGECLUSTER-001. FAIL 0. Named Support 39/0/0 Repl 18/0/0 Pester 9/0/0 Build 2/0/0 VT findings=0. TruckMate sessionlog_query totalCount=230 with AgentSession headers.
+          category: decision
+        - timestamp: 2026-08-19T00:16:40.5821629+00:00
+          role: model
+          content: 'Prior 214800Z H-done DISAGREE holes are closed: inter-phase receipts exist, 139 AC4 tests exist and were re-run, extra TESTs have ac-1, Pester is behavioral, SCHEMA has text filter, HELP echo/progress re-executed.'
+          category: analysis
+        designDecisions:
+        - 'Closeout bar is unit/Pester AC used by H-red/H-green/H9. D5 live UpdateService is N/A unless a listed TODO cannot close without deploy. Consequence: TruckMate sessionlog_query success plus named green suite is enough to AGREE the 16; PLAN stays open.'
+        - 114/115 cannot be blocked on a new UpdateService this turn because live TruckMate sessionlog_query already returns 230 items with AgentSession header columns on host 1.4.26.
+        - 'Full ./build.ps1 Test is not an applicable FAIL: disk fell to 0.89 GB after the named subset, and the parent brief locked named Support/Repl/Pester as the H-done bar.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260819T000500Z.md
+        - docs/receipts/hostile-validator-20260819T000500Z.json
+        - docs/receipts/_hv-20260819T000500Z/01-trust-and-store.ps1
+        - docs/receipts/_hv-20260819T000500Z/02-tests.ps1
+        - docs/receipts/_hv-20260819T000500Z/03-validate-traceability.ps1
+        - docs/receipts/_hv-20260819T000500Z/trust.json
+        - docs/receipts/_hv-20260819T000500Z/test-ac.json
+        - docs/receipts/_hv-20260819T000500Z/mappings.json
+        - docs/receipts/_hv-20260819T000500Z/support-named.log
+        - docs/receipts/_hv-20260819T000500Z/validate-traceability.log
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260818T221600Z-h9-139
+      title: H9 hostile closeout of BUG-TRIAGE-139 original AC
+      model: grok-4
+      started: 2026-08-18T22:16:05.0885860+00:00
+      lastUpdated: 2026-08-18T22:24:16.3094575+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260818T221600Z-001-hostile-closeout-139
+        timestamp: 2026-08-18T22:24:16.3094575+00:00
+        queryText: Independent hostile closeout of BUG-TRIAGE-139 original acceptance criteria only. Surfaces A+B+C+D. Plan S9 closeout first, not a rewrite. Do not mark TODOs. Late-review rule applies.
+        queryTitle: H9 hostile closeout of BUG-TRIAGE-139 original AC
+        response: OverallVerdict AGREE. 17 PASS, 0 FAIL, 0 UNKNOWN. Independent FullyQualifiedName~UseCase 60/60 Failed 0 Skipped 0. Dedicated tests CreateUseCase_WithoutPreSeededWorkspace_AutoCreatesParentAndPersists and CreateAsync_DbUpdateException_ReturnsClassifiedEnvelope Passed. REST MapFailure classifies result.Exception to persistence_error plus details.inner. Receipt docs/receipts/hostile-validator-20260818T221600Z.md and .json twin. BUG-TRIAGE-139 remains Done=false. Parent may mark 139 done only after H-done.
+        interpretation: 'Validate implementer claims that 139 original AC is now test-covered and green: no-seed parent auto-create, create id plus list, classified DbUpdateException on REST/tool, existing create-success tests still green. Score workspace rules, requirements, and plan S9 holistically. Do not flip TODO done.'
+        status: completed
+        planFile: None
+        todoId: BUG-TRIAGE-139
+        actions:
+        - order: 1
+          description: 'Re-ran FullyQualifiedName~UseCase: 60 passed, 0 failed, 0 skipped, exit 0'
+          type: test
+          status: completed
+          filePath: docs/receipts/_h9-139/usecase-test.txt
+        - order: 2
+          description: 'Re-ran FullyQualifiedName~McpErrorClassifierTests: 5 passed, 0 failed, 0 skipped, exit 0'
+          type: test
+          status: completed
+          filePath: docs/receipts/_h9-139/classifier-test.txt
+        - order: 3
+          description: OverallVerdict AGREE for S9 original AC closeout only; TODO stays done=false
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T221600Z.md
+        - order: 4
+          description: Wrote H9 hostile receipt markdown
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T221600Z.md
+        - order: 5
+          description: Wrote H9 hostile receipt JSON twin
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260818T221600Z.json
+        model: grok-4
+        tags:
+        - hostile-validation
+        - H9
+        - S9
+        - BUG-TRIAGE-139
+        - AGREE
+        contextList:
+        - docs/plans/triage-cluster-001.md
+        - docs/receipts/hostile-validator-20260818T214800Z.md
+        - docs/receipts/hostile-validator-20260818T193842Z.md
+        - tests/McpServer.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs
+        - tests/McpServer.Support.Mcp.Tests/Controllers/UseCasesControllerTests.cs
+        - src/McpServer.Support.Mcp/Controllers/UseCasesController.cs
+        - src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.UseCases.cs
+        - src/McpServer.Support.Mcp/McpStdio/McpToolErrors.cs
+        - src/McpServer.Support.Mcp/Services/McpErrorClassifier.cs
+        - src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs
+        - src/McpServer.Storage/McpDbContext.cs
+        processingDialog:
+        - timestamp: 2026-08-18T22:16:00.0000000+00:00
+          role: model
+          content: 'H9 is S9 closeout of BUG-TRIAGE-139 original AC only. Attack implementer claims plus A+B+C+D. Late-review: do not FAIL B2 from FR createdAt versus file times. Do not mark TODOs.'
+          category: reasoning
+        - timestamp: 2026-08-18T22:20:00.0000000+00:00
+          role: model
+          content: 'Judgment: original AC1-AC4 are now covered by CreateUseCase_WithoutPreSeededWorkspace_AutoCreatesParentAndPersists and CreateAsync_DbUpdateException_ReturnsClassifiedEnvelope. Independent FullyQualifiedName~UseCase is 60/60 Failed 0 Skipped 0. REST MapFailure classifies result.Exception. Prior 214800 DISAGREE on missing AC4/REST envelope is closed. Consequence: OverallVerdict AGREE for S9 only. Parent may mark 139 done only after H-done. This review does not flip done.'
+          category: decision
+        designDecisions:
+        - 'Judgment: S9 original AC1-AC4 are met by the two named regression tests plus EnsureWorkspaceRows and MapFailure exception classification. Consequence: OverallVerdict AGREE for S9 only; do not mark BUG-TRIAGE-139 done in this review.'
+        - 'Judgment: Late-review rule applies; do not FAIL B2 from FR createdAt versus file times; do not FAIL B1 for missing historical 139 saga H-red/H-green because S9 is closeout first not rewrite and this H9 is the closeout gate. Consequence: B1 PASS.'
+        - 'Judgment: Missing dedicated create-then-list title assertion is an observation, not AC4 hole. List handler plus persist tests cover AC2. Consequence: C4 PASS.'
+        requirementsDiscovered:
+        - FR-MCP-USECASE-001
+        - FR-MCP-TRIAGEERR-001
+        - TR-MCP-USECASE-002
+        - TR-MCP-TRIAGEERR-001
+        - TEST-MCP-USECASE-001
+        - TEST-MCP-USECASE-002
+        - TEST-MCP-TRIAGEERR-001
+        filesModified:
+        - docs/receipts/hostile-validator-20260818T221600Z.md
+        - docs/receipts/hostile-validator-20260818T221600Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260817T015741Z-handoff-hostile
+      agentSessionId: 01a00bb6-92f7-7e71-846e-f656d77ea42f
+      agentExecutablePath: C:\Users\kingd\AppData\Local\Programs\OpenAI\Codex\bin\codex.exe
+      agentExecutableVersion: codex-cli 0.147.0
+      title: Hostile validate handoff scope-corrected claims
+      model: codex
+      started: 2026-08-17T01:51:59.0000000+00:00
+      lastUpdated: 2026-08-17T12:30:57.0000000+00:00
+      status: in_progress
+      turnCount: 3
+      turns:
+      - requestId: req-20260817T015741Z-001-hostile-handoff-validation
+        timestamp: 2026-08-17T01:58:02.0000000+00:00
+        queryText: Independently attack implementer claims for MCP-HANDOFFPLAN-001 / MCP-HANDOFF-001 without trusting the implementer receipt.
+        queryTitle: Hostile validate handoff scope-corrected claims
+        response: Independent hostile review in progress. add-profile read 18 profile files. Marker signature true. Health nonce echoed. Session open. Historical SQL Server tests match HEAD. Harness files absent. TODOs done=false. No handoff commit. Code inspection of leases, replay keys, unique codes, and plugin HTTP tests is underway. Independent test rerun started.
+        interpretation: Attack MCP-HANDOFFPLAN-001 scope-corrected claims without trusting the implementer receipt.
+        status: in_progress
+        planFile: None
+        todoId: None
+        model: grok
+        tokenCount: 0
+        tags:
+        - hostile-validator
+        - MCP-HANDOFFPLAN-001
+        - MCP-HANDOFF-001
+        - FR-HANDOFF-001
+        contextList:
+        - docs/receipts/mcp-handoffplan-001-scope-corrected-20260817T005200Z.md
+        - src/McpServer.Services/Services/HandoffIngestionService.cs
+      - requestId: req-20260817T015158Z-prompt-8bfb
+        timestamp: 2026-08-17T01:51:59.0000000+00:00
+        queryText: >
+          You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpServer.
+
+          You are adversarial. Your job is to disprove the implementer's claims and to catch process, requirements, and plan failures the implementer did not list.
+
+
+          FIRST ACTION (mandatory, before any validation):
+
+          Execute the `add-profile` skill now. Read C:\Users\kingd\.claude\skills\add-profile\SKILL.md and follow it literally (read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full). Do not begin claim checks until add-profile is complete. Record profile file count in the receipt.
+
+
+          Default every claim to FAIL or UNKNOWN until YOU re-verify with tools.
+
+
+          LOCKED SCOPE (operator 2026-08-13, classification lock 2026-08-14) ΓÇö evaluate ALL applicable surfaces every run:
+
+          Classify the request first (project requirement work vs user-directed general action). Record the class.
+
+          A. Requested validation: attack every implementer claim below.
+
+          B. Workspace rule violations: honesty, receipts, MCP-only storage, lab PowerShell/no-Python, look-before-delete. Byrd v4 applies only to project implementation code/docs. Phase-order (requirements drive tests) is scored at inter-phase hostile gates, not by post-hoc FR-vs-file timestamps. Cite the rule and the violation.
+
+          C. Requirement violations: ONLY for project implementation code/docs. FR/TR/TEST/AC/mappings. "Suite green" is not AC coverage. For operator-directed ops (uninstall obsolete package, backup, ADB pair), C is N/A: do not FAIL for missing FR/TR.
+
+          D. Current plan holistically: only if the implementer claimed plan-step completion. An ops action does not have to satisfy an unrelated product plan DoD.
+
+
+          This turn is project implementation (class 1) continuing MCP-HANDOFFPLAN-001 / MCP-HANDOFF-001. The implementer does NOT claim plan completion or TODO done:true. Attack whether they still overclaim.
+
+
+          Rules:
+
+          1. Do not trust plan checkboxes, agent chat, or old implementer receipts without re-checking.
+
+          2. If the parent brief is under-scoped, expand claims yourself for B/C/D. Never AGREE solely because narrow code claims pass while B/C/D fail.
+
+          3. Independently inspect files, run tests if needed, hit live endpoints if needed, query MCP requirements/TODO/session when the workspace uses them.
+
+          4. PowerShell helper tools are optional evidence collectors only; YOU own the verdict.
+
+          5. Write a durable receipt to docs/receipts/hostile-validator-YYYYMMDDTHHMMSSZ.md with matching .json twin (create docs/receipts if needed). Prefer workspace docs/receipts.
+
+          6. Receipt MUST include:
+             - TimestampUtc
+             - ValidatorIdentity: GrokSubagentHostile
+             - add-profile: executed (yes/no) + profile file count read (or FAIL if skipped)
+             - Claims reviewed (list), grouped by A Requested / B Workspace rules / C Requirements / D Plan
+             - Per-claim: PASS|FAIL|UNKNOWN + evidence (command/output/path)
+             - OverallVerdict: AGREE only if ALL claims in A+B+C+D PASS; else DISAGREE
+             - Explicit FAIL list (never bury)
+             - Explicit list of any mandatory surface that could not be evaluated (UNKNOWN with reason)
+          7. OverallVerdict=AGREE is rare. Prefer DISAGREE when uncertain.
+
+          8. Do not implement product features. Review only. Write receipt only.
+
+          9. End your response with the receipt path and OverallVerdict.
+
+          10. Create a complete MCP session-log turn for this review (bootstrap/open if needed, beginTurn, append dialog/actions, completeTurn). Agent identity GrokCode or GrokSubagentHostile as allowed. Prove persistence.
+
+
+          Implementer claims to attack (surface A ΓÇö still required):
+
+          1. Historical SqlServerDecompose4nfBackfillMigrationTests and SqlServerRenameQuadBrainRolesMigrationTests were reverted to HEAD; untracked SqlServerLocalDbFixture.cs and NoLockSqlServerHistoryRepository.cs were deleted; those four historical tests are not the handoff gate.
+
+          2. New-migration gate exists: ProviderDatabaseIntegrationTests asserts AddHandoffIngestionStorage applied and HandoffIngestionRuns/HandoffDiagnostics round-trip on SQLite and SQL Server; PostgreSQL clean-head equivalent exists; HandoffIngestionStorageMigrationTests downgrade-to-previous and re-upgrade on SQLite, SQL Server, and PostgreSQL. Focused filter Failed 0 Passed 6 Skipped 0.
+
+          3. WorkspaceServiceAccessor no longer has public OverrideWorkspace leak; it has PushWorkspace returning IDisposable/IAsyncDisposable that restores nested prior state; STDIO callers use using var ApplyWorkspaceOverride.
+
+          4. HandoffIngestionService has durable processing lease/owner/expiry, live concurrent replay returns handoff_in_progress not completed replay, stale lease takeover, terminal cancel/failure persistence, cancel still throws.
+
+          5. Approval has durable lease/owner/expiry and stale Approving recovery; concurrent approve creates exactly one TODO.
+
+          6. SaveRunAfterTodo no longer catches Exception broadly with ChangeTracker.Clear; uses provider-aware commit-ambiguity handling and a fresh context with non-cancelled compensation token.
+
+          7. TODO creation persists TodoCreationIntentId before ITodoService.CreateAsync; IdempotencyKey distinguishes this-run heal from caller-owned collision; collision persists ErrorCode and Success=false.
+
+          8. HandoffReplayKeys is fixed-length SHA-256 over a length-prefixed canonical payload; Force remains unique per run id.
+
+          9. HandoffDbExceptions uses SqlException 2601/2627, PostgresException 23505, SQLite extended codes, not English unique text.
+
+          10. PendingReview/invalid RequireReview never report Success=true when error diagnostics exist.
+
+          11. Plugin skill test invokes real HandoffWorkflow ingest/get/approve HTTP, not inventory-only.
+
+          12. Required suites: Client 281/281/0; Repl.Core 825/825/0; Support.Mcp unit Category!=Integration 1893/1893/0; focused Handoff 66/66/0; Support integration 266/266/0; Repl integration 181/181/0; Compile/Test/ValidateTraceability/SyncAgentPlugins EXIT=0; handoff-path git diff --check EXIT=0. Full-tree git diff --check EXIT=2 only on pre-existing docs/Project/Technical-Requirements.md EOF blank line.
+
+          13. Implementer does NOT mark MCP-HANDOFF-001 or MCP-HANDOFFPLAN-001 done and did not commit.
+
+
+          Active plan path(s):
+
+          MCP-HANDOFFPLAN-001 / MCP-HANDOFF-001. Receipt to review: docs/receipts/mcp-handoffplan-001-scope-corrected-20260817T005200Z.md
+
+
+          Requirement IDs / area if known:
+
+          FR-HANDOFF-001..007, TR-HANDOFF-CONTRACT/SECURITY/AGENT/VALIDATE/MODES/TODO/AUDIT/SURFACE-001, TEST-HANDOFF-001..007
+
+
+          Workspace rules roots:
+
+          - AGENTS.md / AGENTS-README-FIRST.yaml when present
+
+          - Operator standing rules: Byrd v4, receipts, MCP-only storage, no Python in lab
+
+          - Hostile AGREE required before done:true. Implementer says they did not mark done.
+
+
+          Write receipt to docs/receipts/hostile-validator-<utc>.md and .json.
+        queryTitle: You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpSer
+        response: Superseded by req-20260817T015741Z-001-hostile-handoff-validation before it was completed.
+        status: canceled
+        planFile: None
+        todoId: None
+        model: grok
+        tokenCount: 0
+      - requestId: req-20260817T104212Z-prompt-6212
+        timestamp: 2026-08-17T10:42:12.0000000+00:00
+        queryText: >-
+          <recommended_plugins>
+
+          Here is a list of plugins that are available but not installed.
+
+
+          - Airtable (airtable@openai-curated-remote)
+
+          - Apollo.io (apollo@openai-curated-remote)
+
+          - Asana (asana@openai-curated-remote)
+
+          - Atlassian Rovo (atlassian-rovo@openai-curated-remote)
+
+          - Base44 (base44@openai-curated-remote)
+
+          - Box (box@openai-curated-remote)
+
+          - Canva (canva@openai-curated-remote)
+
+          - Cloudflare (cloudflare@openai-curated-remote)
+
+          - Codex Security (codex-security@openai-curated-remote)
+
+          - Figma (figma@openai-curated-remote)
+
+          - Google Calendar (google-calendar@openai-curated-remote)
+
+          - Google Drive (google-drive@openai-curated-remote)
+
+          - Granola (granola@openai-curated-remote)
+
+          - HeyGen (heygen@openai-curated-remote)
+
+          - HubSpot (hubspot@openai-curated-remote)
+
+          - HyperFrames by HeyGen (hyperframes@openai-curated-remote)
+
+          - Linear (linear@openai-curated-remote)
+
+          - Lovable (lovable@openai-curated-remote)
+
+          - Monday.com (monday-com@openai-curated-remote)
+
+          - Neon Postgres (neon-postgres@openai-curated-remote)
+
+          - Notion (notion@openai-curated-remote)
+
+          - OpenAI Developers (openai-developers@openai-curated-remote)
+
+          - Outlook Calendar (outlook-calendar@openai-curated-remote)
+
+          - Outlook Email (outlook-email@openai-curated-remote)
+
+          - PostHog (posthog@openai-curated-remote)
+
+          - Remotion (remotion@openai-curated-remote)
+
+          - Replit (replit@openai-curated-remote)
+
+          - Semrush (semrush@openai-curated-remote)
+
+          - Sentry (sentry@openai-curated-remote)
+
+          - SharePoint (sharepoint@openai-curated-remote)
+
+          - Slack (slack@openai-curated-remote)
+
+          - Stripe (stripe@openai-curated-remote)
+
+          - Supabase (supabase@openai-curated-remote)
+
+          - Superpowers (superpowers@openai-curated-remote)
+
+          - Teams (teams@openai-curated-remote)
+
+          - Vercel (vercel@openai-curated-remote)
+
+          - Wix (wix@openai-curated-remote)
+
+          - Zotero (zotero@openai-curated-remote)
+
+          </recommended_plugins># AGENTS.md instructions for F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-remediation
+
+
+          <INSTRUCTIONS>
+
+          [Workspace AGENTS.md instructions supplied in the active prompt and read from disk during this turn.]
+
+          </INSTRUCTIONS><environment_context>
+            <cwd>F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-remediation</cwd>
+            <shell>powershell</shell>
+            <current_date>2026-08-17</current_date>
+            <timezone>America/Chicago</timezone>
+          </environment_context>
+
+
+          Perform the EIGHTH fresh independent adversarial review of BUG-TRIAGE-139 in the current worktree.
+
+
+          MANDATORY OPERATING CONSTRAINTS
+
+          - Use PowerShell.Mcp for every filesystem, git, process, build, test, and MCP/plugin/session operation.
+
+          - Do not use shell_command, exec_command, cmd, WSL, Git Bash, direct host filesystem tools, or raw REST.
+
+          - Work read-only except for mandatory MCP session-log records. Do not edit source, tests, generated files, TODOs, requirements, branches, commits, or refs.
+
+          - Read and obey AGENTS.md, AGENTS-README-FIRST.yaml, .github/copilot-instructions.md, and docs/Development-Process-draft-v4.md.
+
+          - Open and complete your own MCP session-log turn accurately as Codex.
+
+          - Do not trust remediation summaries or prior verdicts. Inspect the actual branch and run independent validation.
+
+          - Do not merge or push.
+
+
+          REVIEW RANGE
+
+          Base: 298c5fde3d1438ff7741ebec82ced796b207433e
+
+          Head: 8baf24e40bd5d226481cc261652af663f0f98226
+
+          Branch: codex/bug-triage-139-remediation
+
+          Prior seventh-review receipt:
+
+          C:\Users\kingd\AppData\Local\Temp\PowerShell.MCP.Output\pwsh_output_20260817_032155_614_1l2q2cnu.ajz.txt
+
+          Remediation execution receipt:
+
+          C:\Users\kingd\AppData\Local\Temp\PowerShell.MCP.Output\pwsh_output_20260817_053939_525_feuduu10.45l.txt
+
+          Backup ref expected:
+
+          backup/bug-triage-139-pre-trailer-rewrite-20260817-1030
+
+
+          [Full required-review, adjacent-regression, validation, and output contract exactly as supplied in this user turn.]
+        response: Eighth independent adversarial review completed read-only with verdict NOT APPROVED; findings and validation were delivered in the retained review receipt.
+        status: completed
+        planFile: None
+        todoId: None
+        model: codex
+        tokenCount: 0
+
+---

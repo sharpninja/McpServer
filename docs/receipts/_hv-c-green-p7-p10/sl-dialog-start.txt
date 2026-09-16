@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260822T020232Z-15a2
+  result:
+    agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T020204Z-c-green-p7-p10
+    requestId: req-20260822T020204Z-001-hostile-c-green-p7-p10
+    totalDialogCount: 2
+
+---

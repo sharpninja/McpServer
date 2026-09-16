@@ -1,0 +1,47 @@
+{
+  "redTrx": {
+    "exists": true,
+    "total": 2,
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "notExecuted": 0,
+    "outcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+        "outcome": "Failed"
+      }
+    ],
+    "creation": "2026-08-22T08:20:05.2762916-05:00"
+  },
+  "redIndependent": {
+    "exists": true,
+    "total": 2,
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "notExecuted": 0,
+    "outcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+        "outcome": "Failed"
+      }
+    ],
+    "creation": "2026-08-22T08:24:44.1113609-05:00"
+  },
+  "redAbsence": {
+    "pluginintP20DirCount": 0,
+    "pluginintP20Dirs": [],
+    "buildPluginPromotionExists": false,
+    "pluginPromotionPolicyExists": false,
+    "plantedApprovalExists": false
+  }
+}

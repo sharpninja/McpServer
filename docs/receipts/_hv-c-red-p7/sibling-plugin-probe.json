@@ -1,0 +1,74 @@
+[
+  {
+    "Name": "Codex",
+    "HostKind": "Codex",
+    "Root": "F:\\GitHub\\mcpserver-codex-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-codex-plugin\\Invoke-CodexMcpPlugin.ps1",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Claude Code",
+    "HostKind": "ClaudeCode",
+    "Root": "F:\\GitHub\\mcpserver-claude-code-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\Invoke-McpPlugin.ps1",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Claude Cowork",
+    "HostKind": "ClaudeCowork",
+    "Root": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-claude-cowork-plugin\\lib\\Invoke-McpPlugin.ps1",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Copilot",
+    "HostKind": "Copilot",
+    "Root": "F:\\GitHub\\mcpserver-copilot-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\Invoke-McpPlugin.ps1",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Grok",
+    "HostKind": "Grok",
+    "Root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Cline",
+    "HostKind": "Cline",
+    "Root": "F:\\GitHub\\mcpserver-cline-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-cline-plugin\\dist\\index.js",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "Cline v2",
+    "HostKind": "ClineV2",
+    "Root": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-cline-v2-plugin\\dist\\index.js",
+    "EntrypointExists": true,
+    "Enabled": true
+  },
+  {
+    "Name": "OpenCode",
+    "HostKind": "OpenCode",
+    "Root": "F:\\GitHub\\mcpserver-opencode-plugin",
+    "RootExists": true,
+    "Entrypoint": "F:\\GitHub\\mcpserver-opencode-plugin\\dist\\index.js",
+    "EntrypointExists": true,
+    "Enabled": true
+  }
+]

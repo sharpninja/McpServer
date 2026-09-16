@@ -1,0 +1,8 @@
+{
+  "AfterQueryMdExists": true,
+  "AfterQueryMdLength": 13779,
+  "AfterQueryJsonExists": true,
+  "AfterQueryJsonLength": 3682,
+  "AfterQueryJsonVerdict": "AGREE",
+  "AfterQueryJsonFailCount": 0
+}

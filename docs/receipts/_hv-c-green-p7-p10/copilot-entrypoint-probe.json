@@ -1,0 +1,5 @@
+{
+  "InvokeCopilotMcpPluginExists": true,
+  "InvokeMcpPluginExists": true,
+  "CatalogEntrypoint": "lib/Invoke-McpPlugin.ps1"
+}

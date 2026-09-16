@@ -1,0 +1,26 @@
+type: result
+payload:
+  requestId: req-20260821T225448Z-bc3b
+  result:
+    id: TR-MCP-REPL-010
+    title: Independent REPL session-log persistence strategies
+    body: McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
+    workspaceId: F:\GitHub\McpServer
+    priority: critical
+    status: pending
+    acceptanceCriteria:
+    - id: TR-MCP-REPL-010-AC001
+      text: Primary and failsafe persistence implementations are independently mockable and neither implementation contains fallback orchestration.
+      isSatisfied: false
+    - id: TR-MCP-REPL-010-AC002
+      text: Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail.
+      isSatisfied: false
+    - id: TR-MCP-REPL-010-AC003
+      text: Failsafe writes use an atomic replace or move and return the final absolute artifact path.
+      isSatisfied: false
+    - id: TR-MCP-REPL-010-AC004
+      text: Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+
+---

@@ -1,0 +1,246 @@
+{
+  "path": "build/Build.PluginSessionLogIntegration.cs",
+  "aiUnit": [
+    {
+      "line": 22,
+      "text": "PreflightPluginSessionLogAiUnitStrategy(RootDirectory);"
+    },
+    {
+      "line": 47,
+      "text": "/// TEST-MCP-PLUGININT-001 AC5: fail closed when aiUnit strategy metadata is missing."
+    },
+    {
+      "line": 50,
+      "text": "internal static void PreflightPluginSessionLogAiUnitStrategy(string repositoryRoot)"
+    },
+    {
+      "line": 54,
+      "text": "if (!File.Exists(csproj) || !File.ReadAllText(csproj).Contains(\"SharpNinja.aiUnit\", StringComparison.Ordinal))"
+    },
+    {
+      "line": 56,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: SharpNinja.aiUnit is not referenced.\");"
+    },
+    {
+      "line": 59,
+      "text": "var settingsPath = Path.Combine(repositoryRoot, \"tests\", \"McpServer.PluginIntegration.Tests\", \"appsettings.aiunit.json\");"
+    },
+    {
+      "line": 62,
+      "text": "throw new FileNotFoundException(\"PluginSessionLogIntegration aiUnit preflight failed: appsettings.aiunit.json is missing.\", settingsPath);"
+    },
+    {
+      "line": 70,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: ActiveStrategy is not available.\");"
+    },
+    {
+      "line": 73,
+      "text": "Log.Information(\"PluginSessionLogIntegration aiUnit strategy preflight passed.\");"
+    }
+  ],
+  "Preflight": [
+    {
+      "line": 22,
+      "text": "PreflightPluginSessionLogAiUnitStrategy(RootDirectory);"
+    },
+    {
+      "line": 50,
+      "text": "internal static void PreflightPluginSessionLogAiUnitStrategy(string repositoryRoot)"
+    },
+    {
+      "line": 56,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: SharpNinja.aiUnit is not referenced.\");"
+    },
+    {
+      "line": 62,
+      "text": "throw new FileNotFoundException(\"PluginSessionLogIntegration aiUnit preflight failed: appsettings.aiunit.json is missing.\", settingsPath);"
+    },
+    {
+      "line": 70,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: ActiveStrategy is not available.\");"
+    },
+    {
+      "line": 73,
+      "text": "Log.Information(\"PluginSessionLogIntegration aiUnit strategy preflight passed.\");"
+    }
+  ],
+  "Trait": [],
+  "PluginInt": [
+    {
+      "line": 10,
+      "text": "/// TEST-MCP-PLUGININT-001 AC5: run PluginIntegration tests and treat skipped tests as failures."
+    },
+    {
+      "line": 16,
+      "text": "var project = TestsDirectory / \"McpServer.PluginIntegration.Tests\" / \"McpServer.PluginIntegration.Tests.csproj\";"
+    },
+    {
+      "line": 31,
+      "text": ".SetFilter(\"PluginInt=Deterministic\")"
+    },
+    {
+      "line": 40,
+      "text": ".SetFilter(\"PluginInt=AI\")"
+    },
+    {
+      "line": 47,
+      "text": "/// TEST-MCP-PLUGININT-001 AC5: fail closed when aiUnit strategy metadata is missing."
+    },
+    {
+      "line": 53,
+      "text": "var csproj = Path.Combine(repositoryRoot, \"tests\", \"McpServer.PluginIntegration.Tests\", \"McpServer.PluginIntegration.Tests.csproj\");"
+    },
+    {
+      "line": 59,
+      "text": "var settingsPath = Path.Combine(repositoryRoot, \"tests\", \"McpServer.PluginIntegration.Tests\", \"appsettings.aiunit.json\");"
+    }
+  ],
+  "SetFilter": [
+    {
+      "line": 31,
+      "text": ".SetFilter(\"PluginInt=Deterministic\")"
+    },
+    {
+      "line": 40,
+      "text": ".SetFilter(\"PluginInt=AI\")"
+    }
+  ],
+  "FailIfPluginSessionLogSkipped": [
+    {
+      "line": 34,
+      "text": "FailIfPluginSessionLogSkipped(resultsDir / deterministicTrx);"
+    },
+    {
+      "line": 43,
+      "text": "FailIfPluginSessionLogSkipped(resultsDir / aiTrx);"
+    },
+    {
+      "line": 79,
+      "text": "internal static void FailIfPluginSessionLogSkipped(string trxPath)"
+    }
+  ],
+  "notExecuted": [
+    {
+      "line": 90,
+      "text": "var notExecuted = int.TryParse(counters?.Attribute(\"notExecuted\")?.Value, out var notExecutedCount) ? notExecutedCount : 0;"
+    },
+    {
+      "line": 94,
+      "text": "if (total == 0 || failed > 0 || skipped > 0 || notExecuted > 0 || executed < total)"
+    },
+    {
+      "line": 97,
+      "text": "$\"PluginSessionLogIntegration SkipIsFailure: skipped={skipped} notExecuted={notExecuted} executed={executed} total={total} failed={failed}.\");"
+    }
+  ],
+  "executed": [
+    {
+      "line": 90,
+      "text": "var notExecuted = int.TryParse(counters?.Attribute(\"notExecuted\")?.Value, out var notExecutedCount) ? notExecutedCount : 0;"
+    },
+    {
+      "line": 92,
+      "text": "var executed = int.TryParse(counters?.Attribute(\"executed\")?.Value, out var executedCount) ? executedCount : 0;"
+    },
+    {
+      "line": 94,
+      "text": "if (total == 0 || failed > 0 || skipped > 0 || notExecuted > 0 || executed < total)"
+    },
+    {
+      "line": 97,
+      "text": "$\"PluginSessionLogIntegration SkipIsFailure: skipped={skipped} notExecuted={notExecuted} executed={executed} total={total} failed={failed}.\");"
+    }
+  ],
+  "skipped": [
+    {
+      "line": 10,
+      "text": "/// TEST-MCP-PLUGININT-001 AC5: run PluginIntegration tests and treat skipped tests as failures."
+    },
+    {
+      "line": 34,
+      "text": "FailIfPluginSessionLogSkipped(resultsDir / deterministicTrx);"
+    },
+    {
+      "line": 43,
+      "text": "FailIfPluginSessionLogSkipped(resultsDir / aiTrx);"
+    },
+    {
+      "line": 77,
+      "text": "/// Fails the PluginSessionLogIntegration target when the TRX counters report skipped tests."
+    },
+    {
+      "line": 79,
+      "text": "internal static void FailIfPluginSessionLogSkipped(string trxPath)"
+    },
+    {
+      "line": 89,
+      "text": "var skipped = int.TryParse(counters?.Attribute(\"skipped\")?.Value, out var skippedCount) ? skippedCount : 0;"
+    },
+    {
+      "line": 94,
+      "text": "if (total == 0 || failed > 0 || skipped > 0 || notExecuted > 0 || executed < total)"
+    },
+    {
+      "line": 97,
+      "text": "$\"PluginSessionLogIntegration SkipIsFailure: skipped={skipped} notExecuted={notExecuted} executed={executed} total={total} failed={failed}.\");"
+    },
+    {
+      "line": 100,
+      "text": "Log.Information(\"PluginSessionLogIntegration SkipIsFailure passed (skipped=0).\");"
+    }
+  ],
+  "SharpNinja": [
+    {
+      "line": 54,
+      "text": "if (!File.Exists(csproj) || !File.ReadAllText(csproj).Contains(\"SharpNinja.aiUnit\", StringComparison.Ordinal))"
+    },
+    {
+      "line": 56,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: SharpNinja.aiUnit is not referenced.\");"
+    }
+  ],
+  "grokBuild": [
+    {
+      "line": 68,
+      "text": "|| !json.Contains(\"grok-build\", StringComparison.Ordinal))"
+    }
+  ],
+  "appsettingsAiunit": [
+    {
+      "line": 59,
+      "text": "var settingsPath = Path.Combine(repositoryRoot, \"tests\", \"McpServer.PluginIntegration.Tests\", \"appsettings.aiunit.json\");"
+    },
+    {
+      "line": 62,
+      "text": "throw new FileNotFoundException(\"PluginSessionLogIntegration aiUnit preflight failed: appsettings.aiunit.json is missing.\", settingsPath);"
+    }
+  ],
+  "ActiveStrategy": [
+    {
+      "line": 66,
+      "text": "if (!json.Contains(\"\\\"ActiveStrategy\\\"\", StringComparison.Ordinal)"
+    },
+    {
+      "line": 70,
+      "text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: ActiveStrategy is not available.\");"
+    }
+  ],
+  "Deterministic": [
+    {
+      "line": 27,
+      "text": "var deterministicTrx = \"plugin-sessionlog-deterministic.trx\";"
+    },
+    {
+      "line": 31,
+      "text": ".SetFilter(\"PluginInt=Deterministic\")"
+    },
+    {
+      "line": 33,
+      "text": ".SetLoggers($\"trx;LogFileName={deterministicTrx}\"));"
+    },
+    {
+      "line": 34,
+      "text": "FailIfPluginSessionLogSkipped(resultsDir / deterministicTrx);"
+    }
+  ]
+}

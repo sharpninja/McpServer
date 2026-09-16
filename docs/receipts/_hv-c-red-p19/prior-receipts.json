@@ -1,0 +1,13 @@
+{
+  "TimestampUtc": "2026-08-22T09:02:59.7033229Z",
+  "MdExists": true,
+  "JsonExists": true,
+  "MdLastWriteTimeUtc": "2026-08-22T08:48:40.5893791Z",
+  "MdLength": 17783,
+  "MdOverallVerdictAgree": true,
+  "MdPhase": "C-green-P16-P18",
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPhase": "C-green-P16-P18-r2",
+  "JsonTimestampUtc": "08/22/2026 08:46:49"
+}

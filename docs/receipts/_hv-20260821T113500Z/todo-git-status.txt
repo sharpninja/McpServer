@@ -1,0 +1,6 @@
+
+---LOG---
+[33macb4374a[m feat: add PowerShell shim DTO module
+[33m1c7ac614[m Update TODO.yaml projections, GitVersion, and McpServerTools submodule
+[33m6584cedc[m Update PowerShell MCP tools and session management
+

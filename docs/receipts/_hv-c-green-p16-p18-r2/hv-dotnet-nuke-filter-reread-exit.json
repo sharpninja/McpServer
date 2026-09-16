@@ -1,0 +1,11 @@
+{
+  "Command": "nuke-skip-filter-reread",
+  "ExitCode": 0,
+  "DurationMs": 4119,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\hv-dotnet-nuke-filter-reread.log",
+  "ResultsDirectory": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\results-nuke-reread-20260822T084513Z",
+  "FinishedUtc": "2026-08-22T08:45:17.6093074Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "BuildSourceUtc": "2026-08-22T08:44:07.2351641Z",
+  "TestSourceUtc": "2026-08-22T08:43:22.1103753Z"
+}

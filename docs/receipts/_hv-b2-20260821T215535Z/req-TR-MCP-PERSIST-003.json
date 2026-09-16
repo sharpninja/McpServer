@@ -1,0 +1,31 @@
+{
+  "id": "TR-MCP-PERSIST-003",
+  "title": "Failsafe drain inspects errors without Write-Error Stop skip",
+  "body": "Invoke-ReplFailsafeDrain SHALL inspect Invoke-ReplRaw failures without Write-Error under ErrorActionPreference Stop skipping Test-ReplFailsafeBackendUnreachable. Drain of SessionLog.SubmitAsync SHALL abort on timeout/503 without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted. Drain MUST NOT block the successful caller for the full 30s SubmitAsync timeout (bounded drain timeout or drain after return).\n\nAcceptance Criteria:\n- Pester: timeout/503 abort, no drain failed stderr, later replay works.\n- getFr returns before 30s when a queued session_submit 503s.",
+  "workspaceId": "F:\\GitHub\\McpServer",
+  "priority": "medium",
+  "status": "pending",
+  "notes": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC1",
+      "text": "Failsafe drain on SubmitAsync timeout or 503 aborts without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC2",
+      "text": "getFr returns before 30s when a queued session_submit 503s.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC3",
+      "text": "Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync is REPL_FAILSAFE_DRAIN_TIMEOUT default 120, or REPL_TIMEOUT when greater, never hardcoded 2.",
+      "isSatisfied": false,
+      "evidence": null
+    }
+  ],
+  "scopeStartLayerKey": "layer-1",
+  "scopeEndLayerKey": null
+}

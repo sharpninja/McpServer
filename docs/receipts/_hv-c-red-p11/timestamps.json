@@ -1,0 +1,114 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T020756Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:09:17.2911026Z",
+    "Length": 16345,
+    "AfterCGreenP7P10Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T020756Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:09:17.3046189Z",
+    "Length": 3470,
+    "AfterCGreenP7P10Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:16:47.2112634Z",
+    "Length": 1382,
+    "AfterCGreenP7P10Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:16:47.2112634Z",
+    "Length": 3013,
+    "AfterCGreenP7P10Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowResult.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:16:47.2112634Z",
+    "Length": 1037,
+    "AfterCGreenP7P10Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCollection.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 303,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:23:02.8876623Z",
+    "Length": 5502,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogScenario.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:05:08.5000833Z",
+    "Length": 1343,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostKind.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 702,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:50:26.5736592Z",
+    "Length": 5529,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:51:52.5198536Z",
+    "Length": 10640,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixture.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+    "Length": 20101,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixtureTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:02:10.4371979Z",
+    "Length": 4930,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationProjectTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 1663,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\scenarios\\plugin-sessionlog-scenarios.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:22:35.5161797Z",
+    "Length": 2303,
+    "AfterCGreenP7P10Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "Length": 68486,
+    "AfterCGreenP7P10Agree": false
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "MdExists": true,
+  "MdPath": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T073737Z.md",
+  "MdLength": 15198,
+  "MdLastWriteTimeUtc": "2026-08-22T07:37:37.1953111Z",
+  "MdHasAgree": true,
+  "MdHasDisagree": false,
+  "MdEmDash": false,
+  "MdEnDash": false,
+  "JsonExists": true,
+  "JsonPath": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T073737Z.json",
+  "JsonLength": 6473,
+  "JsonLastWriteTimeUtc": "2026-08-22T07:37:37.1903135Z",
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPassCount": 17,
+  "JsonClaimCount": 17,
+  "FilterFailed": "8",
+  "FilterPassed": "0",
+  "FilterNotExecuted": "0"
+}

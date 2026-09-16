@@ -1,0 +1,1 @@
+104:Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.PluginIntegration.Tests", "tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj", "{3F720EC0-2136-4C66-B9BE-4E2DBDC00C44}"

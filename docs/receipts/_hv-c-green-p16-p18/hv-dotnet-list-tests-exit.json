@@ -1,0 +1,15 @@
+{
+  "Command": "list-pluginint",
+  "ExitCode": 0,
+  "DurationMs": 19690,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18\\hv-dotnet-list-tests.log",
+  "FinishedUtc": "2026-08-22T07:54:32.9226218Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "DotnetArgs": [
+    "test",
+    "tests/McpServer.PluginIntegration.Tests",
+    "-c",
+    "Debug",
+    "--list-tests"
+  ]
+}

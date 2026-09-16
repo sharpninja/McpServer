@@ -1,0 +1,16 @@
+{
+  "MdPath": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T071202Z.md",
+  "MdLastWriteTimeUtc": "2026-08-22T07:13:03.6679975Z",
+  "MdOverallVerdictMatch": true,
+  "MdP15FilterLine": true,
+  "MdFull86": true,
+  "MdP16Absent": true,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFilterPassed": 24,
+  "JsonFilterFailed": 0,
+  "JsonFilterSkipped": 0,
+  "JsonFullPassed": 86,
+  "JsonFullFailed": 0,
+  "JsonFullSkipped": 0,
+  "JsonP16NamedTestsPresent": false
+}

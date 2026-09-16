@@ -1,0 +1,33 @@
+c217d7a081c1ab4945e44eac381d8b9bea2a2df4 2026-07-10T07:58:05-05:00 feat(transcripts): add multi-agent transcript ingestion
+b9b7febdbb9ef19d5ff29bb945ead2db52901dc6 2026-06-29T17:26:18-05:00 feat(agent): generalize CLI execution strategies
+9c92eba0c4b979e49a9d975f068295400937b9ad 2026-06-22T14:40:13-05:00 fix(repl): appendActions state sync + no Codex default; Byrd TDD tests in DeprecationTests; fixed TR-per-FR-Mapping + QUAD TR Status for unit tests green; requirements wiki export; full Nuke unit tests pass
+7282f689453476ad09520860486247ab4e17ad5c 2026-06-18T18:08:57-05:00 feat(qbagent): Phase D - agentskills.io skill subsystem
+fc221f094b7a5d6d0031339123d25d130c6a1bf5 2026-06-18T17:26:18-05:00 feat(qbagent): Phase A+B - external tool primitives + targeted file edit
+2c48702741651ec53367e259c46f0eba3d1c143c 2026-06-18T12:33:03-05:00 feat: QuadBrain OpenAI-compatible endpoint + QBAgent host + tool interception
+8f715710fd403e53ccb8ee74eaa9bb96a3415741 2026-06-17T13:28:37-05:00 test: add full ACID transaction lifecycle integration suite
+95ba26848cda6ba7451f9c14797ce62d80398397 2026-06-12T11:20:16-05:00 feat(transactions): add separated security services
+dd502e001f4ea9c4b7c175cee9d8c0b27b7b56cf 2026-06-12T01:26:41-05:00 feat(transactions): add keyserver diffgram gate
+fa54266bd1d60253dc7351d176f85800aab2a2cd 2026-04-02T11:40:24-05:00 Add Nuke build system with 15 targets, TDD tests, and CI/CD integration
+866af96d679864b1b131dabd5ee07667a7bd30be 2026-03-29T21:54:44-05:00 Create integration tests for mcpserver-repl with YAML handshake, trust-bootstrap flow, and workspace selection
+acbdb8dfa9ba73a8ffd4c42731add753b1d2ecfb 2026-03-28T12:04:09-05:00 Implement trust bootstrap and provider factory groundwork
+b45ccecf791fceb062419157a743e0702a24ad3c 2026-03-10T18:57:06-05:00 Rebrand hosted agent as MCP Agent
+d75c844a1a3d9d4de9d6e80bd28c14241aa24129 2026-03-09T13:53:45-05:00 Complete agent framework and config APIs
+9e31be828ff86ca012695e4a8e6b465f1d357657 2026-03-06T14:42:45-06:00 chore: commit all current workspace changes
+45bcc7a18876a1eef39d60588e408197042d6fc1 2026-03-06T08:56:48-06:00 Update solution for VS 18; remove SpecFlow test project
+5331c364c95e165be67058c7b39d176cc8611744 2026-03-06T08:29:43-06:00 ARCH-MIGRATE-002: Cleanup submodule - removed migrated projects and fixed tests
+772534f52f9c622031f59b11eab3b2636dde34a2 2026-03-05T10:32:14-06:00 merge: resolve conflicts from origin/develop (SpecFlow InternalsVisibleTo + architecture libs)
+f42380ab4554d90e18aafb303dd1e25a2647a327 2026-03-05T10:03:45-06:00 arch: extract Storage, Services, and GraphRag into dedicated class libraries
+2c384945b379d85c094e6be0eb2266da8c781a5d 2026-03-05T09:05:40-06:00 Merge branch 'develop' into copilot/merge-develop-to-main
+297a35e21a490d961ecffc388231acf2c8e476ef 2026-03-05T08:16:27-06:00 Isolate integration tests, fix all tests
+315629ba61e1389cd70bdf9ee0aa76ce151e75fc 2026-03-04T18:18:26-06:00 feat: add McpServer.Web.Tests project and user-docs TODO
+1a74422d905cc227e20ff88aea40d937a688f4b8 2026-03-03T08:07:56-06:00 test: add UI.Core test suite and Director RBAC coverage
+937773d876c279895dbcabc5809b6a7a3e96e0ea 2026-03-02T20:22:00-06:00 chore: checkpoint pending workspace-wide updates
+ef2ac5729eb2abf675cd3cbcfbedfbb5c32bb5c1 2026-03-02T17:03:22Z chore: merge develop into main
+061b0f795f9844f155e0a0065b76254efc2ddcfd 2026-02-27T21:43:47-06:00 feat: Add McpServer.Launcher desktop process launcher with CreateProcessWithTokenW
+28dc4d6649ebae1d4bf78affd671c8da1fb51228 2026-02-26T14:10:14-06:00 refactor: remove WorkspacePort concept, add Director CLI tests
+45054c5f107502cb4ef1efd821992b151f6461ab 2026-02-24T20:46:45-06:00 Expand Director MVVM/CQRS admin UI, fix requirements execution, and add CI tool packaging
+f302fae382eeded77126aa170a36ee1c19feb777 2026-02-23T19:55:38Z feat: add McpServer.SpecFlow.Tests project with 158 Reqnroll BDD scenarios
+686d42f6116a57afe0738f12078f09661aa24e97 2026-02-23T08:05:10-06:00 feat: add McpServer.Client NuGet library with full API coverage
+fbc2ef4392577db82f6b5a2e6ffd4b709de45a5a 2026-02-19T09:44:38-06:00 refactor: rename FWH identifiers to McpServer across repository
+3f23546ea4a02b3cefb423c6c33449c3c878520d 2026-02-19T09:09:17-06:00 feat: extract MCP server from FunWasHad monorepo
+

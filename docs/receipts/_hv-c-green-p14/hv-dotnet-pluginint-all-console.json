@@ -1,0 +1,13 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-dotnet-pluginint-all.log",
+  "filterFailed": 0,
+  "filterPassed": 62,
+  "filterSkipped": 0,
+  "filterTotal": 62,
+  "filterFailedBang": false,
+  "filterPassedBang": true,
+  "rejectMsgCount": 0,
+  "length": 2709,
+  "lastWriteTimeUtc": "2026-08-22T05:06:15.8008481Z"
+}

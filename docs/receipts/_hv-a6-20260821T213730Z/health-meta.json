@@ -1,0 +1,9 @@
+{
+  "stamp": "20260821T213730Z",
+  "healthStatus": 200,
+  "nonceSent": "c71e92cd029e46579aabbd92e81ea3e6",
+  "nonceEcho": "c71e92cd029e46579aabbd92e81ea3e6",
+  "nonceMatch": true,
+  "signatureOk": true,
+  "healthStatusText": "Healthy"
+}

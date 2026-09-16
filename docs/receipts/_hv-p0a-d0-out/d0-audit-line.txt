@@ -1,0 +1,1 @@
+Audit: `IngestAsync_ConcurrentSameHash_ReservesOnce`, `GetRunAsync_FailedExtraction_DoesNotReportSuccess`, `RequireReview_MalformedDraft_IsFailedAndNotApprovable`, `IngestAsync_Cancelled_ThrowsWithoutSuccessfulPersist`, `IngestAsync_SecretInDraft_IsRedactedOnPersist`, `Parser_UnknownField_IsNotSuccess`, `ApproveAsync_SeparateContexts_CreatedWins`.

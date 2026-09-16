@@ -1,0 +1,371 @@
+type: result
+payload:
+  requestId: req-20260822T003534Z-df03
+  result:
+    totalCount: 25
+    limit: 5
+    offset: 0
+    items:
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T002701Z-c-red-p4-r3
+      title: Hostile C-red-P4 r3 re-gate after 235922Z DISAGREE
+      model: grok-build-subagent
+      started: 2026-08-22T00:27:17.5322773+00:00
+      lastUpdated: 2026-08-22T00:35:07.9344337+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T002701Z-001-hostile-c-red-p4-r3
+        timestamp: 2026-08-22T00:35:07.9344337+00:00
+        queryText: CLASS 1 C-red-P4 re-gate after DISAGREE docs/receipts/hostile-validator-20260821T235922Z.md. Attack parent claims that C3/D5 are closed, tests still fail via not-implemented throw, and LoadAndValidate is still throw-only. Surfaces A+B+C+D. Review only. Do not implement LoadAndValidate. PLAN stays not done.
+        queryTitle: Hostile C-red-P4 r3 re-gate catalog AC1 and TDD hold
+        response: Hostile C-red-P4 r3 DISAGREE. Receipt docs/receipts/hostile-validator-20260822T003120Z.md. PluginSessionLogCatalogTests Passed 6 Failed 0 Skipped 0. LoadAndValidate implemented. Naive deserialize of live JSON AllSixWouldPass true. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not claim C-red-P4 AGREE. Do not mark P4 done.
+        interpretation: Re-gate Phase C-red-P4 after DISAGREE. Review only. Do not implement. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce 77ee702554f947ddb119539070731850 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42820
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Re-ran PluginSessionLogCatalogTests Passed 6 Failed 0 Skipped 0; LoadAndValidate implemented
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - order: 4
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P4 task done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p4-r3/todo-plan-pluginhandoff-001.txt
+        - order: 5
+          description: Wrote hostile receipt pair 20260822T003120Z OverallVerdict DISAGREE FailCount 6
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T003120Z.md
+        - order: 6
+          description: DISAGREE because C-red-P4 brief mixed P4 green artifacts and a deserialize-only loader would pass all six tests
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P4
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogScenario.cs
+        - tests/McpServer.PluginIntegration.Tests/scenarios/plugin-sessionlog-scenarios.json
+        - docs/receipts/hostile-validator-20260821T235922Z.md
+        - docs/receipts/hostile-validator-20260822T001811Z.md
+        - docs/receipts/hostile-validator-20260822T003120Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T00:27:18.0004806+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read. Work class 1. Surfaces A+B+C+D apply. Disk read before tests showed PluginSessionLogCatalog.LoadAndValidate is a full JSON loader with validation, not a not-implemented throw. Independent re-run of CatalogTests, live todo_get, sibling entrypoint probe, and deserialize simulation starting now.
+          category: observation
+        - timestamp: 2026-08-22T00:34:52.6558987+00:00
+          role: model
+          content: Independent re-run PluginSessionLogCatalogTests Passed 6 Failed 0 Skipped 0. Whole PluginIntegration.Tests Passed 7 Failed 0 Skipped 0. LoadAndValidate is implemented (deserialize plus AC1/root/entrypoint/version/eight/unique-key checks), not a not-implemented throw. Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P4 done false. Live JSON Codex entrypoint is Invoke-CodexMcpPlugin.ps1 and the file exists. deserialize-simulate AllSixWouldPass true.
+          category: observation
+        - timestamp: 2026-08-22T00:34:52.6558987+00:00
+          role: model
+          content: 'Decision: DISAGREE this C-red-P4 re-gate. Parent claimed tests still fail via not-implemented throw and that P4 green has not started. Artifacts show P4 green on disk after r2 AGREE. Consequence: cannot AGREE C-red-P4; cannot mark PLAN or PLUGININT or P4 done; do not treat this as C-green-P4 either because the brief mixed a red-gate with green artifacts and false throw-only claims. Alternatives rejected: AGREE because C3 coverage is now present (coverage is not a red-gate while tests are green); treat deserialize-only AllSixWouldPass as a hold that still allows C-red AGREE (parent instruction forbids that).'
+          category: decision
+        - timestamp: 2026-08-22T00:34:52.6558987+00:00
+          role: model
+          content: C-green-P1-P3 AGREE on disk. Prior DISAGREE 235922Z C3/D5. r2 AGREE 001811Z then Catalog.cs 00:23:02Z implementation. Plugin signature true. Health nonce 77ee702554f947ddb119539070731850 echoed. Receipt docs/receipts/hostile-validator-20260822T003120Z.md OverallVerdict DISAGREE FailCount 6.
+          category: observation
+        designDecisions:
+        - Score C-red-P4 r3 from independently re-run CatalogTests, live MCP store, r2 AGREE timestamps, implemented LoadAndValidate, and live-JSON deserialize simulation, not implementer narrative.
+        - 'DISAGREE: P4 green is on disk; tests Passed 6; naive deserialize of live JSON would pass all six. Do not mark PLAN/PLUGININT/P4 done. Do not AGREE this red-gate. Do not treat this receipt as C-green-P4.'
+        requirementsDiscovered:
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T003120Z.md
+        - docs/receipts/hostile-validator-20260822T003120Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T003138Z-c-green-p4
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P4 catalog validation
+      model: grok-build-subagent
+      started: 2026-08-22T00:32:04.1267913+00:00
+      lastUpdated: 2026-08-22T00:32:04.1267913+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T003138Z-001-hostile-c-green-p4-catalog
+        timestamp: 2026-08-22T00:32:04.1267913+00:00
+        queryText: CLASS 1 hostile review of PLAN-PLUGINHANDOFF-001 Phase C-green-P4 only. Surfaces A+B+C+D. Do not require P5-P20. PLAN stays not done. Prior C-red-P4 AGREE docs/receipts/hostile-validator-20260822T001811Z.md. Re-run PluginIntegration.Tests. Read LoadAndValidate. Live todo_get. Attack still throws not implemented, tests skipped, TR AC1 ignored, uniqueness still repository name, PLAN done.
+        queryTitle: Hostile C-green-P4 catalog LoadAndValidate
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        model: grok-build-subagent
+        processingDialog:
+        - timestamp: 2026-08-22T00:32:05.4031372+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read. Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P4 only after C-red-P4 AGREE. Starting independent PluginIntegration.Tests rerun, LoadAndValidate read, live todo_get, sibling entrypoint probe, and fail-closed probes.
+          category: observation
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T001410Z-c-red-p4-r2
+      title: Hostile re-review PLAN-PLUGINHANDOFF-001 C-red-P4 after DISAGREE
+      model: grok-build-subagent
+      started: 2026-08-22T00:14:28.4860917+00:00
+      lastUpdated: 2026-08-22T00:20:58.7564273+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T001410Z-001-hostile-c-red-p4-rereview
+        timestamp: 2026-08-22T00:20:58.7564273+00:00
+        queryText: CLASS 1 re-review of PLAN-PLUGINHANDOFF-001 Phase C-red-P4 after DISAGREE docs/receipts/hostile-validator-20260821T235922Z.md. Surfaces A+B+C+D. Review only. Re-attack C3 TR AC1 pinning and D5 trivial JSON deserialize. Re-run CatalogTests. Live todo_get. PLAN stays not done.
+        queryTitle: Hostile re-review C-red-P4 catalog AC1 pinning
+        response: Hostile C-red-P4 re-review AGREE. Receipt docs/receipts/hostile-validator-20260822T001811Z.md. PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0. LoadAndValidate not implemented. Prior C3/D5 remediations hold. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not claim P4 green.
+        interpretation: Re-review Phase C-red-P4 after DISAGREE. Review only. Do not implement. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce f803eb09c53a496fafada1be18070c48 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42814
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Re-ran PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0; LoadAndValidate not implemented
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - order: 4
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P4 task done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p4-r2/todo-plan-pluginhandoff-001.txt
+        - order: 5
+          description: Wrote hostile receipt pair 20260822T001811Z OverallVerdict AGREE FailCount 0
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T001811Z.md
+        - order: 6
+          description: AGREE because prior C3/D5 holes are closed; tests remain red; PLAN stays not done
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P4
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogScenario.cs
+        - tests/McpServer.PluginIntegration.Tests/scenarios/plugin-sessionlog-scenarios.json
+        - docs/receipts/hostile-validator-20260821T235922Z.md
+        - docs/receipts/hostile-validator-20260822T001811Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T00:14:29.1935446+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read. Work class 1. Surfaces A+B+C+D apply. Prior receipt DISAGREE C3 and D5. Starting independent CatalogTests rerun, catalog type/JSON/test read, live todo_get, and sibling entrypoint probe using catalog-declared paths.
+          category: observation
+        - timestamp: 2026-08-22T00:20:51.6683415+00:00
+          role: model
+          content: Independent re-run PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0. LoadAndValidate still throws not implemented. Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P4 done false. Scenario type now has CacheFolder, Entrypoint, RequiredEnvironmentVariables. JSON has those fields for eight rows; Cline v2 cacheFolder cline-v2. UniqueAgentSourceCache keys AgentSourceType:CacheFolder. RequiredEntrypointFilesExist uses catalog Entrypoint (no three-path OR) and non-empty env vars. Catalog_ExactlyEightEnabled asserts Cline v2.
+          category: observation
+        - timestamp: 2026-08-22T00:20:51.6683415+00:00
+          role: model
+          content: 'Decision: AGREE C-red-P4 after remediations. Prior C3 FAIL is closed: TR-MCP-PLUGININT-001 AC1 catalog fields are typed, in JSON, and pinned by the six red tests. Prior D5 FAIL is closed: trivial JSON deserialize would not green all six (Codex catalog path lib/Invoke-CodexMcpPlugin.ps1 missing; actual file is repo-root Invoke-CodexMcpPlugin.ps1), and the tests that would pass now exercise AC1 fields. Consequence: C-red-P4 gate may proceed to P4 green; do not mark PLAN or PLUGININT done; do not claim P4 green. Alternatives rejected: keep DISAGREE because Codex path is wrong (that is P4 green data, not a red-gate coverage hole); AGREE P4 green; homemade HMAC false as MCP_UNTRUSTED.'
+          category: decision
+        - timestamp: 2026-08-22T00:20:51.6683415+00:00
+          role: model
+          content: C-green-P1-P3 AGREE on disk. Remediation files after prior DISAGREE 23:59:22Z. Plugin signature true. Health nonce f803eb09c53a496fafada1be18070c48 echoed. Receipt docs/receipts/hostile-validator-20260822T001811Z.md OverallVerdict AGREE FailCount 0.
+          category: observation
+        designDecisions:
+        - Score C-red-P4 rereview from independently re-run CatalogTests, live MCP store, prior DISAGREE timestamps, and catalog-path sibling probe, not implementer narrative.
+        - 'AGREE: remediations pin TR-MCP-PLUGININT-001 AC1 catalog fields. Named tests still fail via not implemented. Do not start claiming P4 green. Do not mark PLAN/PLUGININT done.'
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T235600Z-c-red-p4
+      title: Hostile validate PLAN-PLUGINHANDOFF-001 C-red-P4
+      model: grok-build-subagent
+      started: 2026-08-21T23:56:18.5206797+00:00
+      lastUpdated: 2026-08-22T00:02:23.8877141+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T235600Z-001-hostile-c-red-p4
+        timestamp: 2026-08-22T00:02:23.8877141+00:00
+        queryText: 'Independently re-verify PLAN-PLUGINHANDOFF-001 Phase C-red-P4 claims: C-green-P1-P3 AGREE then six new PluginSessionLogCatalogTests reds, LoadAndValidate not implemented, filter Failed 6 Passed 0 Skipped 0, TODOs remain done false.'
+        queryTitle: Hostile validate C-red-P4 plugin sessionlog catalog tests
+        response: Hostile C-red-P4 review DISAGREE. Receipt docs/receipts/hostile-validator-20260821T235922Z.md. PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0. LoadAndValidate not implemented. FAIL C3 TR AC1 catalog fields not pinned; FAIL D5 trivial loader would green. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false.
+        interpretation: Validate Phase C-red-P4 claims. Review only. Do not implement. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce 49d2da7c853647a3b72d361aa98bba42 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42807
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Re-ran PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0; LoadAndValidate not implemented
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - order: 4
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P4 task done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p4/todo-plan-pluginhandoff-001.txt
+        - order: 5
+          description: Wrote hostile receipt pair 20260821T235922Z OverallVerdict DISAGREE FailCount 2
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T235922Z.md
+        - order: 6
+          description: DISAGREE because P4 reds do not pin TR AC1 cache/entrypoint/env; trivial loader would go green
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P4
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+        - docs/receipts/hostile-validator-20260821T234422Z.md
+        - docs/receipts/hostile-validator-20260821T235922Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T00:01:47.7809290+00:00
+          role: model
+          content: add-profile executed. 18 non-skill profile files read. Work class 1. Surfaces A+B+C+D apply. Independent re-run PluginSessionLogCatalogTests Failed 6 Passed 0 Skipped 0. LoadAndValidate still throws not implemented. Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false.
+          category: observation
+        - timestamp: 2026-08-22T00:01:47.7809290+00:00
+          role: model
+          content: 'Decision: DISAGREE C-red-P4 despite currently failing named tests. C3 FAIL: TR-MCP-PLUGININT-001 AC1 catalog fields (entrypoint, environment variables, cache folder name) are not pinned; UniqueAgentSourceCache keys AgentSourceType:RepositoryName. D5 FAIL: sibling plugin probe shows a trivial JSON loader would green all six tests. Consequence: do not start P4 green; do not mark PLAN or PLUGININT done. Alternatives rejected: AGREE on named-test existence alone; treating P2 green in the same project as mixed P4 green; homemade HMAC false as MCP_UNTRUSTED.'
+          category: decision
+        - timestamp: 2026-08-22T00:01:47.7809290+00:00
+          role: model
+          content: C-green-P1-P3 AGREE on disk. P4 test files after 23:48:25Z. Plugin signature true. Health nonce 49d2da7c853647a3b72d361aa98bba42 echoed. Receipt docs/receipts/hostile-validator-20260821T235922Z.md OverallVerdict DISAGREE FailCount 2.
+          category: observation
+        designDecisions:
+        - Score C-red-P4 from independently re-run CatalogTests, live MCP store, C-green-P1-P3 AGREE timestamps, and sibling plugin probe, not implementer narrative.
+        - 'DISAGREE: named tests exist and fail, but they do not cover TR-MCP-PLUGININT-001 AC1 catalog fields. Do not start P4 green. Do not mark PLAN/PLUGININT done.'
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260821T234007Z-c-green-p1-p3
+      title: Hostile validate PLAN-PLUGINHANDOFF-001 C-green-P1-P3
+      model: grok-build-subagent
+      started: 2026-08-21T23:40:19.7498727+00:00
+      lastUpdated: 2026-08-21T23:46:59.5758826+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260821T234007Z-001-hostile-c-green-p1-p3
+        timestamp: 2026-08-21T23:46:59.5758826+00:00
+        queryText: Independently re-verify PLAN-PLUGINHANDOFF-001 Phase C-green-P1-P3 claims for PluginSessionLogIntegration target, PluginIntegration project, eight-row catalog, P1 tests green, C-red-P1 AGREE ordering, and live TODO done flags.
+        queryTitle: Hostile validate C-green-P1-P3 plugin sessionlog harness
+        response: Hostile C-green-P1-P3 review AGREE. Receipt docs/receipts/hostile-validator-20260821T234422Z.md. Build.Tests PluginSessionLogIntegrationTargetTests Passed 3 Failed 0 Skipped 0. PluginIntegration.Tests Passed 1 Failed 0 Skipped 0. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false.
+        interpretation: Validate Phase C-green-P1-P3 claims. Review only. Do not implement. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce 5558b6438b2e489fb0dc93b5e6619462 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42804
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Re-ran PluginSessionLogIntegrationTargetTests Passed 3 Failed 0 Skipped 0 and PluginIntegration.Tests Passed 1 Failed 0 Skipped 0
+          type: test
+          status: completed
+          filePath: tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - order: 4
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p1-p3/todo-plan-pluginhandoff-001.txt
+        - order: 5
+          description: Wrote hostile receipt pair 20260821T234422Z OverallVerdict AGREE
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T234422Z.md
+        - order: 6
+          description: Chose plugin Test-MarkerSignature over homemade HMAC false-negative; did not require P4-P20
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P1-P3
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - docs/receipts/hostile-validator-20260821T232545Z.md
+        - docs/receipts/hostile-validator-20260821T234422Z.md
+        processingDialog:
+        - timestamp: 2026-08-21T23:46:40.8768836+00:00
+          role: model
+          content: add-profile executed. 18 non-skill profile files read. Work class 1. Surfaces A+B+C+D apply. Independent re-run Build.Tests PluginSessionLogIntegrationTargetTests Passed 3 Failed 0 Skipped 0. PluginIntegration.Tests Passed 1 Failed 0 Skipped 0.
+          category: observation
+        - timestamp: 2026-08-21T23:46:40.8768836+00:00
+          role: model
+          content: 'Decision: score C-green-P1-P3 from independently re-run tests, live todo_get, file timestamps versus C-red-P1 AGREE, and plugin Test-MarkerSignature, not implementer chat. Consequence: AGREE only if A+B+C+D all PASS. Alternatives rejected: homemade HMAC false as MCP_UNTRUSTED; requiring P4-P20 or PLAN done; treating missing TRX skipped attribute as skipped tests.'
+          category: decision
+        - timestamp: 2026-08-21T23:46:40.8768836+00:00
+          role: model
+          content: C-red-P1 AGREE on disk. Green files after 23:25:45Z. Catalog has Cline v2. PLAN and PLUGININT done false. FailIfPluginSessionLogSkipped treats skip as fail. Plugin signature true. Health nonce echoed.
+          category: observation
+        designDecisions:
+        - Score C-green-P1-P3 from independently re-run tests, live MCP store, and C-red-P1 AGREE timestamps, not implementer narrative.
+        - Treat plugin Test-MarkerSignature as authoritative. Do not require P4-P20, Phase C complete, or PLAN/PLUGININT done.
+
+---

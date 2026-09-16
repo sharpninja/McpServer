@@ -1,0 +1,12 @@
+{
+  "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginUpdateServiceHarnessTests --logger trx;LogFileName=p20-red.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p20\\results-p20-red --no-build",
+  "exitCode": 1,
+  "durationMs": 2724,
+  "usedNoBuild": true,
+  "consoleFailed": null,
+  "consolePassed": null,
+  "consoleSkipped": null,
+  "consoleTotal": null,
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p20\\results-p20-red\\p20-red.trx",
+  "trxExists": true
+}

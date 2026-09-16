@@ -1,0 +1,8 @@
+{
+  "pluginIntegrationDirExists": false,
+  "pluginIntegrationCsprojExists": false,
+  "catalogInProjectExists": false,
+  "catalogRepoRootExists": false,
+  "testFileExists": true,
+  "nukeTargetFileExists": false
+}

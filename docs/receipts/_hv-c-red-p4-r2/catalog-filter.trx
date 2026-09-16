@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7fa7cd84-0fa5-487a-a258-6b9595383608" name="kingd@PAYTON-LEGION2 2026-08-21 19:14:55" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T19:14:55.7904488-05:00" queuing="2026-08-21T19:14:55.7904495-05:00" start="2026-08-21T19:14:52.5780319-05:00" finish="2026-08-21T19:14:55.8907951-05:00" />
+  <TestSettings name="default" id="9dfb7c47-bd6e-4a54-b151-27cd957f175f">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_19_14_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="082a1a03-4594-47d1-b49e-9416786bfdf7" testId="b4a57976-1c8f-4410-0825-5899e07a7661" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" computerName="PAYTON-LEGION2" duration="00:00:00.0006699" startTime="2026-08-21T19:14:55.5890509-05:00" endTime="2026-08-21T19:14:55.5898649-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="082a1a03-4594-47d1-b49e-9416786bfdf7">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 15&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c646c023-53b8-41b6-8488-0e94bee7c449" testId="a1a83450-289c-1f21-5189-fd8a02f92b69" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" computerName="PAYTON-LEGION2" duration="00:00:00.0005890" startTime="2026-08-21T19:14:55.5876540-05:00" endTime="2026-08-21T19:14:55.5884143-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c646c023-53b8-41b6-8488-0e94bee7c449">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 85&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ab11064c-2261-47ed-a813-d12207f48a6d" testId="93bddd0a-6593-1efb-c454-577812c2cc12" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" computerName="PAYTON-LEGION2" duration="00:00:00.0011873" startTime="2026-08-21T19:14:55.5840023-05:00" endTime="2026-08-21T19:14:55.5854633-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab11064c-2261-47ed-a813-d12207f48a6d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 32&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="da1156bf-fd96-4f6d-a98f-c7475d18cd8d" testId="6edf857f-c350-109d-e751-78f29179f4c4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" computerName="PAYTON-LEGION2" duration="00:00:00.0008337" startTime="2026-08-21T19:14:55.5861160-05:00" endTime="2026-08-21T19:14:55.5871623-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da1156bf-fd96-4f6d-a98f-c7475d18cd8d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 52&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ab5e4b64-c1e3-495b-be16-6fac1d153243" testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" computerName="PAYTON-LEGION2" duration="00:00:00.0295989" startTime="2026-08-21T19:14:55.5043888-05:00" endTime="2026-08-21T19:14:55.5722556-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab5e4b64-c1e3-495b-be16-6fac1d153243">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 42&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0e13f5cd-b3b4-4ebe-87ae-59e8f6f10a89" testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0005206" startTime="2026-08-21T19:14:55.5907652-05:00" endTime="2026-08-21T19:14:55.5914711-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e13f5cd-b3b4-4ebe-87ae-59e8f6f10a89">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs:line 15&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs:line 71&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a6213a20-b401-20f3-7b2f-1044dcf1bcfe">
+      <Execution id="ab5e4b64-c1e3-495b-be16-6fac1d153243" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_SupportedHostKinds" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6edf857f-c350-109d-e751-78f29179f4c4">
+      <Execution id="da1156bf-fd96-4f6d-a98f-c7475d18cd8d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RequiredEntrypointFilesExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="93bddd0a-6593-1efb-c454-577812c2cc12">
+      <Execution id="ab11064c-2261-47ed-a813-d12207f48a6d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RepositoryRootsExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b4a57976-1c8f-4410-0825-5899e07a7661">
+      <Execution id="082a1a03-4594-47d1-b49e-9416786bfdf7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_UniqueAgentSourceCache" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="18d5a8a3-7892-c234-f03d-8f0549399f5f">
+      <Execution id="0e13f5cd-b3b4-4ebe-87ae-59e8f6f10a89" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_VersionMetadataPresent" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a1a83450-289c-1f21-5189-fd8a02f92b69">
+      <Execution id="c646c023-53b8-41b6-8488-0e94bee7c449" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_ExactlyEightEnabled" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b4a57976-1c8f-4410-0825-5899e07a7661" executionId="082a1a03-4594-47d1-b49e-9416786bfdf7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1a83450-289c-1f21-5189-fd8a02f92b69" executionId="c646c023-53b8-41b6-8488-0e94bee7c449" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93bddd0a-6593-1efb-c454-577812c2cc12" executionId="ab11064c-2261-47ed-a813-d12207f48a6d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6edf857f-c350-109d-e751-78f29179f4c4" executionId="da1156bf-fd96-4f6d-a98f-c7475d18cd8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" executionId="ab5e4b64-c1e3-495b-be16-6fac1d153243" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" executionId="0e13f5cd-b3b4-4ebe-87ae-59e8f6f10a89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="0" failed="6" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.67]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.20]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.69]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.89]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.89]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.89]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.89]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(42,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds()&#xD;
+[xUnit.net 00:00:01.89]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.89]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.91]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.91]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist()&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.91]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.91]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(52,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist()&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.91]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.91]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(85,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled()&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.91]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.91]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache()&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.91]       System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.&#xD;
+[xUnit.net 00:00:01.91]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalog.cs(15,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalog.LoadAndValidate(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.91]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCatalogTests.cs(71,0): at McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent()&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.91]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.92]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.5834672-05:00">
+        <Text>[xUnit.net 00:00:01.89]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.6023963-05:00">
+        <Text>[xUnit.net 00:00:01.91]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.6040258-05:00">
+        <Text>[xUnit.net 00:00:01.91]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.6048980-05:00">
+        <Text>[xUnit.net 00:00:01.91]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.6061327-05:00">
+        <Text>[xUnit.net 00:00:01.91]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:14:55.6071283-05:00">
+        <Text>[xUnit.net 00:00:01.91]     McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

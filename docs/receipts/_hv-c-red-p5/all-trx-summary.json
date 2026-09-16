@@ -1,0 +1,111 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p5\\dotnet-pluginintegration-all.trx",
+  "outcome": "Failed",
+  "total": "13",
+  "executed": "13",
+  "passed": "7",
+  "failed": "6",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 13,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker"
+  ],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache"
+  ],
+  "skippedNames": [],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+      "outcome": "Failed",
+      "duration": "00:00:00.0015968",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "outcome": "Passed",
+      "duration": "00:00:00.0440374",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+      "outcome": "Failed",
+      "duration": "00:00:00.0018004",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "outcome": "Failed",
+      "duration": "00:00:00.0006197",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007864",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+      "outcome": "Failed",
+      "duration": "00:00:00.0009594",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+      "outcome": "Passed",
+      "duration": "00:00:00.0230885",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+      "outcome": "Failed",
+      "duration": "00:00:00.0018282",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+      "outcome": "Failed",
+      "duration": "00:00:00.0005862",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014353",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+      "outcome": "Passed",
+      "duration": "00:00:00.0074948",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0019128",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010983",
+      "message": null
+    }
+  ]
+}

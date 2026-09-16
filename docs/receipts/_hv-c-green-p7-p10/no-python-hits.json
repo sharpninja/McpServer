@@ -1,0 +1,12 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p7-p10\\collect.ps1",
+    "LineNumber": 261,
+    "Line": "} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $out 'no-python-scan.json') -Encoding utf8"
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p7-p10\\extra-probes.ps1",
+    "LineNumber": 14,
+    "Line": "$obj | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'no-python-hits.json') -Encoding utf8"
+  }
+]

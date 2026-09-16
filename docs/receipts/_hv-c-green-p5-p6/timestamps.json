@@ -1,0 +1,86 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T005108Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:51:51.5572986Z",
+    "Length": 11950,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T005108Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:53:23.6860192Z",
+    "Length": 3784,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-678ba5b2f579\\implementer\\p5-p6-fixture-tests.log",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:09:29.3016082Z",
+    "Length": 2533,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixture.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+    "Length": 20101,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixtureTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:02:10.4371979Z",
+    "Length": 4930,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalogTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:06:51.8604136Z",
+    "Length": 4407,
+    "AfterCRedP5Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:23:02.8876623Z",
+    "Length": 5502,
+    "AfterCRedP5Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationProjectTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 1663,
+    "AfterCRedP5Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:00:47.7818617Z",
+    "Length": 1113,
+    "AfterCRedP5Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "Length": 68486,
+    "AfterCRedP5Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:34:06.3572758Z",
+    "Length": 1875456,
+    "AfterCRedP5Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T00:34:06.3572758Z",
+    "Length": 1875456,
+    "AfterCRedP5Agree": false
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "namedCounts": {
+    "AiTheory_Agent_RequiresValidJsonFields": 1,
+    "AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure": 1,
+    "NukeTarget_SkipIsFailure": 1,
+    "PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero": 0,
+    "PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero": 0,
+    "PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit": 0
+  },
+  "skipHitsInTestsCs": [],
+  "aiTheoryInlineData": [
+    {
+      "line": 18,
+      "text": "[InlineData(PluginHostKind.Codex)]"
+    },
+    {
+      "line": 19,
+      "text": "[InlineData(PluginHostKind.ClaudeCode)]"
+    },
+    {
+      "line": 20,
+      "text": "[InlineData(PluginHostKind.ClaudeCowork)]"
+    },
+    {
+      "line": 21,
+      "text": "[InlineData(PluginHostKind.Copilot)]"
+    },
+    {
+      "line": 22,
+      "text": "[InlineData(PluginHostKind.Grok)]"
+    },
+    {
+      "line": 23,
+      "text": "[InlineData(PluginHostKind.Cline)]"
+    },
+    {
+      "line": 24,
+      "text": "[InlineData(PluginHostKind.ClineV2)]"
+    },
+    {
+      "line": 25,
+      "text": "[InlineData(PluginHostKind.OpenCode)]"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter \"FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending\"",
+  "ExitCode": 1,
+  "DurationMs": 279170,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p15\\hv-dotnet-p15-filter.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p15\\trx-p15-hv\\p15-filter.trx",
+  "TrxExists": true,
+  "FinishedUtc": "2026-08-22T05:33:05.3962940Z"
+}

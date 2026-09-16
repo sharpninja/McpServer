@@ -1,0 +1,241 @@
+[
+  {
+    "id": "TEST-HANDOFF-001",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-001-roundtrip",
+        "isSatisfied": false,
+        "text": "All public handoff contract types round-trip through the typed client JSON context."
+      },
+      {
+        "id": "ac-test-handoff-001-docs",
+        "isSatisfied": false,
+        "text": "Required contract types exist with complete XMLDocs and the documented enum values."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-002",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-002-reject",
+        "isSatisfied": false,
+        "text": "Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO."
+      },
+      {
+        "id": "ac-test-handoff-002-formats",
+        "isSatisfied": false,
+        "text": "Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-003",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-003-context",
+        "isSatisfied": false,
+        "text": "Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt."
+      },
+      {
+        "id": "ac-test-handoff-003-malformed",
+        "isSatisfied": false,
+        "text": "Malformed or compatibility JSON produces diagnostics and never creates a TODO."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-004",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-004-fields",
+        "isSatisfied": false,
+        "text": "Invalid or conflicting draft fields produce field-specific diagnostics."
+      },
+      {
+        "id": "ac-test-handoff-004-modes",
+        "isSatisfied": false,
+        "text": "DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-005",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 3,
+    "ac": [
+      {
+        "id": "ac-test-handoff-005-one",
+        "isSatisfied": false,
+        "text": "Successful creation produces exactly one TODO through ITodoService."
+      },
+      {
+        "id": "ac-test-handoff-005-replay",
+        "isSatisfied": false,
+        "text": "Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true."
+      },
+      {
+        "id": "ac-test-handoff-005-collision",
+        "isSatisfied": false,
+        "text": "ID collisions require review and are never silently renamed."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-006",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-006-inventory",
+        "isSatisfied": false,
+        "text": "Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill."
+      },
+      {
+        "id": "ac-test-handoff-006-delegate",
+        "isSatisfied": false,
+        "text": "Every surface delegates to IHandoffIngestionService and applies workspace isolation."
+      }
+    ]
+  },
+  {
+    "id": "TEST-HANDOFF-007",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-test-handoff-007-fields",
+        "isSatisfied": false,
+        "text": "Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID."
+      },
+      {
+        "id": "ac-test-handoff-007-redact",
+        "isSatisfied": false,
+        "text": "Persisted runs and logs do not contain raw credentials or source content."
+      }
+    ]
+  },
+  {
+    "id": "FR-HANDOFF-002",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 3,
+    "ac": [
+      {
+        "id": "ac-fr-handoff-002-prompt",
+        "isSatisfied": false,
+        "text": "Extraction uses a versioned prompt and strict JSON contract."
+      },
+      {
+        "id": "ac-fr-handoff-002-malformed",
+        "isSatisfied": false,
+        "text": "Malformed output produces diagnostics and never creates a TODO."
+      },
+      {
+        "id": "ac-fr-handoff-002-source",
+        "isSatisfied": false,
+        "text": "Unknown or missing source information is not silently discarded."
+      }
+    ]
+  },
+  {
+    "id": "FR-HANDOFF-006",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-fr-handoff-006-fields",
+        "isSatisfied": false,
+        "text": "Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID."
+      },
+      {
+        "id": "ac-fr-handoff-006-secrets",
+        "isSatisfied": false,
+        "text": "Raw credentials or source content are not copied into logs."
+      }
+    ]
+  },
+  {
+    "id": "FR-HANDOFF-007",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 1,
+    "ac": [
+      {
+        "id": "ac-fr-handoff-007-delegate",
+        "isSatisfied": false,
+        "text": "Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows."
+      }
+    ]
+  },
+  {
+    "id": "TR-HANDOFF-AGENT-001",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-tr-handoff-agent-001-context",
+        "isSatisfied": false,
+        "text": "Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft."
+      },
+      {
+        "id": "ac-tr-handoff-agent-001-strict",
+        "isSatisfied": false,
+        "text": "Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO."
+      }
+    ]
+  },
+  {
+    "id": "TR-HANDOFF-AUDIT-001",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-tr-handoff-audit-001-run",
+        "isSatisfied": false,
+        "text": "Every run stores normalized provenance and diagnostics independently of TODO rows."
+      },
+      {
+        "id": "ac-tr-handoff-audit-001-redact",
+        "isSatisfied": false,
+        "text": "Persisted records omit raw credentials and raw source content."
+      }
+    ]
+  },
+  {
+    "id": "TR-HANDOFF-SURFACE-001",
+    "found": true,
+    "status": "in_progress",
+    "acCount": 2,
+    "ac": [
+      {
+        "id": "ac-tr-handoff-surface-001-shared",
+        "isSatisfied": false,
+        "text": "API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService."
+      },
+      {
+        "id": "ac-tr-handoff-surface-001-ops",
+        "isSatisfied": false,
+        "text": "Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation."
+      }
+    ]
+  }
+]

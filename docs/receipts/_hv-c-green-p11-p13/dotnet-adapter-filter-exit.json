@@ -1,0 +1,8 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginSessionLogWorkflowAdapterTests",
+  "ExitCode": -1,
+  "DurationMs": 243380,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p11-p13\\dotnet-adapter-filter.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p11-p13\\dotnet-adapter-filter.trx",
+  "FinishedUtc": "2026-08-22T03:31:40.0391953Z"
+}

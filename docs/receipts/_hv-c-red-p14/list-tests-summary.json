@@ -1,0 +1,55 @@
+{
+  "exists": true,
+  "totalListed": 62,
+  "p14Count": 8,
+  "p14Names": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)"
+  ],
+  "p14ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1
+    }
+  ],
+  "p15Success": 0,
+  "p15FailedSubmit": 0,
+  "p15Retry": 0,
+  "p16AiTheory": 0,
+  "adapterClassCount": 32,
+  "skipListed": 0
+}

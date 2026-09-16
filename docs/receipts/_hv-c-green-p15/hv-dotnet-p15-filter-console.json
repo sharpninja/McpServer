@@ -1,0 +1,17 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\hv-dotnet-p15-filter.log",
+  "failed": 0,
+  "passed": 24,
+  "skipped": 0,
+  "total": 24,
+  "failedBang": false,
+  "passedBang": true,
+  "duration": "5 m 43 s - McpServer.PluginIntegration.Tests.dll (net10.0)",
+  "length": 2706,
+  "lastWriteTimeUtc": "2026-08-22T06:27:30.9431071Z",
+  "summaryLine": "Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 5 m 43 s - McpServer.PluginIntegration.Tests.dll (net10.0)",
+  "allSummaryLines": [
+    "Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 5 m 43 s - McpServer.PluginIntegration.Tests.dll (net10.0)"
+  ]
+}

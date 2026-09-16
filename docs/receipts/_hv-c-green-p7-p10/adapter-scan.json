@@ -1,0 +1,151 @@
+{
+  "NamedTests": [
+    {
+      "Name": "Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr",
+      "MatchCount": 1,
+      "Paths": [
+        "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:27"
+      ]
+    },
+    {
+      "Name": "Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint",
+      "MatchCount": 1,
+      "Paths": [
+        "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:91"
+      ]
+    },
+    {
+      "Name": "Adapter_ClineV1_StdioSessionLogTools",
+      "MatchCount": 1,
+      "Paths": [
+        "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:113"
+      ]
+    },
+    {
+      "Name": "Adapter_ClineV2AndOpenCode_UseProductionExport",
+      "MatchCount": 1,
+      "Paths": [
+        "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:135"
+      ]
+    }
+  ],
+  "P7IsTheory": true,
+  "P8IsTheory": true,
+  "P9IsFact": true,
+  "P10IsTheory": true,
+  "SkipAttributeOnAdapterTests": false,
+  "SkipLiteralFactSkip": false,
+  "SkipLiteralTheorySkip": false,
+  "SkipIfOrAssertSkipCount": 0,
+  "SkipIfPaths": [],
+  "P7InlineDataCount": 8,
+  "P7InlineData": [
+    {
+      "HostKind": "Codex",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Copilot",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Grok",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Cline",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClineV2",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "OpenCode",
+      "InlineDataPresent": true
+    }
+  ],
+  "P8InlineData": [
+    {
+      "HostKind": "Codex",
+      "P8Inline": true
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "P8Inline": true
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "P8Inline": true
+    },
+    {
+      "HostKind": "Copilot",
+      "P8Inline": true
+    },
+    {
+      "HostKind": "Grok",
+      "P8Inline": true
+    }
+  ],
+  "LaunchAsyncThrowsNotImplemented": false,
+  "NotImplementedHitCount": 0,
+  "RunnerRunAsyncHitCount": 1,
+  "RunnerRunAsyncLines": [
+    "103:return _runner.RunAsync(request, cancellationToken);"
+  ],
+  "DummyLaunchResultCtorCount": 0,
+  "DummyLaunchResultLines": [],
+  "AdapterHttpClientHits": 0,
+  "FakeLastRequestPresent": true,
+  "FakeLastRequestAssignCount": 1,
+  "FakeLastRequestAssignLines": [
+    "24:LastRequest = request;"
+  ],
+  "FakeLastRequestPrivateSet": true,
+  "AssertLastRequestNotNull": true,
+  "AssertExpectedExecutable": true,
+  "ExpectedExecutablePwsh": true,
+  "PowerShellHostsIncludeFive": true,
+  "AssertEntrypointInArgs": true,
+  "AssertNoProfile": true,
+  "AssertNonInteractive": true,
+  "AssertFile": true,
+  "AssertStdinExact": true,
+  "AssertWorkingDirectoryPluginRoot": true,
+  "AssertTimeoutForwarded": true,
+  "AssertExitFromFake": true,
+  "AssertStdoutFromFake": true,
+  "AssertStderrFromFake": true,
+  "AssertRequiredEnvPresent": true,
+  "AssertPluginAgentName": true,
+  "AssertPluginRootEnv": true,
+  "P8AssertPwsh": true,
+  "P8AssertCodexEntrypoint": true,
+  "P8AssertInvokeMcpPlugin": true,
+  "P8AssertNoReplInvoke": true,
+  "P9AssertNode": true,
+  "P9AssertDistIndex": true,
+  "P9AssertSessionlogStdin": true,
+  "P10AssertNode": true,
+  "P10AssertNoInvokeMcpPlugin": true,
+  "P11MatchCountTestsSrc": 0,
+  "P11Paths": [],
+  "EmDashAdapter": false,
+  "EmDashTests": false,
+  "AdapterReturnsRunnerRunAsync": true,
+  "AdapterMapsPwshFile": true,
+  "AdapterMapsNode": true,
+  "AdapterSetsPluginAgentName": true,
+  "AdapterSetsPluginRootEnv": true,
+  "AdapterWorkingDirectoryPluginRoot": true,
+  "AdapterTimeoutForwarded": true,
+  "AdapterStdinForwarded": true
+}

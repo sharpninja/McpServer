@@ -1,0 +1,25 @@
+type: result
+payload:
+  requestId: req-20260822T133757Z-1069
+  result:
+    totalCount: 1
+    limit: 10
+    offset: 0
+    items:
+    - sourceType: P20Harness
+      sessionId: P20Harness-20260822T133039Z-sanitized
+      started: 2026-08-22T13:30:40.7129647+00:00
+      lastUpdated: 2026-08-22T13:30:40.9560213+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T133039Z-001-p20-sanitized-harness
+        timestamp: 2026-08-22T13:30:40.9560213+00:00
+        queryText: Sanitized fixture against development UpdateService
+        queryTitle: P20 sanitized UpdateService harness
+        response: Sanitized fixture turn against development UpdateService. No live operator identity.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+
+---

@@ -1,0 +1,481 @@
+[
+  {
+    "repositoryName": "mcpserver-codex-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [
+      "NativeSmoke.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "Skills.Tests.ps1"
+    ],
+    "batsFiles": [
+      "manifest.bats",
+      "smoke.bats"
+    ],
+    "jestFiles": [],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "executedAfter": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": true,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": 5,
+    "discoveryAfter": 5,
+    "versionBefore": null,
+    "versionAfter": null
+  },
+  {
+    "repositoryName": "mcpserver-claude-code-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [
+      "ClaudeHookWiring.Tests.ps1",
+      "CurrentTurnSessionRebind.Tests.ps1",
+      "HookTurnDedupe.Tests.ps1",
+      "NativeSmoke.Tests.ps1",
+      "ReplFailsafe.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "Skills.Tests.ps1",
+      "StopGateHardening.Tests.ps1"
+    ],
+    "batsFiles": [
+      "skills.bats",
+      "smoke.bats"
+    ],
+    "jestFiles": [],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "ClaudeHookWiring.Tests.ps1",
+      "StopGateHardening.Tests.ps1"
+    ],
+    "executedAfter": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "ClaudeHookWiring.Tests.ps1",
+      "StopGateHardening.Tests.ps1"
+    ],
+    "omittedPesterBefore": [
+      "CurrentTurnSessionRebind.Tests.ps1",
+      "HookTurnDedupe.Tests.ps1",
+      "ReplFailsafe.Tests.ps1"
+    ],
+    "batsAssertSh": true,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": 7,
+    "discoveryAfter": 7,
+    "versionBefore": null,
+    "versionAfter": null
+  },
+  {
+    "repositoryName": "mcpserver-claude-cowork-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [
+      "NativeSmoke.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "Skills.Tests.ps1"
+    ],
+    "batsFiles": [
+      "skills.bats",
+      "smoke.bats"
+    ],
+    "jestFiles": [],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "executedAfter": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": true,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": 5,
+    "discoveryAfter": 5,
+    "versionBefore": null,
+    "versionAfter": null
+  },
+  {
+    "repositoryName": "mcpserver-copilot-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [
+      "NativeSmoke.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "Skills.Tests.ps1"
+    ],
+    "batsFiles": [
+      "plan-output.bats",
+      "skills.bats",
+      "smoke.bats"
+    ],
+    "jestFiles": [],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "executedAfter": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": true,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": 5,
+    "discoveryAfter": 5,
+    "versionBefore": null,
+    "versionAfter": null
+  },
+  {
+    "repositoryName": "mcpserver-grok-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [
+      "NativeSmoke.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "Skills.Tests.ps1"
+    ],
+    "batsFiles": [
+      "skills.bats",
+      "smoke.bats"
+    ],
+    "jestFiles": [],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "executedAfter": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": true,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "fallback",
+      "pester": false,
+      "jest": false,
+      "fallback": true,
+      "failedLineCount": 1,
+      "skippedLineCount": 1
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": 5,
+    "discoveryAfter": 5,
+    "versionBefore": null,
+    "versionAfter": null
+  },
+  {
+    "repositoryName": "mcpserver-cline-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [],
+    "batsFiles": [],
+    "jestFiles": [
+      "plugin-helpers.test.ts",
+      "skills.test.ts",
+      "smoke.test.ts"
+    ],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "skills.test.ts",
+      "smoke.test.ts",
+      "plugin-helpers.test.ts"
+    ],
+    "executedAfter": [
+      "skills.test.ts",
+      "smoke.test.ts",
+      "plugin-helpers.test.ts"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": false,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 15
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 15
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": null,
+    "discoveryAfter": null,
+    "versionBefore": "1.100.0",
+    "versionAfter": "1.101.0"
+  },
+  {
+    "repositoryName": "mcpserver-cline-v2-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [],
+    "batsFiles": [],
+    "jestFiles": [
+      "plugin.test.ts",
+      "skills.test.ts"
+    ],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "skills.test.ts",
+      "plugin.test.ts"
+    ],
+    "executedAfter": [
+      "skills.test.ts",
+      "plugin.test.ts"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": false,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 10
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 10
+    },
+    "failsafeNoiseBefore": 0,
+    "failsafeNoiseAfter": 0,
+    "discoveryBefore": null,
+    "discoveryAfter": null,
+    "versionBefore": "1.100.0",
+    "versionAfter": "1.101.0"
+  },
+  {
+    "repositoryName": "mcpserver-opencode-plugin",
+    "testsDirExists": true,
+    "pesterFiles": [],
+    "batsFiles": [],
+    "jestFiles": [
+      "plugin.test.ts",
+      "skills.test.ts"
+    ],
+    "shInLibOrHooks": [],
+    "executedBefore": [
+      "skills.test.ts",
+      "plugin.test.ts"
+    ],
+    "executedAfter": [
+      "skills.test.ts",
+      "plugin.test.ts"
+    ],
+    "omittedPesterBefore": [],
+    "batsAssertSh": false,
+    "beforeExists": true,
+    "afterExists": true,
+    "beforeParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 33
+    },
+    "afterParse": {
+      "parsed": true,
+      "failed": 0,
+      "skipped": 0,
+      "path": "jest",
+      "pester": false,
+      "jest": true,
+      "fallback": false,
+      "jestPassed": 33
+    },
+    "failsafeNoiseBefore": 1,
+    "failsafeNoiseAfter": 1,
+    "discoveryBefore": null,
+    "discoveryAfter": null,
+    "versionBefore": "1.100.0",
+    "versionAfter": "1.101.0"
+  }
+]

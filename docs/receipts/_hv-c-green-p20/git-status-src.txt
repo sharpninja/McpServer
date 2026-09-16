@@ -1,0 +1,9 @@
+ M src/McpServer.Repl.Core/ReplCommandDispatcher.cs
+ M src/McpServer.Services/Services/HandoffIngestionService.cs
+ M tests/McpServer.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+?? docs/plans/PLAN-PLUGINHANDOFF-001.md
+?? tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+?? tests/Build.Tests/SyncAgentPluginsChecksumTests.cs
+?? tests/McpServer.PluginIntegration.Tests/
+?? tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs
+

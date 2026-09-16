@@ -1,0 +1,74 @@
+{
+  "plan": {
+    "id": "PLAN-PLUGINHANDOFF-001",
+    "topDone": "false",
+    "p20Hits": [
+      {
+        "line": 11,
+        "text": "note: '2026-08-22T13:15:00Z. Session GrokCode-20260822T131500Z-pluginhandoff-p20. C-green-P19 r2 AGREE 104054Z. C-red-P20 tests on disk, independent filter Failed 2 Passed 0 Skipped 0. Hostile C-red-P20 dispatched. PLAN and MCP-PLUGININT-001 remain done: false. No P20 green until C-red-P20 AGREE.'",
+        "nextDone": null
+      },
+      {
+        "line": 64,
+        "text": "- '- MCP-PLUGININT-001: P0 planning task marked done. P1-P20 open. No `tests/McpServer.PluginIntegration.Tests` project found in repo search. FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001 / TEST-MCP-PLUGININT-001 exist; AC unchecked.'",
+        "nextDone": null
+      },
+      {
+        "line": 351,
+        "text": "- 'P0 is already done in the store. The following inlines MCP-PLUGININT-001 P1-P20 from live `todo_get`. Red-labeled P tasks write failing tests first. Hostile AGREE on those reds before any green implementation of that group. Green-labeled P tasks implement until the preceding red tests pass, then refactor. Mocks: adapter unit tests use process I/O doubles (executable/args/stdin/env/cwd/exit/stdout/stderr). Theory rows and fixture use a disposable real server (TODO requires it). No developer-service database.'",
+        "nextDone": null
+      },
+      {
+        "line": 364,
+        "text": "- '- C-red-P20 AGREE, then P20 execute, then C-green-P20 AGREE'",
+        "nextDone": null
+      },
+      {
+        "line": 410,
+        "text": "- 'P20 red tests, then hostile C-red-P20, then execute:'",
+        "nextDone": null
+      },
+      {
+        "line": 415,
+        "text": "- 'P20 green: harness against development UpdateService with sanitized fixtures. Staging/production plugin promotion remains blocked unless an explicit operator approval artifact is present; the second test fails closed without it.'",
+        "nextDone": null
+      },
+      {
+        "line": 757,
+        "text": "- 19. C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+        "nextDone": null
+      },
+      {
+        "line": 779,
+        "text": "- '- C-red then C-green for each group: P1, P4, P5, P7, P11, P14, P15, P16, P19, P20'",
+        "nextDone": null
+      },
+      {
+        "line": 838,
+        "text": "- task: C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+        "nextDone": "false"
+      }
+    ]
+  },
+  "pluginint": {
+    "id": "MCP-PLUGININT-001",
+    "topDone": "false",
+    "p20Hits": [
+      {
+        "line": 63,
+        "text": "- task: P20 [Deployment] Run the harness against the development UpdateService deployment using sanitized fixture values, then require explicit operator approval before any staging or production plugin promotion.",
+        "nextDone": "false"
+      },
+      {
+        "line": 65,
+        "text": "remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): P0 architecture/requirements work is complete per prior remaining; P1-P20 harness, adapter, cross-repo, and deployment validation still open. Linked FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001. Do not store-close.'",
+        "nextDone": null
+      }
+    ]
+  },
+  "hygiene": {
+    "id": "MCP-WORKSPACEHYGIENE-002",
+    "topDone": "false",
+    "p20Hits": []
+  }
+}

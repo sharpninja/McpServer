@@ -1,0 +1,17 @@
+{
+  "AfterQueryMdExists": true,
+  "AfterQueryMdPath": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T020756Z.md",
+  "AfterQueryJsonExists": true,
+  "AfterQueryJsonPath": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T020756Z.json",
+  "AfterQueryJsonVerdict": "AGREE",
+  "AfterQueryJsonFailCount": 0,
+  "AfterQueryJsonPassCount": 21,
+  "SessionId": "GrokSubagentHostile-20260822T020204Z-c-green-p7-p10",
+  "RequestId": "req-20260822T020204Z-001-hostile-c-green-p7-p10",
+  "TurnId": 42850,
+  "TurnStatus": "completed",
+  "SessionStatus": "in_progress",
+  "QueryHistoryFoundSession": true,
+  "CompleteRetryFile": "docs/receipts/_hv-c-green-p7-p10/sl-complete-retry.txt",
+  "QueryAgentAfterFile": "docs/receipts/_hv-c-green-p7-p10/sl-query-agent-after.txt"
+}

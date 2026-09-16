@@ -1,0 +1,22 @@
+{
+  "MdExists": true,
+  "MdLastWriteTimeUtc": "2026-08-22T08:19:44.0934777Z",
+  "MdHasAgree": false,
+  "MdHasDisagree": true,
+  "JsonExists": true,
+  "JsonOverallVerdict": "DISAGREE",
+  "JsonFailCount": 2,
+  "JsonPhase": "C-green-P16-P18",
+  "JsonExplicitFailList": [
+    "C4. TR-MCP-PLUGININT-001 ac-6 aiUnit strategy preflight missing from Build.PluginSessionLogIntegration.cs",
+    "D2. P18 plan/TODO DoD unmet: no aiUnit strategy preflight; NukeTarget_SkipIsFailure only covers FailIfPluginSessionLogSkipped"
+  ],
+  "CRedMdExists": true,
+  "CRedMdLastWriteTimeUtc": "2026-08-22T07:37:37.1953111Z",
+  "CRedHasAgree": true,
+  "CRedJsonOverallVerdict": "AGREE",
+  "CRedFilterTrxFailed": "8",
+  "CRedFilterTrxPassed": "0",
+  "CRedEvaluateAsyncImplemented": false,
+  "CRedP17NamedTestsPresent": false
+}

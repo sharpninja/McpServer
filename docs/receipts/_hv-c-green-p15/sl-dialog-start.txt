@@ -1,0 +1,14 @@
+ERROR System.Management.Automation.RuntimeException: Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20260822T062203Z-c96f
+  code: method_invocation_error
+  message: 'HTTP 404: {"type":"https://httpstatuses.io/404","title":"not_found","status":404,"detail":"Entry not found: GrokSubagentHostile/GrokSubagentHostile-20260822T062054Z-c-green-p15/req-20260822T062054Z-001-hostile-c-green-p15","code":"not_found","message":"Entry not found: GrokSubagentHostile/GrokSubagentHostile-20260822T062054Z-c-green-p15/req-20260822T062054Z-001-hostile-c-green-p15","retryable":false,"details":{"reason":"not_found"}}'
+  details:
+    clientName: SessionLog
+    methodName: AppendDialogAsync
+    exceptionType: McpServer.Client.McpNotFoundException
+
+---
+
+

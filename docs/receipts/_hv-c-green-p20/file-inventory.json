@@ -1,0 +1,98 @@
+[
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4700
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:55.9205618Z",
+    "length": 4997
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4567
+  },
+  {
+    "path": "build/Build.PluginPromotion.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:28:38.7571549Z",
+    "length": 4358
+  },
+  {
+    "path": "build/plugin-promotion-policy.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:28:38.7571549Z",
+    "length": 179
+  },
+  {
+    "path": "build/Build.SyncAgentPlugins.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:28:38.7571549Z",
+    "length": 35800
+  },
+  {
+    "path": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "length": 68486
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T132413Z.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:25:20.2040530Z",
+    "length": 13274
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T132413Z.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:25:20.2040530Z",
+    "length": 3769
+  },
+  {
+    "path": "docs/receipts/_hv-c-red-p20/p20-green-absence.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:19:10.6479286Z",
+    "length": 178
+  },
+  {
+    "path": "docs/receipts/_hv-c-red-p20/independent-p20-trx-summary.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:25:53.8554645Z",
+    "length": 859
+  },
+  {
+    "path": "docs/receipts/_c-red-p20-20260822T131402Z/p20-red.trx",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:14:15.6530975Z",
+    "length": 9235
+  },
+  {
+    "path": "docs/receipts/pluginint-p20-20260822T133039Z/summary.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:30:41.1608261Z",
+    "length": 195
+  },
+  {
+    "path": "docs/receipts/pluginint-p20-20260822T133039Z/harness.log",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:30:41.1510503Z",
+    "length": 641
+  },
+  {
+    "path": "docs/receipts/pluginint-p20-20260822T133039Z/PluginUpdateServiceHarnessTests.trx",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:30:59.4950075Z",
+    "length": 4845
+  },
+  {
+    "path": "docs/receipts/plugin-promotion-approval-missing.json",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  }
+]

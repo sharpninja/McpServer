@@ -1,0 +1,89 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p7\\dotnet-adapter-filter.trx",
+  "outcome": "Failed",
+  "total": "8",
+  "executed": "8",
+  "passed": "0",
+  "failed": "8",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 8,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)"
+  ],
+  "passedNames": [],
+  "skippedNames": [],
+  "p7Count": 8,
+  "p7Failed": 8,
+  "p7Passed": 0,
+  "p7Skipped": 0,
+  "p7NotImplementedCount": 8,
+  "p8Count": 0,
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0008752",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0007779",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0010232",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0016195",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0008428",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0009332",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+      "outcome": "Failed",
+      "duration": "00:00:00.1009522",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+      "outcome": "Failed",
+      "duration": "00:00:00.0007358",
+      "message": "System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:line 36\r\n   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:line 53\r\n--- End of stack trace from previous location ---"
+    }
+  ]
+}

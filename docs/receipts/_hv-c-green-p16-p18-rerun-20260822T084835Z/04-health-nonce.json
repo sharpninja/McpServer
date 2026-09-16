@@ -1,0 +1,26 @@
+{
+  "nonceSent": "nonce-hv-20260822T084835Z-74968",
+  "nonceEchoed": "nonce-hv-20260822T084835Z-74968",
+  "nonceMatch": true,
+  "status": "Healthy",
+  "raw": {
+    "status": "Healthy",
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0012
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0015
+      }
+    ],
+    "nonce": "nonce-hv-20260822T084835Z-74968",
+    "storage": "reachable"
+  }
+}

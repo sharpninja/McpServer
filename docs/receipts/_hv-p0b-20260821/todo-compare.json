@@ -1,0 +1,350 @@
+{
+  "Id": "PLAN-PLUGINHANDOFF-001",
+  "Title": "Implement plugin core, hostile review queue, plugin integration harness, workspace hygiene, handoff remediations, and wiki dump/import",
+  "Done": false,
+  "Section": "Planning",
+  "Priority": "high",
+  "DescriptionLineCount": 773,
+  "DescriptionJoinChars": 68485,
+  "PlanCharsNormalized": 68486,
+  "PlanCharsNoTrail": 68485,
+  "JoinLfNoTrailChars": 68485,
+  "EqualJoinLfNoTrailVsPlan": true,
+  "EqualJoinCrlfNoTrailVsPlan": true,
+  "EqualJoinLfRawVsPlan": false,
+  "EqualJoinCrlfRawVsPlan": false,
+  "DescriptionSections": [
+    "## 1. Goal and V-squared",
+    "## 2. Locked decisions",
+    "## 3. Current state (verified 2026-08-21 live todo_get)",
+    "## 4. Dual pre-implementation hostile gates",
+    "## 5. Phase A: Requirements (no product implementation)",
+    "## 6. Phase B: Plugin core dialog parse + REPL degraded persistence + drain timeout",
+    "## 7. Phase C: Plugin Session Log integration harness (MCP-PLUGININT-001)",
+    "## 8. Phase D: Handoff remediations and closeout",
+    "## 9. Phase E: Hostile review queue (MCP-HOSTILEREVIEW-001)",
+    "## 10. Phase F: Workspace hygiene (MCP-WORKSPACEHYGIENE-002)",
+    "## 11. Phase G: Wiki dump and add-workspace hydration (MCP-WIKIEXPORT-001)",
+    "## 12. Phase H: Documentation, plugin sync, traceability, regression",
+    "## 13. Phase I: Program closeout",
+    "## 14. Master TODO payload (what to persist after P0-A)",
+    "## 15. Validation command index",
+    "## 16. Blast radius, breaking changes, mocks policy",
+    "## 17. Risks, blockers, and what happens after you approve",
+    "## 18. Implementation task list (PLAN-PLUGINHANDOFF-001 tasks)",
+    "## 19. Inter-phase hostile checklist"
+  ],
+  "DescriptionSectionCount": 19,
+  "StubHints": [
+    "see plan.md"
+  ],
+  "FirstDiff": null,
+  "ImplementationTaskCount": 31,
+  "ImplementationTasks": [
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    },
+    {
+      "Title": null,
+      "Done": false,
+      "Id": null,
+      "Description": null
+    }
+  ],
+  "DependsOn": [
+    "MCP-PLUGINCORE-004",
+    "MCP-PLUGININT-001",
+    "MCP-HANDOFF-001",
+    "MCP-HANDOFFPLAN-001",
+    "MCP-HANDOFFREVIEW-001",
+    "MCP-HOSTILEREVIEW-001",
+    "MCP-WORKSPACEHYGIENE-002",
+    "MCP-WIKIEXPORT-001"
+  ],
+  "DependsOnAlt": [
+    {
+      "name": "DependsOn",
+      "value": [
+        "MCP-PLUGINCORE-004",
+        "MCP-PLUGININT-001",
+        "MCP-HANDOFF-001",
+        "MCP-HANDOFFPLAN-001",
+        "MCP-HANDOFFREVIEW-001",
+        "MCP-HOSTILEREVIEW-001",
+        "MCP-WORKSPACEHYGIENE-002",
+        "MCP-WIKIEXPORT-001"
+      ]
+    },
+    {
+      "name": "dependsOn",
+      "value": [
+        "MCP-PLUGINCORE-004",
+        "MCP-PLUGININT-001",
+        "MCP-HANDOFF-001",
+        "MCP-HANDOFFPLAN-001",
+        "MCP-HANDOFFREVIEW-001",
+        "MCP-HOSTILEREVIEW-001",
+        "MCP-WORKSPACEHYGIENE-002",
+        "MCP-WIKIEXPORT-001"
+      ]
+    }
+  ],
+  "FunctionalRequirements": [
+    "FR-MCP-PLUGINCORE-004",
+    "FR-MCP-REPL-009",
+    "FR-MCP-PLUGININT-001",
+    "FR-HANDOFF-001",
+    "FR-HANDOFF-002",
+    "FR-HANDOFF-003",
+    "FR-HANDOFF-004",
+    "FR-HANDOFF-005",
+    "FR-HANDOFF-006",
+    "FR-HANDOFF-007",
+    "FR-MCP-HOSTILEREVIEW-001",
+    "FR-MCP-HOSTILEREVIEW-002",
+    "FR-MCP-HOSTILEREVIEW-003",
+    "FR-MCP-HOSTILEREVIEW-004",
+    "FR-MCP-HOSTILEREVIEW-005",
+    "FR-MCP-HOSTILEREVIEW-006",
+    "FR-MCP-HYGIENE-001",
+    "FR-MCP-HYGIENE-002",
+    "FR-MCP-HYGIENE-003",
+    "FR-MCP-HYGIENE-004",
+    "FR-MCP-HYGIENE-005",
+    "FR-MCP-WIKIEXPORT-003",
+    "FR-MCP-WIKIEXPORT-004",
+    "FR-MCP-WIKIEXPORT-005",
+    "FR-MCP-172"
+  ],
+  "TechnicalRequirements": [
+    "TR-MCP-PLUGINCORE-004",
+    "TR-MCP-REPL-010",
+    "TR-MCP-PLUGININT-001",
+    "TR-HANDOFF-CONTRACT-001",
+    "TR-HANDOFF-SECURITY-001",
+    "TR-HANDOFF-AGENT-001",
+    "TR-HANDOFF-VALIDATE-001",
+    "TR-HANDOFF-MODES-001",
+    "TR-HANDOFF-TODO-001",
+    "TR-HANDOFF-AUDIT-001",
+    "TR-HANDOFF-SURFACE-001",
+    "TR-MCP-HOSTILEREVIEW-001",
+    "TR-MCP-HOSTILEREVIEW-002",
+    "TR-MCP-HOSTILEREVIEW-003",
+    "TR-MCP-HOSTILEREVIEW-004",
+    "TR-MCP-HOSTILEREVIEW-005",
+    "TR-MCP-HOSTILEREVIEW-006",
+    "TR-MCP-HYGIENE-001",
+    "TR-MCP-HYGIENE-002",
+    "TR-MCP-HYGIENE-003",
+    "TR-MCP-HYGIENE-004",
+    "TR-MCP-HYGIENE-005",
+    "TR-MCP-WIKIEXPORT-003",
+    "TR-MCP-WIKIEXPORT-004",
+    "TR-MCP-WIKIEXPORT-005",
+    "TR-MCP-PERSIST-003",
+    "TR-MCP-REPL-012"
+  ],
+  "TestingRequirements": [],
+  "PropertyNames": [
+    "Id",
+    "Title",
+    "Section",
+    "Priority",
+    "Done",
+    "Estimate",
+    "Note",
+    "Description",
+    "TechnicalDetails",
+    "ImplementationTasks",
+    "CompletedDate",
+    "DoneSummary",
+    "Remaining",
+    "PriorityNote",
+    "Reference",
+    "Phase",
+    "DependsOn",
+    "FunctionalRequirements",
+    "TechnicalRequirements",
+    "IdempotencyKey"
+  ],
+  "Note": "Do not mark done without hostile AGREE and Failed 0 Skipped 0. Keep HYGIENE-002 open per owner unless retracted.",
+  "Estimate": "multi-phase"
+}

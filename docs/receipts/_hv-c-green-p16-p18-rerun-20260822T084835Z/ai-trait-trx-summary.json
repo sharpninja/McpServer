@@ -1,0 +1,20 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-ai-trait-rerun-20260822T085831Z\\ai-trait.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:58:48.5250551Z",
+  "total": null,
+  "executed": null,
+  "passed": null,
+  "failed": null,
+  "skipped": null,
+  "notExecuted": null,
+  "resultCount": 0,
+  "skippedNames": [],
+  "failedNames": [],
+  "p16Count": 0,
+  "p16Passed": 0,
+  "p16Failed": 0,
+  "p17Count": 0,
+  "p19Count": 0,
+  "names": []
+}

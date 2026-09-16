@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260822T062823Z-f297
+  result:
+    turnId: 42910
+    agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T062812Z-pluginhandoff-p15green
+    requestId: req-20260822T062812Z-001-hostile-c-green-p15
+
+---

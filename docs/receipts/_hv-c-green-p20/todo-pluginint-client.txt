@@ -1,0 +1,71 @@
+type: result
+payload:
+  requestId: req-20260822T133738Z-9893
+  result:
+    id: MCP-PLUGININT-001
+    title: Add Session Log workflow aiUnit Theory integration tests for each plugin
+    section: Testing
+    priority: high
+    done: false
+    estimate: 1d
+    description:
+    - Add integration coverage that exercises the Session Log workflow through each MCP plugin surface using aiUnit Theory data for each agent.
+    - The suite must cover Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces that are present in this repository family.
+    - Each theory case should bootstrap the plugin, open a session-log turn, append representative action/dialog data, complete the turn, and verify the persisted Session Log artifact or API-visible receipt is correct.
+    - The tests must prove the active workspace cache is under {workspace}/.mcpServer/{agent} and must reject stale PLUGIN_ROOT_OVERRIDE-style cache routing.
+    technicalDetails:
+    - The deterministic Theory matrix is the correctness gate; AiTheory adds semantic review only.
+    - A disposable real server and database isolate tests from the developer service and make persisted-state assertions meaningful.
+    - Each plugin is exercised through its declared production entrypoint; shared library bypasses are prohibited.
+    - Scenario resolution defaults to the repository parent and supports an explicit MCPSERVER_AGENT_PLUGIN_PARENT override for CI.
+    - The NUKE target parses TRX and treats skipped tests as gate failures.
+    implementationTasks:
+    - task: P0 [Planning] Lock the central harness architecture, deterministic Theory plus companion AiTheory pattern, and FR-MCP-PLUGININT-001/TR-MCP-PLUGININT-001/TEST-MCP-PLUGININT-001 mapping.
+      done: true
+    - task: P1 [Red] Add Build.Tests coverage requiring a PluginSessionLogIntegration NUKE target, the new test project in the solution/test graph, and an eight-entry scenario catalog.
+      done: false
+    - task: P2 [Green] Create tests/McpServer.PluginIntegration.Tests with xUnit v3, SharpNinja.aiUnit, McpServer.Client, process/test-host dependencies, XMLDocs, and nonparallel collection configuration.
+      done: false
+    - task: P3 [Green] Add PluginSessionLogScenario and PluginHostKind models plus scenarios/plugin-sessionlog-scenarios.json containing Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode.
+      done: false
+    - task: P4 [Red] Add catalog validation tests for unique agent/source/cache values, existing repository roots, supported host kinds, required entrypoint files, version metadata, and exactly eight enabled scenarios.
+      done: false
+    - task: P5 [Red] Add PluginSessionLogServerFixture tests for free-port selection, isolated temporary workspace/database creation, service startup timeout, marker creation, signature/nonce trust validation, and deterministic cleanup.
+      done: false
+    - task: P6 [Green] Implement PluginSessionLogServerFixture to launch the compiled McpServer.Support.Mcp host on loopback with temporary configuration, wait for health, and expose trusted marker/client state without using the developer service database.
+      done: false
+    - task: P7 [Red] Add process-adapter contract tests that capture executable, argument list, stdin envelopes, environment, working directory, timeout, exit code, stdout, and stderr for each PluginHostKind.
+      done: false
+    - task: P8 [Green] Implement Codex wrapper and PowerShell-hook adapters using Invoke-CodexMcpPlugin.ps1, Invoke-CopilotMcpPlugin.ps1, or hooks/scripts session-start/user-prompt-submit/stop-gate entrypoints as declared by each scenario.
+      done: false
+    - task: P9 [Green] Implement Cline v1 MCP-stdio adapter that starts dist/index.js and invokes the production session-log tools over framed MCP stdio after npm build.
+      done: false
+    - task: P10 [Green] Implement Cline v2 and OpenCode SDK adapters that load the built plugin export with their existing test shims and invoke production hooks/tools rather than lib/repl-invoke.ps1 directly.
+      done: false
+    - task: P11 [Red] Add a deterministic Theory row for each scenario that fails initially at bootstrap/begin/append/complete until the corresponding adapter is operational.
+      done: false
+    - task: P12 [Green] For each row, bootstrap the plugin, begin a canonical turn, append one action and one decision dialog, complete the turn, and capture session ID, request ID, status, cache path, source SHA, and persistence receipt.
+      done: false
+    - task: P13 [Green] Query the real server through McpServer.Client and assert source type, IDs, query/response text, action order/type/status, dialog role/category/content, completed status, and workspace ownership.
+      done: false
+    - task: P14 [Red] Inject PLUGIN_ROOT_OVERRIDE to a poison directory and assert every scenario still writes only to {workspace}/.mcpServer/{agent}; assert poison directory remains empty and no sibling workspace cache is touched.
+      done: false
+    - task: 'P15 [Red] Add failsafe assertions: successful turns leave no pending recovery document, failed submit retains a root-ID-named pending file, and retry success deletes only that matching file.'
+      done: false
+    - task: P16 [Red] Add companion AiTheory rows using the same scenario catalog; send the redacted persistence receipt/session artifact to AiStrategyFixture and require strict JSON fields valid, missingFields, and contradictions.
+      done: false
+    - task: P17 [Green] Implement semantic assertions that reject model errors, invalid JSON, valid=false, missing required workflow fields, or contradictions with deterministic evidence; AI output never overrides deterministic failures.
+      done: false
+    - task: P18 [Gate] Add Build.PluginSessionLogIntegration.cs to preflight aiUnit strategy availability, run deterministic and AI traits with TRX logging, parse results, and fail on any failed or skipped test.
+      done: false
+    - task: P19 [Cross-repo] Run each plugin native suite (Pester/Bats/Jest as applicable), run SyncAgentPlugins, rerun native suites against synchronized sources/caches, and record each repository branch/SHA without committing unrelated changes.
+      done: false
+    - task: P20 [Deployment] Run the harness against the development UpdateService deployment using sanitized fixture values, then require explicit operator approval before any staging or production plugin promotion.
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): P0 architecture/requirements work is complete per prior remaining; P1-P20 harness, adapter, cross-repo, and deployment validation still open. Linked FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001. Do not store-close.'
+    functionalRequirements:
+    - FR-MCP-PLUGININT-001
+    technicalRequirements:
+    - TR-MCP-PLUGININT-001
+
+---

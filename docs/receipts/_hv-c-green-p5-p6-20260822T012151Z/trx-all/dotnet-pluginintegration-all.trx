@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="62f5bee6-d4e2-4707-b8ca-e3de2ab166ab" name="kingd@PAYTON-LEGION2 2026-08-21 20:29:13" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T20:29:13.7839126-05:00" queuing="2026-08-21T20:29:13.7839131-05:00" start="2026-08-21T20:29:09.8521252-05:00" finish="2026-08-21T20:30:30.8061037-05:00" />
+  <TestSettings name="default" id="889c6737-92fc-4f49-b0e9-2ab740a18461">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_20_29_13" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0777079b-b64d-4504-b5ce-0541592cf667" testId="a1a83450-289c-1f21-5189-fd8a02f92b69" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" computerName="PAYTON-LEGION2" duration="00:00:00.0099238" startTime="2026-08-21T20:29:12.3488221-05:00" endTime="2026-08-21T20:29:12.3588228-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0777079b-b64d-4504-b5ce-0541592cf667" />
+    <UnitTestResult executionId="c46d3a14-e426-42f9-b739-1695576d6402" testId="93bddd0a-6593-1efb-c454-577812c2cc12" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" computerName="PAYTON-LEGION2" duration="00:00:00.0015597" startTime="2026-08-21T20:29:12.3437791-05:00" endTime="2026-08-21T20:29:12.3454090-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c46d3a14-e426-42f9-b739-1695576d6402" />
+    <UnitTestResult executionId="1c3023e4-3435-481c-9436-2a2588164f5b" testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" computerName="PAYTON-LEGION2" duration="00:00:00.0595362" startTime="2026-08-21T20:29:12.2834419-05:00" endTime="2026-08-21T20:29:12.3431079-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c3023e4-3435-481c-9436-2a2588164f5b" />
+    <UnitTestResult executionId="9c20ff45-fc91-4427-a46e-429ce0257e18" testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" computerName="PAYTON-LEGION2" duration="00:00:13.0952155" startTime="2026-08-21T20:29:51.6652784-05:00" endTime="2026-08-21T20:30:04.7605797-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c20ff45-fc91-4427-a46e-429ce0257e18" />
+    <UnitTestResult executionId="e79c580c-2697-4b78-aa1d-860992bb09a0" testId="249e7608-e241-9d6b-5f9e-9784127451a5" testName="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" computerName="PAYTON-LEGION2" duration="00:00:00.0426791" startTime="2026-08-21T20:29:12.2102926-05:00" endTime="2026-08-21T20:29:12.2704038-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e79c580c-2697-4b78-aa1d-860992bb09a0" />
+    <UnitTestResult executionId="30bda7e2-737b-45de-a77d-fb047ea73133" testId="6edf857f-c350-109d-e751-78f29179f4c4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" computerName="PAYTON-LEGION2" duration="00:00:00.0021874" startTime="2026-08-21T20:29:12.3458947-05:00" endTime="2026-08-21T20:29:12.3481645-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30bda7e2-737b-45de-a77d-fb047ea73133" />
+    <UnitTestResult executionId="a5b5ade4-cd61-46c4-8657-fd92474d9b89" testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" computerName="PAYTON-LEGION2" duration="00:00:13.5025581" startTime="2026-08-21T20:30:17.1644635-05:00" endTime="2026-08-21T20:30:30.6670811-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5b5ade4-cd61-46c4-8657-fd92474d9b89" />
+    <UnitTestResult executionId="20bcde15-d5e6-4d0b-9de2-91649ef19205" testId="5bb017ac-c90e-9a36-e020-70d7c3733126" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" computerName="PAYTON-LEGION2" duration="00:00:01.0744261" startTime="2026-08-21T20:29:50.5899170-05:00" endTime="2026-08-21T20:29:51.6644126-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20bcde15-d5e6-4d0b-9de2-91649ef19205" />
+    <UnitTestResult executionId="8c6a0b00-6d6b-4494-8ef8-d5dc558bd91e" testId="b4a57976-1c8f-4410-0825-5899e07a7661" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" computerName="PAYTON-LEGION2" duration="00:00:00.0013122" startTime="2026-08-21T20:29:12.3594410-05:00" endTime="2026-08-21T20:29:12.3608000-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c6a0b00-6d6b-4494-8ef8-d5dc558bd91e" />
+    <UnitTestResult executionId="16ca0b6b-ca9f-47d8-a96a-d9ecf381d74e" testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" computerName="PAYTON-LEGION2" duration="00:00:12.2409184" startTime="2026-08-21T20:29:38.3462187-05:00" endTime="2026-08-21T20:29:50.5872210-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16ca0b6b-ca9f-47d8-a96a-d9ecf381d74e" />
+    <UnitTestResult executionId="8d98f83f-f9e5-44b4-aaf0-526d0ab0f5de" testId="3432ff42-672e-0305-93be-fe61923bb416" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" computerName="PAYTON-LEGION2" duration="00:00:12.5217583" startTime="2026-08-21T20:29:25.8216311-05:00" endTime="2026-08-21T20:29:38.3434726-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d98f83f-f9e5-44b4-aaf0-526d0ab0f5de" />
+    <UnitTestResult executionId="89f81002-fc38-4713-a2cb-21824eb242ef" testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0014750" startTime="2026-08-21T20:29:12.3613738-05:00" endTime="2026-08-21T20:29:12.3629052-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89f81002-fc38-4713-a2cb-21824eb242ef" />
+    <UnitTestResult executionId="934d641b-dca5-4584-8f1a-6ddb2aa473be" testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" computerName="PAYTON-LEGION2" duration="00:00:12.4000783" startTime="2026-08-21T20:30:04.7619182-05:00" endTime="2026-08-21T20:30:17.1620495-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="934d641b-dca5-4584-8f1a-6ddb2aa473be" />
+    <UnitTestResult executionId="21094fab-1ed7-4523-9f32-89ed2ca2e5f3" testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" computerName="PAYTON-LEGION2" duration="00:00:13.4485805" startTime="2026-08-21T20:29:12.3643422-05:00" endTime="2026-08-21T20:29:25.8146321-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21094fab-1ed7-4523-9f32-89ed2ca2e5f3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e">
+      <Execution id="21094fab-1ed7-4523-9f32-89ed2ca2e5f3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_DeterministicCleanup" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="93bddd0a-6593-1efb-c454-577812c2cc12">
+      <Execution id="c46d3a14-e426-42f9-b739-1695576d6402" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RepositoryRootsExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b4a57976-1c8f-4410-0825-5899e07a7661">
+      <Execution id="8c6a0b00-6d6b-4494-8ef8-d5dc558bd91e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_UniqueAgentSourceCache" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="87979b5e-268c-e227-3bdf-1cbbf14997ac">
+      <Execution id="16ca0b6b-ca9f-47d8-a96a-d9ecf381d74e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SignatureAndNonceTrust" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10">
+      <Execution id="a5b5ade4-cd61-46c4-8657-fd92474d9b89" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3432ff42-672e-0305-93be-fe61923bb416">
+      <Execution id="8d98f83f-f9e5-44b4-aaf0-526d0ab0f5de" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SelectsFreePort" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33">
+      <Execution id="9c20ff45-fc91-4427-a46e-429ce0257e18" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="9676f0d0-5f41-a32c-c2d9-8828d86f7808">
+      <Execution id="934d641b-dca5-4584-8f1a-6ddb2aa473be" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesMarker" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a6213a20-b401-20f3-7b2f-1044dcf1bcfe">
+      <Execution id="1c3023e4-3435-481c-9436-2a2588164f5b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_SupportedHostKinds" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="249e7608-e241-9d6b-5f9e-9784127451a5">
+      <Execution id="e79c580c-2697-4b78-aa1d-860992bb09a0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests" name="PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6edf857f-c350-109d-e751-78f29179f4c4">
+      <Execution id="30bda7e2-737b-45de-a77d-fb047ea73133" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RequiredEntrypointFilesExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="18d5a8a3-7892-c234-f03d-8f0549399f5f">
+      <Execution id="89f81002-fc38-4713-a2cb-21824eb242ef" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_VersionMetadataPresent" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="5bb017ac-c90e-9a36-e020-70d7c3733126">
+      <Execution id="20bcde15-d5e6-4d0b-9de2-91649ef19205" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_StartupTimeout" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a1a83450-289c-1f21-5189-fd8a02f92b69">
+      <Execution id="0777079b-b64d-4504-b5ce-0541592cf667" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_ExactlyEightEnabled" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a1a83450-289c-1f21-5189-fd8a02f92b69" executionId="0777079b-b64d-4504-b5ce-0541592cf667" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93bddd0a-6593-1efb-c454-577812c2cc12" executionId="c46d3a14-e426-42f9-b739-1695576d6402" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" executionId="1c3023e4-3435-481c-9436-2a2588164f5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" executionId="9c20ff45-fc91-4427-a46e-429ce0257e18" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="249e7608-e241-9d6b-5f9e-9784127451a5" executionId="e79c580c-2697-4b78-aa1d-860992bb09a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6edf857f-c350-109d-e751-78f29179f4c4" executionId="30bda7e2-737b-45de-a77d-fb047ea73133" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" executionId="a5b5ade4-cd61-46c4-8657-fd92474d9b89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bb017ac-c90e-9a36-e020-70d7c3733126" executionId="20bcde15-d5e6-4d0b-9de2-91649ef19205" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4a57976-1c8f-4410-0825-5899e07a7661" executionId="8c6a0b00-6d6b-4494-8ef8-d5dc558bd91e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" executionId="16ca0b6b-ca9f-47d8-a96a-d9ecf381d74e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3432ff42-672e-0305-93be-fe61923bb416" executionId="8d98f83f-f9e5-44b4-aaf0-526d0ab0f5de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" executionId="89f81002-fc38-4713-a2cb-21824eb242ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" executionId="934d641b-dca5-4584-8f1a-6ddb2aa473be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" executionId="21094fab-1ed7-4523-9f32-89ed2ca2e5f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="14" executed="14" passed="14" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.45]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.98]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.36]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:01:19.93]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

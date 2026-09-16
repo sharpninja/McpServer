@@ -1,0 +1,16 @@
+{
+  "migSqlite": 0,
+  "migPg": 0,
+  "migSql": 0,
+  "clientHits": 0,
+  "replHits": 0,
+  "directorHits": 0,
+  "stdioHits": 0,
+  "ctrlHits": 0,
+  "dbHits": 0,
+  "pluginHits": 0,
+  "testFiles": [
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+  ],
+  "fwhToolHits": []
+}

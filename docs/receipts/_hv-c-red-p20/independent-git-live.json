@@ -1,0 +1,10 @@
+{
+  "branch": "develop",
+  "sha": "910a444959969a87099b800b4b6fe12c77c0aece",
+  "porcelainP20": [
+    "?? tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs",
+    "?? tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs",
+    "?? tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs"
+  ],
+  "logP20Tests": []
+}

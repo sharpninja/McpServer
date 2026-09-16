@@ -1,0 +1,14 @@
+ERROR System.Management.Automation.RuntimeException: Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20260822T012748Z-354b
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  details:
+    methodName: workflow.requirements.getMapping
+    errors:
+    - No YAML schema is registered for method 'workflow.requirements.getMapping'.
+
+---
+
+

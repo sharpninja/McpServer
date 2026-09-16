@@ -1,0 +1,8 @@
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:12:    public Target PluginSessionLogIntegration => _ => _
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:32:            FailIfPluginSessionLogSkipped(trxPath);
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:36:    /// Fails the PluginSessionLogIntegration target when the TRX counters report skipped tests.
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:38:    internal static void FailIfPluginSessionLogSkipped(string trxPath)
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:42:            throw new FileNotFoundException("PluginSessionLogIntegration TRX was not written.", trxPath);
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:55:                $"PluginSessionLogIntegration SkipIsFailure: skipped={skipped} notExecuted={notExecuted} executed={executed} total={total}.");
+F:\GitHub\McpServer\build\Build.PluginSessionLogIntegration.cs:58:        Log.Information("PluginSessionLogIntegration SkipIsFailure passed (skipped=0).");
+

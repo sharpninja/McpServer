@@ -1,0 +1,32 @@
+[
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260816183137_AddHandoffIngestionStorage.cs",
+    "name": "20260816183137_AddHandoffIngestionStorage.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:09:04.1735084Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260816183137_AddHandoffIngestionStorage.Designer.cs",
+    "name": "20260816183137_AddHandoffIngestionStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:10:15.0451383Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260816183150_AddHandoffIngestionStorage.cs",
+    "name": "20260816183150_AddHandoffIngestionStorage.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:09:04.1745064Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260816183150_AddHandoffIngestionStorage.Designer.cs",
+    "name": "20260816183150_AddHandoffIngestionStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:10:15.0451383Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260816183202_AddHandoffIngestionStorage.cs",
+    "name": "20260816183202_AddHandoffIngestionStorage.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:09:04.1745064Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260816183202_AddHandoffIngestionStorage.Designer.cs",
+    "name": "20260816183202_AddHandoffIngestionStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-17T03:10:15.0451383Z"
+  }
+]

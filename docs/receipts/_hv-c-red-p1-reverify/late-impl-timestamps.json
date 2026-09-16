@@ -1,0 +1,56 @@
+[
+  {
+    "path": "build\\Build.PluginSessionLogIntegration.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:30:57.2671084Z",
+    "length": 2643
+  },
+  {
+    "path": "tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:08:56.4300101Z",
+    "length": 3963
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9516690Z",
+    "length": 1017
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\PluginHostKind.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9516690Z",
+    "length": 702
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationProjectTests.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9516690Z",
+    "length": 1663
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCollection.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9516690Z",
+    "length": 303
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogScenario.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9506726Z",
+    "length": 845
+  },
+  {
+    "path": "tests\\McpServer.PluginIntegration.Tests\\scenarios\\plugin-sessionlog-scenarios.json",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:29:05.9506726Z",
+    "length": 1184
+  },
+  {
+    "path": "McpServer.sln",
+    "exists": true,
+    "lastWriteUtc": "2026-08-21T23:31:00.1868248Z",
+    "length": 58808
+  }
+]

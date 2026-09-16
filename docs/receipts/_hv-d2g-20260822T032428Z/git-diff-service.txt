@@ -1,0 +1,112 @@
+[1mdiff --git a/src/McpServer.Services/Services/HandoffIngestionService.cs b/src/McpServer.Services/Services/HandoffIngestionService.cs[m
+[1mindex de118508..d4ea94dd 100644[m
+[1m--- a/src/McpServer.Services/Services/HandoffIngestionService.cs[m
+[1m+++ b/src/McpServer.Services/Services/HandoffIngestionService.cs[m
+[36m@@ -190,6 +190,8 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+                     success: false,[m
+                     error: "Handoff ingestion is already in progress.",[m
+                     errorCode: HandoffErrorCodes.InProgress,[m
+[32m+[m[32m                    extraction.PromptVersion,[m
+[32m+[m[32m                    extraction.TemplateVersion,[m
+                     cancellationToken).ConfigureAwait(false);[m
+             }[m
+ [m
+[36m@@ -242,6 +244,8 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+                 success,[m
+                 success ? null : errorDiagnostic?.Message,[m
+                 success ? null : errorDiagnostic?.Code,[m
+[32m+[m[32m                extraction.PromptVersion,[m
+[32m+[m[32m                extraction.TemplateVersion,[m
+                 cancellationToken).ConfigureAwait(false);[m
+         }[m
+         catch (OperationCanceledException)[m
+[36m@@ -763,17 +767,33 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+         bool success,[m
+         string? error,[m
+         string? errorCode,[m
+[32m+[m[32m        string? promptVersion,[m
+[32m+[m[32m        string? templateVersion,[m
+         CancellationToken cancellationToken)[m
+     {[m
+         var sanitizedDraft = SanitizeDraft(draft);[m
+         var claimedVersion = entity.StateVersion;[m
+[32m+[m[32m        var effectivePrompt = string.IsNullOrWhiteSpace(promptVersion)[m
+[32m+[m[32m            ? HandoffPromptDefaults.PromptVersion[m
+[32m+[m[32m            : promptVersion.Trim();[m
+[32m+[m[32m        var effectiveTemplate = string.IsNullOrWhiteSpace(templateVersion)[m
+[32m+[m[32m            ? HandoffPromptDefaults.TemplateId[m
+[32m+[m[32m            : templateVersion.Trim();[m
+[32m+[m[32m        var replayIdentity = HandoffReplayKeys.Create([m
+[32m+[m[32m            entity.WorkspaceId,[m
+[32m+[m[32m            entity.ContentSha256 ?? string.Empty,[m
+[32m+[m[32m            effectivePrompt,[m
+[32m+[m[32m            request.Force,[m
+[32m+[m[32m            entity.RunId);[m
+         var fenced = await _db.HandoffIngestionRuns[m
+             .Where(run => run.RunId == entity.RunId[m
+                 && run.ProcessingOwner == _instanceId[m
+                 && run.StateVersion == claimedVersion)[m
+             .ExecuteUpdateAsync([m
+                 setters => setters[m
+[31m-                    .SetProperty(run => run.TemplateVersion, HandoffPromptDefaults.TemplateId)[m
+[32m+[m[32m                    .SetProperty(run => run.PromptVersion, effectivePrompt)[m
+[32m+[m[32m                    .SetProperty(run => run.TemplateVersion, effectiveTemplate)[m
+[32m+[m[32m                    .SetProperty(run => run.ReplayIdentity, replayIdentity)[m
+                     .SetProperty(run => run.Agent, SanitizeText(agent))[m
+                     .SetProperty(run => run.Model, SanitizeText(model))[m
+                     .SetProperty(run => run.Confidence, sanitizedDraft?.Confidence)[m
+[36m@@ -793,7 +813,9 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+         if (fenced == 0)[m
+             return InProgressResult(entity);[m
+ [m
+[31m-        entity.TemplateVersion = HandoffPromptDefaults.TemplateId;[m
+[32m+[m[32m        entity.PromptVersion = effectivePrompt;[m
+[32m+[m[32m        entity.TemplateVersion = effectiveTemplate;[m
+[32m+[m[32m        entity.ReplayIdentity = replayIdentity;[m
+         entity.Agent = SanitizeText(agent);[m
+         entity.Model = SanitizeText(model);[m
+         entity.Confidence = sanitizedDraft?.Confidence;[m
+[36m@@ -975,12 +997,14 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+         {[m
+             while (!cancellationToken.IsCancellationRequested)[m
+             {[m
+[31m-                await Task.Delay(_lease.HeartbeatInterval, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);[m
+                 var now = _time.GetUtcNow();[m
+                 await using var db = CreateFreshContext();[m
+                 var renewed = await db.HandoffIngestionRuns[m
+                     .Where(run => run.RunId == entity.RunId[m
+[31m-                        && run.ProcessingOwner == _instanceId)[m
+[32m+[m[32m                        && run.ProcessingOwner == _instanceId[m
+[32m+[m[32m                        && run.ProcessingState == nameof(HandoffProcessingState.Processing)[m
+[32m+[m[32m                        && run.StateVersion == entity.StateVersion)[m
+                     .ExecuteUpdateAsync([m
+                         setters => setters[m
+                             .SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration)),[m
+[36m@@ -996,6 +1020,26 @@[m [mpublic sealed class HandoffIngestionService : IHandoffIngestionService[m
+         }[m
+     }[m
+ [m
+[32m+[m[32m    private async Task WaitForHeartbeatIntervalAsync(CancellationToken cancellationToken)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var due = _time.GetUtcNow() + _lease.HeartbeatInterval;[m
+[32m+[m[32m        while (_time.GetUtcNow() < due)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            cancellationToken.ThrowIfCancellationRequested();[m
+[32m+[m[32m            var remaining = due - _time.GetUtcNow();[m
+[32m+[m[32m            if (remaining <= TimeSpan.Zero)[m
+[32m+[m[32m                return;[m
+[32m+[m
+[32m+[m[32m            var wait = remaining > TimeSpan.FromMilliseconds(50)[m
+[32m+[m[32m                ? TimeSpan.FromMilliseconds(50)[m
+[32m+[m[32m                : remaining;[m
+[32m+[m[32m            if (wait < TimeSpan.FromMilliseconds(1))[m
+[32m+[m[32m                wait = TimeSpan.FromMilliseconds(1);[m
+[32m+[m
+[32m+[m[32m            await Task.Delay(wait, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+     private async Task<bool> OwnsProcessingAsync(HandoffIngestionRunEntity entity, CancellationToken cancellationToken)[m
+     {[m
+         var current = await _db.HandoffIngestionRuns[m

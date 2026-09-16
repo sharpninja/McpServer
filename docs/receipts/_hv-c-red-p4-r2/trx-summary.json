@@ -1,0 +1,103 @@
+{
+  "TimestampUtc": "2026-08-22T00:15:03.4002038Z",
+  "CatalogFilterExitCode": 1,
+  "PluginAllExitCode": 1,
+  "CatalogFilterTrx": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r2\\catalog-filter.trx",
+    "outcome": "Failed",
+    "total": "6",
+    "executed": "6",
+    "passed": "0",
+    "failed": "6",
+    "skipped": null,
+    "notExecuted": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "outcome": "Failed",
+        "duration": "00:00:00.0006699",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "outcome": "Failed",
+        "duration": "00:00:00.0005890",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "outcome": "Failed",
+        "duration": "00:00:00.0011873",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "outcome": "Failed",
+        "duration": "00:00:00.0008337",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "outcome": "Failed",
+        "duration": "00:00:00.0295989",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "outcome": "Failed",
+        "duration": "00:00:00.0005206",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      }
+    ]
+  },
+  "PluginAllTrx": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r2\\pluginintegration-all.trx",
+    "outcome": "Failed",
+    "total": "7",
+    "executed": "7",
+    "passed": "1",
+    "failed": "6",
+    "skipped": null,
+    "notExecuted": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "outcome": "Failed",
+        "duration": "00:00:00.0005937",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "outcome": "Failed",
+        "duration": "00:00:00.0032272",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "outcome": "Failed",
+        "duration": "00:00:00.0007716",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "outcome": "Failed",
+        "duration": "00:00:00.0021860",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "outcome": "Failed",
+        "duration": "00:00:00.0011846",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "outcome": "Failed",
+        "duration": "00:00:00.0007888",
+        "output": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+      }
+    ]
+  }
+}

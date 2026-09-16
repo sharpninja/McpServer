@@ -1,0 +1,17 @@
+turnRequestId: req-20260822T062054Z-001-hostile-c-green-p15
+queryTitle: Hostile C-green-P15 failsafe pending isolation
+openedAt: 2026-08-22T06:25:00Z
+status: in_progress
+sessionId: GrokCode-20260822T062102Z-plugin-session
+codeEdits: 0
+lastBuildStatus: unknown
+auditActions: 0
+auditDialog: 0
+auditDecisions: 0
+auditFiles: 0
+auditCommits: 0
+queryText: CLASS 1 hostile C-green-P15 after C-red-P15 AGREE 20260822T053539Z.
+planFile: None
+todoId: None
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-21T10:20:37.4844112Z

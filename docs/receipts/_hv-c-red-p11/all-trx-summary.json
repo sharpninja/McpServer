@@ -1,0 +1,397 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p11\\dotnet-pluginintegration-all.trx",
+  "outcome": "Failed",
+  "total": "38",
+  "executed": "38",
+  "passed": "30",
+  "failed": "8",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 38,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)"
+  ],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)"
+  ],
+  "skippedNames": [],
+  "p11Count": 8,
+  "p11Failed": 8,
+  "p11Passed": 0,
+  "p11Skipped": 0,
+  "p12Count": 0,
+  "p13Count": 0,
+  "notImplementedCount": 8,
+  "p11ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 2,
+      "Failed": 2,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 2
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "NotImplementedMessage": 1
+    }
+  ],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+      "outcome": "Passed",
+      "duration": "00:00:01.0839443",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0028093",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)",
+      "outcome": "Failed",
+      "duration": "00:00:15.5067199",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+      "outcome": "Passed",
+      "duration": "00:00:23.4889335",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "outcome": "Passed",
+      "duration": "00:00:10.2178098",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "outcome": "Passed",
+      "duration": "00:00:00.0632712",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0035934",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)",
+      "outcome": "Failed",
+      "duration": "00:00:11.6172891",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)",
+      "outcome": "Failed",
+      "duration": "00:00:39.2468171",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015012",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010685",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)",
+      "outcome": "Failed",
+      "duration": "00:00:09.5445035",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+      "outcome": "Passed",
+      "duration": "00:00:11.5007251",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+      "outcome": "Passed",
+      "duration": "00:00:17.5364809",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0022550",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012100",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012119",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+      "outcome": "Passed",
+      "duration": "00:00:00.0114226",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0033351",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018400",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015260",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012401",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012087",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+      "outcome": "Passed",
+      "duration": "00:00:00.0107555",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0338808",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0015536",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)",
+      "outcome": "Failed",
+      "duration": "00:00:08.5861996",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014937",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)",
+      "outcome": "Failed",
+      "duration": "00:00:13.7207415",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+      "outcome": "Passed",
+      "duration": "00:00:17.6501877",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+      "outcome": "Passed",
+      "duration": "00:00:00.0356984",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018275",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)",
+      "outcome": "Failed",
+      "duration": "00:00:21.3932366",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)",
+      "outcome": "Failed",
+      "duration": "00:00:12.9380112",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 24\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 41\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 48\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0023829",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "outcome": "Passed",
+      "duration": "00:00:00.0019830",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+      "outcome": "Passed",
+      "duration": "00:00:18.0256246",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020669",
+      "message": null,
+      "stack": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "Command": "pluginint-p19-filter",
+  "ExitCode": 1,
+  "DurationMs": 18165,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\hv-dotnet-p19-filter.log",
+  "FinishedUtc": "2026-08-22T09:23:00.0168875Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "DotnetArgs": [
+    "test",
+    "tests/McpServer.PluginIntegration.Tests",
+    "-c",
+    "Debug",
+    "--filter",
+    "FullyQualifiedName~PluginNativeSuiteReceiptTests",
+    "--logger",
+    "trx;LogFileName=p19-red.trx",
+    "--logger",
+    "console;verbosity=detailed",
+    "--results-directory",
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\results-p19-20260822T092241Z"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "directory": "F:\\GitHub\\McpServer\\docs\\receipts\\pluginint-p19-20260822T095842Z",
+  "files": [
+    "git.json",
+    "mcpserver-claude-code-plugin-after-sync.log",
+    "mcpserver-claude-code-plugin-before.log",
+    "mcpserver-claude-cowork-plugin-after-sync.log",
+    "mcpserver-claude-cowork-plugin-before.log",
+    "mcpserver-cline-plugin-after-sync.log",
+    "mcpserver-cline-plugin-before.log",
+    "mcpserver-cline-v2-plugin-after-sync.log",
+    "mcpserver-cline-v2-plugin-before.log",
+    "mcpserver-codex-plugin-after-sync.log",
+    "mcpserver-codex-plugin-before.log",
+    "mcpserver-copilot-plugin-after-sync.log",
+    "mcpserver-copilot-plugin-before.log",
+    "mcpserver-grok-plugin-after-sync.log",
+    "mcpserver-grok-plugin-before.log",
+    "mcpserver-opencode-plugin-after-sync.log",
+    "mcpserver-opencode-plugin-before.log",
+    "PluginNativeSuiteReceiptTests.trx",
+    "summary.json",
+    "sync-agent-plugins.log"
+  ],
+  "hasSummary": true,
+  "hasGit": true,
+  "hasSyncLog": true,
+  "hasTrx": true,
+  "pluginCount": 8,
+  "afterSyncCount": 8,
+  "catalogNames": [
+    "mcpserver-codex-plugin",
+    "mcpserver-claude-code-plugin",
+    "mcpserver-claude-cowork-plugin",
+    "mcpserver-copilot-plugin",
+    "mcpserver-grok-plugin",
+    "mcpserver-cline-plugin",
+    "mcpserver-cline-v2-plugin",
+    "mcpserver-opencode-plugin"
+  ],
+  "afterNames": [
+    "mcpserver-codex-plugin",
+    "mcpserver-claude-code-plugin",
+    "mcpserver-claude-cowork-plugin",
+    "mcpserver-copilot-plugin",
+    "mcpserver-grok-plugin",
+    "mcpserver-cline-plugin",
+    "mcpserver-cline-v2-plugin",
+    "mcpserver-opencode-plugin"
+  ],
+  "allFailedZero": true,
+  "allSkippedZero": true,
+  "nativeSuites": [
+    {
+      "name": "mcpserver-codex-plugin",
+      "suite": "Pester",
+      "log": "mcpserver-codex-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-claude-code-plugin",
+      "suite": "Pester",
+      "log": "mcpserver-claude-code-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-claude-cowork-plugin",
+      "suite": "Pester",
+      "log": "mcpserver-claude-cowork-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-copilot-plugin",
+      "suite": "Pester",
+      "log": "mcpserver-copilot-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-grok-plugin",
+      "suite": "Pester",
+      "log": "mcpserver-grok-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-cline-plugin",
+      "suite": "Jest",
+      "log": "mcpserver-cline-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-cline-v2-plugin",
+      "suite": "Jest",
+      "log": "mcpserver-cline-v2-plugin-before.log"
+    },
+    {
+      "name": "mcpserver-opencode-plugin",
+      "suite": "Jest",
+      "log": "mcpserver-opencode-plugin-before.log"
+    }
+  ],
+  "branch": "develop",
+  "sha": "910a444959969a87099b800b4b6fe12c77c0aece",
+  "unrelated": 0,
+  "syncSucceeded": false
+}

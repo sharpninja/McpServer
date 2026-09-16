@@ -1,0 +1,7 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --no-build --filter FullyQualifiedName!~Theory_EachScenario_FailsUntilAdapterOperational",
+  "ExitCode": 0,
+  "DurationMs": 102563,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p11\\dotnet-pluginintegration-rest-nobuild.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p11\\dotnet-pluginintegration-rest-nobuild.trx"
+}

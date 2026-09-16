@@ -1,0 +1,12 @@
+{
+  "Exists": true,
+  "LastWriteTimeUtc": "2026-08-22T02:30:42.3956809Z",
+  "Length": 57482,
+  "Porcelain": " M src/McpServer.Services/Services/HandoffIngestionService.cs",
+  "RecentLog": "bf000bb7 2026-08-18 13:38:20 -0500 feat(products,handoff): ship products + handoff; refresh docs and wiki",
+  "WaitForHeartbeatIntervalAsyncHitCount": 2,
+  "HitLines": [
+    "1000:await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);",
+    "1023:private async Task WaitForHeartbeatIntervalAsync(CancellationToken cancellationToken)"
+  ]
+}

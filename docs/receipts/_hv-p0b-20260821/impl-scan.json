@@ -1,0 +1,100 @@
+{
+  "gitStatus": [
+    " M .worktrees/triage-stale-turns",
+    " M .worktrees/triage-transcript",
+    "?? docs/plans/PLAN-PLUGINHANDOFF-001.md",
+    "?? docs/receipts/_hv-20260821T113500Z/",
+    "?? docs/receipts/_hv-failsafe-post-review/",
+    "?? docs/receipts/_hv-ops-running-20260821/",
+    "?? docs/receipts/_hv-p0a-d0-inventory.ps1",
+    "?? docs/receipts/_hv-p0a-d0-out/",
+    "?? docs/receipts/_hv-p0b-20260821/",
+    "?? docs/receipts/_remaining-submit/",
+    "?? docs/receipts/failsafe-continue-itemized-20260821T155934Z.json",
+    "?? docs/receipts/failsafe-importrecovery-blocked-20260821T161241Z.json",
+    "?? docs/receipts/failsafe-other-replay-20260821T150540Z.json",
+    "?? docs/receipts/failsafe-post-all-summary-20260821T152147Z.json",
+    "?? docs/receipts/failsafe-quarantine-replay-20260821T150140Z.json",
+    "?? docs/receipts/failsafe-remaining-codex-20260821T155103Z.json",
+    "?? docs/receipts/failsafe-remaining-posted-20260821T155540Z.json",
+    "?? docs/receipts/failsafe-replay-20260821T144010Z.json",
+    "?? docs/receipts/hostile-validator-20260821T114530Z.json",
+    "?? docs/receipts/hostile-validator-20260821T114530Z.md",
+    "?? docs/receipts/hostile-validator-20260821T143322Z.json",
+    "?? docs/receipts/hostile-validator-20260821T143322Z.md",
+    "?? docs/receipts/hostile-validator-20260821T153416Z.json",
+    "?? docs/receipts/hostile-validator-20260821T153416Z.md",
+    "?? docs/receipts/hostile-validator-20260821T161800Z.json",
+    "?? docs/receipts/hostile-validator-20260821T161800Z.md",
+    "?? docs/receipts/hostile-validator-20260821T171357Z.json",
+    "?? docs/receipts/hostile-validator-20260821T171357Z.md",
+    "?? docs/receipts/hostile-validator-20260821T172735Z.json",
+    "?? docs/receipts/hostile-validator-20260821T172735Z.md",
+    "?? docs/receipts/hostile-validator-20260821T173914Z.json",
+    "?? docs/receipts/hostile-validator-20260821T173914Z.md",
+    "?? docs/receipts/hostile-validator-20260821T200636Z.json",
+    "?? docs/receipts/hostile-validator-20260821T200636Z.md",
+    "?? docs/receipts/hostile-validator-20260821T201813Z.json",
+    "?? docs/receipts/hostile-validator-20260821T201813Z.md",
+    "?? docs/receipts/hostile-validator-20260821T203017Z.json",
+    "?? docs/receipts/hostile-validator-20260821T203017Z.md",
+    "?? docs/receipts/post-importrecovery-rest-20260821T155700Z.ps1",
+    "?? docs/receipts/replay-grok-failsafe-20260821T144010Z.ps1",
+    "?? docs/receipts/replay-grok-quarantine-20260821T150140Z.ps1",
+    "?? docs/receipts/replay-other-failsafe-20260821T150540Z.ps1",
+    "?? docs/receipts/replay-remaining-codex-20260821T155103Z.ps1",
+    "?? docs/receipts/submit-importrecovery-20260821T155600Z.ps1"
+  ],
+  "gitLogSrc": [
+    "d54f4e324f92adcc791677ebc15e8d56399a2b31 2026-08-20T20:21:28-05:00 test(sessionlog): S15-S18 sanitizer HTTP, stdio, config example",
+    "0e0c57638bf7b75342f0893763a656677579b769 2026-08-20T19:46:32-05:00 feat(sessionlog): incremental dialog persist and 503 degrade-queue",
+    "dfd7097b5dad0081a67a35f2085b97e9cde3d562 2026-08-20T02:54:49-05:00 fix(sessionlog): copy session tags through sanitizer GET projection",
+    "ba5cfaf6c68bedc59fa8d11011180b251fe50957 2026-08-20T02:32:10-05:00 feat(sessionlog): load session tags by SessionLogId for leftover 113",
+    "8ff862efd3a2b4f9e667b86b65ab18a5bb71d7c5 2026-08-19T19:57:03-05:00 feat(sessionlog): leftover S6 stale in_progress query and isolation tests",
+    "dbb097946e1b297fed7c4b1c4535a399cff78456 2026-08-19T19:11:11-05:00 merge triage/tempvol after hostile AGREE docs/receipts/hostile-validator-20260820T000449Z.md",
+    "9c7c3ec3c1e792a1476ca711392812a0ba29425a 2026-08-19T18:18:03-05:00 fix(plugin): leftover S5 same-volume TEMP/TMP for wrappers",
+    "dddcab83f13d579ca358316fd2b2d5e7dbda9133 2026-08-19T18:18:03-05:00 fix(transcript): leftover S4 Codex tool_search and inter_agent adapters",
+    "c43b4d48b342c603c57ebbf01f0ac0e8faed01b3 2026-08-19T17:45:55-05:00 fix(sessionlog): leftover S3 foreign filesModified reject and replace_section retryable 503",
+    "400d881b6599b2fbc696ba51b65a47b4b48cb9eb 2026-08-19T17:00:40-05:00 merge triage/closeout after hostile AGREE docs/receipts/hostile-validator-20260819T215323Z.md",
+    "04dd7efb4376bcb027523ef09ad443f1bdb26121 2026-08-19T17:00:12-05:00 fix(schema): leftover G2 AgentSession header columns on Sqlite plus guarded provider apply",
+    "9649753a8e6e0244ce6efc20bc34685928eb4a6b 2026-08-19T16:12:31-05:00 fix(plugin-core): leftover S2 StrictMode, failsafe 503, SessionEnd, xagent, verify, beginTurn timeout",
+    "c81abaf0193c393bfecffc07015962424a601dfe 2026-08-19T11:34:24-05:00 feat(triage): unified errors, session-log persist, hook isolation",
+    "bf000bb7fc495b6011eb5888a8c9293c992eb305 2026-08-18T13:38:20-05:00 feat(products,handoff): ship products + handoff; refresh docs and wiki",
+    "7c4821ca9d0ce9e205482b6f68afbc9e058cfb28 2026-08-12T17:31:22-05:00 feat(sessionlog): require planFile and todoId on session turns"
+  ],
+  "gitPlan": [],
+  "pluginIntegrationDirExists": false,
+  "pluginIntegrationHits": [],
+  "drainHits": [
+    "591:function Get-ReplMethodTimeoutSeconds {",
+    "602:return 2",
+    "655:$timeout = Get-ReplMethodTimeoutSeconds -Method $Method"
+  ],
+  "hostileReviewFiles": [],
+  "hygieneSrcFiles": [],
+  "wikiDumpHits": [],
+  "health": {
+    "nonceSent": "34f02f107eda4fae88942ccad7b971dc",
+    "raw": {
+      "status": "Healthy",
+      "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+      "checks": [
+        {
+          "name": "self",
+          "status": "Healthy",
+          "description": null,
+          "duration": 0.0016
+        },
+        {
+          "name": "upstream",
+          "status": "Healthy",
+          "description": "Federation disabled.",
+          "duration": 0.001
+        }
+      ],
+      "nonce": "34f02f107eda4fae88942ccad7b971dc",
+      "storage": "reachable"
+    },
+    "echoed": true
+  }
+}

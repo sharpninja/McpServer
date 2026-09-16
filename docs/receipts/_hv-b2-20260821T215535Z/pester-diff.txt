@@ -1,0 +1,138 @@
+[1mdiff --git a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[1mindex d4eb33f8..204926bc 100644[m
+[1m--- a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[1m+++ b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[36m@@ -4948,4 +4948,133 @@[m [mDescribe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {[m
+             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue[m
+         }[m
+     }[m
+[32m+[m
+[32m+[m[32m    It 'Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplFailsafeDraining = $true[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            $seconds = Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync'[m
+[32m+[m[32m            $seconds | Should -BeGreaterThan 2[m
+[32m+[m[32m            $seconds | Should -BeGreaterOrEqual 120[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplFailsafeDraining = $true[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.completeTurn') | Should -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.beginTurn') | Should -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Not -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -BeGreaterOrEqual 120[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml' {[m
+[32m+[m[32m        $sandbox = New-PersistSandbox[m
+[32m+[m[32m        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR[m
+[32m+[m[32m        $previousRaw = $null[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m            $script:ReplFailsafeDrainCompleted = $false[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m            $yamlPath = Join-Path $sandbox.FailsafeDir '20260821T000200Z-session_submit-drain.yaml'[m
+[32m+[m[32m            Write-McpYamlObject -Path $yamlPath -Document ([ordered]@{[m
+[32m+[m[32m                method = 'client.SessionLog.SubmitAsync'[m
+[32m+[m[32m                label = 'session_submit'[m
+[32m+[m[32m                timestamp = '20260821T000200Z'[m
+[32m+[m[32m                params = [ordered]@{[m
+[32m+[m[32m                    sessionLog = [ordered]@{[m
+[32m+[m[32m                        sourceType = 'GrokCode'[m
+[32m+[m[32m                        sessionId = 'GrokCode-20260821T000000Z-plugin-session'[m
+[32m+[m[32m                        turns = @([ordered]@{ requestId = 'req-20260821T000200Z-003-drain'; status = 'in_progress' })[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m            })[m
+[32m+[m[32m            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue[m
+[32m+[m[32m            function Invoke-ReplRaw {[m
+[32m+[m[32m                param([string]$Method, [string]$ParamsYaml = '')[m
+[32m+[m[32m                if ($Method -eq 'client.SessionLog.SubmitAsync') {[m
+[32m+[m[32m                    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method[m
+[32m+[m[32m                    if ($timeout -le 2) {[m
+[32m+[m[32m                        return (New-McpPluginReplResult -Success $false -Output 'timed out after 2s' -Error 'timed out after 2s' -ExitCode 1)[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    return (New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    id: 1" -ExitCode 0)[m
+[32m+[m[32m                }[m
+[32m+[m[32m                return (New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0)[m
+[32m+[m[32m            }[m
+[32m+[m[32m            $summary = Invoke-ReplFailsafeDrain[m
+[32m+[m[32m            $summary.replayed | Should -Be 1[m
+[32m+[m[32m            Test-Path -LiteralPath $yamlPath | Should -BeFalse[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplRawInFlight = $true[m
+[32m+[m[32m        $script:ReplFailsafeDrainDeferred = $false[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Invoke-ReplFailsafeDrainOnFirstSuccess[m
+[32m+[m[32m            $script:ReplFailsafeDrainDeferred | Should -BeTrue[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplRawInFlight = $false[m
+[32m+[m[32m            $script:ReplFailsafeDrainDeferred = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mDescribe 'TEST-MCP-REPL-010 V4 failsafe path unification' {[m
+[32m+[m[32m    It 'Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending' {[m
+[32m+[m[32m        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-v4-failsafe-' + [guid]::NewGuid().ToString('N'))[m
+[32m+[m[32m        [void][System.IO.Directory]::CreateDirectory($workspace)[m
+[32m+[m[32m        $previousWorkspace = $env:MCP_WORKSPACE_PATH[m
+[32m+[m[32m        $previousFailsafe = $env:MCPSERVER_FAILSAFE_DIR[m
+[32m+[m[32m        $previousFailsafe2 = $env:MCP_FAILSAFE_DIR[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            $env:MCP_WORKSPACE_PATH = $workspace[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')[m
+[32m+[m[32m            $dir = Get-McpFailsafeDir -StartPath $workspace[m
+[32m+[m[32m            $dir | Should -Match '[\\/]\.mcpServer[\\/]failsafe[\\/]'[m
+[32m+[m[32m            $dir | Should -Match '[\\/]workspaces[\\/]'[m
+[32m+[m[32m            $dir | Should -Match '[\\/]pending$'[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            if ($null -ne $previousFailsafe) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafe }[m
+[32m+[m[32m            if ($null -ne $previousFailsafe2) { $env:MCP_FAILSAFE_DIR = $previousFailsafe2 }[m
+[32m+[m[32m            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource' {[m
+[32m+[m[32m        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-legacy-failsafe-' + [guid]::NewGuid().ToString('N'))[m
+[32m+[m[32m        $legacy = Join-Path $workspace '.mcpServer\grok\failsafe'[m
+[32m+[m[32m        [void][System.IO.Directory]::CreateDirectory($legacy)[m
+[32m+[m[32m        $legacyFile = Join-Path $legacy '20260821T000000Z-session_submit-legacy.yaml'[m
+[32m+[m[32m        Set-Content -LiteralPath $legacyFile -Value 'method: client.SessionLog.SubmitAsync' -Encoding utf8[m
+[32m+[m[32m        $previousWorkspace = $env:MCP_WORKSPACE_PATH[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            $env:MCP_WORKSPACE_PATH = $workspace[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')[m
+[32m+[m[32m            $dir = Get-McpFailsafeDir -StartPath $workspace[m
+[32m+[m[32m            $migrated = Join-Path $dir '20260821T000000Z-session_submit-legacy.yaml'[m
+[32m+[m[32m            Test-Path -LiteralPath $migrated | Should -BeTrue[m
+[32m+[m[32m            Test-Path -LiteralPath $legacyFile | Should -BeFalse[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+ }[m

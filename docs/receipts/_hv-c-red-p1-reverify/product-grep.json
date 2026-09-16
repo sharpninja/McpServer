@@ -1,0 +1,110 @@
+[
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 7,
+    "text": "/// the PluginSessionLogIntegration Nuke target, solution project, and eight-row"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 10,
+    "text": "public sealed class PluginSessionLogIntegrationTargetTests"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 13,
+    "text": "/// P1 red: Nuke target PluginSessionLogIntegration exists and treats skipped tests as failures."
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 16,
+    "text": "public void BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 20,
+    "text": "var target = buildType.GetProperty(\"PluginSessionLogIntegration\");"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 25,
+    "text": "Assert.Contains(\"PluginSessionLogIntegration\", combined, StringComparison.Ordinal);"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 29,
+    "text": "Regex.IsMatch(combined, @\"PluginSessionLogIntegration[\\s\\S]{0,4000}(Skipped|skip).*fail\", RegexOptions.IgnoreCase)),"
+  },
+  {
+    "pattern": "PluginSessionLogIntegration",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 30,
+    "text": "\"PluginSessionLogIntegration must treat skipped tests as failures.\");"
+  },
+  {
+    "pattern": "McpServer.PluginIntegration.Tests",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 34,
+    "text": "/// P1 red: the solution includes tests/McpServer.PluginIntegration.Tests."
+  },
+  {
+    "pattern": "McpServer.PluginIntegration.Tests",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 41,
+    "text": "Assert.Contains(\"McpServer.PluginIntegration.Tests\", sln, StringComparison.Ordinal);"
+  },
+  {
+    "pattern": "McpServer.PluginIntegration.Tests",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 43,
+    "text": "File.Exists(Path.Combine(repoRoot, \"tests\", \"McpServer.PluginIntegration.Tests\", \"McpServer.PluginIntegration.Tests.csproj\")),"
+  },
+  {
+    "pattern": "McpServer.PluginIntegration.Tests",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 44,
+    "text": "\"tests/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.csproj is missing.\");"
+  },
+  {
+    "pattern": "McpServer.PluginIntegration.Tests",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 57,
+    "text": "\"McpServer.PluginIntegration.Tests\","
+  },
+  {
+    "pattern": "plugin-sessionlog-scenarios",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 59,
+    "text": "\"plugin-sessionlog-scenarios.json\");"
+  },
+  {
+    "pattern": "plugin-sessionlog-scenarios",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 60,
+    "text": "Assert.True(File.Exists(catalogPath), \"plugin-sessionlog-scenarios.json is missing.\");"
+  },
+  {
+    "pattern": "Catalog_HasExactlyEightEnabledScenarios",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 51,
+    "text": "public void Catalog_HasExactlyEightEnabledScenarios()"
+  },
+  {
+    "pattern": "BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 16,
+    "text": "public void BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()"
+  },
+  {
+    "pattern": "Solution_ContainsMcpServerPluginIntegrationTestsProject",
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "line": 37,
+    "text": "public void Solution_ContainsMcpServerPluginIntegrationTestsProject()"
+  }
+]

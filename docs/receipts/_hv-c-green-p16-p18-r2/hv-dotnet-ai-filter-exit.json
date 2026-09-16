@@ -1,0 +1,22 @@
+{
+  "Command": "pluginint-ai-filter",
+  "ExitCode": 0,
+  "DurationMs": 21097,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\hv-dotnet-ai-filter.log",
+  "FinishedUtc": "2026-08-22T08:43:15.2110848Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "DotnetArgs": [
+    "test",
+    "tests/McpServer.PluginIntegration.Tests",
+    "-c",
+    "Debug",
+    "--filter",
+    "PluginInt=AI",
+    "--logger",
+    "trx;LogFileName=ai-theory.trx",
+    "--logger",
+    "console;verbosity=detailed",
+    "--results-directory",
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\results-ai-20260822T084254Z"
+  ]
+}

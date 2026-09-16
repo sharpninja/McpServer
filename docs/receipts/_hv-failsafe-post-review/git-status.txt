@@ -1,0 +1,16 @@
+ M .worktrees/triage-stale-turns
+ M .worktrees/triage-transcript
+?? docs/receipts/_hv-20260821T113500Z/
+?? docs/receipts/_hv-failsafe-post-review/
+?? docs/receipts/_hv-ops-running-20260821/
+?? docs/receipts/failsafe-other-replay-20260821T150540Z.json
+?? docs/receipts/failsafe-post-all-summary-20260821T152147Z.json
+?? docs/receipts/failsafe-quarantine-replay-20260821T150140Z.json
+?? docs/receipts/failsafe-replay-20260821T144010Z.json
+?? docs/receipts/hostile-validator-20260821T114530Z.json
+?? docs/receipts/hostile-validator-20260821T114530Z.md
+?? docs/receipts/hostile-validator-20260821T143322Z.json
+?? docs/receipts/hostile-validator-20260821T143322Z.md
+?? docs/receipts/replay-grok-failsafe-20260821T144010Z.ps1
+?? docs/receipts/replay-grok-quarantine-20260821T150140Z.ps1
+?? docs/receipts/replay-other-failsafe-20260821T150540Z.ps1

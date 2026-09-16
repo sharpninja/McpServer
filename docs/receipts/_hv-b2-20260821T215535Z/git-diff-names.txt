@@ -1,0 +1,3 @@
+.worktrees/triage-stale-turns
+.worktrees/triage-transcript
+plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1

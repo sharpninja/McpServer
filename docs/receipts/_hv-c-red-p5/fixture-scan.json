@@ -1,0 +1,63 @@
+{
+  "StartAsyncThrowsNotImplemented": true,
+  "DisposeAsyncThrowsNotImplemented": true,
+  "StartAsyncHasWebApplication": false,
+  "StartAsyncHasKestrel": false,
+  "StartAsyncHasCreateBuilder": false,
+  "StartAsyncHasListenLocalhost": false,
+  "StartAsyncHasDotnetRun": false,
+  "FixtureHardcodes7147Port": false,
+  "FixtureMentions7147OnlyInComment": true,
+  "TestsAssertNotEqual7147": true,
+  "TestsAssertDbPathNot7147": true,
+  "SkipLiteralInTests": false,
+  "SkipLiteralInFixture": false,
+  "HealthReadyTestPresent": false,
+  "CsprojReferencesSupportMcp": false,
+  "CsprojReferencesClientOnly": true,
+  "NamedMethods": [
+    {
+      "Name": "ServerFixture_SelectsFreePort",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    },
+    {
+      "Name": "ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    },
+    {
+      "Name": "ServerFixture_StartupTimeout",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    },
+    {
+      "Name": "ServerFixture_CreatesMarker",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    },
+    {
+      "Name": "ServerFixture_SignatureAndNonceTrust",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    },
+    {
+      "Name": "ServerFixture_DeterministicCleanup",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false
+    }
+  ],
+  "NamedPresentCount": 6
+}

@@ -1,0 +1,114 @@
+{
+  "TimestampUtc": "2026-08-22T06:24:55.6589665Z",
+  "WmiPid": 86108,
+  "WmiAlive": true,
+  "ChildCount": 6,
+  "Children": [
+    {
+      "ProcessId": 74540,
+      "ParentProcessId": 86108,
+      "Name": "conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 43160,
+      "ParentProcessId": 86108,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedNa"
+    },
+    {
+      "ProcessId": 77884,
+      "ParentProcessId": 23808,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --te"
+    },
+    {
+      "ProcessId": 69692,
+      "ParentProcessId": 77884,
+      "Name": "testhost.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.jso"
+    },
+    {
+      "ProcessId": 57688,
+      "ParentProcessId": 69692,
+      "Name": "McpServer.PluginIntegration.Tests.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.exe\" @@ \"C:\\Users\\kingd\\AppData\\Local\\Temp\\tmpandekv.tmp\""
+    },
+    {
+      "ProcessId": 46332,
+      "ParentProcessId": 57688,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    }
+  ],
+  "Files": [
+    {
+      "Path": "hv-tests-run.transcript.log",
+      "Exists": true,
+      "Length": 15630,
+      "LastWriteTimeUtc": "2026-08-22T06:21:24.4908143Z"
+    },
+    {
+      "Path": "hv-dotnet-list-tests.log",
+      "Exists": true,
+      "Length": 14843,
+      "LastWriteTimeUtc": "2026-08-22T06:21:24.2031296Z"
+    },
+    {
+      "Path": "hv-dotnet-list-tests-exit.json",
+      "Exists": true,
+      "Length": 282,
+      "LastWriteTimeUtc": "2026-08-22T06:21:24.4881194Z"
+    },
+    {
+      "Path": "hv-dotnet-p15-filter.log",
+      "Exists": true,
+      "Length": 2472,
+      "LastWriteTimeUtc": "2026-08-22T06:21:44.5609252Z"
+    },
+    {
+      "Path": "hv-dotnet-p15-filter-exit.json",
+      "Exists": false,
+      "Length": 0,
+      "LastWriteTimeUtc": null
+    },
+    {
+      "Path": "hv-dotnet-pluginint-all.log",
+      "Exists": false,
+      "Length": 0,
+      "LastWriteTimeUtc": null
+    },
+    {
+      "Path": "hv-dotnet-pluginint-all-exit.json",
+      "Exists": false,
+      "Length": 0,
+      "LastWriteTimeUtc": null
+    },
+    {
+      "Path": "trx-p15-hv\\p15-filter.trx",
+      "Exists": false,
+      "Length": 0,
+      "LastWriteTimeUtc": null
+    },
+    {
+      "Path": "trx-all-hv\\pluginint-all.trx",
+      "Exists": false,
+      "Length": 0,
+      "LastWriteTimeUtc": null
+    }
+  ],
+  "TranscriptTail": [
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+    "    McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+    "LIST_EXIT=0"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "hitCount": 3,
+  "hits": [
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\failsafe-post-all-summary-20260821T152147Z.json",
+      "lastWriteUtc": "2026-08-21T15:22:14.8555306Z",
+      "length": 860,
+      "snippet": "{ \"utc\": \"2026-08-21T15:22:14Z\", \"grokLivePosted\": 54, \"grokQuarantinePosted\": 48, \"grokLiveRemaining\": 0, \"grokQuarantineRemaining\": 0, \"codexLivePosted\": 12, \"codexQuarantinePosted\": 12, \"codexQuarantineRemaining\": 3, \"claudeQuarantinePosted\": 41, \"claudeQuarantineRemaining\": 0, \"submitAsyncPosted"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\replay-grok-failsafe-20260821T144010Z.ps1",
+      "lastWriteUtc": "2026-08-21T14:41:18.8739761Z",
+      "length": 4617,
+      "snippet": "#Requires -Version 7.0 # Replay Grok failsafe SessionLog.SubmitAsync records outside workflow.failsafe.drain. # Drain hardcodes a 2s SubmitAsync timeout, which cannot post these payloads. Set-StrictMode -Version Latest $ErrorActionPreference = 'Stop' $pluginRoot = 'F:\\GitHub\\mcpserver-grok-plugin' $"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-ops-running-20260821\\todo-list-done.json",
+      "lastWriteUtc": "2026-08-21T14:31:04.1210115Z",
+      "length": 1126257,
+      "snippet": "{\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\u0022items\\u0022:[{\\u0022Id\\u0022:\\u0022agent-pool-runtime-orchestration\\u0022,\\u0022Title\\u0022:\\u0022Implement Agent Pool runtime orchestration and Director controls\\u0022,\\u0022Section\\u0022:\\u0022Architecture\\u0022,\\u0022Priority\\u0022:\\u0022high\\u0"
+    }
+  ]
+}

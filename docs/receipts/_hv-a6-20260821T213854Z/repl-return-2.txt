@@ -1,0 +1,11 @@
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:597:    $default = if ($env:REPL_TIMEOUT) { [int]$env:REPL_TIMEOUT } else { 30 }
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:598:    $long = if ($env:REPL_LONG_TIMEOUT) { [int]$env:REPL_LONG_TIMEOUT } else { 300 }
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:599:    $helper = if ($env:REPL_HELPER_TIMEOUT) { [int]$env:REPL_HELPER_TIMEOUT } else { 120 }
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:600:
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:601:    if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
+> F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:602:        return 2
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:603:    }
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:604:
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:605:    switch -Wildcard ($Method) {
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:606:        'workflow.todo.analyzeRequirements'       { return $long }
+  F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:607:        'workflow.requirements.generateDocument'  { return $long }

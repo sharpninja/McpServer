@@ -1,0 +1,29 @@
+{
+  "old095842ClaudeBefore": {
+    "exists": true,
+    "length": 1103,
+    "discoveryFiles": 7,
+    "discoveryTests": 20,
+    "pesterPassed": 20,
+    "pesterFailed": 0,
+    "pesterSkipped": 0,
+    "plusFiles": [
+      "NativeSmoke.Tests.ps1",
+      "Skills.Tests.ps1",
+      "ReplMethodTimeout.Tests.ps1",
+      "ReplWorkspaceResolution.Tests.ps1",
+      "SessionIdCanonicalAgent.Tests.ps1",
+      "ClaudeHookWiring.Tests.ps1",
+      "StopGateHardening.Tests.ps1"
+    ],
+    "plusCount": 7,
+    "footerFailed": 0,
+    "footerSkipped": 0,
+    "exitCode": 0,
+    "jestPassed": null,
+    "jestFailed": 0,
+    "jestSkipped": 0,
+    "jestRanAll": false,
+    "jestSuitesPassed": null
+  }
+}

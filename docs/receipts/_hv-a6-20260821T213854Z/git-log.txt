@@ -1,0 +1,8 @@
+[33m910a4449[m docs: refresh 1.4.30, wiki export, session-log persist/sanitizer
+[33mee89cd63[m merge sessionsan/s3-red after hostile AGREE docs/receipts/hostile-validator-20260821T011648Z.md
+[33md54f4e32[m test(sessionlog): S15-S18 sanitizer HTTP, stdio, config example
+[33m4605eab6[m merge sessionpersist/s1-red after hostile AGREE docs/receipts/hostile-validator-20260821T004349Z.md
+[33m0e0c5763[m feat(sessionlog): incremental dialog persist and 503 degrade-queue
+[33m20db61aa[m merge triage/113-tags after hostile AGREE docs/receipts/hostile-validator-20260820T080315Z.md
+[33mdfd7097b[m fix(sessionlog): copy session tags through sanitizer GET projection
+[33mba5cfaf6[m feat(sessionlog): load session tags by SessionLogId for leftover 113

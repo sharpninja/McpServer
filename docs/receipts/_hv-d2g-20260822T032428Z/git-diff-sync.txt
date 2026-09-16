@@ -1,0 +1,45 @@
+[1mdiff --git a/plugins/core/sync/sync-plugin-core.ps1 b/plugins/core/sync/sync-plugin-core.ps1[m
+[1mindex 371c0ce1..42e7352e 100644[m
+[1m--- a/plugins/core/sync/sync-plugin-core.ps1[m
+[1m+++ b/plugins/core/sync/sync-plugin-core.ps1[m
+[36m@@ -106,15 +106,10 @@[m [mfunction Copy-CoreFile {[m
+         [Parameter(Mandatory)][string]$DestinationPath[m
+     )[m
+ [m
+[31m-    $textExtensions = @('.ps1', '.psm1', '.psd1', '.sh', '.bash', '.yaml', '.yml', '.json', '.md', '.txt')[m
+[31m-    if ($textExtensions -contains [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()) {[m
+[31m-        $text = [System.IO.File]::ReadAllText($SourcePath)[m
+[31m-        $text = $text -replace "`r`n", "`n" -replace "`r", "`n"[m
+[31m-        [System.IO.File]::WriteAllText($DestinationPath, $text, [System.Text.UTF8Encoding]::new($false))[m
+[31m-        return[m
+[31m-    }[m
+[31m-[m
+[31m-    Copy-Item $SourcePath $DestinationPath -Force[m
+[32m+[m[32m    # FR-MCP-PLUGINCORE-004 AC3: official plugin copies must be byte-identical to[m
+[32m+[m[32m    # plugins/core/lib-ps so SyncAgentPlugins checksums match. Do not rewrite[m
+[32m+[m[32m    # newlines or encodings during copy.[m
+[32m+[m[32m    Copy-Item -LiteralPath $SourcePath -Destination $DestinationPath -Force[m
+ }[m
+ [m
+ function Sync-Tree {[m
+[36m@@ -133,13 +128,15 @@[m [mfunction Sync-Tree {[m
+ [m
+ Sync-Tree (Join-Path $coreRoot 'lib-ps')[m
+ [m
+[31m-$handoffSkillSource = Join-Path $coreRoot 'skills\handoff\SKILL.md'[m
+[31m-if (Test-Path -LiteralPath $handoffSkillSource) {[m
+[32m+[m[32m$handoffSkillSourceDir = Join-Path $coreRoot 'skills\handoff'[m
+[32m+[m[32mif (Test-Path -LiteralPath $handoffSkillSourceDir) {[m
+     $handoffSkillDestDir = Join-Path $PluginRoot 'skills\handoff'[m
+     New-Item -ItemType Directory -Force $handoffSkillDestDir | Out-Null[m
+[31m-    $handoffSkillDest = Join-Path $handoffSkillDestDir 'SKILL.md'[m
+[31m-    Copy-CoreFile -SourcePath $handoffSkillSource -DestinationPath $handoffSkillDest[m
+[31m-    $manifestFiles['skills/handoff/SKILL.md'] = (Get-FileHash -Path $handoffSkillDest -Algorithm SHA256).Hash.ToLowerInvariant()[m
+[32m+[m[32m    Get-ChildItem -LiteralPath $handoffSkillSourceDir -File | Sort-Object Name | ForEach-Object {[m
+[32m+[m[32m        $dest = Join-Path $handoffSkillDestDir $_.Name[m
+[32m+[m[32m        Copy-CoreFile -SourcePath $_.FullName -DestinationPath $dest[m
+[32m+[m[32m        $manifestFiles["skills/handoff/$($_.Name)"] = (Get-FileHash -Path $dest -Algorithm SHA256).Hash.ToLowerInvariant()[m
+[32m+[m[32m    }[m
+ }[m
+ [m
+ Import-YamlSerializer[m

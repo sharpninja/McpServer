@@ -1,0 +1,30 @@
+{
+  "required": [
+    "ClaudeHookWiring.Tests.ps1",
+    "CurrentTurnSessionRebind.Tests.ps1",
+    "HookTurnDedupe.Tests.ps1",
+    "NativeSmoke.Tests.ps1",
+    "ReplFailsafe.Tests.ps1",
+    "ReplMethodTimeout.Tests.ps1",
+    "ReplWorkspaceResolution.Tests.ps1",
+    "SessionIdCanonicalAgent.Tests.ps1",
+    "Skills.Tests.ps1",
+    "StopGateHardening.Tests.ps1"
+  ],
+  "onDisk": [
+    "ClaudeHookWiring.Tests.ps1",
+    "CurrentTurnSessionRebind.Tests.ps1",
+    "HookTurnDedupe.Tests.ps1",
+    "NativeSmoke.Tests.ps1",
+    "ReplFailsafe.Tests.ps1",
+    "ReplMethodTimeout.Tests.ps1",
+    "ReplWorkspaceResolution.Tests.ps1",
+    "SessionIdCanonicalAgent.Tests.ps1",
+    "Skills.Tests.ps1",
+    "StopGateHardening.Tests.ps1"
+  ],
+  "requiredCount": 10,
+  "onDiskCount": 10,
+  "missingRequired": [],
+  "extraOnDisk": []
+}

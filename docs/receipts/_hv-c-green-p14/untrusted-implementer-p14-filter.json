@@ -1,0 +1,17 @@
+{
+  "Note": "UNTRUSTED concurrent implementer artifact. Not this validator independent rerun.",
+  "TrxExists": true,
+  "LogExists": true,
+  "TrxLastWriteTimeUtc": "2026-08-22T04:22:23.5724311Z",
+  "TrxLength": 14615,
+  "trxTotal": "8",
+  "trxPassed": "8",
+  "trxFailed": "0",
+  "trxExecuted": "8",
+  "trxNotExecuted": "0",
+  "logPassedBang": true,
+  "logFailed": "0",
+  "logPassed": "8",
+  "logSkipped": "0",
+  "logTotal": "8"
+}

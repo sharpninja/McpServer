@@ -1,0 +1,54 @@
+{
+  "TimestampUtc": "2026-08-22T09:02:59.4296495Z",
+  "SkipHitCount": 0,
+  "SkipHits": [],
+  "P19HitCount": 3,
+  "P19Hits": [
+    {
+      "File": "PluginNativeSuiteReceiptTests.cs",
+      "Line": 17,
+      "Text": "public void PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero()"
+    },
+    {
+      "File": "PluginNativeSuiteReceiptTests.cs",
+      "Line": 42,
+      "Text": "public void PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero()"
+    },
+    {
+      "File": "PluginNativeSuiteReceiptTests.cs",
+      "Line": 65,
+      "Text": "public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()"
+    }
+  ],
+  "P20HitCount": 0,
+  "P20Hits": [],
+  "P19FactLines": [
+    {
+      "Line": 16,
+      "Text": "[Fact]"
+    },
+    {
+      "Line": 17,
+      "Text": "public void PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero()"
+    },
+    {
+      "Line": 41,
+      "Text": "[Fact]"
+    },
+    {
+      "Line": 42,
+      "Text": "public void PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero()"
+    },
+    {
+      "Line": 64,
+      "Text": "[Fact]"
+    },
+    {
+      "Line": 65,
+      "Text": "public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()"
+    }
+  ],
+  "NamedEach": 1,
+  "NamedAfterSync": 1,
+  "NamedGit": 1
+}

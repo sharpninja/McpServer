@@ -1,0 +1,22 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p20\\results-p20-green\\p20-green.trx",
+  "total": 2,
+  "executed": 2,
+  "passed": 2,
+  "failed": 0,
+  "notExecuted": 0,
+  "skippedAttr": null,
+  "outcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+      "outcome": "Passed",
+      "duration": "00:00:00.0060323"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+      "outcome": "Passed",
+      "duration": "00:00:00.0995190"
+    }
+  ]
+}

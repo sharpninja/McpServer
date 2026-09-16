@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-08-22T04:51:27.7692277Z",
+  "Count": 2,
+  "Rows": [
+    {
+      "Pid": 52348,
+      "Name": "pwsh.exe",
+      "Cmd": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-procs-now.ps1\\\"\""
+    },
+    {
+      "Pid": 78184,
+      "Name": "pwsh.exe",
+      "Cmd": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-procs-now.ps1"
+    }
+  ]
+}

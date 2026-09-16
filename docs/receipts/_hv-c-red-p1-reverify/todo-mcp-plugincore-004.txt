@@ -1,0 +1,52 @@
+type: result
+payload:
+  requestId: req-20260821T232708Z-07c4
+  result:
+    id: MCP-PLUGINCORE-004
+    title: Repair plugin dialog parsing and add REPL degraded persistence
+    section: Plugin Core
+    priority: high
+    done: true
+    estimate: 4h
+    description:
+    - Repair the Claude Code appendDialog dictionary parsing silent no-op.
+    - Implement independent primary MCP and filesystem failsafe persistence strategies inside McpServer.Repl.Core.
+    - Keep plugins isolated from MCP Session Log degradation until terminal turn close reports the failsafe path.
+    - Propagate the canonical plugin parser fix and validate the Agent Help final-answer repair.
+    technicalDetails:
+    - 'Plugin source: plugins/core/lib-ps/repl-invoke.ps1'
+    - 'REPL source: src/McpServer.Repl.Core session-log persistence strategy and dispatcher surfaces'
+    - 'Plugin requirements: FR-MCP-PLUGINCORE-004, TR-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-004'
+    - 'REPL requirements: FR-MCP-REPL-009, TR-MCP-REPL-010, TEST-MCP-REPL-025'
+    implementationTasks:
+    - task: Add red plugin tests for dictionary-backed dialog parsing and fail-closed empty payloads.
+      done: true
+    - task: Implement and validate the canonical PowerShell plugin parser fix.
+      done: true
+    - task: Add red REPL tests for independently mockable primary and failsafe persistence strategies.
+      done: true
+    - task: Add red workflow and dispatcher tests for non-terminal isolation and terminal degraded-path notification.
+      done: true
+    - task: Implement REPL persistence strategies, atomic V4-scoped recovery artifacts, and failover coordination.
+      done: true
+    - task: Run current and prior plugin and McpServer.Repl.Core suites with zero failures and zero skips.
+      done: true
+    - task: Sync canonical plugin core to every official plugin distribution and verify checksums.
+      done: true
+    - task: Validate the existing Agent Help final-answer fix with focused tests, deployment, and live replay.
+      done: true
+    doneSummary: 'Phase B complete after B5 OverallVerdict AGREE docs/receipts/hostile-validator-20260821T230457Z.md (prior B2 red AGREE docs/receipts/hostile-validator-20260821T220115Z.md). Drain timeout REPL_FAILSAFE_DRAIN_TIMEOUT default 120; V4 Get-McpFailsafeDir plus legacy SHA-256 migrate; dispatcher coordinator isolation; SyncAgentPlugins byte-identical checksums. Gates: Compile succeeded; Pester PluginPowerShellRuntime Passed 124 Failed 0 Skipped 0; Repl.Core.Tests Passed 847 Failed 0 Skipped 0; build.ps1 Test Failed 0 Skipped 0; checksum test Passed 1 Failed 0 Skipped 0.'
+    remaining: ''
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-PLUGINCORE-004
+    - FR-MCP-REPL-009
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PLUGINCORE-004
+    - TR-MCP-REPL-010
+    - TR-MCP-PERSIST-003
+    - TR-MCP-REPL-012
+  deprecated: true
+
+---

@@ -1,0 +1,42 @@
+{
+  "TimestampUtc": "2026-08-22T06:34:59.9761544Z",
+  "Root": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests",
+  "CsFileCount": 23,
+  "SkipAttr": {
+    "Pattern": "\\[Skip",
+    "Count": 0,
+    "Files": []
+  },
+  "FactSkip": {
+    "Pattern": "Fact\\(Skip",
+    "Count": 0,
+    "Files": []
+  },
+  "TheorySkip": {
+    "Pattern": "Theory\\(Skip",
+    "Count": 0,
+    "Files": []
+  },
+  "AssertSkip": {
+    "Pattern": "Assert\\.Skip",
+    "Count": 0,
+    "Files": []
+  },
+  "AiTheory": {
+    "Pattern": "AiTheory_",
+    "Count": 0,
+    "Files": []
+  },
+  "P16Ident": {
+    "Pattern": "\\bP16\\b",
+    "Count": 0,
+    "Files": []
+  },
+  "JsonSkip": {
+    "Pattern": "JsonCommentHandling\\.Skip",
+    "Count": 1,
+    "Files": [
+      "PluginSessionLogCatalog.cs:14:ReadCommentHandling = JsonCommentHandling.Skip,"
+    ]
+  }
+}

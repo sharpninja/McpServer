@@ -1,0 +1,8 @@
+{
+  "TimestampUtc": "2026-08-22T07:24:20.3831669Z",
+  "CollectorScriptPythonHits": [
+    "$py = @(Get-CimInstance Win32_Process -Filter \"Name='python.exe' OR Name='python3.exe' OR Name='py.exe'\" -ErrorAction SilentlyContinue | ForEach-Object {",
+    "ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $out 'python-procs.json') -Encoding utf8",
+    "CollectorScriptPythonHits = @($noPythonHits | ForEach-Object { $_.Line.Trim() })"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p1-reverify\\hv-c-red-p1-reverify.trx",
+  "exitCode": 1,
+  "results": [
+    {
+      "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject",
+      "outcome": "Failed",
+      "duration": "00:00:00.0091150",
+      "message": "Assert.Contains() Failure: Sub-string not found\r\nString:    \"\\r\\nMicrosoft Visual Studio Solution File, Format Ve\"···\r\nNot found: \"McpServer.PluginIntegration.Tests\""
+    },
+    {
+      "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+      "outcome": "Failed",
+      "duration": "00:00:00.2588491",
+      "message": "Assert.NotNull() Failure: Value is null"
+    },
+    {
+      "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios",
+      "outcome": "Failed",
+      "duration": "00:00:00.0709180",
+      "message": "plugin-sessionlog-scenarios.json is missing."
+    }
+  ],
+  "failed": 3,
+  "skipped": 0,
+  "passed": 0,
+  "other": 0
+}

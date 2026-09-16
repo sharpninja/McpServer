@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20260821T231429Z-9c47
+  result:
+    status: Healthy
+    version: 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8
+    checks:
+    - name: self
+      status: Healthy
+      duration: 0.0012
+    - name: upstream
+      status: Healthy
+      description: Federation disabled.
+      duration: 0.0015
+
+---
+
+

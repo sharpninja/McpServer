@@ -1,0 +1,5 @@
+?? tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+?? tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+?? tests/McpServer.PluginIntegration.Tests/PluginSessionLogScenario.cs
+?? tests/McpServer.PluginIntegration.Tests/scenarios/plugin-sessionlog-scenarios.json
+

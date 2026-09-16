@@ -1,0 +1,141 @@
+{
+  "exists": true,
+  "topDone": false,
+  "taskCount": 31,
+  "doneTrueCount": 17,
+  "p14": [],
+  "p15": [],
+  "p16": [],
+  "combinedC": [
+    {
+      "task": "C P14 red + hostile then green; P15 red + hostile then green.",
+      "done": false
+    }
+  ],
+  "tasks": [
+    {
+      "task": "'P0-A: hostile AGREE on this plan.'",
+      "done": true
+    },
+    {
+      "task": "'P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.'",
+      "done": true
+    },
+    {
+      "task": "'A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.'",
+      "done": true
+    },
+    {
+      "task": "'A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.'",
+      "done": true
+    },
+    {
+      "task": "'A3: create HYGIENE FR/TR/TEST 001-005 and mappings.'",
+      "done": true
+    },
+    {
+      "task": "'A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.'",
+      "done": true
+    },
+    {
+      "task": "'A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.'",
+      "done": true
+    },
+    {
+      "task": "'A6: hostile AGREE on requirements; no product code.'",
+      "done": true
+    },
+    {
+      "task": "'B1: write new red tests listed in section 6; do not relabel existing green.'",
+      "done": true
+    },
+    {
+      "task": "'B2: hostile after red.'",
+      "done": true
+    },
+    {
+      "task": "'B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.'",
+      "done": true
+    },
+    {
+      "task": "'B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.'",
+      "done": true
+    },
+    {
+      "task": "'B5: hostile after green.'",
+      "done": true
+    },
+    {
+      "task": "D0 inventory of Handoff findings vs on-disk tests.",
+      "done": true
+    },
+    {
+      "task": "'D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.'",
+      "done": true
+    },
+    {
+      "task": "D1.5 hostile after red.",
+      "done": true
+    },
+    {
+      "task": "D2 implement remediations + three-provider migrations.",
+      "done": true
+    },
+    {
+      "task": "C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.",
+      "done": false
+    },
+    {
+      "task": "C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.",
+      "done": false
+    },
+    {
+      "task": "C P14 red + hostile then green; P15 red + hostile then green.",
+      "done": false
+    },
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    },
+    {
+      "task": "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.",
+      "done": false
+    },
+    {
+      "task": "C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+      "done": false
+    },
+    {
+      "task": "D3 docs/wiki generateDocument.",
+      "done": false
+    },
+    {
+      "task": "D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.",
+      "done": false
+    },
+    {
+      "task": "D5 Codex APPROVED and hostile AGREE.",
+      "done": false
+    },
+    {
+      "task": "E all reds + hostile, then implement, then E-green hostile.",
+      "done": false
+    },
+    {
+      "task": "F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.",
+      "done": false
+    },
+    {
+      "task": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+      "done": false
+    },
+    {
+      "task": "H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.",
+      "done": false
+    },
+    {
+      "task": "I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary.",
+      "done": false
+    }
+  ]
+}

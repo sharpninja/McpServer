@@ -1,0 +1,2 @@
+F:\GitHub\mcpserver-codex-plugin\Invoke-CodexMcpPlugin.ps1
+

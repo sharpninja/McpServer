@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\dotnet-p14-filter.log",
+  "filterFailed": 0,
+  "filterPassed": 8,
+  "filterSkipped": 0,
+  "filterTotal": 8,
+  "filterFailedBang": false,
+  "filterPassedBang": true,
+  "rejectMsgCount": 0,
+  "mentions7147": false,
+  "length": 2698,
+  "lastWriteTimeUtc": "2026-08-22T04:46:52.2909789Z"
+}

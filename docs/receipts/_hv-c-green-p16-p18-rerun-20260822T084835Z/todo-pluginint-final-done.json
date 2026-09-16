@@ -1,0 +1,28 @@
+{
+  "topDone": false,
+  "p16": [
+    {
+      "task": "P16 [Red] Add companion AiTheory rows using the same scenario catalog; send the redacted persistence receipt/session artifact to AiStrategyFixture and require strict JSON fields valid, missingFields, and contradictions.",
+      "done": false
+    }
+  ],
+  "p17": [
+    {
+      "task": "P17 [Green] Implement semantic assertions that reject model errors, invalid JSON, valid=false, missing required workflow fields, or contradictions with deterministic evidence; AI output never overrides deterministic failures.",
+      "done": false
+    }
+  ],
+  "p18": [
+    {
+      "task": "P18 [Gate] Add Build.PluginSessionLogIntegration.cs to preflight aiUnit strategy availability, run deterministic and AI traits with TRX logging, parse results, and fail on any failed or skipped test.",
+      "done": false
+    }
+  ],
+  "p19": [
+    {
+      "task": "P19 [Cross-repo] Run each plugin native suite (Pester/Bats/Jest as applicable), run SyncAgentPlugins, rerun native suites against synchronized sources/caches, and record each repository branch/SHA without committing unrelated changes.",
+      "done": false
+    }
+  ],
+  "combinedC": []
+}

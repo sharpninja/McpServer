@@ -1,0 +1,61 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p5\\dotnet-fixture-filter.trx",
+  "outcome": "Failed",
+  "total": "6",
+  "executed": "6",
+  "passed": "0",
+  "failed": "6",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 6,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort"
+  ],
+  "passedNames": [],
+  "skippedNames": [],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+      "outcome": "Failed",
+      "duration": "00:00:00.0023023",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+      "outcome": "Failed",
+      "duration": "00:00:00.0007776",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "outcome": "Failed",
+      "duration": "00:00:00.0009394",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+      "outcome": "Failed",
+      "duration": "00:00:00.0172979",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+      "outcome": "Failed",
+      "duration": "00:00:00.0023056",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+      "outcome": "Failed",
+      "duration": "00:00:00.0013122",
+      "message": "System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented."
+    }
+  ]
+}

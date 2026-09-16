@@ -1,0 +1,32 @@
+type: result
+payload:
+  requestId: req-20260822T062244Z-2316
+  result:
+    id: FR-MCP-PLUGININT-001
+    title: End-to-end Session Log validation for every agent plugin
+    description: The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.
+    status: pending
+    priority: high
+    area: MCP
+    acceptanceCriteria:
+    - id: ac-1
+      text: Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content.
+      isSatisfied: false
+    - id: ac-2
+      text: Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}.
+      isSatisfied: false
+    - id: ac-3
+      text: Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state.
+      isSatisfied: false
+    - id: ac-4
+      text: The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios.
+      isSatisfied: false
+    - id: ac-5
+      text: The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-22T06:22:45.6351963+00:00
+    updatedAt: 2026-08-22T06:22:45.6353473+00:00
+  deprecated: true
+
+---

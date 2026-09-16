@@ -1,0 +1,50 @@
+{
+  "planId": "PLAN-PLUGINHANDOFF-001",
+  "planDone": false,
+  "planCompletedDate": null,
+  "planRemaining": "C-red-P11 AGREE docs/receipts/hostile-validator-20260822T023808Z.md. P12/P13 theories and ExecuteCanonicalTurnAsync now exist (client persist plus process launch). Next: C-green-P11-P13 hostile then P14 red. D2 implement receipt docs/receipts/d2-implement-20260822T022012Z.md (named tests 0 fail). Next: D2-green hostile then D3/D4. PLAN done=false.",
+  "planDoneSummary": null,
+  "handoffDone": false,
+  "handoffCompletedDate": null,
+  "handoffRemaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): HandoffIngestionService, HandoffClient, HandoffModels, HandoffMcpToolTests, HandoffDirectorCommands, HandoffIngestionServiceTests exist. FR-HANDOFF-001..007 and TR-HANDOFF-* remain in_progress with isSatisfied false. ImplementationTasks 1-10 match files; docs/wiki export still open. Do not store-close.",
+  "handoffPlanDone": false,
+  "handoffPlanRemaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): same code as MCP-HANDOFF-001. Execution prompt TODO remains open until Handoff AC isSatisfied and hostile AGREE. Do not store-close.",
+  "handoffReviewDone": false,
+  "handoffReviewRemaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open until current-plus-prior gates are zero-failure/zero-skip and a fresh independent hostile AGREE. Do not store-close.",
+  "d15Task": [
+    {
+      "Task": "D1.5 hostile after red.",
+      "Done": true
+    }
+  ],
+  "d2Task": [
+    {
+      "Task": "D2 implement remediations + three-provider migrations.",
+      "Done": false
+    }
+  ],
+  "d3Task": [
+    {
+      "Task": "D3 docs/wiki generateDocument.",
+      "Done": false
+    }
+  ],
+  "d4Task": [
+    {
+      "Task": "D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.",
+      "Done": false
+    }
+  ],
+  "d5Task": [
+    {
+      "Task": "D5 Codex APPROVED and hostile AGREE.",
+      "Done": false
+    }
+  ],
+  "d1Task": [
+    {
+      "Task": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+      "Done": true
+    }
+  ]
+}

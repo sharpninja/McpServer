@@ -1,0 +1,13 @@
+{
+  "p19Methods": [
+    "public void PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero()",
+    "public void PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero()",
+    "public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()"
+  ],
+  "p20Hits": [
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginUpdateServiceHarnessTests.cs:17:public void PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero()",
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginUpdateServiceHarnessTests.cs:41:public void PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag()"
+  ],
+  "p20HitCount": 2,
+  "skipAttributeHits": []
+}

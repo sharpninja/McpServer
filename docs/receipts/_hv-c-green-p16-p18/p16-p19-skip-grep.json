@@ -1,0 +1,106 @@
+{
+  "TimestampUtc": "2026-08-22T07:50:53.8358680Z",
+  "SkipHitCount": 0,
+  "SkipHits": [],
+  "P16AiTheoryHitCount": 1,
+  "P16AiTheoryHits": [
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 25,
+      "Text": "public async Task AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)"
+    }
+  ],
+  "P17RejectsHitCount": 1,
+  "P17RejectsHits": [
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 45,
+      "Text": "public async Task AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure()"
+    }
+  ],
+  "P18NukeSkipHitCount": 1,
+  "P18NukeSkipHits": [
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 77,
+      "Text": "public void NukeTarget_SkipIsFailure()"
+    }
+  ],
+  "P19HitCount": 0,
+  "P19Hits": [],
+  "EvaluateHitCount": 13,
+  "EvaluateHits": [
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 7,
+      "Text": "/// Deterministic failures (invalid JSON, missing fields, contradictions, deterministicFailure=true)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 20,
+      "Text": "public static Task<AiStrategyEvaluation> EvaluateAsync(string redactedReceipt, CancellationToken cancellationToken = default)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 47,
+      "Text": "var deterministicFailure = root.TryGetProperty(\"deterministicFailure\", out var flag)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 50,
+      "Text": "var valid = missing.Count == 0 && contradictions.Count == 0 && !deterministicFailure;"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 64,
+      "Text": "Contradictions = [\"invalid-json\"],"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 32,
+      "Text": "var evaluation = await AiStrategyFixture.EvaluateAsync(redactedReceipt, TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 42,
+      "Text": "/// P17 green: invalid JSON and deterministicFailure=true stay Valid=false. AI output never overrides deterministic failure."
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 45,
+      "Text": "public async Task AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure()"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 47,
+      "Text": "var invalid = await AiStrategyFixture.EvaluateAsync(\"{not-json\", TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 50,
+      "Text": "Assert.Contains(\"invalid-json\", invalid.Contradictions);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 52,
+      "Text": "var missing = await AiStrategyFixture.EvaluateAsync(\"{\\\"agent\\\":\\\"Codex\\\"}\", TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 58,
+      "Text": "var deterministic = await AiStrategyFixture.EvaluateAsync("
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 59,
+      "Text": "\"{\\\"agent\\\":\\\"Codex\\\",\\\"cacheFolder\\\":\\\"codex\\\",\\\"entrypoint\\\":\\\"Invoke-CodexMcpPlugin.ps1\\\",\\\"status\\\":\\\"completed\\\",\\\"deterministicFailure\\\":true}\","
+    }
+  ],
+  "BuildTargetHasAiUnit": false,
+  "BuildTargetHasTrait": false,
+  "BuildTargetHasDeterministic": false,
+  "BuildTargetHasFailIfSkipped": true,
+  "BuildTargetHasDotNetTest": true,
+  "BuildTargetHasPreflight": false,
+  "BuildTargetLength": 2694
+}

@@ -1,0 +1,44 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+  "ExitCode": 0,
+  "DurationMs": 14846,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\hv-dotnet-list-tests.log",
+  "FinishedUtc": "2026-08-22T07:26:53.2251971Z",
+  "ListAiTheoryRequiresValidJsonFields": 8,
+  "ListP17Rejects": 0,
+  "ListP18NukeSkip": 0,
+  "HostCounts": [
+    {
+      "HostKind": "Codex",
+      "Count": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 0
+    }
+  ]
+}

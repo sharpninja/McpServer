@@ -1,0 +1,15 @@
+{
+  "RemainingCount": 0,
+  "RemainingPids": [],
+  "SnapshotCount": 1,
+  "Snapshots": [
+    {
+      "TimestampUtc": "2026-08-22T04:48:26.5078397Z",
+      "Count": 0,
+      "ProcessIds": [],
+      "CommandHints": []
+    }
+  ],
+  "TimedOut": false,
+  "FinishedUtc": "2026-08-22T04:48:27.3369723Z"
+}

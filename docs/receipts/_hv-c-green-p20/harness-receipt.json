@@ -1,0 +1,20 @@
+{
+  "summaryExists": true,
+  "environment": "Development",
+  "deployTarget": "UpdateService",
+  "serviceName": "McpServer",
+  "sanitizedFixtures": true,
+  "failed": 0,
+  "skipped": 0,
+  "logFile": "harness.log",
+  "logExists": true,
+  "logContainsUpdateService": true,
+  "logContainsSanitized": true,
+  "logContainsFailed0": true,
+  "logContainsSkipped0": true,
+  "logContainsApiKeyRedacted": true,
+  "rawApiKeyInLog": false,
+  "rawApiKeyInSummary": false,
+  "logContainsP20Harness": true,
+  "logContainsLiveOperatorSession": true
+}

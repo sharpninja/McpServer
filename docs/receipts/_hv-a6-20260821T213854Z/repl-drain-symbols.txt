@@ -1,0 +1,8 @@
+591:function Get-ReplMethodTimeoutSeconds {
+601:    if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
+655:    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
+837:$script:ReplFailsafeDraining = $false
+984:    if ($script:ReplFailsafeDraining) {
+1001:    $script:ReplFailsafeDraining = $true
+1095:        $script:ReplFailsafeDraining = $false
+1118:    if ($script:ReplFailsafeDraining) { return }

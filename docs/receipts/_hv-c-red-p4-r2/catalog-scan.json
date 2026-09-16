@@ -1,0 +1,132 @@
+{
+  "Methods": [
+    {
+      "Name": "Catalog_UniqueAgentSourceCache",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_RepositoryRootsExist",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_SupportedHostKinds",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_RequiredEntrypointFilesExist",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_VersionMetadataPresent",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_ExactlyEightEnabled",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    }
+  ],
+  "CatalogScan": {
+    "LoadAndValidateThrows": true,
+    "LoadAndValidateHasOtherStatements": false,
+    "ScenarioHasCacheFolder": true,
+    "ScenarioHasEntrypoint": true,
+    "ScenarioHasEnvVars": true,
+    "TestsUseCacheInUniquenessKey": true,
+    "TestsUseRepoInUniquenessKey": false,
+    "TestsAssertClineV2": true,
+    "TestsAssertEntrypointField": true,
+    "TestsOrThreeEntrypointPaths": false,
+    "TestsAssertEnvVars": true,
+    "TestsAssertEnvNotEmpty": true,
+    "SkipLiteralInTests": false,
+    "LoaderBody": "throw new InvalidOperationException(\"PluginSessionLogCatalog.LoadAndValidate is not implemented.\");\n    }"
+  },
+  "JsonScan": {
+    "Exists": true,
+    "RowCount": 8,
+    "Names": [
+      "Codex",
+      "Claude Code",
+      "Claude Cowork",
+      "Copilot",
+      "Grok",
+      "Cline",
+      "Cline v2",
+      "OpenCode"
+    ],
+    "EnabledCount": 8,
+    "PropertyNames": [
+      "name",
+      "hostKind",
+      "agentSourceType",
+      "repositoryName",
+      "cacheFolder",
+      "entrypoint",
+      "requiredEnvironmentVariables",
+      "enabled"
+    ],
+    "HasCacheFolderProperty": true,
+    "HasEntrypointProperty": true,
+    "HasEnvProperty": true,
+    "AgentSourceTypes": [
+      "Codex",
+      "ClaudeCode",
+      "ClaudeCowork",
+      "Copilot",
+      "GrokCode",
+      "Cline",
+      "Cline",
+      "OpenCode"
+    ],
+    "CacheFolders": [
+      "codex",
+      "claude",
+      "cowork",
+      "copilot",
+      "grok",
+      "cline",
+      "cline-v2",
+      "opencode"
+    ],
+    "Entrypoints": [
+      "lib/Invoke-CodexMcpPlugin.ps1",
+      "lib/Invoke-McpPlugin.ps1",
+      "lib/Invoke-McpPlugin.ps1",
+      "lib/Invoke-McpPlugin.ps1",
+      "lib/Invoke-McpPlugin.ps1",
+      "dist/index.js",
+      "dist/index.js",
+      "dist/index.js"
+    ],
+    "DuplicateAgentSourceTypes": [
+      "Cline"
+    ],
+    "DuplicateCacheFolders": [],
+    "HasClineV2": true,
+    "ClineV2CacheFolder": "cline-v2",
+    "ClineCacheFolder": "cline",
+    "ExpectedEightNames": [
+      "Codex",
+      "Claude Code",
+      "Claude Cowork",
+      "Copilot",
+      "Grok",
+      "Cline",
+      "Cline v2",
+      "OpenCode"
+    ],
+    "MissingExpectedNames": []
+  }
+}

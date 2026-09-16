@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-08-22T05:57:06.8518603Z",
+  "Rounds": [
+    {
+      "Round": 0,
+      "Found": 1,
+      "Killed": [
+        31592
+      ]
+    }
+  ],
+  "FinalCount": 0,
+  "Final": []
+}

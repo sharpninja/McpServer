@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-08-22T07:25:55.1237150Z",
+  "Iteration": 0,
+  "BusyCount": 0,
+  "Pids": []
+}
+{
+  "TimestampUtc": "2026-08-22T07:26:32.3254618Z",
+  "Iteration": 0,
+  "BusyCount": 1,
+  "Pids": [
+    84800
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T07:26:38.3238619Z",
+  "Iteration": 1,
+  "BusyCount": 0,
+  "Pids": []
+}

@@ -1,0 +1,6 @@
+{
+  "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginUpdateServiceHarnessTests --logger trx;LogFileName=p20-green.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p20\\results-p20-green --no-build",
+  "usedNoBuild": true,
+  "exitCode": 0,
+  "durationMs": 4472
+}

@@ -1,0 +1,3 @@
+ McpServer.sln | 15 [32m+++++++++++++++[m
+ 1 file changed, 15 insertions(+)
+

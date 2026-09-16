@@ -1,0 +1,14 @@
+{
+  "promotionExists": true,
+  "requiresOperatorApprovalMethod": true,
+  "allowPluginPromotionMethod": true,
+  "assertPluginPromotionAllowedMethod": true,
+  "stagingBranch": true,
+  "productionBranch": true,
+  "policyExists": true,
+  "stagingRequire": true,
+  "productionRequire": true,
+  "developmentRequire": false,
+  "syncCallsAssert": true,
+  "plantedApprovalExists": false
+}

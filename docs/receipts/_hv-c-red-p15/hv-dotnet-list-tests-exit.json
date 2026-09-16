@@ -1,0 +1,7 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests",
+  "ExitCode": 0,
+  "DurationMs": 20322,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p15\\hv-dotnet-list-tests.log",
+  "FinishedUtc": "2026-08-22T05:28:26.1821591Z"
+}

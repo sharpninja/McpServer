@@ -1,0 +1,37 @@
+[
+  {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "invokeExists": true,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "matchesCore": true,
+    "version": "1.100.0"
+  },
+  {
+    "root": "F:\\GitHub\\mcpserver-claude-code-plugin",
+    "invokeExists": true,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "matchesCore": true,
+    "version": "1.100.0"
+  },
+  {
+    "root": "F:\\GitHub\\mcpserver-codex-plugin",
+    "invokeExists": true,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "matchesCore": true,
+    "version": "1.100.0"
+  },
+  {
+    "root": "F:\\GitHub\\mcpserver-copilot-plugin",
+    "invokeExists": true,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "matchesCore": true,
+    "version": "1.100.0"
+  },
+  {
+    "root": "F:\\GitHub\\mcpserver-cline-plugin",
+    "invokeExists": true,
+    "sha256": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "matchesCore": true,
+    "version": "1.100.0"
+  }
+]

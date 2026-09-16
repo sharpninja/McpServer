@@ -1,0 +1,70 @@
+[
+  {
+    "frId": "FR-HANDOFF-001",
+    "trIds": [
+      "TR-HANDOFF-CONTRACT-001",
+      "TR-HANDOFF-SECURITY-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-001",
+      "TEST-HANDOFF-002"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-002",
+    "trIds": [
+      "TR-HANDOFF-AGENT-001",
+      "TR-HANDOFF-CONTRACT-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-003"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-003",
+    "trIds": [
+      "TR-HANDOFF-VALIDATE-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-004"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-004",
+    "trIds": [
+      "TR-HANDOFF-MODES-001",
+      "TR-HANDOFF-VALIDATE-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-004"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-005",
+    "trIds": [
+      "TR-HANDOFF-MODES-001",
+      "TR-HANDOFF-TODO-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-005"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-006",
+    "trIds": [
+      "TR-HANDOFF-AUDIT-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-007"
+    ]
+  },
+  {
+    "frId": "FR-HANDOFF-007",
+    "trIds": [
+      "TR-HANDOFF-SURFACE-001"
+    ],
+    "testIds": [
+      "TEST-HANDOFF-006"
+    ]
+  }
+]

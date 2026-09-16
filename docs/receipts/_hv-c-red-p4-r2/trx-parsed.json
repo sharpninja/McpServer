@@ -1,0 +1,94 @@
+{
+  "TimestampUtc": "2026-08-22T00:17:19.7040037Z",
+  "CatalogFilter": {
+    "units": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      }
+    ],
+    "outcome": "Failed",
+    "notExecutedAttr": "0",
+    "skippedAttr": "",
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r2\\catalog-filter.trx",
+    "total": "6",
+    "failed": "6",
+    "executed": "6",
+    "passed": "0",
+    "exists": true
+  },
+  "PluginAll": {
+    "units": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+        "message": null,
+        "outcome": "Passed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "message": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented.",
+        "outcome": "Failed"
+      }
+    ],
+    "outcome": "Failed",
+    "notExecutedAttr": "0",
+    "skippedAttr": "",
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r2\\pluginintegration-all.trx",
+    "total": "7",
+    "failed": "6",
+    "executed": "7",
+    "passed": "1",
+    "exists": true
+  }
+}

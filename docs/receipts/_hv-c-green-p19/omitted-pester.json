@@ -1,0 +1,32 @@
+[
+  {
+    "file": "ReplFailsafe.Tests.ps1",
+    "exists": true,
+    "exitCode": 0,
+    "durationMs": 3948,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p19\\omitted-ReplFailsafe.Tests.ps1.log"
+  },
+  {
+    "file": "HookTurnDedupe.Tests.ps1",
+    "exists": true,
+    "exitCode": 0,
+    "durationMs": 5267,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p19\\omitted-HookTurnDedupe.Tests.ps1.log"
+  },
+  {
+    "file": "CurrentTurnSessionRebind.Tests.ps1",
+    "exists": true,
+    "exitCode": 1,
+    "durationMs": 2957,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p19\\omitted-CurrentTurnSessionRebind.Tests.ps1.log"
+  }
+]

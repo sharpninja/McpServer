@@ -1,0 +1,83 @@
+ M .worktrees/triage-stale-turns
+ M .worktrees/triage-transcript
+ M plugins/core/lib-ps/agent-runtime-header.ps1
+ M plugins/core/lib-ps/repl-invoke.ps1
+ M plugins/core/lib-ps/resolve-cache-dir.ps1
+ M plugins/core/skills/handoff/SKILL.md
+ M plugins/core/sync/sync-plugin-core.ps1
+ M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
+ M src/McpServer.Repl.Core/ReplCommandDispatcher.cs
+?? docs/plans/PLAN-PLUGINHANDOFF-001.md
+?? docs/receipts/_b3-20260821T222058Z/
+?? docs/receipts/_hv-20260821T113500Z/
+?? docs/receipts/_hv-a6-20260821T211938Z-collect-git.ps1
+?? docs/receipts/_hv-a6-20260821T211938Z-collect.ps1
+?? docs/receipts/_hv-a6-20260821T211938Z-extract-plan.ps1
+?? docs/receipts/_hv-a6-20260821T211938Z-extract-tasks.ps1
+?? docs/receipts/_hv-a6-20260821T211938Z/
+?? docs/receipts/_hv-a6-20260821T213730Z/
+?? docs/receipts/_hv-a6-20260821T213854Z/
+?? docs/receipts/_hv-a6-collect-todos.ps1
+?? docs/receipts/_hv-a6-extract-plan-todo.ps1
+?? docs/receipts/_hv-a6-reget-collect.ps1
+?? docs/receipts/_hv-b2-20260821T215535Z/
+?? docs/receipts/_hv-b2-stamp.txt
+?? docs/receipts/_hv-b5-20260821T224147Z/
+?? docs/receipts/_hv-b5-collect.ps1
+?? docs/receipts/_hv-failsafe-post-review/
+?? docs/receipts/_hv-ops-running-20260821/
+?? docs/receipts/_hv-p0a-d0-inventory.ps1
+?? docs/receipts/_hv-p0a-d0-out/
+?? docs/receipts/_hv-p0b-20260821-r2/
+?? docs/receipts/_hv-p0b-20260821/
+?? docs/receipts/_remaining-submit/
+?? docs/receipts/d0-handoff-inventory-20260821T222058Z.json
+?? docs/receipts/d0-handoff-inventory-20260821T222058Z.md
+?? docs/receipts/failsafe-continue-itemized-20260821T155934Z.json
+?? docs/receipts/failsafe-importrecovery-blocked-20260821T161241Z.json
+?? docs/receipts/failsafe-other-replay-20260821T150540Z.json
+?? docs/receipts/failsafe-post-all-summary-20260821T152147Z.json
+?? docs/receipts/failsafe-quarantine-replay-20260821T150140Z.json
+?? docs/receipts/failsafe-remaining-codex-20260821T155103Z.json
+?? docs/receipts/failsafe-remaining-posted-20260821T155540Z.json
+?? docs/receipts/failsafe-replay-20260821T144010Z.json
+?? docs/receipts/hostile-validator-20260821T114530Z.json
+?? docs/receipts/hostile-validator-20260821T114530Z.md
+?? docs/receipts/hostile-validator-20260821T143322Z.json
+?? docs/receipts/hostile-validator-20260821T143322Z.md
+?? docs/receipts/hostile-validator-20260821T153416Z.json
+?? docs/receipts/hostile-validator-20260821T153416Z.md
+?? docs/receipts/hostile-validator-20260821T161800Z.json
+?? docs/receipts/hostile-validator-20260821T161800Z.md
+?? docs/receipts/hostile-validator-20260821T171357Z.json
+?? docs/receipts/hostile-validator-20260821T171357Z.md
+?? docs/receipts/hostile-validator-20260821T172735Z.json
+?? docs/receipts/hostile-validator-20260821T172735Z.md
+?? docs/receipts/hostile-validator-20260821T173914Z.json
+?? docs/receipts/hostile-validator-20260821T173914Z.md
+?? docs/receipts/hostile-validator-20260821T200636Z.json
+?? docs/receipts/hostile-validator-20260821T200636Z.md
+?? docs/receipts/hostile-validator-20260821T201813Z.json
+?? docs/receipts/hostile-validator-20260821T201813Z.md
+?? docs/receipts/hostile-validator-20260821T203017Z.json
+?? docs/receipts/hostile-validator-20260821T203017Z.md
+?? docs/receipts/hostile-validator-20260821T204434Z.json
+?? docs/receipts/hostile-validator-20260821T204434Z.md
+?? docs/receipts/hostile-validator-20260821T205114Z.json
+?? docs/receipts/hostile-validator-20260821T205114Z.md
+?? docs/receipts/hostile-validator-20260821T212702Z.json
+?? docs/receipts/hostile-validator-20260821T212702Z.md
+?? docs/receipts/hostile-validator-20260821T213854Z.json
+?? docs/receipts/hostile-validator-20260821T213854Z.md
+?? docs/receipts/hostile-validator-20260821T220115Z.json
+?? docs/receipts/hostile-validator-20260821T220115Z.md
+?? docs/receipts/plan-pluginhandoff-b3-dispatch-20260821T222058Z.md
+?? docs/receipts/post-importrecovery-rest-20260821T155700Z.ps1
+?? docs/receipts/replay-grok-failsafe-20260821T144010Z.ps1
+?? docs/receipts/replay-grok-quarantine-20260821T150140Z.ps1
+?? docs/receipts/replay-other-failsafe-20260821T150540Z.ps1
+?? docs/receipts/replay-remaining-codex-20260821T155103Z.ps1
+?? docs/receipts/submit-importrecovery-20260821T155600Z.ps1
+?? testResults.xml
+?? tests/Build.Tests/SyncAgentPluginsChecksumTests.cs
+?? tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs

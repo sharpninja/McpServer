@@ -1,0 +1,16 @@
+[
+  {
+    "name": "PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+    "count": 1,
+    "files": [
+      "tests\\McpServer.PluginIntegration.Tests\\PluginUpdateServiceHarnessTests.cs:17"
+    ]
+  },
+  {
+    "name": "PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+    "count": 1,
+    "files": [
+      "tests\\McpServer.PluginIntegration.Tests\\PluginUpdateServiceHarnessTests.cs:41"
+    ]
+  }
+]

@@ -1,0 +1,90 @@
+{
+  "Methods": [
+    {
+      "Name": "Catalog_UniqueAgentSourceCache",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_RepositoryRootsExist",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_SupportedHostKinds",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_RequiredEntrypointFilesExist",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_VersionMetadataPresent",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    },
+    {
+      "Name": "Catalog_ExactlyEightEnabled",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false
+    }
+  ],
+  "CatalogScan": {
+    "LoadAndValidateThrows": true,
+    "LoadAndValidateHasOtherStatements": false,
+    "ScenarioHasCacheFolder": false,
+    "ScenarioHasEntrypoint": false,
+    "ScenarioHasEnvVars": false,
+    "TestsUseCacheInUniquenessKey": false,
+    "TestsAssertClineV2": false,
+    "SkipLiteralInTests": false,
+    "TraitSkip": false,
+    "LoaderBody": "throw new InvalidOperationException(\"PluginSessionLogCatalog.LoadAndValidate is not implemented.\");\n    }"
+  },
+  "JsonScan": {
+    "Exists": true,
+    "RowCount": 8,
+    "Names": [
+      "Codex",
+      "Claude Code",
+      "Claude Cowork",
+      "Copilot",
+      "Grok",
+      "Cline",
+      "Cline v2",
+      "OpenCode"
+    ],
+    "EnabledCount": 8,
+    "PropertyNames": [
+      "name",
+      "hostKind",
+      "agentSourceType",
+      "repositoryName",
+      "enabled"
+    ],
+    "HasCacheFolderProperty": false,
+    "HasEntrypointProperty": false,
+    "HasEnvProperty": false,
+    "AgentSourceTypes": [
+      "Codex",
+      "ClaudeCode",
+      "ClaudeCowork",
+      "Copilot",
+      "GrokCode",
+      "Cline",
+      "Cline",
+      "OpenCode"
+    ],
+    "DuplicateAgentSourceTypes": [
+      "Cline"
+    ]
+  }
+}

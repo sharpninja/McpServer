@@ -1,0 +1,11 @@
+{
+  "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginNativeSuiteReceiptTests",
+  "exitCode": 0,
+  "durationMs": 21241,
+  "consoleTotal": null,
+  "consoleFailed": null,
+  "consolePassed": null,
+  "consoleSkipped": null,
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p19-r2\\results-p19-green\\p19-green.trx",
+  "trxExists": true
+}

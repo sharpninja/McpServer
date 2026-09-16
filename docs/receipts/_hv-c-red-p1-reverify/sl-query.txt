@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260821T233412Z-691d
+  result:
+    totalCount: 0
+    limit: 5
+    offset: 0
+    items: []
+
+---

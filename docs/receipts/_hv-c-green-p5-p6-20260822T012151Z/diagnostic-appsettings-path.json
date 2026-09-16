@@ -1,0 +1,2 @@
+Microsoft.PowerShell.Commands.HttpResponseException: Response status code does not indicate success: 404 (Not Found).
+   at System.Management.Automation.MshCommandRuntime.ThrowTerminatingError(ErrorRecord errorRecord)

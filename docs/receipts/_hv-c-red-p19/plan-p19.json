@@ -1,0 +1,11 @@
+{
+  "TimestampUtc": "2026-08-22T09:02:59.7505298Z",
+  "HasCRedP19ThenExecute": true,
+  "HasNamedEach": true,
+  "HasNamedAfterSync": true,
+  "HasNamedGit": true,
+  "HasP20Harness": true,
+  "HasP20Promotion": true,
+  "HasEvidenceFolder": true,
+  "HasFailUntilReceipts": true
+}

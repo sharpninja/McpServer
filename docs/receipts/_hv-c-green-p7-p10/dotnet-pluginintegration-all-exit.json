@@ -1,0 +1,7 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+  "ExitCode": 0,
+  "DurationMs": 106164,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p7-p10\\dotnet-pluginintegration-all.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p7-p10\\dotnet-pluginintegration-all.trx"
+}

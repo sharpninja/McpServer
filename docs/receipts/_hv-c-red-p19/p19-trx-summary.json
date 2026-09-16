@@ -1,0 +1,63 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\results-p19-20260822T092241Z\\p19-red.trx",
+  "lastWriteTimeUtc": "2026-08-22T09:22:59.7759485Z",
+  "length": 12690,
+  "outcome": "Failed",
+  "total": "3",
+  "executed": "3",
+  "passed": "0",
+  "failed": "3",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 3,
+  "p19Count": 3,
+  "p19Failed": 3,
+  "p19Passed": 0,
+  "p19Skipped": 0,
+  "p20Count": 0,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero"
+  ],
+  "passedNames": [],
+  "skippedNames": [],
+  "failedMessages": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit",
+      "outcome": "Failed",
+      "duration": "00:00:00.0009247",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+      "outcome": "Failed",
+      "duration": "00:00:00.0019444",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+      "outcome": "Failed",
+      "duration": "00:00:00.0819730",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-<utc> receipt directory exists."
+    }
+  ],
+  "fileNotFoundCount": 3,
+  "fileNotFoundAllFailed": true
+}

@@ -1,0 +1,218 @@
+{
+  "worktree": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7",
+  "planNameCount": 16,
+  "nameHits": {
+    "HostileReviewEntity_RoundTrip_SqlitePgSqlServer": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:26:public async Task HostileReviewEntity_RoundTrip_SqlitePgSqlServer()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_ValidRequest_CreatesQueueItem": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:66:public async Task HostileReviewSubmit_ValidRequest_CreatesQueueItem()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_OversizedPayload_Rejected": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:91:public async Task HostileReviewSubmit_OversizedPayload_Rejected()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_ForeignWorkspace_403": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:110:public async Task HostileReviewSubmit_ForeignWorkspace_403()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:128:public async Task HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:151:public async Task HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewSubmit_AmbiguousLink_Diagnostic": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:172:public async Task HostileReviewSubmit_AmbiguousLink_Diagnostic()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewExecution_RecordsModelEffortAgentTemplateRunId": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:193:public async Task HostileReviewExecution_RecordsModelEffortAgentTemplateRunId()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewExecution_OmitsFabricatedTokenCounts": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:233:public async Task HostileReviewExecution_OmitsFabricatedTokenCounts()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewGet_NormalizedFindings_TaxonomyComplete": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:266:public async Task HostileReviewGet_NormalizedFindings_TaxonomyComplete()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:292:public async Task HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:311:public async Task HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewQuery_ByRequesterAndTargetType_AndFilters": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:342:public async Task HostileReviewQuery_ByRequesterAndTargetType_AndFilters()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReviewQuery_NoMatch_EmptyList": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:371:public async Task HostileReviewQuery_NoMatch_EmptyList()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReview_Default_DoesNotMutateProductFiles": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:393:public async Task HostileReview_Default_DoesNotMutateProductFiles()"
+      ],
+      "methodCount": 1
+    },
+    "HostileReview_SurfaceParity_RestReplDirectorPlugin": {
+      "fileCount": 1,
+      "files": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs"
+      ],
+      "methodHits": [
+        "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\tests\\McpServer.Support.Mcp.Tests\\Services\\HostileReviewQueueTests.cs:423:public void HostileReview_SurfaceParity_RestReplDirectorPlugin()"
+      ],
+      "methodCount": 1
+    }
+  },
+  "missingMethodNames": [],
+  "extraMethodNote": "see testFactNames",
+  "productExists": {
+    "src\\McpServer.Support.Mcp\\Controllers\\HostileReviewController.cs": false,
+    "src\\McpServer.Support.Mcp\\McpStdio\\FwhMcpTools.HostileReview.cs": false,
+    "src\\McpServer.Repl.Core\\HostileReviewCommandShapes.cs": false,
+    "src\\McpServer.Cqrs.Mvvm\\HostileReviewDirectorCommands.cs": false,
+    "src\\McpServer.Client\\HostileReviewClient.cs": false,
+    "plugins\\core\\skills\\hostile-review\\SKILL.md": false
+  },
+  "dbHits": [],
+  "storageHits": [],
+  "fwhHits": [],
+  "controllerHits": [],
+  "serviceFiles": [
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewContracts.cs",
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs"
+  ],
+  "throwHits": [
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs:19:_store = store ?? throw new ArgumentNullException(nameof(store));",
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs:20:_artifactResolver = artifactResolver ?? throw new ArgumentNullException(nameof(artifactResolver));",
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs:21:_clock = clock ?? throw new ArgumentNullException(nameof(clock));",
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs:81:private static NotImplementedException CreateStub()",
+    "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\\src\\McpServer.Services\\Services\\HostileReview\\HostileReviewService.cs:101:throw new NotImplementedException("
+  ],
+  "restHits": [],
+  "pluginSkillHits": [],
+  "testFileExists": true,
+  "testFactNames": [
+    "26:public async Task HostileReviewEntity_RoundTrip_SqlitePgSqlServer():",
+    "66:public async Task HostileReviewSubmit_ValidRequest_CreatesQueueItem():",
+    "91:public async Task HostileReviewSubmit_OversizedPayload_Rejected():",
+    "110:public async Task HostileReviewSubmit_ForeignWorkspace_403():",
+    "128:public async Task HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit():",
+    "151:public async Task HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic():",
+    "172:public async Task HostileReviewSubmit_AmbiguousLink_Diagnostic():",
+    "193:public async Task HostileReviewExecution_RecordsModelEffortAgentTemplateRunId():",
+    "233:public async Task HostileReviewExecution_OmitsFabricatedTokenCounts():",
+    "266:public async Task HostileReviewGet_NormalizedFindings_TaxonomyComplete():",
+    "292:public async Task HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext():",
+    "311:public async Task HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns():",
+    "342:public async Task HostileReviewQuery_ByRequesterAndTargetType_AndFilters():",
+    "371:public async Task HostileReviewQuery_NoMatch_EmptyList():",
+    "393:public async Task HostileReview_Default_DoesNotMutateProductFiles():",
+    "423:public void HostileReview_SurfaceParity_RestReplDirectorPlugin():",
+    "603:public Task AddQueueItemAsync(HostileReviewQueueItem item, CancellationToken cancellationToken = default):",
+    "620:public Task AddExecutionAsync(HostileReviewExecution execution, CancellationToken cancellationToken = default):",
+    "648:public void Succeed(string reference, string identity, string hash):",
+    "657:public void Missing(string reference):",
+    "666:public void StaleOrUnauthorized(string reference):",
+    "675:public void Ambiguous(string reference):"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "TimestampUtc": "2026-08-22T00:32:27.5779865Z",
+  "PluginAllExitCode": 0,
+  "PluginAllTrx": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\pluginintegration-all.trx",
+    "outcome": "Completed",
+    "total": "7",
+    "executed": "7",
+    "passed": "7",
+    "failed": "0",
+    "skipped": null,
+    "notExecuted": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0040833",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+        "outcome": "Passed",
+        "duration": "00:00:00.0318836",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "outcome": "Passed",
+        "duration": "00:00:00.0109435",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "outcome": "Passed",
+        "duration": "00:00:00.0019680",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "outcome": "Passed",
+        "duration": "00:00:00.0035361",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0016936",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "outcome": "Passed",
+        "duration": "00:00:00.0555390",
+        "output": ""
+      }
+    ]
+  }
+}

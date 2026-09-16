@@ -1,0 +1,10 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\sl-begin.txt",
+  "length": 255,
+  "created": null,
+  "turnId": "42935",
+  "sessionId": "GrokSubagentHostile-20260822T090257Z-c-red-p19",
+  "hasError": false,
+  "snippet": "type: result\r\npayload:\r\n  requestId: req-20260822T090330Z-5ac3\r\n  result:\r\n    turnId: 42935\r\n    agent: GrokSubagentHostile\r\n    sessionId: GrokSubagentHostile-20260822T090257Z-c-red-p19\r\n    requestId: req-20260822T090257Z-001-hostile-c-red-p19\r\n\r\n---\r\n"
+}

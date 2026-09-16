@@ -1,0 +1,57 @@
+type: result
+payload:
+  requestId: req-20260822T133754Z-6416
+  result:
+  - agent: P20Harness
+    sessionId: P20Harness-20260822T133039Z-sanitized
+    title: ''
+    model: ''
+    started:
+      dateTime: 2026-08-22T13:30:40.7129647
+      utcDateTime: 2026-08-22T13:30:40.7129647Z
+      localDateTime: 2026-08-22T08:30:40.7129647-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 712
+      microsecond: 964
+      nanosecond: 700
+      minute: 30
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 40
+      ticks: 639230022407129647
+      utcTicks: 639230022407129647
+      timeOfDay: 13:30:40.7129647
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:30:40.9560213
+      utcDateTime: 2026-08-22T13:30:40.9560213Z
+      localDateTime: 2026-08-22T08:30:40.9560213-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 956
+      microsecond: 21
+      nanosecond: 300
+      minute: 30
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 40
+      ticks: 639230022409560213
+      utcTicks: 639230022409560213
+      timeOfDay: 13:30:40.9560213
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags: []
+    filesModifiedCount: 0
+  deprecated: true
+
+---

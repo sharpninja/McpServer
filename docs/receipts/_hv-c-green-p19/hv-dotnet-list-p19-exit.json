@@ -1,0 +1,5 @@
+{
+  "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests --filter FullyQualifiedName~PluginNativeSuiteReceiptTests",
+  "exitCode": 0,
+  "durationMs": 24176
+}

@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2dfcee62-207a-4afc-8440-a85fe30a81e4" name="kingd@PAYTON-LEGION2 2026-08-21 21:33:44" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T21:33:44.6097949-05:00" queuing="2026-08-21T21:33:44.6097953-05:00" start="2026-08-21T21:33:40.5964355-05:00" finish="2026-08-21T21:37:35.6452527-05:00" />
+  <TestSettings name="default" id="ac2b364f-3c52-4633-a533-c4e3b1ad605e">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_21_33_44" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c0900761-2c39-4356-b77f-dd7ee88eb2a6" testId="5bb017ac-c90e-9a36-e020-70d7c3733126" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" computerName="PAYTON-LEGION2" duration="00:00:01.0839443" startTime="2026-08-21T21:36:49.1490181-05:00" endTime="2026-08-21T21:36:50.2330156-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0900761-2c39-4356-b77f-dd7ee88eb2a6" />
+    <UnitTestResult executionId="a9551b29-b7c8-4ce5-b924-282e8abcdadc" testId="2743f923-77bb-a451-9de7-de3ee9035cab" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0028093" startTime="2026-08-21T21:35:55.8978917-05:00" endTime="2026-08-21T21:35:55.9007865-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9551b29-b7c8-4ce5-b924-282e8abcdadc" />
+    <UnitTestResult executionId="9dfbf0e6-7c40-4360-9684-95db06672e03" testId="236c9f0a-5162-8715-aff3-f50a3225bd64" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:15.5067199" startTime="2026-08-21T21:35:40.2750280-05:00" endTime="2026-08-21T21:35:55.7821972-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9dfbf0e6-7c40-4360-9684-95db06672e03">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2f73d288-ee40-474e-988f-1e54e26b0907" testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" computerName="PAYTON-LEGION2" duration="00:00:23.4889335" startTime="2026-08-21T21:37:00.4534655-05:00" endTime="2026-08-21T21:37:23.9424557-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f73d288-ee40-474e-988f-1e54e26b0907" />
+    <UnitTestResult executionId="8a86a3d1-ebe7-49fd-a208-f144ed2c5e92" testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" computerName="PAYTON-LEGION2" duration="00:00:10.2178098" startTime="2026-08-21T21:36:50.2345790-05:00" endTime="2026-08-21T21:37:00.4524330-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a86a3d1-ebe7-49fd-a208-f144ed2c5e92" />
+    <UnitTestResult executionId="197560b4-9345-4bb7-808c-5cd389fd253c" testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" computerName="PAYTON-LEGION2" duration="00:00:00.0632712" startTime="2026-08-21T21:33:43.1093569-05:00" endTime="2026-08-21T21:33:43.1727821-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="197560b4-9345-4bb7-808c-5cd389fd253c" />
+    <UnitTestResult executionId="e319bb75-44ff-4874-9dbd-823b925d1f9e" testId="2e8fd848-d1c0-5afc-6f97-94242fd6a63d" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:00.0035934" startTime="2026-08-21T21:35:55.8935952-05:00" endTime="2026-08-21T21:35:55.8972667-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e319bb75-44ff-4874-9dbd-823b925d1f9e" />
+    <UnitTestResult executionId="d4649bd8-eaf0-40d3-a9fd-5b59f6732973" testId="2aa3e527-2c65-85dc-a88a-083c1f3e85eb" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:11.6172891" startTime="2026-08-21T21:33:43.1977538-05:00" endTime="2026-08-21T21:33:54.8210603-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4649bd8-eaf0-40d3-a9fd-5b59f6732973">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="819b4213-ce46-43d9-868c-120e84aa487e" testId="71d44d28-4839-6bff-13df-574b04f76a59" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:39.2468171" startTime="2026-08-21T21:34:48.0856454-05:00" endTime="2026-08-21T21:35:27.3326646-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="819b4213-ce46-43d9-868c-120e84aa487e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6dd0038b-a6c1-4296-b3fe-5e5c70337df0" testId="3f1f706f-8607-0903-ba67-2e1e67ae1d37" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:00.0015012" startTime="2026-08-21T21:35:55.9020222-05:00" endTime="2026-08-21T21:35:55.9037828-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6dd0038b-a6c1-4296-b3fe-5e5c70337df0" />
+    <UnitTestResult executionId="e10bf9fe-74cc-4f5b-9dd2-56ba033b346e" testId="9352565e-1e2b-61f4-41fe-e7f688f70784" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:00.0010685" startTime="2026-08-21T21:35:55.9073380-05:00" endTime="2026-08-21T21:35:55.9084818-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e10bf9fe-74cc-4f5b-9dd2-56ba033b346e" />
+    <UnitTestResult executionId="9e0cda56-e638-4b55-aded-323d16271501" testId="92498341-6556-0681-f973-fb0ee9e18d9d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:09.5445035" startTime="2026-08-21T21:34:29.9497981-05:00" endTime="2026-08-21T21:34:39.4945375-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e0cda56-e638-4b55-aded-323d16271501">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ac3a826a-2288-4345-a8e7-31d86f02963c" testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" computerName="PAYTON-LEGION2" duration="00:00:11.5007251" startTime="2026-08-21T21:37:23.9509732-05:00" endTime="2026-08-21T21:37:35.4517789-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac3a826a-2288-4345-a8e7-31d86f02963c" />
+    <UnitTestResult executionId="f8866516-95be-477c-8553-0da5571038cf" testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" computerName="PAYTON-LEGION2" duration="00:00:17.5364809" startTime="2026-08-21T21:36:31.6081950-05:00" endTime="2026-08-21T21:36:49.1447459-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f8866516-95be-477c-8553-0da5571038cf" />
+    <UnitTestResult executionId="121f64fc-44f4-442f-84b0-a4116d9b7495" testId="6edf857f-c350-109d-e751-78f29179f4c4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" computerName="PAYTON-LEGION2" duration="00:00:00.0022550" startTime="2026-08-21T21:33:43.1759066-05:00" endTime="2026-08-21T21:33:43.1782296-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="121f64fc-44f4-442f-84b0-a4116d9b7495" />
+    <UnitTestResult executionId="f64af81d-ab28-4196-bcbb-603790b4baf4" testId="259cc540-68dc-c0bc-63dc-08ee5851c9be" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:00.0012100" startTime="2026-08-21T21:35:55.8720064-05:00" endTime="2026-08-21T21:35:55.8732806-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f64af81d-ab28-4196-bcbb-603790b4baf4" />
+    <UnitTestResult executionId="16df480f-b534-4572-adbe-c2a8af926f84" testId="1d184306-ca46-c995-1980-88e55b415255" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0012119" startTime="2026-08-21T21:35:55.8739199-05:00" endTime="2026-08-21T21:35:55.8751979-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16df480f-b534-4572-adbe-c2a8af926f84" />
+    <UnitTestResult executionId="28b677f1-3956-4071-938e-adbc195c82c1" testId="a1a83450-289c-1f21-5189-fd8a02f92b69" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" computerName="PAYTON-LEGION2" duration="00:00:00.0114226" startTime="2026-08-21T21:33:43.1787790-05:00" endTime="2026-08-21T21:33:43.1902770-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28b677f1-3956-4071-938e-adbc195c82c1" />
+    <UnitTestResult executionId="0666b0fd-14d3-4b72-9b04-e81c1c406d6c" testId="89af7f04-effa-7eee-6cc0-e2d6a5bc271d" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:00.0033351" startTime="2026-08-21T21:35:55.9095667-05:00" endTime="2026-08-21T21:35:55.9129924-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0666b0fd-14d3-4b72-9b04-e81c1c406d6c" />
+    <UnitTestResult executionId="9a62138a-0bd7-422c-9a96-6048fc35ab1f" testId="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:00.0018400" startTime="2026-08-21T21:35:55.8763161-05:00" endTime="2026-08-21T21:35:55.8782310-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9a62138a-0bd7-422c-9a96-6048fc35ab1f" />
+    <UnitTestResult executionId="05813a7f-23f7-4b39-8874-e02bb42300c1" testId="3b1b35d6-04b5-ae89-94b3-1a72cf86a187" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0015260" startTime="2026-08-21T21:35:55.8790462-05:00" endTime="2026-08-21T21:35:55.8806492-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="05813a7f-23f7-4b39-8874-e02bb42300c1" />
+    <UnitTestResult executionId="aa584b11-39d3-420e-b33e-fa21708cc376" testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0012401" startTime="2026-08-21T21:33:43.1938703-05:00" endTime="2026-08-21T21:33:43.1951724-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa584b11-39d3-420e-b33e-fa21708cc376" />
+    <UnitTestResult executionId="08400c7d-8491-4550-b4b5-0344c8f595a9" testId="fbe0ab7d-103a-2212-6706-b14331c649f7" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:00.0012087" startTime="2026-08-21T21:35:55.8663300-05:00" endTime="2026-08-21T21:35:55.8676352-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="08400c7d-8491-4550-b4b5-0344c8f595a9" />
+    <UnitTestResult executionId="49c35e0d-fb3a-46b5-8f93-4c64bde94953" testId="de836faf-c2ef-8605-ac5c-f4369adbdd78" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools" computerName="PAYTON-LEGION2" duration="00:00:00.0107555" startTime="2026-08-21T21:35:55.8818289-05:00" endTime="2026-08-21T21:35:55.8926542-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49c35e0d-fb3a-46b5-8f93-4c64bde94953" />
+    <UnitTestResult executionId="c696e3eb-f400-4180-818b-cec6eb8741a3" testId="b67667f1-956c-b969-5aff-30951534807a" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:00.0338808" startTime="2026-08-21T21:35:55.8287557-05:00" endTime="2026-08-21T21:35:55.8627571-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c696e3eb-f400-4180-818b-cec6eb8741a3" />
+    <UnitTestResult executionId="3ac87b4b-6b8f-4941-8444-18f93f9098c2" testId="93bddd0a-6593-1efb-c454-577812c2cc12" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" computerName="PAYTON-LEGION2" duration="00:00:00.0015536" startTime="2026-08-21T21:33:43.1735224-05:00" endTime="2026-08-21T21:33:43.1751502-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ac87b4b-6b8f-4941-8444-18f93f9098c2" />
+    <UnitTestResult executionId="afc03ee1-0ccd-4bca-bb45-4ab6a3d5faf0" testId="6a47fc12-3fd2-71eb-43f3-d58f01ca31db" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:08.5861996" startTime="2026-08-21T21:34:39.4985505-05:00" endTime="2026-08-21T21:34:48.0850210-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="afc03ee1-0ccd-4bca-bb45-4ab6a3d5faf0">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e08febdf-1878-46d8-9fb3-019906fca69d" testId="def48c40-4c91-19e5-0c50-98e3e0e06542" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:00.0014937" startTime="2026-08-21T21:35:55.9048075-05:00" endTime="2026-08-21T21:35:55.9064342-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e08febdf-1878-46d8-9fb3-019906fca69d" />
+    <UnitTestResult executionId="bb5c5790-0c6b-43d3-8a59-5b8c72a85cda" testId="2434cb13-4114-67c3-47b5-5afa807d5854" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:13.7207415" startTime="2026-08-21T21:34:16.2267134-05:00" endTime="2026-08-21T21:34:29.9477932-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb5c5790-0c6b-43d3-8a59-5b8c72a85cda">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="198aabaa-b285-44bb-8c03-948d2d98a097" testId="3432ff42-672e-0305-93be-fe61923bb416" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" computerName="PAYTON-LEGION2" duration="00:00:17.6501877" startTime="2026-08-21T21:36:13.9533741-05:00" endTime="2026-08-21T21:36:31.6036579-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198aabaa-b285-44bb-8c03-948d2d98a097" />
+    <UnitTestResult executionId="356c5054-8b68-49d9-9a4b-b3668ab95cee" testId="249e7608-e241-9d6b-5f9e-9784127451a5" testName="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" computerName="PAYTON-LEGION2" duration="00:00:00.0356984" startTime="2026-08-21T21:33:43.0377155-05:00" endTime="2026-08-21T21:33:43.0933280-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="356c5054-8b68-49d9-9a4b-b3668ab95cee" />
+    <UnitTestResult executionId="be19b404-6448-42f0-aa56-226b385bdbd0" testId="37b23830-eb36-269d-32da-331714bb6f30" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0018275" startTime="2026-08-21T21:35:55.9136541-05:00" endTime="2026-08-21T21:35:55.9155685-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be19b404-6448-42f0-aa56-226b385bdbd0" />
+    <UnitTestResult executionId="3b390dd2-6e1d-4b27-a977-eb2b4da4b797" testId="d42781b5-1df1-2439-9cae-15996a584dc2" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:21.3932366" startTime="2026-08-21T21:33:54.8283329-05:00" endTime="2026-08-21T21:34:16.2229850-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b390dd2-6e1d-4b27-a977-eb2b4da4b797">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="909ef68b-e3a5-4ea8-af92-6dbb7a1d019d" testId="10e57566-829a-b4ad-f03a-530076be589d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:12.9380112" startTime="2026-08-21T21:35:27.3349660-05:00" endTime="2026-08-21T21:35:40.2733572-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="909ef68b-e3a5-4ea8-af92-6dbb7a1d019d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c4f765e0-7dc3-49db-921f-fd290b5bf1ef" testId="c2db256a-e7c9-78d2-d025-8768c4c06997" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:00.0023829" startTime="2026-08-21T21:35:55.8688203-05:00" endTime="2026-08-21T21:35:55.8712853-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c4f765e0-7dc3-49db-921f-fd290b5bf1ef" />
+    <UnitTestResult executionId="402a50b9-6a8f-4a16-95f0-2e72daeb0cfc" testId="b4a57976-1c8f-4410-0825-5899e07a7661" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" computerName="PAYTON-LEGION2" duration="00:00:00.0019830" startTime="2026-08-21T21:33:43.1911085-05:00" endTime="2026-08-21T21:33:43.1931496-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="402a50b9-6a8f-4a16-95f0-2e72daeb0cfc" />
+    <UnitTestResult executionId="1fc8a8ee-ebd7-473b-aa70-769c0e0faefd" testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" computerName="PAYTON-LEGION2" duration="00:00:18.0256246" startTime="2026-08-21T21:35:55.9239624-05:00" endTime="2026-08-21T21:36:13.9496497-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1fc8a8ee-ebd7-473b-aa70-769c0e0faefd" />
+    <UnitTestResult executionId="3785547c-18c9-4573-8e72-38121c329a9f" testId="0aac579d-c81e-7ee5-1d52-2c40b8fd390e" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:00.0020669" startTime="2026-08-21T21:35:55.8635369-05:00" endTime="2026-08-21T21:35:55.8657215-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3785547c-18c9-4573-8e72-38121c329a9f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a6213a20-b401-20f3-7b2f-1044dcf1bcfe">
+      <Execution id="197560b4-9345-4bb7-808c-5cd389fd253c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_SupportedHostKinds" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3432ff42-672e-0305-93be-fe61923bb416">
+      <Execution id="198aabaa-b285-44bb-8c03-948d2d98a097" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SelectsFreePort" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3b1b35d6-04b5-ae89-94b3-1a72cf86a187">
+      <Execution id="05813a7f-23f7-4b39-8874-e02bb42300c1" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="0aac579d-c81e-7ee5-1d52-2c40b8fd390e">
+      <Execution id="3785547c-18c9-4573-8e72-38121c329a9f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2743f923-77bb-a451-9de7-de3ee9035cab">
+      <Execution id="a9551b29-b7c8-4ce5-b924-282e8abcdadc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="de836faf-c2ef-8605-ac5c-f4369adbdd78">
+      <Execution id="49c35e0d-fb3a-46b5-8f93-4c64bde94953" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_ClineV1_StdioSessionLogTools" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1d184306-ca46-c995-1980-88e55b415255">
+      <Execution id="16df480f-b534-4572-adbe-c2a8af926f84" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="c2db256a-e7c9-78d2-d025-8768c4c06997">
+      <Execution id="c4f765e0-7dc3-49db-921f-fd290b5bf1ef" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2434cb13-4114-67c3-47b5-5afa807d5854">
+      <Execution id="bb5c5790-0c6b-43d3-8a59-5b8c72a85cda" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2e8fd848-d1c0-5afc-6f97-94242fd6a63d">
+      <Execution id="e319bb75-44ff-4874-9dbd-823b925d1f9e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e">
+      <Execution id="1fc8a8ee-ebd7-473b-aa70-769c0e0faefd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_DeterministicCleanup" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33">
+      <Execution id="8a86a3d1-ebe7-49fd-a208-f144ed2c5e92" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="9676f0d0-5f41-a32c-c2d9-8828d86f7808">
+      <Execution id="2f73d288-ee40-474e-988f-1e54e26b0907" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesMarker" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="87979b5e-268c-e227-3bdf-1cbbf14997ac">
+      <Execution id="f8866516-95be-477c-8553-0da5571038cf" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SignatureAndNonceTrust" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="37b23830-eb36-269d-32da-331714bb6f30">
+      <Execution id="be19b404-6448-42f0-aa56-226b385bdbd0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_ClineV2AndOpenCode_UseProductionExport" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="10e57566-829a-b4ad-f03a-530076be589d">
+      <Execution id="909ef68b-e3a5-4ea8-af92-6dbb7a1d019d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="def48c40-4c91-19e5-0c50-98e3e0e06542">
+      <Execution id="e08febdf-1878-46d8-9fb3-019906fca69d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a1a83450-289c-1f21-5189-fd8a02f92b69">
+      <Execution id="28b677f1-3956-4071-938e-adbc195c82c1" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_ExactlyEightEnabled" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="93bddd0a-6593-1efb-c454-577812c2cc12">
+      <Execution id="3ac87b4b-6b8f-4941-8444-18f93f9098c2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RepositoryRootsExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="89af7f04-effa-7eee-6cc0-e2d6a5bc271d">
+      <Execution id="0666b0fd-14d3-4b72-9b04-e81c1c406d6c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_ClineV2AndOpenCode_UseProductionExport" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="71d44d28-4839-6bff-13df-574b04f76a59">
+      <Execution id="819b4213-ce46-43d9-868c-120e84aa487e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="9352565e-1e2b-61f4-41fe-e7f688f70784">
+      <Execution id="e10bf9fe-74cc-4f5b-9dd2-56ba033b346e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b4a57976-1c8f-4410-0825-5899e07a7661">
+      <Execution id="402a50b9-6a8f-4a16-95f0-2e72daeb0cfc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_UniqueAgentSourceCache" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="259cc540-68dc-c0bc-63dc-08ee5851c9be">
+      <Execution id="f64af81d-ab28-4196-bcbb-603790b4baf4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10">
+      <Execution id="ac3a826a-2288-4345-a8e7-31d86f02963c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d42781b5-1df1-2439-9cae-15996a584dc2">
+      <Execution id="3b390dd2-6e1d-4b27-a977-eb2b4da4b797" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="fbe0ab7d-103a-2212-6706-b14331c649f7">
+      <Execution id="08400c7d-8491-4550-b4b5-0344c8f595a9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b67667f1-956c-b969-5aff-30951534807a">
+      <Execution id="c696e3eb-f400-4180-818b-cec6eb8741a3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2aa3e527-2c65-85dc-a88a-083c1f3e85eb">
+      <Execution id="d4649bd8-eaf0-40d3-a9fd-5b59f6732973" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3f1f706f-8607-0903-ba67-2e1e67ae1d37">
+      <Execution id="6dd0038b-a6c1-4296-b3fe-5e5c70337df0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6edf857f-c350-109d-e751-78f29179f4c4">
+      <Execution id="121f64fc-44f4-442f-84b0-a4116d9b7495" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RequiredEntrypointFilesExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="5bb017ac-c90e-9a36-e020-70d7c3733126">
+      <Execution id="c0900761-2c39-4356-b77f-dd7ee88eb2a6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_StartupTimeout" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29">
+      <Execution id="9a62138a-0bd7-422c-9a96-6048fc35ab1f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="92498341-6556-0681-f973-fb0ee9e18d9d">
+      <Execution id="9e0cda56-e638-4b55-aded-323d16271501" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6a47fc12-3fd2-71eb-43f3-d58f01ca31db">
+      <Execution id="afc03ee1-0ccd-4bca-bb45-4ab6a3d5faf0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="18d5a8a3-7892-c234-f03d-8f0549399f5f">
+      <Execution id="aa584b11-39d3-420e-b33e-fa21708cc376" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_VersionMetadataPresent" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="236c9f0a-5162-8715-aff3-f50a3225bd64">
+      <Execution id="9dfbf0e6-7c40-4360-9684-95db06672e03" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="249e7608-e241-9d6b-5f9e-9784127451a5">
+      <Execution id="356c5054-8b68-49d9-9a4b-b3668ab95cee" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests" name="PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5bb017ac-c90e-9a36-e020-70d7c3733126" executionId="c0900761-2c39-4356-b77f-dd7ee88eb2a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2743f923-77bb-a451-9de7-de3ee9035cab" executionId="a9551b29-b7c8-4ce5-b924-282e8abcdadc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="236c9f0a-5162-8715-aff3-f50a3225bd64" executionId="9dfbf0e6-7c40-4360-9684-95db06672e03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" executionId="2f73d288-ee40-474e-988f-1e54e26b0907" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" executionId="8a86a3d1-ebe7-49fd-a208-f144ed2c5e92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" executionId="197560b4-9345-4bb7-808c-5cd389fd253c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e8fd848-d1c0-5afc-6f97-94242fd6a63d" executionId="e319bb75-44ff-4874-9dbd-823b925d1f9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2aa3e527-2c65-85dc-a88a-083c1f3e85eb" executionId="d4649bd8-eaf0-40d3-a9fd-5b59f6732973" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71d44d28-4839-6bff-13df-574b04f76a59" executionId="819b4213-ce46-43d9-868c-120e84aa487e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f1f706f-8607-0903-ba67-2e1e67ae1d37" executionId="6dd0038b-a6c1-4296-b3fe-5e5c70337df0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9352565e-1e2b-61f4-41fe-e7f688f70784" executionId="e10bf9fe-74cc-4f5b-9dd2-56ba033b346e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92498341-6556-0681-f973-fb0ee9e18d9d" executionId="9e0cda56-e638-4b55-aded-323d16271501" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" executionId="ac3a826a-2288-4345-a8e7-31d86f02963c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" executionId="f8866516-95be-477c-8553-0da5571038cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6edf857f-c350-109d-e751-78f29179f4c4" executionId="121f64fc-44f4-442f-84b0-a4116d9b7495" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="259cc540-68dc-c0bc-63dc-08ee5851c9be" executionId="f64af81d-ab28-4196-bcbb-603790b4baf4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d184306-ca46-c995-1980-88e55b415255" executionId="16df480f-b534-4572-adbe-c2a8af926f84" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1a83450-289c-1f21-5189-fd8a02f92b69" executionId="28b677f1-3956-4071-938e-adbc195c82c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89af7f04-effa-7eee-6cc0-e2d6a5bc271d" executionId="0666b0fd-14d3-4b72-9b04-e81c1c406d6c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29" executionId="9a62138a-0bd7-422c-9a96-6048fc35ab1f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3b1b35d6-04b5-ae89-94b3-1a72cf86a187" executionId="05813a7f-23f7-4b39-8874-e02bb42300c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" executionId="aa584b11-39d3-420e-b33e-fa21708cc376" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbe0ab7d-103a-2212-6706-b14331c649f7" executionId="08400c7d-8491-4550-b4b5-0344c8f595a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de836faf-c2ef-8605-ac5c-f4369adbdd78" executionId="49c35e0d-fb3a-46b5-8f93-4c64bde94953" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b67667f1-956c-b969-5aff-30951534807a" executionId="c696e3eb-f400-4180-818b-cec6eb8741a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93bddd0a-6593-1efb-c454-577812c2cc12" executionId="3ac87b4b-6b8f-4941-8444-18f93f9098c2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a47fc12-3fd2-71eb-43f3-d58f01ca31db" executionId="afc03ee1-0ccd-4bca-bb45-4ab6a3d5faf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="def48c40-4c91-19e5-0c50-98e3e0e06542" executionId="e08febdf-1878-46d8-9fb3-019906fca69d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2434cb13-4114-67c3-47b5-5afa807d5854" executionId="bb5c5790-0c6b-43d3-8a59-5b8c72a85cda" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3432ff42-672e-0305-93be-fe61923bb416" executionId="198aabaa-b285-44bb-8c03-948d2d98a097" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="249e7608-e241-9d6b-5f9e-9784127451a5" executionId="356c5054-8b68-49d9-9a4b-b3668ab95cee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37b23830-eb36-269d-32da-331714bb6f30" executionId="be19b404-6448-42f0-aa56-226b385bdbd0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d42781b5-1df1-2439-9cae-15996a584dc2" executionId="3b390dd2-6e1d-4b27-a977-eb2b4da4b797" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10e57566-829a-b4ad-f03a-530076be589d" executionId="909ef68b-e3a5-4ea8-af92-6dbb7a1d019d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2db256a-e7c9-78d2-d025-8768c4c06997" executionId="c4f765e0-7dc3-49db-921f-fd290b5bf1ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4a57976-1c8f-4410-0825-5899e07a7661" executionId="402a50b9-6a8f-4a16-95f0-2e72daeb0cfc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" executionId="1fc8a8ee-ebd7-473b-aa70-769c0e0faefd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0aac579d-c81e-7ee5-1d52-2c40b8fd390e" executionId="3785547c-18c9-4573-8e72-38121c329a9f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="38" executed="38" passed="30" failed="8" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.46]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.99]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.41]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:13.31]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:13.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.31]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:13.31]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:13.31]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:13.31]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:34.71]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:34.71]       Stack Trace:&#xD;
+[xUnit.net 00:00:34.71]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:34.71]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:34.71]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:34.71]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:48.43]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:48.43]       Stack Trace:&#xD;
+[xUnit.net 00:00:48.43]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:48.43]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:48.43]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:48.43]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:57.98]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:57.98]       Stack Trace:&#xD;
+[xUnit.net 00:00:57.98]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:57.98]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:57.98]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:57.98]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:06.57]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:06.57]       Stack Trace:&#xD;
+[xUnit.net 00:01:06.57]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:06.57]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:06.57]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:06.57]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:45.81]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:45.82]       Stack Trace:&#xD;
+[xUnit.net 00:01:45.82]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:45.82]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:45.82]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:45.82]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:58.75]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:58.76]       Stack Trace:&#xD;
+[xUnit.net 00:01:58.76]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:58.76]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:58.76]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:58.76]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:02:14.27]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:02:14.27]       Stack Trace:&#xD;
+[xUnit.net 00:02:14.27]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:02:14.27]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:02:14.27]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:02:14.27]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:03:53.96]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:33:54.8311835-05:00">
+        <Text>[xUnit.net 00:00:13.31]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:34:16.2262069-05:00">
+        <Text>[xUnit.net 00:00:34.70]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:34:29.9494964-05:00">
+        <Text>[xUnit.net 00:00:48.43]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:34:39.4958169-05:00">
+        <Text>[xUnit.net 00:00:57.98]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:34:48.0860793-05:00">
+        <Text>[xUnit.net 00:01:06.57]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:35:27.3354342-05:00">
+        <Text>[xUnit.net 00:01:45.81]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:35:40.2853498-05:00">
+        <Text>[xUnit.net 00:01:58.75]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:35:55.7847198-05:00">
+        <Text>[xUnit.net 00:02:14.26]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

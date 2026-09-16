@@ -1,0 +1,66 @@
+{
+  "TimestampUtc": "2026-08-22T01:26:46.8081343Z",
+  "FixtureLastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+  "TestsLastWriteTimeUtc": "2026-08-22T01:02:10.4371979Z",
+  "PriorCredP5AgreeExists": true,
+  "StartAsyncThrowsNotImplemented": false,
+  "StartAsyncStartsProcess": true,
+  "UsesSupportMcpDll": true,
+  "CsprojReferencesSupportMcp": true,
+  "CsprojReferencesClient": true,
+  "ReservedServicePortConst": true,
+  "PortAssignedLiteral7147": true,
+  "AllocateRejects7147": true,
+  "DatabasePathTemp": true,
+  "DisposeKillsTree": true,
+  "DisposeDeletesRoot": true,
+  "WaitForMarker": true,
+  "WaitForHealth": true,
+  "AdapterCapturesInTests": false,
+  "AdapterCapturesInFixture": false,
+  "UseUrlsAllInterfaces": true,
+  "Named": [
+    {
+      "Name": "ServerFixture_SelectsFreePort",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_StartupTimeout",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_CreatesMarker",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_SignatureAndNonceTrust",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_DeterministicCleanup",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    },
+    {
+      "Name": "ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+      "Present": true,
+      "SkipNearby": false,
+      "FactTimeout": true
+    }
+  ]
+}

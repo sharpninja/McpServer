@@ -1,0 +1,62 @@
+{
+  "TimestampUtc": "2026-08-22T09:11:35.6481455Z",
+  "BusyCount": 8,
+  "Processes": [
+    {
+      "Pid": 76104,
+      "ParentPid": 86180,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T03:58:48.768424-05:00",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-full-20260822T085831Z --logger trx;LogFileName=pluginint-all.trx"
+    },
+    {
+      "Pid": 51984,
+      "ParentPid": 30068,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T03:59:01.151676-05:00",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --logger:\"trx;LogFileName=pluginint-all.trx\" --resultsDirectory:F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-full-20260822T085831Z F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll --logger:Console;Verbosity=minimal --nologo --artifactsProcessingMode-collect --testSessionCorrelationId:76104_9e066926-35db-41ed-b584-8038e2cb3935"
+    },
+    {
+      "Pid": 19200,
+      "ParentPid": 51984,
+      "Name": "testhost.exe",
+      "CreationDate": "2026-08-22T03:59:01.650717-05:00",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.deps.json\" --port 49954 --endpoint 127.0.0.1:049954 --role client --parentprocessid 51984 --telemetryoptedin false"
+    },
+    {
+      "Pid": 87532,
+      "ParentPid": 70300,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T04:02:12.836182-05:00",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-full-20260822T090212Z --logger trx;LogFileName=pluginint-all.trx"
+    },
+    {
+      "Pid": 81376,
+      "ParentPid": 39228,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T04:02:29.07409-05:00",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --logger:\"trx;LogFileName=pluginint-all.trx\" --resultsDirectory:F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-full-20260822T090212Z F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll --logger:Console;Verbosity=minimal --nologo --artifactsProcessingMode-collect --testSessionCorrelationId:87532_51ffea40-3dcc-4eb1-a0d9-f80240e6be34"
+    },
+    {
+      "Pid": 65116,
+      "ParentPid": 81376,
+      "Name": "testhost.exe",
+      "CreationDate": "2026-08-22T04:02:29.513429-05:00",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.deps.json\" --port 57641 --endpoint 127.0.0.1:057641 --role client --parentprocessid 81376 --telemetryoptedin false"
+    },
+    {
+      "Pid": 33652,
+      "ParentPid": 54560,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T04:11:13.502322-05:00",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    },
+    {
+      "Pid": 5388,
+      "ParentPid": 79216,
+      "Name": "dotnet.exe",
+      "CreationDate": "2026-08-22T04:11:15.868887-05:00",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    }
+  ]
+}

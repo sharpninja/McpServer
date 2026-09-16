@@ -1,0 +1,36 @@
+{
+  "TimestampUtc": "2026-08-22T04:40:12.6449390Z",
+  "Count": 6,
+  "Rows": [
+    {
+      "ProcessId": 59128,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\wait-then-tests.ps1\\\"\""
+    },
+    {
+      "ProcessId": 75108,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\wait-then-tests.ps1"
+    },
+    {
+      "ProcessId": 19956,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-live.ps1\\\"\""
+    },
+    {
+      "ProcessId": 87408,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-tests-run.ps1\\\"\""
+    },
+    {
+      "ProcessId": 66440,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-live.ps1"
+    },
+    {
+      "ProcessId": 38068,
+      "Name": "pwsh.exe",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\hv-tests-run.ps1"
+    }
+  ]
+}

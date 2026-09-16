@@ -1,0 +1,296 @@
+type: result
+payload:
+  requestId: req-20260821T114142Z-df26
+  result:
+    tools:
+    - id: 1
+      name: mcpserver-claude-code-plugin
+      description: Clone or update the Claude Code plugin repository for McpServer session logging, TODO management, requirements tracking, and GraphRAG workflows.
+      tags:
+      - claude
+      - claude-code
+      - graphrag
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-claude-code-plugin'; $repo='https://github.com/sharpninja/mcpserver-claude-code-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o0
+        dateTime: 2026-05-27T22:45:11.2349784
+        utcDateTime: 2026-05-27T22:45:11.2349784Z
+        localDateTime: 2026-05-27T17:45:11.2349784-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 234
+        microsecond: 978
+        nanosecond: 400
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 11
+        ticks: 639155187112349784
+        utcTicks: 639155187112349784
+        timeOfDay: 22:45:11.2349784
+        year: 2026
+      dateTimeModified: *o0
+    - id: 2
+      name: mcpserver-claude-cowork-plugin
+      description: Clone or update the Claude Cowork plugin repository for workspace-scoped McpServer TODO, session log, requirements, and GraphRAG workflows.
+      tags:
+      - claude
+      - cowork
+      - graphrag
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-claude-cowork-plugin'; $repo='https://github.com/sharpninja/mcpserver-claude-cowork-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o1
+        dateTime: 2026-05-27T22:45:21.6359334
+        utcDateTime: 2026-05-27T22:45:21.6359334Z
+        localDateTime: 2026-05-27T17:45:21.6359334-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 635
+        microsecond: 933
+        nanosecond: 400
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 21
+        ticks: 639155187216359334
+        utcTicks: 639155187216359334
+        timeOfDay: 22:45:21.6359334
+        year: 2026
+      dateTimeModified: *o1
+    - id: 3
+      name: mcpserver-cline-plugin
+      description: Clone or update the Cline plugin repository for McpServer workflow tools, enforcement scripts, TODOs, session logs, requirements, and GraphRAG.
+      tags:
+      - cline
+      - graphrag
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      - vscode
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-cline-plugin'; $repo='https://github.com/sharpninja/mcpserver-cline-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o2
+        dateTime: 2026-05-27T22:45:34.7820144
+        utcDateTime: 2026-05-27T22:45:34.7820144Z
+        localDateTime: 2026-05-27T17:45:34.7820144-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 782
+        microsecond: 14
+        nanosecond: 400
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 34
+        ticks: 639155187347820144
+        utcTicks: 639155187347820144
+        timeOfDay: 22:45:34.7820144
+        year: 2026
+      dateTimeModified: *o2
+    - id: 4
+      name: mcpserver-cline-v2-plugin
+      description: Clone or update the Cline V2 AgentPlugin repository for McpServer TODO, session log, requirements, GraphRAG, workspace initialization, and failsafe replay workflows.
+      tags:
+      - agentplugin
+      - cline
+      - cline-v2
+      - graphrag
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-cline-v2-plugin'; $repo='https://github.com/sharpninja/mcpserver-cline-v2-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o3
+        dateTime: 2026-05-27T22:45:39.8311642
+        utcDateTime: 2026-05-27T22:45:39.8311642Z
+        localDateTime: 2026-05-27T17:45:39.8311642-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 831
+        microsecond: 164
+        nanosecond: 200
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 39
+        ticks: 639155187398311642
+        utcTicks: 639155187398311642
+        timeOfDay: 22:45:39.8311642
+        year: 2026
+      dateTimeModified: *o3
+    - id: 5
+      name: mcpserver-codex-plugin
+      description: Clone or update the OpenAI Codex plugin repository for McpServer session logging, TODO management, requirements tracking, GraphRAG, and enforcement scripts.
+      tags:
+      - codex
+      - graphrag
+      - mcp
+      - openai
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-codex-plugin'; $repo='https://github.com/sharpninja/mcpserver-codex-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o4
+        dateTime: 2026-05-27T22:45:45.1639549
+        utcDateTime: 2026-05-27T22:45:45.1639549Z
+        localDateTime: 2026-05-27T17:45:45.1639549-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 163
+        microsecond: 954
+        nanosecond: 900
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 45
+        ticks: 639155187451639549
+        utcTicks: 639155187451639549
+        timeOfDay: 22:45:45.1639549
+        year: 2026
+      dateTimeModified: *o4
+    - id: 6
+      name: mcpserver-copilot-plugin
+      description: Clone or update the GitHub Copilot plugin repository for McpServer TODO, session log, requirements, GraphRAG, workspace, and enforcement workflows.
+      tags:
+      - copilot
+      - github-copilot
+      - graphrag
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-copilot-plugin'; $repo='https://github.com/sharpninja/mcpserver-copilot-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o5
+        dateTime: 2026-05-27T22:45:50.4207219
+        utcDateTime: 2026-05-27T22:45:50.4207219Z
+        localDateTime: 2026-05-27T17:45:50.4207219-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 420
+        microsecond: 721
+        nanosecond: 900
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 50
+        ticks: 639155187504207219
+        utcTicks: 639155187504207219
+        timeOfDay: 22:45:50.4207219
+        year: 2026
+      dateTimeModified: *o5
+    - id: 7
+      name: mcpserver-grok-plugin
+      description: Clone or update the Grok CLI/TUI plugin repository for McpServer TODO, session log, requirements, GraphRAG, and workspace continuity.
+      tags:
+      - graphrag
+      - grok
+      - mcp
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-grok-plugin'; $repo='https://github.com/sharpninja/mcpserver-grok-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o6
+        dateTime: 2026-05-27T22:45:54.9977448
+        utcDateTime: 2026-05-27T22:45:54.9977448Z
+        localDateTime: 2026-05-27T17:45:54.9977448-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 997
+        microsecond: 744
+        nanosecond: 800
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 54
+        ticks: 639155187549977448
+        utcTicks: 639155187549977448
+        timeOfDay: 22:45:54.9977448
+        year: 2026
+      dateTimeModified: *o6
+    - id: 8
+      name: mcpserver-opencode-plugin
+      description: Clone or update the OpenCode plugin repository for McpServer TODO, session log, requirements, GraphRAG, workspace initialization, and failsafe replay workflows.
+      tags:
+      - graphrag
+      - mcp
+      - opencode
+      - plugin
+      - requirements
+      - session-log
+      - todo
+      parameterSchema: '{"type":"object","properties":{"targetParent":{"type":"string","description":"Parent directory where the plugin repository should be cloned or updated"}},"required":["targetParent"]}'
+      commandTemplate: pwsh -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $parent='{{targetParent}}'; $name='mcpserver-opencode-plugin'; $repo='https://github.com/sharpninja/mcpserver-opencode-plugin.git'; New-Item -ItemType Directory -Force -Path $parent | Out-Null; $path=Join-Path $parent $name; if(Test-Path (Join-Path $path '.git')){ git -C $path pull --ff-only } elseif(Test-Path $path){ throw ($path + ' exists but is not a git repository') } else { git clone $repo $path }"
+      dateTimeCreated: &o7
+        dateTime: 2026-05-27T22:45:59.4549496
+        utcDateTime: 2026-05-27T22:45:59.4549496Z
+        localDateTime: 2026-05-27T17:45:59.4549496-05:00
+        date: 2026-05-27T00:00:00.0000000
+        day: 27
+        dayOfWeek: Wednesday
+        dayOfYear: 147
+        hour: 22
+        millisecond: 454
+        microsecond: 949
+        nanosecond: 600
+        minute: 45
+        month: 5
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 59
+        ticks: 639155187594549496
+        utcTicks: 639155187594549496
+        timeOfDay: 22:45:59.4549496
+        year: 2026
+      dateTimeModified: *o7
+    totalCount: 8
+
+---
+

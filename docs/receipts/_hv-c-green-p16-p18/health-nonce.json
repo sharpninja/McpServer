@@ -1,0 +1,8 @@
+{
+  "nonceSent": "nonce-hv-20260822075054-40006",
+  "nonceEcho": "nonce-hv-20260822075054-40006",
+  "status": "Healthy",
+  "match": true,
+  "storage": "reachable",
+  "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+}

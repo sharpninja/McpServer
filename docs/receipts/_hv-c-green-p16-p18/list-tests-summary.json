@@ -1,0 +1,41 @@
+{
+  "p16": 8,
+  "p17": 1,
+  "p18": 0,
+  "p19": 0,
+  "hostCounts": [
+    {
+      "HostKind": "Codex",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1
+    }
+  ],
+  "availableHeader": true
+}

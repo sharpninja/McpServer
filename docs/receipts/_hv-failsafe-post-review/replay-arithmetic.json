@@ -1,0 +1,33 @@
+{
+  "receipts": [
+    {
+      "file": "failsafe-replay-20260821T144010Z.json",
+      "postedField": 12,
+      "failedField": 0,
+      "items": 12,
+      "successTrue": 12,
+      "successFalse": 0
+    },
+    {
+      "file": "failsafe-quarantine-replay-20260821T150140Z.json",
+      "postedField": 47,
+      "failedField": 0,
+      "items": 47,
+      "successTrue": 47,
+      "successFalse": 0
+    },
+    {
+      "file": "failsafe-other-replay-20260821T150540Z.json",
+      "postedField": 65,
+      "failedField": 3,
+      "items": 68,
+      "successTrue": 65,
+      "successFalse": 3
+    }
+  ],
+  "postedSum": 124,
+  "failedSum": 3,
+  "itemizedSuccess": 124,
+  "claimedTotal": 167,
+  "gap": 43
+}

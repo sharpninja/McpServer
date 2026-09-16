@@ -1,0 +1,19 @@
+{
+  "totalCount": 2,
+  "sessionId": "GrokSubagentHostile-20260822T032428Z-pluginhandoff-d2g",
+  "sessionStatus": "in_progress",
+  "turnCount": 1,
+  "requestId": "req-20260822T032428Z-001-d2-green-pluginhandoff",
+  "turnStatus": "completed",
+  "queryTitle": "Hostile D2-green remaining-gap tests PLAN-PLUGINHANDOFF-001",
+  "todoId": "PLAN-PLUGINHANDOFF-001",
+  "planFile": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "actionCount": 8,
+  "dialogCount": 5,
+  "decisionCount": 3,
+  "filesModified": [
+    "docs/receipts/hostile-validator-20260822T033842Z.md",
+    "docs/receipts/hostile-validator-20260822T033842Z.json"
+  ],
+  "responsePreview": "OverallVerdict AGREE. Remaining-gap tests Failed 0 Skipped 0 (Pester 1, named C# 2, durability 24). invoke.ps1 SHA256 matches official grok copy. PLAN and MCP-HANDOFF* remain done false. Receipt docs/receipts/hostile-validator-20260822T033842Z.md"
+}

@@ -1,0 +1,25 @@
+{
+  "csproj": "tests/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.csproj",
+  "hits": [
+    {
+      "line": 13,
+      "text": "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" />"
+    },
+    {
+      "line": 14,
+      "text": "<PackageReference Include=\"xunit.v3\" />"
+    },
+    {
+      "line": 15,
+      "text": "<PackageReference Include=\"xunit.runner.visualstudio\" />"
+    },
+    {
+      "line": 16,
+      "text": "<PackageReference Include=\"SharpNinja.aiUnit\" />"
+    },
+    {
+      "line": 17,
+      "text": "<PackageReference Include=\"coverlet.collector\" />"
+    }
+  ]
+}

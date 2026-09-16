@@ -1,0 +1,9 @@
+{
+  "TimestampUtc": "2026-08-22T07:24:17.7040932Z",
+  "FileExists": true,
+  "HasEvaluateAsync": true,
+  "ThrowsInvalidOperation": true,
+  "NotImplementedMessageExact": true,
+  "HasReturnEvaluation": false,
+  "Body": "namespace McpServer.PluginIntegration.Tests;\n\n/// <summary>\n/// TEST-MCP-PLUGININT-001 AC3: aiUnit companion evaluator for plugin Session Log receipts.\n/// C-red-P16 leaves EvaluateAsync unimplemented so AiTheory_Agent_RequiresValidJsonFields stays red.\n/// </summary>\npublic static class AiStrategyFixture\n{\n    /// <summary>\n    /// Evaluates a redacted persistence receipt and returns strict JSON fields valid, missingFields, and contradictions.\n    /// </summary>\n    /// <param name=\"redactedReceipt\">Redacted persistence receipt or session artifact.</param>\n    /// <param name=\"cancellationToken\">Caller cancellation token.</param>\n    /// <returns>Semantic completeness result.</returns>\n    public static Task<AiStrategyEvaluation> EvaluateAsync(string redactedReceipt, CancellationToken cancellationToken = default)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(redactedReceipt);\n        cancellationToken.ThrowIfCancellationRequested();\n        throw new InvalidOperationException(\"AiStrategyFixture.EvaluateAsync is not implemented.\");\n    }\n}\n"
+}

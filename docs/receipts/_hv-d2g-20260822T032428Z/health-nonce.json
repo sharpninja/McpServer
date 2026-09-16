@@ -1,0 +1,9 @@
+{
+  "url": "http://PAYTON-LEGION2:7147/health?nonce=53b064f5df1c4e12bd5b55a2a07a6dec",
+  "nonceSent": "53b064f5df1c4e12bd5b55a2a07a6dec",
+  "nonceEchoed": "53b064f5df1c4e12bd5b55a2a07a6dec",
+  "nonceMatch": true,
+  "status": "Healthy",
+  "storage": "reachable",
+  "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+}

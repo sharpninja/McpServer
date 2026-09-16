@@ -1,0 +1,31 @@
+1`tTrue`tP0-A: hostile AGREE on this plan.
+2`tTrue`tP0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.
+3`tFalse`tA1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.
+4`tFalse`tA2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.
+5`tFalse`tA3: create HYGIENE FR/TR/TEST 001-005 and mappings.
+6`tFalse`tA4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.
+7`tFalse`tA5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.
+8`tFalse`tA6: hostile AGREE on requirements; no product code.
+9`tFalse`tB1: write new red tests listed in section 6; do not relabel existing green.
+10`tFalse`tB2: hostile after red.
+11`tFalse`tB3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.
+12`tFalse`tB4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.
+13`tFalse`tB5: hostile after green.
+14`tFalse`tC P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.
+15`tFalse`tC P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.
+16`tFalse`tC P14 red + hostile then green; P15 red + hostile then green.
+17`tFalse`tC P16 red + hostile then P17-P18.
+18`tFalse`tC P19 named tests + hostile then native suites + SyncAgentPlugins receipts.
+19`tFalse`tC P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.
+20`tFalse`tD0 inventory of Handoff findings vs on-disk tests.
+21`tFalse`tD1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.
+22`tFalse`tD1.5 hostile after red.
+23`tFalse`tD2 implement remediations + three-provider migrations.
+24`tFalse`tD3 docs/wiki generateDocument.
+25`tFalse`tD4 HANDOFFPLAN gate commands Failed 0 Skipped 0.
+26`tFalse`tD5 Codex APPROVED and hostile AGREE.
+27`tFalse`tE all reds + hostile, then implement, then E-green hostile.
+28`tFalse`tF all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.
+29`tFalse`tG0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.
+30`tFalse`tH docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.
+31`tFalse`tI close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary.

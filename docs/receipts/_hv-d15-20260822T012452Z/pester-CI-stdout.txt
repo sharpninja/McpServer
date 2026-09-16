@@ -1,0 +1,10 @@
+
+Starting discovery in 1 files.
+Discovery found 1 tests in 363ms.
+Running tests.
+[-] TEST-HANDOFF-006 plugin handoff skill-file invoke.PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods 255ms (206ms|49ms)
+ Expected $true, because TEST-HANDOFF-006 remaining gap is skill-file invoke beside F:\GitHub\McpServer\plugins\core\skills\handoff\SKILL.md, not checksum or C# dispatch, but got $false.
+ at Test-Path -LiteralPath $invokePath | Should -BeTrue -Because "TEST-HANDOFF-006 remaining gap is skill-file invoke beside $skillPath, not checksum or C# dispatch", F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1:40
+ at <ScriptBlock>, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1:40
+Tests completed in 2.7s
+Tests Passed: 0, Failed: 1, Skipped: 0, Inconclusive: 0, NotRun: 0

@@ -1,0 +1,3 @@
+103:function Copy-CoreFile {
+111:    # newlines or encodings during copy.
+112:    Copy-Item -LiteralPath $SourcePath -Destination $DestinationPath -Force

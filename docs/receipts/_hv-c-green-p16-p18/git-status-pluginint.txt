@@ -1,0 +1,4 @@
+?? build/Build.PluginSessionLogIntegration.cs
+?? tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+?? tests/McpServer.PluginIntegration.Tests/
+

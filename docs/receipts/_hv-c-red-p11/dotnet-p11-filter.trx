@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="ababe900-41e7-4f03-a1fa-d1f983c0882f" name="kingd@PAYTON-LEGION2 2026-08-21 21:31:43" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T21:31:43.2672902-05:00" queuing="2026-08-21T21:31:43.2672910-05:00" start="2026-08-21T21:31:27.7213423-05:00" finish="2026-08-21T21:33:22.9991436-05:00" />
+  <TestSettings name="default" id="0f116306-b498-4ac0-8c5d-69bcc6410c48">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_21_31_43" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="59a8a07e-8145-4d36-8872-f0f79b475bc3" testId="2aa3e527-2c65-85dc-a88a-083c1f3e85eb" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:13.8219286" startTime="2026-08-21T21:31:29.3636259-05:00" endTime="2026-08-21T21:31:43.1969597-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59a8a07e-8145-4d36-8872-f0f79b475bc3">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6dbacf5f-3400-4a82-8f1c-35039f78dd60" testId="6a47fc12-3fd2-71eb-43f3-d58f01ca31db" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:11.5342076" startTime="2026-08-21T21:32:35.3353252-05:00" endTime="2026-08-21T21:32:46.8703295-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6dbacf5f-3400-4a82-8f1c-35039f78dd60">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d2bdd6ea-b9e0-4d75-8594-bb26af1ead00" testId="92498341-6556-0681-f973-fb0ee9e18d9d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:19.1379829" startTime="2026-08-21T21:32:16.1946855-05:00" endTime="2026-08-21T21:32:35.3330287-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d2bdd6ea-b9e0-4d75-8594-bb26af1ead00">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6fa99593-a921-4701-a53f-91de107d9887" testId="10e57566-829a-b4ad-f03a-530076be589d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:10.9578385" startTime="2026-08-21T21:32:58.0229877-05:00" endTime="2026-08-21T21:33:08.9810631-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fa99593-a921-4701-a53f-91de107d9887">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e6c61c24-91ce-4075-bd2a-7a15baea70d5" testId="236c9f0a-5162-8715-aff3-f50a3225bd64" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:13.8286807" startTime="2026-08-21T21:33:08.9835515-05:00" endTime="2026-08-21T21:33:22.8125170-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6c61c24-91ce-4075-bd2a-7a15baea70d5">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cef3721c-ead9-417d-b1a7-38950235c552" testId="71d44d28-4839-6bff-13df-574b04f76a59" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:11.1413741" startTime="2026-08-21T21:32:46.8760213-05:00" endTime="2026-08-21T21:32:58.0176981-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cef3721c-ead9-417d-b1a7-38950235c552">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9f580f1f-dd9a-40c2-a426-965362ae4877" testId="2434cb13-4114-67c3-47b5-5afa807d5854" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:20.7461163" startTime="2026-08-21T21:31:55.4416123-05:00" endTime="2026-08-21T21:32:16.1888813-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f580f1f-dd9a-40c2-a426-965362ae4877">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9f434792-466e-4407-91d3-c568705c8d8d" testId="d42781b5-1df1-2439-9cae-15996a584dc2" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:12.2270959" startTime="2026-08-21T21:31:43.2114842-05:00" endTime="2026-08-21T21:31:55.4390265-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f434792-466e-4407-91d3-c568705c8d8d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs:line 24&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="71d44d28-4839-6bff-13df-574b04f76a59">
+      <Execution id="cef3721c-ead9-417d-b1a7-38950235c552" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6a47fc12-3fd2-71eb-43f3-d58f01ca31db">
+      <Execution id="6dbacf5f-3400-4a82-8f1c-35039f78dd60" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="236c9f0a-5162-8715-aff3-f50a3225bd64">
+      <Execution id="e6c61c24-91ce-4075-bd2a-7a15baea70d5" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d42781b5-1df1-2439-9cae-15996a584dc2">
+      <Execution id="9f434792-466e-4407-91d3-c568705c8d8d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2434cb13-4114-67c3-47b5-5afa807d5854">
+      <Execution id="9f580f1f-dd9a-40c2-a426-965362ae4877" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="10e57566-829a-b4ad-f03a-530076be589d">
+      <Execution id="6fa99593-a921-4701-a53f-91de107d9887" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="2aa3e527-2c65-85dc-a88a-083c1f3e85eb">
+      <Execution id="59a8a07e-8145-4d36-8872-f0f79b475bc3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="92498341-6556-0681-f973-fb0ee9e18d9d">
+      <Execution id="d2bdd6ea-b9e0-4d75-8594-bb26af1ead00" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_EachScenario_FailsUntilAdapterOperational" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="2aa3e527-2c65-85dc-a88a-083c1f3e85eb" executionId="59a8a07e-8145-4d36-8872-f0f79b475bc3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a47fc12-3fd2-71eb-43f3-d58f01ca31db" executionId="6dbacf5f-3400-4a82-8f1c-35039f78dd60" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92498341-6556-0681-f973-fb0ee9e18d9d" executionId="d2bdd6ea-b9e0-4d75-8594-bb26af1ead00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10e57566-829a-b4ad-f03a-530076be589d" executionId="6fa99593-a921-4701-a53f-91de107d9887" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="236c9f0a-5162-8715-aff3-f50a3225bd64" executionId="e6c61c24-91ce-4075-bd2a-7a15baea70d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71d44d28-4839-6bff-13df-574b04f76a59" executionId="cef3721c-ead9-417d-b1a7-38950235c552" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2434cb13-4114-67c3-47b5-5afa807d5854" executionId="9f580f1f-dd9a-40c2-a426-965362ae4877" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d42781b5-1df1-2439-9cae-15996a584dc2" executionId="9f434792-466e-4407-91d3-c568705c8d8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="0" failed="8" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.61]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.91]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:14.83]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:14.83]       Stack Trace:&#xD;
+[xUnit.net 00:00:14.83]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:14.83]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:14.83]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:14.83]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:27.06]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:27.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:27.06]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:27.06]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:27.06]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:27.06]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:47.81]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:00:47.81]       Stack Trace:&#xD;
+[xUnit.net 00:00:47.81]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:47.81]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:47.81]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:47.81]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:06.96]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:06.96]       Stack Trace:&#xD;
+[xUnit.net 00:01:06.96]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:06.96]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:06.96]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:06.96]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:18.49]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:18.49]       Stack Trace:&#xD;
+[xUnit.net 00:01:18.49]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:18.49]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:18.49]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:18.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:29.64]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:29.64]       Stack Trace:&#xD;
+[xUnit.net 00:01:29.64]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:29.64]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:29.64]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:29.64]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:40.60]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:40.60]       Stack Trace:&#xD;
+[xUnit.net 00:01:40.60]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:40.60]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:40.60]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:40.60]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:54.43]       System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync is not implemented.&#xD;
+[xUnit.net 00:01:54.43]       Stack Trace:&#xD;
+[xUnit.net 00:01:54.43]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapter.cs(24,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteCanonicalTurnAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:01:54.44]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:54.44]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogWorkflowAdapterTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:01:54.44]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:54.50]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:31:43.2090318-05:00">
+        <Text>[xUnit.net 00:00:14.83]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:31:55.4408917-05:00">
+        <Text>[xUnit.net 00:00:27.06]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:32:16.1911046-05:00">
+        <Text>[xUnit.net 00:00:47.81]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:32:35.3373258-05:00">
+        <Text>[xUnit.net 00:01:06.96]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:32:46.8721301-05:00">
+        <Text>[xUnit.net 00:01:18.49]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:32:58.0192922-05:00">
+        <Text>[xUnit.net 00:01:29.64]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:33:08.9828603-05:00">
+        <Text>[xUnit.net 00:01:40.60]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T21:33:22.8142744-05:00">
+        <Text>[xUnit.net 00:01:54.43]     McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

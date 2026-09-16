@@ -1,0 +1,6 @@
+ M plugins/core/skills/handoff/SKILL.md
+ M plugins/core/sync/sync-plugin-core.ps1
+ M src/McpServer.Services/Services/HandoffIngestionService.cs
+ M tests/McpServer.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs
+?? plugins/core/skills/handoff/invoke.ps1
+?? plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1

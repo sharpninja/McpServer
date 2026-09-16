@@ -1,0 +1,20 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\todo-plan-final.txt",
+  "lastWriteTimeUtc": "2026-08-22T09:23:28.1134388Z",
+  "topDone": false,
+  "p19": [
+    {
+      "task": "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.",
+      "done": false
+    }
+  ],
+  "p20": [
+    {
+      "task": "C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+      "done": false
+    }
+  ],
+  "doneTrueCount": 17,
+  "taskCount": 31
+}

@@ -1,0 +1,11 @@
+{
+  "TimestampUtc": "2026-08-22T08:33:27.0398967Z",
+  "PythonProcessCount": 1,
+  "Processes": [
+    {
+      "Pid": 69564,
+      "Name": "python.exe",
+      "CommandLine": "\"C:\\Users\\kingd\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\platform\\bundledpython\\python.exe\" -S \"C:\\Users\\kingd\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\lib\\gcloud.py\" auth login --brief --update-adc \"--scopes=https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/androidpublisher\""
+    }
+  ]
+}

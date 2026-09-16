@@ -1,0 +1,438 @@
+type: result
+payload:
+  requestId: req-20260822T103758Z-3d97
+  result:
+    totalCount: 50
+    limit: 5
+    offset: 0
+    items:
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T103728Z-c-green-p19-r2
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P19 r2 native suites
+      model: grok-build-subagent
+      started: 2026-08-22T10:37:52.2536643+00:00
+      lastUpdated: 2026-08-22T10:37:52.2536643+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T103728Z-001-hostile-c-green-p19-r2
+        timestamp: 2026-08-22T10:37:52.2536643+00:00
+        queryText: CLASS 1 hostile C-green-P19 r2. Surfaces A+B+C+D. Review only. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not write P20 tests. Attack whether Claude-code native Pester is now all 10 on-disk *.Tests.ps1.
+        queryTitle: Hostile C-green-P19 r2 native suite receipts
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        model: grok-build-subagent
+        processingDialog:
+        - timestamp: 2026-08-22T10:37:52.7055823+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P19 r2 remediating prior DISAGREE 20260822T101615Z. Independent PluginNativeSuiteReceiptTests rerun, live todo_get, Claude-code 10-file discovery, P20 absence, PLAN/PLUGININT remain done false.
+          category: observation
+        - timestamp: 2026-08-22T10:37:52.7055823+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-green-P19 r2 phase-gate. Consequence: AGREE only if prior DISAGREE was valid, 102645Z is LoadLatest, Claude-code discovery is 10 files / 25 tests Failed 0 Skipped 0 before and after sync, other plugins run all on-disk native suites as applicable, named tests independently Passed 3 Failed 0 Skipped 0, P20 absent, TODOs remain done false. Alternatives rejected: trusting implementer summary.json without re-running named tests; treating 095842Z 7-file subset as DoD; marking PLAN/PLUGININT done.'
+          category: decision
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T101157Z-c-green-p19
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P19 native suites
+      model: grok-build-subagent
+      started: 2026-08-22T10:12:25.4306844+00:00
+      lastUpdated: 2026-08-22T10:18:56.7784323+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T101157Z-001-hostile-c-green-p19
+        timestamp: 2026-08-22T10:18:56.7784323+00:00
+        queryText: CLASS 1 hostile C-green-P19. Surfaces A+B+C+D. Review only. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not write P20 tests. Attack whether as-applicable native suites were actually run.
+        queryTitle: Hostile C-green-P19 native suite receipts
+        response: Hostile C-green-P19 review DISAGREE. Receipt docs/receipts/hostile-validator-20260822T101615Z.md. PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0. Claude-code omitted 3 Pester files; two pass independently. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not start P20.
+        interpretation: Hostile review Phase C-green-P19. Review only. Do not mark TODOs done. Do not write P20 tests.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822101202-68040 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42943
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - order: 4
+          description: Inventoried official plugin native tests versus pluginint-p19-20260822T095842Z logs; Claude-code omitted 3 Pester files
+          type: read
+          status: completed
+          filePath: docs/receipts/pluginint-p19-20260822T095842Z/summary.json
+        - order: 5
+          description: 'Independently ran omitted Claude-code Pester: ReplFailsafe pass, HookTurnDedupe pass, CurrentTurnSessionRebind fail'
+          type: test
+          status: completed
+          filePath: F:\GitHub\mcpserver-claude-code-plugin\tests\CurrentTurnSessionRebind.Tests.ps1
+        - order: 6
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P19/P20 done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p19/todo-plan-client.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T101615Z OverallVerdict DISAGREE FailCount 6 PassCount 16
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T101615Z.md
+        - order: 8
+          description: 'DISAGREE C-green-P19: Claude-code native Pester incomplete. Do not mark TODOs done. Do not start P20.'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P19
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - docs/receipts/pluginint-p19-20260822T095842Z/summary.json
+        - docs/receipts/hostile-validator-20260822T092424Z.md
+        - docs/receipts/hostile-validator-20260822T101615Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T10:12:25.9451578+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P19. Independent PluginNativeSuiteReceiptTests rerun, live todo_get, native log honesty, Pester/Bats/Jest applicability, P20 absence, PLAN/PLUGININT remain done false.
+          category: observation
+        - timestamp: 2026-08-22T10:12:25.9451578+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-green-P19 phase-gate. Consequence: AGREE only if C-red-P19 AGREE exists, P20 names absent, official native suites as applicable were actually run with Failed 0 Skipped 0 before and after SyncAgentPlugins, named tests independently pass Failed 0 Skipped 0, parser does not hide failures, TODOs remain done false, P20 unstarted. Alternatives rejected: trusting implementer summary.json without re-running tests; treating omitted failing Pester files as as-applicable; marking PLAN/PLUGININT done.'
+          category: decision
+        - timestamp: 2026-08-22T10:18:46.6959516+00:00
+          role: model
+          content: 'Independent PluginNativeSuiteReceiptTests ExitCode 0 Passed 3 Failed 0 Skipped 0. C-red-P19 AGREE exists. P20 names absent. Claude-code omitted ReplFailsafe/HookTurnDedupe/CurrentTurnSessionRebind. Independent omitted Pester: ReplFailsafe 2/0/0, HookTurnDedupe 2/0/0, CurrentTurnSessionRebind 0/1/0. Live todo_get PLAN and PLUGININT done false. Receipt docs/receipts/hostile-validator-20260822T101615Z.md OverallVerdict DISAGREE FailCount 6 PassCount 16.'
+          category: observation
+        - timestamp: 2026-08-22T10:18:46.6959516+00:00
+          role: model
+          content: 'Decision: DISAGREE C-green-P19. Named tests pass on a 7-file Claude-code Pester subset. Bats skip is as-applicable. Omitting two currently-passing native Pester files plus one failing rebind test is not a complete native suite and does not satisfy TEST-MCP-PLUGININT-001 AC5 or P19 green DoD. Consequence: parent must not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done:true and must not start P20 reds. Alternatives rejected: AGREE because named tests Passed 3; AGREE because Bats is inapplicable; FAIL Bats skip (PowerShell-only runtime deletes .sh).'
+          category: decision
+        designDecisions:
+        - Score C-green-P19 from independently re-run PluginNativeSuiteReceiptTests, omitted Claude-code Pester rerun, live MCP store, C-red-P19 AGREE, and plugin inventory versus receipt logs, not implementer narrative.
+        - 'DISAGREE: named tests pass on a Claude-code Pester subset. Two omitted files pass independently. TEST AC5 and P19 DoD require the applicable native suite complete. Do not mark PLAN or PLUGININT done. Do not start P20.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T101615Z.md
+        - docs/receipts/hostile-validator-20260822T101615Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T090257Z-c-red-p19
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-red-P19 native-suite tests
+      model: grok-build-subagent
+      started: 2026-08-22T09:03:32.6383830+00:00
+      lastUpdated: 2026-08-22T09:27:06.0316273+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T090257Z-001-hostile-c-red-p19
+        timestamp: 2026-08-22T09:27:06.0316273+00:00
+        queryText: CLASS 1 hostile C-red-P19 only. Surfaces A+B+C+D. Review only. Do not implement P19 green. Do not run native suites. Do not SyncAgentPlugins. Do not write docs/receipts/pluginint-p19-*. Do not write P20. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done.
+        queryTitle: Hostile C-red-P19 PluginNativeSuiteReceiptTests currently red
+        response: Hostile C-red-P19 review AGREE. Receipt docs/receipts/hostile-validator-20260822T092424Z.md. PluginNativeSuiteReceiptTests Failed 3 Passed 0 Skipped 0. P20 names absent. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. No pluginint-p19 fake-green receipts. Do not implement P19 green. This AGREE is not plan closeout.
+        interpretation: Hostile review Phase C-red-P19 only. Review only. Do not implement P19 green. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822090258-672 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42935
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginNativeSuiteReceiptTests Failed 3 Passed 0 Skipped 0; all three FileNotFoundException pluginint-p19 receipt directory missing
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - order: 4
+          description: Re-read PluginNativeSuiteReceipt.cs LoadLatest stamp pattern, summary.json, nativeSuite allow-list, git.sha
+          type: read
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceipt.cs
+        - order: 5
+          description: Live todo_get after tests PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P19/P20 done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p19/todo-plan-client-final.txt
+        - order: 6
+          description: Confirmed zero pluginint-p19 directories after tests; P20 named tests absent
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p19/pluginint-p19-dirs-after-tests.json
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T092424Z OverallVerdict AGREE FailCount 0 PassCount 19
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T092424Z.md
+        - order: 8
+          description: 'AGREE C-red-P19: named tests red, P20 absent, TODOs remain done false, no fake-green pluginint-p19 receipts. Do not implement P19 green in this review. This AGREE is not plan closeout.'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P19
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceipt.cs
+        - docs/receipts/hostile-validator-20260822T084649Z.md
+        - docs/receipts/hostile-validator-20260822T092424Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T09:03:33.3575278+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-red-P19 only. Independent PluginNativeSuiteReceiptTests filter, live todo_get, PLUGININT FR/TR/TEST AC5 native-suite half, re-read PluginNativeSuiteReceiptTests.cs and PluginNativeSuiteReceipt.cs, prove no pluginint-p19 receipt dirs, P20 names absent.
+          category: observation
+        - timestamp: 2026-08-22T09:03:33.3575278+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-red-P19 phase-gate. Consequence: AGREE only if three named P19 tests exist with no Skip, independent filter Failed 3 Passed 0 Skipped 0, tests pin AC so empty folder cannot green, P20 names absent, P19 tests do not pass, no pluginint-p19 fake-green receipts written by this review or implementer, PLAN/MCP-PLUGININT remain done false, prior C-green-P16-P18 AGREE exists. Alternatives rejected: implementing P19 green, running native suites, SyncAgentPlugins, writing pluginint-p19 receipts, scoring plan closeout.'
+          category: decision
+        - timestamp: 2026-08-22T09:26:47.1097576+00:00
+          role: model
+          content: Independent PluginNativeSuiteReceiptTests ExitCode 1 Total tests 3 Failed 3 Passed 0 Skipped 0. All three FileNotFoundException No docs/receipts/pluginint-p19-<utc> receipt directory exists. list-tests 3 named methods. P20 names absent. pluginint-p19 dirs 0 after tests. Live todo_get PLAN and PLUGININT done false. Receipt docs/receipts/hostile-validator-20260822T092424Z.md OverallVerdict AGREE FailCount 0 PassCount 19.
+          category: observation
+        - timestamp: 2026-08-22T09:26:47.1097576+00:00
+          role: model
+          content: 'Decision: AGREE C-red-P19. Named tests exist, currently red, pin AC5 native-suite half, P20 not mixed, no fake-green receipts, TODOs remain done false, prior C-green-P16-P18 AGREE exists. Consequence: parent may treat this red gate as AGREE and may proceed to P19 green execution after accepting it, but must not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done:true and must not treat this as C-green-P19. Alternatives rejected: DISAGREE because LoadLatest does not itself check Failed/Skipped (Facts do; empty folder still cannot green); DISAGREE because leftover full-suite testhost delayed the filter (independent TRX was still produced after MachineClear); AGREE and mark TODOs done (forbidden).'
+          category: decision
+        designDecisions:
+        - Score C-red-P19 from independently re-run PluginNativeSuiteReceiptTests, live MCP store, C-green-P16-P18 AGREE, PluginNativeSuiteReceipt.cs pin analysis, and zero pluginint-p19 directories, not implementer narrative.
+        - 'AGREE: three named P19 tests exist, currently red Failed 3 Passed 0 Skipped 0, P20 absent, PLAN and PLUGININT remain done false. Do not mark them done. Do not treat this as C-green-P19.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T092424Z.md
+        - docs/receipts/hostile-validator-20260822T092424Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T084835Z-c-green-p16-p18-rerun
+      title: Hostile C-green-P16-P18 rerun after claimed P18 preflight closeout
+      model: grok-build-subagent
+      started: 2026-08-22T08:51:10.5891923+00:00
+      lastUpdated: 2026-08-22T09:26:47.4828975+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T084835Z-001-hostile-c-green-p16-p18-rerun
+        timestamp: 2026-08-22T09:26:47.4828975+00:00
+        queryText: CLASS 1 independent hostile C-green-P16-P18 rerun. Unique collector _hv-c-green-p16-p18-rerun-20260822T084835Z. Do not trust r2 AGREE. Surfaces A+B+C+D. Review only. Do not mark TODOs done. Do not implement P19-P20.
+        queryTitle: Hostile C-green-P16-P18 rerun validation
+        response: Hostile C-green-P16-P18 rerun DISAGREE. Receipt docs/receipts/hostile-validator-20260822T092415Z.md. AiTheory Passed 9 Failed 0 Skipped 0. NukeTarget_SkipIsFailure Passed 1 Failed 0 Skipped 0. PluginInt=AI Passed 9 Failed 0 Skipped 0. Full PluginIntegration.Tests Failed 3 Passed 95 Skipped 0 Total 98. P19 names mixed in. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not implement P19. This DISAGREE is not plan closeout.
+        interpretation: Hostile review Phase C-green-P16-P18 ONLY after cited C-red-P16 AGREE and prior C4/D2 DISAGREE. Unique collector rerun. Review only. Do not implement P19-P20. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822T084835Z-74968 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42932
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginSessionLogAiTheoryTests Failed 0 Passed 9 Skipped 0; PluginInt=AI Failed 0 Passed 9 Skipped 0
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogAiTheoryTests.cs
+        - order: 4
+          description: Independent NukeTarget_SkipIsFailure Failed 0 Passed 1 Skipped 0; asserts preflight and PluginInt filters
+          type: test
+          status: completed
+          filePath: tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - order: 5
+          description: Independent full PluginIntegration.Tests Failed 3 Passed 95 Skipped 0 Total 98 DurationMs 1199229; P19 count 3
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - order: 6
+          description: Live todo_get after tests PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P16/P17/P18/P19 done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p16-p18-rerun-20260822T084835Z/todo-plan-client-final.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T092415Z OverallVerdict DISAGREE FailCount 4 PassCount 18
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T092415Z.md
+        - order: 8
+          description: 'DISAGREE C-green-P16-P18 rerun: named AI/Nuke green and P18 preflight exists, but P19 named tests mixed in and full suite Failed 3. Do not implement P19. This DISAGREE is not plan closeout.'
+          type: design_decision
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P16-P18
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/AiStrategyFixture.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogAiTheoryTests.cs
+        - tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - build/Build.PluginSessionLogIntegration.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - docs/receipts/hostile-validator-20260822T073737Z.md
+        - docs/receipts/hostile-validator-20260822T081750Z.md
+        - docs/receipts/hostile-validator-20260822T092415Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T08:51:10.9446913+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read. Plugin.json version 1.100.0. Tool registry exact name mcpserver-grok-plugin present. Test-MarkerSignature true. Health nonce nonce-hv-20260822T084835Z-74968 echoed. workflow bootstrap initialized true. Dedicated CacheRoot used. Default session-state was GrokCode until client.SessionLog.OpenSessionAsync with explicit GrokSubagentHostile.
+          category: observation
+        - timestamp: 2026-08-22T08:51:10.9446913+00:00
+          role: model
+          content: 'Decision: CLASS 1 C-green-P16-P18 only. Do not treat r2 AGREE at 20260822T084649Z as proof. Independently re-read Build.PluginSessionLogIntegration.cs, AiStrategyFixture.EvaluateAsync, named tests, live TODO/FR/TR/TEST, and re-run named filters plus full PluginIntegration.Tests. Do not kill sibling testhosts. Do not mark PLAN or PLUGININT done.'
+          category: decision
+        - timestamp: 2026-08-22T09:26:38.9683241+00:00
+          role: model
+          content: 'Independent named filters: AiTheory Passed 9 Failed 0 Skipped 0; NukeTarget_SkipIsFailure Passed 1 Failed 0 Skipped 0; PluginInt=AI Passed 9 Failed 0 Skipped 0. Full PluginIntegration.Tests ExitCode 1 Failed 3 Passed 95 Skipped 0 Total 98 DurationMs 1199229. Failures are the three P19 named tests. P19 files created 2026-08-22T08:52:54Z. Live todo_get PLAN and PLUGININT done false. Receipt docs/receipts/hostile-validator-20260822T092415Z.md OverallVerdict DISAGREE FailCount 4 PassCount 18.'
+          category: observation
+        - timestamp: 2026-08-22T09:26:38.9683241+00:00
+          role: model
+          content: 'Decision: DISAGREE C-green-P16-P18 rerun. P18 preflight and PluginInt trait split are in source and named tests Failed 0 Skipped 0, but P19 named tests mixed into PluginIntegration.Tests (Trait PluginInt=Deterministic) and the full suite is Failed 3. Consequence: parent must not mark PLAN or PLUGININT done and must not treat sibling r2 AGREE as current. Alternatives rejected: AGREE because named AI/Nuke filters passed; treat P19 mix as residual instead of FAIL; require running the Nuke target as an extra FAIL.'
+          category: decision
+        designDecisions:
+        - Score this unique-collector rerun from independently re-run filters, full PluginIntegration.Tests, live MCP store, C-red-P16 AGREE, EvaluateAsync source, Build.PluginSessionLogIntegration.cs, and on-disk P19 files, not implementer narrative or sibling r2 AGREE.
+        - 'DISAGREE: P18 preflight/trait-split source is present and named AI/Nuke tests Failed 0 Skipped 0, but P19 named tests mixed into this C-green gate and full PluginIntegration.Tests Failed 3 Passed 95 Skipped 0. PLAN and PLUGININT remain done false. Do not mark them done. Do not implement P19 in this review.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T092415Z.md
+        - docs/receipts/hostile-validator-20260822T092415Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T083324Z-c-green-p16-p18-r2
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P16-P18-r2 remediating C4 D2
+      model: grok-build-subagent
+      started: 2026-08-22T08:33:35.2095484+00:00
+      lastUpdated: 2026-08-22T08:49:24.4656839+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T083324Z-001-hostile-c-green-p16-p18-r2
+        timestamp: 2026-08-22T08:49:24.4656839+00:00
+        queryText: CLASS 1 hostile C-green-P16-P18 remediating prior DISAGREE docs/receipts/hostile-validator-20260822T081750Z.md C4/D2. Review only. Do not implement P19. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done.
+        queryTitle: Hostile C-green-P16-P18-r2 remediating aiUnit preflight and trait TRX split
+        response: Hostile C-green-P16-P18 remediating review AGREE. Receipt docs/receipts/hostile-validator-20260822T084649Z.md. PluginInt=AI Passed 9 Failed 0 Skipped 0. NukeTarget_SkipIsFailure Passed 1 Failed 0 Skipped 0. P19 names absent. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. P18 aiUnit preflight and trait TRX split are in source. Do not implement P19. This AGREE is not plan closeout.
+        interpretation: Hostile review Phase C-green-P16-P18 remediating prior DISAGREE C4/D2. Review only. Do not implement P19. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822083325-84692 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42930
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginInt=AI Failed 0 Passed 9 Skipped 0; all eight host kinds Passed plus P17 Fact
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogAiTheoryTests.cs
+        - order: 4
+          description: Independent NukeTarget_SkipIsFailure reread after 08:44:07Z Failed 0 Passed 1 Skipped 0; Preflight plus both PluginInt filters asserted
+          type: test
+          status: completed
+          filePath: tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - order: 5
+          description: Re-read Build.PluginSessionLogIntegration.cs PreflightPluginSessionLogAiUnitStrategy SharpNinja.aiUnit appsettings.aiunit.json ActiveStrategy/Strategies/grok-build PluginInt=Deterministic then PluginInt=AI FailIfSkipped both
+          type: read
+          status: completed
+          filePath: build/Build.PluginSessionLogIntegration.cs
+        - order: 6
+          description: Live todo_get after tests PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P16/P17/P18/P19 done false
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p16-p18-r2/todo-plan-client-final.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T084649Z OverallVerdict AGREE FailCount 0 PassCount 20
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T084649Z.md
+        - order: 8
+          description: 'AGREE C-green-P16-P18 remediating C4/D2: named tests green, P19 absent, TODOs remain done false, P18 aiUnit preflight and trait TRX split are in source. Do not implement P19. This AGREE is not plan closeout.'
+          type: design_decision
+          status: completed
+          filePath: build/Build.PluginSessionLogIntegration.cs
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P16-P18
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/AiStrategyFixture.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogAiTheoryTests.cs
+        - tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - build/Build.PluginSessionLogIntegration.cs
+        - docs/receipts/hostile-validator-20260822T081750Z.md
+        - docs/receipts/hostile-validator-20260822T084649Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T08:33:35.4830019+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P16-P18 remediating prior DISAGREE C4/D2. Independent PluginInt=AI filter, NukeTarget_SkipIsFailure filter, live todo_get, PLUGININT FR/TR/TEST, re-read Build.PluginSessionLogIntegration.cs PreflightPluginSessionLogAiUnitStrategy and trait TRX split.
+          category: observation
+        - timestamp: 2026-08-22T08:33:35.4830019+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 remediating review of prior C4/D2 only plus A1-A3 re-verify. Consequence: AGREE only if source re-read shows PreflightPluginSessionLogAiUnitStrategy SharpNinja.aiUnit appsettings.aiunit.json ActiveStrategy/Strategies/grok-build then PluginInt=Deterministic TRX then PluginInt=AI TRX FailIfPluginSessionLogSkipped both, NukeTarget_SkipIsFailure calls Preflight, independent tests Failed 0 Skipped 0, P19 names absent, PLAN/MCP-PLUGININT remain done false. Alternatives: requiring full 17-minute PluginIntegration suite or P19. Rejected: parent says PluginInt=AI is the independent rerun; P19 forbidden.'
+          category: decision
+        - timestamp: 2026-08-22T08:40:54.4597414+00:00
+          role: model
+          content: 'Source re-read: Build.PluginSessionLogIntegration.cs LastWriteTimeUtc 2026-08-22T08:27:01Z after prior DISAGREE 08:17:50Z. PreflightPluginSessionLogAiUnitStrategy checks SharpNinja.aiUnit, appsettings.aiunit.json ActiveStrategy/Strategies/grok-build. Target runs PluginInt=Deterministic TRX then FailIfSkipped then PluginInt=AI TRX then FailIfSkipped. NukeTarget_SkipIsFailure calls Preflight. P19 names 0 in *.cs. PLAN and MCP-PLUGININT-001 live done false. Independent PluginInt=AI deferred until leftover implementer testhost from docs/receipts/_p18-preflight-20260822T082521Z/ finishes. Did not kill that process.'
+          category: observation
+        - timestamp: 2026-08-22T08:40:54.4597414+00:00
+          role: model
+          content: 'Decision: do not treat implementer _p18-preflight TRX as this review independent rerun. Wait for leftover PluginIntegration testhost, then run PluginInt=AI and list-tests in unique ResultsDirectory. Run NukeTarget_SkipIsFailure now because Build.Tests does not share that testhost. Consequence: A3 stays UNKNOWN until independent AI TRX exists. Alternatives rejected: kill implementer testhost; claim AGREE from source-only C4/D2; use implementer trx-ai as proof.'
+          category: decision
+        - timestamp: 2026-08-22T08:49:17.1481272+00:00
+          role: model
+          content: Independent PluginInt=AI ExitCode 0 Total tests 9 Passed 9 Failed 0 Skipped 0. NukeTarget_SkipIsFailure reread after source 08:44:07Z ExitCode 0 Total tests 1 Passed 1. Trait list all 95 AI 9 Deterministic 86. P19 names absent. Live todo_get PLAN and PLUGININT done false. Build.PluginSessionLogIntegration.cs now PreflightPluginSessionLogAiUnitStrategy plus PluginInt=Deterministic TRX then PluginInt=AI TRX FailIfSkipped both, fail on failed and empty. Receipt docs/receipts/hostile-validator-20260822T084649Z.md OverallVerdict AGREE FailCount 0 PassCount 20.
+          category: observation
+        - timestamp: 2026-08-22T08:49:17.1481272+00:00
+          role: model
+          content: 'Decision: AGREE C-green-P16-P18 remediating prior C4/D2. Source re-read and tests re-run close TR ac-6 and plan P18 DoD. Consequence: parent may treat this gate as AGREE but must not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done:true and must not start P19 as plan closeout. Alternatives rejected: DISAGREE because full 95 suite was not re-run (parent said PluginInt=AI is the independent rerun; trait union 86+9=95); DISAGREE because Nuke target PluginSessionLogIntegration itself was not executed; AGREE and mark TODOs done (forbidden).'
+          category: decision
+        designDecisions:
+        - Score C-green-P16-P18 remediating from independently re-run PluginInt=AI, NukeTarget_SkipIsFailure after current source, live MCP store, C-red-P16 AGREE, prior DISAGREE C4/D2, EvaluateAsync source, and Build.PluginSessionLogIntegration.cs, not implementer narrative.
+        - 'AGREE: prior C4/D2 remediating is in source and tests this review re-ran Failed 0 Skipped 0. PLAN and PLUGININT remain done false. Do not mark them done. Do not implement P19 in this review.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T084649Z.md
+        - docs/receipts/hostile-validator-20260822T084649Z.json
+
+---

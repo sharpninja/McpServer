@@ -1,0 +1,17 @@
+{
+  "filterFailed": "0",
+  "filterPassed": "24",
+  "filterSkipped": "0",
+  "filterTotal": "24",
+  "filterDuration": "4 m 45 s - McpServer.PluginIntegration.Tests.dll (net10.0)",
+  "filterFailedBang": false,
+  "filterPassedBang": true,
+  "p16Mentions": 0,
+  "listFqn": 88,
+  "listP15Success": 8,
+  "listP15FailedSubmit": 8,
+  "listP15Retry": 8,
+  "listAiTheory": 0,
+  "listP16": 0,
+  "listSkip": 0
+}

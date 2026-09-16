@@ -1,0 +1,21 @@
+{
+  "MdExists": true,
+  "MdLength": 17115,
+  "MdLastWriteTimeUtc": "2026-08-22T07:32:41.8721790Z",
+  "MdHasAgree": true,
+  "MdHasDisagree": false,
+  "MdEmDash": false,
+  "MdEnDash": false,
+  "JsonExists": true,
+  "JsonLength": 6149,
+  "JsonLastWriteTimeUtc": "2026-08-22T07:32:41.8711849Z",
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPassCount": 20,
+  "JsonClaimCount": 20,
+  "FilterFailed": 8,
+  "FilterPassed": 0,
+  "FilterSkipped": 0,
+  "SessionId": "GrokSubagentHostile-20260822T072515Z-pluginhandoff-p16red",
+  "RequestId": "req-20260822T072515Z-001-hostile-c-red-p16-aitheory"
+}

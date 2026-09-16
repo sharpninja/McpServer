@@ -1,0 +1,6 @@
+85:public async Task IngestAsync_StaleLease_IsTakenOverBySecondInstance()
+323:public async Task IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate()
+412:public async Task ApproveAsync_LiveClaimant_RejectsStaleSecondClaim()
+536:public async Task IngestAsync_CustomPromptTemplate_IsRejected()
+601:public async Task ProcessingLease_RenewsAndFencesTerminalUpdates()
+709:public async Task Provenance_IncludesEffectiveCustomPromptIdentityAndVersion()

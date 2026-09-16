@@ -1,0 +1,171 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p11-p13\\dotnet-adapter-filter-rerun.trx",
+  "outcome": "Completed",
+  "total": "24",
+  "executed": "24",
+  "passed": "24",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "unitCount": 24,
+  "failedNames": [],
+  "skippedNames": [],
+  "p11Count": 8,
+  "p11Passed": 8,
+  "p12Count": 8,
+  "p12Passed": 8,
+  "p13Count": 8,
+  "p13Passed": 8,
+  "p14Count": 0,
+  "p11ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    }
+  ],
+  "p12ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    }
+  ],
+  "p13ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Passed": 1,
+      "Failed": 0
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "TimestampUtc": "2026-08-22T04:08:01.8607860Z",
+  "Count": 4,
+  "Processes": [
+    {
+      "ProcessId": 50072,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty --logger trx;LogFileName=F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p14\\trx-p14\\p14-filter.trx"
+    },
+    {
+      "ProcessId": 17736,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --testCaseFilter:\"FullyQualifiedName~Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty\" --logger:\"trx;LogFileName=F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p14\\trx-p14\\p14-filter.trx\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll --logger:Console;Verbosity=minimal --nologo --artifactsProcessingMode-collect --testSessionCorrelationId:50072_68fa4d24-bb54-4c28-bced-4e349a46dbcd"
+    },
+    {
+      "ProcessId": 28268,
+      "Name": "testhost.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.deps.json\" --port 60544 --endpoint 127.0.0.1:060544 --role client --parentprocessid 17736 --telemetryoptedin false"
+    },
+    {
+      "ProcessId": 5352,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    }
+  ]
+}

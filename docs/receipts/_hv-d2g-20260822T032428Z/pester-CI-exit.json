@@ -1,0 +1,8 @@
+{
+  "name": "pester-CI",
+  "exit": 0,
+  "startedUtc": "2026-08-22T03:26:30.0384684Z",
+  "endedUtc": "2026-08-22T03:26:41.1019282Z",
+  "durationSec": 11,
+  "stdout": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-d2g-20260822T032428Z\\pester-CI-stdout.txt"
+}

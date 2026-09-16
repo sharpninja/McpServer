@@ -1,0 +1,32 @@
+[
+  {
+    "plugin": "mcpserver-codex-plugin",
+    "exists": true,
+    "lastWriteUtc": "2026-08-22T09:49:42.6193060Z",
+    "length": 4235
+  },
+  {
+    "plugin": "mcpserver-claude-code-plugin",
+    "exists": true,
+    "lastWriteUtc": "2026-08-22T09:49:42.6193060Z",
+    "length": 4235
+  },
+  {
+    "plugin": "mcpserver-claude-cowork-plugin",
+    "exists": true,
+    "lastWriteUtc": "2026-08-22T09:49:42.6193060Z",
+    "length": 4235
+  },
+  {
+    "plugin": "mcpserver-copilot-plugin",
+    "exists": true,
+    "lastWriteUtc": "2026-08-22T09:49:42.6193060Z",
+    "length": 4235
+  },
+  {
+    "plugin": "mcpserver-grok-plugin",
+    "exists": true,
+    "lastWriteUtc": "2026-08-22T09:49:42.6193060Z",
+    "length": 4235
+  }
+]

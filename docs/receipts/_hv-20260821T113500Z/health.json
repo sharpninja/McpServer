@@ -1,0 +1,32 @@
+{
+  "claimedNonce": "nonce-1bcd467b9def481c859e97e863fae9d1",
+  "claimedEcho": "nonce-1bcd467b9def481c859e97e863fae9d1",
+  "claimedExact": true,
+  "claimedStatus": "Healthy",
+  "claimedHealthStatus": null,
+  "claimedRaw": {
+    "status": "Healthy",
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0043
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0018
+      }
+    ],
+    "nonce": "nonce-1bcd467b9def481c859e97e863fae9d1",
+    "storage": "reachable"
+  },
+  "freshNonce": "nonce-d691dabf92e64611934ecd495dc3f35c",
+  "freshEcho": "nonce-d691dabf92e64611934ecd495dc3f35c",
+  "freshExact": true,
+  "freshStatus": "Healthy",
+  "freshHealthStatus": null
+}

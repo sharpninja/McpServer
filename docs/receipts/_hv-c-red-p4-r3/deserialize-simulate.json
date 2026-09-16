@@ -1,0 +1,19 @@
+{
+  "UniqueAgentSourceCacheWouldPass": true,
+  "RepositoryRootsExistWouldPass": true,
+  "SupportedHostKindsWouldPass": true,
+  "RequiredEntrypointFilesExistWouldPass": true,
+  "VersionMetadataPresentWouldPass": true,
+  "ExactlyEightEnabledWouldPass": true,
+  "AllSixWouldPass": true,
+  "UniqueKeyCount": 8,
+  "RowCount": 8,
+  "UniqueCacheFolderCount": 8,
+  "CodexCatalogEntrypointExists": true,
+  "CodexEntrypoint": "Invoke-CodexMcpPlugin.ps1",
+  "TestsAssertSpecificEnvNames": false,
+  "TestsAssertSpecificCacheNames": false,
+  "TestsLoadJsonFileDirectly": false,
+  "LoaderIsThrowOnly": false,
+  "MissingEntrypointNames": []
+}

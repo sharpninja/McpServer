@@ -1,0 +1,5 @@
+failsafeDir: F:\GitHub\McpServer\.mcpServer\grok\failsafe
+quarantineDir: F:\GitHub\McpServer\.mcpServer\grok\failsafe\quarantine
+pendingCount: 0
+quarantineCount: 0
+

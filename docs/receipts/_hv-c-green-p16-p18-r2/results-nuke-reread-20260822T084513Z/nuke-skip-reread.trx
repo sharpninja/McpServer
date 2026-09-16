@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8c27b309-63e4-4e35-81f2-820e30b5e6f4" name="kingd@PAYTON-LEGION2 2026-08-22 03:45:17" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T03:45:17.5150607-05:00" queuing="2026-08-22T03:45:17.5150610-05:00" start="2026-08-22T03:45:15.9140621-05:00" finish="2026-08-22T03:45:17.5212914-05:00" />
+  <TestSettings name="default" id="81e6aa31-f520-490d-b5af-198f4006a81f">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_03_45_17" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="732f6c84-3ce9-4520-8d60-8bb2633e5373" testId="b3c2618e-c978-a754-6721-47a33c941e9d" testName="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure" computerName="PAYTON-LEGION2" duration="00:00:00.1023977" startTime="2026-08-22T03:45:17.2632348-05:00" endTime="2026-08-22T03:45:17.3747179-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="732f6c84-3ce9-4520-8d60-8bb2633e5373" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b3c2618e-c978-a754-6721-47a33c941e9d">
+      <Execution id="732f6c84-3ce9-4520-8d60-8bb2633e5373" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests" name="NukeTarget_SkipIsFailure" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b3c2618e-c978-a754-6721-47a33c941e9d" executionId="732f6c84-3ce9-4520-8d60-8bb2633e5373" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.22]   Discovering: Build.Tests&#xD;
+[xUnit.net 00:00:00.56]   Discovered:  Build.Tests&#xD;
+[xUnit.net 00:00:00.79]   Starting:    Build.Tests&#xD;
+[xUnit.net 00:00:01.00]   Finished:    Build.Tests (ID = 'e1b1f30cb109091d20dcc58709bccb108b6668bc6c05d94cab09123b02db39aa')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

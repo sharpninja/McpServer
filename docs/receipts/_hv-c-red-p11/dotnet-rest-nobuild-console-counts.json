@@ -1,0 +1,8 @@
+{
+  "restFailed": "0",
+  "restPassed": "30",
+  "restSkipped": "0",
+  "restTotal": "30",
+  "restPassedBang": true,
+  "restFailedBang": false
+}

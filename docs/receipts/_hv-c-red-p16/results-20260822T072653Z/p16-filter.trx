@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="eabda302-9e17-422f-b6a0-ab9c4dac3eeb" name="kingd@PAYTON-LEGION2 2026-08-22 02:27:08" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T02:27:08.1143660-05:00" queuing="2026-08-22T02:27:08.1143665-05:00" start="2026-08-22T02:27:05.8504994-05:00" finish="2026-08-22T02:27:08.1297320-05:00" />
+  <TestSettings name="default" id="0fde8922-d0b1-4354-847a-c47d259bf744">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_02_27_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="09428432-aa85-412c-99a4-269b4d9ba388" testId="06662370-12ba-46c0-6690-5c95f450e80f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0602669" startTime="2026-08-22T02:27:07.8515185-05:00" endTime="2026-08-22T02:27:07.9427808-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09428432-aa85-412c-99a4-269b4d9ba388">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1bbb387f-1df7-4c4b-99f6-b6b8cb99a3d5" testId="4ce4b13d-54c6-ab06-77ae-25635f318e05" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:00.0006179" startTime="2026-08-22T02:27:07.9564199-05:00" endTime="2026-08-22T02:27:07.9572603-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bbb387f-1df7-4c4b-99f6-b6b8cb99a3d5">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e2a6d0df-1980-47b2-9f5d-80b162da2dfa" testId="0d94d9ea-2e88-7983-af02-8739ab212d15" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:00.0005859" startTime="2026-08-22T02:27:07.9552756-05:00" endTime="2026-08-22T02:27:07.9560948-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e2a6d0df-1980-47b2-9f5d-80b162da2dfa">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="82783064-d25c-4a7e-9779-bf8f8bb0a2c4" testId="d866ee6a-ddb8-9e68-69f3-feafaa9032a9" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:00.0006533" startTime="2026-08-22T02:27:07.9587187-05:00" endTime="2026-08-22T02:27:07.9596736-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82783064-d25c-4a7e-9779-bf8f8bb0a2c4">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1ef73062-fe3a-4de6-8038-bac69aec66ae" testId="3dd847b5-7101-a387-584f-a447c0078512" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0008787" startTime="2026-08-22T02:27:07.9523719-05:00" endTime="2026-08-22T02:27:07.9535640-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1ef73062-fe3a-4de6-8038-bac69aec66ae">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="34719d30-8573-461c-8483-55687b8822e2" testId="33523881-f2db-c47e-d853-f3dbb49d03b4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:00.0006741" startTime="2026-08-22T02:27:07.9539861-05:00" endTime="2026-08-22T02:27:07.9549274-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34719d30-8573-461c-8483-55687b8822e2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6d9399d3-ba07-4a0f-9779-f22dc6d63280" testId="8b7ec712-9aa5-6e30-93a3-2e39139d53fc" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:00.0020477" startTime="2026-08-22T02:27:07.9488542-05:00" endTime="2026-08-22T02:27:07.9517428-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d9399d3-ba07-4a0f-9779-f22dc6d63280">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ac9d24db-8355-49d7-8fab-620143f22d31" testId="a819d0f0-58b2-a89b-3964-f2760cfb1ba3" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:00.0005774" startTime="2026-08-22T02:27:07.9575639-05:00" endTime="2026-08-22T02:27:07.9584088-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac9d24db-8355-49d7-8fab-620143f22d31">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs:line 19&#xD;
+   at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="06662370-12ba-46c0-6690-5c95f450e80f">
+      <Execution id="09428432-aa85-412c-99a4-269b4d9ba388" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="0d94d9ea-2e88-7983-af02-8739ab212d15">
+      <Execution id="e2a6d0df-1980-47b2-9f5d-80b162da2dfa" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="4ce4b13d-54c6-ab06-77ae-25635f318e05">
+      <Execution id="1bbb387f-1df7-4c4b-99f6-b6b8cb99a3d5" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d866ee6a-ddb8-9e68-69f3-feafaa9032a9">
+      <Execution id="82783064-d25c-4a7e-9779-bf8f8bb0a2c4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3dd847b5-7101-a387-584f-a447c0078512">
+      <Execution id="1ef73062-fe3a-4de6-8038-bac69aec66ae" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="8b7ec712-9aa5-6e30-93a3-2e39139d53fc">
+      <Execution id="6d9399d3-ba07-4a0f-9779-f22dc6d63280" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="33523881-f2db-c47e-d853-f3dbb49d03b4">
+      <Execution id="34719d30-8573-461c-8483-55687b8822e2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a819d0f0-58b2-a89b-3964-f2760cfb1ba3">
+      <Execution id="ac9d24db-8355-49d7-8fab-620143f22d31" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="06662370-12ba-46c0-6690-5c95f450e80f" executionId="09428432-aa85-412c-99a4-269b4d9ba388" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ce4b13d-54c6-ab06-77ae-25635f318e05" executionId="1bbb387f-1df7-4c4b-99f6-b6b8cb99a3d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d94d9ea-2e88-7983-af02-8739ab212d15" executionId="e2a6d0df-1980-47b2-9f5d-80b162da2dfa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d866ee6a-ddb8-9e68-69f3-feafaa9032a9" executionId="82783064-d25c-4a7e-9779-bf8f8bb0a2c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3dd847b5-7101-a387-584f-a447c0078512" executionId="1ef73062-fe3a-4de6-8038-bac69aec66ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="33523881-f2db-c47e-d853-f3dbb49d03b4" executionId="34719d30-8573-461c-8483-55687b8822e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b7ec712-9aa5-6e30-93a3-2e39139d53fc" executionId="6d9399d3-ba07-4a0f-9779-f22dc6d63280" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a819d0f0-58b2-a89b-3964-f2760cfb1ba3" executionId="ac9d24db-8355-49d7-8fab-620143f22d31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="0" failed="8" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.31]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.72]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.02]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.20]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.21]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.21]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.21]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.21]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.22]       System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\AiStrategyFixture.cs(19,0): at McpServer.PluginIntegration.Tests.AiStrategyFixture.EvaluateAsync(String redactedReceipt, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogAiTheoryTests.cs(32,0): at McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.22]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.23]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9508455-05:00">
+        <Text>[xUnit.net 00:00:01.20]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9672149-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9688895-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9695238-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9700737-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9706638-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9712639-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T02:27:07.9718357-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

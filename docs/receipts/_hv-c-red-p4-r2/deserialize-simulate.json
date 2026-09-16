@@ -1,0 +1,29 @@
+{
+  "UniqueAgentSourceCacheWouldPass": true,
+  "RepositoryRootsExistWouldPass": true,
+  "SupportedHostKindsWouldPass": true,
+  "RequiredEntrypointFilesExistWouldPass": false,
+  "VersionMetadataPresentWouldPass": true,
+  "ExactlyEightEnabledWouldPass": true,
+  "AllSixWouldPass": false,
+  "UniqueKeyCount": 8,
+  "RowCount": 8,
+  "UniqueCacheFolderCount": 8,
+  "DistinctHostKinds": [
+    "Codex",
+    "ClaudeCode",
+    "ClaudeCowork",
+    "Copilot",
+    "Grok",
+    "Cline",
+    "ClineV2",
+    "OpenCode"
+  ],
+  "MissingExpectedNames": [],
+  "DummyReadmeEntrypointWouldPassCount": 5,
+  "TestsAssertUniqueCacheFolderAlone": true,
+  "TestsAssertAllEightNames": false,
+  "TestsAssertSpecificEnvNames": false,
+  "TestsAssertSpecificCacheNames": false,
+  "TestsLoadJsonFileDirectly": false
+}

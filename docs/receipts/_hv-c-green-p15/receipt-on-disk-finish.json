@@ -1,0 +1,22 @@
+{
+  "MdExists": true,
+  "MdLength": 16753,
+  "MdLastWriteTimeUtc": "2026-08-22T07:13:03.6679975Z",
+  "MdHasAgree": true,
+  "MdHasDisagree": false,
+  "MdEmDash": false,
+  "MdEnDash": false,
+  "JsonExists": true,
+  "JsonLength": 6349,
+  "JsonLastWriteTimeUtc": "2026-08-22T07:14:57.3602633Z",
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPassCount": 18,
+  "JsonClaimCount": 18,
+  "FilterFailed": 0,
+  "FilterPassed": 24,
+  "FilterSkipped": 0,
+  "FullFailed": 0,
+  "FullPassed": 86,
+  "FullSkipped": 0
+}

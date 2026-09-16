@@ -1,0 +1,126 @@
+[
+  {
+    "Task": "P0-A: hostile AGREE on this plan.",
+    "Done": true
+  },
+  {
+    "Task": "P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.",
+    "Done": true
+  },
+  {
+    "Task": "A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.",
+    "Done": true
+  },
+  {
+    "Task": "A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.",
+    "Done": true
+  },
+  {
+    "Task": "A3: create HYGIENE FR/TR/TEST 001-005 and mappings.",
+    "Done": true
+  },
+  {
+    "Task": "A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.",
+    "Done": true
+  },
+  {
+    "Task": "A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.",
+    "Done": true
+  },
+  {
+    "Task": "A6: hostile AGREE on requirements; no product code.",
+    "Done": true
+  },
+  {
+    "Task": "B1: write new red tests listed in section 6; do not relabel existing green.",
+    "Done": true
+  },
+  {
+    "Task": "B2: hostile after red.",
+    "Done": true
+  },
+  {
+    "Task": "B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.",
+    "Done": true
+  },
+  {
+    "Task": "B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.",
+    "Done": true
+  },
+  {
+    "Task": "B5: hostile after green.",
+    "Done": true
+  },
+  {
+    "Task": "D0 inventory of Handoff findings vs on-disk tests.",
+    "Done": true
+  },
+  {
+    "Task": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+    "Done": true
+  },
+  {
+    "Task": "D1.5 hostile after red.",
+    "Done": true
+  },
+  {
+    "Task": "C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.",
+    "Done": false
+  },
+  {
+    "Task": "C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.",
+    "Done": false
+  },
+  {
+    "Task": "C P14 red + hostile then green; P15 red + hostile then green.",
+    "Done": false
+  },
+  {
+    "Task": "C P16 red + hostile then P17-P18.",
+    "Done": false
+  },
+  {
+    "Task": "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.",
+    "Done": false
+  },
+  {
+    "Task": "C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+    "Done": false
+  },
+  {
+    "Task": "D2 implement remediations + three-provider migrations.",
+    "Done": false
+  },
+  {
+    "Task": "D3 docs/wiki generateDocument.",
+    "Done": false
+  },
+  {
+    "Task": "D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.",
+    "Done": false
+  },
+  {
+    "Task": "D5 Codex APPROVED and hostile AGREE.",
+    "Done": false
+  },
+  {
+    "Task": "E all reds + hostile, then implement, then E-green hostile.",
+    "Done": false
+  },
+  {
+    "Task": "F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.",
+    "Done": false
+  },
+  {
+    "Task": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+    "Done": false
+  },
+  {
+    "Task": "H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.",
+    "Done": false
+  },
+  {
+    "Task": "I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary.",
+    "Done": false
+  }
+]

@@ -1,0 +1,1 @@
+Microsoft.PowerShell.Commands.WriteErrorException: MCP_UNTRUSTED: Health check failed - The request was canceled due to the configured HttpClient.Timeout of 5 seconds elapsing.
