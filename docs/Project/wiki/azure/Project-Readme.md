@@ -2,7 +2,7 @@
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Current line:** GitVersion `next-version` **1.4.37** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits (observed `1.4.37+08eaf2a506a0aa2db89766e6a547d9ae1c85f681` on this refresh). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
+**Current line:** GitVersion `next-version` **1.4.38** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits (observed `1.4.38+6a72d445dda56f1d288660de044a2b020291630d` on this refresh). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
 
 ## Key Features
 
@@ -198,7 +198,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish; optional Octopus LEGION2 release when `OCTOPUS_API_KEY` is set |
 | **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
 
-Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.37` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.38` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
 
 ## Client Library
 

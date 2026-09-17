@@ -19,7 +19,7 @@ The Session Log workflow API provides structured operations for agent-driven aud
 Primary workflow interface with 10 operations:
 
 1. **BootstrapAsync** — Initialize session log subsystem (idempotent)
-2. **OpenSessionAsync** — Create new session with metadata
+2. **OpenSessionAsync** - Create new session with metadata. Plugin session-start (`Start-PluginSession` in `plugins/core/lib-ps/plugin-hook.ps1`) calls `client.SessionLog.OpenSessionAsync` before writing `status: verified`. If OpenSession fails, cache status is `persist-failed`. `workflow.sessionlog.openSession` remains a local YAML write.
 3. **CurrentSession** — Retrieve active session state
 4. **BeginTurnAsync** — Start new turn within active session
 5. **UpdateTurnAsync** — Modify active turn metadata

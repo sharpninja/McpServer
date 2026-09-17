@@ -342,7 +342,7 @@ Source: `src/McpServer.Client/` - see the [package README](https://github.com/sh
 
 ## Health, storage, and errors
 
-`GET /health` is liveness. Observed live payload keys on 1.4.37: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+`GET /health` is liveness. Observed live payload keys on 1.4.38: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
 
 ## Session log sanitization and incremental persist
 

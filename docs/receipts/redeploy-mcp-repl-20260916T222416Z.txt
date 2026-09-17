@@ -1,0 +1,31 @@
+target: UpdateService
+utcStart: 2026-09-16T22:26:31.2332817Z
+user: PAYTON-LEGION2\kingd
+isAdmin: True
+repo: F:\GitHub\McpServer
+headBefore: 6a72d445dda56f1d288660de044a2b020291630d
+gitVersionBefore: next-version: 1.4.37
+updateServiceExit: 0
+utcEnd: 2026-09-16T22:28:49.4823483Z
+installReplStart: 2026-09-16T22:29:51.4179754Z
+installReplExit: -1
+installReplEnd: 2026-09-16T22:33:16.3671918Z
+installReplStart: 2026-09-16T22:39:06.5691831Z
+installReplExit: 0
+installReplEnd: 2026-09-16T22:41:14.9223064Z
+gitVersionAfter: next-version: 1.4.38
+gitVersionPorcelain: M  GitVersion.yml
+head: 6a72d445dda56f1d288660de044a2b020291630d
+updateServiceNuke: Succeeded 2:09 EXIT=0
+updateServiceHealth: HTTP 200 1.4.38+6a72d445dda56f1d288660de044a2b020291630d
+updateServiceWsHealth: OK 41/42 (one workspace skipped disabled)
+backupArchive: C:\Users\kingd\McpServer-Backups\McpServer-backup-20260916-172639419.zip
+installReplFirstAttempt: Failed uninstall Access denied McpServer.Client.dll (PowerShell.MCP pwsh 81928 still loaded 1.4.26). Tool unregistered from global list. Original store gone. Stage leftover pg042lxw.w2q. Did not kill 81928. Did not kill MCP pid 138544.
+installReplRetry: Succeeded 1:59 EXIT=0
+replVersion: 1.4.38+6a72d445dda56f1d288660de044a2b020291630d
+globalTool: sharpninja.mcpserver.repl 1.4.38 mcpserver-repl
+postDeployHmac: true
+postDeployNonce: d041e0984c2e452790cdfa84391b01b3 echoed
+postDeployHealth: Healthy 1.4.38+6a72d445dda56f1d288660de044a2b020291630d
+service: McpServer Running pid 138544
+didNot: hand-copy binaries; ad-hoc Stop-Service; force-push; retag freeze; mark BUG-TRIAGE-180/170/171/031 done; claim freeze C2/C12 Failed 0
