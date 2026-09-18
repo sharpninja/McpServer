@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
             migrationBuilder.AddColumn<string>(name: "Summary", table: "Memories", type: "nvarchar(max)", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Content", table: "Memories", type: "nvarchar(max)", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Type", table: "Memories", type: "nvarchar(64)", maxLength: 64, nullable: true);
-            migrationBuilder.AddColumn<string>(name: "TagsJson", table: "Memories", type: "nvarchar(max)", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "Tags", table: "Memories", type: "nvarchar(max)", nullable: true);
             migrationBuilder.AddColumn<double>(name: "Confidence", table: "Memories", type: "float", nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceKind", table: "Memories", type: "nvarchar(64)", maxLength: 64, nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceRef", table: "Memories", type: "nvarchar(1024)", maxLength: 1024, nullable: true);

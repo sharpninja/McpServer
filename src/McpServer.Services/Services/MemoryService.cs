@@ -89,7 +89,7 @@ public sealed partial class MemoryService : IMemoryService
             Summary = NormalizeOptional(request.Summary),
             Content = content,
             Type = NormalizeOptional(request.Type),
-            TagsJson = MemoryLayerMapper.SerializeTags(request.Tags),
+            Tags = MemoryLayerMapper.SerializeTags(request.Tags),
             Confidence = request.Confidence ?? MemoryLimits.DefaultConfidence,
             SourceKind = NormalizeOptional(request.SourceKind),
             SourceRef = NormalizeOptional(request.SourceRef),
@@ -239,7 +239,7 @@ public sealed partial class MemoryService : IMemoryService
         {
             if (request.Tags.Any(tag => tag is { Length: > MemoryLimits.MaxTagLength }))
                 return Validation("Tag exceeds the configured maximum length.");
-            entity.TagsJson = MemoryLayerMapper.SerializeTags(request.Tags);
+            entity.Tags = MemoryLayerMapper.SerializeTags(request.Tags);
         }
 
         if (request.Confidence is not null)

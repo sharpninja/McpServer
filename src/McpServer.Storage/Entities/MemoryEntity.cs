@@ -73,7 +73,7 @@ public sealed class MemoryEntity
     public string? Type { get; set; }
 
     /// <summary>FR-MCP-MEMORY-010: JSON-serialized tags array.</summary>
-    public string? TagsJson { get; set; }
+    public string? Tags { get; set; }
 
     /// <summary>FR-MCP-MEMORY-010: Confidence in [0,1].</summary>
     public double? Confidence { get; set; }

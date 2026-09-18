@@ -20,7 +20,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
             migrationBuilder.AddColumn<string>(name: "Summary", table: "Memories", type: "TEXT", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Content", table: "Memories", type: "TEXT", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Type", table: "Memories", type: "TEXT", maxLength: 64, nullable: true);
-            migrationBuilder.AddColumn<string>(name: "TagsJson", table: "Memories", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "Tags", table: "Memories", type: "TEXT", nullable: true);
             migrationBuilder.AddColumn<double>(name: "Confidence", table: "Memories", type: "REAL", nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceKind", table: "Memories", type: "TEXT", maxLength: 64, nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceRef", table: "Memories", type: "TEXT", maxLength: 1024, nullable: true);

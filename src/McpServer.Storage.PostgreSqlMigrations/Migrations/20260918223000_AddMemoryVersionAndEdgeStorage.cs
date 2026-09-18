@@ -16,7 +16,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
             migrationBuilder.AddColumn<string>(name: "Summary", table: "Memories", type: "text", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Content", table: "Memories", type: "text", nullable: true);
             migrationBuilder.AddColumn<string>(name: "Type", table: "Memories", type: "character varying(64)", maxLength: 64, nullable: true);
-            migrationBuilder.AddColumn<string>(name: "TagsJson", table: "Memories", type: "jsonb", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "Tags", table: "Memories", type: "jsonb", nullable: true);
             migrationBuilder.AddColumn<double>(name: "Confidence", table: "Memories", type: "double precision", nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceKind", table: "Memories", type: "character varying(64)", maxLength: 64, nullable: true);
             migrationBuilder.AddColumn<string>(name: "SourceRef", table: "Memories", type: "character varying(1024)", maxLength: 1024, nullable: true);

@@ -78,7 +78,7 @@ public static class MemoryLayerMapper
             Summary = entity.Summary,
             Content = content,
             Type = entity.Type,
-            Tags = DeserializeTags(entity.TagsJson),
+            Tags = DeserializeTags(entity.Tags),
             Confidence = entity.Confidence,
             SourceKind = entity.SourceKind,
             SourceRef = entity.SourceRef,
