@@ -30,6 +30,33 @@ public sealed record MemoryAddRequest
 
     /// <summary>Optional actor or subsystem name recorded as the updater.</summary>
     public string? UpdatedBy { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional title for multi-layer remember payloads.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional summary. Omitted on partial update must not clear an existing value.</summary>
+    public string? Summary { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Multi-layer content. Legacy <see cref="Text"/> maps into this field.</summary>
+    public string? Content { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Memory type token (fact, decision, preference, procedure, entity, other).</summary>
+    public string? Type { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional tags. Null is treated as empty.</summary>
+    public IReadOnlyList<string>? Tags { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional confidence in [0,1]. Omitted uses the documented default.</summary>
+    public double? Confidence { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional provenance kind.</summary>
+    public string? SourceKind { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional provenance reference.</summary>
+    public string? SourceRef { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional create attribution.</summary>
+    public string? CreatedBy { get; init; }
 }
 
 /// <summary>Request to query effective memories visible to the active workspace.</summary>
@@ -59,6 +86,30 @@ public sealed record MemoryUpdateRequest
 
     /// <summary>Optional actor or subsystem name recorded as the updater.</summary>
     public string? UpdatedBy { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional title replacement.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional summary replacement. Null-omit must not clear unless explicit clear is defined.</summary>
+    public string? Summary { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional multi-layer content replacement.</summary>
+    public string? Content { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional type replacement.</summary>
+    public string? Type { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional tags replacement.</summary>
+    public IReadOnlyList<string>? Tags { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional confidence replacement.</summary>
+    public double? Confidence { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional provenance kind replacement.</summary>
+    public string? SourceKind { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Optional provenance reference replacement.</summary>
+    public string? SourceRef { get; init; }
 }
 
 /// <summary>Flattened memory row returned by memory APIs.</summary>
@@ -90,6 +141,33 @@ public sealed record MemoryItem
 
     /// <summary>Optional actor or subsystem that last changed the memory.</summary>
     public string? UpdatedBy { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Multi-layer title when persisted.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Multi-layer summary when persisted.</summary>
+    public string? Summary { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Multi-layer content. Legacy text maps here after backfill.</summary>
+    public string? Content { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Memory type token.</summary>
+    public string? Type { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Tags persisted with the memory.</summary>
+    public IReadOnlyList<string>? Tags { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Confidence in [0,1].</summary>
+    public double? Confidence { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Provenance kind.</summary>
+    public string? SourceKind { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Provenance reference.</summary>
+    public string? SourceRef { get; init; }
+
+    /// <summary>FR-MCP-MEMORY-010: Create attribution.</summary>
+    public string? CreatedBy { get; init; }
 }
 
 /// <summary>Result of listing memories.</summary>
