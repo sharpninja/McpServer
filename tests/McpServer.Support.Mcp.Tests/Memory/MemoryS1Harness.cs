@@ -237,10 +237,11 @@ public sealed class MemoryS1Harness : IDisposable
     private static BindingFlags BindingFlagsPublicInstanceStatic()
         => BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
-    private static IDispatcher CreateProductionDispatcher()
+    private IDispatcher CreateProductionDispatcher()
     {
         var services = new ServiceCollection();
         services.AddLogging();
+        services.AddSingleton(_options);
         services.AddCqrs(typeof(RememberMemoryCommand).Assembly, typeof(MemoryController).Assembly);
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();

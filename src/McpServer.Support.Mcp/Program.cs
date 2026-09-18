@@ -458,6 +458,7 @@ builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
 // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
 builder.Services.AddCqrsDispatcher();
+builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
 builder.Services.AddUseCaseCqrs();
 builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();

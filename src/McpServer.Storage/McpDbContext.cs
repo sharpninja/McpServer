@@ -196,6 +196,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
     public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
 
+    /// <summary>FR-MCP-MEMORY-014 / TR-MCP-MEMORY-MODEL-002: Append-only memory version snapshots.</summary>
+    public DbSet<MemoryVersionEntity> MemoryVersions => Set<MemoryVersionEntity>();
+
+    /// <summary>TR-MCP-MEMORY-MODEL-002: Directed memory edges unique on (From, To, EdgeType).</summary>
+    public DbSet<MemoryEdgeEntity> MemoryEdges => Set<MemoryEdgeEntity>();
+
     /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case headers.</summary>
     public DbSet<UseCaseEntity> UseCases => Set<UseCaseEntity>();
 
@@ -707,11 +713,35 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Category);
             e.HasIndex(x => new { x.Scope, x.WorkspaceId, x.Category });
             e.HasIndex(x => x.UpdatedAtUtc);
+            e.HasIndex(x => new { x.WorkspaceId, x.Scope });
+            e.HasIndex(x => x.EmbeddingStatus);
+            e.Property(x => x.Title).HasMaxLength(256);
+            e.Property(x => x.Type).HasMaxLength(64);
+            e.Property(x => x.SourceKind).HasMaxLength(64);
+            e.Property(x => x.SourceRef).HasMaxLength(1024);
+            e.Property(x => x.CreatedBy).HasMaxLength(256);
+            e.Property(x => x.EmbeddingStatus).HasMaxLength(32);
             e.HasOne<WorkspaceEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.WorkspaceId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MemoryVersionEntity>(e =>
+        {
+            e.HasKey(x => x.VersionRowId);
+            e.HasIndex(x => new { x.MemoryId, x.VersionNumber }).IsUnique();
+            e.HasOne<MemoryEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.MemoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<MemoryEdgeEntity>(e =>
+        {
+            e.HasKey(x => x.EdgeRowId);
+            e.HasIndex(x => new { x.FromMemoryId, x.ToMemoryId, x.EdgeType }).IsUnique();
         });
 
         modelBuilder.Entity<UseCaseEntity>(e =>

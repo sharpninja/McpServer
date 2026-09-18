@@ -117,6 +117,24 @@
       "httpEquivalent": "POST /mcpserver/memory"
     },
     {
+      "name": "memory_remember",
+      "description": "Remember a multi-layer memory (title, content, type, tags, confidence, provenance) and return a MEMORY-* id.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "title": { "type": "string", "required": false, "description": "Optional title" },
+        "summary": { "type": "string", "required": false, "description": "Optional summary" },
+        "content": { "type": "string", "required": true, "description": "Memory content" },
+        "type": { "type": "string", "required": false, "enum": ["fact", "decision", "preference", "procedure", "entity", "other"], "description": "Memory type token" },
+        "tags": { "type": "array", "required": false, "description": "Optional tags" },
+        "confidence": { "type": "number", "required": false, "description": "Optional confidence in [0,1]" },
+        "sourceKind": { "type": "string", "required": false, "description": "Optional provenance kind" },
+        "sourceRef": { "type": "string", "required": false, "description": "Optional provenance reference" },
+        "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "default": "Workspace", "description": "Memory scope" },
+        "id": { "type": "string", "required": false, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Optional explicit memory id" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/remember"
+    },
+    {
       "name": "memory_update",
       "description": "Update a memory item by id. Only provided fields are changed.",
       "parameters": {
