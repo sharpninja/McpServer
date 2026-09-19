@@ -245,9 +245,10 @@ public sealed record MemoryIndexResult(
     string? Error = null);
 
 /// <summary>
-/// FR-MCP-MEMORY-012: Documented explore/Hebbian bounds. S3 Red ships the contract only.
-/// Hebbian remains off by default. Depth above max returns 400. Duplicate explicit edges
-/// return 409 to match the unique (From, To, EdgeType) index.
+/// FR-MCP-MEMORY-012: Documented explore/Hebbian bounds.
+/// Hebbian remains off by default (<c>Mcp:Memory:Hebbian:Enabled=false</c>).
+/// Depth above max returns 400. Duplicate explicit edges return 409 to match the
+/// unique (From, To, EdgeType) index.
 /// </summary>
 public static class MemoryExploreLimits
 {
@@ -286,6 +287,12 @@ public static class MemoryExploreLimits
 
     /// <summary>AC-FR-MCP-MEMORY-012-11: Documented self-loop create policy is HTTP 400.</summary>
     public const int SelfLoopStatusCode = 400;
+
+    /// <summary>
+    /// AC-FR-MCP-MEMORY-012-13: Minimum recall score required to treat a query as a seed.
+    /// Weaker incidental token overlap is documented empty, not a neighborhood walk.
+    /// </summary>
+    public const double QuerySeedMinScore = 0.5;
 }
 
 /// <summary>

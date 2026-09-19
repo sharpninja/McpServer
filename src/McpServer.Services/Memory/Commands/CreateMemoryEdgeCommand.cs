@@ -4,7 +4,6 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// FR-MCP-MEMORY-012 / TEST-MCP-MEMORY-012: CQRS command to create a directed memory edge.
-/// S3 Red ships the port only; no production handler is registered so edge tests stay Red.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="Request">Create-edge payload.</param>
@@ -16,7 +15,7 @@ public sealed record CreateMemoryEdgeCommand(
 
 /// <summary>
 /// FR-MCP-MEMORY-012: CQRS command to strengthen co-retrieved edges after a co-retrieval.
-/// Must not change the recall ranking path. S3 Red ships the port only.
+/// Must not change the recall ranking path.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="MemoryIds">Co-retrieved MEMORY-* ids.</param>

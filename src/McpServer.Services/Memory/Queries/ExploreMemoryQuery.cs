@@ -4,7 +4,6 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// FR-MCP-MEMORY-012 / TEST-MCP-MEMORY-012: CQRS query for <c>memory_explore</c>.
-/// S3 Red ships the port only; no production handler is registered so explore tests stay Red.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="SeedId">Optional MEMORY-* seed. Unknown or soft-deleted seeds must return 404.</param>
