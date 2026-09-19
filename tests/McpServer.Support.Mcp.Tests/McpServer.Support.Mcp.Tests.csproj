@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj" />
     <ProjectReference Include="..\..\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
     <ProjectReference Include="..\McpServer.ProcessTree.TestHelper\McpServer.ProcessTree.TestHelper.csproj" />
   </ItemGroup>
   <ItemGroup>

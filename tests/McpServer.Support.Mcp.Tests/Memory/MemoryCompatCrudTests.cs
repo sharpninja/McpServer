@@ -64,4 +64,13 @@ public sealed class MemoryCompatCrudTests : IDisposable
             || string.Equals(stored?.Type, "other", StringComparison.OrdinalIgnoreCase)
             || !string.IsNullOrWhiteSpace(stored?.Category));
     }
+
+    /// <summary>AC-TR-MCP-MEMORY-API-002-03: Compat memory_add|list|update|remove remain registered.</summary>
+    [Fact]
+    public void ToolsStillRegistered()
+    {
+        var names = MemoryS5Catalog.DiscoverMcpToolNames();
+        foreach (var verb in MemoryS5Catalog.CompatVerbs)
+            Assert.Contains(verb, names);
+    }
 }
