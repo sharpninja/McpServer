@@ -243,3 +243,136 @@ public sealed record MemoryIndexResult(
     int ReadyCount = 0,
     int FailedCount = 0,
     string? Error = null);
+
+/// <summary>
+/// FR-MCP-MEMORY-012: Documented explore/Hebbian bounds. S3 Red ships the contract only.
+/// Hebbian remains off by default. Depth above max returns 400. Duplicate explicit edges
+/// return 409 to match the unique (From, To, EdgeType) index.
+/// </summary>
+public static class MemoryExploreLimits
+{
+    /// <summary>AC-FR-MCP-MEMORY-012-08: Default explore depth when omitted (direct neighbors only).</summary>
+    public const int DefaultDepth = 1;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-10: Configured maximum explore depth. Above this returns 400.</summary>
+    public const int MaxDepth = 5;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-19: Default neighbor cap when omitted.</summary>
+    public const int DefaultMaxNeighbors = 20;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-19: Configured maximum neighbor cap.</summary>
+    public const int MaxNeighbors = 50;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-02: Hebbian is off by default (Mcp:Memory:Hebbian:Enabled=false).</summary>
+    public const bool DefaultHebbianEnabled = false;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-14: Minimum allowed edge weight.</summary>
+    public const double MinWeight = 0;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-14: Maximum allowed edge weight.</summary>
+    public const double MaxWeight = 1;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-15: Allowed EdgeType tokens.</summary>
+    public static readonly IReadOnlySet<string> AllowedEdgeTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "explicit", "related", "derived", "co-retrieved",
+    };
+
+    /// <summary>AC-FR-MCP-MEMORY-012-12: Documented duplicate explicit-edge policy is HTTP 409.</summary>
+    public const int DuplicateExplicitStatusCode = 409;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-10: Documented depth-above-max policy is HTTP 400.</summary>
+    public const int DepthAboveMaxStatusCode = 400;
+
+    /// <summary>AC-FR-MCP-MEMORY-012-11: Documented self-loop create policy is HTTP 400.</summary>
+    public const int SelfLoopStatusCode = 400;
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-012: Request body for <c>memory_explore</c> neighborhood walk.
+/// Provide a seed id, a query seed, or both. Query-only uses the top recall hit.
+/// </summary>
+public sealed record MemoryExploreRequest
+{
+    /// <summary>Optional MEMORY-* seed. Unknown or soft-deleted seeds must return 404.</summary>
+    public string? SeedId { get; init; }
+
+    /// <summary>Optional query seed used when SeedId is omitted (top recall hit or documented empty).</summary>
+    public string? Query { get; init; }
+
+    /// <summary>Hop depth. Omitted uses <see cref="MemoryExploreLimits.DefaultDepth"/>. Non-positive is 400.</summary>
+    public int? Depth { get; init; }
+
+    /// <summary>Neighbor cap. Omitted uses <see cref="MemoryExploreLimits.DefaultMaxNeighbors"/>.</summary>
+    public int? MaxNeighbors { get; init; }
+
+    /// <summary>Optional Hebbian override. Null uses the default (off).</summary>
+    public bool? HebbianEnabled { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-012: One explore neighbor. Weight and EdgeType are required for explicit edges.
+/// </summary>
+public sealed record MemoryExploreNeighbor
+{
+    /// <summary>MEMORY-* id of the neighbor.</summary>
+    public required string Id { get; init; }
+
+    /// <summary>Edge weight in [0,1].</summary>
+    public double Weight { get; init; }
+
+    /// <summary>Edge type token (explicit, related, derived, or co-retrieved).</summary>
+    public required string EdgeType { get; init; }
+
+    /// <summary>Hop distance from the seed (1 for a direct neighbor).</summary>
+    public int Depth { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-012 / TEST-MCP-MEMORY-012: HTTP-shaped explore outcome used by S3 acceptance tests.
+/// </summary>
+public sealed record MemoryExploreResult(
+    int StatusCode,
+    IReadOnlyList<MemoryExploreNeighbor>? Items = null,
+    MemoryMutationFailureKind FailureKind = MemoryMutationFailureKind.None,
+    string? Error = null,
+    string? SeedId = null,
+    bool? HebbianApplied = null);
+
+/// <summary>
+/// FR-MCP-MEMORY-012: Request body for creating a directed memory edge.
+/// </summary>
+public sealed record MemoryCreateEdgeRequest
+{
+    /// <summary>Source MEMORY-* id.</summary>
+    public string? FromMemoryId { get; init; }
+
+    /// <summary>Target MEMORY-* id.</summary>
+    public string? ToMemoryId { get; init; }
+
+    /// <summary>Edge type token.</summary>
+    public string? EdgeType { get; init; }
+
+    /// <summary>Edge weight in [0,1].</summary>
+    public double? Weight { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-012 / TEST-MCP-MEMORY-012: HTTP-shaped create-edge outcome used by S3 acceptance tests.
+/// </summary>
+public sealed record MemoryCreateEdgeResult(
+    int StatusCode,
+    MemoryEdgeRecord? Edge = null,
+    MemoryMutationFailureKind FailureKind = MemoryMutationFailureKind.None,
+    string? Error = null);
+
+/// <summary>
+/// FR-MCP-MEMORY-012: Outcome of recording a Hebbian co-retrieval strengthening.
+/// Must not change recall ranking.
+/// </summary>
+public sealed record MemoryHebbianResult(
+    int StatusCode,
+    IReadOnlyList<MemoryEdgeRecord>? Edges = null,
+    MemoryMutationFailureKind FailureKind = MemoryMutationFailureKind.None,
+    string? Error = null,
+    bool RankingUnchanged = false);

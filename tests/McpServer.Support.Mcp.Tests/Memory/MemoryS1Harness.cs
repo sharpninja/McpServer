@@ -14,8 +14,8 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
-/// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2 tests.
+/// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-012 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
+/// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2/S3 tests.
 /// </summary>
 public sealed class MemoryS1Harness : IDisposable
 {
@@ -211,6 +211,90 @@ public sealed class MemoryS1Harness : IDisposable
             Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory batch index handler is not registered");
     }
 
+    /// <summary>Explores through the S3 CQRS query port when a handler is registered.</summary>
+    public async Task<MemoryExploreResult> ExploreAsync(
+        MemoryExploreRequest request,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.QueryAsync(
+            new ExploreMemoryQuery(
+                workspacePath ?? WorkspaceA,
+                request.SeedId,
+                request.Query,
+                request.Depth,
+                request.MaxNeighbors,
+                request.HebbianEnabled),
+            cancellationToken).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryExploreResult(
+            StatusCode: 501,
+            FailureKind: MemoryMutationFailureKind.None,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory_explore handler is not registered");
+    }
+
+    /// <summary>Creates a directed edge through the S3 CQRS command port when a handler is registered.</summary>
+    public async Task<MemoryCreateEdgeResult> CreateEdgeAsync(
+        MemoryCreateEdgeRequest? request,
+        string? workspacePath = null,
+        bool readOnlyCaller = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.SendAsync(
+            new CreateMemoryEdgeCommand(workspacePath ?? WorkspaceA, request, readOnlyCaller),
+            cancellationToken).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryCreateEdgeResult(
+            StatusCode: 501,
+            FailureKind: MemoryMutationFailureKind.None,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory create-edge handler is not registered");
+    }
+
+    /// <summary>Records a Hebbian co-retrieval through the S3 CQRS command port when a handler is registered.</summary>
+    public async Task<MemoryHebbianResult> RecordHebbianAsync(
+        IReadOnlyList<string> memoryIds,
+        bool hebbianEnabled = true,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.SendAsync(
+            new RecordHebbianCoRetrievalCommand(workspacePath ?? WorkspaceA, memoryIds, hebbianEnabled),
+            cancellationToken).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryHebbianResult(
+            StatusCode: 501,
+            FailureKind: MemoryMutationFailureKind.None,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory Hebbian handler is not registered");
+    }
+
+    /// <summary>Test-only fixture helper to plant a directed edge without the S3 create-edge API.</summary>
+    public async Task InsertEdgeFixtureAsync(
+        string fromMemoryId,
+        string toMemoryId,
+        string edgeType,
+        double weight = 1,
+        string? workspacePath = null)
+    {
+        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        db.MemoryEdges.Add(new MemoryEdgeEntity
+        {
+            FromMemoryId = fromMemoryId,
+            ToMemoryId = toMemoryId,
+            EdgeType = edgeType,
+            Weight = weight,
+        });
+        await db.SaveChangesAsync().ConfigureAwait(true);
+    }
+
     /// <summary>Reads EmbeddingStatus for a memory, including soft-deleted rows.</summary>
     public async Task<string?> GetEmbeddingStatusAsync(string memoryId, string? workspacePath = null)
     {
@@ -352,6 +436,24 @@ public sealed class MemoryS1Harness : IDisposable
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();
     }
+}
+
+/// <summary>
+/// TEST-MCP-MEMORY-012: Port used only for S3 mocks-first contract proof. Not a production facade.
+/// </summary>
+public interface IMemoryS3Port
+{
+    /// <summary>Walks the neighborhood of a seed memory or query.</summary>
+    Task<MemoryExploreResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken);
+
+    /// <summary>Creates a directed explicit edge.</summary>
+    Task<MemoryCreateEdgeResult> CreateEdgeAsync(MemoryCreateEdgeRequest request, CancellationToken cancellationToken);
+
+    /// <summary>Strengthens co-retrieved edges when Hebbian is enabled.</summary>
+    Task<MemoryHebbianResult> RecordHebbianAsync(
+        IReadOnlyList<string> memoryIds,
+        bool hebbianEnabled,
+        CancellationToken cancellationToken);
 }
 
 /// <summary>
