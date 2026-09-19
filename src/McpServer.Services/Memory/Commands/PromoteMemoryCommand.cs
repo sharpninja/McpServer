@@ -4,7 +4,7 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// FR-MCP-MEMORY-015 / TEST-MCP-MEMORY-015: CQRS command for explicit promote into memory.
-/// S4 Red ships the port only; no handler is registered until S4 Green.
+/// S4 Green registers the CQRS handler.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="Request">Promote payload.</param>
