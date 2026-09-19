@@ -320,4 +320,34 @@ public sealed class InteractionLoggingMiddlewareTests
                 entry.Message.Contains("Interaction log forwarding rejected request", StringComparison.Ordinal) &&
                 entry.Message.Contains("/mcpserver/context/search", StringComparison.Ordinal));
     }
+
+    /// <summary>X-Api-Key and Authorization header values never appear in interaction log messages.</summary>
+    [Fact]
+    public async Task InvokeAsync_RedactsApiKeyHeaders_FromLogMessages()
+    {
+        const string sampleKey = "synth-fixture-key-CCCC3333DDDD4444";
+        RequestDelegate next = _ => Task.CompletedTask;
+        var logger = new TestLogger<McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware>();
+        var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions
+        {
+            IncludeRequestBody = false,
+            IncludeResponseBody = false
+        });
+        var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options);
+        var context = CreateContext("GET", "/mcpserver/memory/list");
+        context.Request.Headers["X-Api-Key"] = sampleKey;
+        context.Request.Headers.Authorization = "Bearer " + sampleKey;
+        context.Response.StatusCode = 200;
+
+        await middleware.InvokeAsync(context).ConfigureAwait(true);
+
+        Assert.NotEmpty(logger.Entries);
+        Assert.All(logger.Entries, entry =>
+        {
+            Assert.DoesNotContain(sampleKey, entry.Message, StringComparison.Ordinal);
+        });
+        Assert.Contains(
+            logger.Entries,
+            entry => entry.Message.Contains("X-Api-Key=[REDACTED]", StringComparison.OrdinalIgnoreCase));
+    }
 }
