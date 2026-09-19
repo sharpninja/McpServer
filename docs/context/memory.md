@@ -14,8 +14,15 @@ MCP memories are durable operator guidance stored by McpServer and scoped by wor
 Use the required plugin or MCP tool surface for normal work:
 
 - MCP tools: `memory_add`, `memory_list`, `memory_update`, `memory_remove`
-- REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`
+- Additive CQRS verbs: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`
+- REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`, `workflow.memory.remember`, `workflow.memory.recall`, `workflow.memory.explore`, `workflow.memory.consolidate`, `workflow.memory.promote`, `workflow.memory.revert`
 - REST `/mcpserver/memory` only when explicitly allowed for non-plugin diagnostics
+
+`Idempotency-Key` is not supported on memory write endpoints. A duplicate `memory_remember` (or other write) creates a second memory with a new id; callers must treat duplicate posts as duplicate rows.
+
+`memory_explore` walks directed edges from a seed id or the top recall hit for a query seed. Results stay inside the caller Effective set. Soft-deleted seeds return 404; soft-deleted or foreign neighbors are omitted. Explore does not rewrite memory Content.
+
+Hebbian co-retrieved edges are off by default (`Mcp:Memory:Hebbian:Enabled=false` / `MemoryExploreLimits.DefaultHebbianEnabled`). While Hebbian is off, explore never returns co-retrieved-only edges, even if those rows already exist. Enabling Hebbian can strengthen co-retrieved edges without changing the recall ranking path.
 
 Every mutation should include `updatedBy` with the real agent or user identity when the surface supports it. Do not use placeholders or legacy aliases.
 
@@ -48,3 +55,7 @@ Memory mutations have two audit layers:
 For every successful memory mutation, append a session-log action through `workflow.sessionlog.appendActions` when a turn is active. Use action `type: edit`, `status: completed`, and a description that identifies the memory operation and memory ID when known.
 
 When importing memory content from a local source, keep source attribution in the session-log action or dialog. Do not add private file paths, credentials, or unrelated personal details to the memory text itself unless the operator explicitly wants that text preserved as guidance.
+
+## Operator UI
+
+The first-party Memory UI is served at `/memory/` from packaged `wwwroot/memory` static assets. It lists only the active workspace Effective set, edits through the same CQRS REST update path (`PUT /mcpserver/memory/{id}`), and reverts in three actions (open versions, select, revert). Foreign ids fail closed. The ship path is Nuke `UpdateService`; do not run it unless the operator asks. Auth matches other `/mcpserver` pages (`X-Api-Key`). Content-Security / no inline-eval matches the Use Case Manager sibling UI. Missing hashed bundles and `/memory/unknown-asset` return 404, not a false 200 index.

@@ -54,6 +54,34 @@ public sealed class MemoryClient : McpClientBase
         return await DeleteAsync<MemoryMutationResult>($"mcpserver/memory/{Encode(id)}", cancellationToken).ConfigureAwait(true);
     }
 
+    /// <summary>Remembers a multi-layer memory.</summary>
+    public Task<MemorySurfaceResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>("mcpserver/memory/remember", request, cancellationToken);
+
+    /// <summary>Recalls memories by meaning or keyword.</summary>
+    public Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>("mcpserver/memory/recall", request, cancellationToken);
+
+    /// <summary>Explores a memory neighborhood.</summary>
+    public Task<MemorySurfaceResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>("mcpserver/memory/explore", request, cancellationToken);
+
+    /// <summary>Plans or applies consolidate/sleep merge.</summary>
+    public Task<MemorySurfaceResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>("mcpserver/memory/consolidate", request, cancellationToken);
+
+    /// <summary>Promotes a session-log or context source into memory.</summary>
+    public Task<MemorySurfaceResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>("mcpserver/memory/promote", request, cancellationToken);
+
+    /// <summary>Lists versions for one memory.</summary>
+    public Task<MemorySurfaceResult> ListVersionsAsync(string id, CancellationToken cancellationToken = default)
+        => GetAsync<MemorySurfaceResult>($"mcpserver/memory/{Encode(id)}/versions", cancellationToken);
+
+    /// <summary>Reverts a memory to snapshot N.</summary>
+    public Task<MemorySurfaceResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default)
+        => PostAsync<MemorySurfaceResult>($"mcpserver/memory/{Encode(id)}/revert", new MemoryRevertRequest { VersionNumber = versionNumber }, cancellationToken);
+
     private static string BuildQueryString(MemoryScope? scope, string? category, string? keyword)
     {
         var parts = new List<string>();

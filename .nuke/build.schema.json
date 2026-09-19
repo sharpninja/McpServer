@@ -27,6 +27,7 @@
         "AiCodeReview",
         "AiProjectReview",
         "AiWarningSuppressionReview",
+        "BenchMemory",
         "BuildAgent",
         "BuildTrustedThirdParty",
         "BumpVersion",
@@ -172,6 +173,10 @@
           "type": "string",
           "description": "MCP instance name from appsettings"
         },
+        "MemoryBenchGate": {
+          "type": "boolean",
+          "description": "Fail BenchMemory when Memory:Bench:Gate=true"
+        },
         "MsixVersion": {
           "type": "string",
           "description": "MSIX package version (e.g. 1.0.0.0)"
@@ -183,6 +188,10 @@
         "PackageVersion": {
           "type": "string",
           "description": "Package version for NuGet pack (defaults to GitVersion output)"
+        },
+        "Plugin": {
+          "type": "string",
+          "description": "BenchMemory plugin id (default grok; all is post-H7a)"
         },
         "PluginPromotionApproval": {
           "type": "string",

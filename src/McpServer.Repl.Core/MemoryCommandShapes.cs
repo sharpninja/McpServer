@@ -25,4 +25,22 @@ public static class MemoryCommandShapes
 
     /// <summary>Method: <c>workflow.memory.remove</c>.</summary>
     public const string RemoveMethod = "workflow.memory.remove";
+
+    /// <summary>Method: <c>workflow.memory.remember</c>.</summary>
+    public const string RememberMethod = "workflow.memory.remember";
+
+    /// <summary>Method: <c>workflow.memory.recall</c>.</summary>
+    public const string RecallMethod = "workflow.memory.recall";
+
+    /// <summary>Method: <c>workflow.memory.explore</c>.</summary>
+    public const string ExploreMethod = "workflow.memory.explore";
+
+    /// <summary>Method: <c>workflow.memory.consolidate</c>.</summary>
+    public const string ConsolidateMethod = "workflow.memory.consolidate";
+
+    /// <summary>Method: <c>workflow.memory.promote</c>.</summary>
+    public const string PromoteMethod = "workflow.memory.promote";
+
+    /// <summary>Method: <c>workflow.memory.revert</c>.</summary>
+    public const string RevertMethod = "workflow.memory.revert";
 }

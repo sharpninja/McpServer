@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using McpServer.Cqrs;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Services;
 using McpServer.Support.Mcp.Storage;
@@ -18,6 +20,18 @@ public interface ITransactionGatedMemoryService
 
     /// <summary>Removes a memory item under the turn transaction policy.</summary>
     Task<MemoryMutationResult> RemoveAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Remembers a multi-layer memory under the turn transaction policy.</summary>
+    Task<MemoryRememberResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Promotes a source into memory under the turn transaction policy.</summary>
+    Task<MemoryPromoteResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Applies consolidate/sleep merge under the turn transaction policy.</summary>
+    Task<MemoryConsolidateResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Reverts a memory to snapshot N under the turn transaction policy.</summary>
+    Task<MemoryRevertResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -30,20 +44,28 @@ public sealed class TransactionGatedMemoryService : ITransactionGatedMemoryServi
     private readonly IMemoryService _memoryService;
     private readonly ITurnTransactionCoordinator? _coordinator;
     private readonly McpDbContext? _db;
+    private readonly IDispatcher? _dispatcher;
+    private readonly WorkspaceContext? _workspaceContext;
     private long _lastSequence = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     /// <summary>Initializes a new instance of the <see cref="TransactionGatedMemoryService"/> class.</summary>
     /// <param name="memoryService">Memory service that performs durable mutations.</param>
     /// <param name="coordinator">Optional turn transaction coordinator.</param>
     /// <param name="db">Optional scoped database context used for exact rollback restoration.</param>
+    /// <param name="dispatcher">Optional CQRS dispatcher used by additive S5 verbs.</param>
+    /// <param name="workspaceContext">Optional workspace context used for CQRS commands.</param>
     public TransactionGatedMemoryService(
         IMemoryService memoryService,
         ITurnTransactionCoordinator? coordinator = null,
-        McpDbContext? db = null)
+        McpDbContext? db = null,
+        IDispatcher? dispatcher = null,
+        WorkspaceContext? workspaceContext = null)
     {
         _memoryService = memoryService ?? throw new ArgumentNullException(nameof(memoryService));
         _coordinator = coordinator;
         _db = db;
+        _dispatcher = dispatcher;
+        _workspaceContext = workspaceContext;
     }
 
     /// <inheritdoc />
@@ -108,6 +130,153 @@ public sealed class TransactionGatedMemoryService : ITransactionGatedMemoryServi
                         : null);
             },
             cancellationToken);
+
+    /// <inheritdoc />
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public Task<MemoryRememberResult> RememberAsync(
+        MemoryRememberRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return ExecuteGatedAsync(
+            "memory.remember",
+            request,
+            async ct =>
+            {
+                var dispatched = await RequireDispatcher().SendAsync(
+                    new RememberMemoryCommand(GetWorkspacePath(), request),
+                    ct).ConfigureAwait(false);
+                return dispatched.IsSuccess && dispatched.Value is not null
+                    ? dispatched.Value
+                    : new MemoryRememberResult(500, Error: dispatched.Error ?? "Remember failed.");
+            },
+            error => new MemoryRememberResult(
+                409,
+                FailureKind: MemoryMutationFailureKind.Conflict,
+                Error: error),
+            cancellationToken);
+    }
+
+    /// <inheritdoc />
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public Task<MemoryPromoteResult> PromoteAsync(
+        MemoryPromoteRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return ExecuteGatedAsync(
+            "memory.promote",
+            request,
+            async ct =>
+            {
+                var dispatched = await RequireDispatcher().SendAsync(
+                    new PromoteMemoryCommand(GetWorkspacePath(), request),
+                    ct).ConfigureAwait(false);
+                return dispatched.IsSuccess && dispatched.Value is not null
+                    ? dispatched.Value
+                    : new MemoryPromoteResult(500, Error: dispatched.Error ?? "Promote failed.");
+            },
+            error => new MemoryPromoteResult(
+                409,
+                FailureKind: MemoryMutationFailureKind.Conflict,
+                Error: error),
+            cancellationToken);
+    }
+
+    /// <inheritdoc />
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public Task<MemoryConsolidateResult> ConsolidateAsync(
+        MemoryConsolidateRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return ExecuteGatedAsync(
+            "memory.consolidate",
+            request,
+            async ct =>
+            {
+                var dispatched = await RequireDispatcher().SendAsync(
+                    new ConsolidateMemoryCommand(GetWorkspacePath(), request),
+                    ct).ConfigureAwait(false);
+                return dispatched.IsSuccess && dispatched.Value is not null
+                    ? dispatched.Value
+                    : new MemoryConsolidateResult(500, Error: dispatched.Error ?? "Consolidate failed.");
+            },
+            error => new MemoryConsolidateResult(
+                409,
+                FailureKind: MemoryMutationFailureKind.Conflict,
+                Error: error),
+            cancellationToken);
+    }
+
+    /// <inheritdoc />
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public Task<MemoryRevertResult> RevertAsync(
+        string id,
+        int versionNumber,
+        CancellationToken cancellationToken = default)
+        => ExecuteGatedAsync(
+            "memory.revert",
+            new MemoryRevertTransactionPayload(id, versionNumber),
+            async ct =>
+            {
+                var dispatched = await RequireDispatcher().SendAsync(
+                    new RevertMemoryCommand(GetWorkspacePath(), id, versionNumber),
+                    ct).ConfigureAwait(false);
+                return dispatched.IsSuccess && dispatched.Value is not null
+                    ? dispatched.Value
+                    : new MemoryRevertResult(500, Error: dispatched.Error ?? "Revert failed.");
+            },
+            error => new MemoryRevertResult(
+                409,
+                FailureKind: MemoryMutationFailureKind.Conflict,
+                Error: error),
+            cancellationToken);
+
+    private async Task<T> ExecuteGatedAsync<T>(
+        string operationName,
+        object operationBody,
+        Func<CancellationToken, Task<T>> mutation,
+        Func<string, T> onReject,
+        CancellationToken cancellationToken)
+    {
+        if (_coordinator is null)
+            return await mutation(cancellationToken).ConfigureAwait(false);
+
+        var status = _coordinator.GetStatus();
+        if (status.Degraded)
+        {
+            return onReject(string.IsNullOrWhiteSpace(status.Message)
+                ? "Turn transaction coordinator is degraded."
+                : status.Message);
+        }
+
+        var produced = default(T);
+        var producedSet = false;
+        var result = await _coordinator.ExecuteAsync(
+                BuildTransactionRequest(operationName, operationBody),
+                async ct =>
+                {
+                    produced = await mutation(ct).ConfigureAwait(false);
+                    producedSet = true;
+                    return new TurnMutationResult { Success = true, ResultJson = "{}" };
+                },
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (producedSet && IsTransactionSuccess(result))
+            return produced!;
+
+        var transactionId = string.IsNullOrWhiteSpace(result.TransactionId) ? "unassigned" : result.TransactionId;
+        var message = string.IsNullOrWhiteSpace(result.Message) ? result.Reason.ToString() : result.Message;
+        return onReject($"Turn transaction coordinator did not commit {operationName} '{transactionId}': {message}");
+    }
+
+    private IDispatcher RequireDispatcher()
+        => _dispatcher ?? throw new InvalidOperationException("CQRS dispatcher is not registered for gated memory verbs.");
+
+    private string GetWorkspacePath()
+        => _workspaceContext?.WorkspacePath ?? string.Empty;
 
     private async Task<MemoryMutationResult> ExecuteMutationAsync(
         string operationName,
@@ -316,6 +485,8 @@ public sealed class TransactionGatedMemoryService : ITransactionGatedMemoryServi
     private sealed record MemoryUpdateTransactionPayload(string Id, MemoryUpdateRequest Request);
 
     private sealed record MemoryRemoveTransactionPayload(string Id);
+
+    private sealed record MemoryRevertTransactionPayload(string Id, int VersionNumber);
 
     private static string ToEntityScope(MemoryScope scope)
         => scope == MemoryScope.Global ? MemoryEntity.GlobalScope : MemoryEntity.WorkspaceScope;

@@ -1156,6 +1156,21 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         cancellationToken).ConfigureAwait(false),
                 MemoryCommandShapes.RemoveMethod =>
                     await workflow.RemoveAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.RememberMethod =>
+                    await workflow.RememberAsync(BuildMemoryRememberRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.RecallMethod =>
+                    await workflow.RecallAsync(BuildMemoryRecallRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.ExploreMethod =>
+                    await workflow.ExploreAsync(BuildMemoryExploreRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.ConsolidateMethod =>
+                    await workflow.ConsolidateAsync(BuildMemoryConsolidateRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.PromoteMethod =>
+                    await workflow.PromoteAsync(BuildMemoryPromoteRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.RevertMethod =>
+                    await workflow.RevertAsync(
+                        RequireString(GetRequestArgs(args), "id"),
+                        GetInt(GetRequestArgs(args), "versionNumber") ?? 0,
+                        cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 
@@ -2274,6 +2289,61 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             UpdatedBy = GetString(args, "updatedBy"),
         };
     }
+
+    private static MemoryRememberRequest BuildMemoryRememberRequest(IReadOnlyDictionary<string, object?> args)
+        => new()
+        {
+            Id = GetString(args, "id"),
+            Title = GetString(args, "title"),
+            Summary = GetString(args, "summary"),
+            Content = GetString(args, "content"),
+            Type = GetString(args, "type"),
+            Tags = GetOptionalStringList(args, "tags"),
+            Confidence = GetDouble(args, "confidence"),
+            SourceKind = GetString(args, "sourceKind"),
+            SourceRef = GetString(args, "sourceRef"),
+            Scope = GetMemoryScope(args, "scope"),
+            UpdatedBy = GetString(args, "updatedBy"),
+        };
+
+    private static MemoryRecallRequest BuildMemoryRecallRequest(IReadOnlyDictionary<string, object?> args)
+        => new()
+        {
+            Query = GetString(args, "query"),
+            MinScore = GetDouble(args, "minScore"),
+            TopN = GetInt(args, "topN"),
+            Tags = GetOptionalStringList(args, "tags"),
+            Type = GetString(args, "type"),
+            Scope = GetMemoryScope(args, "scope"),
+        };
+
+    private static MemoryExploreRequest BuildMemoryExploreRequest(IReadOnlyDictionary<string, object?> args)
+        => new()
+        {
+            SeedId = GetString(args, "seedId"),
+            Query = GetString(args, "query"),
+            Depth = GetInt(args, "depth"),
+            MaxNeighbors = GetInt(args, "maxNeighbors"),
+            HebbianEnabled = GetBool(args, "hebbianEnabled"),
+        };
+
+    private static MemoryConsolidateRequest BuildMemoryConsolidateRequest(IReadOnlyDictionary<string, object?> args)
+        => new()
+        {
+            DryRun = GetBool(args, "dryRun"),
+            SimilarityThreshold = GetDouble(args, "similarityThreshold"),
+            AllowHardDelete = GetBool(args, "allowHardDelete"),
+            RunId = GetString(args, "runId"),
+        };
+
+    private static MemoryPromoteRequest BuildMemoryPromoteRequest(IReadOnlyDictionary<string, object?> args)
+        => new()
+        {
+            SourceKind = GetString(args, "sourceKind"),
+            SourceRef = GetString(args, "sourceRef"),
+            Content = GetString(args, "content"),
+            Summary = GetString(args, "summary"),
+        };
 
     private static TriageReportRequest BuildTriageReportRequest(IReadOnlyDictionary<string, object?> args) => new()
     {

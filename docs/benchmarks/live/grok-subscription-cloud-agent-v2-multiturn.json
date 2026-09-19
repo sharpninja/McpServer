@@ -1,0 +1,73 @@
+{
+  "plugin": "grok",
+  "mode": "live",
+  "subject": "cursor-grok-4.6-high-fast",
+  "subject_lane": "cursor-cloud-subscription",
+  "xai_api_key_used": false,
+  "pack_id": "memory-prompt-pack-v2-multiturn",
+  "notes": "Live multi-turn answers produced by this cloud agent as the Grok subject. Not MemoryBenchGrokMultiTurnAdapter stub/recorded fixtures. Host usage was not reported; harness charges tokens via memory-bench-whitespace 1.0.0. without_memory answers use conversation history. with_memory answers use compact recall/injection only.",
+  "answers": {
+    "JOB-PREF-001": {
+      "EST-001": {
+        "without_memory": "Understood for this chat only: you want neovim as the workspace editor, including a terminal-first workflow. I am not persisting that because no memory store is available in this condition.",
+        "with_memory": "I stored a workspace preference that this bench uses neovim, with terminal-first keybindings, via memory_remember."
+      },
+      "QRY-001": {
+        "without_memory": "Looking back at the earlier message in this thread, your editor preference is neovim.",
+        "with_memory": "Compact recall/injection lists BENCH-PREF-EDITOR=neovim, so the editor you prefer here is neovim."
+      }
+    },
+    "JOB-DEC-001": {
+      "EST-001": {
+        "without_memory": "I'll hold this in the current transcript: local McpServer should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store.",
+        "with_memory": "Logged the workspace decision with memory_remember: local McpServer uses native Postgres, not Docker."
+      },
+      "QRY-001": {
+        "without_memory": "The earlier establish turn in this conversation said the local database setup is native Postgres rather than Docker.",
+        "with_memory": "Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local McpServer."
+      }
+    },
+    "JOB-FACT-001": {
+      "EST-001": {
+        "without_memory": "Noted only in this conversation: the agent-memory implementation slice lives on a branch whose name is memory.",
+        "with_memory": "Persisted the fact BENCH-FACT-BRANCH=memory with memory_remember so later turns can recall the memory branch without replaying this speech."
+      },
+      "QRY-001": {
+        "without_memory": "You already told me in this thread that the work is carried on the memory branch.",
+        "with_memory": "REQUIRED MEMORIES / recall says BENCH-FACT-BRANCH=memory, so the carrying line is the memory branch."
+      }
+    },
+    "JOB-MULTI-001": {
+      "EST-001": {
+        "without_memory": "I'll keep your first bench note in this transcript: the editor you want is neovim. No durable write.",
+        "with_memory": "memory_remember now holds BENCH-PREF-EDITOR=neovim as a workspace preference."
+      },
+      "EST-002": {
+        "without_memory": "Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected.",
+        "with_memory": "memory_remember added the decision BENCH-DECISION-DB=native-postgres-not-docker."
+      },
+      "EST-003": {
+        "without_memory": "Third note stays in this conversation: the agent-memory slice lives on the memory branch.",
+        "with_memory": "memory_remember added BENCH-FACT-BRANCH=memory as a separate fact."
+      },
+      "QRY-001": {
+        "without_memory": "Replaying the three earlier turns: editor preference is neovim, the local database decision is native Postgres, and the work is on the memory branch.",
+        "with_memory": "Compact memories (no full transcript) say neovim for the editor, native Postgres for local DB, and the memory branch for the work."
+      }
+    },
+    "JOB-NEG-001": {
+      "EST-001": {
+        "without_memory": "I hear neovim as the only preference you gave. You did not name a favorite unused language and you did not hand me a production credential. This stays in the current transcript only.",
+        "with_memory": "Stored neovim as the editor preference plus the policy that memories are not a secret store. I did not invent extra preferences or keys."
+      },
+      "QRY-001": {
+        "without_memory": "Unknown / not in memory. You never named a favorite unused programming language, so I will not invent one.",
+        "with_memory": "Unknown / not in this memory set. Nothing stored names a favorite unused language, and I will not invent one."
+      },
+      "QRY-002": {
+        "without_memory": "I refuse to invent credentials. A production API key for the bench service is not stored in this conversation.",
+        "with_memory": "I refuse to invent a production API key. Recalled policy says memories are not a secret store, so that key is not stored."
+      }
+    }
+  }
+}

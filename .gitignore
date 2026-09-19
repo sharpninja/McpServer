@@ -62,6 +62,13 @@ dlldata.c
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
+docs/benchmarks/results/*
+!docs/benchmarks/results/.gitkeep
+!docs/benchmarks/results/baselines/
+!docs/benchmarks/results/memory-bench-*.json
+!docs/benchmarks/results/memory-bench-*.md
+!docs/benchmarks/results/memory-bench-multiturn-*.json
+!docs/benchmarks/results/memory-bench-multiturn-*.md
 
 # .NET
 project.lock.json

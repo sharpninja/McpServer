@@ -55,7 +55,6 @@ internal static class ReplYamlMessageValidator
         else if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
-                 method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(TriageCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
             errors.Add($"No YAML schema is registered for method '{method}'.");
@@ -233,6 +232,58 @@ internal static class ReplYamlMessageValidator
                 OptionalMemoryScope(source, "scope", errors);
                 OptionalText(source, "text", errors);
                 OptionalText(source, "updatedBy", errors);
+            },
+            [MemoryCommandShapes.RememberMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                OptionalMemoryId(source, "id", errors);
+                OptionalText(source, "title", errors);
+                OptionalText(source, "summary", errors);
+                RequireText(source, "content", errors);
+                OptionalText(source, "type", errors);
+                OptionalStringList(source, "tags", errors);
+                OptionalText(source, "sourceKind", errors);
+                OptionalText(source, "sourceRef", errors);
+                OptionalMemoryScope(source, "scope", errors);
+                OptionalText(source, "updatedBy", errors);
+            },
+            [MemoryCommandShapes.RecallMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                RequireText(source, "query", errors);
+                OptionalText(source, "type", errors);
+                OptionalStringList(source, "tags", errors);
+                OptionalMemoryScope(source, "scope", errors);
+            },
+            [MemoryCommandShapes.ExploreMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                OptionalMemoryId(source, "seedId", errors);
+                OptionalText(source, "query", errors);
+                OptionalInteger(source, "depth", errors);
+                OptionalInteger(source, "maxNeighbors", errors);
+                OptionalBoolean(source, "hebbianEnabled", errors);
+            },
+            [MemoryCommandShapes.ConsolidateMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                OptionalBoolean(source, "dryRun", errors);
+                OptionalBoolean(source, "allowHardDelete", errors);
+                OptionalText(source, "runId", errors);
+            },
+            [MemoryCommandShapes.PromoteMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                RequireText(source, "sourceKind", errors);
+                RequireText(source, "sourceRef", errors);
+                OptionalText(source, "content", errors);
+                OptionalText(source, "summary", errors);
+            },
+            [MemoryCommandShapes.RevertMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                RequireMemoryId(source, "id", errors);
+                RequireInteger(source, "versionNumber", errors);
             },
 
             [TriageCommandShapes.ReportMethod] = static (args, errors) =>

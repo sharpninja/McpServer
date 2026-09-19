@@ -15,6 +15,9 @@ public sealed record ChangeEvent
     /// <summary>MCP resource URI (e.g. "mcp://workspace/todo/MVP-APP-001").</summary>
     public string? ResourceUri { get; init; }
 
+    /// <summary>Owning workspace path for workspace-scoped events such as memory.*.</summary>
+    public string? WorkspacePath { get; init; }
+
     /// <summary>When the event occurred.</summary>
     public DateTimeOffset Timestamp { get; init; } = DateTimeOffset.UtcNow;
 }

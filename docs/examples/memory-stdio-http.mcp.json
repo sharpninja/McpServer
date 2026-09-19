@@ -1,0 +1,20 @@
+{
+  "name": "mcpserver-memory-stdio-http",
+  "description": "Committed STDIO and /mcp-transport example listing additive memory verbs.",
+  "transport": ["stdio", "http"],
+  "http": {
+    "path": "/mcp-transport"
+  },
+  "tools": [
+    "memory_add",
+    "memory_list",
+    "memory_update",
+    "memory_remove",
+    "memory_remember",
+    "memory_recall",
+    "memory_explore",
+    "memory_consolidate",
+    "memory_promote",
+    "memory_revert"
+  ]
+}

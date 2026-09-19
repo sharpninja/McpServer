@@ -1,0 +1,21 @@
+{
+  "slice": "S5",
+  "requiredNow": ["grok"],
+  "deferredUntilH7a": [
+    "claude-code",
+    "claude-cowork",
+    "cline",
+    "cline-v2",
+    "codex",
+    "copilot",
+    "opencode"
+  ],
+  "rows": [
+    {
+      "plugin": "grok",
+      "required": true,
+      "status": "pass"
+    }
+  ],
+  "deferralNote": "Non-Grok plugin sync is blocked until H7a. Implement grok first; the other seven hosts stay deferred until the value gate."
+}

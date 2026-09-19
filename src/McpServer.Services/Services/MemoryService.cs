@@ -32,8 +32,29 @@ public sealed partial class MemoryService : IMemoryService
         if (category is null)
             return Validation("Memory category is required.");
 
-        if (string.IsNullOrWhiteSpace(request.Text))
+        if (string.IsNullOrWhiteSpace(request.Text) && string.IsNullOrWhiteSpace(request.Content))
             return Validation("Memory text is required.");
+
+        if (!Enum.IsDefined(request.Scope))
+            return Validation("Memory scope must be Global or Workspace.");
+
+        var content = string.IsNullOrWhiteSpace(request.Content) ? request.Text : request.Content;
+        if (MemoryPolicy.RejectsSecrets(content) || MemoryPolicy.RejectsSecrets(request.Text))
+            return Validation("Memory content matches a rejected secret pattern.");
+
+        if (request.Title is { Length: > MemoryLimits.MaxTitleLength })
+            return Validation("Title exceeds the configured maximum length.");
+        if (content.Length > MemoryLimits.MaxContentLength)
+            return Validation("Content exceeds the configured maximum length.");
+        if (request.Tags is not null && request.Tags.Any(tag => tag is { Length: > MemoryLimits.MaxTagLength }))
+            return Validation("Tag exceeds the configured maximum length.");
+        if (request.Confidence is < 0 or > 1)
+            return Validation("Confidence must be in [0,1].");
+        if (!string.IsNullOrWhiteSpace(request.Type)
+            && !MemoryLimits.AllowedTypes.Contains(request.Type.Trim()))
+        {
+            return Validation("Type is not an allowed memory type.");
+        }
 
         var workspaceId = ResolveWorkspaceId(request.Scope);
         if (request.Scope == MemoryScope.Workspace && workspaceId is null)
@@ -59,17 +80,29 @@ public sealed partial class MemoryService : IMemoryService
             Category = category,
             Scope = ToEntityScope(request.Scope),
             WorkspaceId = workspaceId,
-            Text = request.Text,
+            Text = string.IsNullOrWhiteSpace(request.Text) ? content : request.Text,
             Version = 1,
             CreatedAtUtc = now,
             UpdatedAtUtc = now,
             UpdatedBy = NormalizeOptional(request.UpdatedBy),
+            Title = NormalizeOptional(request.Title),
+            Summary = NormalizeOptional(request.Summary),
+            Content = content,
+            Type = NormalizeOptional(request.Type),
+            Tags = MemoryLayerMapper.SerializeTags(request.Tags),
+            Confidence = request.Confidence ?? MemoryLimits.DefaultConfidence,
+            SourceKind = NormalizeOptional(request.SourceKind),
+            SourceRef = NormalizeOptional(request.SourceRef),
+            CreatedBy = NormalizeOptional(request.CreatedBy),
+            EmbeddingStatus = "pending",
         };
 
         _db.Memories.Add(entity);
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await new MemoryCompetitiveOperations(_db).AppendVersionAsync(entity, cancellationToken).ConfigureAwait(false);
+        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, "memory_add", cancellationToken).ConfigureAwait(false);
         _logger.LogInformation("Memory created: {MemoryId} ({Scope})", entity.Id, entity.Scope);
-        return new MemoryMutationResult(true, Memory: ToItem(entity));
+        return new MemoryMutationResult(true, Memory: MemoryLayerMapper.ToItem(entity));
     }
 
     /// <inheritdoc />
@@ -90,21 +123,25 @@ public sealed partial class MemoryService : IMemoryService
             query = query.Where(memory => memory.Category == category);
 
         var keyword = NormalizeOptional(request.Keyword);
-        if (keyword is not null)
-        {
-            query = query.Where(memory =>
-                memory.Id.Contains(keyword)
-                || memory.Category.Contains(keyword)
-                || memory.Text.Contains(keyword));
-        }
-
         var rows = await query
             .OrderBy(memory => memory.Scope == MemoryEntity.GlobalScope ? 0 : 1)
             .ThenBy(memory => memory.Id)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        var items = rows.Select(ToItem).ToList();
+        if (keyword is not null)
+        {
+            var lowered = keyword.ToLowerInvariant();
+            rows = rows.Where(memory =>
+                    memory.Id.ToLowerInvariant().Contains(lowered, StringComparison.Ordinal)
+                    || memory.Category.ToLowerInvariant().Contains(lowered, StringComparison.Ordinal)
+                    || memory.Text.ToLowerInvariant().Contains(lowered, StringComparison.Ordinal)
+                    || (memory.Title ?? string.Empty).ToLowerInvariant().Contains(lowered, StringComparison.Ordinal)
+                    || MemoryLayerMapper.EffectiveContent(memory).ToLowerInvariant().Contains(lowered, StringComparison.Ordinal))
+                .ToList();
+        }
+
+        var items = rows.Select(MemoryLayerMapper.ToItem).ToList();
         return new MemoryQueryResult(items, items.Count);
     }
 
@@ -119,7 +156,7 @@ public sealed partial class MemoryService : IMemoryService
             .AsNoTracking()
             .FirstOrDefaultAsync(memory => memory.Id == normalizedId, cancellationToken)
             .ConfigureAwait(false);
-        return entity is null ? null : ToItem(entity);
+        return entity is null ? null : MemoryLayerMapper.ToItem(entity);
     }
 
     /// <inheritdoc />
@@ -147,6 +184,9 @@ public sealed partial class MemoryService : IMemoryService
 
         if (request.Scope is not null)
         {
+            if (!Enum.IsDefined(request.Scope.Value))
+                return Validation("Memory scope must be Global or Workspace.");
+
             var workspaceId = ResolveWorkspaceId(request.Scope.Value);
             if (request.Scope.Value == MemoryScope.Workspace && workspaceId is null)
                 return Validation("Workspace memory requires an active workspace.");
@@ -155,21 +195,78 @@ public sealed partial class MemoryService : IMemoryService
             entity.WorkspaceId = workspaceId;
         }
 
+        var contentChanged = false;
         if (request.Text is not null)
         {
             if (string.IsNullOrWhiteSpace(request.Text))
                 return Validation("Memory text cannot be empty.");
+            if (MemoryPolicy.RejectsSecrets(request.Text))
+                return Validation("Memory content matches a rejected secret pattern.");
             entity.Text = request.Text;
+            entity.Content = request.Text;
+            contentChanged = true;
         }
+
+        if (request.Content is not null)
+        {
+            if (string.IsNullOrWhiteSpace(request.Content))
+                return Validation("Memory content cannot be empty.");
+            if (MemoryPolicy.RejectsSecrets(request.Content))
+                return Validation("Memory content matches a rejected secret pattern.");
+            entity.Content = request.Content;
+            entity.Text = request.Content;
+            contentChanged = true;
+        }
+
+        if (request.Title is not null)
+        {
+            if (request.Title.Length > MemoryLimits.MaxTitleLength)
+                return Validation("Title exceeds the configured maximum length.");
+            entity.Title = NormalizeOptional(request.Title);
+        }
+
+        if (request.Summary is not null)
+            entity.Summary = NormalizeOptional(request.Summary);
+
+        if (request.Type is not null)
+        {
+            if (!MemoryLimits.AllowedTypes.Contains(request.Type.Trim()))
+                return Validation("Type is not an allowed memory type.");
+            entity.Type = NormalizeOptional(request.Type);
+        }
+
+        if (request.Tags is not null)
+        {
+            if (request.Tags.Any(tag => tag is { Length: > MemoryLimits.MaxTagLength }))
+                return Validation("Tag exceeds the configured maximum length.");
+            entity.Tags = MemoryLayerMapper.SerializeTags(request.Tags);
+        }
+
+        if (request.Confidence is not null)
+        {
+            if (request.Confidence is < 0 or > 1)
+                return Validation("Confidence must be in [0,1].");
+            entity.Confidence = request.Confidence;
+        }
+
+        if (request.SourceKind is not null)
+            entity.SourceKind = NormalizeOptional(request.SourceKind);
+        if (request.SourceRef is not null)
+            entity.SourceRef = NormalizeOptional(request.SourceRef);
 
         entity.Version++;
         entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
         if (request.UpdatedBy is not null)
             entity.UpdatedBy = NormalizeOptional(request.UpdatedBy);
+        if (contentChanged)
+            entity.EmbeddingStatus = "pending";
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        if (contentChanged)
+            await new MemoryCompetitiveOperations(_db).AppendVersionAsync(entity, cancellationToken).ConfigureAwait(false);
+        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, "memory_update", cancellationToken).ConfigureAwait(false);
         _logger.LogInformation("Memory updated: {MemoryId}", entity.Id);
-        return new MemoryMutationResult(true, Memory: ToItem(entity));
+        return new MemoryMutationResult(true, Memory: MemoryLayerMapper.ToItem(entity));
     }
 
     /// <inheritdoc />
@@ -185,9 +282,10 @@ public sealed partial class MemoryService : IMemoryService
         if (entity is null)
             return new MemoryMutationResult(false, $"Memory '{normalizedId}' not found.", FailureKind: MemoryMutationFailureKind.NotFound);
 
-        var item = ToItem(entity);
+        var item = MemoryLayerMapper.ToItem(entity);
         _db.Memories.Remove(entity);
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, "memory_remove", cancellationToken).ConfigureAwait(false);
         _logger.LogInformation("Memory removed: {MemoryId}", entity.Id);
         return new MemoryMutationResult(true, Memory: item);
     }
@@ -262,28 +360,7 @@ public sealed partial class MemoryService : IMemoryService
         return scope == MemoryScope.Global ? MemoryEntity.GlobalScope : MemoryEntity.WorkspaceScope;
     }
 
-    private static MemoryScope ToScope(string scope)
-    {
-        return string.Equals(scope, MemoryEntity.GlobalScope, StringComparison.Ordinal)
-            ? MemoryScope.Global
-            : MemoryScope.Workspace;
-    }
-
-    private static MemoryItem ToItem(MemoryEntity entity)
-    {
-        return new MemoryItem
-        {
-            Id = entity.Id,
-            Category = entity.Category,
-            Scope = ToScope(entity.Scope),
-            WorkspacePath = entity.WorkspaceId,
-            Text = entity.Text,
-            Version = entity.Version,
-            CreatedAtUtc = entity.CreatedAtUtc,
-            UpdatedAtUtc = entity.UpdatedAtUtc,
-            UpdatedBy = entity.UpdatedBy,
-        };
-    }
+    private static MemoryItem ToItem(MemoryEntity entity) => MemoryLayerMapper.ToItem(entity);
 
     [GeneratedRegex("[^A-Z0-9]+", RegexOptions.CultureInvariant)]
     private static partial Regex CategoryUnsafeCharactersRegex();

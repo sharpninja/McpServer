@@ -1,0 +1,44 @@
+{
+  "phase": "H6-green",
+  "branch": "memory-s4-red",
+  "tipSha": "e2dd13310385acf524a8c2492f8617e90aec618b",
+  "filters": {
+    "namespaceMemory": "FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "broaderMemory": "FullyQualifiedName~Memory",
+    "s6Focus": "FullyQualifiedName~MemoryUi|FullyQualifiedName~MemoryS6"
+  },
+  "startedUtc": "2026-09-19T08:01:59Z",
+  "endedUtc": "2026-09-19T08:02:26Z",
+  "trxSha256": {
+    "namespaceMemory": "c6c9c6a1b9e7aebaba05d004b8e2a711d4c95a0eef451f61edf12908d4e30da4",
+    "broaderMemory": "b65fedebed2ade376e2dc009e8ef84d17305a1ca7b311fa4f6e17c1389e1558d",
+    "s6Focus": "508832c143903ba8a37d5b31e3aa60ff27fe87f35a2d849941f49340aa89b609"
+  },
+  "counts": {
+    "namespaceMemory": { "failed": 0, "passed": 251, "skipped": 0, "total": 251 },
+    "broaderMemory": { "failed": 0, "passed": 301, "skipped": 0, "total": 301 },
+    "s6Focus": { "failed": 0, "passed": 24, "skipped": 0, "total": 24 }
+  },
+  "catalog": {
+    "S6": { "pass": 20, "total": 20, "fail": 0, "miss": 0, "skip": 0, "uniqueMethods": 19 }
+  },
+  "focus": [
+    { "area": "memory-static-assets-publish", "outcome": "Passed" },
+    { "area": "nuke-updateservice-deploy-docs", "outcome": "Passed" },
+    { "area": "csp-matches-sibling-no-inline-eval", "outcome": "Passed" },
+    { "area": "deep-link-fail-closed", "outcome": "Passed" },
+    { "area": "auth-parity-with-mcpserver-pages", "outcome": "Passed" },
+    { "area": "s6-catalog-100pct-green", "outcome": "Passed" }
+  ],
+  "accuracy": 99,
+  "completeness": 99,
+  "overallVerdict": "AGREE",
+  "honesty": [
+    "S6 Red+Green one agent pass: d5930d68 then e2dd1331; no separate H6-red hostile receipt. Not a sole-FAIL; disclosed under honesty.",
+    "Sibling /usecases/ lacks CSP meta; Memory UI has CSP meta. Parity = no inline-eval via tests/Program.",
+    "No PR (head:memory-s4-red = 0). TODO not Done. UpdateService not run. S7a not started at receipt time."
+  ],
+  "prOpened": false,
+  "todoMarkedDone": false,
+  "updateServiceRun": false
+}

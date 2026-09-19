@@ -1,0 +1,72 @@
+{
+  "name": "memory_remember",
+  "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Use this instead of memory_add when title, type, tags, confidence, or provenance matter.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "content": {
+        "description": "Memory content",
+        "type": "string"
+      },
+      "title": {
+        "description": "Optional title",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "summary": {
+        "description": "Optional summary",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "type": {
+        "description": "Memory type token",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "tags": {
+        "description": "Optional comma-separated tags",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "confidence": {
+        "description": "Optional confidence in [0,1]",
+        "type": ["number", "null"],
+        "default": null
+      },
+      "sourceKind": {
+        "description": "Optional provenance kind",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "sourceRef": {
+        "description": "Optional provenance reference",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "scope": {
+        "description": "Memory scope: Global or Workspace",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "id": {
+        "description": "Optional explicit memory id",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "updatedBy": {
+        "description": "Optional updater identity",
+        "type": ["string", "null"],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "content"
+    ]
+  }
+}

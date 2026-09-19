@@ -1,0 +1,10 @@
+{
+  "gate": "H7a",
+  "agree": false,
+  "h7bBlockedUntilH7aAgree": true,
+  "hDoneDefaultRequires": "H7a",
+  "h7bFollowOn": true,
+  "nonGrokCiRequired": false,
+  "defaultPlugin": "grok",
+  "note": "Policy only. Hostile/operator AGREE is a later receipt; this file stays agree=false until that gate."
+}

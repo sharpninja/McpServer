@@ -458,6 +458,7 @@ builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
 // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
 builder.Services.AddCqrsDispatcher();
+builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
 builder.Services.AddUseCaseCqrs();
 builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
@@ -871,7 +872,12 @@ app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // FR-MCP-USECASE-007: serve first-party Use Case UI from wwwroot (/usecases/, /usecases/index.html).
-// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected.
+// FR-MCP-MEMORY-016 / TR-MCP-MEMORY-UI-002: serve first-party Memory UI from wwwroot (/memory/, /memory/index.html).
+// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected
+// behind the same API-key auth as other /mcpserver pages (X-Api-Key), matching /usecases/.
+// Content-Security / no inline-eval policy matches sibling Use Case Manager static UIs.
+// Missing /memory/unknown-asset and hashed bundles return Results.NotFound (404), not a false 200 index.
+// Deep link /memory/{id} opens detail or fail-closed.
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
@@ -883,6 +889,7 @@ app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 
 app.MapDefaultEndpoints();
+MemoryUiEndpoints.Map(app);
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context API v1"));
