@@ -9,8 +9,8 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-010 / FR-MCP-MEMORY-014:
-/// Read-only vs full-access key behavior for S1 verbs.
+/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-010 / FR-MCP-MEMORY-011 / FR-MCP-MEMORY-014:
+/// Read-only vs full-access key behavior for S1 verbs and S2 recall.
 /// </summary>
 public sealed class MemoryAuthTests : IDisposable
 {
@@ -91,6 +91,35 @@ public sealed class MemoryAuthTests : IDisposable
         Assert.Equal(403, revert.StatusCode == 501 ? revertAuth : revert.StatusCode);
         Assert.True(getVersionsAuth is 200 or 404 or 403);
         Assert.Equal(403, revertAuth);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-011-26: Read-only API key may recall/list.</summary>
+    [Fact]
+    public async Task ReadOnlyKey_CanRecall()
+    {
+        var added = await _harness.AddCompatAsync(new MemoryAddRequest
+        {
+            Category = "recall",
+            Text = "BENCH-PREF-EDITOR=neovim read-only recall",
+            Content = "BENCH-PREF-EDITOR=neovim read-only recall",
+            Type = "preference",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(added.Success, added.Error);
+
+        var recall = await _harness.RecallAsync(
+            new MemoryRecallRequest { Query = "BENCH-PREF-EDITOR=neovim", MinScore = 0.1 },
+            readOnlyCaller: true,
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var listAuth = await InvokeAuthAsync("GET", "/mcpserver/memory", defaultKey: true)
+            .ConfigureAwait(true);
+        var recallAuth = await InvokeAuthAsync("POST", "/mcpserver/memory/recall", defaultKey: true)
+            .ConfigureAwait(true);
+
+        Assert.Equal(200, recall.StatusCode);
+        Assert.NotEqual(403, recall.StatusCode);
+        Assert.Contains(recall.Items ?? [], item => item.Id == added.Memory!.Id && item.Score.HasValue);
+        Assert.Equal(200, listAuth);
+        Assert.Equal(200, recallAuth);
     }
 
     private static async Task<int> InvokeAuthAsync(string method, string path, bool defaultKey)

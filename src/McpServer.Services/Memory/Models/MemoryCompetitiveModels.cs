@@ -133,3 +133,114 @@ public sealed record MemoryEdgeRecord
     /// <summary>Optional weight.</summary>
     public double Weight { get; init; }
 }
+
+/// <summary>
+/// FR-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002: Documented recall bounds for S2.
+/// Production fusion/indexer Green is not implemented in this Red slice; tests assert these limits.
+/// </summary>
+public static class MemorySearchLimits
+{
+    /// <summary>AC-FR-MCP-MEMORY-011-16: Default topN when the caller omits the field.</summary>
+    public const int DefaultTopN = 10;
+
+    /// <summary>AC-FR-MCP-MEMORY-011-18: Configured maximum topN. Above this is clamped or 400.</summary>
+    public const int MaxTopN = 50;
+
+    /// <summary>AC-FR-MCP-MEMORY-011-21: Maximum query length accepted by memory_recall.</summary>
+    public const int MaxQueryLength = 2048;
+
+    /// <summary>AC-FR-MCP-MEMORY-011-13: Documented default minScore when omitted (include all scored hits).</summary>
+    public const double DefaultMinScore = 0;
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-011: Request body for <c>memory_recall</c> hybrid search.
+/// </summary>
+public sealed record MemoryRecallRequest
+{
+    /// <summary>Recall query text. Empty, whitespace, or null must return 400.</summary>
+    public string? Query { get; init; }
+
+    /// <summary>Minimum hit score in [0,1].</summary>
+    public double? MinScore { get; init; }
+
+    /// <summary>Maximum number of ranked hits to return.</summary>
+    public int? TopN { get; init; }
+
+    /// <summary>Optional tag filter. Combined with other filters using AND.</summary>
+    public IReadOnlyList<string>? Tags { get; init; }
+
+    /// <summary>Optional type filter.</summary>
+    public string? Type { get; init; }
+
+    /// <summary>Optional scope filter (Global vs Workspace visibility).</summary>
+    public MemoryScope? Scope { get; init; }
+
+    /// <summary>Optional BM25 fusion weight override for fixture ordering tests.</summary>
+    public double? FusionBm25Weight { get; init; }
+
+    /// <summary>Optional vector fusion weight override for fixture ordering tests.</summary>
+    public double? FusionVectorWeight { get; init; }
+
+    /// <summary>Optional rerank flag. Default production config must keep rerank off.</summary>
+    public bool? RerankEnabled { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-011: One ranked recall hit. Score is required for hybrid recall Green.
+/// </summary>
+public sealed record MemoryRecallHit
+{
+    /// <summary>MEMORY-* id of the hit.</summary>
+    public required string Id { get; init; }
+
+    /// <summary>Hybrid fusion score in [0,1].</summary>
+    public double? Score { get; init; }
+
+    /// <summary>Title when persisted.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Content used to open the memory without a second round-trip.</summary>
+    public string? Content { get; init; }
+
+    /// <summary>Legacy text field when Content is unset.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>Memory type token.</summary>
+    public string? Type { get; init; }
+
+    /// <summary>Tags persisted with the memory.</summary>
+    public IReadOnlyList<string>? Tags { get; init; }
+
+    /// <summary>Visibility scope of the hit.</summary>
+    public MemoryScope? Scope { get; init; }
+
+    /// <summary>How the hit was retrieved (bm25, vector, or hybrid).</summary>
+    public string? MatchKind { get; init; }
+
+    /// <summary>Workspace id used for ANN scoping. Must match the caller for workspace hits.</summary>
+    public string? AnnWorkspaceId { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-MEMORY-011 / TEST-MCP-MEMORY-011: HTTP-shaped recall outcome used by S2 acceptance tests.
+/// </summary>
+public sealed record MemoryRecallResult(
+    int StatusCode,
+    IReadOnlyList<MemoryRecallHit>? Items = null,
+    MemoryMutationFailureKind FailureKind = MemoryMutationFailureKind.None,
+    string? Error = null,
+    bool? RerankApplied = null,
+    string? RankingMode = null);
+
+/// <summary>
+/// TR-MCP-MEMORY-SEARCH-002: Outcome of indexing or reconciling a memory embedding.
+/// </summary>
+public sealed record MemoryIndexResult(
+    int StatusCode,
+    string? MemoryId = null,
+    string? EmbeddingStatus = null,
+    string? FailureReason = null,
+    int ReadyCount = 0,
+    int FailedCount = 0,
+    string? Error = null);

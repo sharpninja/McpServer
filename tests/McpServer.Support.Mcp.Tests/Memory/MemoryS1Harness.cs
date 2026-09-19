@@ -14,9 +14,9 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
-/// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1 Red tests.
-/// Does not implement S1 Green behavior.
+/// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
+/// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2 tests.
+/// Does not implement S2 Green indexer or hybrid fusion.
 /// </summary>
 public sealed class MemoryS1Harness : IDisposable
 {
@@ -117,19 +117,126 @@ public sealed class MemoryS1Harness : IDisposable
             Error: dispatched.Error ?? dispatched.Exception?.Message ?? "revert handler is not registered");
     }
 
-    /// <summary>Recalls through the S1/S2 CQRS query port (used by AfterRevert).</summary>
-    public async Task<MemoryQueryResult> RecallAsync(
-        string query,
+    /// <summary>Recalls through the S1/S2 CQRS query port (used by AfterRevert and S2 matrix).</summary>
+    public Task<MemoryRecallResult> RecallAsync(
+        string? query,
+        CancellationToken cancellationToken = default)
+        => RecallAsync(new MemoryRecallRequest { Query = query }, cancellationToken: cancellationToken);
+
+    /// <summary>Recalls through the S2 CQRS query port with filters and ranking options.</summary>
+    public async Task<MemoryRecallResult> RecallAsync(
+        MemoryRecallRequest request,
+        string? workspacePath = null,
+        bool readOnlyCaller = false,
         CancellationToken cancellationToken = default)
     {
         var dispatcher = CreateProductionDispatcher();
         var dispatched = await dispatcher.QueryAsync(
-            new RecallMemoryQuery(WorkspaceA, query),
+            new RecallMemoryQuery(
+                workspacePath ?? WorkspaceA,
+                request.Query,
+                request.MinScore,
+                request.TopN,
+                request.Tags,
+                request.Type,
+                request.Scope,
+                readOnlyCaller,
+                request.FusionBm25Weight,
+                request.FusionVectorWeight,
+                request.RerankEnabled),
             cancellationToken).ConfigureAwait(true);
         if (dispatched.IsSuccess && dispatched.Value is not null)
             return dispatched.Value;
 
-        return new MemoryQueryResult([], 0);
+        return new MemoryRecallResult(
+            StatusCode: 501,
+            FailureKind: MemoryMutationFailureKind.None,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory_recall handler is not registered");
+    }
+
+    /// <summary>Indexes one memory through the S2 CQRS command port when a handler is registered.</summary>
+    public async Task<MemoryIndexResult> IndexAsync(
+        string memoryId,
+        string? workspacePath = null,
+        string? provider = null,
+        bool cloudEnabled = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.SendAsync(
+            new IndexMemoryCommand(workspacePath ?? WorkspaceA, memoryId, provider, cloudEnabled),
+            cancellationToken).ConfigureAwait(true);
+        var status = await GetEmbeddingStatusAsync(memoryId, workspacePath).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryIndexResult(
+            StatusCode: 501,
+            MemoryId: memoryId,
+            EmbeddingStatus: status,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory index handler is not registered");
+    }
+
+    /// <summary>Reconciles stale EmbeddingStatus through the S2 CQRS command port.</summary>
+    public async Task<MemoryIndexResult> ReconcileIndexAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.SendAsync(
+            new ReconcileMemoryIndexCommand(workspacePath ?? WorkspaceA),
+            cancellationToken).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryIndexResult(
+            StatusCode: 501,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory index reconcile handler is not registered");
+    }
+
+    /// <summary>Batch-indexes memories through the S2 CQRS command port.</summary>
+    public async Task<MemoryIndexResult> BatchIndexAsync(
+        IReadOnlyList<string>? memoryIds = null,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dispatcher = CreateProductionDispatcher();
+        var dispatched = await dispatcher.SendAsync(
+            new BatchIndexMemoriesCommand(workspacePath ?? WorkspaceA, memoryIds),
+            cancellationToken).ConfigureAwait(true);
+        if (dispatched.IsSuccess && dispatched.Value is not null)
+            return dispatched.Value;
+
+        return new MemoryIndexResult(
+            StatusCode: 501,
+            Error: dispatched.Error ?? dispatched.Exception?.Message ?? "memory batch index handler is not registered");
+    }
+
+    /// <summary>Reads EmbeddingStatus for a memory, including soft-deleted rows.</summary>
+    public async Task<string?> GetEmbeddingStatusAsync(string memoryId, string? workspacePath = null)
+    {
+        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var entity = await db.Memories
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(memory => memory.Id == memoryId)
+            .ConfigureAwait(true);
+        return entity?.EmbeddingStatus;
+    }
+
+    /// <summary>Test-only fixture helper to stamp EmbeddingStatus without an indexer.</summary>
+    public async Task SetEmbeddingStatusAsync(string memoryId, string? status, string? workspacePath = null)
+    {
+        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var entity = await db.Memories
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(memory => memory.Id == memoryId)
+            .ConfigureAwait(true);
+        if (entity is null)
+            return;
+
+        entity.EmbeddingStatus = status;
+        await db.SaveChangesAsync().ConfigureAwait(true);
     }
 
     /// <summary>Renders REQUIRED MEMORIES from a production injector type when present.</summary>
@@ -246,6 +353,24 @@ public sealed class MemoryS1Harness : IDisposable
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();
     }
+}
+
+/// <summary>
+/// TEST-MCP-MEMORY-011: Port used only for S2 mocks-first contract proof. Not a production facade.
+/// </summary>
+public interface IMemoryS2Port
+{
+    /// <summary>Recalls ranked memories.</summary>
+    Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken);
+
+    /// <summary>Indexes one memory.</summary>
+    Task<MemoryIndexResult> IndexAsync(string memoryId, CancellationToken cancellationToken);
+
+    /// <summary>Reconciles stale EmbeddingStatus.</summary>
+    Task<MemoryIndexResult> ReconcileAsync(CancellationToken cancellationToken);
+
+    /// <summary>Batch-indexes memories to a terminal status.</summary>
+    Task<MemoryIndexResult> BatchIndexAsync(IReadOnlyList<string> memoryIds, CancellationToken cancellationToken);
 }
 
 /// <summary>

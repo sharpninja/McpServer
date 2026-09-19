@@ -75,7 +75,7 @@ public sealed class MemoryListEffectiveTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.DoesNotContain(list.Items, item => item.Id == created.Memory.Id);
-        Assert.DoesNotContain(recall.Items, item => item.Id == created.Memory.Id);
+        Assert.DoesNotContain(recall.Items ?? [], item => item.Id == created.Memory.Id);
     }
 
     /// <summary>AC-FR-MCP-MEMORY-010-34: Within each scope group, list sorts by Id ascending (ordinal).</summary>
