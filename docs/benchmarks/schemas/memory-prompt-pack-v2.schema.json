@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpserver.local/schemas/memory-prompt-pack-v2.schema.json",
+  "title": "memory-prompt-pack-v2-multiturn",
+  "type": "object",
+  "required": ["version", "id", "plugins", "conditions", "jobs", "token_fields", "pilot_plugin"],
+  "properties": {
+    "version": { "type": "string" },
+    "id": { "type": "string" },
+    "kind": { "const": "multi_turn_jobs" },
+    "pack_role": { "type": "string" },
+    "plugins": { "type": "array", "minItems": 8 },
+    "conditions": {
+      "type": "array",
+      "minItems": 2,
+      "contains": { "const": "without_memory" }
+    },
+    "jobs": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["id", "class", "turns"],
+        "properties": {
+          "id": { "type": "string" },
+          "class": { "type": "string" },
+          "turns": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "role", "user_text"],
+              "properties": {
+                "id": { "type": "string" },
+                "role": { "type": "string", "enum": ["establish", "query"] },
+                "user_text": { "type": "string" },
+                "required": { "type": "boolean" },
+                "scoring": { "type": "string", "enum": ["exact", "contains", "rubric"] },
+                "gold_answer_rubric": { "type": "string" },
+                "gold_tokens": { "type": "array", "items": { "type": "string" } },
+                "query_must_not_contain": { "type": "array", "items": { "type": "string" } },
+                "forbidden_claims": { "type": "array", "items": { "type": "string" } },
+                "write_memories": { "type": "boolean" },
+                "expected_memories": { "type": "array" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "token_fields": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "pilot_plugin": { "const": "grok" }
+  }
+}

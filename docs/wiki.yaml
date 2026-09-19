@@ -303,6 +303,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: benchmarks-memory
+    title: Memory Benchmarks
+    source: docs/benchmarks/README.md
+    target: Memory-Benchmarks.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -344,6 +351,7 @@ navigation:
       - document: context-todo-schema
       - document: context-action-types
       - document: context-memory
+      - document: benchmarks-memory
       - document: context-federation
       - document: context-api-capabilities
       - document: context-compliance-rules

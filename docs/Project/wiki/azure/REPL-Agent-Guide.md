@@ -825,6 +825,46 @@ payload:
 
 Inspect with `workflow.handoff.get` (`runId`). Approve with `workflow.handoff.approve` (`runId`, `approved`, `reviewer`). Custom `promptTemplateId` values are rejected.
 
+## Memory Workflow
+
+Use `workflow.memory.*` for durable shared memories. Do not invent memories. Do not write agent-local stores as the source of truth. See `docs/context/memory.md`, `plugins/core/skills/memory/SKILL.md`, and the per-host payloads under `plugins/core/hosts/*/SKILL.md`. All eight official plugins ship `skills/memory` plus `memory-descriptor.json` with always-on required-memory injection (or a documented host path).
+
+```yaml
+type: request
+payload:
+  requestId: req-20260919T090000Z-memory-remember-001
+  method: workflow.memory.remember
+  params:
+    content: Prefer tokens_total as the memory bench primary metric.
+    type: decision
+    scope: Workspace
+    updatedBy: CursorGrok
+```
+
+Recall with `workflow.memory.recall` (`query`, optional `topN` / `minScore` / `tags` / `type` / `scope`). Promote only when the operator asks (`workflow.memory.promote`, `sourceKind` + `sourceRef`). Consolidate defaults to dry-run (`workflow.memory.consolidate`). Revert with `workflow.memory.revert`. Compat CRUD: `list`, `get`, `add`, `update`, `remove`.
+
+### REQUIRED MEMORIES
+
+At a host-supported request boundary, all eight official plugins inject Effective memories using raw `Content` (or legacy `Text`) only:
+
+```
+REQUIRED MEMORIES
+- <raw content>
+```
+
+When none are visible:
+
+```
+REQUIRED MEMORIES
+- None
+```
+
+Preserve raw text. Do not summarize, paraphrase, or add secrets. Title, summary, confidence, and tags must not appear in the injected block.
+
+If the MCP server is unavailable, keep a local failsafe for mutating tools and replay after the server acknowledges the write.
+
+Typed passthrough: `client.Memory.RememberAsync`, `RecallAsync`, `ExploreAsync`, `ConsolidateAsync`, `PromoteAsync`, `RevertAsync`.
+
 ## Requirements Workflow
 
 ### List Functional Requirements

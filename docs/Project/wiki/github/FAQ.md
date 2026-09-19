@@ -4,7 +4,7 @@
 
 ### What is MCP Server?
 
-MCP Server is a local AI-agent integration server that exposes project context — TODO items, repository files, GitHub issues, session logs, and semantic search — to MCP-compatible clients (Claude Desktop, VS Code Copilot, Cursor) via both HTTP REST and MCP Streamable HTTP transports, and optionally over STDIO.
+MCP Server is a local AI-agent integration server that exposes project context — TODO items, repository files, GitHub issues, session logs, durable agent memories, and semantic search — to MCP-compatible clients (Claude Desktop, VS Code Copilot, Cursor) via both HTTP REST and MCP Streamable HTTP transports, and optionally over STDIO.
 
 ### How do I run the server?
 
@@ -254,6 +254,55 @@ Trigger a full re-index with `POST /mcpserver/sync/run`.
 
 ---
 
+## Agent Memory
+
+### What is MCP memory?
+
+Durable operator guidance stored by McpServer and scoped `Global` or `Workspace`. `Effective` lists Global memories first (by id), then the current workspace. The MCP store is the shared source of truth; agent-local files are caches. See `docs/context/memory.md`.
+
+### How do remember, recall, promote, and consolidate work?
+
+- **remember** (`POST /mcpserver/memory/remember` / `memory_remember`) writes a multi-layer memory. Injection later uses raw `content` (or legacy `text`) only.
+- **recall** (`POST /mcpserver/memory/recall` / `memory_recall`) returns ranked Effective hits by meaning or keyword.
+- **promote** (`POST /mcpserver/memory/promote` / `memory_promote`) copies an operator-selected `sessionlog` or `context` source into memory.
+- **consolidate** (`POST /mcpserver/memory/consolidate` / `memory_consolidate`) plans a sleep/merge. Default is dry-run; set `dryRun: false` to apply.
+
+Compat CRUD (`memory_add` / `list` / `update` / `remove`) remains. Writes are not idempotent: a duplicate remember creates a second row.
+
+### What is REQUIRED MEMORIES?
+
+All eight official plugins inject Effective memories at host-supported request boundaries (always-on, or the documented host path). The production block is:
+
+```
+REQUIRED MEMORIES
+- <raw content>
+```
+
+or, when none are visible:
+
+```
+REQUIRED MEMORIES
+- None
+```
+
+Summary, confidence, tags, and titles are never injected. Do not paraphrase the raw text.
+
+### Which plugins support memory?
+
+All eight official plugins now ship `skills/memory/SKILL.md`, root `memory-descriptor.json`, and always-on required-memory injection (or a documented host path): claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode. Canonical payloads also live in McpServer `plugins/core/hosts/{id}/`.
+
+Grok remains the default CI bench lane (`./build.ps1 BenchMemory`). After H7a `agree:true`, `./build.ps1 BenchMemory -Plugin all` is unblocked (S7b/H7b on develop, PR #50). Primary bench metric is tokens used. The efficiency claim is the multi-turn v2 pack (`docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`), not the v1 single-turn smoke pack.
+
+### Where is the Perplexity research policy?
+
+Each official plugin repo has `docs/research/perplexity-research-policy.md` (and `docs/research/research-to-plan-workflow.md`). Perplexity is the preferred external research provider for planning and substantive documentation. Plugins do not require `PERPLEXITY_API_KEY` for ordinary McpServer tool execution.
+
+### Where is the Memory UI?
+
+`http://localhost:7147/memory/` after a service build that includes `wwwroot/memory` (Nuke `UpdateService`). It lists the active workspace Effective set and edits through the same REST update/revert paths.
+
+---
+
 ## MCP Transport
 
 ### What's the difference between REST and MCP transport?
@@ -262,7 +311,7 @@ Trigger a full re-index with `POST /mcpserver/sync/run`.
 |---------|--------------------|---------------------------------|
 | Protocol | Standard HTTP/JSON | MCP Streamable HTTP (JSON-RPC) |
 | Clients | Any HTTP client, curl, Swagger | Claude Desktop, VS Code Copilot, Cursor |
-| Tools | N/A (endpoints) | `todo_*`, `context_*`, `repo_*`, `github_*`, `sync_*`, `sessionlog_*` |
+| Tools | N/A (endpoints) | `todo_*`, `context_*`, `repo_*`, `github_*`, `sync_*`, `sessionlog_*`, `memory_*` |
 | Discovery | OpenAPI/Swagger | MCP tool listing |
 
 Both share the same backend services and run on the same port.

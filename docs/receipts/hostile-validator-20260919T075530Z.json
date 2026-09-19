@@ -1,0 +1,129 @@
+{
+  "phase": "H5-green",
+  "branch": "memory-s4-red",
+  "tipSha": "359e51f24ef39c28498675117c8f8680e781f9cb",
+  "filters": {
+    "supportMcpMemory": "FullyQualifiedName~Memory",
+    "repl": "FullyQualifiedName~Memory",
+    "client": "FullyQualifiedName~Memory",
+    "namespaceControl": "FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory"
+  },
+  "startedUtc": "2026-09-19T07:54:17Z",
+  "endedUtc": "2026-09-19T07:54:32Z",
+  "trxSha256": {
+    "supportMcpMemory": "8f6a0eb2d93473560c083df4965689e30d093090c7b82a833c25747b754c82c1",
+    "repl": "1e8bf1f738dc5cefdae90673d3b3293e68f5cb082d3c1aeab769461465a86989",
+    "client": "1e0c67d899804521f0de73beb89f972f3987b94d8a7384695f17593d31ba2007",
+    "namespaceControl": "75ae1d17bdbebb05a0e5c12bd86fbb40c40e9f177e477d0ef11f84954716bcfc"
+  },
+  "counts": {
+    "supportMcpMemory": {
+      "failed": 0,
+      "passed": 277,
+      "skipped": 0,
+      "total": 277
+    },
+    "repl": {
+      "failed": 0,
+      "passed": 9,
+      "skipped": 0,
+      "total": 9
+    },
+    "client": {
+      "failed": 0,
+      "passed": 3,
+      "skipped": 0,
+      "total": 3
+    },
+    "namespaceControl": {
+      "failed": 0,
+      "passed": 227,
+      "skipped": 0,
+      "total": 227
+    }
+  },
+  "catalog": {
+    "S1": {
+      "pass": 73,
+      "total": 73,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S2": {
+      "pass": 40,
+      "total": 40,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S3": {
+      "pass": 20,
+      "total": 20,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S4": {
+      "pass": 42,
+      "total": 42,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S5": {
+      "pass": 24,
+      "total": 24,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    }
+  },
+  "focus": [
+    {
+      "area": "cqrs-adapters-handlers-only",
+      "outcome": "Passed"
+    },
+    {
+      "area": "error-envelope-unchanged",
+      "outcome": "Passed"
+    },
+    {
+      "area": "stdio-equiv-http-verb-set",
+      "outcome": "Passed"
+    },
+    {
+      "area": "grok-plugin-checklist-pass",
+      "outcome": "Passed"
+    },
+    {
+      "area": "marker-template-new-and-old-verbs",
+      "outcome": "Passed"
+    },
+    {
+      "area": "memories-context-opt-in-scoped",
+      "outcome": "Passed"
+    },
+    {
+      "area": "sse-no-cross-workspace",
+      "outcome": "Passed"
+    },
+    {
+      "area": "s5-catalog-100pct-green",
+      "outcome": "Passed"
+    }
+  ],
+  "accuracy": 99,
+  "completeness": 99,
+  "overallVerdict": "AGREE",
+  "honesty": [
+    "S5 Red+Green landed in one agent pass: bcefb456 (S5 Red 2026-09-19T07:40:03Z) then 359e51f2 (S5 Green 2026-09-19T07:48:19Z). No separate prior H5-red hostile receipt. Not a sole-FAIL; disclosed under honesty.",
+    "Hostile skill ~/.grok/skills/hostile-validator/SKILL.md missing on this box; claims independently re-verified.",
+    "No PR; memory-s4-red only; MCP-MEMORY-002 not Done; S6 not started."
+  ],
+  "notes": [
+    "Claim Support.Mcp Memory 277 matches FullyQualifiedName~Memory (broader than namespace-only 227).",
+    "Independently re-ran Support.Mcp Memory, Repl, and Client filters on tip 359e51f2.",
+    "S5 AC 24/24 Pass; all H5-green focus areas Passed."
+  ]
+}

@@ -458,6 +458,28 @@ Response example:
 - `POST /mcpserver/graphrag/index`
 - `POST /mcpserver/graphrag/query`
 
+### Memory controller (`/mcpserver/memory*`)
+
+Compat CRUD (workspace Effective visibility; `X-Api-Key` required; optional `X-Workspace-Path`):
+
+- `GET /mcpserver/memory` — list (`scope` = `Effective` default, `Global`, or `Workspace`; optional `category`, `keyword`)
+- `GET /mcpserver/memory/{id}`
+- `POST /mcpserver/memory` — add (`text`, `category`, optional `id`, `scope`, `updatedBy`)
+- `PUT /mcpserver/memory/{id}` — update provided fields only
+- `DELETE /mcpserver/memory/{id}`
+
+Additive CQRS verbs (MCP-MEMORY-002):
+
+- `POST /mcpserver/memory/remember` — persist a multi-layer memory (`content` required; optional title/summary/type/tags/confidence/source/scope)
+- `POST /mcpserver/memory/recall` — ranked recall by meaning or keyword (`query`; optional `minScore`, `topN`, `tags`, `type`, `scope`)
+- `POST /mcpserver/memory/explore` — neighborhood from `seedId` or query seed (Hebbian off by default)
+- `POST /mcpserver/memory/consolidate` — dry-run merge plan by default; set `dryRun: false` to apply
+- `POST /mcpserver/memory/promote` — promote a `sessionlog` or `context` source into memory (operator-explicit)
+- `GET /mcpserver/memory/{id}/versions`
+- `POST /mcpserver/memory/{id}/revert` — restore snapshot `versionNumber` (appends history)
+
+`Idempotency-Key` is not supported. A duplicate remember creates a second row. Foreign or soft-deleted ids fail closed. See `docs/context/memory.md`.
+
 ### PromptTemplate controller (`/mcpserver/templates*`)
 
 - `GET|POST /mcpserver/templates`
@@ -730,7 +752,7 @@ PUT /mcpserver/workspace/prompt
 
 Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`
 
-Current surface area: 42 tools.
+Current surface area: STDIO tools in `docs/stdio-tool-contract.json` (includes the memory surface below).
 
 ### Workspace policy
 
@@ -754,6 +776,12 @@ Current surface area: 42 tools.
 ### Requirements
 
 - `requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`
+
+### Memory
+
+- Compat: `memory_list`, `memory_get`, `memory_add`, `memory_update`, `memory_remove`
+- Competitive: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`
+- Prefer the required plugin or REPL `workflow.memory.*` over raw REST. Injection contract: `docs/context/memory.md`.
 
 ### Session logs
 
@@ -931,6 +959,77 @@ All routes require `X-Api-Key`. Invalid keys are 400; duplicate keys 409; non-ow
 - Typed client: `client.Products`
 - Context source `product-requirements` returns sibling FR/TR/TEST text tagged with `originWorkspaceId`, not sibling `.cs` files
 
+## 7d) Agent memory (remember / recall / promote / consolidate)
+
+MCP memories are the shared, workspace-scoped store for durable operator guidance. Agent-local memory files are caches only. Full contract: `docs/context/memory.md`.
+
+### Verbs
+
+- `memory_remember` / `POST /mcpserver/memory/remember` — persist a fact, decision, preference, procedure, or entity. `content` is the raw text that later injection uses.
+- `memory_recall` / `POST /mcpserver/memory/recall` — ranked guidance by meaning or keyword. Results stay in the caller Effective set.
+- `memory_promote` / `POST /mcpserver/memory/promote` — copy an operator-selected session-log or context source into memory (`sourceKind` + `sourceRef`).
+- `memory_consolidate` / `POST /mcpserver/memory/consolidate` — sleep/merge near-duplicates. Default is dry-run; apply only when `dryRun` is false.
+- `memory_explore` / `POST /mcpserver/memory/explore` — neighborhood walk from a seed id or the top recall hit. Hebbian co-retrieved edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
+- `memory_revert` / `POST /mcpserver/memory/{id}/revert` — restore snapshot N and append history.
+- Compat CRUD remains: `memory_add`, `memory_list`, `memory_update`, `memory_remove`.
+
+REPL: `workflow.memory.remember|recall|explore|consolidate|promote|revert` plus the same compat names. Typed client: `McpServerClient.Memory`.
+
+### REQUIRED MEMORIES injection
+
+All eight official plugins (claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode) render Effective memories at host-supported request boundaries using raw `Content` (or legacy `Text`) only. Each plugin ships `skills/memory/SKILL.md` plus root `memory-descriptor.json`, with always-on injection on the host path (`hooks/scripts/memory-context.ps1` and/or `src/memory-context.ts`). Title, summary, confidence, and tags never appear in the block. Production renderer (`MemoryRequiredMemoriesRenderer`):
+
+```
+REQUIRED MEMORIES
+- <raw content>
+```
+
+An empty Effective set still renders:
+
+```
+REQUIRED MEMORIES
+- None
+```
+
+Do not summarize or rewrite injected text.
+
+### Memory UI (active-workspace governance)
+
+`/memory/` is the first-party static UI for search, open, edit, and version/revert of Effective memories in the active workspace.
+
+REST used by the UI:
+
+- List: `GET /mcpserver/memory?scope=Effective` (requires `X-Api-Key`, optional `X-Workspace-Path`)
+- Get / update: `GET/PUT /mcpserver/memory/{id}`
+- Remember: `POST /mcpserver/memory/remember`
+- Recall: `POST /mcpserver/memory/recall`
+- Versions / revert: `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`
+
+The UI calls only those public REST routes. Foreign or unknown ids fail closed (403/404). Soft-deleted rows stay hidden because the default list omits them.
+
+### First-party UI and ship path
+
+- Served at `http://localhost:7147/memory/` after deploy via Nuke `UpdateService`
+- Deep link `/memory/{id}` opens detail or fail-closed for unknown ids
+- Static assets live in `wwwroot/memory` and are included in publish output and the Linux service package
+- Auth is the same API-key cookie/header bridge as other `/mcpserver` pages (`X-Api-Key`)
+- Redeploy only with elevated Nuke:
+
+```powershell
+.\build.ps1 UpdateService --SkipVersionBump true
+```
+
+Do not run UpdateService in this slice unless an operator asks.
+
+## 7e) Memory plugin efficacy check
+
+The standard with/without memory pack is `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression).
+The real efficiency + correctness bench is `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` (multi-turn jobs; success-gated tokens_total).
+See `docs/benchmarks/README.md` for the token-primary bench (pass/fail is correctness/safety only).
+Run `./build.ps1 BenchMemory` for the default Grok lane. After H7a `agree:true` (`docs/benchmarks/h7a-value-gate.json`), `./build.ps1 BenchMemory -Plugin all` runs all eight recorded/stub adapters. S7b/H7b landed on develop (PR #50).
+
+Eight-plugin token-primary v2 results: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Live Grok subscription-context v2 remains `docs/benchmarks/live/grok-subscription-cloud-agent-v2-multiturn.json` (summary `memory-bench-multiturn-20260919T090341Z.md`). Do not treat v1 `memory-bench-*.md` artifacts as the efficiency claim.
+
 ## 8) Wire docs into README index and docs folder
 
 This user guide is wired into:
@@ -938,6 +1037,8 @@ This user guide is wired into:
 - repository README (`README.md`)
 - docs index (`docs/README.md`)
 - docs navigation (`docs/toc.yml`)
+- memory contract (`docs/context/memory.md`)
+- memory benchmarks (`docs/benchmarks/README.md`)
 
 ## Reference links
 
@@ -946,6 +1047,8 @@ This user guide is wired into:
 - `REPL-USER-GUIDE.md`
 - `REPL-AGENT-GUIDE.md`
 - `context/federation.md`
+- `context/memory.md`
+- `benchmarks/README.md`
 - `README.md`
 - `FAQ.md`
 - `context/`

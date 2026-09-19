@@ -69,4 +69,50 @@ public sealed class MemoryWorkflow : IMemoryWorkflow
 
         return _client.RemoveAsync(id, cancellationToken);
     }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return _client.RememberAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return _client.RecallAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return _client.ExploreAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return _client.ConsolidateAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return _client.PromoteAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<MemorySurfaceResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw new ArgumentException("Memory ID cannot be null or empty.", nameof(id));
+        }
+
+        return _client.RevertAsync(id, versionNumber, cancellationToken);
+    }
 }

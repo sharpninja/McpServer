@@ -25,7 +25,9 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 | **Integration Mechanism** | Claude hooks + plugin manifest + skills | .claude-plugin (mcpServers + skills + userConfig) | MCP Server (stdio, MCP SDK) | AgentPlugin (createTool + hooks cap) | .codex-plugin (skillsPath) + lib scripts | plugin.json (skills[] + hooks + mcpServers) | Grok/Claude-compatible plugin manifests + native SKILL.md + hooks + mcpServers | OpenCode plugin SDK (createMcpServerPlugin) |
 | **Core Workflow Tools** | Full (TODO, Session, Reqs, GraphRAG, Workspace) | Full (same 5) | Full (via MCP tools) | Full (5 tools) | Full (5 + guidance) | Full (5) | Full (5) | Full (many explicit tools) |
 | **Additional Dedicated Skills** | claude-hook-validation, claude-hook-wiring | - | - | - | device, enforcement, workflow | - | - | - |
-| **Native SKILL.md Files** | Yes (13) | Yes (11) | Yes (7) | Yes (7) | Yes (14) | Yes (11) | Yes (11) | Yes (7) |
+| **Native SKILL.md Files** | Yes (17) | Yes (14) | Yes (10) | Yes (10) | Yes (18) | Yes (14) | Yes (15) | Yes (10) |
+| **Agent Memory (MCP-MEMORY-002)** | Yes (`skills/memory` + `memory-descriptor.json` + injection) | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
+| **Perplexity research policy** | Yes (`docs/research/perplexity-research-policy.md`) | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
 | **Automatic Hook Support** | Yes (rich) | Partial (degrades to handoff/cache) | No | Partial (capabilities include hooks) | No (Codex has limited hook surface) | Yes (rich) | Yes (dual claude/codex manifests) | No |
 | **Hook Events Supported** | SessionStart/End, UserPromptSubmit, Stop, PostToolUse (plan+edit), Pre/PostCompact, SubagentComplete | Limited (Cowork hook env) | N/A | Via V2 hooks cap | N/A (uses scripts) | Session*, Compact*, UserPromptSubmit, Stop, PostToolUse | Same as Claude Code + Codex | N/A |
 | **Manual Enforcement Scripts** | Yes (lib/ + hooks) | Yes (lib/ + handoff) | Yes (3-phase: user-prompt-submit, code-verify, stop-gate) | Yes (same 3 scripts + ENFORCEMENT.md) | Yes (strong: session-start, code-verify, stop-gate + dedicated skill) | Yes (lib/ scripts) | Yes (full lib/ scripts) | Limited (cache only; no enforcement scripts in lib/) |
@@ -46,7 +48,7 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 ## Legend and Notes
 
 - **Core Workflow Tools**: Always includes TODO management (with streaming plan/implement/status), Session Log (beginTurn/completeTurn/appendActions/query), Requirements (FR/TR/TEST + mappings + document gen), GraphRAG (entities/rels + ingest/query), and Workspace initialization/lifecycle.
-- **Native SKILL.md Files (v1.35.0)**: Counts are the total `skills/<name>/SKILL.md` files per repo. The shared core-surface skills (session, todo, requirements, graphrag) and operational skills (workspace, commit-sync, sync-logs, wrap-up, triage) are host-neutral and identical across every plugin that carries them. Core-surface skills ship in the five SKILL.md-first hosts (Claude Code, Claude Cowork, Codex, Copilot, Grok); the tool-first hosts (Cline, Cline v2, OpenCode) expose those surfaces as native tools and carry the operational subset. All eight plugins also ship `reddit-draft` and `reddit-publish` for drafting and publishing articles to Reddit.
+- **Native SKILL.md Files (plugin HEAD 2026-09-19)**: Counts are the total `skills/<name>/SKILL.md` files per repo on each plugin default branch. The shared core-surface skills (session, todo, requirements, graphrag, memory) and operational skills (workspace, commit-sync, sync-logs, wrap-up, triage) are host-neutral and identical across every plugin that carries them. Core-surface skills ship in the five SKILL.md-first hosts (Claude Code, Claude Cowork, Codex, Copilot, Grok); the tool-first hosts (Cline, Cline v2, OpenCode) expose those surfaces as native tools and carry the operational subset plus `skills/memory`. All eight plugins also ship `reddit-draft` and `reddit-publish` for drafting and publishing articles to Reddit, and `docs/research/perplexity-research-policy.md`.
 - **Enforcement Scripts**: The three-phase per-user-message protocol (open turn on prompt, verify build after edits, stop-gate before final output) required by AGENTS-README-FIRST.yaml Rule 2/10 when the host lacks reliable hooks.
 - **Session Log Ownership**: Models write their own session-log turns through workflow/session tools; plugin hooks open, gate, cache, and replay turn payloads but do not parse local chat transcripts.
 - **Offline Resilience**: Writes are cached locally when the MCP server or REPL is unreachable; flushed opportunistically or on session end.
@@ -62,7 +64,9 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 
 ## Source of Truth
 
-The authoritative behavioral contract for all plugins is the `AGENTS-README-FIRST.yaml` file present in every enabled workspace, combined with the shared REPL tool surface (`workflow.todo.*`, `workflow.sessionlog.*`, `workflow.requirements.*`, `workflow.graphrag.*`, `client.Workspace.*`).
+The authoritative behavioral contract for all plugins is the `AGENTS-README-FIRST.yaml` file present in every enabled workspace, combined with the shared REPL tool surface (`workflow.todo.*`, `workflow.sessionlog.*`, `workflow.requirements.*`, `workflow.graphrag.*`, `workflow.memory.*`, `client.Workspace.*`).
+
+Memory (MCP-MEMORY-002) is complete on `develop` through S7b/H7b (PR #49, PR #50). The shared core skill is `plugins/core/skills/memory/SKILL.md`. Per-host payloads live in `plugins/core/hosts/{id}/` and in each plugin repo as `skills/memory` + `memory-descriptor.json` with always-on required-memory injection. `./build.ps1 BenchMemory` still defaults to the Grok lane; `-Plugin all` is unblocked because `docs/benchmarks/h7a-value-gate.json` is `agree:true`. Do not claim a token-efficiency win from the v1 smoke pack; use `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`.
 
 ## Related Documents
 

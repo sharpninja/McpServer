@@ -306,6 +306,7 @@ public static class McpStdioHost
         builder.Services.AddMcpGraphRag();
         // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by usecase_* tools and handlers.
         builder.Services.AddCqrsDispatcher();
+        builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
         builder.Services.AddUseCaseCqrs();
         builder.Services.AddProductCqrs();
         DecorateGraphRagService(builder.Services);

@@ -1,0 +1,42 @@
+{
+  "name": "memory_explore",
+  "description": "Explore related memories from a seed id or query when you need neighborhood context. Use explore after recall when you want linked neighbors, not a fresh ranked search.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "seedId": {
+        "description": "Optional MEMORY-* seed",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "query": {
+        "description": "Optional query seed",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "depth": {
+        "description": "Optional hop depth",
+        "type": ["integer", "null"],
+        "default": null
+      },
+      "maxNeighbors": {
+        "description": "Optional neighbor cap",
+        "type": ["integer", "null"],
+        "default": null
+      },
+      "hebbianEnabled": {
+        "description": "Optional Hebbian override",
+        "type": ["boolean", "null"],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

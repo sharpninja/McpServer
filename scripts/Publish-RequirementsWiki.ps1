@@ -126,7 +126,9 @@ function Get-UserDocumentationLinks {
         @{ Label = 'REPL User Guide'; Path = 'docs/REPL-USER-GUIDE.md' },
         @{ Label = 'REPL Agent Guide'; Path = 'docs/REPL-AGENT-GUIDE.md' },
         @{ Label = 'Federation Guidance'; Path = 'docs/context/federation.md' },
-        @{ Label = 'Agent Plugin Availability'; Path = 'docs/AGENT-PLUGIN-AVAILABILITY.md' }
+        @{ Label = 'Agent Plugin Availability'; Path = 'docs/AGENT-PLUGIN-AVAILABILITY.md' },
+        @{ Label = 'MCP Memories'; Path = 'docs/context/memory.md' },
+        @{ Label = 'Memory Benchmarks'; Path = 'docs/benchmarks/README.md' }
     )
 
     foreach ($doc in $docs) {
