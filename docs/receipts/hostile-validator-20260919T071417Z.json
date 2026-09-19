@@ -1,1 +1,155 @@
-PLACEHOLDER
+{
+  "timestampUtc": "2026-09-19T07:14:17Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H4-red",
+  "todoId": "MCP-MEMORY-002",
+  "priorH3GreenAgree": "docs/receipts/hostile-validator-20260919T064237Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": null,
+  "prUrl": null,
+  "gitHeadVerified": "1f2b94760b8f2d09b72eb2ffee1e93bc2f566be2",
+  "gitBranch": "memory-s4-red",
+  "baseBranch": "memory-s3-red",
+  "overallVerdict": "AGREE",
+  "passCount": 17,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Operator AGREE floor for THIS run: every scored claim PASS AND Accuracy>=98 AND Completeness>=98. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "storage": "reachable",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002",
+      "remainingNote": "stale: remaining still cites H3-red in progress despite S4 Red tip @ 1f2b947 and H3-green AGREE on ancestry"
+    },
+    "evidenceSource": "origin/memory-s4-red worktree /tmp/s4-h4-red-wt @ 1f2b94760b8f2d09b72eb2ffee1e93bc2f566be2",
+    "priorH3GreenAgreeOnBranch": true
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 42,
+      "passed": 158,
+      "skipped": 0,
+      "total": 200
+    },
+    "s4CatalogMatrix": {
+      "count": 42,
+      "coverage": "42/42",
+      "failed": 42,
+      "passed": 0,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s4MocksFirst": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "methods": [
+        "PortMock_DryRunDefault_NoMutations",
+        "PortMock_WriteMode_SurvivorAndLineage",
+        "PortMock_LockBusy",
+        "PortMock_NoCrossWorkspaceMerge",
+        "PortMock_PromoteProvenance",
+        "PortMock_SessionLogByteIdentical",
+        "PortMock_NoAutoPromote_ExplicitOnly"
+      ]
+    },
+    "s3CatalogInSameFilter": {
+      "count": 20,
+      "failed": 0,
+      "passed": 20,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s2CatalogInSameFilter": {
+      "count": 40,
+      "failed": 0,
+      "passed": 40,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s1CatalogInSameFilter": {
+      "count": 73,
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0,
+      "missing": 0
+    },
+    "compatFr001_007": {
+      "failed": 0,
+      "passed": 37,
+      "skipped": 0,
+      "filter": "MemoryServiceTests|MemoryControllerTests|MemoryEntityScopeTests|MemoryContractArtifactTests|MemoryTxnGatedTests|MemoryMcpToolTests|MemoryFederationTests"
+    },
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s4-h4-red-test-results/memory-s4-h4-red.trx",
+    "logPath": "/tmp/s4-h4-red-dotnet-test.log",
+    "utcStart": "2026-09-19T07:11:48Z",
+    "utcEnd": "2026-09-19T07:12:21Z",
+    "agentClaimMatch": "Failed 42 Passed 158 Skipped 0 MATCH; S4 catalog 42 red MATCH"
+  },
+  "focusFailures": {
+    "dryRunDefault": "DryRunDefaultTrue Consolidate+Job Expected 200 Actual 501",
+    "mergeLineage": "WriteMode_MergesNearDuplicates Expected 200 Actual 501",
+    "lockBusy": "LockContention_BusyError Expected 400 Actual 501",
+    "noCrossWorkspace": "NeverMergesAcrossWorkspaces Expected 200 Actual 501",
+    "promoteProvenance": "FromSessionLog_SetsProvenance Expected 200 Actual 501",
+    "sessionlogIdentical": "SessionLogRows_Unchanged Expected 200 Actual 501",
+    "noAutoPromote": "NoAutoPromote_OnTurnComplete Expected 200 Actual 501"
+  },
+  "noGreenHandlers": true,
+  "claims": [
+    {"id": "H4R-1", "verdict": "PASS", "claim": "S4 Red suite 42/42 catalog methods present", "evidence": "TRX 42/42 present Missing 0; methods across MemoryConsolidateTests/PromoteTests/ConsolidateJobTests/Auth"},
+    {"id": "H4R-2", "verdict": "PASS", "claim": "Production Red fails for missing consolidate/promote/jobs not compile/skip", "evidence": "Failed 42 Skipped 0; Expected 200/400/403/404 Actual 501 (handler not registered); CancelMidRun Assert.True StatusCode 200|409|499 got 501"},
+    {"id": "H4R-3", "verdict": "PASS", "claim": "Mocks-first may pass; S4 production stays Red", "evidence": "mocks 7/7 Passed; production catalog 42 Failed / 0 Passed / 0 Skipped"},
+    {"id": "H4R-4", "verdict": "PASS", "claim": "No S4 Green consolidate/promote/job handlers on Red branch", "evidence": "ConsolidateMemoryCommand/PromoteMemoryCommand/RunConsolidateJobCommand records only; no *Handler; harness returns 501"},
+    {"id": "H4R-5", "verdict": "PASS", "claim": "S1+S2+S3 Green Failed 0 in same Memory filter", "evidence": "S1 73/73 Passed; S2 40/40 Passed; S3 20/20 Passed"},
+    {"id": "H4R-6", "verdict": "PASS", "claim": "FR-001..007 compat unbroken", "evidence": "compat filter Failed 0 Passed 37 Skipped 0"},
+    {"id": "H4R-7", "verdict": "PASS", "claim": "No Python product path", "evidence": "git ls-tree .py empty"},
+    {"id": "H4R-8", "verdict": "PASS", "claim": "TODO done=false; no PR; no S4 Green by validator", "evidence": "curl done=false; head:memory-s4-red PR search 0; no handlers added"},
+    {"id": "H4R-9", "verdict": "PASS", "claim": "Honesty disclose gaps", "evidence": "hostile skill/profile missing; TODO remaining stale (still cites H3-red in progress); MCP todo_get timeouts"},
+    {"id": "H4R-10", "verdict": "PASS", "claim": "H3-green AGREE prerequisite exists; not rewritten", "evidence": "hostile-validator-20260919T064237Z twin on tip ancestry"},
+    {"id": "H4R-F1", "verdict": "PASS", "claim": "dry-run default / no mutations focus", "evidence": "DryRunDefaultTrue (Consolidate+Job) Expected 200 Actual 501; DryRun_NoMutations 501; PortMock_DryRunDefault_NoMutations Passed"},
+    {"id": "H4R-F2", "verdict": "PASS", "claim": "write merge survivor+lineage focus", "evidence": "WriteMode_MergesNearDuplicates Expected 200 Actual 501; PortMock_WriteMode_SurvivorAndLineage Passed"},
+    {"id": "H4R-F3", "verdict": "PASS", "claim": "lock busy focus", "evidence": "LockContention_BusyError Expected 400 Actual 501; PerWorkspaceLock/LockExpiry_Recovers 501; PortMock_LockBusy Passed"},
+    {"id": "H4R-F4", "verdict": "PASS", "claim": "no cross-workspace merge focus", "evidence": "NeverMergesAcrossWorkspaces Expected 200 Actual 501; PortMock_NoCrossWorkspaceMerge Passed"},
+    {"id": "H4R-F5", "verdict": "PASS", "claim": "promote provenance focus", "evidence": "FromSessionLog_SetsProvenance / FromContext_SetsProvenance Expected 200 Actual 501; PortMock_PromoteProvenance Passed"},
+    {"id": "H4R-F6", "verdict": "PASS", "claim": "sessionlog byte-identical focus", "evidence": "SessionLogRows_Unchanged Expected 200 Actual 501; PortMock_SessionLogByteIdentical Passed"},
+    {"id": "H4R-F7", "verdict": "PASS", "claim": "no auto-promote focus", "evidence": "NoAutoPromote_OnTurnComplete Expected 200 Actual 501; PortMock_NoAutoPromote_ExplicitOnly Passed"}
+  ],
+  "workspaceRules": [
+    "NO PULL REQUESTS",
+    "push receipts to memory-s4-red only",
+    "do not mark MCP-MEMORY-002 Done",
+    "no Nuke UpdateService",
+    "no Python"
+  ],
+  "didNot": [
+    "mark TODO MCP-MEMORY-002 done",
+    "open pull request",
+    "implement S4 Green consolidate/promote/job handlers",
+    "rewrite prior H3-green AGREE receipts",
+    "start S5"
+  ],
+  "accuracyResidual": [
+    "Hostile-validator skill + profile dirs absent on box",
+    "Live TODO remaining text not yet advanced to H4-red / S4 Red tip",
+    "MCP todo_get tool timed out; used curl health+todo instead"
+  ],
+  "receiptMd": "docs/receipts/hostile-validator-20260919T071417Z.md"
+}
