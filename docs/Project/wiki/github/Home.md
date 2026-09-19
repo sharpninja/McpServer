@@ -32,6 +32,7 @@
   - [TODO Schema](TODO-Schema)
   - [Session Log Action Types](Action-Types)
   - [MCP Memories](MCP-Memories)
+  - [Memory Benchmarks](Memory-Benchmarks)
   - [Federation](Federation)
   - [API Capabilities](API-Capabilities)
   - [Compliance Rules](Compliance-Rules)

@@ -1,6 +1,6 @@
 # Agent Plugin Availability
 
-This guide is for operators and agents that need the audited MCP workflow surface for session log, TODO, requirements, import/export, and traceability operations.
+This guide is for operators and agents that need the audited MCP workflow surface for session log, TODO, requirements, import/export, traceability, and (Grok-first) agent memory operations.
 
 ## Source Of Truth
 
@@ -38,7 +38,8 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
   - Repository: https://github.com/sharpninja/mcpserver-grok-plugin
   - Typical local root: `F:\GitHub\mcpserver-grok-plugin`
   - Runtime: Grok-compatible plugin manifests, enabled plugin skills, a Streamable HTTP MCP declaration, and PowerShell helpers from the plugin root.
-  - Discovery check: `grok inspect`, `grok mcp doctor mcpserver`, or the `/mcps` TUI view should show the plugin MCP server when the plugin is loaded. The discoverable MCP tools are the server's native names, including `sessionlog_*`, `todo_*`, and `requirements_*`. `mcp_*` names are hosted-agent aliases, and `workflow.sessionlog.*`, `workflow.todo.*`, and `workflow.requirements.*` are plugin shim/REPL method names, not literal Grok `search_tool` results. When those workflow names are needed, invoke the plugin helper (`lib\repl-invoke.ps1` or `lib/repl-invoke.sh`) through the Grok plugin instructions instead of treating their absence from tool discovery as proof that the plugin is unavailable.
+  - Discovery check: `grok inspect`, `grok mcp doctor mcpserver`, or the `/mcps` TUI view should show the plugin MCP server when the plugin is loaded. The discoverable MCP tools are the server's native names, including `sessionlog_*`, `todo_*`, `requirements_*`, and `memory_*` (`memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove`). `mcp_*` names are hosted-agent aliases, and `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.requirements.*`, and `workflow.memory.*` are plugin shim/REPL method names, not literal Grok `search_tool` results. When those workflow names are needed, invoke the plugin helper (`lib\repl-invoke.ps1` or `lib/repl-invoke.sh`) through the Grok plugin instructions instead of treating their absence from tool discovery as proof that the plugin is unavailable.
+  - Memory pilot: Grok is first. Official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries (empty set is `- None`). Other plugins stay opt-in until hostile/operator H7a AGREE. See `docs/context/memory.md` and `docs/benchmarks/README.md`.
 
 - Claude Cowork uses `mcpserver-claude-cowork-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-claude-cowork-plugin
@@ -92,3 +93,5 @@ Root `UserPromptSubmit` stays on the root session while background agents run (F
 - `docs/REPL-USER-GUIDE.md`
 - `docs/REPL-MIGRATION-GUIDE.md`
 - `docs/context/federation.md`
+- `docs/context/memory.md`
+- `docs/benchmarks/README.md`
