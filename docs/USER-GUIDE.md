@@ -961,7 +961,8 @@ Do not run UpdateService in this slice unless an operator asks.
 
 ## 7e) Memory plugin efficacy check
 
-The standard with/without memory pack is `docs/benchmarks/memory-prompt-pack-v1.yaml`.
+The standard with/without memory pack is `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression).
+The real efficiency + correctness bench is `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` (multi-turn jobs; success-gated tokens_total).
 See `docs/benchmarks/README.md` for the Grok-first bench (primary metric: tokens used; pass/fail is correctness/safety only).
 Run `./build.ps1 BenchMemory` for the Grok pilot; other plugins wait for H7a AGREE.
 

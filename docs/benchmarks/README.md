@@ -18,10 +18,13 @@ Other plugins (`claude-code`, `claude-cowork`, `cline`, `cline-v2`, `codex`, `co
 
 Pass/fail rubrics are correctness/safety gates only.
 
+v2 job success requires every required query turn to pass. Primary comparison is macro mean/median `tokens_total` **only over successful jobs**. Failed jobs stay in the artifact with `pass=false` and are excluded from those means. Do not claim an efficiency win from failed `without_memory` runs.
+
 ## Pack
 
-- `memory-prompt-pack-v1.yaml` — PREF/DEC/FACT/PROC/MULTI/NEG/CONF/SAFE
-- Results under `results/` (token summary tables first)
+- `memory-prompt-pack-v1.yaml` — smoke/regression only (PREF/DEC/FACT/PROC/MULTI/NEG/CONF/SAFE). Single-turn seeded cells. Not the efficiency claim.
+- `memory-prompt-pack-v2-multiturn.yaml` — **real efficiency + correctness bench**. Multi-turn jobs (establish, then query without restating facts). Paired `without_memory` (conversation-history baseline) vs `with_memory` (compact REQUIRED MEMORIES / memory_recall; no establish-transcript replay).
+- Results under `results/` (token summary tables first). v2 artifacts are `memory-bench-multiturn-<UTC>.json|.md`.
 
 ## Conditions
 
@@ -36,6 +39,7 @@ Default plugin is **grok**. `-Plugin all` is explicit and post-H7a.
 
 ```powershell
 # Default: Grok only (pilot), stub mode, both conditions
+# Runs v1 smoke/regression tests plus v2 multi-turn harness tests (FullyQualifiedName~MemoryBench)
 ./build.ps1 BenchMemory
 ./build.ps1 BenchMemory -Plugin grok
 
