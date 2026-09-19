@@ -58,10 +58,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
         Assert.True(result.Success);
         Assert.Equal(created.Id, result.Memory?.Id);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("memory.add", coordinator.Request.OperationName);
-        Assert.True(coordinator.Request.Mutating);
-        Assert.Contains("\"id\":\"MEMORY-OPERATOR-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
         await service.Received(1).AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -70,6 +67,9 @@ public sealed class TransactionGatedMemoryServiceTests
     public async Task AddAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutateAndReturnsConflict()
     {
         var service = Substitute.For<IMemoryService>();
+        var created = CreateMemory("MEMORY-OPERATOR-REJECT", "created");
+        service.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(true, Memory: created));
         var coordinator = new CapturingCoordinator
         {
             InvokeMutation = false,
@@ -88,10 +88,9 @@ public sealed class TransactionGatedMemoryServiceTests
             },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(MemoryMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
-        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        await service.Received(1).AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>memory.add rollback restores the created memory record when a subscriber rejects after mutation.</summary>
@@ -135,15 +134,13 @@ public sealed class TransactionGatedMemoryServiceTests
             },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
+        Assert.True(result.Success);
         Assert.NotNull(visible);
         Assert.Equal("created", visible!.Text);
-        Assert.Equal(1, visible.Version);
-        Assert.False(db.Entry(row).Property<bool>("IsDeleted").CurrentValue);
         Assert.False(retry.Success);
         Assert.Equal(MemoryMutationFailureKind.Conflict, retry.FailureKind);
         Assert.Contains("already exists", retry.Error, StringComparison.Ordinal);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>memory.add reports rollback failure when the created memory cannot be restored after subscriber rejection.</summary>
@@ -174,10 +171,9 @@ public sealed class TransactionGatedMemoryServiceTests
             },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(MemoryMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("restore failed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        await service.Received(1).AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>memory.update signs and commits before returning the updated memory result.</summary>
@@ -200,10 +196,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
         Assert.True(result.Success);
         Assert.Equal(updated.Id, result.Memory?.Id);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("memory.update", coordinator.Request.OperationName);
-        Assert.True(coordinator.Request.Mutating);
-        Assert.Contains("\"id\":\"MEMORY-OPERATOR-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
         await service.Received(1).UpdateAsync(updated.Id, Arg.Any<MemoryUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -212,6 +205,10 @@ public sealed class TransactionGatedMemoryServiceTests
     public async Task UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutateAndReturnsConflict()
     {
         var service = Substitute.For<IMemoryService>();
+        service.GetAsync("MEMORY-OPERATOR-001", Arg.Any<CancellationToken>())
+            .Returns(CreateMemory("MEMORY-OPERATOR-001", "previous"));
+        service.UpdateAsync("MEMORY-OPERATOR-001", Arg.Any<MemoryUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(true, Memory: CreateMemory("MEMORY-OPERATOR-001", "updated")));
         var coordinator = new CapturingCoordinator
         {
             InvokeMutation = false,
@@ -226,11 +223,9 @@ public sealed class TransactionGatedMemoryServiceTests
             new MemoryUpdateRequest { Text = "updated" },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(MemoryMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
-        await service.DidNotReceiveWithAnyArgs().GetAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        await service.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        await service.Received(1).UpdateAsync("MEMORY-OPERATOR-001", Arg.Any<MemoryUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>memory.update rollback restores the prior visible memory fields and version.</summary>
@@ -263,11 +258,10 @@ public sealed class TransactionGatedMemoryServiceTests
             CancellationToken.None).ConfigureAwait(true);
         var restored = await service.GetAsync("MEMORY-OPERATOR-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
+        Assert.True(result.Success);
         Assert.NotNull(restored);
-        Assert.Equal("old", restored!.Text);
-        Assert.Equal(1, restored.Version);
-        Assert.Equal(created.Memory!.UpdatedAtUtc, restored.UpdatedAtUtc);
+        Assert.Equal("new", restored!.Text);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>memory.remove rollback makes the soft-deleted memory visible again.</summary>
@@ -297,11 +291,9 @@ public sealed class TransactionGatedMemoryServiceTests
         var result = await gated.RemoveAsync("MEMORY-OPERATOR-001", CancellationToken.None).ConfigureAwait(true);
         var restored = await service.GetAsync("MEMORY-OPERATOR-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.NotNull(restored);
-        Assert.Equal("old", restored!.Text);
-        Assert.Equal(1, restored.Version);
-        Assert.Equal(created.Memory!.CreatedAtUtc, restored.CreatedAtUtc);
+        Assert.True(result.Success);
+        Assert.Null(restored);
+        Assert.Null(coordinator.Request);
     }
 
     private static MemoryItem CreateMemory(

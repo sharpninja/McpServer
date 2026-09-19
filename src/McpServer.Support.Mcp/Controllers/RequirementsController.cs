@@ -6,6 +6,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -907,10 +908,10 @@ public sealed class RequirementsController : ControllerBase
     private bool ShouldDeferIngest(out string error)
     {
         error = string.Empty;
-        if (_transactionCoordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_transactionCoordinator, "requirements.ingest"))
             return false;
 
-        var status = _transactionCoordinator.GetStatus();
+        var status = _transactionCoordinator!.GetStatus();
         if (status.Degraded)
         {
             error = string.IsNullOrWhiteSpace(status.Message)

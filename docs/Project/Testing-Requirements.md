@@ -387,10 +387,12 @@
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] `SeparateTransactionServiceIntegrationTests` and durable transaction-security integration coverage pass with zero failures and zero skips.
-- TEST-MCP-161: MCP transaction gating tests SHALL verify coordinator commit/degraded paths, durable timeout rollback cancellation, pub-sub handoff/replay/retention, federation apply/control-plane gating, memory add/update/delete rollback, TODO CRUD rollback, repo/template/requirements/session/tool registry compensation, GraphRAG/GitHub/context/voice/agent-pool fail-closed gates, stdio routing, and generic client protected namespace policy.
+- TEST-MCP-161: MCP transaction gating tests SHALL verify coordinator commit, degraded, rollback, durable timeout cancellation, and pub-sub handoff/replay/retention for QuadBrain brain-slot.invoke and brain-slot.weight-update (and other RequiresKeyserver operations). Generic REPL client protected-namespace policy remains in this TEST. First-party non-QuadBrain mutations (TODO, requirements, session-log including QBAgent, memory, repo, prompt templates, tool registry, GitHub, GraphRAG, voice, agent pool, ingest, context, federation apply/control) are governed by FR-MCP-173 / TEST-MCP-221 and SHALL persist without coordinator/keyserver; they are not fail-closed under this TEST. Covered by TurnTransactionCoordinatorTests, BrainSlotInvocationTransactionTests, QuadBrainOrchestrationServiceTests, and remaining TEST-MCP-168 pub-sub tests. Zero failures and zero skips in the executed QuadBrain/coordinator scope.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Focused and full Support.Mcp/Repl.Core test suites cover transaction gating and fail-closed behavior with zero skipped tests in the executed scope.
+  - [ ] TurnTransactionCoordinatorTests prove ExecuteAsync signs and commits for brain-slot.invoke when Enabled and RequiredForMutations are true, and bypasses SignManifestAsync for todo.update.
+  - [ ] BrainSlotInvocationTransactionTests and QuadBrainOrchestrationServiceTests prove brain-slot.invoke and brain-slot.weight-update still hit ITurnTransactionCoordinator.
+  - [ ] Generic REPL client protected-namespace policy tests remain in this TEST. Non-QuadBrain TransactionGated adapter persist/bypass is TEST-MCP-221, not this TEST.
 - TEST-MCP-162: Transaction traceability/import tests SHALL prove FR-MCP-118 through FR-MCP-128, transaction TR records, TEST-MCP-158 through TEST-MCP-173, and live TODO references resolve without placeholder transaction-plan entries.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -526,6 +528,8 @@
   - [x] A failsafe SubmitAsync that succeeds within that budget is replayed and the yaml is removed. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
   - [x] Nested drain while ReplRawInFlight is set is deferred; getFr still EXIT 0 with body before 30s when a queued session_submit 503s. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-MCP-196: C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+  Scope: layer-1+
+- TEST-MCP-221: Unit tests SHALL prove: (1) TurnTransactionKeyserverScope.RequiresKeyserver is true only for brain-slot:/brain-slot./quadbrain. and false for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest; (2) TransactionGated adapters and TransactionalTodoWorkflow persist/succeed while CapturingCoordinator.Request stays null even when TurnTransactions.Enabled and RequiredForMutations are true and the coordinator would reject or is degraded; (3) brain-slot.invoke still hits the coordinator; (4) TurnTransactionCoordinator.ExecuteAsync bypasses SignManifestAsync for todo.update. Covered by TurnTransactionKeyserverScopeTests, TransactionGated*Tests, TransactionalTodoWorkflowTests, TurnTransactionCoordinatorTests, BrainSlotInvocationTransactionTests. Zero failures and zero skips in those classes.
   Scope: layer-1+
 - TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with key server and subscriber mocked in-process and the coordinator as system under test; happy commit, mutation-abort+rollback, subscriber-unavailable degraded+rollback, and all published-message rejections.
   Scope: layer-1+
@@ -852,6 +856,8 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
   - [x] Tool definitions flow through and assistant tool_calls are emitted for external tools. (evidence: QuadBrainOpenAiChatServiceTests tool-call parsing + endpoint test ChatCompletions_ExternalTool_ReturnedAsToolCall.)
   - [x] Bearer / X-Api-Key auth is enforced (401 on missing/invalid token). (evidence: QuadBrainOpenAiAuthTests + endpoint test ChatCompletions_NoToken_Returns401.)
+- TEST-MCP-QBPROGRESS-001: Unit tests prove (1) full orchestration reports started then completed for Creativity, Logic, and ArbiterOfTruth with role output on completed, and Creativity/Logic started events occur before Arbiter started; (2) stream=true SSE contains quadbrain.role events for those reports before the final assistant chunk; (3) QBAgent SSE client prints Creativity started and Creativity completed with output from a canned SSE body without waiting for [DONE] to print the first role line. Tests use mocks or in-memory HTTP, not the Windows service.
+  Scope: layer-1+
 - TEST-MCP-QBSEED-001: Unit coverage for BrainSlotStartupSeeder over a real in-memory McpDbContext, real BrainSlotRegistryService, and the in-memory key server (only the credential resolver stubbed).
   Scope: layer-1+
   **Acceptance Criteria:**

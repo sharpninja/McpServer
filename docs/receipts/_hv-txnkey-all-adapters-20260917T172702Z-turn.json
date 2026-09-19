@@ -1,0 +1,134 @@
+{
+  "requestId": "req-20260917T172702Z-001-hostile-validate-txnkey-adapters",
+  "queryTitle": "Hostile validate PLAN-TXNKEYSERVER-001 all-adapters",
+  "queryText": "Hostile validation of PLAN-TXNKEYSERVER-001 all non-QuadBrain first-party mutation adapters. Attack implementer claims on FR/TR/TEST amendments, ShouldBypassCoordinator wiring, focused test counts, live service not redeployed, RepairWorkspaceStampsAsync fail-closed, and remaining open work. Surfaces A/B/C/D.",
+  "response": "# Hostile validation receipt\n\nTimestampUtc: 2026-09-17T17:41:43Z\nLaunchTimestampUtc: 2026-09-17T17:27:02Z\nValidatorIdentity: GrokSubagentHostile\nWorkspacePath: F:\\GitHub\\McpServer\nGate: txnkey-all-adapters\nTodoId: PLAN-TXNKEYSERVER-001\nWorkClass: 1 (project implementation: PLAN-TXNKEYSERVER-001 all non-QuadBrain first-party mutation adapters)\nAddProfileExecuted: true\nAddProfileFileCount: 19\nAddProfileExcludedSkillPort: C:\\Users\\kingd\\.claude\\profile\\add-profile.grok.md\nProfileFilesRead:\n- PROFILE.md\n- user-payton-byrd.md\n- accuracy-first-verify-sources.md\n- approve-before-execute.md\n- philosophical-dialogue-mode.md\n- log-decisions-as-conclusions.md\n- session-turn-title-summary.md\n- never-skip-explicit-actions.md\n- adversarial-review-global.md\n- hv-jsonl-and-session-log.md\n- bring-the-receipts.md\n- hostile-on-goal-state.md\n- hostile-ops-vs-requirements.md\n- hostile-phase-gates.md\n- lab-authorization.md\n- no-attitude-honesty-tell.md\n- no-python-lab.md\n- no-shortcuts-precision-over-convenience.md\n- requirement-change-plan-first.md\n\nHvSessionId: GrokSubagentHostile-20260917T172702Z-txnkey-all-adapters\nHvRequestId: req-20260917T172702Z-001-hostile-validate-txnkey-adapters\nHvTurnId: 45218\nRequestJsonl: F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T172702Z-txnkey-all-adapters.request.jsonl\nResponseJsonl: F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T172702Z-txnkey-all-adapters.response.jsonl\nReceiptMarkdown: F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260917T172702Z.md\nReceiptJson: F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260917T172702Z.json\n\nOverallVerdict: DISAGREE\nAccuracy: 99\nCompleteness: 99\nPASS: 16\nFAIL: 1\nUNKNOWN: 0\n\nDo not mark PLAN-TXNKEYSERVER-001 done. Hostile AGREE is required before done. This review is DISAGREE.\n\n## Classification\n\nClass 1 project implementation. Surface C applies. Byrd phase-order is not scored from FR-vs-file timestamps. Implementer does not claim the TODO is done.\n\n## FAIL list\n\nC-TEST161-not-retargeted: TEST-MCP-161 remains mapped to FR-MCP-120 and its store Condition still requires federation apply/control-plane gating, memory add/update/delete rollback, TODO CRUD rollback, repo/template/requirements/session/tool registry compensation, and GraphRAG/GitHub/context/voice/agent-pool fail-closed gates. FR-MCP-120 / FR-MCP-173 now require those same first-party mutations (including QBAgent session-log) to persist without coordinator/keyserver. Product TransactionGatedSessionLogService.ExecuteMutationAsync now bypasses on operation name for every source type, including QBAgent. TEST-MCP-161 was not retargeted to brain-slot.invoke / brain-slot.weight-update remaining scope. One structured AC on TEST-MCP-161 is still isSatisfied=true with generic \"transaction gating and fail-closed\" text.\n\n## UNKNOWN list\n\nnone.\n\n## Surface A (requested claims)\n\n### A1. PASS. Operator rejected session-log-only carve-out. Store FR-MCP-173, FR-MCP-120 (structured AC), TR-MCP-TXNKEY-001, TEST-MCP-221 were amended to all non-QuadBrain first-party mutations. Markdown regenerated via requirements_generate doc=all.\n\nEvidence:\n- REST GET `/mcpserver/requirements/fr/FR-MCP-173`: title \"Keyserver signs QuadBrain transactions only\", notes \"Amended 2026-09-17: operator rejected session-log-only carve-out. Scope is every non-QuadBrain first-party gated adapter, not session-log only.\", 5 structured ACs (ac-fr173-001..005, all isSatisfied=false). Body lists TODO, requirements, session-log including QBAgent, memory, repo, tools, GitHub, GraphRAG, voice, agent pool, REPL TODO workflow, ingest, context, federation apply/control.\n- REST GET `/mcpserver/requirements/fr/FR-MCP-120`: notes \"Amended 2026-09-17 for FR-MCP-173: coordinator/keyserver applies to QuadBrain brain-slot transactions only. Operator rejected session-log-only carve-out.\" ac-fr120-001..006 structured; ac-fr120-001 and ac-fr120-004 include session-log for every source type including QBAgent under FR-MCP-173 persist-without-coordinator.\n- REST GET `/mcpserver/requirements/tr/TR-MCP-TXNKEY-001`: title now \"Keyserver gate is QuadBrain/brain-slot only\" (was session-log/QBAgent-only in the 14:33 HV). notes \"Amended 2026-09-17: all non-QuadBrain first-party gated adapters, not session-log/QBAgent-only.\" 3 structured ACs ac-trtxnkey-001..003 isSatisfied=false.\n- REST GET `/mcpserver/requirements/test/TEST-MCP-221`: title \"Non-QuadBrain gated adapters skip coordinator and keyserver\", notes \"Amended 2026-09-17: all non-QuadBrain adapters, not session-log only.\" Condition length 914 names the expanded operation list and TransactionGated* / TransactionalTodoWorkflowTests / coordinator SignManifest bypass.\n- Mapping GET FR-MCP-173 -> TR-MCP-TXNKEY-001 + TEST-MCP-221. FR-MCP-120 still TR-MCP-TXN-001 + TEST-MCP-161,TEST-MCP-168.\n- context_search product-requirements FR-MCP-173 and FR-MCP-120 match store bodies.\n- Markdown LastWriteTimeUtc 2026-09-17T17:24:41Z for Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, and Requirements-Matrix.md (same second: generate doc=all).\n\n### A2. PASS. TurnTransactionKeyserverScope.ShouldBypassCoordinator is used by the named adapters/controllers. Coordinator ExecuteAsync bypasses SignManifestAsync unless RequiresKeyserver.\n\nEvidence:\n- `TurnTransactionKeyserverScope.cs` RequiresKeyserver true only for `brain-slot:` party prefix or `brain-slot.` / `quadbrain.` operation prefixes. ShouldBypassCoordinator = coordinator is null OR !RequiresKeyserver.\n- ShouldBypassCoordinator call sites: TransactionGatedTodoMutationService, TodoExecutionService, SessionLogService, RequirementsDocumentService, RequirementsAnalysisService, RepoFileService, MemoryService, PromptTemplateService, ToolRegistryService, ToolBucketService, GraphRagService, GitHubCliService, GitHubWorkspaceTokenStore, IssueTodoSyncService, VoiceConversationService, AgentPoolService, TurnTransactionFederationOperationApplyService, TransactionalTodoWorkflow, RequirementsController.ShouldDeferIngest, ContextController.ShouldDeferContextMutation, FederationController.ShouldDeferFederationControlMutation, FwhMcpTools/McpServerMcpTools.ShouldDeferContextMutation (partial class).\n- TransactionGatedTriageTodoCreator has no direct call; it delegates to ITransactionGatedTodoMutationService (bypass inherited).\n- RepairWorkspaceStampsAsync does not call ShouldBypassCoordinator; it fail-closes via ThrowIfUncompensatedRepairBlocked (matches TR-MCP-TXNKEY-001 last sentence).\n- TurnTransactionCoordinator.ExecuteAsync lines 311-327: if !Mutating or !Enabled or !RequiredForMutations or !RequiresKeyserver, run mutation and return Status=bypassed without SignManifestAsync. SignManifestAsync is only after that gate (line 343).\n\n### A3. PASS. HV re-ran the claimed focused filters. Counts match.\n\nEvidence (HV, not implementer memory):\n- Support.Mcp.Tests filter FullyQualifiedName~TransactionGated|TurnTransactionKeyserverScope|TurnTransactionCoordinatorTests|BrainSlotInvocationTransaction|RequirementsControllerTransactionGate|ContextControllerTransactionGate|TransactionGatedStdioRouting|FederationController: Failed 0, Passed 227, Skipped 0, EXIT=0, duration 4 m 55 s. Log: `docs/receipts/_hv-txnkey-all-adapters-20260917T172702Z-focused.txt` line 25. TRX: `docs/receipts/_hv-txnkey-all-adapters-20260917T172702Z-focused.trx`.\n- FederationOperationApplyServiceTests: Failed 0, Passed 9, Skipped 0, EXIT=0. Log: `docs/receipts/_hv-txnkey-all-adapters-20260917T172702Z-fedapply.txt` line 25.\n- TransactionalTodoWorkflowTests (tests/McpServer.Repl.IntegrationTests): Failed 0, Passed 10, Skipped 0, EXIT=0. Log: `docs/receipts/_hv-txnkey-all-adapters-20260917T172702Z-todowf.txt` line 12.\n\nResidual (not FAIL): TEST-MCP-221 says \"Unit tests SHALL prove\" and names TransactionalTodoWorkflowTests, which lives in the IntegrationTests project with Trait Integration. The 10 tests exist and pass; placement is hygiene.\n\n### A4. PASS. PLAN-TXNKEYSERVER-001 Done=false. Live Windows service was not redeployed (pid 138544). Live todo.update still hits coordinator on the 9/16 binary.\n\nEvidence:\n- MCP todo_get: Id=PLAN-TXNKEYSERVER-001 Done=false CompletedDate=null. Title still \"Keyserver signs QuadBrain/QBAgent session-log only\". Note still says \"FR-MCP-173/FR-MCP-120 to be amended\".\n- Marker pid 138544. Win32_Process Name=McpServer.Support.Mcp.exe CreationDate 2026-09-16 17:28:11 local (22:28:11 UTC). Live exe C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe LastWriteTimeUtc 2026-09-16T22:28:06Z. Working-tree TurnTransactionKeyserverScope.cs LastWriteTimeUtc 2026-09-17T15:20:44Z.\n- Live binary Unicode/UTF8 scan: ShouldBypassCoordinator=false, TurnTransactionKeyserverScope=false, IsQuadBrainSessionLogSource=false. brain-slot: present.\n- Live C:\\ProgramData\\McpServer\\appsettings.yaml TurnTransactions.Enabled=true RequiredForMutations=true LastWriteTimeUtc 2026-09-16T15:21:04Z. Repo src/McpServer.Support.Mcp/appsettings.yaml Enabled=false RequiredForMutations=true (unchanged 2026-09-10).\n- Live log C:\\ProgramData\\McpServer\\logs\\mcp-20260917.log line 74020: coordinator did not commit todo.update for PLAN-TXNKEYSERVER-001 txn-bae6a4baebd14260ac835ef0958edb78 Subscriber commit failed. Independently confirms implementer observation on the live 9/16 binary.\n- Residual: HV MCP todo_update of the same note at 2026-09-17T17:34:27 local returned success=true. That does not redeploy the binary; it shows live coordinator commit is not a 100 percent fail. The failure the implementer cited is in the live log.\n\n### A5. PASS. RepairWorkspaceStampsAsync remains fail-closed. Full unit suite was not run; only the focused gated-adapter slice.\n\nEvidence:\n- TransactionGatedSessionLogService.RepairWorkspaceStampsAsync dryRun skips the gate; non-dryRun calls ThrowIfUncompensatedRepairBlocked which throws when coordinator.GetStatus().Enabled and RequiredForMutations, or when degraded. No ShouldBypassCoordinator on this path.\n- Tests RepairWorkspaceStampsAsync_WhenTransactionsRequired_FailsClosedWithoutCoordinatorExecute and WhenCoordinatorDegraded_FailsClosedWithoutCoordinatorExecute are in the 227-run class.\n- HV ran only the claimed focused filters. No `./build.ps1 Test` / full unit suite in this review. Implementer did not claim otherwise.\n\n### A6. PASS. Implementer does not claim done, deploy, or live-service green.\n\nEvidence: todo_get Done=false; live exe still 9/16; FR-MCP-173 structured ACs isSatisfied=false; TR-MCP-TXNKEY-001 ACs isSatisfied=false; markdown FR-MCP-173 checkboxes are `[ ]`.\n\n## Surface B (workspace rules)\n\n### B1. PASS. Honesty.\n\nNo done/green/deploy claim. Stale TODO title/description/note (\"to be amended\") after the store amendment is residual metadata lag, not a false done-state.\n\n### B2. PASS. Receipts.\n\nHV re-verified store, product, live process, and tests. Did not accept plan checkboxes.\n\n### B3. PASS. MCP-only storage.\n\nRequirements were read from MCP store (context_search + REST GET after TR/TEST context_search returned empty). TODO via todo_get. HV did not edit todo.yaml or session-log files.\n\n### B4. PASS. PowerShell only. No Python in this review.\n\n### B5. PASS (N/A). No deletes.\n\n### B6. PASS. Byrd v4 phase-order not failed from post-hoc timestamps. This is a post-slice review of in-progress work, not a claimed phase-complete with missing inter-phase HV.\n\n## Surface C (requirements)\n\n### C1. PASS. FR-MCP-173, FR-MCP-120, TR-MCP-TXNKEY-001, TEST-MCP-221 exist, are amended to the all-adapter carve-out, and FR-MCP-173 maps to TR-MCP-TXNKEY-001 + TEST-MCP-221.\n\n### C2. PASS. TEST-MCP-221 coverage exists in TurnTransactionKeyserverScopeTests, TransactionGated*Tests (Request stays null / persist on reject-or-degraded coordinator), BrainSlotInvocationTransactionTests (coordinator still used for invoke), TurnTransactionCoordinatorTests.ExecuteAsync_WhenEnabledForGeneralAgentMutation_BypassesKeyserver (DidNotReceive SignManifestAsync for todo.update).\n\n### C3. FAIL. TEST-MCP-161 not retargeted. See FAIL list.\n\n### C4. Residual, not FAIL. TR-MCP-TXN-001 body still says mutation paths SHALL use compensation-capable coordinator execution or fail closed, Status Complete, mapped from FR-MCP-120. Prior 14:33 HV treated this as residual. Conflict is larger now that FR-MCP-120 carves out those adapters, but TR-MCP-TXNKEY-001 is the specific new TR.\n\nOther residuals (not FAIL): FR-MCP-173 structured ACs isSatisfied=false while FR-MCP-120 ACs isSatisfied=true for overlapping carve-out text; TransactionGatedSessionLogServiceTests class comments still say TEST-MCP-161 QBAgent goes through the coordinator while the facts in that file now Assert.Null(coordinator.Request) for QBAgent submits; TEST-MCP-221 Condition rather than structured AC array.\n\n## Surface D (plan holistically)\n\n### D1. PASS. PLAN-TXNKEYSERVER-001 is not claimed complete. Done=false. FR-173 ACs unsatisfied.\n\n### D2. PASS. Remaining open work is honestly stated as live Windows-service deploy (Nuke), HV AGREE before done, and full unit suite. Those three are still open. HV AGREE is not obtained on this run.\n\nResidual: remaining-work inventory does not mention TEST-MCP-161 retarget or TODO title/description refresh. Not scored as D FAIL because the named remaining gates are still actually open and were not hidden.\n\n## Verdict\n\nOverallVerdict=DISAGREE because C-TEST161-not-retargeted FAILs. Accuracy 99 Completeness 99. One FAIL blocks AGREE even with scores at 99. Do not change PLAN-TXNKEYSERVER-001 to done.\n\n=== VERDICT JSON ===\n{\"OverallVerdict\":\"DISAGREE\",\"Accuracy\":99,\"Completeness\":99,\"PassCount\":16,\"FailCount\":1,\"UnknownCount\":0,\"FailList\":[\"C-TEST161-not-retargeted: TEST-MCP-161 still mapped to FR-MCP-120 and still requires adapter compensation/fail-closed for memory/TODO/session/repo/tools/GraphRAG/GitHub/context/voice/agent-pool while FR-MCP-173/FR-MCP-120/product now persist those paths without coordinator, including QBAgent session-log.\"],\"UnknownList\":[],\"WorkClass\":1,\"AddProfileFileCount\":19,\"HvSessionId\":\"GrokSubagentHostile-20260917T172702Z-txnkey-all-adapters\",\"HvRequestId\":\"req-20260917T172702Z-001-hostile-validate-txnkey-adapters\",\"HvTurnId\":45218}\n",
+  "interpretation": "Class 1 project implementation HV of PLAN-TXNKEYSERVER-001 all-adapter keyserver carve-out. Attack A-D. Default FAIL/UNKNOWN until re-verified. AGREE only if every applicable claim PASSes and accuracy and completeness are at least 98.",
+  "status": "completed",
+  "model": "grok-4.6",
+  "tags": [
+    "hostile-validator",
+    "PLAN-TXNKEYSERVER-001",
+    "FR-MCP-173",
+    "FR-MCP-120",
+    "TR-MCP-TXNKEY-001",
+    "TEST-MCP-221",
+    "TEST-MCP-161",
+    "DISAGREE",
+    "txnkey-all-adapters"
+  ],
+  "contextList": [
+    "F:\\GitHub\\McpServer\\src\\McpServer.TransactionSecurity\\TurnTransactionKeyserverScope.cs",
+    "F:\\GitHub\\McpServer\\src\\McpServer.TransactionSecurity\\Services\\TurnTransactionCoordinator.cs",
+    "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Services\\TransactionGatedSessionLogService.cs",
+    "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe",
+    "C:\\ProgramData\\McpServer\\appsettings.yaml",
+    "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260917T172702Z.md"
+  ],
+  "filesModified": [
+    "docs/receipts/hostile-validator-20260917T172702Z.md",
+    "docs/receipts/hostile-validator-20260917T172702Z.json",
+    "docs/receipts/hv/20260917T172702Z-txnkey-all-adapters.response.jsonl"
+  ],
+  "designDecisions": [
+    "Classified work as class 1 project implementation before scoring surface C.",
+    "Treated MCP store REST GET plus context_search as authoritative for FR/TR/TEST bodies, not implementer chat.",
+    "Scored TEST-MCP-161 unretargeted Condition vs FR-MCP-173/FR-MCP-120/product QBAgent bypass as C FAIL, not residual.",
+    "Did not FAIL A4 because live log line 74020 independently shows todo.update subscriber commit failed on pid 138544; HV same-note update success is residual.",
+    "Did not FAIL TR-MCP-TXN-001 generic complete body; scored it residual as in the 14:33 HV.",
+    "DISAGREE blocks PLAN-TXNKEYSERVER-001 done."
+  ],
+  "requirementsDiscovered": [
+    "FR-MCP-173/FR-MCP-120/TR-MCP-TXNKEY-001/TEST-MCP-221 amended to all non-QuadBrain first-party mutations.",
+    "TEST-MCP-161 remains mapped to FR-MCP-120 with adapter compensation/fail-closed Condition that contradicts the carve-out."
+  ],
+  "blockers": [
+    "C-TEST161-not-retargeted blocks HV AGREE and therefore blocks done."
+  ],
+  "planFile": "None",
+  "todoId": "PLAN-TXNKEYSERVER-001",
+  "actions": [
+    {
+      "filePath": "C:\\Users\\kingd\\.claude\\profile",
+      "description": "add-profile: read 19 non-skill profile markdown files",
+      "order": 0,
+      "status": "completed",
+      "type": "read"
+    },
+    {
+      "filePath": "None",
+      "description": "sessionlog_open + begin_turn GrokSubagentHostile turnId 45218",
+      "order": 1,
+      "status": "completed",
+      "type": "mcp_query"
+    },
+    {
+      "filePath": "None",
+      "description": "todo_get PLAN-TXNKEYSERVER-001 Done=false",
+      "order": 2,
+      "status": "completed",
+      "type": "mcp_query"
+    },
+    {
+      "filePath": "None",
+      "description": "REST GET FR-MCP-120/173 TR-MCP-TXNKEY-001 TEST-MCP-221 TEST-MCP-161 mappings",
+      "order": 3,
+      "status": "completed",
+      "type": "mcp_query"
+    },
+    {
+      "filePath": "docs/receipts/_hv-txnkey-all-adapters-20260917T172702Z-focused.txt",
+      "description": "dotnet test focused 227/0/0, fedapply 9/0/0, todowf 10/0/0",
+      "order": 4,
+      "status": "completed",
+      "type": "test"
+    },
+    {
+      "filePath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe",
+      "description": "live pid 138544 exe 2026-09-16T22:28:06Z lacks ShouldBypassCoordinator",
+      "order": 5,
+      "status": "completed",
+      "type": "read"
+    },
+    {
+      "filePath": "docs/receipts/hostile-validator-20260917T172702Z.md",
+      "description": "wrote HV receipt markdown, json twin, response jsonl",
+      "order": 6,
+      "status": "completed",
+      "type": "create"
+    },
+    {
+      "filePath": "docs/receipts/hostile-validator-20260917T172702Z.md",
+      "description": "DISAGREE C-TEST161-not-retargeted; do not mark PLAN done",
+      "order": 7,
+      "status": "completed",
+      "type": "design_decision"
+    }
+  ],
+  "processingDialog": [
+    {
+      "role": "model",
+      "timestamp": "2026-09-17T17:27:02.0000000+00:00",
+      "category": "observation",
+      "content": "add-profile executed first. Read 19 non-skill profile markdown files under C:\\Users\\kingd\\.claude\\profile. Excluded add-profile.grok.md. WorkClass=1."
+    },
+    {
+      "role": "model",
+      "timestamp": "2026-09-17T17:29:57.0000000+00:00",
+      "category": "observation",
+      "content": "sessionlog_open created=true sessionId=GrokSubagentHostile-20260917T172702Z-txnkey-all-adapters. begin_turn turnId=45218 status=in_progress."
+    },
+    {
+      "role": "tool",
+      "timestamp": "2026-09-17T17:39:32.0000000+00:00",
+      "category": "tool_result",
+      "content": "dotnet test focused Failed 0 Passed 227 Skipped 0 EXIT=0. FederationOperationApplyServiceTests 9/0/0. TransactionalTodoWorkflowTests 10/0/0."
+    },
+    {
+      "role": "model",
+      "timestamp": "2026-09-17T17:41:43.0000000+00:00",
+      "category": "decision",
+      "content": "DISAGREE: C-TEST161-not-retargeted. Accuracy 99 Completeness 99 PASS 16 FAIL 1 UNKNOWN 0. Do not mark PLAN-TXNKEYSERVER-001 done."
+    }
+  ]
+}

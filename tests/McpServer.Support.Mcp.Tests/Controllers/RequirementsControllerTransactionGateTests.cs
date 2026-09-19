@@ -27,13 +27,15 @@ public sealed class RequirementsControllerTransactionGateTests
         """;
 
     /// <summary>
-    /// TEST-MCP-161: Required transaction mode rejects ingest before reading or
-    /// mutating the requirements repository.
+    /// TEST-MCP-221: Required transaction mode still ingests into the requirements repository.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_WhenTransactionsRequired_ReturnsConflictWithoutCallingRepository()
+    public async Task IngestAsync_WhenTransactionsRequired_DelegatesToRepository()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GetAllFrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<FrEntry>());
+        requirements.GetAllTrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<TrEntry>());
+        requirements.GetAllTestAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<TestEntry>());
         var controller = CreateController(requirements, new CapturingCoordinator());
 
         var result = await controller.IngestAsync(
@@ -41,20 +43,20 @@ public sealed class RequirementsControllerTransactionGateTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        await requirements.DidNotReceive().GetAllFrAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await requirements.DidNotReceive().AddFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await requirements.DidNotReceive().UpdateFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.IsType<OkObjectResult>(result.Result);
+        await requirements.Received().GetAllFrAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
-    /// TEST-MCP-161: Degraded transaction security rejects ingest with the
-    /// coordinator message before repository access.
+    /// TEST-MCP-221: Degraded transaction security does not block requirements ingest.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_WhenCoordinatorDegraded_ReturnsConflictWithoutCallingRepository()
+    public async Task IngestAsync_WhenCoordinatorDegraded_DelegatesToRepository()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GetAllFrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<FrEntry>());
+        requirements.GetAllTrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<TrEntry>());
+        requirements.GetAllTestAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<TestEntry>());
         var controller = CreateController(requirements, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
         var result = await controller.IngestAsync(
@@ -62,9 +64,8 @@ public sealed class RequirementsControllerTransactionGateTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        var conflict = Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Contains("txn degraded", conflict.Value?.ToString(), StringComparison.Ordinal);
-        await requirements.DidNotReceive().GetAllFrAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.IsType<OkObjectResult>(result.Result);
+        await requirements.Received().GetAllFrAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>

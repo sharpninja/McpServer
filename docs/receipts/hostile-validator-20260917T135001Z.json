@@ -1,0 +1,100 @@
+{
+  "schema": "hostile-validator-receipt/v1",
+  "utc": "2026-09-17T13:50:01Z",
+  "utcStamp": "20260917T135001Z",
+  "launchStamp": "20260917T134152Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "class": 2,
+  "classLabel": "user-directed ops / diagnosis",
+  "reviewer": "GrokSubagentHostile",
+  "model": "grok-4-fast",
+  "addProfile": {
+    "executed": true,
+    "nonSkillMarkdownCount": 19,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "overallVerdict": "AGREE",
+  "accuracy": 99,
+  "completeness": 99,
+  "passCount": 9,
+  "failCount": 0,
+  "unknownCount": 0,
+  "surfaceB": "PASS",
+  "surfaceC": "N/A",
+  "surfaceD": "N/A",
+  "claims": [
+    {
+      "id": 1,
+      "verdict": "PASS",
+      "claim": "New MCP session exists and did not reuse mousekeyproxy-sync"
+    },
+    {
+      "id": 2,
+      "verdict": "PASS",
+      "claim": "First begin_turn keyserver failure txn-082d9e0fd0a94d7f8fe615dfc820c65d; retry 45191; later turn 45193 completed"
+    },
+    {
+      "id": 3,
+      "verdict": "PASS",
+      "claim": "TransactionGatedSessionLogService routes mutations through coordinator; SignManifestAsync is keyserver when Enabled and RequiredForMutations"
+    },
+    {
+      "id": 4,
+      "verdict": "PASS",
+      "claim": "Live TurnTransactions Enabled=true RequiredForMutations=true; repo default Enabled=false"
+    },
+    {
+      "id": 5,
+      "verdict": "PASS",
+      "claim": "FR-MCP-120 requires session-log writes through coordinator/manifest signing when turn transactions are active"
+    },
+    {
+      "id": 6,
+      "verdict": "PASS",
+      "claim": "Failsafe YAML exists at claimed path"
+    },
+    {
+      "id": 7,
+      "verdict": "PASS",
+      "claim": "Triage report and group ids submitted"
+    },
+    {
+      "id": 8,
+      "verdict": "PASS",
+      "claim": "No product fix; waiting for BDPv4 plan approval on requirement-scope change"
+    },
+    {
+      "id": 9,
+      "verdict": "PASS",
+      "claim": "Operator profile loaded; 19 non-skill profile markdown files"
+    }
+  ],
+  "sessionLog": {
+    "agent": "GrokSubagentHostile",
+    "sessionId": "GrokSubagentHostile-20260917T134152Z-session-keyserver-scope",
+    "requestId": "req-20260917T134152Z-001-session-keyserver-scope-hv",
+    "beginTurnId": 45196
+  },
+  "jsonl": {
+    "request": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T134152Z-session-keyserver-scope.request.jsonl",
+    "response": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T134152Z-session-keyserver-scope.response.jsonl"
+  },
+  "evidence": {
+    "parentSessionId": "GrokCode-20260917T132412Z-new-mcp-session",
+    "oldSessionQueryCount": 0,
+    "txnId": "txn-082d9e0fd0a94d7f8fe615dfc820c65d",
+    "retryTurnId": 45191,
+    "laterTurnId": 45193,
+    "laterRequestId": "req-20260917T132923Z-prompt-b144",
+    "liveTurnTransactionsEnabled": true,
+    "liveRequiredForMutations": true,
+    "repoTurnTransactionsEnabled": false,
+    "failsafePath": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260917T133442Z-keyserver-sessionlog-scope.yaml",
+    "triageReportId": "triage-report-25aebcc191a8436f9d0034d6599ee07a",
+    "triageGroupId": "triage-group-81f17141af2ec492",
+    "srcWritesAfterNoonUtc": 0,
+    "parentProfileUniqueReads": 19
+  }
+}

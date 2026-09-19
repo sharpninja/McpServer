@@ -2023,6 +2023,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-QBPROGRESS-001
+
+**Role progress via orchestration IProgress and OpenAI SSE** — QuadBrainOrchestrationRequest carries a non-serialized IProgress of QuadBrainRoleProgress. InvokeRoleAsync reports phase started before the slot call and phase completed with output after. ExecuteAotReconciliationCoreAsync reports ArbiterOfTruth the same way. When POST /v1/chat/completions has stream=true, the controller writes SSE event quadbrain.role as those reports arrive, then the OpenAI chat.completion.chunk with the Arbiter assistant content, then data [DONE]. It does not buffer the entire orchestration before the first role event. QBAgent posts stream=true and prints each role event as a progress line while the turn is still running.
+**Covered by:** FR: FR-MCP-QBPROGRESS-001; TEST: TEST-MCP-QBPROGRESS-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-QBSEED-002
 
 **Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping** — BrainSlotOptions gains Slots (List<BrainSlotSeedDefinition>), each carrying a SlotId plus UpsertBrainSlotRequest fields with safe credential references. BrainSlotStartupSeeder provisions the GLOBAL quad on StartAsync with idempotency keyed by SlotId. WorkspaceResolutionMiddleware resolves /v1 requests from X-Workspace-Path header or Bearer/X-Api-Key token, scoping internal-tool mutations to that workspace while brains remain global.
@@ -3236,6 +3243,22 @@ Scope: layer-1+
 
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
+
+## TR-MCP-TXNKEY-001
+
+**Keyserver gate is QuadBrain/brain-slot only** — TurnTransactionKeyserverScope SHALL treat only publisher party ids with prefix brain-slot: and operation names with prefix brain-slot. or quadbrain. as requiring keyserver signing. TransactionGated adapters, TransactionalTodoWorkflow, TurnTransactionFederationOperationApplyService, RequirementsController ingest, ContextController mutations, FederationController control-plane mutations, and STDIO context mutations SHALL call ShouldBypassCoordinator and invoke the inner mutation directly for every non-QuadBrain operation even when Mcp:TurnTransactions:Enabled=true and RequiredForMutations=true. TurnTransactionCoordinator.ExecuteAsync SHALL also bypass SignManifestAsync unless RequiresKeyserver is true. RepairWorkspaceStampsAsync remains a workspace-wide fail-closed path.
+
+Acceptance Criteria:
+- ac-1: ShouldBypassCoordinator returns true for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest when a coordinator is registered.
+- ac-2: ShouldBypassCoordinator returns false for brain-slot.invoke and brain-slot.weight-update when a coordinator is registered.
+- ac-3: ExecuteAsync does not call SignManifestAsync for general-agent operation names even when Enabled and RequiredForMutations are true.
+**Covered by:** FR: FR-MCP-173; TEST: TEST-MCP-221
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ShouldBypassCoordinator returns true for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest when a coordinator is registered.
+- [ ] ShouldBypassCoordinator returns false for brain-slot.invoke and brain-slot.weight-update when a coordinator is registered.
+- [ ] ExecuteAsync does not call SignManifestAsync for general-agent operation names even when Enabled and RequiredForMutations are true.
 
 ## TR-MCP-USECASE-001
 

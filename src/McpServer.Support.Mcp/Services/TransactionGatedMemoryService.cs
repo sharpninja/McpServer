@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Services;
 using McpServer.Support.Mcp.Storage;
@@ -115,13 +116,13 @@ public sealed class TransactionGatedMemoryService : ITransactionGatedMemoryServi
         Func<CancellationToken, Task<MutationExecution>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
         {
             var direct = await mutation(cancellationToken).ConfigureAwait(false);
             return direct.Result;
         }
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new MemoryMutationResult(

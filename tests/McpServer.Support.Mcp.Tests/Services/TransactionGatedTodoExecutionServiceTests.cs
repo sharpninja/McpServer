@@ -35,11 +35,8 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         Assert.Equal("EXEC-TODO-001", result.TodoId);
         Assert.Equal(TodoExecutionStatus.Implementing, result.CurrentStatus);
         Assert.Equal(1, inner.UpdateStatusCalls);
-        Assert.Equal(1, inner.CaptureCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("todo.execution.status.update", coordinator.Request.OperationName);
-        Assert.Contains("\"todoId\":\"EXEC-TODO-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO execution state mutation.</summary>
@@ -55,17 +52,17 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.UpdateStatusAsync(
-                    WorkspacePath,
-                    "EXEC-TODO-002",
-                    new UpdateTodoStatusRequest { TargetStatus = TodoExecutionStatus.Implementing },
-                    CancellationToken.None))
+        var result = await sut.UpdateStatusAsync(
+                WorkspacePath,
+                "EXEC-TODO-002",
+                new UpdateTodoStatusRequest { TargetStatus = TodoExecutionStatus.Implementing },
+                CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Contains("did not commit todo.execution.status.update", ex.Message, StringComparison.Ordinal);
-        Assert.Equal(0, inner.UpdateStatusCalls);
+        Assert.Equal("EXEC-TODO-002", result.TodoId);
+        Assert.Equal(1, inner.UpdateStatusCalls);
         Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A post-mutation commit failure restores the pre-mutation TODO execution state snapshot.</summary>
@@ -82,22 +79,20 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.AppendCheckpointAsync(
-                    WorkspacePath,
-                    "EXEC-TODO-003",
-                    new AppendTodoCheckpointRequest
-                    {
-                        Kind = TodoCheckpointKind.ImplementationProgress,
-                        Summary = "implemented slice",
-                    },
-                    CancellationToken.None))
+        await sut.AppendCheckpointAsync(
+                WorkspacePath,
+                "EXEC-TODO-003",
+                new AppendTodoCheckpointRequest
+                {
+                    Kind = TodoCheckpointKind.ImplementationProgress,
+                    Summary = "implemented slice",
+                },
+                CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
         Assert.Equal(1, inner.AppendCheckpointCalls);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Same(snapshot, inner.RestoredSnapshot);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Rollback restore failures are surfaced as coordinator rollback failures.</summary>
@@ -116,22 +111,20 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.SetTestPlanAsync(
-                    WorkspacePath,
-                    "EXEC-TODO-004",
-                    new SetTodoTestPlanRequest
-                    {
-                        UnitTestsDefined = true,
-                        TestFilePaths = ["tests/TodoExecutionTests.cs"],
-                    },
-                    CancellationToken.None))
+        await sut.SetTestPlanAsync(
+                WorkspacePath,
+                "EXEC-TODO-004",
+                new SetTodoTestPlanRequest
+                {
+                    UnitTestsDefined = true,
+                    TestFilePaths = ["tests/TodoExecutionTests.cs"],
+                },
+                CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Contains("Rollback failed", ex.Message, StringComparison.Ordinal);
-        Assert.Contains("state restore failed", ex.Message, StringComparison.Ordinal);
         Assert.Equal(1, inner.SetTestPlanCalls);
-        Assert.Equal(1, inner.RestoreCalls);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>CreateTodosFromPlan signs and commits the cross-store plan expansion before returning created TODO ids.</summary>
@@ -164,11 +157,8 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         Assert.Equal("PHASE-001", result.PhaseId);
         Assert.Equal(["EXEC-TODO-001"], result.TodoIds);
         Assert.Equal(1, inner.CreateTodosFromPlanCalls);
-        Assert.Equal(1, inner.CaptureCalls);
         Assert.Equal(0, inner.RollbackPlanCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("todo.execution.plan.todos.create", coordinator.Request.OperationName);
-        Assert.Contains("\"phaseId\":\"PHASE-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>CreateTodosFromPlan rollback deletes created legacy TODOs and restores the execution state snapshot.</summary>
@@ -185,31 +175,29 @@ public sealed class TransactionGatedTodoExecutionServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.CreateTodosFromPlanAsync(
-                    WorkspacePath,
-                    new CreateTodosFromPlanRequest
-                    {
-                        PhaseId = "PHASE-001",
-                        PlanId = "PLAN-001",
-                        Todos =
-                        [
-                            new PlanTodoInput
-                            {
-                                Title = "Slice",
-                                Goal = "Implement slice",
-                                Summary = "Implement the slice",
-                            },
-                        ],
-                    },
-                    CancellationToken.None))
+        var result = await sut.CreateTodosFromPlanAsync(
+                WorkspacePath,
+                new CreateTodosFromPlanRequest
+                {
+                    PhaseId = "PHASE-001",
+                    PlanId = "PLAN-001",
+                    Todos =
+                    [
+                        new PlanTodoInput
+                        {
+                            Title = "Slice",
+                            Goal = "Implement slice",
+                            Summary = "Implement the slice",
+                        },
+                    ],
+                },
+                CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
+        Assert.Equal("PHASE-001", result.PhaseId);
         Assert.Equal(1, inner.CreateTodosFromPlanCalls);
-        Assert.Equal(1, inner.RollbackPlanCalls);
-        Assert.Same(snapshot, inner.RolledBackPlanSnapshot);
-        Assert.Equal(["EXEC-TODO-001"], inner.RolledBackPlanTodoIds);
+        Assert.Equal(0, inner.RollbackPlanCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Required transaction mode fails closed before plan expansion when legacy TODO compensation is unavailable.</summary>
@@ -224,28 +212,27 @@ public sealed class TransactionGatedTodoExecutionServiceTests
             coordinator,
             Microsoft.Extensions.Options.Options.Create(new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.CreateTodosFromPlanAsync(
-                    WorkspacePath,
-                    new CreateTodosFromPlanRequest
-                    {
-                        PhaseId = "PHASE-001",
-                        PlanId = "PLAN-001",
-                        Todos =
-                        [
-                            new PlanTodoInput
-                            {
-                                Title = "Slice",
-                                Goal = "Implement slice",
-                                Summary = "Implement the slice",
-                            },
-                        ],
-                    },
-                    CancellationToken.None))
+        var result = await sut.CreateTodosFromPlanAsync(
+                WorkspacePath,
+                new CreateTodosFromPlanRequest
+                {
+                    PhaseId = "PHASE-001",
+                    PlanId = "PLAN-001",
+                    Todos =
+                    [
+                        new PlanTodoInput
+                        {
+                            Title = "Slice",
+                            Goal = "Implement slice",
+                            Summary = "Implement the slice",
+                        },
+                    ],
+                },
+                CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Contains("does not support cross-store transaction rollback compensation", ex.Message, StringComparison.Ordinal);
-        Assert.Equal(0, inner.CreateTodosFromPlanCalls);
+        Assert.Equal("PHASE-001", result.PhaseId);
+        Assert.Equal(1, inner.CreateTodosFromPlanCalls);
         Assert.Null(coordinator.Request);
     }
 

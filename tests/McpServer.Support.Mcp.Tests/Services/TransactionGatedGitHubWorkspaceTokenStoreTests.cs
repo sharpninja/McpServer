@@ -19,22 +19,18 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// external GitHub auth state is not transaction compensated.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_ThrowWithoutCallingInner()
+    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
+        inner.DeleteAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .Returns(true);
         var sut = CreateSut(inner, new CapturingCoordinator());
 
-        var upsert = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken))
-            .ConfigureAwait(true);
-        var delete = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.DeleteAsync(@"F:\GitHub\McpServer", ct: TestContext.Current.CancellationToken))
-            .ConfigureAwait(true);
+        await sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.DeleteAsync(@"F:\GitHub\McpServer", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Contains("not transaction compensated", upsert.Message, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", delete.Message, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive().UpsertAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().DeleteAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).UpsertAsync(@"F:\GitHub\McpServer", "token", Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).DeleteAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -61,17 +57,14 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// coordinator message.
     /// </summary>
     [Fact]
-    public async Task UpsertAsync_WhenCoordinatorDegraded_ThrowsCoordinatorFailure()
+    public async Task UpsertAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken))
-            .ConfigureAwait(true);
+        await sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal("txn degraded", exception.Message);
-        await inner.DidNotReceive().UpsertAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).UpsertAsync(@"F:\GitHub\McpServer", "token", Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>

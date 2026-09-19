@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -255,10 +256,10 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
         Func<CancellationToken, Task<T>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
             return await mutation(cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
             throw new RequirementsConflictException(string.IsNullOrWhiteSpace(status.Message)
                 ? "Turn transaction coordinator is degraded."
@@ -308,10 +309,10 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
         Func<CancellationToken, Task<RequirementsDocumentExportResult>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
             return await mutation(cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
             throw new RequirementsConflictException(string.IsNullOrWhiteSpace(status.Message)
                 ? "Turn transaction coordinator is degraded."

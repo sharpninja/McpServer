@@ -13,7 +13,7 @@ using TxnFailureReason = McpServer.TransactionSecurity.Models.TransactionFailure
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Server-side TODO update mutation transaction gate tests.
+/// TEST-MCP-221 / FR-MCP-173: Server-side TODO mutations skip coordinator/keyserver.
 /// </summary>
 public sealed class TransactionGatedTodoMutationServiceTests
 {
@@ -38,12 +38,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.True(result.Success);
         Assert.Equal("After", result.Item?.Title);
         Assert.Equal(1, todo.UpdateCalls);
-        Assert.Equal(1, todo.CompensatedUpdateCalls);
-        Assert.Equal(0, todo.CaptureCalls);
         Assert.Equal(0, todo.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("todo.update", coordinator.Request.OperationName);
-        Assert.Contains("\"id\":\"TODO-TXN-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO update execution.</summary>
@@ -65,10 +61,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(0, todo.UpdateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.UpdateCalls);
         Assert.Equal(0, todo.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A post-mutation commit failure invokes TODO store compensation.</summary>
@@ -95,13 +91,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
+        Assert.True(result.Success);
         Assert.Equal(1, todo.UpdateCalls);
-        Assert.Equal(1, todo.CompensatedUpdateCalls);
-        Assert.Equal(1, todo.RestoreCalls);
-        Assert.Same(before, todo.RestoredState);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.Equal(0, todo.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Rollback compensation failures are surfaced as failed rollback results instead of success.</summary>
@@ -129,11 +122,9 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(1, todo.RestoreCalls);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("restore failed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Equal(0, todo.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>External-sync/projection failures with a mutated item are rolled back during abort.</summary>
@@ -162,8 +153,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.ExternalSyncFailed, result.FailureKind);
         Assert.Equal(1, todo.UpdateCalls);
-        Assert.Equal(1, todo.RestoreCalls);
-        Assert.Same(before, todo.RestoredState);
+        Assert.Equal(0, todo.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Projection failures keep authoritative local state and do not rollback projection repair state.</summary>
@@ -194,7 +185,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Equal(TodoMutationFailureKind.ProjectionFailed, result.FailureKind);
         Assert.Equal(0, todo.RestoreCalls);
         Assert.Same(after, todo.Existing);
-        Assert.Equal("committed", coordinator.LastResult?.Status);
+        Assert.Null(coordinator.Request);
+        Assert.Null(coordinator.LastResult);
     }
 
     /// <summary>ISSUE-backed updates are rejected while transaction gating is required because GitHub side effects are not compensated yet.</summary>
@@ -211,10 +203,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("ISSUE-backed TODO updates", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, todo.UpdateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.UpdateCalls);
         Assert.Null(coordinator.Request);
     }
 
@@ -245,9 +235,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Same(created, result.Item);
         Assert.Equal(1, todo.CreateCalls);
         Assert.Equal(0, todo.DeleteCreatedCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("todo.create", coordinator.Request.OperationName);
-        Assert.Contains("\"id\":\"TODO-TXN-CREATE-001\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO create execution.</summary>
@@ -274,9 +262,9 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(0, todo.CreateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.CreateCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>A post-mutation commit failure removes the locally-created TODO item.</summary>
@@ -307,12 +295,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
+        Assert.True(result.Success);
         Assert.Equal(1, todo.CreateCalls);
-        Assert.Equal(1, todo.DeleteCreatedCalls);
-        Assert.Null(todo.Existing);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.Equal(0, todo.DeleteCreatedCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>TODO create projection failures keep the locally-created authoritative item for later projection repair.</summary>
@@ -347,7 +333,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Equal(1, todo.CreateCalls);
         Assert.Equal(0, todo.DeleteCreatedCalls);
         Assert.Same(created, todo.Existing);
-        Assert.Equal("committed", coordinator.LastResult?.Status);
+        Assert.Null(coordinator.Request);
+        Assert.Null(coordinator.LastResult);
     }
 
     /// <summary>
@@ -449,7 +436,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         var result = await sut.CreateAsync(
                 new TodoCreateRequest
                 {
-                    Id = TodoCreationService.NewGitHubIssueTodoId,
+                    Id = "ISSUE-42",
                     Title = "Issue backed",
                     Section = "Backlog",
                     Priority = "high",
@@ -457,10 +444,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("ISSUE-backed TODO creates", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, todo.CreateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.CreateCalls);
         Assert.Null(coordinator.Request);
     }
 
@@ -469,6 +454,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
     public async Task CreateAsync_WhenFederatedProviderWrapsUnsupportedInnerAndGatingRequired_RejectsBeforeMutation()
     {
         var inner = Substitute.For<ITodoService>();
+        inner.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(true, Item: Item("TODO-TXN-CREATE-FED-001", "Created")));
         var federated = new FederatedTodoService(
             inner,
             new FederationRegistry(Microsoft.Extensions.Options.Options.Create(new FederationOptions())),
@@ -488,10 +475,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("active TODO provider does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(result.Success);
+        await inner.Received(1).CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
         Assert.Null(coordinator.Request);
     }
 
@@ -515,13 +500,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
         var result = await sut.DeleteAsync("TODO-TXN-DELETE-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
+        Assert.True(result.Success);
         Assert.Equal(1, todo.DeleteCalls);
-        Assert.Equal(1, todo.CompensatedDeleteCalls);
-        Assert.Equal(1, todo.RestoreCalls);
-        Assert.Same(before, todo.RestoredState);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.Equal(0, todo.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>ISSUE-backed deletes are rejected while required transaction gating lacks GitHub side-effect compensation.</summary>
@@ -534,10 +516,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
         var result = await sut.DeleteAsync("ISSUE-42", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("ISSUE-backed TODO deletes", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, todo.DeleteCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.DeleteCalls);
         Assert.Null(coordinator.Request);
     }
 
@@ -561,10 +541,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(0, target.CreateCalls);
-        Assert.Equal(0, source.DeleteCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, target.CreateCalls);
+        Assert.Equal(1, source.DeleteCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>TODO move creates the target item and deletes the source only after transaction commit approval.</summary>
@@ -597,8 +577,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Same(movedItem, target.Existing);
         Assert.Equal(1, target.CreateCalls);
         Assert.Equal(1, source.CompensatedDeleteCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("todo.move", coordinator.Request.OperationName);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>TODO move rollback removes the target item and restores the source snapshot.</summary>
@@ -630,13 +609,11 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Same(sourceItem, source.Existing);
-        Assert.Null(target.Existing);
-        Assert.Equal(1, target.DeleteCreatedCalls);
-        Assert.Equal(1, source.RestoreCalls);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Same(movedItem, target.Existing);
+        Assert.Equal(0, target.DeleteCreatedCalls);
+        Assert.Equal(0, source.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>TODO move reports rollback failure when either target cleanup or source restore fails.</summary>
@@ -670,13 +647,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(1, target.DeleteCreatedCalls);
-        Assert.Equal(1, source.RestoreCalls);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("target cleanup failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("source restore failed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Equal(0, target.DeleteCreatedCalls);
+        Assert.Equal(0, source.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>ISSUE-backed TODO moves are rejected while GitHub side-effect compensation is deferred.</summary>
@@ -694,11 +668,9 @@ public sealed class TransactionGatedTodoMutationServiceTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Contains("ISSUE-backed TODO moves", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, target.CreateCalls);
-        Assert.Equal(0, source.DeleteCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, target.CreateCalls);
+        Assert.Equal(1, source.DeleteCalls);
         Assert.Null(coordinator.Request);
     }
 
@@ -734,9 +706,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
         var result = await sut.RepairProjectionAsync(CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("not transaction compensated", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, todo.RepairProjectionCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.RepairProjectionCalls);
     }
 
     /// <summary>TODO projection repair fails closed when the coordinator is degraded.</summary>
@@ -757,9 +728,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
         var result = await sut.RepairProjectionAsync(CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("transaction gate unavailable", result.Error, StringComparison.Ordinal);
-        Assert.Equal(0, todo.RepairProjectionCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, todo.RepairProjectionCalls);
     }
 
     /// <summary>TODO projection repair delegates when mutation transactions are not required.</summary>

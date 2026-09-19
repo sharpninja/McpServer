@@ -75,12 +75,11 @@ public sealed class FederationControllerPushTests
             CreateRegistry(enabled: true, defaultTarget: "remote"),
             new CapturingCoordinator(enabled: true));
 
+        _pushService.PushAllAsync(Arg.Any<CancellationToken>()).Returns(new FederationPushResult(1, 0, []));
         var result = await controller.Push(new FederationPushRequest(), CancellationToken.None);
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        await _pushService.DidNotReceiveWithAnyArgs().PushAllAsync(ct: TestContext.Current.CancellationToken);
-        await _pushService.DidNotReceiveWithAnyArgs().PushTodosAsync(ct: TestContext.Current.CancellationToken);
-        await _pushService.DidNotReceiveWithAnyArgs().PushSessionLogsAsync(ct: TestContext.Current.CancellationToken);
+        Assert.IsType<OkObjectResult>(result.Result);
+        await _pushService.Received(1).PushAllAsync(Arg.Any<CancellationToken>());
     }
 
     /// <summary>When federation is disabled, push returns 409 Conflict.</summary>

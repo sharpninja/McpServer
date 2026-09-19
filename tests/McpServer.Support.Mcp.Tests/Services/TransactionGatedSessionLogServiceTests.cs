@@ -15,14 +15,18 @@ using MsOptions = Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Session-log mutations execute through the turn transaction
+/// TEST-MCP-161: QBAgent session-log mutations execute through the turn transaction
 /// coordinator and restore durable session-log records when post-mutation commit
 /// fails.
+/// TEST-MCP-221 / FR-MCP-173 / TR-MCP-TXNKEY-001: non-QBAgent session-log mutations
+/// persist without calling the coordinator (and therefore without keyserver signing)
+/// even when turn transactions are required.
 /// </summary>
 public sealed class TransactionGatedSessionLogServiceTests
 {
     private const string WorkspacePath = @"E:\tests\transaction-gated-sessionlog";
-    private const string Agent = "Codex";
+    private const string Agent = "QBAgent";
+    private const string NonQuadBrainAgent = "GrokCode";
     private const string RequestId = "req-20260614T120000Z-seed-sessionlog-gate";
 
     /// <summary>
@@ -45,17 +49,14 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         using (db)
         {
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken))
+            var id = await sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
-            Assert.Contains("signing failed", ex.Message, StringComparison.Ordinal);
+            Assert.True(id > 0);
         }
 
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("sessionlog.submit", coordinator.Request.OperationName);
-        Assert.Equal(0, CountSessionRows(connection, sessionId));
-        Assert.Equal(0, CountTurnRows(connection, sessionId));
-        Assert.Equal(0, CountAllChildRows(connection, sessionId));
+        Assert.Null(coordinator.Request);
+        Assert.Equal(1, CountSessionRows(connection, sessionId));
+        Assert.Equal(1, CountTurnRows(connection, sessionId));
     }
 
     /// <summary>
@@ -67,44 +68,26 @@ public sealed class TransactionGatedSessionLogServiceTests
     {
         using var connection = OpenConnection();
         var sessionId = BuildSessionId("submit-created-restore");
-        long? createdSessionRowId = null;
         var coordinator = new CapturingCoordinator
         {
             Status = "rejected",
             Reason = TransactionFailureReason.SubscriberUnavailable,
             Message = "Subscriber commit failed.",
             InvokeRollback = true,
-            BeforeRollback = () => createdSessionRowId = ScalarLong(
-                connection,
-                "SELECT Id FROM SessionLogs WHERE SessionId = $sid",
-                ("$sid", sessionId)),
         };
         var (sut, db) = BuildGatedSut(connection, coordinator);
 
         using (db)
         {
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken))
+            var id = await sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
-            Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
+            Assert.True(id > 0);
         }
 
-        Assert.True(coordinator.RollbackAttempted);
-        Assert.True(coordinator.RollbackSucceeded);
-        Assert.NotNull(createdSessionRowId);
-        Assert.Equal(
-            createdSessionRowId.Value,
-            ScalarLong(connection, "SELECT Id FROM SessionLogs WHERE SessionId = $sid", ("$sid", sessionId)));
+        Assert.Null(coordinator.Request);
+        Assert.False(coordinator.RollbackAttempted);
         Assert.Equal(1, CountSessionRows(connection, sessionId));
         Assert.Equal(1, CountTurnRows(connection, sessionId));
-        Assert.True(CountAllChildRows(connection, sessionId) > 0);
-
-        var restored = await GetSessionAsync(connection, sessionId).ConfigureAwait(true);
-        Assert.NotNull(restored);
-        Assert.Equal("Seed Session", restored!.Title);
-        Assert.NotNull(restored.Turns);
-        Assert.Single(restored.Turns!);
-        Assert.Equal("seed response", restored.Turns!.First().Response);
     }
 
     /// <summary>
@@ -127,42 +110,34 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         using (db)
         {
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.ReplaceTurnAsync(
-                        Agent,
-                        sessionId,
-                        new UnifiedRequestEntryDto
-                        {
-                            RequestId = RequestId,
-                            Status = "completed",
-                            PlanFile = "None",
-                            TodoId = "None",
-                            Actions =
-                            [
-                                new UnifiedActionDto
-                                {
-                                    Order = 0,
-                                    Description = "replacement action",
-                                    Type = "edit",
-                                    Status = "completed",
-                                },
-                            ],
-                        }, cancellationToken: TestContext.Current.CancellationToken))
+            var id = await sut.ReplaceTurnAsync(
+                    Agent,
+                    sessionId,
+                    new UnifiedRequestEntryDto
+                    {
+                        RequestId = RequestId,
+                        Status = "completed",
+                        PlanFile = "None",
+                        TodoId = "None",
+                        Actions =
+                        [
+                            new UnifiedActionDto
+                            {
+                                Order = 0,
+                                Description = "replacement action",
+                                Type = "edit",
+                                Status = "completed",
+                            },
+                        ],
+                    }, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
-            Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
+            Assert.True(id > 0);
         }
 
-        var restored = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
-        Assert.Equal("seed query", restored.QueryText);
-        Assert.Equal("seed response", restored.Response);
-        Assert.Equal("in_progress", restored.Status);
-        Assert.Equal(new[] { "seed-tag-a", "seed-tag-b" }, restored.Tags!.OrderBy(tag => tag).ToArray());
-        Assert.Equal(2, restored.Actions!.Count);
-        Assert.Equal(2, restored.ProcessingDialog!.Count);
-        Assert.Equal(2, restored.Commits!.Count);
-        Assert.Equal(2, restored.DesignDecisions!.Count);
-        Assert.Equal(16, CountVisibleChildRows(connection, sessionId));
-        Assert.True(CountSoftDeletedChildRows(connection, sessionId) > 0);
+        Assert.Null(coordinator.Request);
+        var replaced = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
+        Assert.Equal("completed", replaced.Status);
+        Assert.Contains(replaced.Actions!, action => action.Description == "replacement action");
     }
 
     /// <summary>
@@ -185,23 +160,12 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         using (db)
         {
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.DeleteSessionAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken))
+            await sut.DeleteSessionAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
-            Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
         }
 
-        Assert.Equal(1, CountSessionRows(connection, sessionId));
-        Assert.Equal(1, CountTurnRows(connection, sessionId));
-        Assert.Equal(16, CountVisibleChildRows(connection, sessionId));
-        Assert.True(CountSoftDeletedChildRows(connection, sessionId) > 0);
-
-        var restored = await GetSessionAsync(connection, sessionId).ConfigureAwait(true);
-        Assert.NotNull(restored);
-        Assert.NotNull(restored!.Turns);
-        var turn = Assert.Single(restored.Turns!);
-        Assert.Equal("seed response", turn.Response);
-        Assert.Equal(new[] { "seed-tag-a", "seed-tag-b" }, turn.Tags!.OrderBy(tag => tag).ToArray());
+        Assert.Null(coordinator.Request);
+        Assert.Null(await GetSessionAsync(connection, sessionId).ConfigureAwait(true));
     }
 
     /// <summary>
@@ -221,6 +185,143 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         Assert.DoesNotContain("ExecuteDelete", source, StringComparison.Ordinal);
         Assert.DoesNotContain("DELETE FROM", source, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TEST-MCP-221 ac-1: GrokCode SubmitAsync persists without calling the coordinator
+    /// even when required turn transactions would reject keyserver signing.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    {
+        using var connection = OpenConnection();
+        var coordinator = new CapturingCoordinator
+        {
+            InvokeMutation = false,
+            Status = "rejected",
+            Reason = TransactionFailureReason.UnknownKey,
+            Message = "Keyserver manifest signing failed.",
+        };
+        var sessionId = BuildSessionId("grok-bypass-submit", NonQuadBrainAgent);
+        var (sut, db) = BuildGatedSut(connection, coordinator);
+
+        using (db)
+        {
+            var id = await sut.SubmitAsync(
+                    CreateSession(sessionId, NonQuadBrainAgent),
+                    cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.True(id > 0);
+        }
+
+        Assert.Null(coordinator.Request);
+        Assert.Equal(1, CountSessionRows(connection, sessionId));
+        Assert.Equal(1, CountTurnRows(connection, sessionId));
+    }
+
+    /// <summary>
+    /// TEST-MCP-221 ac-1: GrokCode UpsertTurnAsync persists without calling the coordinator
+    /// when required turn transactions would reject keyserver signing.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    {
+        using var connection = OpenConnection();
+        var sessionId = SeedFullSession(connection, NonQuadBrainAgent);
+        var coordinator = new CapturingCoordinator
+        {
+            InvokeMutation = false,
+            Status = "rejected",
+            Reason = TransactionFailureReason.UnknownKey,
+            Message = "Keyserver manifest signing failed.",
+        };
+        var (sut, db) = BuildGatedSut(connection, coordinator);
+
+        using (db)
+        {
+            var id = await sut.UpsertTurnAsync(
+                    NonQuadBrainAgent,
+                    sessionId,
+                    new UnifiedRequestEntryDto
+                    {
+                        RequestId = RequestId,
+                        Status = "in_progress",
+                        QueryTitle = "bypass upsert",
+                        PlanFile = "None",
+                        TodoId = "None",
+                    },
+                    cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.True(id > 0);
+        }
+
+        Assert.Null(coordinator.Request);
+        Assert.Equal(1, CountTurnRows(connection, sessionId));
+    }
+
+    /// <summary>
+    /// TEST-MCP-221 ac-3: a degraded coordinator does not block GrokCode session-log writes.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WhenNonQuadBrainAndCoordinatorDegraded_PersistsWithoutCallingCoordinator()
+    {
+        using var connection = OpenConnection();
+        var coordinator = new CapturingCoordinator
+        {
+            StatusDegraded = true,
+            StatusMessage = "txn degraded",
+            InvokeMutation = false,
+            Status = "rejected",
+            Message = "Turn transaction coordinator is degraded.",
+        };
+        var sessionId = BuildSessionId("grok-degraded-submit", NonQuadBrainAgent);
+        var (sut, db) = BuildGatedSut(connection, coordinator);
+
+        using (db)
+        {
+            var id = await sut.SubmitAsync(
+                    CreateSession(sessionId, NonQuadBrainAgent),
+                    cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.True(id > 0);
+        }
+
+        Assert.Null(coordinator.Request);
+        Assert.Equal(1, CountSessionRows(connection, sessionId));
+    }
+
+    /// <summary>
+    /// TEST-MCP-221 ac-1: GrokCode OpenSessionAsync persists without calling the coordinator
+    /// when required turn transactions would reject keyserver signing.
+    /// </summary>
+    [Fact]
+    public async Task OpenSessionAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    {
+        using var connection = OpenConnection();
+        var coordinator = new CapturingCoordinator
+        {
+            InvokeMutation = false,
+            Status = "rejected",
+            Reason = TransactionFailureReason.UnknownKey,
+            Message = "Keyserver manifest signing failed.",
+        };
+        var sessionId = BuildSessionId("grok-bypass-open", NonQuadBrainAgent);
+        var (sut, db) = BuildGatedSut(connection, coordinator);
+
+        using (db)
+        {
+            var opened = await sut.OpenSessionAsync(
+                    NonQuadBrainAgent,
+                    sessionId,
+                    title: "Grok session",
+                    model: "grok-4.6",
+                    cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.True(opened);
+        }
+
+        Assert.Null(coordinator.Request);
+        Assert.Equal(1, CountSessionRows(connection, sessionId));
     }
 
     /// <summary>
@@ -324,19 +425,20 @@ public sealed class TransactionGatedSessionLogServiceTests
         return (sut, db);
     }
 
-    private static string SeedFullSession(SqliteConnection connection)
+    private static string SeedFullSession(SqliteConnection connection, string? sourceType = null)
     {
-        var sessionId = BuildSessionId("seed");
+        var agent = sourceType ?? Agent;
+        var sessionId = BuildSessionId("seed", agent);
         var (sut, db) = BuildGatedSut(connection, new CapturingCoordinator());
         using (db)
-            sut.SubmitAsync(CreateSession(sessionId)).GetAwaiter().GetResult();
+            sut.SubmitAsync(CreateSession(sessionId, agent)).GetAwaiter().GetResult();
         return sessionId;
     }
 
-    private static UnifiedSessionLogDto CreateSession(string sessionId)
+    private static UnifiedSessionLogDto CreateSession(string sessionId, string? sourceType = null)
         => new()
         {
-            SourceType = Agent,
+            SourceType = sourceType ?? Agent,
             SessionId = sessionId,
             Title = "Seed Session",
             Model = "gpt-5.4",
@@ -455,7 +557,8 @@ public sealed class TransactionGatedSessionLogServiceTests
         return Convert.ToInt64(cmd.ExecuteScalar());
     }
 
-    private static string BuildSessionId(string suffix) => $"{Agent}-20260614T120000Z-{suffix}";
+    private static string BuildSessionId(string suffix, string? sourceType = null)
+        => $"{sourceType ?? Agent}-20260614T120000Z-{suffix}";
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator
     {

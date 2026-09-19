@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7b2e89fc-9b16-4c41-bcd4-9e7ed84b7aa6" name="SYSTEM@PAYTON-LEGION2 2026-09-17 12:40:23" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-17T12:40:23.1540059-05:00" queuing="2026-09-17T12:40:23.1540064-05:00" start="2026-09-17T12:40:21.1022508-05:00" finish="2026-09-17T12:40:23.1977827-05:00" />
+  <TestSettings name="default" id="aa42ded7-30d7-474f-8894-ac3b99ee2dea">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-17_12_40_23" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="b6c946d6-c8fc-43a8-9310-8db14ee249e0" testId="58744215-072b-6715-ee03-fc775465a75b" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot" computerName="PAYTON-LEGION2" duration="00:00:00.0346761" startTime="2026-09-17T12:40:22.9940524-05:00" endTime="2026-09-17T12:40:23.0287693-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6c946d6-c8fc-43a8-9310-8db14ee249e0" />
+    <UnitTestResult executionId="e81431b3-8498-49b3-9d4b-86b9781d2da1" testId="367bf11c-a1b9-7add-259d-96eade7c6d67" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedBeforeInnerWorkflow" computerName="PAYTON-LEGION2" duration="00:00:00.0007552" startTime="2026-09-17T12:40:22.9843543-05:00" endTime="2026-09-17T12:40:22.9851344-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e81431b3-8498-49b3-9d4b-86b9781d2da1" />
+    <UnitTestResult executionId="7c03df02-cfde-48f3-a3b6-5f32bce5c020" testId="9525a58a-c779-a8ea-3ec4-d66b918b13bd" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" computerName="PAYTON-LEGION2" duration="00:00:00.0007950" startTime="2026-09-17T12:40:23.0427950-05:00" endTime="2026-09-17T12:40:23.0436147-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c03df02-cfde-48f3-a3b6-5f32bce5c020" />
+    <UnitTestResult executionId="e0898539-5ac7-4963-a7ac-8d33b3ee32fd" testId="c0bafc17-6523-e1f1-fb4f-1c7202ee0604" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToInnerWorkflow" computerName="PAYTON-LEGION2" duration="00:00:00.1329489" startTime="2026-09-17T12:40:22.8019047-05:00" endTime="2026-09-17T12:40:22.9458959-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0898539-5ac7-4963-a7ac-8d33b3ee32fd" />
+    <UnitTestResult executionId="0899c441-02e6-4eb0-9fb4-bd7bef4433d6" testId="74d5cffa-b355-d39d-013b-4607811376f4" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult" computerName="PAYTON-LEGION2" duration="00:00:00.0081269" startTime="2026-09-17T12:40:22.9854328-05:00" endTime="2026-09-17T12:40:22.9936024-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0899c441-02e6-4eb0-9fb4-bd7bef4433d6" />
+    <UnitTestResult executionId="417cce38-7900-419f-9c0f-116cde9a4174" testId="cb9d5f17-9280-9dc3-bc49-006a071b6057" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" computerName="PAYTON-LEGION2" duration="00:00:00.0282457" startTime="2026-09-17T12:40:22.9555396-05:00" endTime="2026-09-17T12:40:22.9838650-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="417cce38-7900-419f-9c0f-116cde9a4174" />
+    <UnitTestResult executionId="c6910186-b65d-4f9d-86cf-7790cc178a5e" testId="acb0114a-1e14-261e-61c2-84b2a511dae0" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCommitFailsAfterMutation_RecreatesSnapshot" computerName="PAYTON-LEGION2" duration="00:00:00.0018743" startTime="2026-09-17T12:40:23.0357300-05:00" endTime="2026-09-17T12:40:23.0376432-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c6910186-b65d-4f9d-86cf-7790cc178a5e" />
+    <UnitTestResult executionId="4e83ecf3-2693-4585-beea-7cd802946962" testId="fbf5c2c6-868d-1e7e-7b00-34e220327f23" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCommitFailsAfterMutation_DeletesReturnedCanonicalId" computerName="PAYTON-LEGION2" duration="00:00:00.0017619" startTime="2026-09-17T12:40:23.0382232-05:00" endTime="2026-09-17T12:40:23.0400200-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e83ecf3-2693-4585-beea-7cd802946962" />
+    <UnitTestResult executionId="ddfbbfd3-fa9d-45fc-aece-c3eff4c65cfc" testId="92bdf3af-732e-d345-6f7f-ec903904dcd6" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteSelectedAsync_WhenCommitFailsAfterMutation_RecreatesAndReselects" computerName="PAYTON-LEGION2" duration="00:00:00.0019306" startTime="2026-09-17T12:40:23.0404577-05:00" endTime="2026-09-17T12:40:23.0424165-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ddfbbfd3-fa9d-45fc-aece-c3eff4c65cfc" />
+    <UnitTestResult executionId="1810b049-1122-4a0d-b557-734db63f2be5" testId="4420fe0f-e2dd-bbf5-76cd-8bfc7cdc0496" testName="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateSelectedAsync_WhenCommitFailsAfterMutation_RestoresAndReselects" computerName="PAYTON-LEGION2" duration="00:00:00.0060373" startTime="2026-09-17T12:40:23.0292117-05:00" endTime="2026-09-17T12:40:23.0352818-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1810b049-1122-4a0d-b557-734db63f2be5" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteSelectedAsync_WhenCommitFailsAfterMutation_RecreatesAndReselects" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="92bdf3af-732e-d345-6f7f-ec903904dcd6">
+      <Execution id="ddfbbfd3-fa9d-45fc-aece-c3eff4c65cfc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="DeleteSelectedAsync_WhenCommitFailsAfterMutation_RecreatesAndReselects" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCommitFailsAfterMutation_RecreatesSnapshot" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="acb0114a-1e14-261e-61c2-84b2a511dae0">
+      <Execution id="c6910186-b65d-4f9d-86cf-7790cc178a5e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="DeleteAsync_WhenCommitFailsAfterMutation_RecreatesSnapshot" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToInnerWorkflow" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="c0bafc17-6523-e1f1-fb4f-1c7202ee0604">
+      <Execution id="e0898539-5ac7-4963-a7ac-8d33b3ee32fd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToInnerWorkflow" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCommitFailsAfterMutation_DeletesReturnedCanonicalId" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="fbf5c2c6-868d-1e7e-7b00-34e220327f23">
+      <Execution id="4e83ecf3-2693-4585-beea-7cd802946962" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="CreateAsync_WhenCommitFailsAfterMutation_DeletesReturnedCanonicalId" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="cb9d5f17-9280-9dc3-bc49-006a071b6057">
+      <Execution id="417cce38-7900-419f-9c0f-116cde9a4174" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="74d5cffa-b355-d39d-013b-4607811376f4">
+      <Execution id="0899c441-02e6-4eb0-9fb4-bd7bef4433d6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="9525a58a-c779-a8ea-3ec4-d66b918b13bd">
+      <Execution id="7c03df02-cfde-48f3-a3b6-5f32bce5c020" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="DeleteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateSelectedAsync_WhenCommitFailsAfterMutation_RestoresAndReselects" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="4420fe0f-e2dd-bbf5-76cd-8bfc7cdc0496">
+      <Execution id="1810b049-1122-4a0d-b557-734db63f2be5" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="UpdateSelectedAsync_WhenCommitFailsAfterMutation_RestoresAndReselects" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="58744215-072b-6715-ee03-fc775465a75b">
+      <Execution id="b6c946d6-c8fc-43a8-9310-8db14ee249e0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot" />
+    </UnitTest>
+    <UnitTest name="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedBeforeInnerWorkflow" storage="f:\github\mcpserver\tests\mcpserver.repl.integrationtests\bin\debug\net10.0\mcpserver.repl.integrationtests.dll" id="367bf11c-a1b9-7add-259d-96eade7c6d67">
+      <Execution id="e81431b3-8498-49b3-9d4b-86b9781d2da1" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Repl.IntegrationTests\bin\Debug\net10.0\McpServer.Repl.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Repl.IntegrationTests.TransactionalTodoWorkflowTests" name="RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedBeforeInnerWorkflow" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="58744215-072b-6715-ee03-fc775465a75b" executionId="b6c946d6-c8fc-43a8-9310-8db14ee249e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="367bf11c-a1b9-7add-259d-96eade7c6d67" executionId="e81431b3-8498-49b3-9d4b-86b9781d2da1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9525a58a-c779-a8ea-3ec4-d66b918b13bd" executionId="7c03df02-cfde-48f3-a3b6-5f32bce5c020" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c0bafc17-6523-e1f1-fb4f-1c7202ee0604" executionId="e0898539-5ac7-4963-a7ac-8d33b3ee32fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="74d5cffa-b355-d39d-013b-4607811376f4" executionId="0899c441-02e6-4eb0-9fb4-bd7bef4433d6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cb9d5f17-9280-9dc3-bc49-006a071b6057" executionId="417cce38-7900-419f-9c0f-116cde9a4174" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acb0114a-1e14-261e-61c2-84b2a511dae0" executionId="c6910186-b65d-4f9d-86cf-7790cc178a5e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbf5c2c6-868d-1e7e-7b00-34e220327f23" executionId="4e83ecf3-2693-4585-beea-7cd802946962" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92bdf3af-732e-d345-6f7f-ec903904dcd6" executionId="ddfbbfd3-fa9d-45fc-aece-c3eff4c65cfc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4420fe0f-e2dd-bbf5-76cd-8bfc7cdc0496" executionId="1810b049-1122-4a0d-b557-734db63f2be5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)&#xD;
+[xUnit.net 00:00:00.30]   Discovering: McpServer.Repl.IntegrationTests&#xD;
+[xUnit.net 00:00:00.73]   Discovered:  McpServer.Repl.IntegrationTests&#xD;
+[xUnit.net 00:00:01.00]   Starting:    McpServer.Repl.IntegrationTests&#xD;
+[xUnit.net 00:00:01.36]   Finished:    McpServer.Repl.IntegrationTests (ID = '62118ded484063782970717a29aa7056aafa7afc41398ae624504e96b0bde841')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

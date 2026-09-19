@@ -1,0 +1,122 @@
+{
+  "TimestampUtc": "2026-09-17T14:18:43Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkspacePath": "F:\\GitHub\\McpServer",
+  "Gate": "txnkey-sessionlog-green",
+  "AddProfileExecuted": true,
+  "AddProfileFileCount": 19,
+  "WorkClass": 1,
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 99,
+  "PassCount": 16,
+  "FailCount": 1,
+  "UnknownCount": 0,
+  "HvSessionId": "GrokSubagentHostile-20260917T141036Z-txnkey-sessionlog-green",
+  "HvRequestId": "req-20260917T141036Z-001-txnkey-sessionlog-green",
+  "HvTurnId": 45201,
+  "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T141843Z-txnkey-sessionlog-green.request.jsonl",
+  "ResponseJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260917T141843Z-txnkey-sessionlog-green.response.jsonl",
+  "ReceiptMarkdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260917T141843Z.md",
+  "FailList": [
+    "C-FR120-conflict: FR-MCP-120 still requires session-log writes through coordinator or fail-closed while required transactions are active; product now bypasses coordinator for non-QBAgent."
+  ],
+  "Claims": [
+    {
+      "summary": "FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221 exist and map; PLAN-TXNKEYSERVER-001 Done=false",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A1"
+    },
+    {
+      "summary": "Red 4/9/0 on four new GrokCode tests at 14:05:59Z then product edit 14:06:10Z then green 13/0/0; TEST-MCP-161 retargeted Codex to QBAgent",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A2"
+    },
+    {
+      "summary": "ExecuteMutationAsync bypasses coordinator when sourceType is not QBAgent (OrdinalIgnoreCase)",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A3"
+    },
+    {
+      "summary": "HV focused filter Failed 0 Passed 13 Skipped 0 EXIT=0",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A4"
+    },
+    {
+      "summary": "HV broader TransactionGated filter Failed 0 Passed 139 Skipped 0 EXIT=0",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A5"
+    },
+    {
+      "summary": "Live TurnTransactions.Enabled=true last write 2026-09-16; repo Enabled=false unmodified",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A6"
+    },
+    {
+      "summary": "PLAN Done=false; live exe 1.4.38+6a72d445 from 2026-09-16 lacks IsQuadBrainSessionLogSource",
+      "verdict": "PASS",
+      "group": "A",
+      "id": "A7"
+    },
+    {
+      "summary": "Byrd red then implement proven from implementer recap plus HV green rerun",
+      "verdict": "PASS",
+      "group": "B",
+      "id": "B1"
+    },
+    {
+      "summary": "Honesty/receipts: HV re-ran tests and re-read store/source/live artifacts",
+      "verdict": "PASS",
+      "group": "B",
+      "id": "B2"
+    },
+    {
+      "summary": "MCP-only storage; git slice is two cs files",
+      "verdict": "PASS",
+      "group": "B",
+      "id": "B3"
+    },
+    {
+      "summary": "PowerShell/MCP only; no Python lab automation",
+      "verdict": "PASS",
+      "group": "B",
+      "id": "B4"
+    },
+    {
+      "summary": "Done=false and no-redeploy claims match live artifacts",
+      "verdict": "PASS",
+      "group": "B",
+      "id": "B5"
+    },
+    {
+      "summary": "FR/TR/TEST exist in MCP store",
+      "verdict": "PASS",
+      "group": "C",
+      "id": "C1"
+    },
+    {
+      "summary": "FR-MCP-173 body ACs covered in TransactionGatedSessionLogServiceTests",
+      "verdict": "PASS",
+      "group": "C",
+      "id": "C2"
+    },
+    {
+      "summary": "FR-MCP-120 session-log AC unamended and conflicts with the bypass",
+      "verdict": "FAIL",
+      "group": "C",
+      "id": "C3"
+    },
+    {
+      "summary": "Plan not claimed complete; working tree matches approved QuadBrain-only design; live not redeployed",
+      "verdict": "PASS",
+      "group": "D",
+      "id": "D1"
+    }
+  ]
+}

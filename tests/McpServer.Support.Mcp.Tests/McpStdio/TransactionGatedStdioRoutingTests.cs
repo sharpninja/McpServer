@@ -417,11 +417,14 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             .ConfigureAwait(true);
     }
 
-    /// <summary>context_ingest_website fails closed before calling the website ingestor when required transactions are active.</summary>
+    /// <summary>context_ingest_website delegates to the website ingestor when required transactions are active.</summary>
     [Fact]
-    public async Task ContextIngestWebsite_WhenTransactionsRequired_ReturnsErrorWithoutCallingWebsiteIngestor()
+    public async Task ContextIngestWebsite_WhenTransactionsRequired_DelegatesToWebsiteIngestor()
     {
         var websiteIngestor = Substitute.For<IWebsiteIngestor>();
+        websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([]));
         var tools = CreateTools(
             _db,
             _repoFileService,
@@ -434,16 +437,15 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         var json = await tools.ContextIngestWebsite("https://example.test/docs", WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
-        Assert.Equal("turn_transaction_gate", document.RootElement.GetProperty("code").GetString());
-        Assert.Contains("not transaction compensated", document.RootElement.GetProperty("error").GetString(), StringComparison.OrdinalIgnoreCase);
-        await websiteIngestor.DidNotReceive()
+        Assert.False(document.RootElement.TryGetProperty("code", out var code) && code.GetString() == "turn_transaction_gate");
+        await websiteIngestor.Received(1)
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>sync_run fails closed before starting durable context sync when required transactions are active.</summary>
+    /// <summary>sync_run is not blocked by the turn-transaction gate when required transactions are active.</summary>
     [Fact]
-    public async Task SyncRun_WhenTransactionsRequired_ReturnsErrorWithoutWritingContextRows()
+    public async Task SyncRun_WhenTransactionsRequired_DoesNotReturnTurnTransactionGate()
     {
         var tools = CreateTools(
             _db,
@@ -456,9 +458,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         var json = await tools.SyncRun(WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
-        Assert.Equal("turn_transaction_gate", document.RootElement.GetProperty("code").GetString());
-        Assert.Contains("not transaction compensated", document.RootElement.GetProperty("error").GetString(), StringComparison.OrdinalIgnoreCase);
-        Assert.Empty(await _db.Documents.ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.False(document.RootElement.TryGetProperty("code", out var code) && code.GetString() == "turn_transaction_gate");
     }
 
     private static PromptTemplate CreateTemplate(string id)

@@ -1,3 +1,4 @@
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -38,10 +39,10 @@ public sealed class TransactionGatedRequirementsAnalysisService : IRequirementsS
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(todoId);
 
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "requirements.analyze"))
             return _inner.AnalyzeAsync(todoId, cancellationToken);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return Task.FromResult(new RequirementsAnalysisResult(

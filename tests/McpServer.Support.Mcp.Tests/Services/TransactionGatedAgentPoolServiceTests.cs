@@ -10,55 +10,58 @@ using MsOptions = Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Verifies agent-pool runtime mutations fail closed while required turn transactions are active.
+/// TEST-MCP-221 / FR-MCP-173: Agent-pool runtime mutations skip coordinator/keyserver.
 /// </summary>
 public sealed class TransactionGatedAgentPoolServiceTests
 {
-    /// <summary>start-agent returns a failed mutation result without invoking the inner pool while required transactions are active.</summary>
+    /// <summary>start-agent delegates to the inner pool while required transactions are active.</summary>
     [Fact]
-    public async Task StartAgentAsync_WhenTransactionsRequired_ReturnsFailureWithoutCallingInner()
+    public async Task StartAgentAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
+        inner.StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new AgentPoolMutationResult { Success = true }));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
         var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive()
-            .StartAgentAsync(Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+        Assert.True(result.Success);
+        await inner.Received(1)
+            .StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>enqueue returns a failed enqueue result when the coordinator is degraded.</summary>
+    /// <summary>enqueue delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task EnqueueOneShotAsync_WhenCoordinatorDegraded_ReturnsFailureWithoutCallingInner()
+    public async Task EnqueueOneShotAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
+        inner.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new AgentPoolEnqueueResult { Success = true }));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
 
         var result = await sut.EnqueueOneShotAsync(new AgentPoolOneShotRequest { PromptText = "plan" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("txn degraded", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceive()
+        Assert.True(result.Success);
+        await inner.Received(1)
             .EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>connect returns a failed connect result without starting a pooled interactive session.</summary>
+    /// <summary>connect delegates to the inner pool while required transactions are active.</summary>
     [Fact]
-    public async Task ConnectInteractiveAsync_WhenTransactionsRequired_ReturnsFailureWithoutCallingInner()
+    public async Task ConnectInteractiveAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
+        inner.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new AgentPoolConnectResult { Success = true }));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
         var result = await sut.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive()
-            .ConnectInteractiveAsync(Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+        Assert.True(result.Success);
+        await inner.Received(1)
+            .ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 

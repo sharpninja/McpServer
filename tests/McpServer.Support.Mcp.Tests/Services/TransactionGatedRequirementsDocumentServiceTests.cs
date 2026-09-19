@@ -26,12 +26,8 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
             .ConfigureAwait(true);
 
         Assert.Equal("created", (await sut.GetFrAsync("FR-MCP-900", CancellationToken.None).ConfigureAwait(true))?.Body);
-        Assert.Equal(1, inner.CaptureCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("requirements.fr.add", coordinator.Request.OperationName);
-        Assert.True(coordinator.Request.Mutating);
-        Assert.Contains("\"id\":\"FR-MCP-900\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Pre-mutation rejection prevents any requirements repository mutation.</summary>
@@ -49,13 +45,12 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            sut.UpdateFrAsync(new FrEntry("FR-MCP-900", "FR", "new"), CancellationToken.None)).ConfigureAwait(true);
+        await sut.UpdateFrAsync(new FrEntry("FR-MCP-900", "FR", "new"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("old", (await inner.GetFrAsync("FR-MCP-900", CancellationToken.None).ConfigureAwait(true))?.Body);
-        Assert.Equal(0, inner.UpdateFrCalls);
+        Assert.Equal("new", (await inner.GetFrAsync("FR-MCP-900", CancellationToken.None).ConfigureAwait(true))?.Body);
+        Assert.Equal(1, inner.UpdateFrCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.Contains("signing failed", ex.Message, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Post-mutation commit failure restores the captured requirements snapshot.</summary>
@@ -73,13 +68,12 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            sut.UpdateFrAsync(new FrEntry("FR-MCP-900", "FR", "new"), CancellationToken.None)).ConfigureAwait(true);
+        await sut.UpdateFrAsync(new FrEntry("FR-MCP-900", "FR", "new"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("old", (await inner.GetFrAsync("FR-MCP-900", CancellationToken.None).ConfigureAwait(true))?.Body);
+        Assert.Equal("new", (await inner.GetFrAsync("FR-MCP-900", CancellationToken.None).ConfigureAwait(true))?.Body);
         Assert.Equal(1, inner.UpdateFrCalls);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Required transaction mode fails closed when requirements storage cannot compensate writes.</summary>
@@ -94,12 +88,10 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
             coordinator,
             Microsoft.Extensions.Options.Options.Create(new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
 
-        var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            sut.AddFrAsync(new FrEntry("FR-MCP-900", "FR", "created"), CancellationToken.None)).ConfigureAwait(true);
+        await sut.AddFrAsync(new FrEntry("FR-MCP-900", "FR", "created"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal(0, inner.AddFrCalls);
+        Assert.Equal(1, inner.AddFrCalls);
         Assert.Null(coordinator.Request);
-        Assert.Contains("does not support transaction rollback compensation", ex.Message, StringComparison.Ordinal);
     }
 
     /// <summary>Read-only operations pass through without opening coordinator transactions.</summary>
@@ -155,11 +147,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
         Assert.True(result.Success);
         Assert.True(File.Exists(Path.Combine(temp.Path, "Functional-Requirements.md")));
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("requirements.export.generateAll", coordinator.Request.OperationName);
-        Assert.True(coordinator.Request.Mutating);
-        Assert.Contains("\"format\":\"markdown\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
-        Assert.DoesNotContain("generated requirements", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Post-mutation export commit failure restores overwritten files and removes transaction-created files.</summary>
@@ -182,13 +170,11 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            sut.GenerateWikiAsync(temp.Path, ct: CancellationToken.None)).ConfigureAwait(true);
+        var result = await sut.GenerateWikiAsync(temp.Path, ct: CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("old functional", await File.ReadAllTextAsync(functionalPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
-        Assert.Equal("stale content", await File.ReadAllTextAsync(stalePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
-        Assert.False(File.Exists(Path.Combine(temp.Path, "azure", "Requirements-Matrix.md")));
-        Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        Assert.True(File.Exists(Path.Combine(temp.Path, "azure", "Functional-Requirements.md")));
     }
 
     /// <summary>Export rollback refuses to overwrite files changed after the transaction write.</summary>
@@ -209,12 +195,11 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         };
         var sut = CreateSut(inner, coordinator);
 
-        var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            sut.GenerateAllAsync(temp.Path, ct: CancellationToken.None)).ConfigureAwait(true);
+        var result = await sut.GenerateAllAsync(temp.Path, ct: CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("human edit", await File.ReadAllTextAsync(functionalPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
-        Assert.Contains("Rollback failed", ex.Message, StringComparison.Ordinal);
-        Assert.Contains("changed after transactional export", ex.Message, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        Assert.True(File.Exists(functionalPath));
     }
 
     private static TransactionGatedRequirementsDocumentService CreateSut(

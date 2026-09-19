@@ -940,14 +940,14 @@ Scope: layer-1+
 
 ## FR-MCP-120 MCP Server transaction gating
 
-McpServer SHALL gate first-party mutating user-turn paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available.
+McpServer SHALL gate QuadBrain/brain-slot mutating paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available. FR-MCP-173 carves out every non-QuadBrain first-party mutation (TODO, requirements, session-log for every source type including QBAgent, memory, repo, tools, GitHub, GraphRAG, voice, agent pool, REPL TODO workflow, requirements ingest, context rebuild, and federation apply/control): those persist without keyserver/coordinator even when turn transactions are enabled. QuadBrain brain-slot.invoke and brain-slot.weight-update remain in this gate.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Federation adapter apply, memory add/update/delete, TODO create/update/delete/move, repository write, prompt-template mutations, TODO execution state/plan mutations, requirements repository/export writes, session-log writes, tool registry mutations, voice/external interactive mutations, agent-pool lifecycle mutations, GraphRAG mutations, GitHub external side-effect mutations, context rebuild/website/sync mutations, and federation control-plane mutations either route through compensation-capable coordinator gates or fail closed while required transactions are active.
-- [x] Memory add rollback restores or preserves the created memory record, clears soft-delete metadata when exact EF restoration is available, and same-ID retry conflicts after rollback.
-- [x] Server-side TODO compensation captures update/delete/move restore points under the provider write lock, deletes uncommitted local create rows, restores source snapshots on move rollback, and rejects ISSUE-backed TODO mutation while GitHub side-effect compensation remains future scope.
-- [x] Session-log rollback restores or preserves add-style created session records and restores captured full session graphs for replace/delete inside an explicit database transaction.
-- [x] Generic REPL client passthrough blocks unsafe protected namespaces and unclassified client namespaces while required transaction gating is active, while explicitly service-gated namespaces remain routed to server-side gates.
+- [x] QuadBrain brain-slot.invoke and brain-slot.weight-update either route through compensation-capable coordinator gates or fail closed while required transactions are active. All other first-party mutations (federation apply, memory, TODO, repository write, prompt templates, TODO execution, requirements repository/export/ingest, session-log for every source type including QBAgent, tool registry, voice, agent-pool, GraphRAG, GitHub, context rebuild/website/sync, and federation control-plane) are governed by FR-MCP-173 and SHALL persist without coordinator/keyserver even when Mcp:TurnTransactions:Enabled=true.
+- [x] QuadBrain coordinator ExecuteAsync rollback restores mutation snapshots when a brain-slot transaction fails after mutation. TransactionGatedMemoryService general-agent mutations are FR-MCP-173 and do not use coordinator compensation.
+- [x] QuadBrain coordinator ExecuteAsync paths retain TODO compensation. TransactionGated TODO adapters are FR-MCP-173. ISSUE-backed GitHub side-effect compensation remains future scope for QuadBrain-gated paths.
+- [x] Session-log writes including QBAgent are governed by FR-MCP-173 and persist without coordinator/keyserver. Workspace-stamp repair remains fail-closed while required transactions are active because it is not compensated.
+- [x] Generic REPL client passthrough blocks unsafe protected namespaces and unclassified client namespaces while required transaction gating is active for QuadBrain operations, while explicitly service-gated namespaces remain routed to server-side gates that apply FR-MCP-173 for non-QuadBrain mutations.
 - [x] Complete provider-level isolation across delayed subscriber rejection and bucket/GitHub whole-orchestration compensation remain documented future enhancements, not committed-success claims for this slice.
 
 ## FR-MCP-121 Degraded mode and rollback
@@ -1206,6 +1206,24 @@ Scope: layer-1+
 - [x] stderr has no Failsafe queue drain failed for that class. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - [x] ReplFailsafeDrainCompleted stays false on abort. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - [x] Next drain in-process replays after a stubbed success. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+
+## FR-MCP-173 Keyserver signs QuadBrain transactions only
+
+Keyserver manifest signing SHALL be used only for QuadBrain transactions: publisher party id prefix brain-slot:, or operation name prefix brain-slot. or quadbrain. All other first-party mutations (TODO, requirements, session-log for every source type including QBAgent, memory, repo, prompt templates, tool registry, GitHub, GraphRAG, voice, agent pool, issue-todo-sync, tool buckets, REPL TODO workflow, requirements ingest, context rebuild, and federation apply/control) SHALL persist without calling ITurnTransactionCoordinator or the keyserver even when Mcp:TurnTransactions:Enabled=true and RequiredForMutations=true. Do not disable the live TurnTransactions flag as the fix. QuadBrain brain-slot.invoke and brain-slot.weight-update remain coordinator-gated and may call keyserver.
+
+Acceptance Criteria:
+- ac-1: With TurnTransactions.Enabled=true and RequiredForMutations=true, general-agent mutations (todo.update, requirements.fr.update, sessionlog.submit for GrokCode and QBAgent, memory.add, repo.write, github.cli) do not invoke ITurnTransactionCoordinator.ExecuteAsync and still succeed.
+- ac-2: brain-slot.invoke and brain-slot.weight-update still invoke the coordinator and may call SignManifestAsync.
+- ac-3: Coordinator degraded state does not block general-agent first-party mutations.
+- ac-4: Live TurnTransactions.Enabled remains true for QuadBrain; the repo default may stay false.
+- ac-5: Focused TransactionGated* tests plus TurnTransactionCoordinatorTests, TurnTransactionKeyserverScopeTests, and BrainSlotInvocationTransactionTests complete with zero failures and zero skips.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] With TurnTransactions.Enabled=true and RequiredForMutations=true, general-agent mutations (todo.update, requirements.fr.update, sessionlog.submit for GrokCode and QBAgent, memory.add, repo.write, github.cli) do not invoke ITurnTransactionCoordinator.ExecuteAsync and still succeed.
+- [ ] brain-slot.invoke and brain-slot.weight-update still invoke the coordinator and may call SignManifestAsync.
+- [ ] Coordinator degraded state does not block general-agent first-party mutations.
+- [ ] Live TurnTransactions.Enabled remains true for QuadBrain; the repo default may stay false.
+- [ ] Focused TransactionGated* tests plus TurnTransactionCoordinatorTests, TurnTransactionKeyserverScopeTests, and BrainSlotInvocationTransactionTests complete with zero failures and zero skips.
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
@@ -1703,6 +1721,11 @@ Scope: layer-1+
 - [x] Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
 - [x] Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
 - [x] QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+
+## FR-MCP-QBPROGRESS-001 Live QuadBrain role progress on qbagent
+
+While a qbagent prompt is running, the operator SHALL see each QuadBrain role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) as it starts and when it completes, including that role's output text, without waiting for the full orchestration to finish. The OpenAI chat-completions stream SHALL emit those role events before the final Arbiter assistant message. The final assistant message remains the Arbiter decision (FR-MCP-QBOPENAI-001). Heartbeat still-working lines are not a substitute for role progress.
+Scope: layer-1+
 
 ## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
 

@@ -367,8 +367,8 @@ public sealed class FederationControllerTests
 
         var result = controller.Enable();
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.False(registry.IsEnabled);
+        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.True(registry.IsEnabled);
     }
 
     /// <summary>Disable sets federation to disabled.</summary>
@@ -396,9 +396,8 @@ public sealed class FederationControllerTests
 
         var result = controller.Disable();
 
-        var conflict = Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Contains("txn degraded", conflict.Value?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
-        Assert.True(registry.IsEnabled);
+        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.False(registry.IsEnabled);
     }
 
     // --- ListTargets ---
@@ -439,8 +438,8 @@ public sealed class FederationControllerTests
 
         var result = controller.AddTarget(new FederationTargetOptions { Name = "remote", BaseUrl = "https://x.ngrok.io" });
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Empty(registry.List());
+        Assert.False(result.Result is ConflictObjectResult);
+        Assert.NotEmpty(registry.List());
     }
 
     /// <summary>Adding a duplicate target name returns 409 Conflict.</summary>
@@ -562,8 +561,8 @@ public sealed class FederationControllerTests
             TargetName = "t1",
         });
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Empty(registry.ListRoutes());
+        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.NotEmpty(registry.ListRoutes());
     }
 
     /// <summary>Adding a route with an unknown target returns 404.</summary>
@@ -635,8 +634,8 @@ public sealed class FederationControllerTests
                 CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.IsType<ConflictObjectResult>(result.Result);
-        await topology.DidNotReceive()
+        Assert.IsType<OkObjectResult>(result.Result);
+        await topology.Received(1)
             .RecordOperationAsync(Arg.Any<FederationOperationRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }

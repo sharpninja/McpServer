@@ -11,6 +11,7 @@ using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -210,10 +211,10 @@ public sealed partial class FwhMcpTools
     private bool ShouldDeferContextMutation(out string error)
     {
         error = string.Empty;
-        if (_transactionCoordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_transactionCoordinator, "context.mutate"))
             return false;
 
-        var status = _transactionCoordinator.GetStatus();
+        var status = _transactionCoordinator!.GetStatus();
         if (status.Degraded)
         {
             error = string.IsNullOrWhiteSpace(status.Message)

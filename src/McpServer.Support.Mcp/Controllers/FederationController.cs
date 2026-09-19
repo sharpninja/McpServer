@@ -1,4 +1,5 @@
 using System.Globalization;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -615,10 +616,10 @@ public sealed class FederationController : ControllerBase
     private bool ShouldDeferFederationControlMutation(out string error)
     {
         error = string.Empty;
-        if (_transactionCoordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_transactionCoordinator, "federation.control"))
             return false;
 
-        var status = _transactionCoordinator.GetStatus();
+        var status = _transactionCoordinator!.GetStatus();
         if (status.Degraded)
         {
             error = string.IsNullOrWhiteSpace(status.Message)

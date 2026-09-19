@@ -10,93 +10,81 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Verifies GraphRAG mutations fail closed while required turn transactions are active.
+/// TEST-MCP-221 / FR-MCP-173: GraphRAG mutations skip coordinator/keyserver and
+/// invoke the inner service even when turn transactions are required.
 /// </summary>
 public sealed class TransactionGatedGraphRagServiceTests
 {
-    /// <summary>GraphRAG indexing fails before calling the inner service while required transactions are active.</summary>
+    /// <summary>GraphRAG indexing delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task IndexAsync_WhenRequiredTransactionsActive_FailsClosedWithoutCallingInner()
+    public async Task IndexAsync_WhenRequiredTransactionsActive_DelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
+        inner.IndexAsync(Arg.Any<GraphRagIndexRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new GraphRagStatusResponse());
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.IndexAsync(new GraphRagIndexRequest { Force = true }, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.IndexAsync(new GraphRagIndexRequest { Force = true }, CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("GraphRAG mutations are not transaction compensated", exception.Message, StringComparison.Ordinal);
-        await inner.DidNotReceive()
+        await inner.Received(1)
             .IndexAsync(Arg.Any<GraphRagIndexRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>GraphRAG text ingestion fails before calling the inner service while required transactions are active.</summary>
+    /// <summary>GraphRAG text ingestion delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task IngestTextAsync_WhenRequiredTransactionsActive_FailsClosedWithoutCallingInner()
+    public async Task IngestTextAsync_WhenRequiredTransactionsActive_DelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.IngestTextAsync(new GraphRagIngestTextRequest { Content = "hello" }, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.IngestTextAsync(new GraphRagIngestTextRequest { Content = "hello" }, CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("GraphRAG mutations are not transaction compensated", exception.Message, StringComparison.Ordinal);
-        await inner.DidNotReceive()
+        await inner.Received(1)
             .IngestTextAsync(Arg.Any<GraphRagIngestTextRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>GraphRAG document deletion fails before calling the inner service while required transactions are active.</summary>
+    /// <summary>GraphRAG document deletion delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task DeleteDocumentAsync_WhenRequiredTransactionsActive_FailsClosedWithoutCallingInner()
+    public async Task DeleteDocumentAsync_WhenRequiredTransactionsActive_DelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteDocumentAsync("doc-1", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.DeleteDocumentAsync("doc-1", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("GraphRAG mutations are not transaction compensated", exception.Message, StringComparison.Ordinal);
-        await inner.DidNotReceive()
-            .DeleteDocumentAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>GraphRAG entity CRUD fails before calling the inner service while required transactions are active.</summary>
+    /// <summary>GraphRAG entity CRUD delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task EntityMutations_WhenRequiredTransactionsActive_FailClosedWithoutCallingInner()
+    public async Task EntityMutations_WhenRequiredTransactionsActive_DelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.CreateEntityAsync(request, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.UpdateEntityAsync("ge-1", request, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteEntityAsync("ge-1", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.CreateEntityAsync(request, CancellationToken.None).ConfigureAwait(true);
+        await sut.UpdateEntityAsync("ge-1", request, CancellationToken.None).ConfigureAwait(true);
+        await sut.DeleteEntityAsync("ge-1", CancellationToken.None).ConfigureAwait(true);
 
-        await inner.DidNotReceive()
+        await inner.Received(1)
             .CreateEntityAsync(Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await inner.DidNotReceive()
-            .UpdateEntityAsync(Arg.Any<string>(), Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .UpdateEntityAsync("ge-1", Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await inner.DidNotReceive()
-            .DeleteEntityAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .DeleteEntityAsync("ge-1", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>GraphRAG relationship CRUD fails before calling the inner service while required transactions are active.</summary>
+    /// <summary>GraphRAG relationship CRUD delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task RelationshipMutations_WhenRequiredTransactionsActive_FailClosedWithoutCallingInner()
+    public async Task RelationshipMutations_WhenRequiredTransactionsActive_DelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
@@ -107,32 +95,28 @@ public sealed class TransactionGatedGraphRagServiceTests
             RelationshipType = "knows",
         };
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.CreateRelationshipAsync(request, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.UpdateRelationshipAsync("gr-1", request, CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteRelationshipAsync("gr-1", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(request, CancellationToken.None).ConfigureAwait(true);
+        await sut.UpdateRelationshipAsync("gr-1", request, CancellationToken.None).ConfigureAwait(true);
+        await sut.DeleteRelationshipAsync("gr-1", CancellationToken.None).ConfigureAwait(true);
 
-        await inner.DidNotReceive()
+        await inner.Received(1)
             .CreateRelationshipAsync(Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await inner.DidNotReceive()
-            .UpdateRelationshipAsync(Arg.Any<string>(), Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .UpdateRelationshipAsync("gr-1", Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await inner.DidNotReceive()
-            .DeleteRelationshipAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .DeleteRelationshipAsync("gr-1", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>GraphRAG mutations fail closed when the coordinator is degraded.</summary>
+    /// <summary>GraphRAG initialize still delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task InitializeAsync_WhenCoordinatorDegraded_FailsClosedWithoutCallingInner()
+    public async Task InitializeAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
+        inner.InitializeAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
+            .Returns(new GraphRagStatusResponse());
         var coordinator = Substitute.For<ITurnTransactionCoordinator>();
         coordinator.GetStatus().Returns(new TurnTransactionStatusResponse
         {
@@ -142,12 +126,9 @@ public sealed class TransactionGatedGraphRagServiceTests
         });
         var sut = CreateSut(inner, coordinator, RequiredOptions());
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.InitializeAsync(cancellationToken: CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.InitializeAsync(cancellationToken: CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("transaction gate unavailable", exception.Message, StringComparison.Ordinal);
-        await inner.DidNotReceive()
+        await inner.Received(1)
             .InitializeAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
