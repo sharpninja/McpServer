@@ -4,8 +4,8 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
 /// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
-/// S2 Red acceptance for the dedicated memory indexer. Production ANN/FTS fusion
-/// and EmbeddingStatus transitions are not implemented yet.
+/// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
+/// and EmbeddingStatus transitions.
 /// </summary>
 public sealed class MemoryIndexerTests : IDisposable
 {

@@ -6,7 +6,7 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 /// <summary>
 /// TEST-MCP-MEMORY-011 / FR-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002:
 /// Mocks-first green proof that S2 recall/index port contracts are assertable.
-/// Production S2 indexer/fusion is intentionally absent (Red tests live in the matrix classes).
+/// Production S2 indexer/fusion is covered by the matrix classes.
 /// </summary>
 public sealed class MemoryS2PortMockTests
 {

@@ -16,7 +16,6 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 /// <summary>
 /// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
 /// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2 tests.
-/// Does not implement S2 Green indexer or hybrid fusion.
 /// </summary>
 public sealed class MemoryS1Harness : IDisposable
 {

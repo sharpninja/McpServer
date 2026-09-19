@@ -4,8 +4,7 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
 /// TEST-MCP-MEMORY-011 / FR-MCP-MEMORY-011 / FR-MCP-MEMORY-014 / TR-MCP-MEMORY-SEARCH-002:
-/// S1 AfterRevert stays green. S2 production recall matrix asserts hybrid search behavior
-/// that is not implemented yet (Red).
+/// S1 AfterRevert stays green. S2 production recall matrix asserts hybrid search behavior.
 /// </summary>
 public sealed class MemoryRecallTests : IDisposable
 {
