@@ -163,6 +163,165 @@ public sealed class MemoryClientTests
         Assert.False(document.RootElement.TryGetProperty("items", out _));
     }
 
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Live explore JSON uses <c>items</c> neighbors. The client must
+    /// keep those rows on <c>items</c>, <c>neighbors</c>, and plugin-facing <c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task ExploreAsync_LiveItemsJson_SurfacesHits()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveExploreItemsJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.ExploreAsync(
+            new MemoryExploreRequest { SeedId = "MEMORY-FACT-003" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("http://localhost:7147/mcpserver/memory/explore", handler.LastRequest!.RequestUri!.ToString());
+        Assert.Equal("MEMORY-FACT-004", Assert.Single(result.Items!).Id);
+        Assert.Equal("MEMORY-FACT-004", Assert.Single(result.Hits!).Id);
+        Assert.Equal("MEMORY-FACT-004", Assert.Single(result.Neighbors!).Id);
+        Assert.Equal("related", result.Hits![0].EdgeType);
+
+        var pluginFacing = JsonSerializer.Serialize(result, McpClientJsonContext.Default.MemoryExploreResult);
+        using var document = JsonDocument.Parse(pluginFacing);
+        Assert.Equal("MEMORY-FACT-004", document.RootElement.GetProperty("hits")[0].GetProperty("id").GetString());
+        Assert.Equal("MEMORY-FACT-004", document.RootElement.GetProperty("items")[0].GetProperty("id").GetString());
+        Assert.Equal("MEMORY-FACT-004", document.RootElement.GetProperty("neighbors")[0].GetProperty("id").GetString());
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Live consolidate JSON uses <c>plan</c>. The client must surface
+    /// that list as non-empty <c>plan</c>, <c>items</c>, and <c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task ConsolidateAsync_LivePlanJson_SurfacesHits()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveConsolidatePlanJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.ConsolidateAsync(
+            new MemoryConsolidateRequest { DryRun = true },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Plan!).SurvivorId);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Items!).SurvivorId);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Hits!).SurvivorId);
+        Assert.Contains("MEMORY-FACT-004", result.Plan![0].CandidateIds);
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Live versions JSON uses <c>items</c> snapshots. The client must
+    /// keep those rows on <c>items</c> and plugin-facing <c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task ListVersionsAsync_LiveItemsJson_SurfacesHits()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveVersionsItemsJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.ListVersionsAsync("MEMORY-FACT-003", cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.EndsWith("/mcpserver/memory/MEMORY-FACT-003/versions", handler.LastRequest!.RequestUri!.OriginalString, StringComparison.Ordinal);
+        Assert.Equal(1, Assert.Single(result.Items!).VersionNumber);
+        Assert.Equal(1, Assert.Single(result.Hits!).VersionNumber);
+        Assert.Contains("Operator fact from Legion recall proof.", result.Hits![0].Content, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Remember returns a memory object, not a ranked list. The typed
+    /// DTO must keep <c>memory</c> instead of collapsing to <see cref="MemorySurfaceResult"/>.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RememberAsync_LiveMemoryJson_KeepsMemory()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Created, LiveRememberJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.RememberAsync(
+            new MemoryRememberRequest { Content = "Operator fact from Legion recall proof." },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(201, result.StatusCode);
+        Assert.Equal("MEMORY-FACT-003", result.MemoryId);
+        Assert.Equal("MEMORY-FACT-003", result.Memory!.Id);
+        Assert.Contains("Operator fact from Legion recall proof.", result.Memory.Text, StringComparison.Ordinal);
+        using var document = JsonDocument.Parse(LiveRememberJson);
+        Assert.False(document.RootElement.TryGetProperty("items", out _));
+        Assert.False(document.RootElement.TryGetProperty("hits", out _));
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Promote keeps the created memory row from live HTTP.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task PromoteAsync_LiveMemoryJson_KeepsMemory()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LivePromoteJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.PromoteAsync(
+            new MemoryPromoteRequest { SourceKind = "sessionlog", SourceRef = "turn-1" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("MEMORY-FACT-003", result.Memory!.Id);
+        Assert.Equal("sessionlog", result.SourceKind);
+        using var document = JsonDocument.Parse(LivePromoteJson);
+        Assert.False(document.RootElement.TryGetProperty("items", out _));
+        Assert.False(document.RootElement.TryGetProperty("hits", out _));
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Revert keeps the restored memory row from live HTTP.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RevertAsync_LiveMemoryJson_KeepsMemory()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRevertJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.RevertAsync("MEMORY-FACT-003", 1, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("MEMORY-FACT-003", result.Memory!.Id);
+        Assert.Equal(1, result.Memory.Version);
+        using var document = JsonDocument.Parse(LiveRevertJson);
+        Assert.False(document.RootElement.TryGetProperty("items", out _));
+        Assert.False(document.RootElement.TryGetProperty("hits", out _));
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: No MemoryClient additive method maps a live body onto
+    /// <see cref="MemorySurfaceResult"/> alone.
+    /// </summary>
+    [Fact]
+    public void MemoryClient_AdditiveMethods_DoNotReturnMemorySurfaceResult()
+    {
+        foreach (var name in new[]
+        {
+            "RememberAsync", "RecallAsync", "ExploreAsync", "ConsolidateAsync",
+            "PromoteAsync", "ListVersionsAsync", "RevertAsync",
+        })
+        {
+            var method = typeof(MemoryClient).GetMethods()
+                .Single(item => item.Name == name && item.GetParameters().Length >= 1);
+            Assert.True(method.ReturnType.IsGenericType, name);
+            Assert.NotEqual(typeof(MemorySurfaceResult), method.ReturnType.GetGenericArguments()[0]);
+        }
+    }
+
     private const string LiveRecallItemsJson =
         """
         {"statusCode":200,"items":[{"id":"MEMORY-FACT-003","score":0.87,"title":"Legion fact","content":"Operator fact from Legion recall proof.","type":"fact","tags":["legion"],"scope":"Workspace","matchKind":"hybrid"}],"failureKind":"None","rerankApplied":false,"rankingMode":"hybrid"}
@@ -171,5 +330,35 @@ public sealed class MemoryClientTests
     private const string LiveRecallHitsJson =
         """
         {"statusCode":200,"hits":[{"id":"MEMORY-FACT-003","score":0.87,"content":"Operator fact from Legion recall proof."}]}
+        """;
+
+    private const string LiveExploreItemsJson =
+        """
+        {"statusCode":200,"items":[{"id":"MEMORY-FACT-004","weight":0.8,"edgeType":"related","depth":1}],"failureKind":"None","seedId":"MEMORY-FACT-003","hebbianApplied":false}
+        """;
+
+    private const string LiveConsolidatePlanJson =
+        """
+        {"statusCode":200,"plan":[{"candidateIds":["MEMORY-FACT-003","MEMORY-FACT-004"],"similarityScore":0.91,"survivorId":"MEMORY-FACT-003"}],"mergedAwayIds":[],"dryRunApplied":true,"failureKind":"None"}
+        """;
+
+    private const string LiveVersionsItemsJson =
+        """
+        {"statusCode":200,"items":[{"versionNumber":1,"title":"Legion fact","content":"Operator fact from Legion recall proof.","createdAtUtc":"2026-09-19T19:00:00Z"}]}
+        """;
+
+    private const string LiveRememberJson =
+        """
+        {"statusCode":201,"memoryId":"MEMORY-FACT-003","memory":{"id":"MEMORY-FACT-003","category":"FACT","scope":"Workspace","text":"Operator fact from Legion recall proof.","version":1,"createdAtUtc":"2026-09-19T19:00:00Z","updatedAtUtc":"2026-09-19T19:00:00Z"},"failureKind":"None"}
+        """;
+
+    private const string LivePromoteJson =
+        """
+        {"statusCode":200,"memory":{"id":"MEMORY-FACT-003","category":"FACT","scope":"Workspace","text":"Promoted fact.","version":1,"createdAtUtc":"2026-09-19T19:00:00Z","updatedAtUtc":"2026-09-19T19:00:00Z"},"sourceKind":"sessionlog","sourceRef":"turn-1","failureKind":"None"}
+        """;
+
+    private const string LiveRevertJson =
+        """
+        {"statusCode":200,"memory":{"id":"MEMORY-FACT-003","category":"FACT","scope":"Workspace","text":"Restored fact.","version":1,"createdAtUtc":"2026-09-19T19:00:00Z","updatedAtUtc":"2026-09-19T19:00:00Z"},"failureKind":"None"}
         """;
 }

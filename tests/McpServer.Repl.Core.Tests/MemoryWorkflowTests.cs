@@ -108,6 +108,94 @@ public sealed class MemoryWorkflowTests
         Assert.Contains("Operator fact from Legion recall proof.", yaml, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-MEMORY-004 / TEST-MCP-MEMORY-005:
+    /// workflow.memory.explore must keep live-API neighbor <c>items</c> as plugin-facing <c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async Task ExploreAsync_LiveItemsJson_PreservesHitsInPluginYaml()
+    {
+        var handler = new JsonHandler(
+            """
+            {"statusCode":200,"items":[{"id":"MEMORY-FACT-004","weight":0.8,"edgeType":"related","depth":1}],"failureKind":"None","seedId":"MEMORY-FACT-003","hebbianApplied":false}
+            """);
+        using var http = new HttpClient(handler);
+        var workflow = new MemoryWorkflow(new MemoryClient(http, Options));
+        var dispatcher = new ReplCommandDispatcher(
+            Substitute.For<IGenericClientPassthrough>(),
+            memoryWorkflow: workflow);
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-explore-hits",
+                Method = MemoryCommandShapes.ExploreMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["seedId"] = "MEMORY-FACT-003",
+                },
+            },
+        };
+
+        var response = await dispatcher.DispatchAsync(envelope, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal("result", response.Type);
+        var payload = Assert.IsAssignableFrom<IResultPayload>(response.Payload);
+        var explore = Assert.IsType<MemoryExploreResult>(payload.Result);
+        Assert.Equal("MEMORY-FACT-004", Assert.Single(explore.Hits!).Id);
+        Assert.Equal("MEMORY-FACT-004", Assert.Single(explore.Items!).Id);
+
+        var yaml = new YamlSerializer().Serialize(response);
+        Assert.Contains("hits:", yaml, StringComparison.Ordinal);
+        Assert.Contains("MEMORY-FACT-004", yaml, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004 / TEST-MCP-MEMORY-005:
+    /// workflow.memory.consolidate must keep live-API <c>plan</c> as plugin-facing <c>items</c>/<c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async Task ConsolidateAsync_LivePlanJson_PreservesHitsInPluginYaml()
+    {
+        var handler = new JsonHandler(
+            """
+            {"statusCode":200,"plan":[{"candidateIds":["MEMORY-FACT-003","MEMORY-FACT-004"],"similarityScore":0.91,"survivorId":"MEMORY-FACT-003"}],"mergedAwayIds":[],"dryRunApplied":true,"failureKind":"None"}
+            """);
+        using var http = new HttpClient(handler);
+        var workflow = new MemoryWorkflow(new MemoryClient(http, Options));
+        var dispatcher = new ReplCommandDispatcher(
+            Substitute.For<IGenericClientPassthrough>(),
+            memoryWorkflow: workflow);
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-consolidate-hits",
+                Method = MemoryCommandShapes.ConsolidateMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["dryRun"] = true,
+                },
+            },
+        };
+
+        var response = await dispatcher.DispatchAsync(envelope, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal("result", response.Type);
+        var payload = Assert.IsAssignableFrom<IResultPayload>(response.Payload);
+        var consolidate = Assert.IsType<MemoryConsolidateResult>(payload.Result);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(consolidate.Hits!).SurvivorId);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(consolidate.Items!).SurvivorId);
+
+        var yaml = new YamlSerializer().Serialize(response);
+        Assert.Contains("hits:", yaml, StringComparison.Ordinal);
+        Assert.Contains("MEMORY-FACT-003", yaml, StringComparison.Ordinal);
+    }
+
     private sealed class JsonHandler : HttpMessageHandler
     {
         private readonly string _json;
