@@ -1,1 +1,97 @@
-PLACEHOLDER
+{
+  "phase": "H7a-green",
+  "workClass": "Class 1 H7a-green",
+  "branch": "memory-s4-red",
+  "tipSha": "c5541d025759dac7b76990b69ce9b6e61f015c32",
+  "todoId": "MCP-MEMORY-002",
+  "filters": {
+    "namespaceMemory": "FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "s7aFocus": "FullyQualifiedName~MemoryBench|FullyQualifiedName~MemoryIntegrationTests"
+  },
+  "startedUtc": "2026-09-19T08:12:41Z",
+  "endedUtc": "2026-09-19T08:13:17Z",
+  "trxSha256": {
+    "namespaceMemory": "96aca9133d8817077f4707b779e661735f8b677008847417f52ca13f0e1f6072",
+    "s7aFocus": "44f597b72b8b8f23f61dbcef4b974615a5385df284a0e9a847a2b16cb63721bc"
+  },
+  "benchStubSha256": "3c184d58e8b12a7f3a4c1afdefaaa49628531afffa78bdbc261644989c649d3a",
+  "counts": {
+    "namespaceMemory": {
+      "failed": 0,
+      "passed": 308,
+      "skipped": 0,
+      "total": 308
+    },
+    "s7aFocus": {
+      "failed": 0,
+      "passed": 57,
+      "skipped": 0,
+      "total": 57
+    }
+  },
+  "catalog": {
+    "S7_S7a_methods": {
+      "pass": 57,
+      "total": 57,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    }
+  },
+  "valueGate": {
+    "tokensPrimaryInSchema": true,
+    "packWithAndWithout": true,
+    "grokFirst": true,
+    "otherPluginsDeferred": true,
+    "hardFailWithoutTokens": true,
+    "stubMacroMeanTokensTotalWithMemory": 38.125,
+    "stubMacroMeanTokensTotalWithoutMemory": 20.25,
+    "stubCells": 16,
+    "stubPassRate": 1.0,
+    "committedH7aValueGateJsonAgree": false,
+    "committedH7aValueGateJsonNote": "Operator placeholder; hostile AGREE is this receipt. File left agree:false because unit tests pin pre-AGREE state."
+  },
+  "focus": [
+    {
+      "area": "tokens_star_primary_in_schema",
+      "outcome": "Passed"
+    },
+    {
+      "area": "pack_x_with_without",
+      "outcome": "Passed"
+    },
+    {
+      "area": "grok_first",
+      "outcome": "Passed"
+    },
+    {
+      "area": "other_plugins_deferred",
+      "outcome": "Passed"
+    },
+    {
+      "area": "hard_fail_without_tokens",
+      "outcome": "Passed"
+    },
+    {
+      "area": "s7_s7a_57_methods_green",
+      "outcome": "Passed"
+    },
+    {
+      "area": "memory_filter_failed_0",
+      "outcome": "Passed"
+    }
+  ],
+  "accuracy": 99,
+  "completeness": 99,
+  "overallVerdict": "AGREE",
+  "honesty": [
+    "S7a Red+Green one agent pass: 4535fde8 then c5541d02; no separate H7a-red hostile receipt on memory-s4-red. Honesty disclosure (same posture as H5/H6-green).",
+    "docs/benchmarks/h7a-value-gate.json remains agree:false (tests pin it). Hostile AGREE is this twin receipt, not a blind copy of false.",
+    "Committed grok-stub-token-summary.md shows zero placeholder rows; independent stub harness produced with_memory mean tokens_total=38.125 vs without_memory=20.25.",
+    "Hostile skill ~/.grok/skills/hostile-validator/SKILL.md MISSING on this box; claims independently re-verified with tools.",
+    "No PR opened. TODO not Done. UpdateService not run."
+  ],
+  "prOpened": false,
+  "todoMarkedDone": false,
+  "updateServiceRun": false
+}
