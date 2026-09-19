@@ -1,8 +1,10 @@
 # Plan: MCP-MEMORY-002 Competitive agent memory
 
-**TODO:** MCP-MEMORY-002 (high, Architecture, `Done: false`)
+**Superseded as an active planning draft.** Implementation through S7b/H7b is on `develop` (PR #49 merge `63f2e745`, PR #50 merge `09be2022`). Keep this file for AC/hostile-gate history. Current operator docs: `docs/context/memory.md`, `docs/benchmarks/README.md`, `docs/AGENT-PLUGIN-AVAILABILITY.md`. This refresh does not mark MCP-MEMORY-002 Done in the TODO store (MCP unavailable).
+
+**TODO:** MCP-MEMORY-002 (high, Architecture, live Done state unknown without marker)
 **Process:** Byrd Development Process v4 — `docs/Development-Process-draft-v4.md` + `skills/byrd-tdd-process/SKILL.md` + `docs/byrd-todo-execution-spec.md`
-**Status:** Planning. Byrd v4. 283 AC. TDD 100% AC. **Grok-first** integration tests + token bench before other plugins. Tokens = primary bench metric.
+**Status:** Superseded planning draft. Shipped path: S1-S7a H-done, S7b/H7b on develop, H7a `agree:true`, `-Plugin all` unblocked. Tokens remain the primary bench metric.
 **Baseline:** McpServer ~1.4.30 (`memory_*`, `/mcpserver/memory`, sessionlog, context hybrid, GraphRAG, `/mcp-transport`)
 **Breaking change:** No for v1. Compat CRUD retained; FR-MCP-MEMORY-001..007 contracts remain in force.
 **Hostile gates:** H-plan, H0, H1–H6 red/green, **H7a-red/green (Grok bench+integration value gate)**, **H7b-red/green (other plugins, after H7a)**, H-done. Default close after H7a. Tokens primary. AGREE+receipt required. See Hostile validation checkpoints.

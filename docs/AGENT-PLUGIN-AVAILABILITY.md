@@ -1,6 +1,6 @@
 # Agent Plugin Availability
 
-This guide is for operators and agents that need the audited MCP workflow surface for session log, TODO, requirements, import/export, traceability, and (Grok-first) agent memory operations.
+This guide is for operators and agents that need the audited MCP workflow surface for session log, TODO, requirements, import/export, traceability, and agent memory operations. All eight official plugins now ship memory skill + descriptor + always-on required-memory injection (or a documented host path), plus Perplexity research-policy docs.
 
 ## Source Of Truth
 
@@ -16,45 +16,61 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
   - Status wrapper: `Invoke-CodexMcpPlugin.ps1 -Command Status`
   - Workflow wrapper: `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`
   - Completion wrapper: `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <text>`
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection via `hooks/scripts/memory-context.ps1`.
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - Claude Code uses `mcpserver-claude-code-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-claude-code-plugin
   - Typical local root: `F:\GitHub\mcpserver-claude-code-plugin`
   - Status helper: `lib/mcp.claude.status.sh`
   - PowerShell wrapper: `Invoke-ClaudeMcpPlugin.ps1`
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection via `hooks/scripts/memory-context.ps1`.
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - GitHub Copilot uses `mcpserver-copilot-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-copilot-plugin
   - Typical local root: `F:\GitHub\mcpserver-copilot-plugin`
   - Status helper: `lib/mcp.copilot.status.sh`
   - PowerShell wrapper: `Invoke-CopilotMcpPlugin.ps1`
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection via `hooks/scripts/memory-context.ps1`.
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - Cline uses `mcpserver-cline-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-cline-plugin
   - Typical local root: `F:\GitHub\mcpserver-cline-plugin`
   - Runtime: Cline MCP server from `server.json`, built with `npm run build`.
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection on the documented host path (`hooks/scripts/memory-context.ps1`).
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - Grok uses `mcpserver-grok-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-grok-plugin
   - Typical local root: `F:\GitHub\mcpserver-grok-plugin`
   - Runtime: Grok-compatible plugin manifests, enabled plugin skills, a Streamable HTTP MCP declaration, and PowerShell helpers from the plugin root.
   - Discovery check: `grok inspect`, `grok mcp doctor mcpserver`, or the `/mcps` TUI view should show the plugin MCP server when the plugin is loaded. The discoverable MCP tools are the server's native names, including `sessionlog_*`, `todo_*`, `requirements_*`, and `memory_*` (`memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove`). `mcp_*` names are hosted-agent aliases, and `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.requirements.*`, and `workflow.memory.*` are plugin shim/REPL method names, not literal Grok `search_tool` results. When those workflow names are needed, invoke the plugin helper (`lib\repl-invoke.ps1` or `lib/repl-invoke.sh`) through the Grok plugin instructions instead of treating their absence from tool discovery as proof that the plugin is unavailable.
-  - Memory pilot: Grok is first. Official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries (empty set is `- None`). Other plugins stay opt-in until hostile/operator H7a AGREE. See `docs/context/memory.md` and `docs/benchmarks/README.md`.
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection on UserPromptSubmit via `hooks/scripts/memory-context.ps1`.
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md` (also linked from `GROK-USAGE.md`).
+  - Bench default: Grok remains the `./build.ps1 BenchMemory` default lane. After H7a `agree:true`, `-Plugin all` is unblocked. See `docs/context/memory.md` and `docs/benchmarks/README.md`.
 
 - Claude Cowork uses `mcpserver-claude-cowork-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-claude-cowork-plugin
   - Typical local root: `F:\GitHub\mcpserver-claude-cowork-plugin`
   - Runtime: `.claude-plugin` manifest (mcpServers + skills + userConfig.workspace_path) with a local stdio connector and failsafe handoff. Never bypasses marker trust.
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection via `hooks/scripts/memory-context.ps1`.
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - Cline v2 uses `mcpserver-cline-v2-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-cline-v2-plugin
   - Typical local root: `F:\GitHub\mcpserver-cline-v2-plugin`
   - Runtime: Cline V2 AgentPlugin (createTool + hooks capability), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection on the documented host path (`hooks/scripts/memory-context.ps1`).
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 - OpenCode uses `mcpserver-opencode-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-opencode-plugin
   - Typical local root: `F:\GitHub\mcpserver-opencode-plugin`
   - Runtime: OpenCode plugin SDK (createMcpServerPlugin), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
+  - Memory: `skills/memory/SKILL.md` + root `memory-descriptor.json`. Always-on required-memory injection on the documented host path (`hooks/scripts/memory-context.ps1` and `src/memory-context.ts`).
+  - Research: `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md`.
 
 ## MCP Client Verification
 
@@ -68,6 +84,27 @@ Current local validation commands for external clients:
 - `copilot mcp get mcpserver` should report `Source: Workspace (<workspace>\.github\mcp.json)`.
 - `cline config mcp` should list `mcpserver` and `PowerShell.MCP`.
 - `opencode mcp list` should report `mcpserver` connected; the supported add command writes to the user OpenCode config.
+
+## Memory (all eight plugins)
+
+MCP-MEMORY-002 S1-S7a H-done and S7b/H7b are on `develop` (PR #49, PR #50). H7a `docs/benchmarks/h7a-value-gate.json` is `agree:true`.
+
+Every official plugin now has:
+
+- `skills/memory/SKILL.md` (remember/recall/explore/consolidate/promote/revert plus compat CRUD)
+- root `memory-descriptor.json`
+- always-on required-memory injection at a host-supported request boundary, or a documented host path
+
+Canonical McpServer payloads (for sync) live under `plugins/core/hosts/{id}/` and are applied with `plugins/core/sync/apply-memory-s7b-hosts.ps1`. Sibling plugin-repo PRs that landed this surface:
+
+- Memory skill/descriptor: claude-code #3, claude-cowork #2, cline #2, cline-v2 #2, copilot #2, codex #2, opencode #2. Grok already had the S5 skill; grok #4 wired injection.
+- Required-memory injection: claude-code #4, claude-cowork #3, cline #3, cline-v2 #3, grok #4, copilot #3, codex #3, opencode #3.
+
+Empty Effective set still renders `REQUIRED MEMORIES` / `- None`. See `docs/context/memory.md`.
+
+## Perplexity research policy
+
+All eight plugin repos now include `docs/research/perplexity-research-policy.md` and `docs/research/research-to-plan-workflow.md` (merged PRs: claude-code #2, claude-cowork #1, cline #1, cline-v2 #1, grok #3, copilot #1, codex #1, opencode #1). Perplexity is the preferred external research provider for planning and substantive documentation. Ordinary McpServer tool execution does not require `PERPLEXITY_API_KEY`.
 
 ## Codex Quick Check
 

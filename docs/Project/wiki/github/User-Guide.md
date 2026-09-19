@@ -977,7 +977,7 @@ REPL: `workflow.memory.remember|recall|explore|consolidate|promote|revert` plus 
 
 ### REQUIRED MEMORIES injection
 
-Supported plugins render Effective memories at host request boundaries using raw `Content` (or legacy `Text`) only. Title, summary, confidence, and tags never appear in the block. Production renderer (`MemoryRequiredMemoriesRenderer`):
+All eight official plugins (claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode) render Effective memories at host-supported request boundaries using raw `Content` (or legacy `Text`) only. Each plugin ships `skills/memory/SKILL.md` plus root `memory-descriptor.json`, with always-on injection on the host path (`hooks/scripts/memory-context.ps1` and/or `src/memory-context.ts`). Title, summary, confidence, and tags never appear in the block. Production renderer (`MemoryRequiredMemoriesRenderer`):
 
 ```
 REQUIRED MEMORIES
@@ -1025,10 +1025,10 @@ Do not run UpdateService in this slice unless an operator asks.
 
 The standard with/without memory pack is `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression).
 The real efficiency + correctness bench is `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` (multi-turn jobs; success-gated tokens_total).
-See `docs/benchmarks/README.md` for the Grok-first bench (primary metric: tokens used; pass/fail is correctness/safety only).
-Run `./build.ps1 BenchMemory` for the Grok pilot; other plugins wait for H7a AGREE.
+See `docs/benchmarks/README.md` for the token-primary bench (pass/fail is correctness/safety only).
+Run `./build.ps1 BenchMemory` for the default Grok lane. After H7a `agree:true` (`docs/benchmarks/h7a-value-gate.json`), `./build.ps1 BenchMemory -Plugin all` runs all eight recorded/stub adapters. S7b/H7b landed on develop (PR #50).
 
-Token-primary v2 results on this branch live under `docs/benchmarks/results/memory-bench-multiturn-*.md` (paired with `docs/benchmarks/live/grok-subscription-cloud-agent-v2-multiturn.json`). Do not treat v1 `memory-bench-*.md` artifacts as the efficiency claim.
+Eight-plugin token-primary v2 results: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Live Grok subscription-context v2 remains `docs/benchmarks/live/grok-subscription-cloud-agent-v2-multiturn.json` (summary `memory-bench-multiturn-20260919T090341Z.md`). Do not treat v1 `memory-bench-*.md` artifacts as the efficiency claim.
 
 ## 8) Wire docs into README index and docs folder
 

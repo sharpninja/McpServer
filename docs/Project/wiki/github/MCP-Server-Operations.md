@@ -236,8 +236,8 @@ Main endpoints:
 - `/memory/` - first-party Memory UI static assets from `wwwroot/memory` (REST-only; included in publish output / Linux service package; deploy via Nuke `UpdateService`)
 - STDIO/MCP tools: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove` (`docs/stdio-tool-contract.json`)
 - REPL: `workflow.memory.*` (same verb names). Typed client: `McpServerClient.Memory`
-- REQUIRED MEMORIES: supported plugins inject Effective raw `Content` (or legacy `Text`) at host request boundaries. Empty set is `REQUIRED MEMORIES` / `- None`. Title/summary/confidence/tags are never injected. See `docs/context/memory.md`.
-- Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (Grok-first smoke/regression; tokens primary). Real efficiency bench: `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml`. Token-primary v2 results on this branch: `docs/benchmarks/results/memory-bench-multiturn-*.md`. See `docs/benchmarks/README.md`.
+- REQUIRED MEMORIES: all eight official plugins inject Effective raw `Content` (or legacy `Text`) at host request boundaries (`skills/memory` + `memory-descriptor.json` + always-on host injection). Empty set is `REQUIRED MEMORIES` / `- None`. Title/summary/confidence/tags are never injected. See `docs/context/memory.md`.
+- Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression; tokens primary). Real efficiency bench: `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml`. Eight-plugin stub v2: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Default CI plugin remains grok; `-Plugin all` is unblocked after H7a `agree:true`. See `docs/benchmarks/README.md`.
 - Hebbian explore edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
 - `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import

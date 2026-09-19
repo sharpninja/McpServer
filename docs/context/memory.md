@@ -52,7 +52,9 @@ REQUIRED MEMORIES
 
 Preserve raw memory text. Do not summarize, paraphrase, decorate, or add secrets. Summary, confidence, tags, and titles must not appear in the injected block.
 
-Grok is the first plugin lane for injection and the token-primary bench. Other official plugins remain opt-in until hostile/operator H7a AGREE. See `docs/benchmarks/README.md` and `docs/benchmarks/results/memory-bench-multiturn-*.md`.
+All eight official plugins inject this block at host-supported request boundaries. Each plugin ships `skills/memory/SKILL.md` plus `memory-descriptor.json`, with always-on injection on the host path (`hooks/scripts/memory-context.ps1` and/or `src/memory-context.ts`). Canonical host payloads also live in this repo under `plugins/core/hosts/{claude-code,claude-cowork,cline,cline-v2,grok,copilot,codex,opencode}/`.
+
+Grok remains the default CI bench lane. After H7a `agree:true` (`docs/benchmarks/h7a-value-gate.json`), `./build.ps1 BenchMemory -Plugin all` is unblocked. S7b/H7b is on develop (PR #50). See `docs/benchmarks/README.md` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`.
 
 ## Importing Agent-Local Memories
 

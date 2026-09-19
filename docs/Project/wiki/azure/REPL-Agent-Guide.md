@@ -827,7 +827,7 @@ Inspect with `workflow.handoff.get` (`runId`). Approve with `workflow.handoff.ap
 
 ## Memory Workflow
 
-Use `workflow.memory.*` for durable shared memories. Do not invent memories. Do not write agent-local stores as the source of truth. See `docs/context/memory.md` and `plugins/core/skills/memory/SKILL.md`.
+Use `workflow.memory.*` for durable shared memories. Do not invent memories. Do not write agent-local stores as the source of truth. See `docs/context/memory.md`, `plugins/core/skills/memory/SKILL.md`, and the per-host payloads under `plugins/core/hosts/*/SKILL.md`. All eight official plugins ship `skills/memory` plus `memory-descriptor.json` with always-on required-memory injection (or a documented host path).
 
 ```yaml
 type: request
@@ -845,7 +845,7 @@ Recall with `workflow.memory.recall` (`query`, optional `topN` / `minScore` / `t
 
 ### REQUIRED MEMORIES
 
-At a supported request boundary, Effective memories are injected using raw `Content` (or legacy `Text`) only:
+At a host-supported request boundary, all eight official plugins inject Effective memories using raw `Content` (or legacy `Text`) only:
 
 ```
 REQUIRED MEMORIES

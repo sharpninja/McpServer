@@ -16,7 +16,7 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
 - **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
-- **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD; plugins inject a raw `REQUIRED MEMORIES` block at supported request boundaries. Grok-first multi-turn bench uses tokens as the primary metric (`docs/benchmarks/`).
+- **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD. All eight official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries. Default CI bench stays Grok; `./build.ps1 BenchMemory -Plugin all` is unblocked after H7a `agree:true`. Multi-turn v2 uses tokens as the primary metric (`docs/benchmarks/`).
 - **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
 
 ## Quick Start
@@ -192,7 +192,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `ValidateTraceability` | Check FR/TR/TEST requirements coverage |
 | `TestMultiInstance` | Two-instance smoke test |
 | `TestGraphRagSmoke` | GraphRAG endpoint smoke test |
-| `BenchMemory` | Grok-first memory bench (v1 smoke + v2 multi-turn; tokens primary). `-Plugin all` waits for H7a AGREE |
+| `BenchMemory` | Memory bench (v1 smoke + v2 multi-turn; tokens primary). Default `-Plugin grok`; `-Plugin all` after H7a `agree:true` (S7b/H7b on develop) |
 | `Clean` | Clean artifacts and solution output |
 
 ## CI/CD
@@ -277,7 +277,7 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 | [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to mcpserver-repl |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [MCP Memories](docs/context/memory.md) | Remember/recall/promote/consolidate and REQUIRED MEMORIES injection |
-| [Memory benchmarks](docs/benchmarks/README.md) | Grok-first token-primary bench; v2 multi-turn is the efficiency claim |
+| [Memory benchmarks](docs/benchmarks/README.md) | Token-primary bench; v2 multi-turn is the efficiency claim; `-Plugin all` after H7a |
 | [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release verification |
 | [Azure Pipelines](docs/AZURE-PIPELINES.md) | CI/CD variables and retention |
 

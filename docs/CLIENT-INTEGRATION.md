@@ -72,7 +72,7 @@ Key tool categories:
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
 - **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
 - **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
-- **Memory**: `memory_list`, `memory_get`, `memory_add`, `memory_update`, `memory_remove`, `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert` (see `docs/context/memory.md` and `docs/stdio-tool-contract.json`)
+- **Memory**: `memory_list`, `memory_get`, `memory_add`, `memory_update`, `memory_remove`, `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert` (see `docs/context/memory.md` and `docs/stdio-tool-contract.json`). Official plugins expose the same verbs and inject `REQUIRED MEMORIES` at host request boundaries.
 
 ## Typed client: Handoff
 

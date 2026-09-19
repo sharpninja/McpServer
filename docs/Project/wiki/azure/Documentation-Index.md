@@ -22,7 +22,7 @@
 - [QBAgent User Guide](QBAGENT.md)
 - [FAQ](FAQ.md)
 - [Client Integration](CLIENT-INTEGRATION.md)
-- [Agent Plugin Availability](AGENT-PLUGIN-AVAILABILITY.md)
+- [Agent Plugin Availability](AGENT-PLUGIN-AVAILABILITY.md) (eight-plugin memory + Perplexity research policy)
 - [REPL User Guide](REPL-USER-GUIDE.md)
 - [REPL Agent Guide](REPL-AGENT-GUIDE.md)
 - [REPL Migration Guide](REPL-MIGRATION-GUIDE.md)

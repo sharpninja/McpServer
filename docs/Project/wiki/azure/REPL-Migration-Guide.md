@@ -79,7 +79,7 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 |------|-------------|
 | `mcp_client_invoke` | Dynamically invoke any McpServerClient sub-client method |
 
-Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). See `docs/context/memory.md`.
+Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). Official plugins also inject `REQUIRED MEMORIES` at host request boundaries. See `docs/context/memory.md`.
 
 ### Memory (REPL / STDIO, not hosted mcp_memory_*)
 

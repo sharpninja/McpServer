@@ -271,7 +271,7 @@ Compat CRUD (`memory_add` / `list` / `update` / `remove`) remains. Writes are no
 
 ### What is REQUIRED MEMORIES?
 
-Supported plugins inject Effective memories at host request boundaries. The production block is:
+All eight official plugins inject Effective memories at host-supported request boundaries (always-on, or the documented host path). The production block is:
 
 ```
 REQUIRED MEMORIES
@@ -287,9 +287,15 @@ REQUIRED MEMORIES
 
 Summary, confidence, tags, and titles are never injected. Do not paraphrase the raw text.
 
-### Which plugin is the memory pilot?
+### Which plugins support memory?
 
-Grok first. `./build.ps1 BenchMemory` runs the Grok lane. Other plugins stay opt-in until hostile/operator **H7a AGREE**. Primary bench metric is tokens used. The efficiency claim is the multi-turn v2 pack (`docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-*.md`), not the v1 single-turn smoke pack.
+All eight official plugins now ship `skills/memory/SKILL.md`, root `memory-descriptor.json`, and always-on required-memory injection (or a documented host path): claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode. Canonical payloads also live in McpServer `plugins/core/hosts/{id}/`.
+
+Grok remains the default CI bench lane (`./build.ps1 BenchMemory`). After H7a `agree:true`, `./build.ps1 BenchMemory -Plugin all` is unblocked (S7b/H7b on develop, PR #50). Primary bench metric is tokens used. The efficiency claim is the multi-turn v2 pack (`docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`), not the v1 single-turn smoke pack.
+
+### Where is the Perplexity research policy?
+
+Each official plugin repo has `docs/research/perplexity-research-policy.md` (and `docs/research/research-to-plan-workflow.md`). Perplexity is the preferred external research provider for planning and substantive documentation. Plugins do not require `PERPLEXITY_API_KEY` for ordinary McpServer tool execution.
 
 ### Where is the Memory UI?
 

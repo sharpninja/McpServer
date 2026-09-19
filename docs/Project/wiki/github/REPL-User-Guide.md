@@ -304,7 +304,7 @@ payload:
     topN: 5
 ```
 
-Supported plugins inject Effective memories as a `REQUIRED MEMORIES` block (raw content only; empty set is `- None`).
+All eight official plugins inject Effective memories as a `REQUIRED MEMORIES` block (raw content only; empty set is `- None`) at the host-supported request boundary. Each plugin ships `skills/memory` plus `memory-descriptor.json`.
 
 ### workflow.handoff.*
 
