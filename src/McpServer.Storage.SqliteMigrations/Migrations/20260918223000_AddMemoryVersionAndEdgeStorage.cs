@@ -1,4 +1,6 @@
 using System;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 {
     /// <summary>TR-MCP-MEMORY-MODEL-002: Memory version/edge tables and multi-layer columns (forward-only).</summary>
+    [DbContext(typeof(McpDbContext))]
+    [Migration("20260918223000_AddMemoryVersionAndEdgeStorage")]
     public partial class AddMemoryVersionAndEdgeStorage : Migration
     {
         /// <inheritdoc />

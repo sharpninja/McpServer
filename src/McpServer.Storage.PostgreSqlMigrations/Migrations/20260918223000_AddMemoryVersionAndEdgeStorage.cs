@@ -1,4 +1,6 @@
 using System;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -7,6 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 {
     /// <summary>TR-MCP-MEMORY-MODEL-002: Memory version/edge tables and multi-layer columns (forward-only).</summary>
+    [DbContext(typeof(McpDbContext))]
+    [Migration("20260918223000_AddMemoryVersionAndEdgeStorage")]
     public partial class AddMemoryVersionAndEdgeStorage : Migration
     {
         /// <inheritdoc />
