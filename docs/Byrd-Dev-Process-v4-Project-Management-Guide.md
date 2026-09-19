@@ -284,146 +284,223 @@ Structural safeguards:
 
 ## 8. Cadence
 
-The three personas do not run as a standing committee. They run as a repeating cadence the coordinator owns. Miss a beat and the separation of authority collapses into one long chat.
+| Cadence | Activity | Owner |
+|---|---|---|
+| Per turn | Session-log turn created and completed; TODO status and checkpoints updated immediately, never deferred | Active persona |
+| ~Every 10 interactions | Marker-file cadence check; design decisions captured; requirements docs current | Active persona |
+| Per TODO | Red → mocks → Green → refactor → unit gate → `Validating` | Sol |
+| Per TODO close | Hostile validation, receipt pair written, AGREE required for `Complete` | Grok |
+| Per status report | Receipt path, verdict, PASS/FAIL/UNKNOWN counts, explicit FAIL list | Reporting persona |
+| Per slice | `./build.ps1 Test` + `ValidateConfig` + `ValidateTraceability`, then independent re-run | Sol, then Grok |
+| Per iteration | Integration tests, user sampling where warranted, deploy Dev → Staging → Production via `./build.ps1 UpdateService`, health check | Coordinator, Grok verifies |
+| Per iteration close | Requirement-defect retro: which requirements were defective and what systemic gap produced them | Astra, coordinator approves |
 
-### 8.1 The unit of work is one slice
-
-A slice is one TODO that Astra planned, Sol implements, and Grok validates. It is not a sprint, not a day, and not "until the model gets tired." The TODO status machine in §5.1 is the clock.
-
-Typical healthy cadence for one slice:
-
-| Beat | Actor | Duration | Stop condition |
-|---|---|---|---|
-| Plan | Astra, one-shot or a short interactive session | Minutes to a couple of hours | Slice exists in MCP with every handoff field from §5.2 |
-| Red / mocks / Green | Sol, steered | One sitting if the slice is small; a worktree day if it is not | Unit gate green, receipt written, TODO in `Validating` |
-| Hostile pass | Grok, separate spawn | One sitting | Receipt pair on disk, `OverallVerdict` set |
-| Route | Coordinator | Immediate | AGREE → `Complete`. DISAGREE → back to Astra or Sol with the FailList, not a debate |
-
-Do not batch three TODOs into one Sol session "to save a handshake." That is how compaction amnesia and silent scope creep arrive together.
-
-### 8.2 When the coordinator must be present
-
-Unattended Astra is cheap to restart. Unattended Sol is expensive. Unattended Grok that is allowed to "just fix the last test" is a collapsed gate.
-
-- **Astra unattended:** allowed for a bounded planning brief. Review the MCP state before you let Sol start. If a TODO is missing an id, a `dependsOn`, or an interface note, send it back. Do not "fix it in the brief."
-- **Sol steered:** the default. You watch the Red, you watch the first mock-green, you stop a tangent the first time it appears. A one-shot `codex exec` is for a slice whose acceptance tests already exist and whose scope you would bet a worktree on.
-- **Grok unattended:** allowed, and preferred. The validator's job is mechanical. Stay out of the spawn. Read the receipt. Do not coach it toward AGREE.
-
-If you will be away for more than one Sol cycle, do not leave Sol running. Park the TODO in `Blocked` with a reason, or stop at `Validating` and let Grok run when you return.
-
-### 8.3 Daily operator rhythm
-
-1. Server up. `./build.ps1 StartServer --instance default`. Health nonce echoes. Marker signature verifies.
-2. Open the TODO list from the store, not from memory and not from `TODO.yaml`.
-3. For each `Validating` item: run Grok if the receipt is missing or stale. Do not implement while a validator is in flight on the same tree.
-4. For each `TestReady` item: start Sol in a dedicated branch or worktree.
-5. For each hole in the backlog: start Astra against `main` read-only.
-6. Import transcripts at the end of every unattended run (§6.5).
-7. Stop. A day that produces one AGREE and a clean session log is a successful day. A day that produces twelve "almost done" narratives is not.
-
-### 8.4 What "done" means on the calendar
-
-`Complete` is a TODO state, not a feeling and not a Friday. An iteration phase reaches `Complete` only when every TODO it owns is `Complete` or explicitly `Cancelled`, the unit suite for this iteration and all prior iterations is green with zero skips, and the latest hostile receipt for the phase is AGREE. Deployment is a coordinator action after that, never a Sol claim.
+Never redeploy Windows service files by hand; `UpdateService` performs backup, deploy, restore, and health check as one unit.
 
 ---
 
 ## 9. Metrics
 
-Section 3 made persona the `sourceType` and required engine and profile tags to compensate. Those tags exist so you can measure the process, not so the logs look tidy.
+Pull from MCP state rather than estimating. With three personas, the interesting numbers are about the seams between them.
 
-### 9.1 What to count
-
-| Metric | How to read it | What a bad number means |
-|---|---|---|
-| Slices reaching `Validating` without a Sol receipt | Query session actions of type `commit` / receipt paths on the TODO | Sol is skipping the untrusted-input contract |
-| Hostile AGREE rate | `OverallVerdict` on `docs/receipts/hostile-validator-*.json` | A 100% AGREE rate is not a trophy. It usually means the validator is being polite or the slices are too small to fail |
-| DISAGREE routed to Astra vs Sol | FailList classification you record when you bounce the TODO | If every DISAGREE is "requirement defect," Astra is planning in slogans. If every DISAGREE is "test not re-run," Sol is narrating |
-| Engine-tagged failures | Turn tags `engine:Codex` vs `engine:Grok` | A Codex-only failure cluster is the shared-engine risk in §7 showing up in data |
-| Profile-tagged write events | `profile:astra` turns that also modified files | Astra's read-only boundary leaked |
-| Skipped-test incidents | `./build.ps1 Test` outputs that Sol or Grok filed | A skip is a process defect, not a test defect |
-| Session restarts for rogue / compaction | Coordinator notes, not model self-report | Rising restarts mean the seed or the workspace instructions are wrong |
-| Time from `TestReady` to first Red failure | Session timestamps | If Red never fails, Sol is writing tests against the implementation |
-
-### 9.2 How to collect without lying
-
-- Prefer MCP queries and receipt JSON over chat summaries.
-- A metric that exists only in a status report is not a metric.
-- Do not let Sol write the dashboard. Sol's receipt is untrusted input here too.
-- When you change `sourceType` rules (§3), backfill is not required, but new turns that omit `engine:` or `profile:` tags are incomplete and should be treated as UNKNOWN in any roll-up.
-
-### 9.3 What you do with the numbers
-
-You do not estimate velocity from these. You use them to decide which persona prompt to revise, which launcher to tighten, and which human habit to drop. The process doc's failure modes — compaction amnesia, rogue sessions, unsafe assumptions — show up here as restarts, skipped tests, and DISAGREE clusters. Fix the guideline with the persona that drifted. That is the §7 rule, applied to data.
+- **Gate integrity** — skipped tests in executed scope. Target zero, always.
+- **DISAGREE rate, by cause** — the single most valuable number. FAILs traced to requirement defects indict Astra; FAILs traced to implementation indict Sol; FAILs traced to unverifiable claims indict receipt discipline.
+- **Astra handoff rejections** — slices bounced back for missing ids, untestable criteria, or invalid `dependsOn`. Rising means planning depth is being traded for speed.
+- **Requirement defect rate** — `RequirementRefined` checkpoints per slice. Healthy and high early, declining across iterations.
+- **Rework** — TODOs reopened from `Complete` after requirement refinement.
+- **Blocked time** — duration plus stated reason, grouped by cause.
+- **Steering cost** — human interventions per slice, split by §7 failure mode and by persona. Tells you whether your guidelines are actually improving.
+- **Traceability** — `ValidateTraceability` first-attempt pass rate.
+- **Shared-engine drift** — FAIL claims where the defect originates in the plan *and* survived implementation. Any nonzero value is the correlation risk materializing.
 
 ---
 
-## 10. Coordinator playbook
+## 10. Appendix: task templates
 
-You are the only actor who decides V², who promotes environments, and who treats a DISAGREE as a routing problem rather than a verdict on a person.
+These are per-slice briefs. The durable persona prompts that sit underneath them are in §11.
 
-### 10.1 Before the first persona-logged session
+### 10.1 Persona registry (add to `AGENTS.md`)
 
-Complete the identity change in §3. Until `AGENTS.md`, `templates/prompt-templates.yaml`, and the identity tests agree that `Astra`, `Sol`, and `Grok` are valid `sourceType` values, every persona session is a policy violation waiting to become an audit mess.
+```
+Astra — Planning.        Engine Codex CLI, profile astra. Sandbox read-only. sourceType: Astra
+Sol   — Coding.          Engine Codex CLI, profile sol.   Sandbox workspace-write. sourceType: Sol
+Grok  — Hostile validation. Engine Grok Build, adversarial sub-agent spawn. sourceType: Grok,
+        receipt ValidatorIdentity: GrokSubagentHostile
+Every turn also tags: engine:<Codex|Grok>, profile:<astra|sol|->, and sets model to the real model id.
+```
 
-Also confirm, once per machine:
+### 10.2 Iteration phase charter (Astra)
 
-- [ ] McpServer healthy on the marker `baseUrl` (default `http://localhost:7147`); provider reachable
-- [ ] Full API key from the verified marker, exported for this session only
-- [ ] Codex CLI installed, logged in, profiles `astra` and `sol` present, MCP registered to `/mcp-transport`
-- [ ] Grok CLI installed, logged in, `hostile-validator` skill enabled, MCP registered
-- [ ] `docs/personas/{astra,sol,grok}.md` present and loaded by the launchers, not pasted from memory
-- [ ] `docs/receipts/` writable
-- [ ] Agents will not hand-edit `docs/Project/TODO.yaml` or session-log files
+```
+Phase:        ITER-<n> <name>
+V² statement: Viable because … / Valuable because …
+Scope in:     FR-MCP-### , FR-MCP-###
+Scope out:    (explicit)
+Requirements: TR-MCP-### … | TEST-MCP-### …
+Interfaces:   (public surfaces designed and documented before any implementation)
+Exit proof:   ./build.ps1 Test green (0 fail / 0 skip) + ValidateTraceability
+              + integration suite <X> + Grok AGREE receipt
+Personas:     plan=Astra  implement=Sol  validate=Grok
+Risks:        (with §7 response per risk)
+```
 
-### 10.2 Starting a slice
+### 10.3 Astra planning prompt skeleton
 
-1. Astra plans against `main` read-only. You read the MCP state, not Astra's closing paragraph.
-2. If the slice is missing any §5.2 field, it is not a slice. Return it.
-3. Create or check out Sol's branch / worktree.
-4. Launch Sol with `Start-Sol.ps1` or the equivalent §12 command so the persona prompt is in the process, not in your head.
-5. Steer. When Sol asks a scope question, that is an Astra defect. Stop Sol. Do not answer out of band and keep going.
-6. When Sol stops at `Validating`, launch Grok with `Invoke-HostileGrok.ps1`. Do not "glance at the tests" yourself and call it hostile.
-7. On AGREE, you move the TODO to `Complete`. On DISAGREE, you route. Grok does not.
+```
+You are Astra, the planning persona. Engine Codex CLI, profile astra, sandbox read-only.
+You do not write production code or tests. You may not edit files; record everything
+through MCP.
 
-### 10.3 Routing a DISAGREE
+Read AGENTS-README-FIRST.yaml, then AGENTS.md. Complete the trust handshake; log
+MCP_UNTRUSTED and stop if it fails. Log with sourceType Astra plus tags
+engine:Codex, profile:astra.
 
-Read the FailList. Each FAIL is one of three things:
+Follow Byrd Dev Process v4 (docs/Development-Process-draft-v4.md), Planning section.
 
-| Kind | Signal | Route |
-|---|---|---|
-| Requirement defect | Paradox, missing id, AC that cannot be asserted, doc/store mismatch | Astra. Sol stays off the keyboard. |
-| Implementation defect | Red not red, skip, weakened assertion, missing XML docs, gate not re-run | Sol, same worktree, same tests. Do not let Sol rewrite the AC to escape. |
-| Process defect | Missing receipt, implementer-authored "hostile" file, Astra wrote to disk, validator repaired code | Coordinator. Restart the offending session. Discard a contaminated worktree if Sol and Grok shared one. |
+For phase <ITER-n>:
+1. State the V² case: is this viable and valuable? If either is no, say the scope is
+   wrong and stop.
+2. Author or refine FR/TR/TEST entries in docs/Project/ via the requirements tools,
+   and confirm they are readable from the store.
+3. Design components and document every public interface before any implementation
+   exists.
+4. Decompose into TODOs via create_iteration_phase and create_todos_from_plan. Each
+   TODO needs testable acceptance criteria, valid dependsOn ids, a target test
+   project, and a target production project.
+5. Set test plans with set_todo_test_plan.
+6. Log PlanningDecision checkpoints: what was decided, alternatives considered, what
+   was rejected, and why.
 
-Then Grok runs again. A DISAGREE that is "fixed" by editing the receipt is a failed process, not a passed slice.
+Handoff criterion: Sol should have no scope questions left, only implementation ones.
+Do not estimate schedule. Do not write code.
+```
 
-### 10.4 Killing a session
+### 10.4 Sol slice prompt skeleton
 
-Do it the moment you see a rogue seed, a compaction loop, or a persona arguing that a test is invalid. Do not negotiate. Close the agent, keep the worktree only if the last green commit is still a clean Red/Green pair you would defend, and restart with a corrected seed. Record the restart as a metric (§9). Ask that same model what in the guidelines would have prevented the tangent, and have **that** model propose the guideline edit. You approve it.
+```
+You are Sol, the coding persona. Engine Codex CLI, profile sol, sandbox
+workspace-write. You implement one TODO and you do not certify your own work.
 
-### 10.5 Promotion
+Read AGENTS-README-FIRST.yaml, then AGENTS.md. Complete the trust handshake; log
+MCP_UNTRUSTED and stop if it fails. Log with sourceType Sol plus tags engine:Codex,
+profile:sol.
 
-Sol never deploys. Grok may verify health and UI proof. You run `./build.ps1 UpdateService` (or the environment's equivalent) after AGREE, and you keep Development / Staging / Production as three different trust boundaries. A local green gate is not a Staging proof.
+Follow Byrd Dev Process v4 and the byrd-tdd-process skill. Work exactly one TODO: <ID>.
+
+1. Confirm the FR/TR/TEST ids. If a requirement is missing or contradictory, stop and
+   escalate to Astra; do not invent scope and do not weaken a test.
+2. Write acceptance unit tests for the next small increment. They must fail for the
+   right reason. Move the TODO TestDesign -> TestReady.
+3. Make them pass against mocks only. Checkpoint TestDefined and TestPassing.
+4. Implement the real logic. Reference requirement ids in doc-comments.
+5. Refactor tests and production code.
+6. Run ./build.ps1 Test. Zero failures, zero skips, or you are not done.
+7. Run ./build.ps1 ValidateConfig and ./build.ps1 ValidateTraceability.
+8. Write your implementer receipt to docs/receipts/sol-<ID>-<utc>.md with exact
+   commands run and exact counts. Label it untrusted input for hostile validation.
+9. Complete the session-log turn with actions, filesModified, designDecisions,
+   requirementsDiscovered. Set the TODO to Validating.
+
+Do not set done:true. Do not claim green, passing, or complete in any status report.
+Do not edit docs/Project/TODO.yaml or session-log files. Use pwsh.exe for shell work.
+```
+
+### 10.5 Grok hostile validation brief skeleton
+
+```
+You are an adversarial hostile validator, a separate Grok spawn. You are not the
+implementer. Use the hostile-validator skill.
+
+Default EVERY claim to FAIL or UNKNOWN until YOU re-verify it with tools. Do not
+trust the implementer narrative, plan [x] checkboxes, or the implementer-authored
+receipt. Do not pre-load AGREE. Do not fix anything you find.
+
+Workspace: <path>          LiveBase: http://localhost:7147
+Plan: <plan path>#<section> UntrustedImplementerReceipt: docs/receipts/sol-<ID>-<utc>.md
+
+Claims to verify (one entry per claim, with the evidence you will demand):
+  A. <claim> — re-run <exact command>; require exact counts
+  B. <claim> — read <exact file/heading>; require the id present in docs AND store
+  C. <claim> — live HTTP check against <endpoint>
+
+Rules:
+- Re-run ./build.ps1 Test yourself. Zero failures AND zero skips, or FAIL.
+- Re-run ValidateConfig and ValidateTraceability yourself.
+- A requirement id claimed in code but absent from docs/Project is FAIL.
+- Narrative without a reproducible command is UNKNOWN, never PASS.
+
+Write both receipts: docs/receipts/hostile-validator-<utc>.md and .json, with
+ValidatorIdentity GrokSubagentHostile, per-claim Verdict and Evidence, PASS/FAIL/
+UNKNOWN counts, an explicit FailList, and OverallVerdict AGREE only if every claim
+is PASS. DISAGREE is a successful outcome; honesty is the deliverable.
+```
+
+### 10.6 Hostile receipt JSON shape (existing repo schema)
+
+```json
+{
+  "TimestampUtc": "2026-09-19T02:30:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Plan": "docs/<plan>.md#<section>",
+  "UntrustedImplementerReceipt": "docs/receipts/sol-<ID>-<utc>.md",
+  "LiveBase": "http://localhost:7147",
+  "OverallVerdict": "AGREE | DISAGREE",
+  "Counts": { "PASS": 0, "FAIL": 0, "UNKNOWN": 0 },
+  "FailList": [],
+  "Claims": [
+    { "Id": "A", "Summary": "...", "Verdict": "PASS",
+      "Evidence": ["dotnet test ... => Passed 35 Failed 0 Skipped 0"] }
+  ]
+}
+```
+
+### 10.7 Status report contract (any persona claiming truth)
+
+```
+[ ] Path to the latest hostile-validator receipt, written by the sub-agent
+[ ] OverallVerdict value (AGREE or DISAGREE)
+[ ] PASS / FAIL / UNKNOWN counts
+[ ] Explicit list of every FAIL claim, not buried
+```
+
+Missing receipt, implementer-authored receipt, or DISAGREE means no completion claim is authorized.
+
+### 10.8 Phase exit checklist
+
+```
+[ ] Astra: requirements, interfaces, and TODO decomposition complete; PlanningDecision
+    checkpoints logged
+[ ] Sol: all slice TODOs in Validating with implementer receipts
+[ ] Sol: ./build.ps1 Test green — 0 failures, 0 skips
+[ ] Sol: ValidateConfig and ValidateTraceability pass
+[ ] Sol: XML docs on all new public surface; no CS1591
+[ ] Grok: independent re-run of the unit gate and both validation targets
+[ ] Grok: receipt pair written with ValidatorIdentity GrokSubagentHostile
+[ ] Grok: OverallVerdict AGREE for the full claim pack
+[ ] TODOs set Complete with doneSummary only after AGREE
+[ ] Requirements docs and Requirements-Matrix updated
+[ ] Transcripts imported to /mcpserver/sessionlog for all three personas
+[ ] Coordinator: deployed Dev → Staging → Production via ./build.ps1 UpdateService;
+    /health verified; Grok confirms health and UI proof
+[ ] Requirement-defect retro logged; guidelines updated by the persona that drifted
+```
 
 ---
 
-## 11. Durable persona prompts
+## 11. Persona prompts
 
-These are the on-disk prompts the launchers load. Do not paste a remembered subset. Do not "improve" them in the session. Edit the files, then relaunch, so every spawn sees the same text.
+These are the durable identity prompts, distinct from the per-task briefs in §10. A task brief says what to do this turn; a persona prompt says who is working and what they are forbidden to become. The §10 briefs assume the matching persona prompt is already loaded.
 
-Canonical paths:
+**Where they live.** Keep them in the repo at `docs/personas/astra.md`, `sol.md`, and `grok.md` so they are versioned, reviewable, and diffable. Editing one is a Byrd slice like any other: it changes behavior, so it gets a session-log decision entry and a coordinator approval.
 
-- `docs/personas/astra.md`
-- `docs/personas/sol.md`
-- `docs/personas/grok.md`
+**How they load.** Codex CLI has no system-prompt or rules-injection flag for agent instructions, so Astra's and Sol's personas must be concatenated ahead of the task brief in the prompt itself. Grok does have a rules override, so its persona loads as session rules and survives the whole run. Exact commands are in §12.
 
-### 11.1 Astra
+Do not paste a persona prompt into a running session to correct drift. Per §7, a session that has reinterpreted its identity cannot be argued back; end it and restart with the persona loaded from the seed.
 
-```markdown
-# Astra - planning persona
+### 11.1 Astra — planning persona
 
-Byrd Development Process v4 persona prompt. Load ahead of any task brief.
-
+```
 You are Astra. You are the planning persona on this project, not a general
 assistant. Your engine is Codex CLI running under profile astra with a read-only
 sandbox. You work inside the Byrd Development Process v4
@@ -489,13 +566,9 @@ alternatives; session-log turn completed with interpretation, actions, and
 requirementsDiscovered. State plainly what Sol can start on and what is still open.
 ```
 
-### 11.2 Sol
+### 11.2 Sol — coding persona
 
-```markdown
-# Sol - coding persona
-
-Byrd Development Process v4 persona prompt. Load ahead of any task brief.
-
+```
 You are Sol. You are the coding persona on this project, a disciplined software
 engineer, not a useful assistant. Your engine is Codex CLI running under profile
 sol with a workspace-write sandbox. You work inside the Byrd Development Process v4
@@ -587,13 +660,9 @@ commands and counts; session-log turn completed with actions, filesModified,
 designDecisions, requirementsDiscovered; TODO in Validating, not Complete.
 ```
 
-### 11.3 Grok
+### 11.3 Grok — hostile validation persona
 
-```markdown
-# Grok - hostile validation persona
-
-Byrd Development Process v4 persona prompt. Load ahead of any task brief.
-
+```
 You are the hostile validator, a separate adversarial Grok spawn. You are not the
 implementer, you are not the planner, and you are not a reviewer trying to be
 helpful. Your engine is Grok Build. Your contract is section 6.1 of
@@ -668,482 +737,197 @@ No em-dashes in any output. Use pwsh.exe for shell work.
 
 ---
 
-## 12. Launch commands
+## 12. Concrete launch commands
 
-Section 6 is policy. This section is what you actually type. Prefer the launchers so the persona file, the trust handshake, and the receipt path stay consistent. The raw CLI forms are the fallback when you are already inside a trusted session and need a one-shot.
+All commands are `pwsh.exe` (PowerShell 7+), per `AGENTS.md`. Paths assume the workspace root.
 
-### 12.1 Shared helper
-
-`tools/powershell/McpPersonaCommon.ps1` wraps `plugins/core/lib-ps/marker-resolver.ps1`. It is the only supported way for a launcher to complete the handshake. Do not hand-parse the marker.
+### 12.1 One-time machine setup
 
 ```powershell
-#requires -Version 7.4
-<#
-.SYNOPSIS
-    Shared trust-handshake helper for the persona launchers.
+# Codex CLI: one profile per persona, so the sandbox boundary is config, not prompt text.
+$env:CODEX_HOME ??= (Join-Path $HOME '.codex')
 
-.DESCRIPTION
-    Wraps the repository marker helper at plugins/core/lib-ps/marker-resolver.ps1 instead of
-    parsing the marker file directly. That helper owns the canonical marker-v1 payload
-    construction and HMAC-SHA256 comparison, so any hand-rolled reader will drift from the
-    server the moment the payload shape changes.
+Set-Content -LiteralPath (Join-Path $env:CODEX_HOME 'astra.config.toml') -Value @'
+model_reasoning_effort = "xhigh"
+sandbox_mode = "read-only"
+'@
 
-    Invoke-FullBootstrap performs all three handshake steps from the process doc: locate the
-    marker by walking up from the start directory, verify its signature, then issue a nonce
-    challenge against /health and confirm the nonce is echoed back.
-#>
+Set-Content -LiteralPath (Join-Path $env:CODEX_HOME 'sol.config.toml') -Value @'
+model_reasoning_effort = "xhigh"
+sandbox_mode = "workspace-write"
+'@
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
+# Register the MCP server with both engines.
+codex mcp add mcpserver --url http://localhost:7147/mcp-transport --bearer-token-env-var MCP_API_KEY
+codex mcp list
 
-function Import-McpMarkerResolver {
-    <#
-    .SYNOPSIS
-        Dot-sources the repository marker resolver.
-    #>
-    [CmdletBinding()]
-    param(
-        [Parameter()][string]$Workspace = (Get-Location).Path
-    )
+grok login --device-auth
+grok mcp add            # mcpserver Streamable HTTP endpoint
+grok plugin install <mcpserver-grok-plugin source>
+grok plugin enable <plugin>
+grok inspect            # confirm rules, skills, plugins, hooks, MCP servers
 
-    $resolver = Join-Path $Workspace 'plugins/core/lib-ps/marker-resolver.ps1'
-    if (-not (Test-Path -LiteralPath $resolver)) {
-        throw "Marker resolver not found at '$resolver'. Run from the workspace root, or pass -Workspace."
-    }
-    . $resolver
-}
-
-function Assert-McpTrust {
-    <#
-    .SYNOPSIS
-        Completes the trust handshake and exports the current API key.
-    .DESCRIPTION
-        On any failure this throws after the caller has logged MCP_UNTRUSTED intent. A failed
-        handshake is terminal: do not launch a persona, and do not probe around it.
-    .OUTPUTS
-        Hashtable with MarkerFile, BaseUrl, and ApiKey.
-    #>
-    [CmdletBinding()]
-    param(
-        [Parameter()][string]$Workspace = (Get-Location).Path
-    )
-
-    Import-McpMarkerResolver -Workspace $Workspace
-
-    # Find marker, verify marker-v1 HMAC signature, nonce-challenge /health.
-    if (-not (Invoke-FullBootstrap -StartDir $Workspace)) {
-        throw 'MCP_UNTRUSTED: trust handshake failed. Not launching a persona against an untrusted server.'
-    }
-
-    $markerFile = Find-MarkerFile -StartDir $Workspace
-    $apiKey = Get-MarkerField -MarkerFile $markerFile -FieldName 'apiKey'
-    $baseUrl = Get-MarkerField -MarkerFile $markerFile -FieldName 'baseUrl'
-
-    if (-not $apiKey) { throw "MCP_UNTRUSTED: no apiKey field in '$markerFile'." }
-
-    # The key rotates on every server start, so always re-read it rather than caching a value.
-    $env:MCP_API_KEY = $apiKey
-
-    return @{
-        MarkerFile = $markerFile
-        BaseUrl    = $baseUrl
-        ApiKey     = $apiKey
-    }
-}
+# Keep plugin and skill manifests in step with the repo.
+./build.ps1 SyncAgentPlugins
 ```
 
-### 12.2 Astra launcher
+### 12.2 Per-session prologue (coordinator)
+
+Use the repository marker helper. Do not read the marker with `ConvertFrom-Yaml` or a regex: `plugins/core/lib-ps/marker-resolver.ps1` owns the canonical `marker-v1` payload construction and the HMAC-SHA256 comparison, so any hand-rolled reader silently diverges from the server as soon as the signed payload gains a field.
 
 ```powershell
-./tools/powershell/Start-Astra.ps1 -Brief ./prompts/astra-plan-ITER-07.md -Iteration ITER-07
+./build.ps1 StartServer --instance default        # Swagger at http://localhost:7147/swagger
+
+. ./plugins/core/lib-ps/marker-resolver.ps1
+
+# All three handshake steps in one call: locate the marker by walking up, verify its
+# marker-v1 signature, then nonce-challenge /health and confirm the nonce is echoed back.
+if (-not (Invoke-FullBootstrap -StartDir (Get-Location).Path)) {
+    throw 'MCP_UNTRUSTED: handshake failed.'
+}
+
+$markerFile = Find-MarkerFile
+$env:MCP_API_KEY = Get-MarkerField -MarkerFile $markerFile -FieldName 'apiKey'
+$baseUrl = Get-MarkerField -MarkerFile $markerFile -FieldName 'baseUrl'
+$sessionLog = Get-MarkerEndpoint -MarkerFile $markerFile -EndpointName 'sessionLog'
+```
+
+The field helpers are `Get-MarkerField` for top-level keys (`apiKey`, `baseUrl`, `port`, `workspacePath`, `pid`, `markerWrittenAtUtc`), `Get-MarkerEndpoint` for entries under `endpoints:`, and `Get-MarkerAgentPluginField` for `agent_plugins:`. `Test-MarkerSignature` verifies alone if you need the signature check without the nonce round trip, and `Get-MarkerFileSnapshot` returns the path plus `markerLastWriteUtc`, which is what tells you the marker was rewritten and the key rotated.
+
+Two consequences worth holding onto. The API key rotates on every server start, so re-read it per session instead of caching it in a profile or a `.env`. And a failed handshake is terminal: log `MCP_UNTRUSTED`, fall back to internal memory, and do not launch a persona or probe endpoints around the failure.
+
+For the same reason the launchers do not take an API key argument. Each one calls `Assert-McpTrust` from `tools/powershell/McpPersonaCommon.ps1`, which wraps `Invoke-FullBootstrap` and exports `MCP_API_KEY` before the persona starts. Pass `-SkipHandshake` only when you verified the server earlier in the same shell session.
+
+### 12.3 Astra — planning, read-only
+
+```powershell
+# Unattended planning pass. '-' makes codex exec read the composed prompt from stdin,
+# so persona plus brief never hits a command-line length limit.
+$prompt = (Get-Content -Raw ./docs/personas/astra.md) + "`n`n--- TASK BRIEF ---`n`n" +
+          (Get-Content -Raw ./prompts/astra-plan-ITER-07.md)
+
+$prompt | codex exec --profile astra --sandbox read-only -C . `
+  -c model_reasoning_effort="xhigh" `
+  --json --output-last-message ./docs/receipts/astra-plan-ITER-07.md -
+
+# Interactive planning with the persona preloaded.
+codex --profile astra --sandbox read-only -C . (Get-Content -Raw ./docs/personas/astra.md)
+
+# Wrapper equivalent.
+./tools/powershell/Start-Astra.ps1 -Iteration ITER-07 -Brief ./prompts/astra-plan-ITER-07.md
 ./tools/powershell/Start-Astra.ps1 -Iteration ITER-07 -Interactive
 ```
 
+### 12.4 Sol — coding, workspace-write
+
 ```powershell
-#requires -Version 7.4
-<#
-.SYNOPSIS
-    Launches the Astra planning persona on Codex CLI, read-only.
-
-.DESCRIPTION
-    Composes docs/personas/astra.md with a per-iteration planning brief and pipes the
-    result to 'codex exec' as stdin, because Codex CLI has no system-prompt flag:
-    persona text must be part of the prompt. The sandbox is pinned read-only so the
-    planning persona cannot write to the tree even if it decides it should.
-
-.EXAMPLE
-    ./tools/powershell/Start-Astra.ps1 -Brief ./prompts/astra-plan-ITER-07.md -Iteration ITER-07
-
-.EXAMPLE
-    ./tools/powershell/Start-Astra.ps1 -Iteration ITER-07 -Interactive
-#>
-[CmdletBinding()]
-param(
-    # Planning brief for this iteration. Not required in -Interactive mode.
-    [Parameter()][string]$Brief,
-
-    # Iteration phase identifier, used to name the receipt.
-    [Parameter(Mandatory)][string]$Iteration,
-
-    # Workspace root. Defaults to the current location.
-    [Parameter()][string]$Workspace = (Get-Location).Path,
-
-    # Launch the TUI with the persona preloaded instead of a one-shot run.
-    [Parameter()][switch]$Interactive,
-
-    # Persona prompt path.
-    [Parameter()][string]$Persona = './docs/personas/astra.md',
-
-    # Skip the trust handshake. Only for a server you have already verified this session.
-    [Parameter()][switch]$SkipHandshake
-)
-
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
-
-. (Join-Path $PSScriptRoot 'McpPersonaCommon.ps1')
-
-if (-not $SkipHandshake) {
-    $trust = Assert-McpTrust -Workspace $Workspace
-    Write-Host "Trusted marker: $($trust.MarkerFile) ($($trust.BaseUrl))"
-}
-
-if (-not (Test-Path -LiteralPath $Persona)) {
-    throw "Astra persona prompt not found at '$Persona'. Astra must never run without its persona."
-}
-
-$personaText = Get-Content -LiteralPath $Persona -Raw
-
-if ($Interactive) {
-    # Persona goes in as the opening instruction; the operator drives the rest.
-    codex --profile astra --sandbox read-only -C $Workspace $personaText
-    return
-}
-
-if (-not $Brief) { throw 'Provide -Brief for an unattended planning pass, or use -Interactive.' }
-if (-not (Test-Path -LiteralPath $Brief)) { throw "Planning brief not found at '$Brief'." }
-
-$receiptDir = Join-Path $Workspace 'docs/receipts'
-New-Item -ItemType Directory -Force -Path $receiptDir | Out-Null
+$todo = 'MCP-TODOPROGRESSION-001'
 $stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
-$receipt = Join-Path $receiptDir "astra-plan-$Iteration-$stamp.md"
+$receipt = "./docs/receipts/sol-$todo-$stamp.md"
 
-$prompt = @(
-    $personaText
-    ''
-    '--- TASK BRIEF ---'
-    ''
-    (Get-Content -LiteralPath $Brief -Raw)
-) -join [Environment]::NewLine
+$prompt = (Get-Content -Raw ./docs/personas/sol.md) + "`n`n--- TASK BRIEF ---`n`n" +
+          (Get-Content -Raw "./prompts/sol-slice-$todo.md")
 
-# '-' makes codex exec read the prompt from stdin, so the composed persona plus brief
-# never hits a command-line length limit.
-$prompt | codex exec `
-    --profile astra `
-    --sandbox read-only `
-    -C $Workspace `
-    -c model_reasoning_effort="xhigh" `
-    --json `
-    --output-last-message $receipt `
-    -
+$prompt | codex exec --profile sol --sandbox workspace-write -C . `
+  -c model_reasoning_effort="xhigh" `
+  --json --output-last-message $receipt -
 
-if ($LASTEXITCODE -ne 0) { throw "Astra planning pass failed with exit code $LASTEXITCODE." }
-Write-Host "Astra plan summary: $receipt"
-Write-Host 'Verify in MCP: iteration phase created, TODOs complete, PlanningDecision checkpoints logged.'
-```
-
-### 12.3 Sol launcher
-
-```powershell
-./tools/powershell/Start-Sol.ps1 -TodoId MCP-TODOPROGRESSION-001 -Brief ./prompts/sol-slice-MCP-TODOPROGRESSION-001.md
-./tools/powershell/Start-Sol.ps1 -TodoId MCP-TODOPROGRESSION-001 -Resume -Followup 'unit gate is red on TodoProgressionTests; fix without weakening assertions'
-```
-
-```powershell
-#requires -Version 7.4
-<#
-.SYNOPSIS
-    Launches the Sol coding persona on Codex CLI with workspace-write access.
-
-.DESCRIPTION
-    Composes docs/personas/sol.md with a per-TODO slice brief and pipes the result to
-    'codex exec' as stdin. Sol is the only persona granted workspace-write. The run
-    writes an untrusted implementer receipt that the hostile validator will attack;
-    it does not mark anything complete.
-
-.EXAMPLE
-    ./tools/powershell/Start-Sol.ps1 -TodoId MCP-TODOPROGRESSION-001 -Brief ./prompts/sol-slice-MCP-TODOPROGRESSION-001.md
-
-.EXAMPLE
-    ./tools/powershell/Start-Sol.ps1 -TodoId MCP-TODOPROGRESSION-001 -Resume -Followup 'unit gate is red on TodoProgressionTests; fix without weakening assertions'
-#>
-[CmdletBinding()]
-param(
-    # Canonical TODO id for this slice.
-    [Parameter(Mandatory)][string]$TodoId,
-
-    # Slice brief. Not required with -Resume.
-    [Parameter()][string]$Brief,
-
-    # Workspace root.
-    [Parameter()][string]$Workspace = (Get-Location).Path,
-
-    # Resume the previous Sol session instead of starting a new one.
-    [Parameter()][switch]$Resume,
-
-    # Follow-up instruction used with -Resume.
-    [Parameter()][string]$Followup,
-
-    # Launch the TUI with the persona preloaded instead of a one-shot run.
-    [Parameter()][switch]$Interactive,
-
-    # Persona prompt path.
-    [Parameter()][string]$Persona = './docs/personas/sol.md',
-
-    # Skip the trust handshake. Only for a server you have already verified this session.
-    [Parameter()][switch]$SkipHandshake
-)
-
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
-
-. (Join-Path $PSScriptRoot 'McpPersonaCommon.ps1')
-
-if (-not $SkipHandshake) {
-    $trust = Assert-McpTrust -Workspace $Workspace
-    Write-Host "Trusted marker: $($trust.MarkerFile) ($($trust.BaseUrl))"
-}
-
-if (-not (Test-Path -LiteralPath $Persona)) {
-    throw "Sol persona prompt not found at '$Persona'. Sol must never run without its persona."
-}
-$personaText = Get-Content -LiteralPath $Persona -Raw
-
-if ($Resume) {
-    if (-not $Followup) { throw 'Provide -Followup with -Resume.' }
-    # Resume keeps the original persona in context; do not re-paste it.
-    codex exec --profile sol --sandbox workspace-write -C $Workspace resume --last $Followup
-    if ($LASTEXITCODE -ne 0) { throw "Sol resume failed with exit code $LASTEXITCODE." }
-    return
-}
-
-if ($Interactive) {
-    codex --profile sol --sandbox workspace-write -C $Workspace $personaText
-    return
-}
-
-if (-not $Brief) { throw 'Provide -Brief for an unattended slice, or use -Interactive or -Resume.' }
-if (-not (Test-Path -LiteralPath $Brief)) { throw "Slice brief not found at '$Brief'." }
-
-$receiptDir = Join-Path $Workspace 'docs/receipts'
-New-Item -ItemType Directory -Force -Path $receiptDir | Out-Null
-$stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
-$receipt = Join-Path $receiptDir "sol-$TodoId-$stamp.md"
-
-$prompt = @(
-    $personaText
-    ''
-    '--- TASK BRIEF ---'
-    ''
-    (Get-Content -LiteralPath $Brief -Raw)
-    ''
-    "Write your untrusted implementer receipt to $receipt with the exact commands run and"
-    'the exact counts printed. Stop at TodoStatus Validating. Do not set done:true.'
-) -join [Environment]::NewLine
-
-$prompt | codex exec `
-    --profile sol `
-    --sandbox workspace-write `
-    -C $Workspace `
-    -c model_reasoning_effort="xhigh" `
-    --json `
-    --output-last-message $receipt `
-    -
-
-if ($LASTEXITCODE -ne 0) { throw "Sol slice run failed with exit code $LASTEXITCODE." }
-
-Write-Host "Sol receipt (untrusted): $receipt"
-Write-Host 'Independent gate check before handing to the validator:'
-& (Join-Path $Workspace 'build.ps1') Test
-if ($LASTEXITCODE -ne 0) { throw 'Unit gate is red. The slice is not ready for hostile validation.' }
-Write-Host "Next: ./tools/powershell/Invoke-HostileGrok.ps1 -TodoId $TodoId -ImplementerReceipt $receipt"
-```
-
-### 12.4 Grok launcher
-
-```powershell
-./tools/powershell/Invoke-HostileGrok.ps1 -TodoId MCP-TODOPROGRESSION-001 `
-    -ImplementerReceipt ./docs/receipts/sol-MCP-TODOPROGRESSION-001-20260918T203344Z.md
-```
-
-```powershell
-#requires -Version 7.4
-<#
-.SYNOPSIS
-    Spawns the adversarial Grok hostile validator for a slice.
-
-.DESCRIPTION
-    Implements the invocation half of the hostile validation contract in
-    docs/McpServer-UseCase-Extension-Design-v3.0.md section 6.1. The validator runs as a
-    separate Grok spawn, loads docs/personas/grok.md as session rules so the adversarial
-    stance survives the whole run, works in its own git worktree so it cannot disturb the
-    implementer's tree, and is confined to plan permission mode so it cannot repair what
-    it finds.
-
-    This script is a launcher. It is not evidence, and its exit code is not a verdict.
-    The verdict is OverallVerdict in the receipt the validator writes.
-
-.EXAMPLE
-    ./tools/powershell/Invoke-HostileGrok.ps1 -TodoId MCP-TODOPROGRESSION-001 `
-        -ImplementerReceipt ./docs/receipts/sol-MCP-TODOPROGRESSION-001-20260918T203344Z.md
-#>
-[CmdletBinding()]
-param(
-    # Canonical TODO id under validation.
-    [Parameter(Mandatory)][string]$TodoId,
-
-    # Path to Sol's receipt. Passed in as untrusted input, never as authority.
-    [Parameter(Mandatory)][string]$ImplementerReceipt,
-
-    # Workspace root.
-    [Parameter()][string]$Workspace = (Get-Location).Path,
-
-    # Running server base URL for live checks. Defaults to the value in the verified marker.
-    [Parameter()][string]$LiveBase,
-
-    # Optional claim brief. Generated from the TODO id when omitted.
-    [Parameter()][string]$Brief,
-
-    # Persona prompt path, loaded as Grok session rules.
-    [Parameter()][string]$Persona = './docs/personas/grok.md',
-
-    # Turn ceiling for the validation run.
-    [Parameter()][int]$MaxTurns = 60,
-
-    # Skip the trust handshake. Only for a server you have already verified this session.
-    [Parameter()][switch]$SkipHandshake
-)
-
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
-
-. (Join-Path $PSScriptRoot 'McpPersonaCommon.ps1')
-
-if (-not $SkipHandshake) {
-    $trust = Assert-McpTrust -Workspace $Workspace
-    Write-Host "Trusted marker: $($trust.MarkerFile) ($($trust.BaseUrl))"
-    # Prefer the signed marker's baseUrl over a hardcoded default for live checks.
-    if (-not $LiveBase) { $LiveBase = $trust.BaseUrl }
-}
-if (-not $LiveBase) { $LiveBase = 'http://localhost:7147' }
-
-if (-not (Test-Path -LiteralPath $Persona)) {
-    throw "Hostile validator persona not found at '$Persona'. Refusing to run a validator without its stance."
-}
-if (-not (Test-Path -LiteralPath $ImplementerReceipt)) {
-    throw "Implementer receipt not found at '$ImplementerReceipt'."
-}
-
-$rules = Get-Content -LiteralPath $Persona -Raw
-$stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
-$receiptBase = "docs/receipts/hostile-validator-$stamp"
-
-$task = if ($Brief -and (Test-Path -LiteralPath $Brief)) {
-    Get-Content -LiteralPath $Brief -Raw
-}
-else {
-    @(
-        "Hostile validation of $TodoId."
-        ''
-        "Untrusted implementer receipt: $ImplementerReceipt"
-        "Live base: $LiveBase"
-        ''
-        'Enumerate every completion claim in that receipt and in the TODO doneSummary.'
-        'Start each claim at FAIL or UNKNOWN. Re-verify each one yourself with tools:'
-        're-run ./build.ps1 Test and confirm zero failures and zero skips, re-run'
-        './build.ps1 ValidateConfig and ./build.ps1 ValidateTraceability, confirm every'
-        'claimed requirement id exists in docs/Project and in the requirements store, and'
-        'make live checks against the running server for any behavioral claim.'
-        ''
-        "Write both receipts: $receiptBase.md and $receiptBase.json."
-        'Set ValidatorIdentity to GrokSubagentHostile. OverallVerdict is AGREE only if'
-        'every claim is PASS, otherwise DISAGREE. Do not fix anything you find.'
-    ) -join [Environment]::NewLine
-}
-
-# --effort high is the strongest level accepted; the server strategy records that 'max' is rejected.
-grok -p $task `
-    --rules $rules `
-    --cwd $Workspace `
-    --permission-mode plan `
-    --output-format plain `
-    --effort high `
-    --reasoning-effort high `
-    --max-turns $MaxTurns `
-    -w "hostile-$TodoId"
-
-$exit = $LASTEXITCODE
-
-$json = Join-Path $Workspace "$receiptBase.json"
-if (-not (Test-Path -LiteralPath $json)) {
-    throw "No hostile receipt at '$json'. A missing receipt is not an AGREE; treat the slice as unvalidated."
-}
-
-$verdict = (Get-Content -LiteralPath $json -Raw | ConvertFrom-Json).OverallVerdict
-Write-Host "Hostile receipt: $json"
-Write-Host "OverallVerdict: $verdict (launcher exit code $exit, which is not a verdict)"
-
-if ($verdict -ne 'AGREE') {
-    Write-Host 'DISAGREE is the process working. Route the FailList back to Sol for code defects'
-    Write-Host 'or to Astra for requirement defects. Do not mark the TODO Complete.'
-    exit 1
-}
-Write-Host "AGREE. The coordinator may now move $TodoId to Complete."
-```
-
-### 12.5 Raw CLI equivalents
-
-Use these only when the launcher cannot run. They do not replace the handshake.
-
-```bash
-# Astra, interactive, read-only
-codex --profile astra --sandbox read-only -C /path/to/workspace
-
-# Astra, one-shot
-codex exec --profile astra --sandbox read-only \
-  --json --output-last-message ./docs/receipts/astra-plan-ITER-07.md \
-  "$(cat ./docs/personas/astra.md ./prompts/astra-plan-ITER-07.md)"
-
-# Sol, interactive, workspace-write
-codex --profile sol --sandbox workspace-write -C /path/to/workspace
-
-# Sol, one-shot
-codex exec --profile sol --sandbox workspace-write \
-  -c model_reasoning_effort="xhigh" \
-  --json --output-last-message ./docs/receipts/sol-MCP-TODOPROGRESSION-001.md \
-  "$(cat ./docs/personas/sol.md ./prompts/sol-slice-MCP-TODOPROGRESSION-001.md)"
-
-# Grok hostile spawn
-grok -p "$(cat ./prompts/hostile-MCP-TODOPROGRESSION-001.md)" \
-  --rules "$(cat ./docs/personas/grok.md)" \
-  --cwd . --permission-mode plan \
-  --output-format plain --effort high --reasoning-effort high --max-turns 60 \
-  -w hostile-MCP-TODOPROGRESSION-001
-```
-
-Gates the coordinator re-runs independently of any persona:
-
-```powershell
+# Gate check before handoff. Zero failures AND zero skips.
 ./build.ps1 Test
 ./build.ps1 ValidateConfig
 ./build.ps1 ValidateTraceability
-./build.ps1 MigrationIntegrationTests
+
+# Continue the same slice without re-pasting the persona; resume keeps it in context.
+codex exec --profile sol --sandbox workspace-write -C . resume --last `
+  'unit gate is red on TodoProgressionTests; fix without weakening assertions'
+
+# Wrapper equivalents.
+./tools/powershell/Start-Sol.ps1 -TodoId $todo -Brief "./prompts/sol-slice-$todo.md"
+./tools/powershell/Start-Sol.ps1 -TodoId $todo -Resume -Followup 'address the FailList items 2 and 3 only'
 ```
+
+`codex exec` defaults to a read-only sandbox, so `workspace-write` is a deliberate grant; keep `--dangerously-bypass-approvals-and-sandbox` (`--yolo`) for isolated runners only ([Codex CLI reference](https://developers.openai.com/codex/cli/reference), [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode)).
+
+### 12.5 Grok — hostile validation, separate spawn
+
+```powershell
+$todo = 'MCP-TODOPROGRESSION-001'
+$stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
+
+grok -p (Get-Content -Raw "./prompts/hostile-$todo.md") `
+  --rules (Get-Content -Raw ./docs/personas/grok.md) `
+  --cwd . --permission-mode plan `
+  --output-format plain --effort high --reasoning-effort high `
+  --max-turns 60 -w "hostile-$todo"
+
+# Read the verdict from the receipt, not from the exit code.
+$json = Get-ChildItem ./docs/receipts/hostile-validator-*.json |
+        Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+(Get-Content -Raw $json.FullName | ConvertFrom-Json) |
+  Select-Object ValidatorIdentity, OverallVerdict, Counts, FailList
+
+# Capture the transcript for session-log ingestion.
+grok export <session-id> > "./docs/receipts/hostile-$todo-$stamp.transcript"
+
+# Wrapper equivalent.
+./tools/powershell/Invoke-HostileGrok.ps1 -TodoId $todo `
+  -ImplementerReceipt ./docs/receipts/sol-MCP-TODOPROGRESSION-001-<stamp>.md
+```
+
+`--rules` loads the persona as session rules; `-w` runs the validator in its own git worktree so it cannot disturb Sol's tree; `--permission-mode plan` is what mechanically stops it from fixing what it finds. `--effort high` is the strongest accepted level, and the server's Grok strategy records that `max` is rejected. Use `--output-format streaming-json` when a script must parse events ([Grok CLI reference](https://docs.x.ai/build/cli/reference)).
+
+A missing receipt is never an AGREE. If the file is absent, the slice is unvalidated.
+
+### 12.6 Full slice, start to finish
+
+```powershell
+./build.ps1 StartServer --instance default
+
+# 1. Plan
+./tools/powershell/Start-Astra.ps1 -Iteration ITER-07 -Brief ./prompts/astra-plan-ITER-07.md
+
+# 2. Pull the next ready slice from MCP state, not from chat memory
+$todo = 'MCP-TODOPROGRESSION-001'   # from get_next_ready_todo
+
+# 3. Implement, stopping at Validating
+./tools/powershell/Start-Sol.ps1 -TodoId $todo -Brief "./prompts/sol-slice-$todo.md"
+
+# 4. Attack the claims
+$solReceipt = (Get-ChildItem "./docs/receipts/sol-$todo-*.md" |
+               Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1).FullName
+./tools/powershell/Invoke-HostileGrok.ps1 -TodoId $todo -ImplementerReceipt $solReceipt
+
+# 5. On AGREE only: coordinator closes the slice via update_todo_status and a
+#    ValidationPassed checkpoint. On DISAGREE: route the FailList back to Sol
+#    (code defect) or Astra (requirement defect) and re-run step 4 afterward.
+```
+
+### 12.7 Launcher scripts
+
+Three wrappers, kept in `tools/powershell/`, so the persona file, the sandbox grant, and the receipt naming cannot be forgotten under time pressure:
+
+| Script | Purpose | Refuses to run when |
+|---|---|---|
+| `Start-Astra.ps1` | Composes persona plus planning brief, one-shot or interactive, pinned `read-only` | persona file missing, brief missing |
+| `Start-Sol.ps1` | Composes persona plus slice brief with `workspace-write`, names the untrusted receipt, then runs the unit gate | persona file missing, gate red after the run |
+| `Invoke-HostileGrok.ps1` | Separate Grok spawn in its own worktree with persona as rules, then reads `OverallVerdict` from the receipt | persona missing, implementer receipt missing, hostile receipt not written |
+| `McpPersonaCommon.ps1` | Shared `Assert-McpTrust`, wrapping the repo's `Invoke-FullBootstrap` and exporting `MCP_API_KEY` | marker resolver not found, handshake fails, marker has no `apiKey` |
+
+`Invoke-HostileGrok.ps1` also takes its `LiveBase` from the verified marker rather than a hardcoded port, so the validator's live checks hit the server it actually verified.
+
+Flag surfaces move. Re-check `codex exec --help` and `grok --help` after an upgrade before trusting a pinned invocation, and note that `-p` means `--profile` in Codex but `--prompt` in Grok.
 
 ---
 
-## Related process
+## Sources
 
-The canonical process file is `docs/Development-Process-draft-v4.md`. In-repo aliases `Byrd Dev Process`, `BDP`, and `BDPv4` all resolve there. This guide does not replace that document. It is how a coordinator runs it with three named personas on McpServer.
-
-Of well-known SDLC methodologies the process is most closely related to the Rational Unified Process: iterative-rapids, a series of mini-waterfalls, with stronger dependency and testability boundaries than raw efficiency would suggest. See the [Rational Unified Process](https://en.wikipedia.org/wiki/Rational_Unified_Process).
+- Byrd Development Process v4 — `docs/Development-Process-draft-v4.md`, [sharpninja/McpServer](https://github.com/sharpninja/mcpserver)
+- Hostile validator contract (adversarial Grok sub-agent, receipt schema, AGREE gate) — `docs/McpServer-UseCase-Extension-Design-v3.0.md` §6.1, and existing receipts under `docs/receipts/hostile-validator-*.json`
+- `skills/byrd-tdd-process/SKILL.md`, `skills/mcp-todo/SKILL.md`, `AGENTS.md` (Byrd Test Gate, identity rule 11), `CLAUDE.md`, `CODEX-HANDOFF.md`, `templates/prompt-templates.yaml`
+- TODO-Centered Byrd Development Process Implementation Spec — `docs/byrd-todo-execution-spec.md`
+- Agent execution strategies and marker activation text — `src/McpServer.Services/Services/CodexCliAgentExecutionStrategy.cs`, `GrokCliAgentExecutionStrategy.cs`, `MarkerFileService.cs`, `build/Build.SyncAgentPlugins.cs`
+- Repository capabilities, build targets, CI/CD — [McpServer README](https://github.com/sharpninja/mcpserver)
+- Codex CLI — [developer command reference](https://developers.openai.com/codex/cli/reference), [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode)
+- Grok Build — [overview](https://docs.x.ai/build/overview), [CLI reference](https://docs.x.ai/build/cli/reference)
+- Test-Driven Development — [Martin Fowler](https://martinfowler.com/bliki/TestDrivenDevelopment.html)
+- Rational Unified Process — [Wikipedia](https://en.wikipedia.org/wiki/Rational_unified_process)
