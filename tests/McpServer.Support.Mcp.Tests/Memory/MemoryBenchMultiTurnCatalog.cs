@@ -33,19 +33,35 @@ internal static class MemoryBenchMultiTurnCatalog
 
     /// <summary>Runs a fresh Grok multi-turn stub.</summary>
     public static MemoryBenchMultiTurnRunResult RunGrokStub(string? resultsDirectory = null, bool gateEnabled = false)
+        => RunStub(["grok"], resultsDirectory, gateEnabled);
+
+    /// <summary>Runs a fresh multi-turn stub for the requested plugins.</summary>
+    public static MemoryBenchMultiTurnRunResult RunStub(
+        IReadOnlyList<string> plugins,
+        string? resultsDirectory = null,
+        bool gateEnabled = false,
+        string utcStamp = "20000101T000000Z")
     {
         return new MemoryBenchMultiTurnHarness().Run(FindRepoRoot(), new MemoryBenchRunOptions
         {
-            Plugins = ["grok"],
+            Plugins = plugins,
             Mode = MemoryBenchModes.Stub,
             ResultsDirectory = resultsDirectory,
-            UtcStamp = "20000101T000000Z",
+            UtcStamp = utcStamp,
             GateEnabled = gateEnabled,
         });
     }
 
+    /// <summary>Runs the full eight-plugin multi-turn stub pack once per process after H7a.</summary>
+    public static MemoryBenchMultiTurnRunResult StubAll() => StubAllHolder.Value;
+
     private static class StubGrokHolder
     {
         internal static readonly MemoryBenchMultiTurnRunResult Value = RunGrokStub();
+    }
+
+    private static class StubAllHolder
+    {
+        internal static readonly MemoryBenchMultiTurnRunResult Value = RunStub(["all"]);
     }
 }

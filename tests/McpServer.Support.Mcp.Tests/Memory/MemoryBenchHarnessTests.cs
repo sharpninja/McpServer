@@ -39,10 +39,14 @@ public sealed class MemoryBenchHarnessTests
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.Equal(["grok"], result.Plugins);
-        Assert.False(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchCatalog.FindRepoRoot()));
+        Assert.True(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchCatalog.FindRepoRoot()));
         var harness = new MemoryBenchHarness();
-        Assert.Throws<InvalidOperationException>(() =>
-            harness.Run(MemoryBenchCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["claude-code"] }));
+        var claude = harness.Run(MemoryBenchCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["claude-code"] });
+        Assert.Equal(["claude-code"], claude.Plugins);
+        Assert.Equal(16, claude.Cells.Count);
+        var all = harness.Run(MemoryBenchCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["all"] });
+        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, all.Plugins);
+        Assert.Equal(128, all.Cells.Count);
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-08: Each cell records transcript, tools, injection, tokens, latency, score, pass.</summary>

@@ -94,4 +94,10 @@ public sealed class MemoryBenchValueGateDocument
 
     /// <summary>Default BenchMemory plugin.</summary>
     public string DefaultPlugin { get; set; } = "grok";
+
+    /// <summary>Hostile/operator H7a receipt path cited when agree is true.</summary>
+    public string Receipt { get; set; } = string.Empty;
+
+    /// <summary>Policy note, including the H7a receipt citation.</summary>
+    public string Note { get; set; } = string.Empty;
 }

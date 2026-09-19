@@ -13,12 +13,15 @@ public sealed class MemoryBenchValueGateTests
     {
         var gate = MemoryBenchValueGate.Load(MemoryBenchCatalog.FindRepoRoot());
         Assert.Equal("H7a", gate.Gate);
-        Assert.False(gate.Agree);
+        Assert.True(gate.Agree);
+        Assert.Contains("hostile-validator-20260919T081530Z.md", gate.Receipt, StringComparison.Ordinal);
+        Assert.Contains("hostile-validator-20260919T081530Z.md", gate.Note, StringComparison.Ordinal);
         Assert.True(gate.H7bBlockedUntilH7aAgree);
         Assert.Equal("grok", gate.DefaultPlugin);
-        Assert.False(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchCatalog.FindRepoRoot()));
-        Assert.Throws<InvalidOperationException>(() =>
-            MemoryBenchAdapterRegistry.Resolve(["claude-code"]));
+        Assert.True(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchCatalog.FindRepoRoot()));
+        var resolved = MemoryBenchAdapterRegistry.Resolve(["claude-code"]);
+        Assert.Equal("claude-code", resolved["claude-code"].PluginId);
+        Assert.Equal("recorded-fixture", resolved["claude-code"].ValidationEntrypoint);
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-50: H-done defaults to H7a; H7b is follow-on.</summary>

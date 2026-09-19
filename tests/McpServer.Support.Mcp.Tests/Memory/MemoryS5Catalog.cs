@@ -63,7 +63,7 @@ internal static class MemoryS5Catalog
         "versions",
     ];
 
-    /// <summary>Plugin ids deferred until H7a.</summary>
+    /// <summary>Plugin ids that were deferred until H7a and are required for H7b.</summary>
     public static readonly string[] DeferredPlugins =
     [
         "claude-code",
@@ -73,6 +73,13 @@ internal static class MemoryS5Catalog
         "codex",
         "copilot",
         "opencode",
+    ];
+
+    /// <summary>All eight plugin ids in checklist order (Grok first).</summary>
+    public static readonly string[] AllPlugins =
+    [
+        "grok",
+        .. DeferredPlugins,
     ];
 
     /// <summary>Locates the repository root from the test output directory.</summary>

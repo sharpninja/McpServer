@@ -34,19 +34,35 @@ internal static class MemoryBenchCatalog
 
     /// <summary>Runs a fresh Grok stub into a temp results directory.</summary>
     public static MemoryBenchRunResult RunGrokStub(string? resultsDirectory = null, bool gateEnabled = false)
+        => RunStub(["grok"], resultsDirectory, gateEnabled);
+
+    /// <summary>Runs a fresh stub for the requested plugins.</summary>
+    public static MemoryBenchRunResult RunStub(
+        IReadOnlyList<string> plugins,
+        string? resultsDirectory = null,
+        bool gateEnabled = false,
+        string utcStamp = "20000101T000000Z")
     {
         return new MemoryBenchHarness().Run(FindRepoRoot(), new MemoryBenchRunOptions
         {
-            Plugins = ["grok"],
+            Plugins = plugins,
             Mode = MemoryBenchModes.Stub,
             ResultsDirectory = resultsDirectory,
-            UtcStamp = "20000101T000000Z",
+            UtcStamp = utcStamp,
             GateEnabled = gateEnabled,
         });
     }
 
+    /// <summary>Runs the full eight-plugin stub pack once per process after H7a.</summary>
+    public static MemoryBenchRunResult StubAll() => StubAllHolder.Value;
+
     private static class StubGrokHolder
     {
         internal static readonly MemoryBenchRunResult Value = RunGrokStub();
+    }
+
+    private static class StubAllHolder
+    {
+        internal static readonly MemoryBenchRunResult Value = RunStub(["all"]);
     }
 }
