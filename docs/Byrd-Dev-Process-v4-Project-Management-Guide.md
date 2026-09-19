@@ -270,4 +270,16 @@ The process doc names three AI failure modes. With three personas, each has a pe
 | Risk | Signal | Response |
 |---|---|---|
 | Context compaction amnesia | Stops logging turns, forgets workspace steps, loops on failing tests, starts calling a test "invalid" | Steering message to re-read workspace instructions; repetition also raises the weight compaction retains. Sol is most exposed — never leave long Sol runs unattended |
-| Rogue session 
+| Rogue session | Session started on the wrong foot and reinterprets guidelines; cannot be argued back | Do not negotiate. End the session, close the agent, restart with a corrected seed. Cheapest on Astra (re-plan), most expensive on Sol (discard the worktree) |
+| Unsafe assumptions | Goes outside provided context without flagging it | Workspace must define ambiguity handling, when initiative is allowed, and how to re-ground. Then ask the model what caused the tangent and have **that** model update the guidelines |
+
+Structural safeguards:
+
+- **No self-certification.** Operator trust requirement of 2026-08-08. If the receipt is missing, not written by the sub-agent, or DISAGREE, Sol is not authorized to claim completion.
+- **Shared-engine correlation risk.** Astra and Sol share an engine, so a systematic Codex blind spot can pass unnoticed from plan into code. Grok on a different engine is the only thing breaking that correlation — which is precisely why the validator must never be a Codex profile.
+- **One-shot by default for unattended work.** Both server-side strategies use reusable one-shot invocations for non-interactive prompts. A one-shot run cannot drift for an hour unobserved.
+- **Receipts over assertions.** Every gate claim produces a durable artifact in `docs/receipts/`.
+
+---
+
+## 8. Ca
