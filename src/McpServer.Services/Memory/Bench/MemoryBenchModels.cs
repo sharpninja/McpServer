@@ -362,6 +362,9 @@ public sealed class MemoryBenchRunOptions
 
     /// <summary>Optional adapter overrides keyed by plugin id.</summary>
     public IReadOnlyDictionary<string, IMemoryBenchPluginAdapter>? Adapters { get; init; }
+
+    /// <summary>Optional multi-turn adapter overrides keyed by plugin id.</summary>
+    public IReadOnlyDictionary<string, IMemoryBenchMultiTurnAdapter>? MultiTurnAdapters { get; init; }
 }
 
 /// <summary>
