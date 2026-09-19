@@ -62,6 +62,9 @@ dlldata.c
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
+docs/benchmarks/results/*
+!docs/benchmarks/results/.gitkeep
+!docs/benchmarks/results/baselines/
 
 # .NET
 project.lock.json

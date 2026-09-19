@@ -32,14 +32,28 @@ Pass/fail rubrics are correctness/safety gates only.
 
 ## Run
 
+Default plugin is **grok**. `-Plugin all` is explicit and post-H7a.
+
 ```powershell
-# Default: Grok only (pilot)
+# Default: Grok only (pilot), stub mode, both conditions
 ./build.ps1 BenchMemory
 ./build.ps1 BenchMemory -Plugin grok
 
 # After H7a AGREE only
 ./build.ps1 BenchMemory -Plugin all
 ```
+
+CI prints **token means by plugin × condition** as the first metrics block.
+`Memory:Bench:Gate=true` (Nuke `-MemoryBenchGate`) fails the target on required correctness misses; default is report-only.
+
+without_memory vs with_memory are pack conditions, not extra CLI flags: every run executes both.
+
+## Grok pilot validation path
+
+- Adapter: `MemoryBenchGrokAdapter` (`recorded-fixture` entrypoint; stub/recorded fixtures, no cloud).
+- Unit + fixture integration: `tests/McpServer.Support.Mcp.Tests/Memory/MemoryBench*.cs` and `MemoryIntegrationTests.cs`.
+- Remember→recall/injection is asserted on the Grok lane with recorded fixtures. Live Grok is opt-in via `XAI_API_KEY` and tags `mode=live`; CI does not require a real XAI key.
+- No live Perplexity. No Python product path. Token estimator id `memory-bench-whitespace` / version `1.0.0` when the host does not report usage.
 
 ## Traceability
 

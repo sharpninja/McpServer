@@ -234,6 +234,7 @@ Main endpoints:
 - `/usecases/` - first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
 - `/mcpserver/memory` - remember/recall/explore/consolidate/promote/versions/revert plus compat CRUD
 - `/memory/` - first-party Memory UI static assets from `wwwroot/memory` (REST-only; included in publish output / Linux service package; deploy via Nuke `UpdateService`)
+- Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (Grok-first with/without memory bench; tokens primary). See `docs/benchmarks/README.md`.
 - `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import
 - `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.

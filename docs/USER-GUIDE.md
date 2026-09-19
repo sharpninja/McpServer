@@ -959,6 +959,12 @@ The UI calls only those public REST routes. Foreign or unknown ids fail closed (
 
 Do not run UpdateService in this slice unless an operator asks.
 
+## 7e) Memory plugin efficacy check
+
+The standard with/without memory pack is `docs/benchmarks/memory-prompt-pack-v1.yaml`.
+See `docs/benchmarks/README.md` for the Grok-first bench (primary metric: tokens used; pass/fail is correctness/safety only).
+Run `./build.ps1 BenchMemory` for the Grok pilot; other plugins wait for H7a AGREE.
+
 ## 8) Wire docs into README index and docs folder
 
 This user guide is wired into:

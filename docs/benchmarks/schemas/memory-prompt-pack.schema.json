@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpserver.local/schemas/memory-prompt-pack.schema.json",
+  "title": "memory-prompt-pack",
+  "type": "object",
+  "required": ["version", "id", "plugins", "conditions", "prompts", "token_fields", "pilot_plugin"],
+  "properties": {
+    "version": { "type": "string" },
+    "id": { "type": "string" },
+    "plugins": { "type": "array", "minItems": 8 },
+    "conditions": {
+      "type": "array",
+      "minItems": 2,
+      "contains": { "const": "without_memory" }
+    },
+    "prompts": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "class", "user_text", "gold_answer_rubric", "seeded_memories", "forbidden_claims", "scoring"],
+        "properties": {
+          "id": { "type": "string" },
+          "class": { "type": "string" },
+          "user_text": { "type": "string" },
+          "gold_answer_rubric": { "type": "string" },
+          "seeded_memories": { "type": "array" },
+          "forbidden_claims": { "type": "array" },
+          "scoring": { "type": "string", "enum": ["exact", "contains", "rubric"] }
+        }
+      }
+    },
+    "token_fields": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "pilot_plugin": { "const": "grok" }
+  }
+}
