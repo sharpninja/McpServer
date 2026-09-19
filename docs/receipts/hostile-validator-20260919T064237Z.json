@@ -1,1 +1,243 @@
-PLACEHOLDER
+{
+  "timestampUtc": "20260919T064237Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H3-green",
+  "todoId": "MCP-MEMORY-002",
+  "priorH3RedAgree": "docs/receipts/hostile-validator-20260919T062341Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": null,
+  "prUrl": null,
+  "prNote": "HARD CONSTRAINT: no PR; push receipts to memory-s3-red only; search head:memory-s3-red = 0",
+  "gitHeadVerified": "ab88d634f6d245d85b4fa30b3f3acfb8b35726d9",
+  "gitBranch": "memory-s3-red",
+  "baseBranch": "cursor/memory-s2-green-c63a",
+  "baseHead": "dc830bb7bc3264cc954fbc2684265211ae70b5a3",
+  "s3GreenFeatCommit": "a26039d7",
+  "overallVerdict": "AGREE",
+  "passCount": 16,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Strict AGREE only if every scored claim is PASS AND Accuracy>=98/100 AND Completeness>=98/100. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002",
+      "remainingNote": "stale: still cites H3-red / S3 Red despite S3 Green tip ab88d634"
+    },
+    "evidenceSource": "origin/memory-s3-red tip worktree /tmp/s3-green-wt @ ab88d634f6d245d85b4fa30b3f3acfb8b35726d9",
+    "priorH3RedAgreeOnBranch": true
+  },
+  "agentClaimCheck": {
+    "claimed": {
+      "failed": 0,
+      "passed": 151,
+      "skipped": 0
+    },
+    "observed": {
+      "failed": 0,
+      "passed": 151,
+      "skipped": 0,
+      "s3ProductionPassed": 20,
+      "s3ProductionFailed": 0
+    },
+    "match": true
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 0,
+      "passed": 151,
+      "skipped": 0,
+      "total": 151
+    },
+    "s3CatalogMatrix": {
+      "count": 20,
+      "coverage": "20/20",
+      "failed": 0,
+      "passed": 20,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s3MocksFirst": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "methods": [
+        "PortMock_ExplicitEdge_ReturnedWithWeight",
+        "PortMock_HebbianOff_NoCoRetrievedOnlyEdges",
+        "PortMock_DepthBounds_Return400",
+        "PortMock_SelfLoop_Rejected",
+        "PortMock_Directed_NoImpliedReverse",
+        "PortMock_ForeignTarget_FailsClosed"
+      ]
+    },
+    "s2CatalogInSameFilter": {
+      "count": 40,
+      "failed": 0,
+      "passed": 40,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s1CatalogInSameFilter": {
+      "count": 73,
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0,
+      "missing": 0
+    },
+    "compatFr001_007": {
+      "failed": 0,
+      "passed": 37,
+      "skipped": 0,
+      "filter": "MemoryServiceTests|MemoryControllerTests|MemoryEntityScopeTests|MemoryContractArtifactTests|MemoryTxnGatedTests|MemoryMcpToolTests|MemoryFederationTests"
+    },
+    "focusGreenPassed": [
+      "MemoryExploreTests.HebbianOff_NoCoRetrievedOnlyEdges",
+      "MemoryExploreTests.HebbianToggle_DocumentedVisibility",
+      "MemoryExploreTests.DoesNotMutateContent",
+      "MemoryExploreTests.MaxNeighbors_TruncatesStable",
+      "MemoryExploreTests.ExplicitEdge_ReturnedWithWeight",
+      "MemoryExploreTests.DepthNonPositive_Returns400",
+      "MemoryExploreTests.DepthAboveMax_StableBehavior",
+      "MemoryExploreTests.Depth_ControlsHops",
+      "MemoryExploreTests.SelfLoop_RejectedOrAbsent",
+      "MemoryExploreTests.Directed_NoImpliedReverse",
+      "MemoryEdgeTests.ForeignTarget_FailsClosed",
+      "MemoryExploreTests.HebbianOn_StrengthensCoRetrieved"
+    ],
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s3-green-test-results/memory-s3-green.trx",
+    "logPath": "/tmp/s3-green-dotnet-test.log"
+  },
+  "accuracyResiduals": [
+    "appsettings.yaml lacks Mcp:Memory:Hebbian:Enabled key; DefaultHebbianEnabled=false constant used",
+    "hostile-validator skill + profile dirs absent",
+    "TODO remaining text stale vs S3 Green tip"
+  ],
+  "claims": [
+    {
+      "id": "H3G-1",
+      "verdict": "PASS",
+      "claim": "Memory filter Failed 0 Skipped 0 Passed 151",
+      "evidence": "independent TRX Passed=151 Failed=0 Skipped=0"
+    },
+    {
+      "id": "H3G-2",
+      "verdict": "PASS",
+      "claim": "S3 catalog 20/20 Green",
+      "evidence": "TRX 20/20 Passed Missing 0"
+    },
+    {
+      "id": "H3G-3",
+      "verdict": "PASS",
+      "claim": "Explore/CreateEdge/Hebbian handlers present; production no longer 501",
+      "evidence": "ExploreMemoryQueryHandler + CreateMemoryEdgeCommandHandler + RecordHebbianCoRetrievalCommandHandler + MemoryExploreOperations"
+    },
+    {
+      "id": "H3G-4",
+      "verdict": "PASS",
+      "claim": "S1+S2 Green Failed 0 in same Memory filter",
+      "evidence": "S1 73/73 Passed; S2 40/40 Passed"
+    },
+    {
+      "id": "H3G-5",
+      "verdict": "PASS",
+      "claim": "FR-001..007 compat not broken",
+      "evidence": "compat filter Failed 0 Passed 37 Skipped 0"
+    },
+    {
+      "id": "H3G-6",
+      "verdict": "PASS",
+      "claim": "No Python product path",
+      "evidence": "git ls-tree .py empty"
+    },
+    {
+      "id": "H3G-7",
+      "verdict": "PASS",
+      "claim": "TODO done=false; no PR opened by validator",
+      "evidence": "curl done=false; search head:memory-s3-red = 0"
+    },
+    {
+      "id": "H3G-8",
+      "verdict": "PASS",
+      "claim": "H3-red AGREE prerequisite exists; honesty residuals disclosed",
+      "evidence": "hostile-validator-20260919T062341Z twin on branch; skill/profile/appsettings/stale remaining"
+    },
+    {
+      "id": "H3G-F1",
+      "verdict": "PASS",
+      "claim": "Hebbian default config false",
+      "evidence": "DefaultHebbianEnabled=false; HebbianOff_NoCoRetrievedOnlyEdges Passed"
+    },
+    {
+      "id": "H3G-F2",
+      "verdict": "PASS",
+      "claim": "co-retrieved edges invisible while off",
+      "evidence": "HebbianOff + HebbianToggle Passed"
+    },
+    {
+      "id": "H3G-F3",
+      "verdict": "PASS",
+      "claim": "explore does not mutate Content",
+      "evidence": "DoesNotMutateContent Passed"
+    },
+    {
+      "id": "H3G-F4",
+      "verdict": "PASS",
+      "claim": "maxNeighbors stable order",
+      "evidence": "MaxNeighbors_TruncatesStable Passed"
+    },
+    {
+      "id": "H3G-F5",
+      "verdict": "PASS",
+      "claim": "explicit edge return",
+      "evidence": "ExplicitEdge_ReturnedWithWeight Passed"
+    },
+    {
+      "id": "H3G-F6",
+      "verdict": "PASS",
+      "claim": "depth/self-loop/directed/foreign green",
+      "evidence": "Depth* + SelfLoop + Directed + ForeignTarget Passed"
+    },
+    {
+      "id": "H3G-F7",
+      "verdict": "PASS",
+      "claim": "Hebbian on strengthens co-retrieved",
+      "evidence": "HebbianOn_StrengthensCoRetrieved Passed"
+    },
+    {
+      "id": "H3G-F8",
+      "verdict": "PASS",
+      "claim": "S3 AC 100% Green",
+      "evidence": "20/20 Passed"
+    }
+  ],
+  "workspaceRules": {
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "B6": "PASS"
+  },
+  "didNot": [
+    "mark TODO done",
+    "create a pull request",
+    "implement S4 Green",
+    "rewrite H3-red AGREE receipts"
+  ]
+}
