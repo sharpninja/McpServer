@@ -154,7 +154,7 @@ public sealed class WorkspaceAuthMiddleware
             if (tokenService.ValidateDefaultToken(workspacePath, provided))
             {
                 context.Items[IsDefaultKeyItem] = true;
-                if (s_readOnlyMethods.Contains(context.Request.Method))
+                if (IsReadOnlyRequest(context))
                 {
                     await _next(context).ConfigureAwait(false);
                     return;
@@ -237,6 +237,19 @@ public sealed class WorkspaceAuthMiddleware
             return false;
 
         return !s_readOnlyMethods.Contains(method);
+    }
+
+    /// <summary>
+    /// FR-MCP-MEMORY-011-26: Default keys may recall. POST /mcpserver/memory/recall is a read.
+    /// </summary>
+    private static bool IsReadOnlyRequest(HttpContext context)
+    {
+        if (s_readOnlyMethods.Contains(context.Request.Method))
+            return true;
+
+        var path = context.Request.Path.Value ?? string.Empty;
+        return HttpMethods.IsPost(context.Request.Method)
+            && path.Equals("/mcpserver/memory/recall", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

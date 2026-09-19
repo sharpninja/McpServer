@@ -4,9 +4,7 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// FR-MCP-MEMORY-011 / FR-MCP-MEMORY-014-14 / TR-MCP-MEMORY-SEARCH-002:
-/// CQRS query for <c>memory_recall</c>. S1 uses it for post-revert index reflection.
-/// S2 owns hybrid BM25+vector fusion, filters, and bounds; this Red slice keeps the
-/// production handler on keyword reflection only so S2 matrix tests stay Red.
+/// CQRS query for <c>memory_recall</c> hybrid BM25+vector fusion, filters, and bounds.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="Query">Recall query text. Null/empty/whitespace must be 400 in S2 Green.</param>

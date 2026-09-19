@@ -4,7 +4,6 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// TR-MCP-MEMORY-SEARCH-002: CQRS command to index one memory into the dedicated memory ANN/FTS index.
-/// S2 Red ships the port only; no production handler is registered so indexer tests stay Red.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="MemoryId">MEMORY-* id to index.</param>
@@ -18,7 +17,7 @@ public sealed record IndexMemoryCommand(
 
 /// <summary>
 /// TR-MCP-MEMORY-SEARCH-002: CQRS command to reconcile stale EmbeddingStatus vs row hash.
-/// S2 Red ships the port only; no production handler is registered.
+/// Production S2 Green handler repairs stale EmbeddingStatus.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 public sealed record ReconcileMemoryIndexCommand(
@@ -26,7 +25,6 @@ public sealed record ReconcileMemoryIndexCommand(
 
 /// <summary>
 /// TR-MCP-MEMORY-SEARCH-002: CQRS command to batch-index memories to a terminal EmbeddingStatus.
-/// S2 Red ships the port only; no production handler is registered.
 /// </summary>
 /// <param name="WorkspacePath">Active workspace path.</param>
 /// <param name="MemoryIds">Optional explicit id set. Null means all pending in the workspace effective set.</param>

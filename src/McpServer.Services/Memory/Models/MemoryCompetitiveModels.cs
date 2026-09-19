@@ -136,7 +136,6 @@ public sealed record MemoryEdgeRecord
 
 /// <summary>
 /// FR-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002: Documented recall bounds for S2.
-/// Production fusion/indexer Green is not implemented in this Red slice; tests assert these limits.
 /// </summary>
 public static class MemorySearchLimits
 {

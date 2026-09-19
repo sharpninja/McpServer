@@ -125,6 +125,7 @@ public sealed class MemoryCompetitiveOperations
         entity.Text = snapshot.Content;
         entity.Version++;
         entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        entity.EmbeddingStatus = "pending";
 
         var nextNumber = await NextVersionNumberAsync(memoryId, cancellationToken).ConfigureAwait(false);
         _db.MemoryVersions.Add(new MemoryVersionEntity

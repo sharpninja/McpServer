@@ -202,6 +202,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-MEMORY-MODEL-002: Directed memory edges unique on (From, To, EdgeType).</summary>
     public DbSet<MemoryEdgeEntity> MemoryEdges => Set<MemoryEdgeEntity>();
 
+    /// <summary>TR-MCP-MEMORY-SEARCH-002: Dedicated memory ANN/FTS side table.</summary>
+    public DbSet<MemoryIndexEntity> MemoryIndexes => Set<MemoryIndexEntity>();
+
     /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case headers.</summary>
     public DbSet<UseCaseEntity> UseCases => Set<UseCaseEntity>();
 
@@ -744,6 +747,18 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => new { x.FromMemoryId, x.ToMemoryId, x.EdgeType }).IsUnique();
         });
 
+        modelBuilder.Entity<MemoryIndexEntity>(e =>
+        {
+            e.HasKey(x => x.MemoryId);
+            e.HasIndex(x => x.WorkspaceId);
+            e.HasIndex(x => x.ContentHash);
+            e.Property(x => x.ContentHash).HasMaxLength(64);
+            e.HasOne<MemoryEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.MemoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         modelBuilder.Entity<UseCaseEntity>(e =>
         {
             e.HasKey(x => x.UseCaseId);
@@ -1111,6 +1126,9 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<MemoryIndexEntity>().HasQueryFilter("Workspace", e =>
+            e.WorkspaceId == null
+            || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<UseCaseEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<UseCaseActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
@@ -1239,7 +1257,8 @@ public sealed class McpDbContext : DbContext
             if (entityType.ClrType == workspaceClrType)
                 continue;
 
-            if (entityType.ClrType == typeof(MemoryEntity))
+            if (entityType.ClrType == typeof(MemoryEntity)
+                || entityType.ClrType == typeof(MemoryIndexEntity))
                 continue;
 
             // WorkspaceBannedItemEntity's WorkspaceId IS its parent foreign key; it is configured

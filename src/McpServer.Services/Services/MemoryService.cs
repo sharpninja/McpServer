@@ -258,6 +258,8 @@ public sealed partial class MemoryService : IMemoryService
         entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
         if (request.UpdatedBy is not null)
             entity.UpdatedBy = NormalizeOptional(request.UpdatedBy);
+        if (contentChanged)
+            entity.EmbeddingStatus = "pending";
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         if (contentChanged)
