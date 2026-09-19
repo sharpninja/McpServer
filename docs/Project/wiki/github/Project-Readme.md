@@ -1,8 +1,8 @@
 # MCP Server
 
-Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
+Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Current line:** GitVersion `next-version` **1.4.38** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits (observed `1.4.38+6a72d445dda56f1d288660de044a2b020291630d` on this refresh). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
+**Current line:** GitVersion `next-version` **1.4.38** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits. This refresh could not reach a running server (`GET /health` on `localhost:7147` failed), so no new live informational version is claimed. `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys on prior live checks: `status`, `version`, `checks`, `nonce`, `storage`.
 
 ## Key Features
 
@@ -16,6 +16,7 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
 - **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
+- **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD; plugins inject a raw `REQUIRED MEMORIES` block at supported request boundaries. Grok-first multi-turn bench uses tokens as the primary metric (`docs/benchmarks/`).
 - **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
 
 ## Quick Start
@@ -99,6 +100,8 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 | `/mcpserver/products` | Product CRUD and workspace membership (`PROD-*` keys) |
 | `/mcpserver/usecases` | Use case CRUD, flows/steps/actors/FR links, diagram-graph, coverage, approval/product |
 | `/usecases/` | First-party Use Case Manager UI (REST-only; UML canvas + secondary forms) |
+| `/mcpserver/memory` | Remember, recall, explore, consolidate, promote, versions/revert, plus compat CRUD |
+| `/memory/` | First-party Memory UI (REST-only; Effective set search/edit/revert) |
 | `/mcpserver/workspace` | Multi-tenant workspace resolution and management |
 | `/mcpserver/gh` | GitHub issues, PRs, workflows, repository metadata |
 | `/mcpserver/tools` | Tool capability registration, discovery, schema validation |
@@ -189,6 +192,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `ValidateTraceability` | Check FR/TR/TEST requirements coverage |
 | `TestMultiInstance` | Two-instance smoke test |
 | `TestGraphRagSmoke` | GraphRAG endpoint smoke test |
+| `BenchMemory` | Grok-first memory bench (v1 smoke + v2 multi-turn; tokens primary). `-Plugin all` waits for H7a AGREE |
 | `Clean` | Clean artifacts and solution output |
 
 ## CI/CD
@@ -214,7 +218,7 @@ builder.Services.AddMcpServerClient(options =>
 });
 ```
 
-Covers: Todo, Context, SessionLog, GitHub, Repo, Workspace, ToolRegistry, Sync, and more.
+Covers: Todo, Context, SessionLog, Memory, GitHub, Repo, Workspace, ToolRegistry, Sync, and more.
 
 Source: `src/McpServer.Client/` | [Package README](src/McpServer.Client/README.md)
 
@@ -272,6 +276,8 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 | [Client Integration](docs/CLIENT-INTEGRATION.md) | NuGet client library usage |
 | [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to mcpserver-repl |
 | [FAQ](docs/FAQ.md) | Common questions |
+| [MCP Memories](docs/context/memory.md) | Remember/recall/promote/consolidate and REQUIRED MEMORIES injection |
+| [Memory benchmarks](docs/benchmarks/README.md) | Grok-first token-primary bench; v2 multi-turn is the efficiency claim |
 | [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release verification |
 | [Azure Pipelines](docs/AZURE-PIPELINES.md) | CI/CD variables and retention |
 

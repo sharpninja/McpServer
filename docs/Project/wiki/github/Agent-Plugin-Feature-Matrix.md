@@ -62,7 +62,9 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 
 ## Source of Truth
 
-The authoritative behavioral contract for all plugins is the `AGENTS-README-FIRST.yaml` file present in every enabled workspace, combined with the shared REPL tool surface (`workflow.todo.*`, `workflow.sessionlog.*`, `workflow.requirements.*`, `workflow.graphrag.*`, `client.Workspace.*`).
+The authoritative behavioral contract for all plugins is the `AGENTS-README-FIRST.yaml` file present in every enabled workspace, combined with the shared REPL tool surface (`workflow.todo.*`, `workflow.sessionlog.*`, `workflow.requirements.*`, `workflow.graphrag.*`, `workflow.memory.*`, `client.Workspace.*`).
+
+Memory (MCP-MEMORY-002) is Grok-first. The shared core skill is `plugins/core/skills/memory/SKILL.md` (remember/recall/explore/consolidate/promote/revert plus REQUIRED MEMORIES injection). `./build.ps1 BenchMemory` defaults to the Grok lane; other plugins stay opt-in until hostile/operator H7a AGREE. Do not claim a token-efficiency win from the v1 smoke pack; use `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-*.md`.
 
 ## Related Documents
 

@@ -20,11 +20,39 @@ Use the required plugin or MCP tool surface for normal work:
 
 `Idempotency-Key` is not supported on memory write endpoints. A duplicate `memory_remember` (or other write) creates a second memory with a new id; callers must treat duplicate posts as duplicate rows.
 
+Additive verbs (MCP-MEMORY-002):
+
+- `memory_remember` persists a multi-layer memory. Injection later uses raw `Content` (or legacy `Text`) only. Title, summary, confidence, and tags are stored when provided but are never injected.
+- `memory_recall` returns ranked Effective hits by meaning or keyword (`query`, optional `minScore`, `topN`, `tags`, `type`, `scope`).
+- `memory_promote` copies an operator-selected `sessionlog` or `context` source (`sourceKind` + `sourceRef`) into memory. Do not promote unless the operator asks.
+- `memory_consolidate` plans a sleep/merge. Default is dry-run; apply writes only when `dryRun` is false.
+- `memory_revert` restores snapshot N and appends history.
+
 `memory_explore` walks directed edges from a seed id or the top recall hit for a query seed. Results stay inside the caller Effective set. Soft-deleted seeds return 404; soft-deleted or foreign neighbors are omitted. Explore does not rewrite memory Content.
 
 Hebbian co-retrieved edges are off by default (`Mcp:Memory:Hebbian:Enabled=false` / `MemoryExploreLimits.DefaultHebbianEnabled`). While Hebbian is off, explore never returns co-retrieved-only edges, even if those rows already exist. Enabling Hebbian can strengthen co-retrieved edges without changing the recall ranking path.
 
 Every mutation should include `updatedBy` with the real agent or user identity when the surface supports it. Do not use placeholders or legacy aliases.
+
+## REQUIRED MEMORIES Injection
+
+Supported plugins render the active Effective set at host-supported request boundaries. The production renderer (`MemoryRequiredMemoriesRenderer`) writes:
+
+```
+REQUIRED MEMORIES
+- <raw Content or legacy Text>
+```
+
+An empty Effective set still renders:
+
+```
+REQUIRED MEMORIES
+- None
+```
+
+Preserve raw memory text. Do not summarize, paraphrase, decorate, or add secrets. Summary, confidence, tags, and titles must not appear in the injected block.
+
+Grok is the first plugin lane for injection and the token-primary bench. Other official plugins remain opt-in until hostile/operator H7a AGREE. See `docs/benchmarks/README.md` and `docs/benchmarks/results/memory-bench-multiturn-*.md`.
 
 ## Importing Agent-Local Memories
 

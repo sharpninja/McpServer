@@ -79,6 +79,21 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 |------|-------------|
 | `mcp_client_invoke` | Dynamically invoke any McpServerClient sub-client method |
 
+Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). See `docs/context/memory.md`.
+
+### Memory (REPL / STDIO, not hosted mcp_memory_*)
+
+| Surface | Replaces | Description |
+|---------|----------|-------------|
+| `workflow.memory.remember` / `memory_remember` | `POST /mcpserver/memory/remember` | Persist a multi-layer memory |
+| `workflow.memory.recall` / `memory_recall` | `POST /mcpserver/memory/recall` | Ranked recall |
+| `workflow.memory.explore` / `memory_explore` | `POST /mcpserver/memory/explore` | Neighborhood walk |
+| `workflow.memory.consolidate` / `memory_consolidate` | `POST /mcpserver/memory/consolidate` | Dry-run or apply merge |
+| `workflow.memory.promote` / `memory_promote` | `POST /mcpserver/memory/promote` | Promote session-log or context |
+| `workflow.memory.revert` / `memory_revert` | `POST /mcpserver/memory/{id}/revert` | Restore snapshot N |
+| `workflow.memory.list` / `memory_list` | `GET /mcpserver/memory` | Compat Effective list |
+| `mcp_client_invoke` (`client.Memory.*`) | any `/mcpserver/memory` verb | Typed client passthrough |
+
 ### Quad Brain (0 tools)
 
 QuadBrain is not exposed to hosted agents or agent plugins. The former

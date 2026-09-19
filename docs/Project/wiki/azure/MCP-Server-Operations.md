@@ -232,6 +232,13 @@ Main endpoints:
 - `/mcpserver/sync`
 - `/mcpserver/usecases` - use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
 - `/usecases/` - first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
+- `/mcpserver/memory` - remember/recall/explore/consolidate/promote/versions/revert plus compat CRUD (`GET/POST/PUT/DELETE /mcpserver/memory`, `POST .../remember|recall|explore|consolidate|promote`, `GET .../{id}/versions`, `POST .../{id}/revert`)
+- `/memory/` - first-party Memory UI static assets from `wwwroot/memory` (REST-only; included in publish output / Linux service package; deploy via Nuke `UpdateService`)
+- STDIO/MCP tools: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove` (`docs/stdio-tool-contract.json`)
+- REPL: `workflow.memory.*` (same verb names). Typed client: `McpServerClient.Memory`
+- REQUIRED MEMORIES: supported plugins inject Effective raw `Content` (or legacy `Text`) at host request boundaries. Empty set is `REQUIRED MEMORIES` / `- None`. Title/summary/confidence/tags are never injected. See `docs/context/memory.md`.
+- Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (Grok-first smoke/regression; tokens primary). Real efficiency bench: `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml`. Token-primary v2 results on this branch: `docs/benchmarks/results/memory-bench-multiturn-*.md`. See `docs/benchmarks/README.md`.
+- Hebbian explore edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
 - `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import
 - `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
@@ -358,5 +365,3 @@ Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, 
 - User documentation: `USER-GUIDE.md`
 - Documentation index: `README.md`
 - FAQ: `FAQ.md`
-
-

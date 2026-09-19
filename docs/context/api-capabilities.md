@@ -39,6 +39,7 @@ To detect a stale marker without auth:
 - **Session Log**: `POST /mcpserver/sessionlog`, `GET /mcpserver/sessionlog` - session logging; `PATCH` (additive merge) / `PUT` (replace turn or section) / `DELETE` (remove turn, section, item, or session) under `/{agent}/{sessionId}/{requestId}` - see [session-log-workflow-api.md](session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete)
 - **Federation**: `GET /mcpserver/federation/status` - role, hub URL, proxy id, queue depth, fanout depth, stale-read status, conflicts; `/mcpserver/federation/proxies`, `/workspaces`, `/queue`, `/conflicts`, `/adapters`, `/operations`, `/envelopes`, and `/sync` support hub-spoke enrollment, signed operation replay, diagnostics, and fanout
 - **MCP Protocol**: `/mcp-transport` - Model Context Protocol streamable HTTP transport endpoint
+- **Memory**: `GET/POST/PUT/DELETE /mcpserver/memory`, `POST /mcpserver/memory/remember|recall|explore|consolidate|promote`, `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`. STDIO tools `memory_*`. First-party UI at `/memory/`. See [memory.md](memory.md).
 
 ## Server Health
 
