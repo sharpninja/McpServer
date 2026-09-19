@@ -55,3 +55,7 @@ Memory mutations have two audit layers:
 For every successful memory mutation, append a session-log action through `workflow.sessionlog.appendActions` when a turn is active. Use action `type: edit`, `status: completed`, and a description that identifies the memory operation and memory ID when known.
 
 When importing memory content from a local source, keep source attribution in the session-log action or dialog. Do not add private file paths, credentials, or unrelated personal details to the memory text itself unless the operator explicitly wants that text preserved as guidance.
+
+## Operator UI
+
+The first-party Memory UI is served at `/memory/` from packaged `wwwroot/memory` static assets. It lists only the active workspace Effective set, edits through the same CQRS REST update path (`PUT /mcpserver/memory/{id}`), and reverts in three actions (open versions, select, revert). Foreign ids fail closed. The ship path is Nuke `UpdateService`; do not run it unless the operator asks. Auth matches other `/mcpserver` pages (`X-Api-Key`). Content-Security / no inline-eval matches the Use Case Manager sibling UI. Missing hashed bundles and `/memory/unknown-asset` return 404, not a false 200 index.

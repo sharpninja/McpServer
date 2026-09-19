@@ -931,6 +931,34 @@ All routes require `X-Api-Key`. Invalid keys are 400; duplicate keys 409; non-ow
 - Typed client: `client.Products`
 - Context source `product-requirements` returns sibling FR/TR/TEST text tagged with `originWorkspaceId`, not sibling `.cs` files
 
+## 7d) Memory UI (active-workspace governance)
+
+`/memory/` is the first-party static UI for search, open, edit, and version/revert of Effective memories in the active workspace.
+
+### REST used by the UI
+
+- List: `GET /mcpserver/memory?scope=Effective` (requires `X-Api-Key`, optional `X-Workspace-Path`)
+- Get / update: `GET/PUT /mcpserver/memory/{id}`
+- Remember: `POST /mcpserver/memory/remember`
+- Recall: `POST /mcpserver/memory/recall`
+- Versions / revert: `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`
+
+The UI calls only those public REST routes. Foreign or unknown ids fail closed (403/404). Soft-deleted rows stay hidden because the default list omits them.
+
+### First-party UI and ship path
+
+- Served at `http://localhost:7147/memory/` after deploy via Nuke `UpdateService`
+- Deep link `/memory/{id}` opens detail or fail-closed for unknown ids
+- Static assets live in `wwwroot/memory` and are included in publish output and the Linux service package
+- Auth is the same API-key cookie/header bridge as other `/mcpserver` pages (`X-Api-Key`)
+- Redeploy only with elevated Nuke:
+
+```powershell
+.\build.ps1 UpdateService --SkipVersionBump true
+```
+
+Do not run UpdateService in this slice unless an operator asks.
+
 ## 8) Wire docs into README index and docs folder
 
 This user guide is wired into:
