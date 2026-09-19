@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
@@ -96,7 +97,7 @@ public sealed class InteractionLoggingMiddleware
 
             var path = context.Request.Path.Value ?? string.Empty;
             var queryString = _options.IncludeQueryString && !string.IsNullOrEmpty(context.Request.QueryString.Value)
-                ? context.Request.QueryString.Value
+                ? ApiKeyRedaction.Redact(context.Request.QueryString.Value)
                 : null;
 
             var entry = new InteractionLogEntry
@@ -108,8 +109,8 @@ public sealed class InteractionLoggingMiddleware
                 StatusCode = context.Response.StatusCode,
                 DurationMs = stopwatch.Elapsed.TotalMilliseconds,
                 RequestId = context.TraceIdentifier,
-                RequestBody = requestBody,
-                ResponseBody = responseBody
+                RequestBody = requestBody is null ? null : ApiKeyRedaction.Redact(requestBody),
+                ResponseBody = responseBody is null ? null : ApiKeyRedaction.Redact(responseBody)
             };
 
             _logger.LogInformation(
@@ -121,8 +122,12 @@ public sealed class InteractionLoggingMiddleware
                 entry.RequestId,
                 FormatHeaders(context.Request.Headers),
                 FormatHeaders(context.Response.Headers),
-                entry.RequestBody ?? "(none)",
-                entry.ResponseBody ?? "(none)");
+                ApiKeyRedaction.Redact(entry.RequestBody) is { Length: > 0 } redactedRequest
+                    ? redactedRequest
+                    : "(none)",
+                ApiKeyRedaction.Redact(entry.ResponseBody) is { Length: > 0 } redactedResponse
+                    ? redactedResponse
+                    : "(none)");
 
             if (!string.IsNullOrWhiteSpace(_options.LoggingServiceUrl) && _channel != null && !_channel.TryEnqueue(entry))
             {
@@ -156,14 +161,14 @@ public sealed class InteractionLoggingMiddleware
         return await ReadAndTruncateAsync(buffer, maxChars).ConfigureAwait(false);
     }
 
-    /// <summary>Formats HTTP headers as a semicolon-delimited string for structured logging.</summary>
+    /// <summary>Formats HTTP headers as a semicolon-delimited string with credential values redacted.</summary>
     private static string FormatHeaders(IHeaderDictionary headers)
     {
         var sb = new StringBuilder();
         foreach (var kvp in headers)
         {
             if (sb.Length > 0) sb.Append("; ");
-            sb.Append(kvp.Key).Append('=').Append(kvp.Value);
+            sb.Append(kvp.Key).Append('=').Append(ApiKeyRedaction.RedactHeaderValue(kvp.Key, kvp.Value.ToString()));
         }
         return sb.Length > 0 ? sb.ToString() : "(none)";
     }

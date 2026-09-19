@@ -1,4 +1,6 @@
 using System;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 {
     /// <summary>TR-MCP-MEMORY-SEARCH-002: Dedicated memory ANN/FTS side table (forward-only).</summary>
+    [DbContext(typeof(McpDbContext))]
+    [Migration("20260919060000_AddMemoryIndexStorage")]
     public partial class AddMemoryIndexStorage : Migration
     {
         /// <inheritdoc />

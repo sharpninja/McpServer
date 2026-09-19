@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Models;
 using Microsoft.Extensions.Logging;
 
@@ -51,7 +51,7 @@ public interface IBrainInteractionSessionLogger
 }
 
 /// <summary>FR-MCP-QBEXEC-003: Default <see cref="IBrainInteractionSessionLogger"/> over <see cref="ISessionLogService"/>.</summary>
-public sealed partial class BrainInteractionSessionLogger : IBrainInteractionSessionLogger
+public sealed class BrainInteractionSessionLogger : IBrainInteractionSessionLogger
 {
     private readonly ISessionLogService _sessionLog;
     private readonly ILogger<BrainInteractionSessionLogger> _logger;
@@ -137,19 +137,5 @@ public sealed partial class BrainInteractionSessionLogger : IBrainInteractionSes
     /// <summary>Redacts common secret shapes (bearer tokens, api keys) before full-text logging.</summary>
     /// <param name="text">The text to redact.</param>
     /// <returns>The redacted text.</returns>
-    public static string Redact(string text)
-    {
-        if (string.IsNullOrEmpty(text))
-            return text;
-
-        text = BearerRegex().Replace(text, "Bearer [REDACTED]");
-        text = ApiKeyRegex().Replace(text, "${1}[REDACTED]");
-        return text;
-    }
-
-    [GeneratedRegex(@"Bearer\s+[A-Za-z0-9\-._~+/]+=*", RegexOptions.IgnoreCase)]
-    private static partial Regex BearerRegex();
-
-    [GeneratedRegex(@"(?i)((?:x-api-key|api[_-]?key|apikey)\s*[:=]\s*)[A-Za-z0-9\-._]{8,}")]
-    private static partial Regex ApiKeyRegex();
+    public static string Redact(string text) => ApiKeyRedaction.Redact(text);
 }
