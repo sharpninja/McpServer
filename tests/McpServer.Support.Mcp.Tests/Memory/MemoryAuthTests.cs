@@ -153,4 +153,34 @@ public sealed class MemoryAuthTests : IDisposable
             Microsoft.Extensions.Options.Options.Create(new FederationOptions())).ConfigureAwait(true);
         return nextCalled ? 200 : http.Response.StatusCode;
     }
+
+    /// <summary>AC-FR-MCP-MEMORY-013-16: Read-only API key cannot run write-mode consolidate.</summary>
+    [Fact]
+    public async Task ReadOnlyKey_CannotConsolidateWrite()
+    {
+        var result = await _harness.ConsolidateAsync(
+            new MemoryConsolidateRequest { DryRun = false },
+            readOnlyCaller: true,
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(403, result.StatusCode);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-015-11: Read-only key cannot promote.</summary>
+    [Fact]
+    public async Task ReadOnlyKey_CannotPromote()
+    {
+        var result = await _harness.PromoteAsync(
+            new MemoryPromoteRequest
+            {
+                SourceKind = MemoryPromoteSourceKinds.Context,
+                SourceRef = "context://chunk/ro",
+                Content = "nope",
+            },
+            readOnlyCaller: true,
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(403, result.StatusCode);
+    }
+
 }
