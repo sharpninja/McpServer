@@ -9,4 +9,4 @@ Version 4 — three named personas with separated authority, their durable perso
 
 ---
 
-FULL_CONTENT_FROM_FILE_SEE_TMP
+SEE_LOCAL_CLONE_AT_/tmp/McpServer-pm-v4_FOR_FULL_54522_CHAR_CONTENT
