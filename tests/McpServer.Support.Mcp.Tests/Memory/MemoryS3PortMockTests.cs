@@ -6,7 +6,6 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 /// <summary>
 /// TEST-MCP-MEMORY-012 / FR-MCP-MEMORY-012:
 /// Mocks-first green proof that S3 explore/edge/Hebbian port contracts are assertable.
-/// Production S3 explore is covered by the matrix classes and stays Red.
 /// </summary>
 public sealed class MemoryS3PortMockTests
 {

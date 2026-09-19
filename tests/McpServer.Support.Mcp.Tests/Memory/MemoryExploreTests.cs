@@ -4,8 +4,7 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 
 /// <summary>
 /// TEST-MCP-MEMORY-012 / FR-MCP-MEMORY-012:
-/// S3 Red acceptance for <c>memory_explore</c> and Hebbian visibility.
-/// Production explore is not registered, so these assertions stay Red until S3 Green.
+/// S3 Green acceptance for <c>memory_explore</c> and Hebbian visibility.
 /// </summary>
 public sealed class MemoryExploreTests : IDisposable
 {

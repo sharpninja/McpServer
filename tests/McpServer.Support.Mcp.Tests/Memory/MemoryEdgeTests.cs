@@ -7,7 +7,6 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 /// <summary>
 /// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-012 / TR-MCP-MEMORY-MODEL-002 / FR-MCP-MEMORY-012:
 /// Unique (From, To, EdgeType) at the DB layer, plus S3 create-edge acceptance.
-/// S3 create-edge remains Red until a production handler is registered.
 /// </summary>
 public sealed class MemoryEdgeTests : IDisposable
 {

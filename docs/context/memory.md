@@ -14,8 +14,13 @@ MCP memories are durable operator guidance stored by McpServer and scoped by wor
 Use the required plugin or MCP tool surface for normal work:
 
 - MCP tools: `memory_add`, `memory_list`, `memory_update`, `memory_remove`
+- Additive CQRS verbs: `memory_remember`, `memory_recall`, `memory_explore`
 - REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`
 - REST `/mcpserver/memory` only when explicitly allowed for non-plugin diagnostics
+
+`memory_explore` walks directed edges from a seed id or the top recall hit for a query seed. Results stay inside the caller Effective set. Soft-deleted seeds return 404; soft-deleted or foreign neighbors are omitted. Explore does not rewrite memory Content.
+
+Hebbian co-retrieved edges are off by default (`Mcp:Memory:Hebbian:Enabled=false` / `MemoryExploreLimits.DefaultHebbianEnabled`). While Hebbian is off, explore never returns co-retrieved-only edges, even if those rows already exist. Enabling Hebbian can strengthen co-retrieved edges without changing the recall ranking path.
 
 Every mutation should include `updatedBy` with the real agent or user identity when the surface supports it. Do not use placeholders or legacy aliases.
 
