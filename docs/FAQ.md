@@ -351,6 +351,8 @@ gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateServic
 
 The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\McpServer-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.
 
+Nuke `UpdateService` is Windows-only. The Linux box close-out for PLAN-TXNKEYSERVER-001 published `develop` `8f30caf` and swapped it into `/opt/mcpserver`. That is not a Legion `UpdateService` run.
+
 ### What actions are available in the management script?
 
 | Action | Description |
@@ -364,6 +366,24 @@ The Nuke target stops the service, creates backups, publishes, restores configur
 | `Publish` | Build and publish without service changes |
 
 ---
+
+## Turn transactions and keyserver
+
+### Does every mutation go through the keyserver?
+
+No. On `develop` and on the live Linux box MCP, keyserver signing is QuadBrain-only (FR-MCP-173). `TurnTransactionKeyserverScope` requires the keyserver only when the publisher party id starts with `brain-slot:` or the operation name starts with `brain-slot.` or `quadbrain.`. TODO, session-log (including QBAgent), requirements, memory, repo, tools, GitHub, GraphRAG, and other first-party adapters persist without the coordinator or keyserver even when `Mcp:TurnTransactions:Enabled=true`.
+
+### Should I turn off `TurnTransactions.Enabled` if writes fail?
+
+No. Keep the live flag `true` for QuadBrain. The shipped fix is the all-adapter bypass, not disabling transactions. Repo `appsettings` may still default `Enabled: false`.
+
+### What is still fail-closed?
+
+QuadBrain `brain-slot.invoke` and `brain-slot.weight-update` still use the coordinator and may call the keyserver. Uncompensated workspace-stamp repair stays fail-closed.
+
+### Is PLAN-TXNKEYSERVER-001 done?
+
+On the Linux box MCP, yes (`Done=true`) after the `/opt/mcpserver` publish/swap of `8f30caf`, live TODO/session-log/requirements proof with `TurnTransactions.Enabled=true`, requirements restore, and hostile AGREE Accuracy 99 Completeness 98. This FAQ does not claim a Windows Legion `UpdateService` run. Integration, Validation, and Review suites were not run.
 
 ## Troubleshooting
 

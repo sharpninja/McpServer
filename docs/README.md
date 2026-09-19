@@ -14,6 +14,7 @@
 - [Products (shared requirements)](USER-GUIDE.md#7c-products-shared-requirements-across-workspaces)
 - [Agent memory](USER-GUIDE.md#7d-agent-memory-remember--recall--promote--consolidate)
 - [Memory plugin efficacy](USER-GUIDE.md#7e-memory-plugin-efficacy-check)
+- [QuadBrain-only keyserver](USER-GUIDE.md#7f-quadbrain-only-keyserver-plan-txnkeyserver-001)
 - [MCP Memories](context/memory.md)
 - [Memory benchmarks](benchmarks/README.md)
 - [Handoff Ingestion](Handoff-Ingestion.md)

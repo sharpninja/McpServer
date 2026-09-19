@@ -829,6 +829,8 @@ Inspect with `workflow.handoff.get` (`runId`). Approve with `workflow.handoff.ap
 
 Use `workflow.memory.*` for durable shared memories. Do not invent memories. Do not write agent-local stores as the source of truth. See `docs/context/memory.md`, `plugins/core/skills/memory/SKILL.md`, and the per-host payloads under `plugins/core/hosts/*/SKILL.md`. All eight official plugins ship `skills/memory` plus `memory-descriptor.json` with always-on required-memory injection (or a documented host path).
 
+REPL TODO, session-log, requirements, and memory writes bypass the keyserver on `develop` and on the live Linux box MCP (FR-MCP-173). Keep live `TurnTransactions.Enabled=true` for QuadBrain. Do not disable that flag to make workflow mutations succeed.
+
 ```yaml
 type: request
 payload:

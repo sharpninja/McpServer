@@ -114,6 +114,14 @@ pwsh.exe -NoLogo -NoProfile -NonInteractive -Command "& 'F:\GitHub\mcpserver-cod
 
 The status output must show marker trust, health nonce verification, workspace path, session id, current turn, and supported namespaces before Codex performs MCP mutations.
 
+## Turn transactions and keyserver
+
+Official plugin mutations (session-log, TODO, requirements, memory, and the other first-party adapters) persist without keyserver/coordinator calls even when the live box keeps `Mcp:TurnTransactions:Enabled=true`. That is the shipped PLAN-TXNKEYSERVER-001 behavior on `develop` (`8f30caf`) and on the Linux box MCP at `/opt/mcpserver`.
+
+Keyserver signing remains QuadBrain-only (`brain-slot.invoke`, `brain-slot.weight-update`). Do not disable `TurnTransactions.Enabled` to make plugin writes succeed. Do not treat a Linux publish/swap as Nuke `UpdateService` (Windows-only). Workspace-stamp repair stays fail-closed.
+
+See `docs/USER-GUIDE.md` section 7f and `docs/MCP-SERVER.md` QuadBrain-only keyserver.
+
 ## REPL Relationship
 
 `mcpserver-repl --agent-stdio` is the protocol host used by plugins and by implementation diagnostics. It is not a substitute for the required per-agent plugin during normal audited work. Direct REPL use is acceptable for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails.

@@ -167,7 +167,8 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | Method | Details |
 |---|---|
 | **Standalone** | `./build.ps1 StartServer` or `dotnet run` |
-| **Windows Service** | `./build.ps1 UpdateService` through the Nuke build; do not manually redeploy service files |
+| **Windows Service** | `./build.ps1 UpdateService` through the Nuke build; do not manually redeploy service files. Nuke `UpdateService` is Windows-only. |
+| **Linux box** | Publish `develop` and swap into `/opt/mcpserver` (box equivalent; not `UpdateService`). PLAN-TXNKEYSERVER-001 closed on the box MCP at `8f30caf`. |
 | **Docker** | Multi-stage build, volumes for `/data` and `/workspace` |
 | **MSIX** | `./build.ps1 PackageMsix` for Windows app package |
 | **Windows Launcher** | GUI application for starting/managing the server |
@@ -181,7 +182,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `Compile` | Restore + build the solution (default) |
 | `Test` | Run all unit tests |
 | `Publish` | Publish server for deployment |
-| `UpdateService` | Build/publish, backup config/data, update the Windows service, restore config/data, and health-check |
+| `UpdateService` | Build/publish, backup config/data, update the Windows service, restore config/data, and health-check (Windows-only; Linux box uses publish/swap to `/opt/mcpserver`) |
 | `PackNuGet` | Pack McpServer.Client NuGet package |
 | `PackReplTool` | Pack mcpserver-repl to local-packages/ |
 | `PackageMsix` | Create MSIX package for Windows |

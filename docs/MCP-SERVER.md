@@ -78,6 +78,7 @@ Important keys:
 - `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
+- `Mcp:TurnTransactions:*` (coordinator + keyserver). Repo default `Enabled: false`. Live box MCP keeps `Enabled: true` for QuadBrain. Keyserver signing is QuadBrain/brain-slot only (`TurnTransactionKeyserverScope`; FR-MCP-173). First-party adapters bypass the coordinator.
 - `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
 - `Mcp:Instances:{name}:*` (per-instance overrides)
 
@@ -151,11 +152,32 @@ Windows service deployment and update must go through the Nuke build target:
 pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
+Nuke `UpdateService` is Windows-only. A Linux box publish/swap into `/opt/mcpserver` is the box equivalent, not an `UpdateService` run. Do not claim a Windows Legion `UpdateService` unless that host actually ran the Nuke target.
+
+PLAN-TXNKEYSERVER-001 closed on the Linux box MCP after `develop` `8f30caf` was published/swapped to `/opt/mcpserver`. Live proof on that box: TODO, session-log, and requirements mutations with `TurnTransactions.Enabled=true` and no keyserver errors.
+
 The following operational/admin scripts are lower-level helpers for local development, diagnostics, or migration tasks. Do not use them as the normal Windows service redeploy path:
 
 - `scripts/Run-McpServer.ps1` - direct local run helper
 - `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
+
+## QuadBrain-only keyserver
+
+Shipped on `develop` (`facbb3a6` in `8f30caf`) and live on the Linux box MCP.
+
+`TurnTransactionKeyserverScope` (`src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
+
+- `RequiresKeyserver` is true only for publisher party prefix `brain-slot:` or operation prefix `brain-slot.` / `quadbrain.`
+- `ShouldBypassCoordinator` is true when the coordinator is null or `RequiresKeyserver` is false
+
+Wired into all `TransactionGated*` adapters, `TransactionalTodoWorkflow`, federation apply, requirements ingest, context mutations, federation control, and STDIO context mutations. `TurnTransactionCoordinator.ExecuteAsync` also skips `SignManifestAsync` unless `RequiresKeyserver`.
+
+Still gated: `BrainSlotInvocationService` (`brain-slot.invoke`) and `QuadBrainOrchestrationService` (`brain-slot.weight-update`). Still fail-closed: `RepairWorkspaceStampsAsync`.
+
+Keep live `Mcp:TurnTransactions:Enabled=true` for QuadBrain. Do not flip that flag off to unblock general-agent writes.
+
+Box requirements restore: FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221 plus mapping; FR-MCP-120 carve-out; TEST-MCP-161 retarget. Prior unit-suite HV AGREEs: `docs/receipts/hostile-validator-20260917T174749Z.md`, `docs/receipts/hostile-validator-20260917T184144Z.md`. Box deploy: `docs/receipts/implementer-txnkeyserver-box-deploy-20260919T154640Z.md`. Done-claim HV AGREE Accuracy 99 Completeness 98: `docs/receipts/hostile-validator-20260919T162808Z.md` (json twin + `docs/receipts/hv/20260919T162808Z-txnkeyserver-box-deploy-done-claim.*.jsonl`). Prior DISAGREE history: `docs/receipts/hostile-validator-20260919T161130Z.md`. Integration/Validation/Review were not run.
 
 ## GraphRAG
 

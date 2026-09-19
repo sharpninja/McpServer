@@ -1,10 +1,12 @@
 # MCP Server Quad-Model Transactional Diffgram Plan
 
+**Superseded for keyserver scope.** PLAN-TXNKEYSERVER-001 on `develop` (`8f30caf`) and the live Linux box MCP limit keyserver signing to QuadBrain/brain-slot transactions (FR-MCP-173). First-party adapters bypass the coordinator. Keep this imported contract for history. Current operator docs: `docs/USER-GUIDE.md` section 7f.
+
 Source: https://drive.google.com/file/d/1jX9E298FRvo6gjEDDNFZHNrgpfNWHyFO/view?usp=drivesdk
 
 Version: 1.0
 
-Status: Imported implementation contract
+Status: Imported implementation contract (keyserver scope superseded by FR-MCP-173)
 
 ## Implementation Ordering
 

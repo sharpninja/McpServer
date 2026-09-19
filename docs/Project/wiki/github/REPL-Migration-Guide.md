@@ -81,6 +81,8 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 
 Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). Official plugins also inject `REQUIRED MEMORIES` at host request boundaries. See `docs/context/memory.md`.
 
+First-party REPL/plugin mutations (TODO, session-log, requirements, memory) bypass the keyserver on `develop` and on the live Linux box MCP even when `TurnTransactions.Enabled=true`. QuadBrain brain-slot invoke/weight-update stay coordinator-gated. See `docs/USER-GUIDE.md` section 7f.
+
 ### Memory (REPL / STDIO, not hosted mcp_memory_*)
 
 | Surface | Replaces | Description |

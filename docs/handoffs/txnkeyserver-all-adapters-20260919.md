@@ -1,5 +1,7 @@
 # Handoff: QuadBrain-only keyserver, all-adapter bypass (stop 2026-09-19)
 
+**Superseded as an active handoff.** PLAN-TXNKEYSERVER-001 is `Done=true` on the Linux box MCP after a publish/swap of `develop` `8f30caf` to `/opt/mcpserver`, live TODO/session-log/requirements proof with `TurnTransactions.Enabled=true`, requirements restore, and hostile AGREE Accuracy 99 Completeness 98. Keep this file for the operator decision and the pre-deploy remaining-work list. The close-out was not Windows Legion Nuke `UpdateService`. Current operator docs: `docs/USER-GUIDE.md` section 7f, `docs/MCP-SERVER.md` QuadBrain-only keyserver. Integration/Validation/Review remain unrun (operator policy).
+
 Copy everything below the line into the next agent. Do not re-litigate the operator decision. Do not mark PLAN-TXNKEYSERVER-001 done until live Nuke deploy plus hostile AGREE on the done claim.
 
 ---

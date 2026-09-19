@@ -1466,45 +1466,45 @@ infrastructure:
     - 'User-invoked skills: /mcpserver:status, /mcpserver:todo, /mcpserver:deploy, /mcpserver:tunnel.'
     - 'Model-invoked skills: session logging workflow, TODO workflow, requirements tracking.'
     - 'Custom agent: mcp-context-researcher for context search and GraphRAG research.'
-    - ''
+    - ""
     - '## Implementation Phases'
-    - ''
+    - ""
     - '### Phase 1: Core Infrastructure (3 files)'
     - '- .claude-plugin/plugin.json - Plugin manifest (fields: name, description, version, author with name/email). No homepage field.'
     - '- .mcp.json - MCP transport connection. FLAT format: { server-name: { type: http, url: ... } }. No mcpServers wrapper.'
     - '- README.md - Plugin documentation'
-    - ''
+    - ""
     - '### Phase 2: Session Bootstrap (2 files) - REVISED'
     - '- hooks/hooks.json - Hook registration. Top-level has description + hooks object. Valid events: PreToolUse, PostToolUse, Stop, UserPromptSubmit. SessionStart does NOT exist.'
     - '- hooks/hooks-handlers/session-start.ps1 - Bootstrap script. Reads AGENTS-README-FIRST.yaml, verifies /health with nonce, injects context or MCP_UNTRUSTED warning.'
     - '- DESIGN DECISION NEEDED: Use UserPromptSubmit hook (fires on first prompt, auto-bootstrap) OR create a /mcpserver:start user-invoked skill for explicit bootstrap. UserPromptSubmit fires on EVERY prompt so script must be idempotent and fast (check cached state).'
     - '- Hook entry fields: type, command, timeout ONLY. No shell field. Use $CLAUDE_PLUGIN_ROOT for paths.'
-    - ''
+    - ""
     - '### Phase 3: User-Invoked Skills (4 files)'
     - '- skills/status/SKILL.md - /mcpserver:status. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
     - '- skills/todo/SKILL.md - /mcpserver:todo. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
     - '- skills/deploy/SKILL.md - /mcpserver:deploy. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
     - '- skills/tunnel/SKILL.md - /mcpserver:tunnel. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
     - '- NOTE: User-invoked is determined by presence of argument-hint field. No user_invoked: true field exists.'
-    - ''
+    - ""
     - '### Phase 4: Model-Invoked Skills (3 files)'
     - '- skills/mcp-session-logging/SKILL.md - Only name + description in frontmatter. No argument-hint = model-invoked.'
     - '- skills/mcp-todo-workflow/SKILL.md - TODO CRUD, ID format rules, GitHub sync behavior'
     - '- skills/mcp-requirements/SKILL.md - FR/TR/TEST format, docs/Project/ locations'
-    - ''
+    - ""
     - '### Phase 5: Custom Agent (1 file)'
     - '- agents/mcp-context-researcher.md - Frontmatter must include: name, description, tools (comma-separated), model (sonnet), color (cyan)'
-    - ''
+    - ""
     - '### Phase 6: Housekeeping (1 task)'
     - '- Update .gitignore with .claude/*.local.md and .claude/*.local.json patterns'
-    - ''
+    - ""
     - '## Key Design Decisions'
     - '- .mcp.json uses FLAT format with localhost:7147/mcp-transport (no API key, portable)'
     - '- Bootstrap hook uses UserPromptSubmit (not SessionStart which does not exist). Script must be idempotent.'
     - '- Hook commands reference plugin root via ${CLAUDE_PLUGIN_ROOT} variable, not hardcoded paths'
     - '- Model-invoked skills provide naming conventions and workflow guides'
     - '- API key included in hook context output for REST API fallback calls'
-    - ''
+    - ""
     - '## Audit Corrections Applied (2026-04-06)'
     - '- CRITICAL: SessionStart is not a valid hook event. Changed to UserPromptSubmit or explicit /mcpserver:start skill.'
     - '- CRITICAL: shell field does not exist in hook entries. Removed.'
@@ -1516,7 +1516,7 @@ infrastructure:
     - '- MINOR: Added .gitignore task for plugin local config files.'
     - '- MINOR: Use ${CLAUDE_PLUGIN_ROOT} in hook commands instead of hardcoded paths.'
     - '- MINOR: Added top-level description field to hooks.json spec.'
-    - ''
+    - ""
     - '## Verification'
     - 1. Bootstrap hook fires on first prompt and injects MCP server context
     - 2. /mcpserver:status shows health, workspace, tunnel status
@@ -1617,7 +1617,6 @@ infrastructure:
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/context-search.html -> Implement query-mode controls, ranked results display, and score visibility.'
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/health-dashboard.html -> Implement health cards plus detailed checks table for diagnostics and drill-down.'
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/auth-config.html -> Implement read-only OIDC config table with copy actions and configuration validation trigger.'
-    depends-on: []
     functional-requirements:
     - FR-MCP-031
     technical-requirements:
@@ -1793,6 +1792,25 @@ infrastructure:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'
     done: false
+  low-priority:
+  - id: TEST-CLOUDSEED-001
+    title: Cursor Cloud MCP seed proof mutation
+    note: updated 20260919T164740Z transactions-on proof
+    done: false
+    description:
+    - Proof TODO for Cursor Cloud MCP seed. Not an implementation close-out.
+    - Do not mark PLAN-TXNKEYSERVER-001 or other product TODOs done.
+    remaining: leave open; seed proof only
+    functional-requirements:
+    - FR-MCP-173
+    technical-requirements:
+    - TR-MCP-TXNKEY-001
+  - id: SEED-CLOUDMCP-001
+    title: Cursor Cloud MCP seed session proof
+    note: created 20260919T164848Z
+    done: false
+    description:
+    - Sessionlog proof TODO. Leave open. Not a product close-out.
 Architecture:
   high-priority:
   - id: audit-di-ssot
@@ -2601,33 +2619,7 @@ plugins:
     - DTO coverage must include wrapper invocation options, REPL request envelopes, REPL invocation results, session metadata, session-turn upsert/fallback payloads, failsafe records, and action records used by the shim.
     - Every public constructor/factory and every DTO member must be discoverable through comment-based help or adjacent public documentation, with examples that agents can follow without reading private implementation details.
     - Existing plugin behavior must remain compatible for Codex, Claude Code, Claude Cowork, Cline, Cline v2, Copilot, Grok, and OpenCode package sync.
-    technicalDetails:
-    - Source module will live under plugins/core/lib-ps so sync-plugin-core.ps1 copies it into each plugin lib folder and CORE-MANIFEST.yaml hashes it.
-    - The module will expose typed DTO classes and factory functions; scripts may still serialize to JSON/YAML using PowerShell-native ConvertTo-Json and existing PowerShell parsers.
-    - repl-invoke.ps1 will import the module idempotently and use the DTO layer for REPL request envelope construction, result envelopes, session metadata, turn upsert payloads, fallback session payloads, failsafe records, and audit action normalization.
-    - Invoke-McpPlugin.ps1 will import the module idempotently and use the invocation-options DTO so command, method, params, response, workspace, plugin root, cache root, and timeout contracts are centralized.
-    - Pester coverage must prove module import, DTO construction and serialization, help discoverability for all public DTO members, wrapper compatibility, and synced manifest inclusion.
-    - Backport/projection acceptance is docs/Project/TODO.yaml containing PLAN-PSSHIMMODULE-001 after workflow.todo.repairProjection or an explicitly documented projection failure.
-    - Validation evidence - Invoke-Pester plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 passed 17/0/0; Invoke-Pester plugins/core/test-fixtures/pester passed 347/0/0; build.ps1 --target ValidatePluginPowerShellOnly passed for 9 package roots; git diff --check passed; live Invoke-McpPlugin.ps1 workflow.todo.query succeeded.
-    - Sibling plugin distributions were synced with sync-plugin-core.ps1 and wrapper generation without version bumps; core integrity passed for Claude Code, Claude Cowork, Cline, Cline v2, Codex, Copilot, Grok, and OpenCode.
-    - Non-blocking residual - dotnet test tests/AgentPluginCore/AgentPluginCore.Tests.csproj currently fails in stale Bash-era parity assertions such as lib/cache-manager.sh and marker-resolver.sh, which conflict with the PowerShell-only runtime direction.
-    implementationTasks:
-    - task: Inventory current PowerShell shim commands, parameter shapes, emitted envelopes, failsafe records, and plugin wrapper entry points.
-      done: true
-    - task: Backport the detailed PLAN-PSSHIMMODULE-001 plan into the authoritative TODO projection.
-      done: true
-    - task: Add plugins/core/lib-ps/McpPluginShim.psm1 with typed DTO classes and exported factory/serialization functions.
-      done: true
-    - task: Document every DTO object and public member through comment-based help plus inline member documentation and examples.
-      done: true
-    - task: Migrate Invoke-McpPlugin.ps1 and repl-invoke.ps1 to import and use the module without changing external command behavior.
-      done: true
-    - task: Add Pester tests for module import, DTO JSON shape, help/member discoverability, source wrapper usage, and CORE-MANIFEST sync inclusion.
-      done: true
-    - task: Run plugin sync/static validation, targeted Pester tests, and projection/status verification with zero failures and zero skips in the executed scope.
-      done: true
     remaining: None for PLAN-PSSHIMMODULE-001. Stale Bash-era AgentPluginCore parity failures remain separate from this PowerShell shim module implementation.
-    doneSummary: PowerShell shim module implemented with DTO factories, help/member documentation, script integration, YAML backport, sibling plugin sync, Pester coverage, and plugin static validation.
 mcpserver-ui:
   high-priority:
   - id: MCP-UI-CHAT-VM-ITEST-001

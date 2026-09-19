@@ -68,6 +68,8 @@ The authoritative behavioral contract for all plugins is the `AGENTS-README-FIRS
 
 Memory (MCP-MEMORY-002) is complete on `develop` through S7b/H7b (PR #49, PR #50). The shared core skill is `plugins/core/skills/memory/SKILL.md`. Per-host payloads live in `plugins/core/hosts/{id}/` and in each plugin repo as `skills/memory` + `memory-descriptor.json` with always-on required-memory injection. `./build.ps1 BenchMemory` still defaults to the Grok lane; `-Plugin all` is unblocked because `docs/benchmarks/h7a-value-gate.json` is `agree:true`. Do not claim a token-efficiency win from the v1 smoke pack; use `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`.
 
+PLAN-TXNKEYSERVER-001 is shipped on `develop` (`8f30caf`) and live on the Linux box MCP: plugin TODO/session-log/requirements/memory writes bypass the keyserver. QuadBrain brain-slot invoke/weight-update remain coordinator-gated. Do not claim Windows Legion `UpdateService` for that box close-out.
+
 ## Related Documents
 
 - [AGENT-PLUGIN-AVAILABILITY.md](./AGENT-PLUGIN-AVAILABILITY.md) - Operator guidance for acquiring and invoking the plugins

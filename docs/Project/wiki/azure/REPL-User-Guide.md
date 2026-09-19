@@ -4,6 +4,8 @@
 
 The MCP REPL (Read-Eval-Print Loop) is a command-line tool for interacting with the Model Context Protocol server. It provides both interactive mode for human users and agent STDIO mode for programmatic integration with AI agents.
 
+REPL TODO, session-log, requirements, and memory mutations persist without keyserver signing on `develop` and on the live Linux box MCP (FR-MCP-173). Keep live `Mcp:TurnTransactions:Enabled=true` for QuadBrain. Keyserver remains QuadBrain/brain-slot only.
+
 ## Installation
 
 ### Install as .NET Global Tool

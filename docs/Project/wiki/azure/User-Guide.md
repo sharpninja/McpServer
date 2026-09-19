@@ -7,6 +7,7 @@ This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
 ### Supported host environment
 
 - Windows 10/11 or Windows Server
+- Linux hosts that publish a self-contained layout (the live box path is `/opt/mcpserver`)
 - .NET SDK 10.x for local development (`global.json` pins `10.0.201` with `rollForward: latestFeature`)
 - PowerShell 7+
 - `gh` CLI for GitHub issue and PR workflows
@@ -44,6 +45,12 @@ Get-Service McpServer
 
 The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
 
+Nuke `UpdateService` is Windows-only. Do not treat a Linux box publish/swap as `UpdateService`, and do not claim a Windows Legion `UpdateService` run unless that host actually ran the Nuke target.
+
+#### Linux box publish/swap
+
+On Linux, the shipped close-out path is a publish of `develop` followed by an atomic swap into `/opt/mcpserver`. PLAN-TXNKEYSERVER-001 closed on the box MCP after `develop` `8f30caf` was published that way, with live `Mcp:TurnTransactions:Enabled=true`. That is the box equivalent of the Windows service update, not Nuke `UpdateService`.
+
 ### Verify startup
 
 - `GET /health` returns liveness Healthy, echoes a caller nonce when one is supplied, and reports `storage` as `reachable` or `unreachable` (storage outage does not flip liveness off Healthy)
@@ -61,6 +68,7 @@ The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s 
 - `Mcp:Database:*` — canonical database provider, provider connection settings, migration assembly override, and native at-rest encryption settings
 - `Mcp:RepoRoot`, `Mcp:RepoAllowlist`
 - `Mcp:TodoFilePath`, `Mcp:TodoStorage:*`
+- `Mcp:TurnTransactions:*` — coordinator + keyserver. Repo default `Enabled: false`. Live box MCP keeps `Enabled: true` for QuadBrain. Keyserver signing is QuadBrain/brain-slot only (FR-MCP-173); first-party adapters bypass the coordinator.
 - `Mcp:GraphRag:*`
 - `Mcp:ToolRegistry:*`
 - `Mcp:Tunnel:*`
@@ -902,6 +910,14 @@ Queue one-shot example:
 - always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
+- Nuke `UpdateService` is Windows-only. Linux box updates publish/swap into `/opt/mcpserver` and are not an `UpdateService` run
+
+### Keyserver errors on TODO, session-log, or requirements writes
+
+- First-party mutations (TODO, session-log including QBAgent, requirements, memory, repo, tools, GitHub, GraphRAG, federation apply/control) persist without the keyserver when `TurnTransactionKeyserverScope` is shipped
+- Keep `Mcp:TurnTransactions:Enabled=true` on a live QuadBrain box; do not flip that flag off as the fix
+- Keyserver signing remains only for QuadBrain `brain-slot.invoke` / `brain-slot.weight-update` (publisher prefix `brain-slot:` or operation prefix `brain-slot.` / `quadbrain.`)
+- Workspace-stamp repair (`RepairWorkspaceStampsAsync`) stays fail-closed
 
 ## 7b) Use cases (FR/TR traceability modeling)
 
@@ -1029,6 +1045,33 @@ See `docs/benchmarks/README.md` for the token-primary bench (pass/fail is correc
 Run `./build.ps1 BenchMemory` for the default Grok lane. After H7a `agree:true` (`docs/benchmarks/h7a-value-gate.json`), `./build.ps1 BenchMemory -Plugin all` runs all eight recorded/stub adapters. S7b/H7b landed on develop (PR #50).
 
 Eight-plugin token-primary v2 results: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Live Grok subscription-context v2 remains `docs/benchmarks/live/grok-subscription-cloud-agent-v2-multiturn.json` (summary `memory-bench-multiturn-20260919T090341Z.md`). Do not treat v1 `memory-bench-*.md` artifacts as the efficiency claim.
+
+## 7f) QuadBrain-only keyserver (PLAN-TXNKEYSERVER-001)
+
+Shipped on `develop` (`8f30caf` / `facbb3a6`) and live on the Linux box MCP after a publish/swap to `/opt/mcpserver`. The box TODO store has PLAN-TXNKEYSERVER-001 `Done=true`. This guide does not claim a Windows Legion `UpdateService` run.
+
+`TurnTransactionKeyserverScope` requires keyserver signing only when the publisher party id starts with `brain-slot:` or the operation name starts with `brain-slot.` or `quadbrain.`. Every other first-party mutation adapter bypasses `ITurnTransactionCoordinator` and the keyserver even when `Mcp:TurnTransactions:Enabled=true` and `RequiredForMutations=true`.
+
+Still coordinator-gated:
+
+- `brain-slot.invoke`
+- `brain-slot.weight-update`
+
+Bypass (persist without keyserver):
+
+- TODO, requirements (including ingest), session-log for every source type including QBAgent
+- memory, repo, prompt templates, tool registry/buckets
+- GraphRAG, GitHub CLI, GitHub token store, issue-todo-sync
+- voice, agent pool, federation apply/control, context rebuild
+- REPL `TransactionalTodoWorkflow`
+
+Still fail-closed: uncompensated workspace-stamp repair.
+
+Do not disable live `TurnTransactions.Enabled` to make general-agent writes succeed. Repo `appsettings` may keep `Enabled: false`; the live box keeps it `true` for QuadBrain.
+
+Requirements (store restored on the box; markdown projections may lag until generateDocument): FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221, FR-MCP-120 carve-out, TEST-MCP-161 retargeted to QuadBrain/brain-slot coordinator tests.
+
+Cited unit-suite HV AGREEs remain `docs/receipts/hostile-validator-20260917T174749Z.md` and `docs/receipts/hostile-validator-20260917T184144Z.md`. Box deploy: `docs/receipts/implementer-txnkeyserver-box-deploy-20260919T154640Z.md`. Done-claim HV AGREE Accuracy 99 Completeness 98: `docs/receipts/hostile-validator-20260919T162808Z.md` (json twin + `docs/receipts/hv/20260919T162808Z-txnkeyserver-box-deploy-done-claim.*.jsonl`). Prior DISAGREE kept as history: `docs/receipts/hostile-validator-20260919T161130Z.md`. Integration, Validation, and Review suites were not run (operator policy).
 
 ## 8) Wire docs into README index and docs folder
 

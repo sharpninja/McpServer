@@ -31,6 +31,8 @@ MCP-compatible editor clients can connect directly through Streamable HTTP or ST
 
 See `docs/AGENT-PLUGIN-AVAILABILITY.md` for current plugin repositories, expected local roots, status wrappers, and failure behavior.
 
+Plugin and client first-party writes (TODO, session-log, requirements, memory) bypass the keyserver on `develop` and on the live Linux box MCP even when `Mcp:TurnTransactions:Enabled=true`. Keyserver signing is QuadBrain/brain-slot only. See `docs/USER-GUIDE.md` section 7f.
+
 ### Docker Mode
 
 When running the MCP server in Docker, the extension connects to the same URL

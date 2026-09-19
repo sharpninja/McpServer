@@ -49,7 +49,10 @@ the server's `RepoFileService`. The server is the single enforcement gate for:
 
 - **Path safety** - traversal outside the workspace is rejected.
 - **Allowlist** - writes are confined to the configured `Mcp:RepoAllowlist` globs.
-- **Audit and transactional rollback** - every write/edit is audited and transaction-gated.
+- **Audit and transactional rollback** - every write/edit is audited. Repo and other first-party
+  adapters persist without keyserver signing (FR-MCP-173). QuadBrain brain-slot invoke and
+  weight-update stay coordinator-gated. Session-log writes, including QBAgent, also bypass the
+  keyserver.
 
 `edit_file` applies a targeted find-and-replace (`path`, `oldString`, `newString`, optional `replaceAll`
 and `expectedOccurrences`). An ambiguous match (multiple occurrences without `replaceAll`) is rejected.

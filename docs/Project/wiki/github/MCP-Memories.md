@@ -34,6 +34,8 @@ Hebbian co-retrieved edges are off by default (`Mcp:Memory:Hebbian:Enabled=false
 
 Every mutation should include `updatedBy` with the real agent or user identity when the surface supports it. Do not use placeholders or legacy aliases.
 
+Memory writes are first-party mutations under FR-MCP-173. On `develop` and on the live Linux box MCP they persist without `ITurnTransactionCoordinator` or keyserver signing even when `Mcp:TurnTransactions:Enabled=true`. Keyserver remains QuadBrain/brain-slot only. Do not disable the live turn-transaction flag to make `memory_*` succeed.
+
 ## REQUIRED MEMORIES Injection
 
 Supported plugins render the active Effective set at host-supported request boundaries. The production renderer (`MemoryRequiredMemoriesRenderer`) writes:
