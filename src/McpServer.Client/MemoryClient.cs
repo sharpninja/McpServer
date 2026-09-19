@@ -59,8 +59,12 @@ public sealed class MemoryClient : McpClientBase
         => PostAsync<MemorySurfaceResult>("mcpserver/memory/remember", request, cancellationToken);
 
     /// <summary>Recalls memories by meaning or keyword.</summary>
-    public Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
-        => PostAsync<MemorySurfaceResult>("mcpserver/memory/recall", request, cancellationToken);
+    public async Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await PostAsync<MemoryRecallResult>("mcpserver/memory/recall", request, cancellationToken).ConfigureAwait(false);
+        result.SynchronizeHitsAndItems();
+        return result;
+    }
 
     /// <summary>Explores a memory neighborhood.</summary>
     public Task<MemorySurfaceResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default)

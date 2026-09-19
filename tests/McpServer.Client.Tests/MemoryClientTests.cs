@@ -89,4 +89,87 @@ public sealed class MemoryClientTests
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Equal("http://localhost:7147/mcpserver/memory/MEMORY-OPERATOR-001", handler.LastRequest.RequestUri!.ToString());
     }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004 / triage-report-a6fb8ae08ce348799d0db61ae2e0734a:
+    /// Live recall JSON uses <c>items</c>. MemoryClient must surface those rows as non-empty
+    /// plugin-facing <c>hits</c> instead of dropping them on <see cref="MemorySurfaceResult"/>.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RecallAsync_LiveItemsJson_SurfacesHits()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRecallItemsJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.RecallAsync(
+            new MemoryRecallRequest { Query = "MEMORY-FACT-003" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Equal("http://localhost:7147/mcpserver/memory/recall", handler.LastRequest.RequestUri!.ToString());
+        Assert.NotNull(result.Items);
+        Assert.NotEmpty(result.Items!);
+        Assert.NotNull(result.Hits);
+        Assert.NotEmpty(result.Hits!);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Hits!).Id);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Items!).Id);
+        Assert.Equal(0.87, result.Hits![0].Score);
+        Assert.Contains("Operator fact from Legion recall proof.", result.Hits[0].Content, StringComparison.Ordinal);
+
+        var pluginFacing = JsonSerializer.Serialize(result, McpClientJsonContext.Default.MemoryRecallResult);
+        using var document = JsonDocument.Parse(pluginFacing);
+        Assert.True(document.RootElement.TryGetProperty("hits", out var hits));
+        Assert.Equal(JsonValueKind.Array, hits.ValueKind);
+        Assert.NotEqual(0, hits.GetArrayLength());
+        Assert.Equal("MEMORY-FACT-003", hits[0].GetProperty("id").GetString());
+        Assert.True(document.RootElement.TryGetProperty("items", out var items));
+        Assert.Equal("MEMORY-FACT-003", items[0].GetProperty("id").GetString());
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: A <c>hits</c> array on the wire also deserializes and stays non-empty.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RecallAsync_HitsJson_SurfacesItems()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRecallHitsJson);
+        using var http = new HttpClient(handler);
+        var client = new MemoryClient(http, DefaultOptions);
+
+        var result = await client.RecallAsync(
+            new MemoryRecallRequest { Query = "MEMORY-FACT-003" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.RankedHits).Id);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Hits!).Id);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Items!).Id);
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004: Direct deserialize of live API JSON into the old surface DTO
+    /// still drops ranked rows, which is why recall must use <see cref="MemoryRecallResult"/>.
+    /// </summary>
+    [Fact]
+    public void MemorySurfaceResult_LiveItemsJson_DropsHits()
+    {
+        var dropped = JsonSerializer.Deserialize(LiveRecallItemsJson, McpClientJsonContext.Default.MemorySurfaceResult);
+        Assert.NotNull(dropped);
+        Assert.Equal(200, dropped!.StatusCode);
+        var surfaceJson = JsonSerializer.Serialize(dropped, McpClientJsonContext.Default.MemorySurfaceResult);
+        using var document = JsonDocument.Parse(surfaceJson);
+        Assert.False(document.RootElement.TryGetProperty("hits", out _));
+        Assert.False(document.RootElement.TryGetProperty("items", out _));
+    }
+
+    private const string LiveRecallItemsJson =
+        """
+        {"statusCode":200,"items":[{"id":"MEMORY-FACT-003","score":0.87,"title":"Legion fact","content":"Operator fact from Legion recall proof.","type":"fact","tags":["legion"],"scope":"Workspace","matchKind":"hybrid"}],"failureKind":"None","rerankApplied":false,"rankingMode":"hybrid"}
+        """;
+
+    private const string LiveRecallHitsJson =
+        """
+        {"statusCode":200,"hits":[{"id":"MEMORY-FACT-003","score":0.87,"content":"Operator fact from Legion recall proof."}]}
+        """;
 }

@@ -292,6 +292,111 @@ public sealed class MemorySurfaceResult
     public string? Error { get; set; }
 }
 
+/// <summary>
+/// One ranked recall hit. Matches the live <c>/mcpserver/memory/recall</c> JSON shape
+/// used by <see cref="MemoryRecallResult"/>.
+/// </summary>
+public sealed class MemoryRecallHit
+{
+    /// <summary>MEMORY-* id of the hit.</summary>
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>Hybrid fusion score in [0,1].</summary>
+    [JsonPropertyName("score")]
+    public double? Score { get; set; }
+
+    /// <summary>Title when persisted.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Content used to open the memory without a second round-trip.</summary>
+    [JsonPropertyName("content")]
+    public string? Content { get; set; }
+
+    /// <summary>Legacy text field when Content is unset.</summary>
+    [JsonPropertyName("text")]
+    public string? Text { get; set; }
+
+    /// <summary>Memory type token.</summary>
+    [JsonPropertyName("type")]
+    public string? Type { get; set; }
+
+    /// <summary>Tags persisted with the memory.</summary>
+    [JsonPropertyName("tags")]
+    public IReadOnlyList<string>? Tags { get; set; }
+
+    /// <summary>Visibility scope of the hit.</summary>
+    [JsonPropertyName("scope")]
+    public MemoryScope? Scope { get; set; }
+
+    /// <summary>How the hit was retrieved (bm25, vector, or hybrid).</summary>
+    [JsonPropertyName("matchKind")]
+    public string? MatchKind { get; set; }
+
+    /// <summary>Workspace id used for ANN scoping.</summary>
+    [JsonPropertyName("annWorkspaceId")]
+    public string? AnnWorkspaceId { get; set; }
+}
+
+/// <summary>
+/// Typed recall result. The live HTTP body uses <c>items</c>; plugin/REPL agents look for
+/// <c>hits</c>. Both names are bound and kept in sync so neither surface drops ranked memories.
+/// </summary>
+public sealed class MemoryRecallResult
+{
+    /// <summary>HTTP status code from the memory surface.</summary>
+    [JsonPropertyName("statusCode")]
+    public int StatusCode { get; set; }
+
+    /// <summary>Created memory id when present.</summary>
+    [JsonPropertyName("memoryId")]
+    public string? MemoryId { get; set; }
+
+    /// <summary>Optional error text.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Ranked hits as returned by the live API (<c>items</c>).</summary>
+    [JsonPropertyName("items")]
+    public IReadOnlyList<MemoryRecallHit>? Items { get; set; }
+
+    /// <summary>Plugin-facing alias for <see cref="Items"/> (<c>hits</c>).</summary>
+    [JsonPropertyName("hits")]
+    public IReadOnlyList<MemoryRecallHit>? Hits { get; set; }
+
+    /// <summary>Failure classification.</summary>
+    [JsonPropertyName("failureKind")]
+    public MemoryMutationFailureKind FailureKind { get; set; }
+
+    /// <summary>True when a reranker ran. Production default is false.</summary>
+    [JsonPropertyName("rerankApplied")]
+    public bool? RerankApplied { get; set; }
+
+    /// <summary>Ranking mode token (for example hybrid).</summary>
+    [JsonPropertyName("rankingMode")]
+    public string? RankingMode { get; set; }
+
+    /// <summary>Non-empty ranked hits, preferring <see cref="Hits"/> then <see cref="Items"/>.</summary>
+    [JsonIgnore]
+    public IReadOnlyList<MemoryRecallHit> RankedHits =>
+        Hits is { Count: > 0 } ? Hits :
+        Items is { Count: > 0 } ? Items :
+        Hits ?? Items ?? [];
+
+    /// <summary>
+    /// Copies <c>items</c> onto <c>hits</c> (and the reverse) so plugin YAML/JSON keeps
+    /// ranked memories under both live-API and agent-facing names.
+    /// </summary>
+    public void SynchronizeHitsAndItems()
+    {
+        if (Hits is { Count: > 0 } && Items is not { Count: > 0 })
+            Items = Hits;
+        else if (Items is { Count: > 0 } && Hits is not { Count: > 0 })
+            Hits = Items;
+    }
+}
+
 /// <summary>Result of creating, updating, or removing a memory.</summary>
 public sealed class MemoryMutationResult
 {

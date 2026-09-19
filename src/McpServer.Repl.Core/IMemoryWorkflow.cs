@@ -32,8 +32,8 @@ public interface IMemoryWorkflow
     /// <summary>Remembers a multi-layer memory.</summary>
     Task<MemorySurfaceResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default);
 
-    /// <summary>Recalls memories by meaning or keyword.</summary>
-    Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default);
+    /// <summary>Recalls memories by meaning or keyword and preserves ranked hits.</summary>
+    Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>Explores a memory neighborhood.</summary>
     Task<MemorySurfaceResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default);

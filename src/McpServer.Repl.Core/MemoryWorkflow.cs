@@ -78,7 +78,7 @@ public sealed class MemoryWorkflow : IMemoryWorkflow
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.RecallAsync(request, cancellationToken);

@@ -3,6 +3,7 @@ using System.Text.Json;
 using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.Repl.Core;
+using NSubstitute;
 
 namespace McpServer.Repl.Core.Tests;
 
@@ -60,6 +61,51 @@ public sealed class MemoryWorkflowTests
         using var document = JsonDocument.Parse(handler.LastBody!);
         Assert.Equal("MEMORY-AGENT-001", document.RootElement.GetProperty("id").GetString());
         Assert.Equal("Workspace", document.RootElement.GetProperty("scope").GetString());
+    }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-004 / TEST-MCP-MEMORY-005 / triage-report-a6fb8ae08ce348799d0db61ae2e0734a:
+    /// workflow.memory.recall must keep live-API <c>items</c> as plugin-facing <c>hits</c>.
+    /// </summary>
+    [Fact]
+    public async Task RecallAsync_LiveItemsJson_PreservesHitsInPluginYaml()
+    {
+        var handler = new JsonHandler(
+            """
+            {"statusCode":200,"items":[{"id":"MEMORY-FACT-003","score":0.87,"title":"Legion fact","content":"Operator fact from Legion recall proof.","type":"fact","scope":"Workspace","matchKind":"hybrid"}],"failureKind":"None","rerankApplied":false,"rankingMode":"hybrid"}
+            """);
+        using var http = new HttpClient(handler);
+        var workflow = new MemoryWorkflow(new MemoryClient(http, Options));
+        var dispatcher = new ReplCommandDispatcher(
+            Substitute.For<IGenericClientPassthrough>(),
+            memoryWorkflow: workflow);
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-recall-hits",
+                Method = MemoryCommandShapes.RecallMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["query"] = "MEMORY-FACT-003",
+                },
+            },
+        };
+
+        var response = await dispatcher.DispatchAsync(envelope, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal("result", response.Type);
+        var payload = Assert.IsAssignableFrom<IResultPayload>(response.Payload);
+        var recall = Assert.IsType<MemoryRecallResult>(payload.Result);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(recall.Hits!).Id);
+        Assert.Equal("MEMORY-FACT-003", Assert.Single(recall.Items!).Id);
+
+        var yaml = new YamlSerializer().Serialize(response);
+        Assert.Contains("hits:", yaml, StringComparison.Ordinal);
+        Assert.Contains("MEMORY-FACT-003", yaml, StringComparison.Ordinal);
+        Assert.Contains("Operator fact from Legion recall proof.", yaml, StringComparison.Ordinal);
     }
 
     private sealed class JsonHandler : HttpMessageHandler
