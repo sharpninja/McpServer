@@ -18,10 +18,14 @@ session-log logic lives here and is distributed by sync.
 - `test-fixtures/` - shared bats suites and golden REPL envelope fixtures,
   parameterized by explicit plugin roots plus `MCP_CACHE_DIR_OVERRIDE`, runnable against the core itself
   and against any synced plugin repo.
+- `hosts/` - per-plugin memory skill/descriptor payloads (Grok plus S7b hosts).
+  Apply with `sync/apply-memory-s7b-hosts.ps1 -PluginRoot <repo> -HostName <id>`.
 - `sync/` - distribution tooling:
   - `sync-plugin-core.sh|ps1 <plugin-root> [--include-ps]` copies the libs
     into `<plugin>/lib/` and writes `CORE-MANIFEST.yaml` (core git version +
     per-file sha256).
+  - `apply-memory-s7b-hosts.ps1 <plugin-root> -HostName <id>` copies the host
+    memory skill, descriptor, and descriptor-load tests into a plugin repo.
   - `check-core-integrity.sh|ps1 <plugin-root>` is the CI guard: it fails the
     build when any synced file was edited locally. Fix in this directory and
     re-sync; never patch a plugin's copy.

@@ -1,10 +1,11 @@
 {
   "gate": "H7a",
-  "agree": false,
+  "agree": true,
   "h7bBlockedUntilH7aAgree": true,
   "hDoneDefaultRequires": "H7a",
   "h7bFollowOn": true,
   "nonGrokCiRequired": false,
   "defaultPlugin": "grok",
-  "note": "Policy only. Hostile/operator AGREE is a later receipt; this file stays agree=false until that gate."
+  "receipt": "docs/receipts/hostile-validator-20260919T081530Z.md",
+  "note": "Hostile H7a-green AGREE on memory-s4-red tip c5541d025759dac7b76990b69ce9b6e61f015c32. Receipt docs/receipts/hostile-validator-20260919T081530Z.md (OverallVerdict AGREE). File flipped to agree:true so BenchMemory -Plugin all and S7b/H7b non-Grok adapters are unblocked."
 }

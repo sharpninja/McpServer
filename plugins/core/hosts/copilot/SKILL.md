@@ -2,11 +2,12 @@
 name: memory
 description: Use when the operator wants durable MCP memories remembered, recalled, explored, consolidated, promoted, or reverted.
 version: 0.5.0
+host: copilot
 ---
 
-# MCP Memory
+# MCP Memory (copilot)
 
-Use the shared host plugin memory surface. Do not invent memories. Prefer MCP tools over local files.
+Use the Copilot plugin memory surface. Do not invent memories. Prefer MCP tools over local files.
 
 ## Injection
 

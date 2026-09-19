@@ -2,11 +2,12 @@
 name: memory
 description: Use when the operator wants durable MCP memories remembered, recalled, explored, consolidated, promoted, or reverted.
 version: 0.5.0
+host: cline-v2
 ---
 
-# MCP Memory
+# MCP Memory (cline-v2)
 
-Use the shared host plugin memory surface. Do not invent memories. Prefer MCP tools over local files.
+Use the Cline v2 plugin memory surface (shared `@sharpninja/mcpserver-plugin-core` memoryTools shim). Do not invent memories. Prefer MCP tools over local files.
 
 ## Injection
 

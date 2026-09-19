@@ -46,11 +46,12 @@ public sealed class MemoryBenchCiTests
     public void NonGrok_OptionalUntilH7a()
     {
         var gate = MemoryBenchValueGate.Load(MemoryBenchCatalog.FindRepoRoot());
-        Assert.False(gate.Agree);
+        Assert.True(gate.Agree);
         Assert.False(gate.NonGrokCiRequired);
         var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
         Assert.Contains("FullyQualifiedName~MemoryBench", source, StringComparison.Ordinal);
         Assert.DoesNotContain("ClaudeCode_CompletesFullPack", source, StringComparison.Ordinal);
         Assert.Contains("blocked until H7a", source, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("readonly string Plugin = \"grok\"", source, StringComparison.Ordinal);
     }
 }

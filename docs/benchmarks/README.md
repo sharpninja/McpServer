@@ -5,7 +5,7 @@
 Integration tests and the required CI bench run on the **Grok** plugin/agent lane first.
 Validate **performance and value** (primary metric: **tokens used**) under `with_memory` vs `without_memory` before implementing other agent plugins.
 
-Other plugins (`claude-code`, `claude-cowork`, `cline`, `cline-v2`, `codex`, `copilot`, `opencode`) are **opt-in after H7a AGREE**.
+Other plugins (`claude-code`, `claude-cowork`, `cline`, `cline-v2`, `codex`, `copilot`, `opencode`) are **unblocked after H7a AGREE**. Default CI stays Grok; `./build.ps1 BenchMemory -Plugin all` runs all eight recorded/stub adapters.
 
 ## Primary metric: tokens used
 
@@ -58,6 +58,8 @@ without_memory vs with_memory are pack conditions, not extra CLI flags: every ru
 - Adapter: `MemoryBenchGrokAdapter` (`recorded-fixture` entrypoint; stub/recorded fixtures, no cloud).
 - Unit + fixture integration: `tests/McpServer.Support.Mcp.Tests/Memory/MemoryBench*.cs` and `MemoryIntegrationTests.cs`.
 - Remember→recall/injection is asserted on the Grok lane with recorded fixtures. Live Grok is opt-in via `XAI_API_KEY` and tags `mode=live`; CI does not require a real XAI key.
+- After H7a AGREE (`docs/benchmarks/h7a-value-gate.json` cites `docs/receipts/hostile-validator-20260919T081530Z.md`), the same recorded-fixture adapters exist for the other seven plugins. Live keys (`ANTHROPIC_API_KEY`, `CLINE_API_KEY`, `OPENAI_API_KEY`, `COPILOT_GITHUB_TOKEN`, `OPENCODE_API_KEY`) are opt-in only.
+- Success-gated multi-turn (`IMemoryBenchMultiTurnAdapter`) is registered per plugin. Failed jobs stay in the artifact and are excluded from token means.
 - No live Perplexity. No Python product path. Token estimator id `memory-bench-whitespace` / version `1.0.0` when the host does not report usage.
 
 ## Traceability

@@ -292,12 +292,30 @@ public sealed class MemoryBenchMultiTurnHarness
 }
 
 /// <summary>
-/// FR-MCP-MEMORY-019-07: Resolves multi-turn adapters. Grok is required.
+/// FR-MCP-MEMORY-019-07: Resolves multi-turn adapters. Grok is default; others after H7a.
 /// </summary>
 public static class MemoryBenchMultiTurnAdapterRegistry
 {
     /// <summary>Creates the default Grok multi-turn adapter.</summary>
     public static IMemoryBenchMultiTurnAdapter CreateGrok() => new MemoryBenchGrokMultiTurnAdapter();
+
+    /// <summary>Creates the recorded/stub multi-turn adapter for a known plugin id.</summary>
+    public static IMemoryBenchMultiTurnAdapter Create(string pluginId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(pluginId);
+        return pluginId.Trim().ToLowerInvariant() switch
+        {
+            "grok" => CreateGrok(),
+            "claude-code" => new MemoryBenchClaudeCodeMultiTurnAdapter(),
+            "claude-cowork" => new MemoryBenchClaudeCoworkMultiTurnAdapter(),
+            "cline" => new MemoryBenchClineMultiTurnAdapter(),
+            "cline-v2" => new MemoryBenchClineV2MultiTurnAdapter(),
+            "codex" => new MemoryBenchCodexMultiTurnAdapter(),
+            "copilot" => new MemoryBenchCopilotMultiTurnAdapter(),
+            "opencode" => new MemoryBenchOpencodeMultiTurnAdapter(),
+            _ => throw new InvalidOperationException($"Unknown MemoryBench multi-turn plugin '{pluginId}'."),
+        };
+    }
 
     /// <summary>Resolves adapters for the requested plugins.</summary>
     public static IReadOnlyDictionary<string, IMemoryBenchMultiTurnAdapter> Resolve(
@@ -321,8 +339,13 @@ public static class MemoryBenchMultiTurnAdapterRegistry
                 continue;
             }
 
-            throw new InvalidOperationException(
-                $"Plugin '{plugin}' is deferred until H7a AGREE. Default/required multi-turn adapter is grok.");
+            if (!MemoryBenchValueGate.IsH7aAgreed())
+            {
+                throw new InvalidOperationException(
+                    $"Plugin '{plugin}' is deferred until H7a AGREE. Default/required multi-turn adapter is grok.");
+            }
+
+            map[plugin] = Create(plugin);
         }
 
         return map;

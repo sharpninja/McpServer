@@ -96,10 +96,27 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         Assert.Equal(["grok"], result.Plugins);
-        Assert.False(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchMultiTurnCatalog.FindRepoRoot()));
+        Assert.True(MemoryBenchValueGate.IsH7aAgreed(MemoryBenchMultiTurnCatalog.FindRepoRoot()));
         var harness = new MemoryBenchMultiTurnHarness();
-        Assert.Throws<InvalidOperationException>(() =>
-            harness.Run(MemoryBenchMultiTurnCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["claude-code"] }));
+        var claude = harness.Run(MemoryBenchMultiTurnCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["claude-code"] });
+        Assert.Equal(["claude-code"], claude.Plugins);
+        Assert.All(claude.Jobs, job => Assert.Equal("claude-code", job.Plugin));
+        var all = harness.Run(MemoryBenchMultiTurnCatalog.FindRepoRoot(), new MemoryBenchRunOptions { Plugins = ["all"] });
+        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, all.Plugins);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-019 / H7b: Stub -Plugin all writes success-gated multiturn tokens for eight plugins.</summary>
+    [Fact]
+    public void AllEight_WritesMultiTurnStubArtifacts()
+    {
+        var directory = Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
+        Directory.CreateDirectory(directory);
+        var result = MemoryBenchMultiTurnCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+        Assert.All(result.Jobs, job => Assert.True(job.Pass, job.Plugin + " " + job.JobId + " " + job.Condition));
+        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.json")));
+        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.md")));
+        Assert.Contains("SUCCESS-GATED mean tokens_total", result.SummaryMarkdown, StringComparison.Ordinal);
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Writes multiturn artifacts with token tables first.</summary>
