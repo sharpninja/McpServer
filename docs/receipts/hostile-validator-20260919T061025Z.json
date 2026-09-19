@@ -1,0 +1,196 @@
+{
+  "timestampUtc": "20260919T061025Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H2-green",
+  "todoId": "MCP-MEMORY-002",
+  "priorH2RedAgree": "docs/receipts/hostile-validator-20260919T055510Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": 48,
+  "prUrl": "https://github.com/sharpninja/McpServer/pull/48",
+  "gitHeadVerified": "dc830bb7bc3264cc954fbc2684265211ae70b5a3",
+  "gitBranch": "cursor/memory-s2-green-c63a",
+  "baseBranch": "memory-s2-red",
+  "overallVerdict": "AGREE",
+  "passCount": 16,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Strict AGREE only if every scored claim is PASS AND Accuracy>=98/100 AND Completeness>=98/100. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "todoGetMcp": "timed_out",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002",
+      "remainingNote": "stale: still cites Next S2 Green then H2-green despite PR #48"
+    },
+    "evidenceSource": "origin/cursor/memory-s2-green-c63a worktree /tmp/s2-green-wt @ dc830bb7bc3264cc954fbc2684265211ae70b5a3",
+    "priorH2RedAgreeOnBranch": true
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 0,
+      "passed": 125,
+      "skipped": 0,
+      "total": 125
+    },
+    "s2CatalogMatrix": {
+      "count": 40,
+      "coverage": "40/40",
+      "failed": 0,
+      "passed": 40,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s2MocksFirst": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    "s1CatalogInSameFilter": {
+      "count": 73,
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0,
+      "missing": 0
+    },
+    "focusGreenPassed": [
+      "MemoryIndexerTests.ReadyOrFailedStatus",
+      "MemoryIndexerTests.Reconcile_RepairsStale",
+      "MemoryRecallTests.FusionWeights_AffectOrdering",
+      "MemoryRecallTests.Rerank_DefaultOff",
+      "MemoryIndexerTests.Ann_NoCrossWorkspaceLeak",
+      "MemoryIndexerTests.OnnxLocal_NoCloudRequired",
+      "MemoryIndexerTests.Reindex_AfterContentChange",
+      "MemoryIndexerTests.CloudOptIn_FailsClosedWhenOff"
+    ],
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s2-green-test-results/memory-s2-green.trx",
+    "logPath": "/tmp/s2-green-dotnet-test.log"
+  },
+  "claims": [
+    {
+      "id": "H2G-1",
+      "verdict": "PASS",
+      "claim": "Memory filter Failed 0 Skipped 0 Passed 125",
+      "evidence": "independent TRX Passed=125 Failed=0 Skipped=0"
+    },
+    {
+      "id": "H2G-2",
+      "verdict": "PASS",
+      "claim": "S2 catalog 40/40 Green",
+      "evidence": "TRX 40/40 Passed Missing 0"
+    },
+    {
+      "id": "H2G-3",
+      "verdict": "PASS",
+      "claim": "Index/Reconcile/Batch handlers + hybrid recall present",
+      "evidence": "IndexMemoryCommandHandler.cs + MemorySearchOperations MemoryIndexes"
+    },
+    {
+      "id": "H2G-4",
+      "verdict": "PASS",
+      "claim": "S1 Green Failed 0 in same Memory filter",
+      "evidence": "73/73 Passed Failed 0 Skipped 0"
+    },
+    {
+      "id": "H2G-5",
+      "verdict": "PASS",
+      "claim": "No Python product path",
+      "evidence": "git ls-tree .py empty"
+    },
+    {
+      "id": "H2G-6",
+      "verdict": "PASS",
+      "claim": "TODO done=false; no merge; no new PR; no S3",
+      "evidence": "curl done=false; receipts-only push"
+    },
+    {
+      "id": "H2G-7",
+      "verdict": "PASS",
+      "claim": "H2-red AGREE prerequisite exists; not rewritten",
+      "evidence": "hostile-validator-20260919T055510Z twin on branch"
+    },
+    {
+      "id": "H2G-8",
+      "verdict": "PASS",
+      "claim": "Honesty disclose gaps",
+      "evidence": "skill/profile/MCP/stale remaining/worktree"
+    },
+    {
+      "id": "H2G-F1",
+      "verdict": "PASS",
+      "claim": "indexer ready/failed",
+      "evidence": "ReadyOrFailedStatus Passed"
+    },
+    {
+      "id": "H2G-F2",
+      "verdict": "PASS",
+      "claim": "reconcile repairs stale",
+      "evidence": "Reconcile_RepairsStale Passed"
+    },
+    {
+      "id": "H2G-F3",
+      "verdict": "PASS",
+      "claim": "fusion weights affect order",
+      "evidence": "FusionWeights_AffectOrdering Passed"
+    },
+    {
+      "id": "H2G-F4",
+      "verdict": "PASS",
+      "claim": "rerank default off",
+      "evidence": "Rerank_DefaultOff Passed RerankApplied=false"
+    },
+    {
+      "id": "H2G-F5",
+      "verdict": "PASS",
+      "claim": "ANN/FTS no cross-workspace leakage",
+      "evidence": "Ann_NoCrossWorkspaceLeak Passed"
+    },
+    {
+      "id": "H2G-F6",
+      "verdict": "PASS",
+      "claim": "ONNX local without cloud",
+      "evidence": "OnnxLocal_NoCloudRequired Passed"
+    },
+    {
+      "id": "H2G-F7",
+      "verdict": "PASS",
+      "claim": "after-update index refresh",
+      "evidence": "Reindex_AfterContentChange Passed"
+    },
+    {
+      "id": "H2G-F8",
+      "verdict": "PASS",
+      "claim": "S2 AC 100% Green",
+      "evidence": "40/40 Passed"
+    }
+  ],
+  "workspaceRules": {
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "B6": "PASS"
+  },
+  "didNot": [
+    "mark TODO done",
+    "merge PR #48",
+    "create a new pull request",
+    "start S3"
+  ]
+}
