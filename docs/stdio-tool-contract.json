@@ -118,7 +118,8 @@
     },
     {
       "name": "memory_remember",
-      "description": "Remember a multi-layer memory (title, content, type, tags, confidence, provenance) and return a MEMORY-* id.",
+      "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions.",
+      "additionalProperties": false,
       "parameters": {
         "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
         "title": { "type": "string", "required": false, "description": "Optional title" },
@@ -133,6 +134,72 @@
         "id": { "type": "string", "required": false, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Optional explicit memory id" }
       },
       "httpEquivalent": "POST /mcpserver/memory/remember"
+    },
+    {
+      "name": "memory_recall",
+      "description": "Recall memories by meaning or keyword when you need ranked guidance for the current question.",
+      "additionalProperties": false,
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "query": { "type": "string", "required": true, "description": "Recall query text" },
+        "minScore": { "type": "number", "required": false, "description": "Optional minimum score in [0,1]" },
+        "topN": { "type": "integer", "required": false, "description": "Optional result cap" },
+        "tags": { "type": "array", "required": false, "description": "Optional tags" },
+        "type": { "type": "string", "required": false, "description": "Optional type filter" },
+        "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "description": "Optional scope filter" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/recall"
+    },
+    {
+      "name": "memory_explore",
+      "description": "Explore related memories from a seed id or query when you need neighborhood context.",
+      "additionalProperties": false,
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "seedId": { "type": "string", "required": false, "description": "Optional MEMORY-* seed" },
+        "query": { "type": "string", "required": false, "description": "Optional query seed" },
+        "depth": { "type": "integer", "required": false, "description": "Optional hop depth" },
+        "maxNeighbors": { "type": "integer", "required": false, "description": "Optional neighbor cap" },
+        "hebbianEnabled": { "type": "boolean", "required": false, "description": "Optional Hebbian override" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/explore"
+    },
+    {
+      "name": "memory_consolidate",
+      "description": "Consolidate near-duplicate memories when an operator asks for sleep/merge maintenance.",
+      "additionalProperties": false,
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "dryRun": { "type": "boolean", "required": false, "description": "When false, apply writes. Default is dry-run." },
+        "similarityThreshold": { "type": "number", "required": false, "description": "Optional similarity threshold in [0,1]" },
+        "allowHardDelete": { "type": "boolean", "required": false, "description": "When true, merged-away rows may be hard-deleted" },
+        "runId": { "type": "string", "required": false, "description": "Optional client run id" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/consolidate"
+    },
+    {
+      "name": "memory_promote",
+      "description": "Promote a session-log or context source into memory when the operator explicitly wants that text remembered.",
+      "additionalProperties": false,
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "sourceKind": { "type": "string", "required": true, "description": "Source kind: sessionlog or context" },
+        "sourceRef": { "type": "string", "required": true, "description": "Source reference" },
+        "content": { "type": "string", "required": false, "description": "Optional content override" },
+        "summary": { "type": "string", "required": false, "description": "Optional summary override" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/promote"
+    },
+    {
+      "name": "memory_revert",
+      "description": "Revert a memory to a prior version when the current content is wrong and a snapshot should be restored.",
+      "additionalProperties": false,
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" },
+        "versionNumber": { "type": "integer", "required": true, "description": "Snapshot number to restore" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory/{id}/revert"
     },
     {
       "name": "memory_update",

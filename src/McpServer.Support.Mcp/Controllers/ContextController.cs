@@ -11,6 +11,7 @@ using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
@@ -197,6 +198,28 @@ public sealed class ContextController : ControllerBase
         {
             chunks.AddRange(productChunks.Take(limit));
             sourceKeys = sourceKeys.Concat(productChunks.Select(c => c.DocumentId)).Distinct().ToList();
+        }
+
+        if (MemoryContextSource.IsRequested(request?.Sources))
+        {
+            var memoryService = HttpContext.RequestServices.GetService<IMemoryService>();
+            if (memoryService is not null)
+            {
+                var listed = await memoryService.ListAsync(new MemoryListRequest(), cancellationToken).ConfigureAwait(false);
+                var memories = MemoryContextSource.FilterEffective(listed.Items, request!.Sources);
+                foreach (var memory in memories.Take(Math.Max(0, limit - chunks.Count)))
+                {
+                    chunks.Add(new ContextChunk
+                    {
+                        Id = memory.Id,
+                        DocumentId = "memories:" + memory.Id,
+                        Content = memory.Content ?? memory.Text,
+                        TokenCount = Math.Max(1, (memory.Content ?? memory.Text).Length / 4),
+                        ChunkIndex = 0,
+                    });
+                    sourceKeys.Add(MemoryContextSource.Name);
+                }
+            }
         }
 
         return Ok(new ContextPack
@@ -427,4 +450,9 @@ public sealed class ContextPackRequest
 
     /// <summary>Max chunks in pack.</summary>
     public int Limit { get; set; } = 20;
+
+    /// <summary>
+    /// TR-MCP-MEMORY-API-002-07: Optional source keys. The <c>memories</c> source is off unless listed.
+    /// </summary>
+    public IReadOnlyList<string>? Sources { get; set; }
 }

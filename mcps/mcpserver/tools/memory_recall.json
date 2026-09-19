@@ -1,0 +1,47 @@
+{
+  "name": "memory_recall",
+  "description": "Recall memories by meaning or keyword when you need ranked guidance for the current question. Use recall instead of list when the query is semantic; do not invent memories that recall does not return.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "query": {
+        "description": "Recall query text",
+        "type": "string"
+      },
+      "minScore": {
+        "description": "Optional minimum score in [0,1]",
+        "type": ["number", "null"],
+        "default": null
+      },
+      "topN": {
+        "description": "Optional result cap",
+        "type": ["integer", "null"],
+        "default": null
+      },
+      "tags": {
+        "description": "Optional comma-separated tags",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "type": {
+        "description": "Optional type filter",
+        "type": ["string", "null"],
+        "default": null
+      },
+      "scope": {
+        "description": "Optional scope filter: Global or Workspace",
+        "type": ["string", "null"],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "query"
+    ]
+  }
+}

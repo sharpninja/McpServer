@@ -14,9 +14,11 @@ MCP memories are durable operator guidance stored by McpServer and scoped by wor
 Use the required plugin or MCP tool surface for normal work:
 
 - MCP tools: `memory_add`, `memory_list`, `memory_update`, `memory_remove`
-- Additive CQRS verbs: `memory_remember`, `memory_recall`, `memory_explore`
-- REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`
+- Additive CQRS verbs: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`
+- REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`, `workflow.memory.remember`, `workflow.memory.recall`, `workflow.memory.explore`, `workflow.memory.consolidate`, `workflow.memory.promote`, `workflow.memory.revert`
 - REST `/mcpserver/memory` only when explicitly allowed for non-plugin diagnostics
+
+`Idempotency-Key` is not supported on memory write endpoints. A duplicate `memory_remember` (or other write) creates a second memory with a new id; callers must treat duplicate posts as duplicate rows.
 
 `memory_explore` walks directed edges from a seed id or the top recall hit for a query seed. Results stay inside the caller Effective set. Soft-deleted seeds return 404; soft-deleted or foreign neighbors are omitted. Explore does not rewrite memory Content.
 
