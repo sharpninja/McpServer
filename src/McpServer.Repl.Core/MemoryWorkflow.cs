@@ -71,42 +71,42 @@ public sealed class MemoryWorkflow : IMemoryWorkflow
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryRememberResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.RememberAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.RecallAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryExploreResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.ExploreAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryConsolidateResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.ConsolidateAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default)
+    public Task<MemoryPromoteResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return _client.PromoteAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<MemorySurfaceResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default)
+    public Task<MemoryRevertResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(id))
         {
