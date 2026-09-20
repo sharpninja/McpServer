@@ -1,8 +1,8 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.3  
-**Status:** Draft for operator review (post Round-3 external review pass)  
+**Version:** v0.1.4  
+**Status:** Draft for operator review (post Round-3 external review, follow-up pass)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
 **Date:** 2026-09-20 (America/Chicago)  
@@ -85,10 +85,10 @@ Memory alone stores facts. Compaction alone discards history. Neither continuous
 Operator / Host UX
        |
        v
-+------------------+     append      +-------------+
-|  AgentInvoker    | --------------->| SessionLog  |
-|  (CLI / hooks)   |                 | (append-only)|
-+--------+---------+                 +------+------+
++------------------+     append      +---------------+
+|  AgentInvoker    | --------------->| SessionLog    |
+|  (CLI / hooks)   |                 | (append-only) |
++--------+---------+                 +------+--------+
          |                                  |
          | projection                       | turns + metadata
          v                                  v
@@ -124,7 +124,7 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `turnId` | Stable identity in SessionLog |
 | `sessionId` | Session scope |
 | `payload` | Full request + intermediates + response (or content-addressed blob ref) |
-| `weight` | Relative score for current-work progress ∈ [0, 1] or ranked mass |
+| `weight` | Independent scalar score for current-work progress ∈ [0, 1]. Not a normalized distribution: weights do not sum to 1 across a session, so `Δweight` hysteresis thresholds (§5.2) and the density packing in §6 compare absolute values |
 | `pin` | Boolean / pin class (operator, system, acceptance) |
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
 | `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
@@ -176,7 +176,7 @@ Mid weight: progress narrative worth a summary (“tried A, failed for reason R,
 
 **v2 — LLM / learned judge:**
 
-- Periodic or per-turn judge prompt: given goal + recent projection + candidate turn stubs, redistribute mass under budget.
+- Periodic or per-turn judge prompt: given goal + recent projection + candidate turn stubs, re-score candidate turns under budget. The judge emits independent `∈ [0, 1]` scores per turn (see §4.2)—it does **not** redistribute a fixed normalized mass, because normalization would make one turn's score depend on unrelated turns and break `Δweight` hysteresis.
 - Still write results back to SessionLog; never delete.
 - Keep hysteresis and pin overrides.
 
@@ -191,9 +191,10 @@ Preferred: **after each turn**. Acceptable: at compact gates / budget pressure /
 Informal algorithm under hard budget `B`:
 
 1. Load SessionLog turns for `sessionId` plus standing memories from MemoryBridge.
-2. Ensure pins are marked `expanded` (fail closed: if pins alone exceed `B`, surface error / force memory promotion / ask operator—do not silently drop pins).
-3. Score or refresh weights (respect hysteresis).
-4. Allocate remaining budget by **value density**, not raw weight:
+2. **Charge the fixed prefix against the budget first.** Compute `B_turns = B - tokens(system prefix) - tokens(standing memories)`, where the standing memories are those listed in `standingMemoryIds[]`. Standing memories are model-facing and therefore consume `budgetTokens` exactly as turns do; §7's stable-prefix guidance makes them cheap to cache, not free to send. Fail closed: if `B_turns <= 0`, surface error / demote or consolidate standing memories via `consolidate` / ask operator—do not silently overflow `B`.
+3. Ensure pins are marked `expanded` (fail closed: if pins alone exceed `B_turns`, surface error / force memory promotion / ask operator—do not silently drop pins).
+4. Score or refresh weights (respect hysteresis).
+5. Allocate the remaining `B_turns` by **value density**, not raw weight:
    - Compute `density = weight / max(tokenEstimate, 1)` for each non-pinned turn.
    - Sort by `density` descending (stable tie-break: `weight` descending, then recency, then `turnId`).
    - Expand while residual budget allows full payloads.
@@ -201,8 +202,10 @@ Informal algorithm under hard budget `B`:
    - Omit the rest; record `omittedTurnIds`.
 
    **Why density and not raw weight:** sorting by weight alone lets a single high-weight, high-token payload (e.g. a 40k-token tool dump scored 0.9) consume the budget ahead of many smaller turns of nearly equal weight—including exactly the low-verbosity constraint turns §11.2 exists to protect. Density packing is the standard greedy approximation for a hard-capped budget; raw weight survives as the tie-break so that equal-cost turns still order by task relevance.
-5. Emit `contextProjection` with `generation++`.
-6. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else.
+6. Emit `contextProjection` with `generation++`.
+7. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else, subject to the §11.1 cooldown.
+
+**Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) ≤ B`. The §10.1 budget-adherence metric and the §14 Phase 1 adherence report both measure this full sum, not the turn portion alone.
 
 **Recoverability invariant:** For every omitted turn, SessionLog still has the bytes (or blob). Projection never claims deletion.
 
@@ -239,14 +242,14 @@ MAF supports client-managed chat history patterns: an `AgentSession` holding loc
 1. SessionLog is source of truth.
 2. ContextProjector builds a prompt blob under budget.
 3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
-4. Capture the full turn (including tool traces if observed) back into SessionLog; reweight; repeat.
+4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
 
 **Why sessionless:** Resuming a vendor CLI session reintroduces vendor-owned transcript and their compaction. Fresh oneshots preserve *our* projection as the model-facing context.
 
 **Trade-offs (engineering-honest):**
 
 - Control is **prompt-blob**, not a full structured `messages[]` API (unless the chosen CLI exposes one).
-- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Both are viable; split-brain tooling is the failure mode to avoid.
+- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Both are viable; split-brain tooling is the failure mode to avoid. **The spike must declare which owner it uses before starting**, because the two branches have different observability ceilings and therefore different acceptance gates (§14.1).
 - Fair-use / rate limits of CLI **subscriptions** still apply even for sessionless oneshots. This is not infinite capacity and is not a claim of uncapped API throughput.
 - Prompt-cache friendliness: keep a **stable prefix** (system + standing memories) and a **variable tail** (projection segments). Do not reshuffle the prefix every turn.
 - Host UI may still compact its *display* transcript; that is UX, not model-facing truth, if invocation bypasses the host model path.
@@ -281,8 +284,8 @@ Misses: note graphs are not the same as weighted projection over a full append-o
 Shares: next-step utility; multi-granularity context; adaptive pressure for long-horizon agents—treated here as the closest research cousin on *predictive relevance for the next action* **(author judgment, not a citation rank claim)**.  
 Misses: not specified as an operator SessionLog + MemoryBridge + sessionless CLI deployment; re-admit semantics should be made explicit for IDE/CLI product constraints.
 
-**HiGMem** ([arXiv:2604.18349](https://arxiv.org/abs/2604.18349))  
-Shares: event summaries with expand-to-underlying-turns; hierarchical recoverability.  
+**HiGMem** ([arXiv:2604.18349](https://arxiv.org/abs/2604.18349)) — *accepted to Findings of ACL 2026; camera-ready, code public*  
+Shares: event summaries with expand-to-underlying-turns; hierarchical recoverability. Strongest empirical result among the memory-system citations here: best F1 on four of five LoCoMo10 question categories, and adversarial F1 from 0.54 to 0.78 over A-MEM while retrieving an order of magnitude fewer turns.  
 Misses: retrieval-for-QA framing more than continuous *task-progress* reweight under an always-on agent budget; less emphasis on escaping host compact via outer oneshot invocation.
 
 **G-Long** ([arXiv:2606.13115](https://arxiv.org/abs/2606.13115))  
@@ -290,6 +293,7 @@ Shares: graph structure + attention-aware importance scoring for long-term dialo
 Misses: importance from summarizer attention ≠ relative weight for unfinished engineering work; no SessionLog/CLI assembly story.
 
 **Adaptive context compression** ([arXiv:2603.29193](https://arxiv.org/abs/2603.29193))  
+**Provenance caveat:** two-author v1 preprint, no accepted venue, no comments/page-count field, and cross-listed under cs.CV rather than cs.CL. Weight it accordingly against the peer-reviewed entries above; it is retained for idea coverage (banded compression under a dynamic budget), not as evidence.  
 Shares: turn importance scores; retain / summarize / drop bands; dynamic budget.  
 Misses: importance mix (similarity, recency, dependency) is not explicitly *progress-toward-completion*; durable re-admit + MCP memory bridge + host-escape runtime need productization beyond the paper’s conversational benchmarks.
 
@@ -315,9 +319,9 @@ Misses: same core gap—compaction as reduction, not continuous projection with 
 | Rolling recursive summary | No (lossy) | No | No | Soft | Optional | App-dependent |
 | Selective Context | N/A | Self-info ≠ progress | No | Yes | No | App-dependent |
 | PACE | Design-dependent | Next-step utility (close) | Glimpse-like | Adaptive | Design-dependent | App-dependent |
-| HiGMem | Turn layer yes | Event/retrieval | Expand turns | Retrieval budget | Profile optional | App-dependent |
+| HiGMem (Findings of ACL 2026) | Turn layer yes | Event/retrieval | Expand turns | Retrieval budget | Profile optional | App-dependent |
 | G-Long | Graph triplets | Attention importance | Graph expand | Retrieval | No SessionLog | App-dependent |
-| Adaptive compression (2603.29193) | Usually in-memory | Relevance/recency/deps | Limited | Yes | Limited | App-dependent |
+| Adaptive compression (2603.29193 — *v1 preprint, no venue*) | Usually in-memory | Relevance/recency/deps | Limited | Yes | Limited | App-dependent |
 | Haystack / Praison compactors | Often replaced | Structured summary heuristics | No | Threshold-based | Optional | If you own agent runtime |
 | **This design (WCP)** | **SessionLog yes (design)** | **Explicit (design)** | **Yes (design)** | **Yes (design)** | **MCP MemoryBridge (design)** | **Option C oneshot (design target; not yet measured)** |
 
@@ -330,7 +334,7 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 ### 10.1 Primary success metrics
 
 1. **Post-reproject (or post-compact fallback) task continuation** without operator re-paste of constraints, paths, or acceptance criteria.
-2. **Weight stability / hysteresis:** rate of projectionState flips per turn; thrash budget.
+2. **Weight stability / hysteresis:** `projectionState` flip rate, defined as (state changes observed in a projection pass) / (turns present in that pass), averaged over the session. Provisional thrash budget: **≤ 0.10**, i.e. under one state change per ten turns per pass. Operator-adjustable, but a number must be fixed before Phase 4 can pass or fail (§14).
 3. **Projection token budget adherence:** fraction of assemblies ≤ `budgetTokens` (local estimator OK for this engineering metric only).
 4. **Re-admit usefulness:** when a turn is re-admitted, did the subsequent action correctly use it (human or rubric check)?
 5. **Pin integrity:** zero silent pin drops.
@@ -405,7 +409,7 @@ Mapped **1:1 to Roadmap phases** in §14. Cross-cutting constraints listed after
 | **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
 | **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
 | **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
-| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | Thrash metrics under threshold; quiet-constraint eval suite green |
+| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | `projectionState` flip rate ≤ **0.10** per turn per pass (§10.1 metric 2, operator-adjustable but fixed before the phase opens); quiet-constraint eval suite green |
 
 ### 14.1 Phase 2 spike acceptance checklist (pass/fail)
 
@@ -413,7 +417,8 @@ All bullets must be **pass** before calling the Phase 2 spike done. Fail any →
 
 - [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
 - [ ] **PASS/FAIL — Projection under budget:** Assembled prompt / projection is ≤ configured `budgetTokens` (local estimator OK for this engineering gate only).
-- [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn (observable request + response + tool traces) appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop.
+- [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§7 Option C, §11.4).
+- [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
 - [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
 - [ ] **PASS/FAIL — Re-admit demo:** One previously omitted turn is re-admitted into a later projection and used by a subsequent oneshot (receipt: turnIds + generations).
 - [ ] **PASS/FAIL — No estimator savings claim:** Spike write-up does **not** claim provider-metered token savings or cite `memory-bench-whitespace` deltas as cost proof.
@@ -440,7 +445,7 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | --- | --- |
 | **SessionLog** | Append-only durable transcript of turns for a session; extends MCP `sessionlog_*` with weight/pin/projection metadata |
 | **Turn** | Full request + intermediates + response unit |
-| **Weight** | Relative importance for advancing current work toward completion |
+| **Weight** | Independent scalar ∈ [0, 1] for advancing current work toward completion; not a normalized distribution (see §4.2) |
 | **Pin** | Hard retain-in-projection marker |
 | **contextProjection** | Budgeted model-facing assembly derived from SessionLog + memory |
 | **Re-admit** | Restoring an omitted turn into the projection from SessionLog |
@@ -458,10 +463,10 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 2. Li, Y., et al. *Compressing Context to Enhance Inference Efficiency of Large Language Models* (Selective Context). arXiv:2310.06201. https://arxiv.org/abs/2310.06201  
 3. Wang, Q., et al. *Recursively Summarizing Enables Long-Term Dialogue Memory in Large Language Models.* arXiv:2308.15022. https://arxiv.org/abs/2308.15022  
 4. Xu, W., et al. *A-MEM: Agentic Memory for LLM Agents.* arXiv:2502.12110. https://arxiv.org/abs/2502.12110  
-5. Wei, L., et al. *PACE: Predictive Adaptive Context Extraction for Long-Horizon LLM Agents.* ACL 2026. https://aclanthology.org/2026.acl-long.1252/  
-6. Cao, S., He, J., Tan, F. *HiGMem: A Hierarchical and LLM-Guided Memory System for Long-Term Conversational Agents.* arXiv:2604.18349. https://arxiv.org/abs/2604.18349  
-7. *G-Long: Graph-Enhanced Memory Management for Efficient Long-Term Dialogue Agents.* arXiv:2606.13115. https://arxiv.org/abs/2606.13115  
-8. *Developing Adaptive Context Compression Techniques for Large Language Models (LLMs) in Long-Running Interactions.* arXiv:2603.29193. https://arxiv.org/abs/2603.29193  
+5. Wei, L., et al. *PACE: Predictive Adaptive Context Extraction for Long-Horizon LLM Agents.* In *Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)*, pp. 27184–27199. ACL, 2026. https://aclanthology.org/2026.acl-long.1252/  
+6. Cao, S., He, J., Tan, F. *HiGMem: A Hierarchical and LLM-Guided Memory System for Long-Term Conversational Agents.* Findings of the Association for Computational Linguistics: ACL 2026. arXiv:2604.18349. https://arxiv.org/abs/2604.18349  
+7. Choi, M., Jang, Y., Youn, S., Ko, Y. *G-Long: Graph-Enhanced Memory Management for Efficient Long-Term Dialogue Agents.* arXiv:2606.13115. https://arxiv.org/abs/2606.13115  
+8. Fofadiya, P., Tiwari, S. *Developing Adaptive Context Compression Techniques for Large Language Models (LLMs) in Long-Running Interactions.* arXiv:2603.29193 (v1 preprint; no accepted venue). https://arxiv.org/abs/2603.29193  
 9. deepset Haystack. *SummarizationCompactor* documentation. https://docs.haystack.deepset.ai/docs/next/summarization-compactor  
 10. PraisonAI. *Intelligent Conversation Compaction* documentation. https://praison.ai/docs/features/intelligent-conversation-compaction  
 11. Microsoft Agent Framework. *Chat history storage patterns* (client-managed `AgentSession` / `ChatHistoryProvider`). https://devblogs.microsoft.com/agent-framework/chat-history-storage-patterns-in-microsoft-agent-framework/
@@ -476,5 +481,6 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | v0.1.1 | 2026-09-20 | Round-1 self-eval: HV = Hostile Validation; SessionLog extends `sessionlog_*`; hook matrix honesty; Immediate next actions; Phase 1 exit criteria concreteness; memory verb / alias clarity |
 | v0.1.2 | 2026-09-20 | Round-2 hostile pass: remove soft overclaims; label assumptions; Phase 2 spike acceptance checklist; Out of scope for v0.1.x; Recommendations↔Roadmap 1:1 |
 | v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §11.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
+| v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the §14.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
 
 **Non-claims:** This document does not assert measured token-cost reductions, benchmark wins against PACE/HiGMem/G-Long, ToS clearance for high-frequency CLI oneshots, or completed Perplexity HV. Those require separate empirical, legal/ops, and API-key-unblocked work. Design-target rows in §9 are not empirical results.
