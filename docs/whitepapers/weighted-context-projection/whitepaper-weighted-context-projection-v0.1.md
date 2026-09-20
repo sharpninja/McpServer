@@ -1,8 +1,8 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.4  
-**Status:** Draft for operator review (post Round-3 external review, follow-up pass)  
+**Version:** v0.1.5  
+**Status:** Draft for operator review (post code-grounded review of `main`)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
 **Date:** 2026-09-20 (America/Chicago)  
@@ -37,9 +37,13 @@ That is the failure mode this paper addresses. It is not “we estimated fewer w
 
 ### 1.2 What already shipped (and what it is not)
 
-- **MCP-MEMORY-002** shipped `remember` / `recall` / `explore` / `consolidate` / `promote`, plus REQUIRED MEMORIES injection across eight plugins **(per MCP-MEMORY-002 ship scope)**. That layer is for durable, cross-session facts and standing instructions.
-- **PLAN-MANAGER-MEMORY-UI-001** (Manager Memory UI) is a separate Viewer CRUD surface. It is not SessionLog and not a projection engine.
-- Plugin hooks: Claude / Grok / Copilot are hook-richer than Codex / Cline / OpenCode today. Supported injection and reaction points include (where the host exposes them) `UserPromptSubmit`, `PreCompact`, and `PostCompact`. Hooks inject or react; they do **not** own the full host transcript and do **not** prevent the host from compacting.
+Three capabilities already exist. What matters for this paper is that none of them is the projection engine it proposes.
+
+**A durable cross-session memory layer.** Workspace-scoped tools persist facts, decisions, preferences, procedures, and entities across sessions. A typed write path carries title, type, tags, confidence, and provenance, alongside a thinner compatibility CRUD surface for plain records; retrieval, exploration, promotion between layers, consolidation of near-duplicates, and revert are all present. Each of the eight official host plugins injects the required-memory block at host-supported request boundaries. This layer holds standing truth that should outlive any one session. It does not answer which turns of the *current, unfinished* task still deserve space in the live window.
+
+**An operator-facing memory management surface.** A separate Viewer provides human inspect-and-edit CRUD over those memory records. It is a management view over the memory layer—not SessionLog, and not a projection engine. It is orthogonal to the scoring and packing this paper describes.
+
+**Plugin hooks, unevenly distributed.** Claude / Grok / Copilot expose more hook points than Codex / Cline / OpenCode today. Injection and reaction points include `UserPromptSubmit`, `PreCompact`, and `PostCompact`, where the host exposes them. Hooks inject and react; they do **not** own the full host transcript and do **not** prevent the host from compacting. That asymmetry is why §7 treats plugin-only deployment as interim hardening rather than an end state.
 
 ### 1.3 Estimator benches are not savings proof
 
@@ -60,13 +64,13 @@ Memory alone stores facts. Compaction alone discards history. Neither continuous
 | Manager Memory UI | Operator-facing CRUD | Memory records | Human inspect / edit | Orthogonal to projection algorithm |
 | Host transcript | Ephemeral / host-owned | Whatever the IDE keeps | Live chat UX | Subject to auto-compact; not authoritative |
 
-**Principle:** SessionLog is the append-only ledger. MCP already ships **`sessionlog_*` APIs** for session/turn logging; this design **extends** that ledger with weight / pin / projection metadata—it is not a wholly greenfield store. Memory is the cross-session digest. Projection is the ephemeral, budgeted view assembled for the model. UI is for humans.
+**Principle:** SessionLog is the append-only ledger—and append-only is an enforced property of the existing durable store, not an aspiration of this design (§6). MCP already ships **`sessionlog_*` APIs** for session/turn logging; this design **extends** that ledger with weight / pin / projection metadata—it is not a wholly greenfield store. Memory is the cross-session digest. Projection is the ephemeral, budgeted view assembled for the model. UI is for humans.
 
 ---
 
 ## 3. Design principles
 
-1. **Never permanently delete turns from SessionLog.** Omission from the projection is not deletion.
+1. **Never permanently delete turns from SessionLog.** Omission from the projection is not deletion. The durable store already enforces this, so the invariant is inherited rather than built (§6).
 2. **Weight relative to current work progress**, not raw self-information, recency alone, or “interestingness.”
 3. **Hard token budget** on the live projection. Soft targets without enforcement invite drift.
 4. **Re-admit is first-class.** If a quiet constraint suddenly matters, the scorer must be allowed to pull the full turn back from SessionLog.
@@ -208,6 +212,15 @@ Informal algorithm under hard budget `B`:
 **Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) ≤ B`. The §10.1 budget-adherence metric and the §14 Phase 1 adherence report both measure this full sum, not the turn portion alone.
 
 **Recoverability invariant:** For every omitted turn, SessionLog still has the bytes (or blob). Projection never claims deletion.
+
+This is **an existing enforced property of the durable store, not an aspiration of this design.** Deletes of durable records are converted to tombstones rather than executed; physical deletion is rejected outright rather than merely discouraged; and every mutation is mirrored into an append-only audit ledger carrying before-and-after snapshots, so original writes and additive changes stay reconstitutable even for a tombstoned record. Projection therefore *inherits* recoverability instead of having to implement it.
+
+Two consequences the design must respect:
+
+- **Re-admit of an omitted turn is safe by construction** (step 7 above), because omitted turns are never deleted. Re-admit of a *tombstoned* turn is a different matter: recovery reads must bypass the default visibility filters, and no restore operation is exposed on the session-log tool surface today. Any design that depends on reviving deleted turns is depending on unbuilt work.
+- **The enforcement is not visible in the data model's type definitions,** which makes it easy to audit incorrectly and conclude the ledger is mutable. An earlier review of this paper did exactly that.
+
+The specific classes, methods, guard behavior, and ledger contract that provide these guarantees are identified in the companion implementation note. This paper states the property; that note states the code.
 
 **Budget adherence:** Local token estimates may drive packing. They are engineering controls, not published savings metrics.
 
@@ -482,5 +495,6 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | v0.1.2 | 2026-09-20 | Round-2 hostile pass: remove soft overclaims; label assumptions; Phase 2 spike acceptance checklist; Out of scope for v0.1.x; Recommendations↔Roadmap 1:1 |
 | v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §11.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
 | v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the §14.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
+| v0.1.5 | 2026-09-20 | Separate design from implementation, and stop describing shipped work by ticket number. §3 and §6 now state recoverability as an *existing enforced property* of the durable store—tombstones instead of executed deletes, physical deletion rejected, mutations mirrored to an append-only snapshot ledger—so projection inherits the invariant rather than building it; the classes and methods providing it are delegated to the companion implementation note instead of named here. Records the two design-relevant consequences: re-admit of an *omitted* turn is safe by construction, while re-admit of a *tombstoned* turn depends on unbuilt restore capability. §1.2 describes the shipped capabilities directly instead of citing internal work-item identifiers (`MCP-MEMORY-002`, `PLAN-MANAGER-MEMORY-UI-001`), which meant nothing to an external reader |
 
 **Non-claims:** This document does not assert measured token-cost reductions, benchmark wins against PACE/HiGMem/G-Long, ToS clearance for high-frequency CLI oneshots, or completed Perplexity HV. Those require separate empirical, legal/ops, and API-key-unblocked work. Design-target rows in §9 are not empirical results.
