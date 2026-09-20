@@ -6,6 +6,10 @@
 **Whitepaper baseline:** `cursor/whitepaper-context-projection-v012` @ `eb3655a4160164f70c802fbcebd45a3be4232626`
 **Date:** 2026-09-20
 
+> **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
+> `§N` refers to a section of *this* document. The two numbering schemes overlap, so the
+> prefix is load-bearing.
+
 ## 1. Purpose and standing
 
 This document does not amend the whitepaper. The whitepaper describes a design; this
@@ -17,7 +21,7 @@ names the file it came from so it can be re-checked or falsified. Where the whit
 and the code disagree, the code wins as a statement of fact about the present, and the
 disagreement is recorded as a correction to be made — not as a defect in the design.
 
-Nothing here should be read as approval to build. §12 of the whitepaper still owns the
+Nothing here should be read as approval to build. WP §12 still owns the
 Phase 1 decision and the Option B/C decision.
 
 ## 2. Headline
@@ -30,7 +34,7 @@ already referenced and already in use. Neither option is greenfield.
 
 **The recoverability invariant is already backed, and more strongly than the design
 claims.** `McpDbContext` blocks physical deletes outright and mirrors every mutation into
-an append-only audit ledger with before-and-after snapshots, so §6 can cite enforcement
+an append-only audit ledger with before-and-after snapshots, so WP §6 can cite enforcement
 rather than assume it. An earlier draft of this document asserted the opposite; §3.2 carries
 the retraction and why the mechanism is easy to miss.
 
@@ -46,7 +50,7 @@ Each one would surface as rework during Phase 1.
 ### 3.1 The memory verbs are not tool names
 
 The whitepaper refers throughout to `remember`, `recall`, `explore`, `consolidate`, and
-`promote` as the shipped MCP-MEMORY-002 surface, and §15 describes `memory_remember` as
+`promote` as the shipped MCP-MEMORY-002 surface, and WP §15 describes `memory_remember` as
 a bridge alias.
 
 The shipped surface is five tools: `memory_add`, `memory_get`, `memory_list`,
@@ -55,7 +59,7 @@ backed by `McpServer.Services/Services/MemoryService.cs` and `McpServer.Client/M
 
 The five verbs appear in `docs/plans/mcp-memory-002-ac-catalog.json` and in test names.
 They are the plan's vocabulary, not the tool surface. `memory_remember` does not exist
-anywhere in the tree, so the alias relationship in §15 is inverted: there is no verb for
+anywhere in the tree, so the alias relationship in WP §15 is inverted: there is no verb for
 it to alias.
 
 **Recommendation.** Rewrite every verb reference to the actual tool name, and bind the
@@ -90,13 +94,13 @@ The actual enforcement, all in `McpServer.Storage/McpDbContext.cs`:
   itself excluded from soft-delete, so the ledger cannot be tombstoned either.
 
 So original writes and additive data are reconstitutable from the audit ledger, and the
-rows themselves are never physically gone. Design Principle #1 holds, and §6's
+rows themselves are never physically gone. Design Principle #1 holds, and WP §6's
 recoverability invariant rests on infrastructure that already exists and already
 fail-closes. The eviction-versus-demotion distinction is sound.
 
 **Recommendation — now a much smaller one.** Nothing to build; two things to write down.
 
-1. **Cite the mechanism in the whitepaper.** §6 asserts recoverability without naming what
+1. **Cite the mechanism in the whitepaper.** WP §6 asserts recoverability without naming what
    guarantees it. Naming `BlockPhysicalDeletes` and `DataAuditLogEntity` turns an
    assumption into a verifiable claim, and stops the next reviewer from making the mistake
    this section just made.
@@ -108,7 +112,7 @@ fail-closes. The eviction-versus-demotion distinction is sound.
    it misled this review.
 
 One genuine follow-up: recovery requires `IgnoreQueryFilters`, and there is no
-`sessionlog_restore` or equivalent tool. If §6 re-admit is ever to read a tombstoned turn
+`sessionlog_restore` or equivalent tool. If WP §6 re-admit is ever to read a tombstoned turn
 rather than only a demoted one, it needs an explicit `IgnoreQueryFilters(SoftDeleteQueryFilter)`
 read path — the pattern already used in `RequirementsDatabaseDocumentService` and
 `ToolRegistryService`. Storage-layer recoverability is settled; operator-facing
@@ -116,15 +120,16 @@ reconstitution is a small unbuilt convenience, not a missing invariant.
 
 ### 3.3 There is no `payload` field
 
-§4.2 models a turn as carrying a `payload`. In `SessionLogTurnEntity.cs` turn content is
+WP §4.2 models a turn as carrying a `payload`. In `SessionLogTurnEntity.cs` turn content is
 spread across five scalar columns — `QueryText`, `Response`, `Interpretation`,
 `RawContextJson`, `OriginalEntryJson` — plus six child collections: `Actions`, `Tags`,
 `ContextItems`, `ProcessingDialog`, `Commits`, `StringListItems`.
 
-**Recommendation.** Define `payload` explicitly as a projection-time assembly over those
-eleven sources, and specify the assembly order, because `tokenEstimate` is meaningless
-until it is fixed. This also means the §6 load step is a multi-table include, not a
-column read — relevant to both the projection latency budget and the Phase 1 simulator.
+**Recommendation.** Superseded by §5 — the sealed-projection design resolves this by
+reusing the existing `UnifiedRequestEntryDto` contract as the payload definition. If §5 is
+not adopted, `payload` must instead be defined as an explicit projection-time assembly over
+those eleven sources with a specified order, and the WP §6 load step documented as a
+multi-table include rather than a column read.
 
 ### 3.4 `Score` is already taken
 
@@ -150,16 +155,17 @@ query that starts at `SessionLogTurns` directly instead of navigating from `Sess
 inherits no scoping.
 
 **Recommendation.** Have the projector navigate from `SessionLogEntity`, or filter
-`WorkspaceId` explicitly. Worth one line in §4.2 so the key is `(WorkspaceId, SessionLogId)`
-rather than `sessionId` alone. This is a code-style precaution, not a defect class.
+`WorkspaceId` explicitly. Worth one line in WP §4.2 so the key is `(WorkspaceId, SessionLogId)`
+rather than `sessionId` alone. This is a code-style precaution, not a defect class. Under
+§5 it resolves once at seal time rather than on every projection read.
 
 ## 4. What already exists
 
-Two scoping assumptions in §7 are more favorable than the whitepaper assumes.
+Two scoping assumptions in WP §7 are more favorable than the whitepaper assumes.
 
 ### 4.1 The Option C invoker is mostly built
 
-`McpServer.Common.AgentCli` already provides what §7 Option C describes as new work:
+`McpServer.Common.AgentCli` already provides what WP §7 Option C describes as new work:
 
 - `IAgentCliClient.InvokeAsync(prompt, options, ct)` — a one-shot that takes a prompt blob
   and returns a structured `AgentCliResult`. This is the Option C call shape.
@@ -179,7 +185,7 @@ branches on `NormalizeAgentName` into exactly two cases: a `cline` branch (`-p`,
 `--yolo`). There is no per-CLI flag profile and no extra-arguments escape hatch.
 `AgentCliClientOptions.AgentPath` defaults to `"cline"`.
 
-§14.1's gate requires verified fresh-session / no-resume flags for the chosen CLI. That
+WP §14.1's gate requires verified fresh-session / no-resume flags for the chosen CLI. That
 gate cannot be satisfied by configuration today — it needs a flag-profile abstraction
 first. This is small but it is a prerequisite, not a nice-to-have, and it belongs in
 Phase 2 scope explicitly. It also bears on the whitepaper's no-invented-flags standard:
@@ -188,7 +194,7 @@ should be verified per CLI rather than inherited.
 
 ### 4.2 Option B is closer than the whitepaper implies
 
-§7 frames Option B as a weaker fit given a preference for CLI subscriptions. The code
+WP §7 frames Option B as a weaker fit given a preference for CLI subscriptions. The code
 complicates that framing:
 
 - `Microsoft.Agents.AI`, `Microsoft.Agents.AI.OpenAI`, and `Microsoft.Agents.AI.Workflows`
@@ -203,7 +209,7 @@ central technical prerequisite is met.
 **Recommendation.** Stop treating B and C as exclusive. Have the projector emit a
 neutral assembly and render it two ways — `IList<ChatMessage>` for the `IChatClient` path,
 a single prompt blob for the `IAgentCliClient` path. The selection then becomes a host
-configuration choice rather than an architectural commitment, and the §12 Option decision
+configuration choice rather than an architectural commitment, and the WP §12 Option decision
 narrows to "which path do we validate first," which is a much cheaper decision to get wrong.
 
 ### 4.3 Schema changes cost three migrations, and there is a guard to extend
@@ -221,15 +227,142 @@ difference between a partial deploy failing loudly and a partial deploy projecti
 silently without weights — which would look like a context-quality problem and be
 diagnosed as one. This is the cheapest high-value item in this document.
 
-## 5. Suggested phasing
+## 5. Sealed projection (ImmutableSessionLog)
+
+Operator-proposed and, on the sealing trigger, operator-decided. This section records the
+design and the questions it leaves open. It supersedes §3.3 and §3.5 as the recommended
+resolution for both.
+
+The shape: project an immutable per-turn record out of SessionLog, and make that record —
+not the live tables — the input to context projection.
+
+### 5.1 Trigger: seal on turn completion — **decided**
+
+Seal when a turn reaches a terminal status, not on every write. A turn is authored across
+`sessionlog_begin_turn` → n appends (`sessionlog_dialog` appends processing dialog items,
+and `SessionLogTurnEntity` documents that the model may append them independently) →
+`sessionlog_complete_turn` or `sessionlog_fail_turn`. Only at that terminal point is the
+turn genuinely immutable.
+
+Projecting per write would produce many superseded versions per turn, which matters here
+for a specific reason: see §5.5.
+
+In-progress turns are read live from the mutable tables. This costs nothing, because the
+current turn is never a compaction candidate.
+
+**Two triggers, not one.** `sessionlog_submit` is an upsert of an entire
+`UnifiedSessionLogDto`, so turns can arrive already carrying `completed` or `failed`
+status — the ingestion path (`SessionLogIngestor`, `MarkdownSessionLogParser`) does exactly
+this. Sealing must therefore fire on terminal-status turns arriving via `submit`, not only
+on the `complete_turn` / `fail_turn` transitions. Observed statuses in `SessionLogService`
+are `in_progress`, `completed`, `failed`.
+
+### 5.2 Payload schema: reuse `UnifiedRequestEntryDto`
+
+No new shape is needed. `UnifiedRequestEntryDto`
+(`McpServer.Client/Models/SessionLogModels.cs`) is already the assembled turn — `requestId`,
+`timestamp`, `queryText`, `queryTitle`, `response`, `interpretation`, `status`, `planFile`,
+`todoId`, `model`, and nested collections including `actions`. It is already the wire
+contract for `sessionlog_complete_turn`, `sessionlog_replace_turn`, and
+`sessionlog_replace_section`, and already what the ingestor and the Markdown parser emit.
+
+Sealing serializes that DTO once and stores it. §3.3's problem — `payload` having no
+definition and therefore `tokenEstimate` having no stable basis — is resolved by
+construction, and the assembly order question is answered by an existing contract rather
+than a new convention.
+
+### 5.3 Split immutable content from mutable scoring
+
+The WP §4.2 field list divides cleanly, and should be stored as two tables:
+
+| Immutable — sealed once at terminal status | Mutable — rewritten per projection generation |
+|---|---|
+| serialized `UnifiedRequestEntryDto` payload | `weight` |
+| `tokenEstimate` over that payload | `pin` |
+| turn identity (`sessionLogId`, `requestId`) | `projectionState` |
+| `workspaceId` | `projectionGeneration` |
+| seal sequence, superseded marker | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
+
+`weight` must **not** live in the immutable record. It is re-scored every turn under WP §11
+hysteresis, so storing it in an append-only structure would force a new sealed version on
+every rescore — turning §5.5's growth concern from O(turns) into O(turns × passes).
+
+### 5.4 Re-seal on re-open — open question
+
+`sessionlog_begin_turn` is documented as "Begin (**or re-open**) a session turn with status
+`in_progress`." A sealed turn can therefore be un-sealed, and `sessionlog_replace_turn`
+can rewrite a completed turn wholesale with PUT semantics.
+
+So sealing is not one-shot, and the immutable record cannot be updated in place without
+abandoning the property it exists to provide. The recommended handling: append a new
+sealed version under a monotonic sequence and mark the prior version superseded; readers
+take the highest non-superseded sequence per turn. `FederationOutboxEntity` already uses a
+database-generated monotonic `Sequence` for a comparable purpose and is a reasonable
+pattern to copy.
+
+What needs deciding: whether a re-opened turn's prior seal stays readable to projection
+(treat it as history) or is excluded immediately (treat it as retracted). This affects WP §6
+re-admit semantics and should not be settled implicitly by whoever writes the query.
+
+### 5.5 Growth, and why sealing per turn matters
+
+An entity named `ImmutableSessionLogEntity` ends in `Entity`, so `DurableEntityTypes` picks
+it up: it inherits the soft-delete shadow properties, and `BlockPhysicalDeletes` will throw
+on any attempt to physically remove it (§3.2). That is the correct behavior for a durable
+record, and it means **sealed versions can never be pruned through the context.**
+
+Sealing at terminal status makes version count O(turns). Sealing per write would make it
+O(writes), permanently, with no delete path. This is the concrete reason §5.1 is decided the
+way it is.
+
+### 5.6 Status and repair are not optional
+
+This repo has built a materialized projection before and recorded what it cost.
+`ITodoWorkflow` exposes `GetProjectionStatusAsync` and `RepairProjectionAsync`, and its own
+documentation states that projections "can become stale or corrupted; use
+`RepairProjectionAsync` to rebuild them from source TODO data."
+
+Ship the equivalents with ImmutableSessionLog from the start: a status/health check, and a
+rebuild-from-source path. The source tables remain authoritative; the sealed log is a
+derived read model and must be treated as disposable and reconstructible. A projection that
+cannot be rebuilt is a second source of truth by accident.
+
+Precedent for building derived rows inside the write path already exists in
+`AppendAuditRows`, which adds `DataAuditLogEntity` rows during `SaveChanges`.
+
+### 5.7 Second-order benefit: a stable density denominator
+
+WP §6 packs by `density = weight / max(tokenEstimate, 1)`. `TokenCount` is nullable today and
+is not guaranteed to reflect the assembled turn, so `tokenEstimate` can move between passes
+for reasons unrelated to scoring — which reorders the pack and registers as flips.
+
+Sealing fixes the denominator at terminal status. Measured flip rate then attributes to the
+scorer alone, which is what the Phase 4 ≤ 0.10 flips/turn/pass gate in WP §10.1 and WP §14 needs
+in order to mean anything. Without a stable denominator that threshold measures the
+estimator as much as the scorer.
+
+### 5.8 Three copies — decide deliberately
+
+This puts turn content in three places: the source tables, `DataAuditLogEntity` snapshots,
+and the sealed log. That is defensible when the roles are distinct — the audit ledger exists
+for reconstitution and compliance, the sealed log for read performance and a stable token
+denominator — but it should be written down as a decision with those roles stated. Someone
+will eventually ask why the database is several times larger than the conversation, and the
+answer should be on record before they do.
+
+## 6. Suggested phasing
 
 Ordered against the whitepaper's own phases, with the above folded in.
 
-**Phase 1 — schema and offline simulation.**
-Add `Weight`, `Pin`, `ProjectionGeneration`, `ProjectionState`, `SummaryText`,
-`ReAdmitCount`, `LastReAdmitGeneration` to `SessionLogTurnEntity`; reuse `TokenCount`.
-No tombstone or soft-delete work is needed (§3.2). Three provider migrations plus snapshot. Extend `SessionLogSchemaGuard`. Build the simulator as a test
-project replaying recorded sessions, so scorer changes are measurable before anything
+**Phase 1 — sealed projection, schema, and offline simulation.**
+Per §5: an immutable sealed-turn table (serialized `UnifiedRequestEntryDto`,
+`tokenEstimate`, identity, `workspaceId`, seal sequence, superseded marker) written at
+terminal status from both `complete_turn`/`fail_turn` and terminal-status turns arriving via
+`submit`; plus a mutable projection-state table (`Weight`, `Pin`, `ProjectionGeneration`,
+`ProjectionState`, `SummaryText`, `ReAdmitCount`, `LastReAdmitGeneration`). Status and
+repair operations per §5.6. No tombstone or soft-delete work is needed (§3.2). Three
+provider migrations plus snapshot. Extend `SessionLogSchemaGuard`. Build the simulator as a
+test project replaying recorded sessions, so scorer changes are measurable before anything
 reaches a live loop.
 
 **Phase 2 — projector and one host.**
@@ -243,9 +376,9 @@ existing plugin seams.
 
 **Phase 4 — scorer v1.**
 Rules-based only, measured against the Phase 1 simulator, gated on the ≤ 0.10 flips per
-turn per pass threshold now fixed in §10.1 and §14.
+turn per pass threshold now fixed in WP §10.1 and WP §14.
 
-## 6. Open questions for the operator
+## 7. Open questions for the operator
 
 1. **Should the `sessionlog_*` delete descriptions be corrected** (§3.2)? They tell agents
    an operation is irreversible when the storage layer guarantees it is not.
@@ -253,10 +386,12 @@ turn per pass threshold now fixed in §10.1 and §14.
    relies on it, it is unbuilt work rather than an integration point.
 3. **Which CLIs must the flag profile cover at Phase 2 exit?** Only `cline` has verified
    flags today.
-4. **Does the Option B/C decision still need making,** given §4.2? If the two-renderer
-   approach is accepted, §12 may be deciding something it no longer needs to decide.
+4. **Does the Option B/C decision still need making,** given WP §4.2? If the two-renderer
+   approach is accepted, WP §12 may be deciding something it no longer needs to decide.
+5. **Re-opened turns (§5.4):** does a superseded seal stay readable to projection as
+   history, or is it excluded as retracted? This changes WP §6 re-admit semantics.
 
-## 7. Method and limits
+## 8. Method and limits
 
 Findings come from a direct read of `main` at `e7c43a12`: entity definitions under
 `src/McpServer.Storage/Entities/`, the MCP tool surface in
