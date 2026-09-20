@@ -38,35 +38,54 @@ an append-only audit ledger with before-and-after snapshots, so WP §6 can cite 
 rather than assume it. An earlier draft of this document asserted the opposite; §3.2 carries
 the retraction and why the mechanism is easy to miss.
 
-**Three schema and naming assumptions still need correction before code is written** —
-§3.1, §3.3, §3.4 — plus a narrower scoping note in §3.5. None invalidate the design; all
-would waste Phase 1 effort if found during implementation instead of before it.
+**Two schema assumptions still need correction before code is written** — §3.3 and §3.4 —
+plus a narrower scoping note in §3.5. Neither invalidates the design; both would waste
+Phase 1 effort if found during implementation instead of before it.
+
+**Two of this document's own findings have been retracted.** §3.1 (memory verbs) and §3.2
+(append-only) were both wrong, both in the same direction — asserting that something did
+not exist on the strength of a narrow read. They are kept in place as retractions rather
+than deleted, so the error and its cause stay auditable. Weigh the surviving findings
+accordingly: the ones that claim *presence* of code were checked by reading that code, and
+the ones that claimed *absence* are the ones that failed.
 
 ## 3. Corrections to make before building
 
 These are places where the whitepaper describes something that does not match the code.
 Each one would surface as rework during Phase 1.
 
-### 3.1 The memory verbs are not tool names
+### 3.1 RETRACTED — the memory verbs *are* backed by shipped tools
 
-The whitepaper refers throughout to `remember`, `recall`, `explore`, `consolidate`, and
-`promote` as the shipped MCP-MEMORY-002 surface, and WP §15 describes `memory_remember` as
-a bridge alias.
+**This finding was wrong and is withdrawn in full.** An earlier revision of this document
+claimed the shipped memory surface was five CRUD tools (`memory_add`, `memory_get`,
+`memory_list`, `memory_remove`, `memory_update`); that the whitepaper's `remember` /
+`recall` / `explore` / `consolidate` / `promote` vocabulary existed only in
+`docs/plans/mcp-memory-002-ac-catalog.json` and test names; that `memory_remember` did not
+exist; and that WP §15's alias relationship was therefore inverted. None of that holds.
 
-The shipped surface is five tools: `memory_add`, `memory_get`, `memory_list`,
-`memory_remove`, `memory_update` — one descriptor each under `mcps/mcpserver/tools/`,
-backed by `McpServer.Services/Services/MemoryService.cs` and `McpServer.Client/MemoryClient.cs`.
+`mcps/mcpserver/tools/` contains **eleven** memory descriptors, not five: `memory_add`,
+`memory_consolidate`, `memory_explore`, `memory_get`, `memory_list`, `memory_promote`,
+`memory_recall`, `memory_remember`, `memory_remove`, `memory_revert`, `memory_update`.
+Each carries a full input schema, and the richer verbs have implementations in
+`src/McpServer.Services/Memory/` (`MemoryPromoteOperations.cs`, `MemoryExploreOperations.cs`,
+among others).
 
-The five verbs appear in `docs/plans/mcp-memory-002-ac-catalog.json` and in test names.
-They are the plan's vocabulary, not the tool surface. `memory_remember` does not exist
-anywhere in the tree, so the alias relationship in WP §15 is inverted: there is no verb for
-it to alias.
+The alias direction runs the other way from what this document claimed.
+`memory_remember`'s own descriptor reads: "Use this instead of `memory_add` when title,
+type, tags, confidence, or provenance matter." So `memory_remember` is the typed,
+provenance-carrying write path and `memory_add` is the thinner compatibility surface —
+which is what WP §15 already said. `memory_consolidate` likewise exists, with
+`dryRun`, `similarityThreshold`, and `allowHardDelete` parameters.
 
-**Recommendation.** Rewrite every verb reference to the actual tool name, and bind the
-memory bridge to `memory_add` (write) and `memory_list` (read, which already supports
-scope, category, and keyword filters). Note that there is no `consolidate` or `promote`
-tool — if the projection design depends on consolidation as an existing capability, that
-dependency is unmet and needs its own line item rather than a call site.
+**Recommendation: none. No whitepaper change is required here, and §15 should be left
+alone.** The memory bridge should bind to `memory_remember` for writes that carry
+provenance and `memory_recall` for meaning-ranked reads, rather than to the compatibility
+CRUD pair this document previously recommended.
+
+**Why it was wrong.** The claim came from reading `MemoryService.cs` and a partial listing
+rather than enumerating the descriptor directory. It is the same failure mode as the §3.2
+retraction below: asserting absence from a narrow read instead of confirming absence across
+the tree. Absence is the expensive claim to make and the one this document twice got wrong.
 
 ### 3.2 SessionLog *is* append-only — the recoverability invariant is already backed
 
@@ -382,8 +401,8 @@ turn per pass threshold now fixed in WP §10.1 and WP §14.
 
 1. **Should the `sessionlog_*` delete descriptions be corrected** (§3.2)? They tell agents
    an operation is irreversible when the storage layer guarantees it is not.
-2. **Is consolidation assumed?** Per §3.1 there is no `consolidate` tool. If the design
-   relies on it, it is unbuilt work rather than an integration point.
+2. *(Withdrawn — this asked whether consolidation was an unbuilt assumption. `memory_consolidate`
+   ships with a real schema and implementation; see the §3.1 retraction. No decision needed.)*
 3. **Which CLIs must the flag profile cover at Phase 2 exit?** Only `cline` has verified
    flags today.
 4. **Does the Option B/C decision still need making,** given WP §4.2? If the two-renderer
