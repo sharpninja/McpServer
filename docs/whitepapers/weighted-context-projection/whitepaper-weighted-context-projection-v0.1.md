@@ -1,8 +1,8 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.2  
-**Status:** Draft for operator review (post Round-2 self-eval)  
+**Version:** v0.1.3  
+**Status:** Draft for operator review (post Round-3 external review pass)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
 **Date:** 2026-09-20 (America/Chicago)  
@@ -127,10 +127,11 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `weight` | Relative score for current-work progress ∈ [0, 1] or ranked mass |
 | `pin` | Boolean / pin class (operator, system, acceptance) |
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
-| `projectionState` | `expanded` \| `summarized` \| `omitted` \| `stubbed` |
+| `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
 | `summaryText` | Mid-tier stub when not expanded |
 | `tokenEstimate` | Local estimate for *budgeting only* (not billing proof) |
 | `reAdmitCount` | How often this turn was pulled back from omit |
+| `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §11.1 reads |
 
 Projection object:
 
@@ -138,7 +139,7 @@ Projection object:
 | --- | --- |
 | `budgetTokens` | Hard cap for model-facing assembly |
 | `generation` | Matches scorer pass |
-| `segments[]` | Ordered expanded / summary / stub markers with `turnId` refs |
+| `segments[]` | Ordered `expanded` / `summarized` segment markers with `turnId` refs |
 | `omittedTurnIds[]` | Recoverable via SessionLog |
 | `standingMemoryIds[]` | Injected via MemoryBridge |
 
@@ -192,11 +193,14 @@ Informal algorithm under hard budget `B`:
 1. Load SessionLog turns for `sessionId` plus standing memories from MemoryBridge.
 2. Ensure pins are marked `expanded` (fail closed: if pins alone exceed `B`, surface error / force memory promotion / ask operator—do not silently drop pins).
 3. Score or refresh weights (respect hysteresis).
-4. Allocate remaining budget:
-   - Sort non-pinned turns by weight descending (stable tie-break: recency, then `turnId`).
+4. Allocate remaining budget by **value density**, not raw weight:
+   - Compute `density = weight / max(tokenEstimate, 1)` for each non-pinned turn.
+   - Sort by `density` descending (stable tie-break: `weight` descending, then recency, then `turnId`).
    - Expand while residual budget allows full payloads.
-   - For the next band, attach `summaryText` stubs.
+   - For the next band, attach `summaryText` stubs, charged at the stub's own `tokenEstimate` rather than the full payload's.
    - Omit the rest; record `omittedTurnIds`.
+
+   **Why density and not raw weight:** sorting by weight alone lets a single high-weight, high-token payload (e.g. a 40k-token tool dump scored 0.9) consume the budget ahead of many smaller turns of nearly equal weight—including exactly the low-verbosity constraint turns §11.2 exists to protect. Density packing is the standard greedy approximation for a hard-capped budget; raw weight survives as the tie-break so that equal-cost turns still order by task relevance.
 5. Emit `contextProjection` with `generation++`.
 6. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else.
 
@@ -220,9 +224,11 @@ Honest comparison of where this can live.
 
 ### Option B — Microsoft Agent Framework with client-managed history
 
-MAF supports client-managed chat history patterns (`ChatMessageStore` / `ChatHistoryProvider`). On invoke, the framework can obtain an exact history list from the provider (modulo system messages, tools, and `AIContextProvider` contributions). That is materially stronger control than opaque host threads.
+MAF supports client-managed chat history patterns: an `AgentSession` holding local conversation state, plus a pluggable `ChatHistoryProvider` that controls where history lives and how it is retrieved (`InMemoryChatHistoryProvider` ships as the default; a `DatabaseChatHistoryProvider` is the application-implemented durable option). On invoke, the framework can obtain an exact history list from the provider (modulo system messages, tools, and context-provider contributions). That is materially stronger control than opaque host threads.
 
-**Caveat:** Foundry persistent threads (or any service-owned thread store) weaken control: the service may retain or reshape history outside the projector. Prefer client-managed stores when the goal is weighted projection.
+**Caveat:** Foundry service-managed conversations (or any service-owned history store) weaken control: the service may retain or reshape history outside the projector. Prefer client-managed providers when the goal is weighted projection.
+
+**Naming note (v0.1.3):** earlier revisions of this whitepaper cited `ChatMessageStore` as the client-managed abstraction. That name is not used by the cited Agent Framework guidance—it is earlier-preview / Semantic Kernel terminology—and has been corrected to `AgentSession` / `ChatHistoryProvider` here and in §16.
 
 **Verdict:** Strong fit for API-shaped agents where message arrays are first-class. Weaker fit when the operational preference is frontier **CLI subscriptions** rather than per-token API burn.
 
@@ -346,7 +352,7 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 
 ## 11. Risks and open questions
 
-1. **Thrashing:** scores oscillate; projection churns; prompt cache dies. Mitigation: hysteresis, pin classes, cooldown on re-admit.
+1. **Thrashing:** scores oscillate; projection churns; prompt cache dies. Mitigation: hysteresis, pin classes, cooldown on re-admit (enforced against `lastReAdmitGeneration`; see §4.2).
 2. **Bad scorer drops quiet constraints:** low-verbosity “never X” turns get omitted. Mitigation: constraint detector → pin or MemoryBridge; fail tests in eval protocol.
 3. **CLI Terms of Service / fair use:** sessionless high-frequency oneshots may trip rate or ToS limits. Mitigation: backoff, batching, respect vendor rules; do not pretend subscriptions are uncapped APIs.
 4. **Tool-loop ownership:** split between orchestrator and CLI causes missing traces in SessionLog. Mitigation: pick one owner per spike; log everything observable.
@@ -396,7 +402,7 @@ Mapped **1:1 to Roadmap phases** in §14. Cross-cutting constraints listed after
 | Phase | Deliverable | Exit criteria |
 | --- | --- | --- |
 | **0** | This whitepaper + Hostile Validation (HV) alignment | Operator review of open questions; HV still pending where blocked on API keys |
-| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
+| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
 | **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
 | **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
 | **4** | Scorer v1 rules → v2 LLM judge with hysteresis | Thrash metrics under threshold; quiet-constraint eval suite green |
@@ -458,7 +464,7 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 8. *Developing Adaptive Context Compression Techniques for Large Language Models (LLMs) in Long-Running Interactions.* arXiv:2603.29193. https://arxiv.org/abs/2603.29193  
 9. deepset Haystack. *SummarizationCompactor* documentation. https://docs.haystack.deepset.ai/docs/next/summarization-compactor  
 10. PraisonAI. *Intelligent Conversation Compaction* documentation. https://praison.ai/docs/features/intelligent-conversation-compaction  
-11. Microsoft Agent Framework. *Chat history storage patterns* (client-managed `ChatMessageStore` / `ChatHistoryProvider`). https://devblogs.microsoft.com/agent-framework/chat-history-storage-patterns-in-microsoft-agent-framework/
+11. Microsoft Agent Framework. *Chat history storage patterns* (client-managed `AgentSession` / `ChatHistoryProvider`). https://devblogs.microsoft.com/agent-framework/chat-history-storage-patterns-in-microsoft-agent-framework/
 
 ---
 
@@ -469,5 +475,6 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | v0.1 | 2026-09-20 | Initial whitepaper for operator review tomorrow |
 | v0.1.1 | 2026-09-20 | Round-1 self-eval: HV = Hostile Validation; SessionLog extends `sessionlog_*`; hook matrix honesty; Immediate next actions; Phase 1 exit criteria concreteness; memory verb / alias clarity |
 | v0.1.2 | 2026-09-20 | Round-2 hostile pass: remove soft overclaims; label assumptions; Phase 2 spike acceptance checklist; Out of scope for v0.1.x; Recommendations↔Roadmap 1:1 |
+| v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §11.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
 
 **Non-claims:** This document does not assert measured token-cost reductions, benchmark wins against PACE/HiGMem/G-Long, ToS clearance for high-frequency CLI oneshots, or completed Perplexity HV. Those require separate empirical, legal/ops, and API-key-unblocked work. Design-target rows in §9 are not empirical results.
