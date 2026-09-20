@@ -1,9 +1,10 @@
-# Weighted Context Projection — Implementation Recommendations
+# Weighted Context Projection — Proposed Implementation
 
-**Status:** advisory, non-normative
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.4)
+**Document:** proposed-implementation-weighted-context-projection-v0.1.md
+**Version:** v0.1.0
+**Status:** Proposed. Requires operator approval before any build work begins.
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.5)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Whitepaper baseline:** `cursor/whitepaper-context-projection-v012` @ `eb3655a4160164f70c802fbcebd45a3be4232626`
 **Date:** 2026-09-20
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
@@ -12,17 +13,22 @@
 
 ## 1. Purpose and standing
 
-This document does not amend the whitepaper. The whitepaper describes a design; this
-describes what building that design costs against the code that exists today, and
-where the two disagree.
+The whitepaper describes a design. This document describes **how that design would be
+built against the code that exists today, and what it would cost** — deployment options,
+corrections the code forces on the design, recommendations, phases, and exit gates. The
+two were previously one file; they are separated because a design argument and a build
+proposal are read by different people for different reasons, and because implementation
+detail kept accumulating inside a document whose job was to argue a design.
 
-Everything below is grounded in a read of `main` at the baseline commit. Every claim
-names the file it came from so it can be re-checked or falsified. Where the whitepaper
-and the code disagree, the code wins as a statement of fact about the present, and the
-disagreement is recorded as a correction to be made — not as a defect in the design.
+Nothing here is approved. Every claim about the codebase names the file it came from so it
+can be re-checked or falsified. Where the whitepaper and the code disagree, the code wins
+as a statement of fact about the present, and the disagreement is recorded as a correction
+to be made — not as a defect in the design. No build was run and no tests were executed
+for this document.
 
-Nothing here should be read as approval to build. WP §12 still owns the
-Phase 1 decision and the Option B/C decision.
+This document does not amend the whitepaper, and it does not decide anything. §9 still
+owns the Phase 1 decision and the Option B/C decision; §10 lists what remains genuinely
+undecided.
 
 ## 2. Headline
 
@@ -61,7 +67,7 @@ claimed the shipped memory surface was five CRUD tools (`memory_add`, `memory_ge
 `memory_list`, `memory_remove`, `memory_update`); that the whitepaper's `remember` /
 `recall` / `explore` / `consolidate` / `promote` vocabulary existed only in
 `docs/plans/mcp-memory-002-ac-catalog.json` and test names; that `memory_remember` did not
-exist; and that WP §15's alias relationship was therefore inverted. None of that holds.
+exist; and that WP §11's alias relationship was therefore inverted. None of that holds.
 
 `mcps/mcpserver/tools/` contains **eleven** memory descriptors, not five: `memory_add`,
 `memory_consolidate`, `memory_explore`, `memory_get`, `memory_list`, `memory_promote`,
@@ -74,10 +80,10 @@ The alias direction runs the other way from what this document claimed.
 `memory_remember`'s own descriptor reads: "Use this instead of `memory_add` when title,
 type, tags, confidence, or provenance matter." So `memory_remember` is the typed,
 provenance-carrying write path and `memory_add` is the thinner compatibility surface —
-which is what WP §15 already said. `memory_consolidate` likewise exists, with
+which is what WP §11 already said. `memory_consolidate` likewise exists, with
 `dryRun`, `similarityThreshold`, and `allowHardDelete` parameters.
 
-**Recommendation: none. No whitepaper change is required here, and §15 should be left
+**Recommendation: none. No whitepaper change is required here, and WP §11 should be left
 alone.** The memory bridge should bind to `memory_remember` for writes that carry
 provenance and `memory_recall` for meaning-ranked reads, rather than to the compatibility
 CRUD pair this document previously recommended.
@@ -180,11 +186,11 @@ rather than `sessionId` alone. This is a code-style precaution, not a defect cla
 
 ## 4. What already exists
 
-Two scoping assumptions in WP §7 are more favorable than the whitepaper assumes.
+Two scoping assumptions in §6 are more favorable than the whitepaper assumes.
 
 ### 4.1 The Option C invoker is mostly built
 
-`McpServer.Common.AgentCli` already provides what WP §7 Option C describes as new work:
+`McpServer.Common.AgentCli` already provides what §6 Option C describes as new work:
 
 - `IAgentCliClient.InvokeAsync(prompt, options, ct)` — a one-shot that takes a prompt blob
   and returns a structured `AgentCliResult`. This is the Option C call shape.
@@ -204,7 +210,7 @@ branches on `NormalizeAgentName` into exactly two cases: a `cline` branch (`-p`,
 `--yolo`). There is no per-CLI flag profile and no extra-arguments escape hatch.
 `AgentCliClientOptions.AgentPath` defaults to `"cline"`.
 
-WP §14.1's gate requires verified fresh-session / no-resume flags for the chosen CLI. That
+§8.1's gate requires verified fresh-session / no-resume flags for the chosen CLI. That
 gate cannot be satisfied by configuration today — it needs a flag-profile abstraction
 first. This is small but it is a prerequisite, not a nice-to-have, and it belongs in
 Phase 2 scope explicitly. It also bears on the whitepaper's no-invented-flags standard:
@@ -213,7 +219,7 @@ should be verified per CLI rather than inherited.
 
 ### 4.2 Option B is closer than the whitepaper implies
 
-WP §7 frames Option B as a weaker fit given a preference for CLI subscriptions. The code
+§6 frames Option B as a weaker fit given a preference for CLI subscriptions. The code
 complicates that framing:
 
 - `Microsoft.Agents.AI`, `Microsoft.Agents.AI.OpenAI`, and `Microsoft.Agents.AI.Workflows`
@@ -228,7 +234,7 @@ central technical prerequisite is met.
 **Recommendation.** Stop treating B and C as exclusive. Have the projector emit a
 neutral assembly and render it two ways — `IList<ChatMessage>` for the `IChatClient` path,
 a single prompt blob for the `IAgentCliClient` path. The selection then becomes a host
-configuration choice rather than an architectural commitment, and the WP §12 Option decision
+configuration choice rather than an architectural commitment, and the §9 Option decision
 narrows to "which path do we validate first," which is a much cheaper decision to get wrong.
 
 ### 4.3 Schema changes cost three migrations, and there is a guard to extend
@@ -302,7 +308,7 @@ The WP §4.2 field list divides cleanly, and should be stored as two tables:
 | `workspaceId` | `projectionGeneration` |
 | seal sequence, superseded marker | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
 
-`weight` must **not** live in the immutable record. It is re-scored every turn under WP §11
+`weight` must **not** live in the immutable record. It is re-scored every turn under WP §10
 hysteresis, so storing it in an append-only structure would force a new sealed version on
 every rescore — turning §5.5's growth concern from O(turns) into O(turns × passes).
 
@@ -356,7 +362,7 @@ is not guaranteed to reflect the assembled turn, so `tokenEstimate` can move bet
 for reasons unrelated to scoring — which reorders the pack and registers as flips.
 
 Sealing fixes the denominator at terminal status. Measured flip rate then attributes to the
-scorer alone, which is what the Phase 4 ≤ 0.10 flips/turn/pass gate in WP §10.1 and WP §14 needs
+scorer alone, which is what the Phase 4 ≤ 0.10 flips/turn/pass gate in WP §9.1 and §8 needs
 in order to mean anything. Without a stable denominator that threshold measures the
 estimator as much as the scorer.
 
@@ -369,7 +375,110 @@ denominator — but it should be written down as a decision with those roles sta
 will eventually ask why the database is several times larger than the conversation, and the
 answer should be on record before they do.
 
-## 6. Suggested phasing
+## 6. Runtime deployment options
+
+Honest comparison of where this can live.
+
+### Option A — Stay inside IDE plugins
+
+**What works:** Hook injection of REQUIRED MEMORIES; PreCompact / PostCompact reactions; prompt prefixes; limited transcript glimpses depending on host APIs.
+
+**What fails:** Plugins do not own the full host transcript. The host can still auto-compact. Projection can *mitigate* loss but cannot guarantee that model-facing context equals SessionLog-derived projection.
+
+**Verdict:** Necessary interim hardening; not sufficient for the end state.
+
+### Option B — Microsoft Agent Framework with client-managed history
+
+MAF supports client-managed chat history patterns: an `AgentSession` holding local conversation state, plus a pluggable `ChatHistoryProvider` that controls where history lives and how it is retrieved (`InMemoryChatHistoryProvider` ships as the default; a `DatabaseChatHistoryProvider` is the application-implemented durable option). On invoke, the framework can obtain an exact history list from the provider (modulo system messages, tools, and context-provider contributions). That is materially stronger control than opaque host threads.
+
+**Caveat:** Foundry service-managed conversations (or any service-owned history store) weaken control: the service may retain or reshape history outside the projector. Prefer client-managed providers when the goal is weighted projection.
+
+**Naming note (carried over from whitepaper v0.1.3):** earlier revisions cited `ChatMessageStore` as the client-managed abstraction. That name is not used by the cited Agent Framework guidance—it is earlier-preview / Semantic Kernel terminology—and has been corrected to `AgentSession` / `ChatHistoryProvider` here and in WP §12.
+
+**Verdict:** Strong fit for API-shaped agents where message arrays are first-class. Weaker fit when the operational preference is frontier **CLI subscriptions** rather than per-token API burn.
+
+### Option C — Outer orchestrator (extend QBAgent) + sessionless frontier CLI oneshots
+
+**Shape:**
+
+1. SessionLog is source of truth.
+2. ContextProjector builds a prompt blob under budget.
+3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
+4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
+
+**Why sessionless:** Resuming a vendor CLI session reintroduces vendor-owned transcript and their compaction. Fresh oneshots preserve *our* projection as the model-facing context.
+
+**Trade-offs (engineering-honest):**
+
+- Control is **prompt-blob**, not a full structured `messages[]` API (unless the chosen CLI exposes one).
+- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Both are viable; split-brain tooling is the failure mode to avoid. **The spike must declare which owner it uses before starting**, because the two branches have different observability ceilings and therefore different acceptance gates (§8.1).
+- Fair-use / rate limits of CLI **subscriptions** still apply even for sessionless oneshots. This is not infinite capacity and is not a claim of uncapped API throughput.
+- Prompt-cache friendliness: keep a **stable prefix** (system + standing memories) and a **variable tail** (projection segments). Do not reshuffle the prefix every turn.
+- Host UI may still compact its *display* transcript; that is UX, not model-facing truth, if invocation bypasses the host model path.
+
+**Verdict:** Best match for escaping host auto-compaction on the *model-facing* path while remaining compatible with CLI subscription usage (fair-use still applies). **Primary recommendation for Phase 2 spike** (pending operator approve/reject in §9).
+
+---
+
+## 7. Recommendations
+
+Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed after.
+
+| Rec | Maps to | Action |
+| --- | --- | --- |
+| **R0** | **Phase 0** | Treat compaction / context loss as the primary problem; complete operator review of the whitepaper and of this proposal; run Hostile Validation when unblocked (Perplexity HV still pending API key). Keep the durable memory layer as the cross-session companion, not the turn ledger. |
+| **R1** | **Phase 1** | Extend MCP `sessionlog_*` with weight / pin / projection metadata (prefer extend over new store); ship offline projection simulator with the schema fields and I/O in §8 Phase 1 exit criteria. |
+| **R2** | **Phase 2** | Spike Option C (outer orchestrator + one Claude or Grok sessionless CLI oneshot) early—before over-investing in in-host projection theater. Meet the Phase 2 spike acceptance checklist in §8.1. |
+| **R3** | **Phase 3** | Keep Option A PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) during transition; measure re-paste rate vs baseline. |
+| **R4** | **Phase 4** | Scorer honesty: ship v1 rules with hysteresis before any learned / LLM judge (v2). |
+
+**Cross-cutting (all phases):**
+
+- Do **not** rehabilitate `memory-bench-whitespace` (whitespace/estimator multiturn bench) as provider-metered savings proof.
+- Success = task continuity without operator re-paste after reproject / compact fallback—not estimator deltas.
+- Prefer MAF client-managed history (**Option B**) when the runtime is API-native rather than CLI-subscription-native; Option B is a parallel path, not a substitute for the Phase 2 CLI spike unless the operator redirects.
+
+---
+
+## 8. Roadmap and phase gates
+
+| Phase | Deliverable | Exit criteria |
+| --- | --- | --- |
+| **0** | This whitepaper + Hostile Validation (HV) alignment | Operator review of open questions; HV still pending where blocked on API keys |
+| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
+| **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
+| **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
+| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | `projectionState` flip rate ≤ **0.10** per turn per pass (WP §9.1 metric 2, operator-adjustable but fixed before the phase opens); quiet-constraint eval suite green |
+
+### 8.1 Phase 2 spike acceptance checklist (pass/fail)
+
+All bullets must be **pass** before calling the Phase 2 spike done. Fail any → not done.
+
+- [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
+- [ ] **PASS/FAIL — Projection under budget:** Assembled prompt / projection is ≤ configured `budgetTokens` (local estimator OK for this engineering gate only).
+- [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§6 Option C, WP §10.4).
+- [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
+- [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
+- [ ] **PASS/FAIL — Re-admit demo:** One previously omitted turn is re-admitted into a later projection and used by a subsequent oneshot (receipt: turnIds + generations).
+- [ ] **PASS/FAIL — No estimator savings claim:** Spike write-up does **not** claim provider-metered token savings or cite `memory-bench-whitespace` deltas as cost proof.
+- [ ] **PASS/FAIL — Continuation:** Operator (or rubric) confirms task continues without re-pasting standing constraints after reproject.
+
+### 8.2 Out of scope for v0.1.x
+
+Explicitly **not** attempted in this proposal or the Phase 0–2 decision window:
+
+- Learned / trained scorer weights or production v2 judge prompts
+- Full eight-CLI matrix (Codex / Cline / OpenCode / Copilot / …) oneshot certification
+- Legal opinion on vendor CLI Terms of Service for high-frequency sessionless oneshots
+- Provider-metered A/B cost studies or published “token savings %”
+- New SessionLog implementation code or production migrations (Phase 1 may prototype schema offline only)
+- Inventing additional literature beyond the frozen citation list in WP §12
+- Claiming Perplexity Hostile Validation complete while API key remains missing post-reseed
+- Publishing operator `add-profile` / standing-rules profile files publicly
+
+---
+
+### 8.3 Where the code read changes the phasing
 
 Ordered against the whitepaper's own phases, with the above folded in.
 
@@ -395,9 +504,22 @@ existing plugin seams.
 
 **Phase 4 — scorer v1.**
 Rules-based only, measured against the Phase 1 simulator, gated on the ≤ 0.10 flips per
-turn per pass threshold now fixed in WP §10.1 and WP §14.
+turn per pass threshold now fixed in WP §9.1 and §8.
 
-## 7. Open questions for the operator
+## 9. Immediate next actions (operator review)
+
+Concrete checklist for tomorrow—no need to re-derive the design:
+
+- [ ] **Approve or reject Option C** as the primary Phase 2 spike target (Claude or Grok CLI sessionless oneshot; prompt-blob control, not full `messages[]` unless that CLI exposes it).
+- [ ] **Approve Phase 1 SessionLog path:** extend existing MCP `sessionlog_*` with weight / pin / projection metadata **vs** stand up a new store (default recommendation: extend).
+- [ ] **Confirm success metric:** zero operator re-paste of constraints / paths / acceptance criteria after reproject (or compact fallback)—not estimator token deltas; not provider-metered savings claims from `memory-bench-whitespace`.
+- [ ] **Note:** Perplexity HV still **pending API key** after box reseed—do not treat HV as done.
+- [ ] **Note:** Full 19-file `add-profile` restore still needed when PAYTON-LEGION2 reconnects; standing rules currently restored from durable memory only. Never publish profile files publicly.
+- [ ] **Skim related-work table** for fairness (especially PACE proximity + re-admit gap); literature list is frozen for v0.1.x—no invented papers.
+
+---
+
+## 10. Open questions for the operator
 
 1. **Should the `sessionlog_*` delete descriptions be corrected** (§3.2)? They tell agents
    an operation is irreversible when the storage layer guarantees it is not.
@@ -406,11 +528,11 @@ turn per pass threshold now fixed in WP §10.1 and WP §14.
 3. **Which CLIs must the flag profile cover at Phase 2 exit?** Only `cline` has verified
    flags today.
 4. **Does the Option B/C decision still need making,** given WP §4.2? If the two-renderer
-   approach is accepted, WP §12 may be deciding something it no longer needs to decide.
+   approach is accepted, §9 may be deciding something it no longer needs to decide.
 5. **Re-opened turns (§5.4):** does a superseded seal stay readable to projection as
    history, or is it excluded as retracted? This changes WP §6 re-admit semantics.
 
-## 8. Method and limits
+## 11. Method and limits
 
 Findings come from a direct read of `main` at `e7c43a12`: entity definitions under
 `src/McpServer.Storage/Entities/`, the MCP tool surface in
@@ -433,3 +555,13 @@ other than `main` and the whitepaper branch were not surveyed, so a capability m
 in flight that this document reports as missing.
 
 Line numbers are accurate as of the baseline commits and will drift.
+
+---
+
+## Document control
+
+| Version | Date (CT) | Notes |
+| --- | --- | --- |
+| v0.1.0 | 2026-09-20 | Created by splitting proposed implementation out of the whitepaper (whitepaper v0.1.6) and folding in `implementation-recommendations-v0.1.md`, which this document replaces. Contents: deployment options (§6), recommendations (§7), roadmap and phase gates (§8), and immediate next actions (§9) moved from the whitepaper; code-grounded corrections (§3), existing capability (§4), the sealed-projection design (§5), phasing notes (§8.3), open questions (§10), and method (§11) carried over from the recommendations note. Two findings from that note are retracted in place — see §3.1 and §3.2 |
+
+**Non-claims.** This document inherits the whitepaper's non-claims and adds no measured results of its own. It asserts no benchmark outcome, no provider-metered cost figure, and no completed validation. No build was run and no tests were executed while writing it; every code claim is a read of `main` at the stated baseline and may be falsified by re-reading it.

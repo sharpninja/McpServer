@@ -6,12 +6,14 @@ Operator-facing index for the whitepaper on escaping host auto-compaction via Se
 
 | File | Description |
 | --- | --- |
-| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | Full technical whitepaper (**v0.1.4** content; filename retained) |
-| [implementation-recommendations-v0.1.md](./implementation-recommendations-v0.1.md) | Advisory: design read against `main` @ `e7c43a12` — corrections, existing capability, phasing |
+| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.6** content; filename retained). Problem, architecture, scoring model, projection algorithm, related work, evaluation method, glossary, references |
+| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.0). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md` |
 | [self-eval-round1.md](./self-eval-round1.md) | Round-1 accuracy + actionability self-eval receipt |
 | [self-eval-round2.md](./self-eval-round2.md) | Round-2 hostile-pass self-eval receipt |
 
 Standing-rules load receipts are deliberately **not** in this folder — see the profile note below.
+
+**Read order.** The whitepaper argues the design and decides nothing operational. The implementation proposal is where deployment options, phases, exit gates, and everything grounded in the current code live — including two findings that were asserted and then retracted, kept in place so the error stays auditable. Cross-references use `WP §N` for the whitepaper and `IMPL §N` for the proposal.
 
 ## One-paragraph abstract
 
