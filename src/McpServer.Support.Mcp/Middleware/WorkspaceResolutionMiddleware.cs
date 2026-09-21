@@ -13,9 +13,9 @@ namespace McpServer.Support.Mcp.Middleware;
 /// If neither tier resolves a workspace, API-key and unauthenticated callers may continue on
 /// explicitly workspace-independent routes, but Bearer-authenticated callers must still supply
 /// <c>X-Workspace-Path</c> for tenant-scoped routes. Workspace-required routes receive a <c>404</c>.
-/// <c>/mcpserver/memory</c> is workspace-optional so Global memories can be created from the
-/// server default or empty workspace context (FR-MCP-MEMORY-001). Workspace-scoped memory writes
-/// still fail later when no real workspace is active.
+/// FR-MCP-MEMORY-001: only <c>POST /mcpserver/memory</c> and <c>POST /mcpserver/memory/remember</c>
+/// proceed without a resolved workspace, so Global creates work from the default or empty context.
+/// List, get, update, remove, and every other memory route stay workspace-required.
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
 /// Non-<c>/mcpserver/</c> and non-<c>/mcp-transport</c> routes skip resolution.
 /// </summary>
@@ -43,7 +43,6 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcpserver/events",
         "/mcpserver/gh",
         "/mcpserver/context",
-        "/mcpserver/memory",
         "/mcpserver/configuration",
         "/mcpserver/voice",
         "/mcp-transport",
@@ -53,7 +52,6 @@ public sealed class WorkspaceResolutionMiddleware
     {
         "/mcpserver/workspace",
         "/mcpserver/tools",
-        "/mcpserver/memory",
         "/mcpserver/configuration",
     };
 
@@ -162,7 +160,8 @@ public sealed class WorkspaceResolutionMiddleware
         }
 
         // No workspace resolved — check whether this route requires one.
-        if (IsWorkspaceIndependent(path, hasBearerToken))
+        // FR-MCP-MEMORY-001: Global create POSTs are the only memory exception.
+        if (IsWorkspaceIndependent(path, hasBearerToken) || IsGlobalMemoryCreate(context.Request))
         {
             _logger.LogDebug("[WS-Resolve] {Method} {Path} | SKIP: workspace-independent route, proceeding without workspace",
                 method, path);
@@ -221,6 +220,20 @@ public sealed class WorkspaceResolutionMiddleware
         }
 
         await _next(context).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Exact Global-create POSTs may run with an empty workspace context.
+    /// Subpaths such as recall, list, get, update, and remove are not included.
+    /// </summary>
+    private static bool IsGlobalMemoryCreate(HttpRequest request)
+    {
+        if (!HttpMethods.IsPost(request.Method))
+            return false;
+
+        var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
+        return path.Equals("/mcpserver/memory", StringComparison.OrdinalIgnoreCase)
+            || path.Equals("/mcpserver/memory/remember", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsWorkspaceIndependent(PathString path, bool hasBearerToken)

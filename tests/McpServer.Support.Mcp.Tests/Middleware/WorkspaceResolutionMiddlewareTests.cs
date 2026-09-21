@@ -284,11 +284,18 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     /// <summary>
-    /// FR-MCP-MEMORY-001: Bearer callers can reach memory routes without a workspace header
-    /// so Global creates work from the default or empty workspace context.
+    /// FR-MCP-MEMORY-001: Bearer callers without X-Workspace-Path may POST the exact Global-create
+    /// routes. List, get, update, remove, and other memory subpaths stay workspace-required.
     /// </summary>
-    [Fact]
-    public async Task BearerToken_WithoutWorkspaceHeader_AllowsMemoryRoute()
+    [Theory]
+    [InlineData("POST", "/mcpserver/memory", true)]
+    [InlineData("POST", "/mcpserver/memory/remember", true)]
+    [InlineData("GET", "/mcpserver/memory", false)]
+    [InlineData("GET", "/mcpserver/memory/MEMORY-FACT-001", false)]
+    [InlineData("PUT", "/mcpserver/memory/MEMORY-FACT-001", false)]
+    [InlineData("DELETE", "/mcpserver/memory/MEMORY-FACT-001", false)]
+    [InlineData("POST", "/mcpserver/memory/recall", false)]
+    public async Task BearerToken_WithoutWorkspaceHeader_MemoryRoutes(string method, string path, bool allowed)
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -297,11 +304,11 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcpserver/memory", method: "POST", bearerToken: "jwt-token");
+        var ctx = CreateContext(path, method: method, bearerToken: "jwt-token");
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
-        Assert.True(nextCalled);
-        Assert.Equal(200, ctx.Response.StatusCode);
+        Assert.Equal(allowed, nextCalled);
+        Assert.Equal(allowed ? 200 : 404, ctx.Response.StatusCode);
         Assert.False(wsContext.IsResolved);
     }
 
