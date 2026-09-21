@@ -5,7 +5,8 @@ MCP memories are durable operator guidance stored by McpServer and scoped by wor
 ## Scopes
 
 - `Global` memories apply to every workspace and must contain only guidance the operator intends to share everywhere.
-- `Workspace` memories apply only to the active workspace and must be stored with that workspace ownership.
+- Creating a `Global` memory succeeds when the active workspace is empty or is the configured default workspace. The stored row is `Scope=Global` and `WorkspaceId=null`. `memory_add` and `memory_remember` accept an empty, omitted, or configured default `workspacePath` for `Global` scope. On HTTP, only `POST /mcpserver/memory` and `POST /mcpserver/memory/remember` proceed without a resolved workspace; list, get, update, and remove still require one. Full auth (JWT or a full workspace API key) is required; a default read-only API key cannot write.
+- `Workspace` memories apply only to the active workspace and must be stored with that workspace ownership. Workspace scope still requires a real workspace path.
 - `Effective` listing returns `Global` memories first sorted by ID, then current `Workspace` memories sorted by ID.
 - Workspace-scoped memories must not be copied, applied, or replayed into a different workspace unless the operator explicitly asks for that new memory to exist there.
 

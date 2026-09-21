@@ -27,9 +27,19 @@ public static class MemorySurfaceCatalog
         "memory_remove",
     ];
 
+    /// <summary>Agent-oriented description for <c>memory_add</c>.</summary>
+    public const string AddDescription =
+        "Add a memory item. Defaults to Workspace scope. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.";
+
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Tool parameter contract for workspace path on memory create verbs.
+    /// </summary>
+    public const string CreateWorkspacePathDescription =
+        "Workspace path. Optional for Global scope: empty, omitted, or the configured default workspace stores a Global memory with no workspace owner. Required for Workspace scope.";
+
     /// <summary>Agent-oriented description for <c>memory_remember</c>.</summary>
     public const string RememberDescription =
-        "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Use this instead of memory_add when title, type, tags, confidence, or provenance matter.";
+        "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Use this instead of memory_add when title, type, tags, confidence, or provenance matter. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.";
 
     /// <summary>Agent-oriented description for <c>memory_recall</c>.</summary>
     public const string RecallDescription =

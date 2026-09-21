@@ -138,7 +138,13 @@ public sealed class WorkspaceAuthMiddleware
         }
 
         // ── API key path (agents only) ────────────────────────────────────────
-        var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
+        // FR-MCP-MEMORY-001: a cleared or unresolved workspace context is the server default workspace.
+        // Null and empty paths both authenticate with the configured default (Mcp:RepoRoot) full key.
+        // Default (anonymous) keys stay read-only; this does not grant them write access.
+        var workspacePath = workspaceContext.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            workspacePath = configuration["Mcp:RepoRoot"];
+        workspacePath ??= string.Empty;
         var expected = string.IsNullOrWhiteSpace(workspacePath) ? null : tokenService.GetToken(workspacePath);
 
         if (expected is not null)

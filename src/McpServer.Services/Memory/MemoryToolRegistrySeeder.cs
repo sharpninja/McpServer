@@ -40,7 +40,7 @@ public static class MemoryToolRegistrySeeder
         "memory_consolidate" => MemorySurfaceCatalog.ConsolidateDescription,
         "memory_promote" => MemorySurfaceCatalog.PromoteDescription,
         "memory_revert" => MemorySurfaceCatalog.RevertDescription,
-        "memory_add" => "Add a memory item. Defaults to Workspace scope.",
+        "memory_add" => MemorySurfaceCatalog.AddDescription,
         "memory_list" => "List effective memory items. Optional filters: scope, category, keyword.",
         "memory_update" => "Update a memory item by id. Only provided fields are changed.",
         "memory_remove" => "Remove a visible memory item by id.",

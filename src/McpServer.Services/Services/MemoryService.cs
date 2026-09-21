@@ -316,6 +316,10 @@ public sealed partial class MemoryService : IMemoryService
         return new Regex("^" + Regex.Escape(prefix) + "([0-9]+)$", RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));
     }
 
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Global memories have no workspace owner, including when the active
+    /// context is empty or is the configured default workspace. Workspace memories use that context.
+    /// </summary>
     private string? ResolveWorkspaceId(MemoryScope scope)
     {
         return scope == MemoryScope.Global
