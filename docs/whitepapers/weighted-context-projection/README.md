@@ -7,7 +7,7 @@ Operator-facing index for the whitepaper on escaping host auto-compaction via Se
 | File | Description |
 | --- | --- |
 | [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.9** content; filename retained). Problem, architecture, scoring model, projection algorithm, related work, evaluation method, glossary, references |
-| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.3). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md` |
+| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.4). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md` |
 | [self-eval-round1.md](./self-eval-round1.md) | Round-1 accuracy + actionability self-eval receipt |
 | [self-eval-round2.md](./self-eval-round2.md) | Round-2 hostile-pass self-eval receipt |
 
@@ -50,4 +50,4 @@ Long-horizon agent friction is **compaction / context loss**, not whitespace-est
 
 ## Status
 
-Draft — whitepaper **v0.1.9**, proposed implementation **v0.1.3** — 2026-09-20 (America/Chicago). Awaiting operator Payton Byrd review. Author: Payton Byrd.
+Draft — whitepaper **v0.1.9**, proposed implementation **v0.1.4** — 2026-09-20 (America/Chicago). Awaiting operator Payton Byrd review. Author: Payton Byrd.

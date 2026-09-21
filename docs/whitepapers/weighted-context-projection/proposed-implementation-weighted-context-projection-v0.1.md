@@ -1,7 +1,7 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.3
+**Version:** v0.1.4
 **Status:** Proposed. Requires operator approval before any build work begins.
 **Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.9)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
@@ -134,7 +134,7 @@ rows themselves are never physically gone. Design Principle #1 holds, and WP §6
 recoverability invariant rests on infrastructure that already exists and already
 fail-closes. The eviction-versus-demotion distinction is sound.
 
-### 3.2.1 Correction: the ledger does not cover the bulk delete paths
+#### 3.2.1 Correction: the ledger does not cover the bulk delete paths
 
 The paragraph above overstated the audit guarantee, and external review caught it. The
 claim "every mutation is mirrored" is true only of mutations that flow through the tracked
@@ -206,6 +206,41 @@ read of a write path, and the second in a row to over-trust an application-layer
 recurring shape: a check is found, and the property it enforces is then described as holding
 unconditionally, without asking which call paths reach the check. Reading the guard is not the
 same as reading everything that can avoid it.
+
+#### 3.2.3 Correction: new tables do not inherit tombstoning — Phase 1 must register them
+
+§3.2 concluded that this design needs no soft-delete work because the store already tombstones
+rather than deletes. That conclusion holds for the **existing** tables and does not transfer to
+the two new ones, which is a distinction the Phase 1 plan elided.
+
+`SoftDeleteTurnRowsAsync` names its targets explicitly — `SessionLogActions`,
+`SessionLogTurnTags`, `SessionLogTurnContexts`, `SessionLogProcessingDialogs`,
+`SessionLogCommits`, `SessionLogTurnStringLists`, then `SessionLogTurns` — each through a
+separate `SoftDeleteRowsAsync` call. The revival path carries the same fixed list. Neither
+enumerates the model or discovers soft-deletable types.
+
+So a sealed-turn row and a projection-state row for a turn deleted through
+`sessionlog_delete_turn` or `sessionlog_delete_session` would keep `IsDeleted = false`. Naming
+the types with an `Entity` suffix earns the shadow columns and the query filter, but nothing
+ever flips the values. A projection query reading its own tables would then serve content from
+a turn the operator believes is deleted — worse than the audit gap in §3.2.1, because this one
+is visible to callers rather than only to auditors.
+
+**Phase 1 must do both:**
+
+1. **Register both new tables** in `SoftDeleteTurnRowsAsync` and in the revival path, in the
+   same explicit style, so a deleted turn's seal and projection state are tombstoned with it.
+2. **Join projection reads through the source turn**, so visibility derives from the turn
+   rather than from a flag that a future table might again forget to set. Belt and braces: (1)
+   keeps the data consistent, (2) keeps a missed registration from becoming a disclosure.
+
+That these lists are hand-maintained is itself worth flagging to the operator: every future
+child table inherits the same trap. Enumerating soft-deletable entity types from the model
+would remove the class of bug, though it is out of scope here.
+
+**Pattern note.** Fifth correction of the same shape, and the sharpest version of it: the
+property was real, I checked that it held, and I then assumed it would extend to tables that do
+not exist yet. An invariant maintained by a hardcoded list only covers what is on the list.
 
 **Recommendation — now a much smaller one.** Nothing to build; two things to write down.
 
@@ -717,7 +752,9 @@ at every status recognized by `IsTerminalTurnStatus`, reached through `complete_
 post-terminal mutation paths per §5.1; plus a mutable projection-state table (`Weight`, `Pin`, `ProjectionGeneration`,
 `ProjectionState`, `SummaryText`, `ReAdmitCount`, `LastReAdmitGeneration`, plus the derived
 `tokenEstimate` cache keyed by renderer and tokenizer). Status and
-repair operations per §5.6. No tombstone or soft-delete work is needed (§3.2). Three
+repair operations per §5.6. **Both new tables must be registered in the bulk tombstone and
+revival paths, and projection reads must join through the source turn** (§3.2.3) — an earlier
+version of this plan said no soft-delete work was needed, which was wrong. Three
 provider migrations plus snapshot. Extend `SessionLogSchemaGuard`. Build the simulator as a
 test project replaying recorded sessions, so scorer changes are measurable before anything
 reaches a live loop.
@@ -809,6 +846,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.4 | 2026-09-20 | Round-6 external review; one P1. New tables do not inherit tombstoning: `SoftDeleteTurnRowsAsync` and the revival path name seven tables explicitly and discover nothing, so a sealed-turn or projection-state row would keep `IsDeleted = false` after `sessionlog_delete_turn`/`delete_session` and could serve a turn the operator believes deleted. Phase 1 must register both tables in each path **and** join projection reads through the source turn (new §3.2.3); the Phase 1 line claiming no soft-delete work was needed is corrected. Also renumbered §3.2.1 to a consistent heading depth |
 | v0.1.3 | 2026-09-20 | Round-5 follow-up (three findings from the automatic pass on `56996df`). Physical-delete blocking is a tracked-path guard plus a source-text test, not a schema constraint — new §3.2.2, WP §6 narrowed again, open question 9. The §3.2 delete-warning reversal was never propagated to the README review checklist, which still told the operator to correct the warning on the abandoned premise. Banner versions were stale against this document's own changelog (v0.1.0 vs v0.1.1) and against the companion (v0.1.5 vs v0.1.8) |
 | v0.1.2 | 2026-09-20 | Round-5 external review; two findings accepted. `tokenEstimate` cannot be a single frozen column in the seal, because Option B's `IList<ChatMessage>` and Option C's prompt blob render the same turn to different sizes under different tokenizers — the seal now carries a renderer-neutral payload size and the budget-facing estimate is derived per `(renderer, tokenizer)` (§3.4, §5.3, §5.7, Phase 1). Also confirmed that the whitepaper's remaining inverted memory-alias definitions needed fixing rather than being left alone, correcting §3.1's instruction |
 | v0.1.1 | 2026-09-20 | Round-4 external review; eight findings accepted, all verified against `main` before editing. Corrections: the audit ledger does not cover the bulk tombstone/revival paths (new §3.2.1); `TokenCount` cannot back `tokenEstimate` because it is provider usage including prompt and history (§3.4); sealing must fire on all five statuses recognized by `IsTerminalTurnStatus`, not two (§5.1); terminal status is not currently a mutability boundary, so seals go stale silently unless post-terminal mutation is rejected or triggers a reseal (§5.1); the live in-progress turn is not cost-free and must be charged against the budget (§5.1); supersession must be derived from the seal sequence rather than written back into the immutable row (§5.3, §5.4); the session key needs `SourceType` or must name the numeric row id (§3.5); and the `delete_session` irreversibility warning should be kept, reversing an earlier recommendation, because no restore exists on the tool surface (§3.2). Open questions 6–8 added |
