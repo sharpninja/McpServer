@@ -1,7 +1,7 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.7  
+**Version:** v0.1.8  
 **Status:** Draft for operator review (design only; implementation proposal split out)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
@@ -14,7 +14,7 @@
 
 ## Executive summary
 
-Long-horizon agent sessions fail more often from **context loss under host auto-compaction** than from raw model capability limits **(operational observation; not a measured benchmark claim)**. Plugin hooks can inject memories and react to compact events, but they do not own the host transcript. Cross-session MCP memory (remember / recall / explore / consolidate / promote) is necessary and already shipping, yet it is the wrong primary store for *turn-by-turn task state*. Whitespace-token estimator benches (including `memory-bench-whitespace`) are **not** provider-metered savings proof and must not be rehabilitated as such.
+Long-horizon agent sessions fail more often from **context loss under host auto-compaction** than from raw model capability limits **(operational observation; not a measured benchmark claim)**. Plugin hooks can inject memories and react to compact events, but they do not own the host transcript. Cross-session MCP memory (the `memory_*` tools — remember / recall / explore / consolidate / promote, named in full in point 5 below) is necessary and already shipping, yet it is the wrong primary store for *turn-by-turn task state*. Whitespace-token estimator benches (including `memory-bench-whitespace`) are **not** provider-metered savings proof and must not be rehabilitated as such.
 
 This whitepaper proposes **Weighted Context Projection**:
 
@@ -77,7 +77,7 @@ Memory alone stores facts. Compaction alone discards history. Neither continuous
 3. **Hard token budget** on the live projection. Soft targets without enforcement invite drift.
 4. **Re-admit is first-class.** If a quiet constraint suddenly matters, the scorer must be allowed to pull the full turn back from SessionLog.
 5. **Pins beat scores.** Explicit operator or agent pins (e.g., acceptance criteria, blocked-on facts) stay expanded until unpinned.
-6. **Memory bridges the long tail.** Standing facts leave the projection via MCP `remember` (bridge/API alias: `memory_remember`) rather than forever occupying mid-tier summary slots.
+6. **Memory bridges the long tail.** Standing facts leave the projection via the MCP memory write path (`memory_remember`) rather than forever occupying mid-tier summary slots.
 7. **Own assembly when possible.** If the orchestrator builds the prompt, host auto-compaction becomes optional for *model-facing* context—not for host UI chrome.
 8. **No fake metrics.** Do not claim savings from estimators; measure continuation quality and budget adherence.
 
@@ -135,7 +135,7 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
 | `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
 | `summaryText` | Mid-tier stub when not expanded |
-| `tokenEstimate` | Local estimate of the turn's **own rendered payload**, for *budgeting only* (not billing proof). Distinct from any provider-reported usage count for the call that produced the turn, which includes prompt and history — see IMPL §3.4 |
+| `tokenEstimate` | Local estimate of the turn's **own rendered payload**, for *budgeting only* (not billing proof). Two distinctions matter. It is not a provider-reported usage count for the call that produced the turn, which includes prompt and history. And it is **not one fixed number per turn**: the same turn renders to different sizes under a `messages[]` assembly than under a prompt blob, and under different tokenizers, so the estimate is per renderer and target model (§10 risk 8; IMPL §3.4) |
 | `reAdmitCount` | How often this turn was pulled back from omit |
 | `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §10.1 reads |
 
@@ -349,7 +349,7 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 | **Pin** | Hard retain-in-projection marker |
 | **contextProjection** | Budgeted model-facing assembly derived from SessionLog + memory |
 | **Re-admit** | Restoring an omitted turn into the projection from SessionLog |
-| **MemoryBridge** | Path between turn stream and MCP durable memory (`remember` / `recall` / `explore` / `consolidate` / `promote`; `memory_remember` = bridge/API alias) |
+| **MemoryBridge** | Path between turn stream and MCP durable memory. Binds to the shipped tools — `memory_remember` for provenance-carrying writes, `memory_recall` for meaning-ranked reads, with `memory_explore` / `memory_consolidate` / `memory_promote` alongside. The bare verb forms used in this paper's prose are shorthand for those tool names, not separate tools; `memory_add` is the thinner compatibility surface, not the canonical write path |
 | **Sessionless oneshot** | Fresh CLI invocation without vendor session resume |
 | **Host auto-compaction** | IDE/runtime irreversible (to the model) context reduction |
 | **Hysteresis** | Resistance to rapid weight/state flipping |
@@ -385,6 +385,7 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 | v0.1.5 | 2026-09-20 | Separate design from implementation, and stop describing shipped work by ticket number. §3 and §6 now state recoverability as an *existing enforced property* of the durable store—tombstones instead of executed deletes, physical deletion rejected, mutations mirrored to an append-only snapshot ledger—so projection inherits the invariant rather than building it; the classes and methods providing it are delegated to the companion implementation note instead of named here. Records the two design-relevant consequences: re-admit of an *omitted* turn is safe by construction, while re-admit of a *tombstoned* turn depends on unbuilt restore capability. §1.2 describes the shipped capabilities directly instead of citing internal work-item identifiers (`MCP-MEMORY-002`, `PLAN-MANAGER-MEMORY-UI-001`), which meant nothing to an external reader |
 | v0.1.6 | 2026-09-20 | **Split design from proposed implementation.** Runtime deployment options, immediate next actions, recommendations, and the roadmap with its phase gates moved to `proposed-implementation-weighted-context-projection-v0.1.md`, together with the code-grounded findings that were previously a third document; remaining sections renumbered (old §8–§11 → §7–§10, old §15–§16 → §11–§12). Executive summary now names the memory **tools** (`memory_remember` / `memory_recall` / `memory_explore` / `memory_consolidate` / `memory_promote`) rather than describing `memory_remember` as an alias of a bare `remember` verb, which had the relationship backwards |
 | v0.1.7 | 2026-09-20 | Round-4 external review. Narrows the §6 recoverability paragraph: the audit ledger covers the tracked save path, not the bulk tombstone and revival operations, so content recoverability holds but a complete deletion history is not claimable. Defines `tokenEstimate` in §4.2 as an estimate of the turn's own rendered payload, explicitly not a provider usage count for the producing call |
+| v0.1.8 | 2026-09-20 | Round-5 external review. Fixes the two remaining inverted memory-alias definitions that the v0.1.6 changelog wrongly implied were already handled — Principle 6 and the MemoryBridge glossary entry still presented a bare `remember` verb as canonical with `memory_remember` as its alias; both now bind to the shipped `memory_*` tools and mark the short verb forms as prose shorthand. Redefines `tokenEstimate` in §4.2 as per-renderer and per-model rather than one fixed number per turn, since a turn renders to different sizes under a `messages[]` assembly than under a prompt blob (§10 risk 8) |
 
 > **Note on numbering:** rows above v0.1.6 describe changes using **current** section numbers, not the numbers in force at the time, so that every reference in this table still resolves.
 

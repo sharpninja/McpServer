@@ -83,10 +83,21 @@ provenance-carrying write path and `memory_add` is the thinner compatibility sur
 which is what WP §11 already said. `memory_consolidate` likewise exists, with
 `dryRun`, `similarityThreshold`, and `allowHardDelete` parameters.
 
-**Recommendation: none. No whitepaper change is required here, and WP §11 should be left
-alone.** The memory bridge should bind to `memory_remember` for writes that carry
+**Recommendation.** The memory bridge should bind to `memory_remember` for writes that carry
 provenance and `memory_recall` for meaning-ranked reads, rather than to the compatibility
 CRUD pair this document previously recommended.
+
+**Correction to this retraction's own instruction.** The first version of this paragraph said
+"no whitepaper change is required here, and WP §11 should be left alone." That overcorrected.
+WP §11's alias *direction* was right, but its wording still presented a bare `remember` verb
+as canonical with `memory_remember` as an "alias" of it, and Principle 6 did the same. An
+implementer following those definitions literally would look for bare verbs that do not exist
+on the tool surface. Both were reworded in whitepaper v0.1.8 to bind to the shipped `memory_*`
+tools and to mark the short verb forms as prose shorthand.
+
+The lesson generalizes past this section: retracting a wrong finding is not the same as
+confirming the original text was well-phrased, and "leave it alone" is itself a claim that
+needs checking.
 
 **Why it was wrong.** The claim came from reading `MemoryService.cs` and a partial listing
 rather than enumerating the descriptor directory. It is the same failure mode as the §3.2
@@ -220,8 +231,35 @@ and a turn whose stored content exceeds the provider count would be under-charge
 the hard budget — exactly the overflow the budget invariant is supposed to prevent.
 
 `tokenEstimate` must be computed from the **actual serialized payload** the projector will
-send, under the tokenizer for the target model, and stored as its own column. Keep
-`TokenCount` as the provider-cost record it already is.
+send, under the tokenizer for the target model. Keep `TokenCount` as the provider-cost record
+it already is.
+
+**Follow-on correction: one stored estimate is not enough.** The first draft of this fix said
+"stored as its own column," which review then flagged as still wrong — correctly. A single
+frozen value cannot be right across the deployment options this document itself proposes:
+Option B assembles an `IList<ChatMessage>`, Option C assembles a prompt blob for CLI stdin,
+and the two differ in message wrappers, tool-schema serialization, and formatting before any
+tokenizer disagreement is considered. WP §10's "prompt-blob vs messages[] fidelity" risk is
+the same observation from the other end.
+
+So the same sealed turn has **different** model-facing sizes depending on renderer and target
+model, and a single stored number would let packing report `≤ B` while the assembled request
+overflows it — defeating the invariant the estimate exists to enforce.
+
+Split the quantity in two:
+
+- **Immutable, in the seal:** a renderer-neutral measure of the sealed payload — serialized
+  byte length, and optionally a token count under one declared reference tokenizer, labelled
+  as reference-only. This is genuinely a property of the content and cannot change.
+- **Derived, per projection pass:** the budget-facing `tokenEstimate`, computed over the
+  finalized renderer-and-model-specific assembly. Cache it keyed by `(renderer, tokenizer)`
+  in the mutable table if recomputation cost matters, but never treat a cached value from one
+  renderer as valid for another.
+
+The density denominator in WP §6 must use the derived estimate for the renderer actually in
+use. §5.7's stability argument still holds — what stabilizes is the *payload*, which is what
+made the denominator move between passes; it was never a claim that one number serves every
+renderer.
 
 ### 3.5 Workspace scoping is implicit, and turn tables are the gap
 
@@ -426,7 +464,8 @@ The WP §4.2 field list divides cleanly, and should be stored as two tables:
 | Immutable — sealed once at terminal status | Mutable — rewritten per projection generation |
 |---|---|
 | serialized `UnifiedRequestEntryDto` payload | `weight` |
-| `tokenEstimate` over that payload | `pin` |
+| renderer-neutral size of that payload (serialized byte length; reference token count optional) | `pin` |
+| — | `tokenEstimate` per `(renderer, tokenizer)`, derived — see §3.4 |
 | turn identity (`sessionLogId`, `requestId`) | `projectionState` |
 | `workspaceId` | `projectionGeneration` |
 | seal sequence (supersession is derived, not stored — see §5.4) | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
@@ -500,10 +539,12 @@ Precedent for building derived rows inside the write path already exists in
 ### 5.7 Second-order benefit: a stable density denominator
 
 WP §6 packs by `density = weight / max(tokenEstimate, 1)`. `TokenCount` is nullable today and
-is not guaranteed to reflect the assembled turn, so `tokenEstimate` can move between passes
+is not guaranteed to reflect the assembled turn, so the denominator can move between passes
 for reasons unrelated to scoring — which reorders the pack and registers as flips.
 
-Sealing fixes the denominator at terminal status. Measured flip rate then attributes to the
+Sealing fixes the *payload* at terminal status, and with it the denominator for any one
+renderer and tokenizer — which is the variance that mattered. It does not make the estimate
+renderer-independent (§3.4). Measured flip rate then attributes to the
 scorer alone, which is what the Phase 4 ≤ 0.10 flips/turn/pass gate in WP §9.1 and §8 needs
 in order to mean anything. Without a stable denominator that threshold measures the
 estimator as much as the scorer.
@@ -626,11 +667,13 @@ Ordered against the whitepaper's own phases, with the above folded in.
 
 **Phase 1 — sealed projection, schema, and offline simulation.**
 Per §5: an immutable sealed-turn table (serialized `UnifiedRequestEntryDto`,
-`tokenEstimate` computed over that payload, identity, `workspaceId`, seal sequence) written
+the renderer-neutral size of that payload, identity, `workspaceId`, seal sequence — but
+**not** a single frozen `tokenEstimate`, per §3.4) written
 at every status recognized by `IsTerminalTurnStatus`, reached through `complete_turn` /
 `fail_turn`, through terminal-status turns arriving via `submit`, or through the
 post-terminal mutation paths per §5.1; plus a mutable projection-state table (`Weight`, `Pin`, `ProjectionGeneration`,
-`ProjectionState`, `SummaryText`, `ReAdmitCount`, `LastReAdmitGeneration`). Status and
+`ProjectionState`, `SummaryText`, `ReAdmitCount`, `LastReAdmitGeneration`, plus the derived
+`tokenEstimate` cache keyed by renderer and tokenizer). Status and
 repair operations per §5.6. No tombstone or soft-delete work is needed (§3.2). Three
 provider migrations plus snapshot. Extend `SessionLogSchemaGuard`. Build the simulator as a
 test project replaying recorded sessions, so scorer changes are measurable before anything
@@ -716,6 +759,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.2 | 2026-09-20 | Round-5 external review; two findings accepted. `tokenEstimate` cannot be a single frozen column in the seal, because Option B's `IList<ChatMessage>` and Option C's prompt blob render the same turn to different sizes under different tokenizers — the seal now carries a renderer-neutral payload size and the budget-facing estimate is derived per `(renderer, tokenizer)` (§3.4, §5.3, §5.7, Phase 1). Also confirmed that the whitepaper's remaining inverted memory-alias definitions needed fixing rather than being left alone, correcting §3.1's instruction |
 | v0.1.1 | 2026-09-20 | Round-4 external review; eight findings accepted, all verified against `main` before editing. Corrections: the audit ledger does not cover the bulk tombstone/revival paths (new §3.2.1); `TokenCount` cannot back `tokenEstimate` because it is provider usage including prompt and history (§3.4); sealing must fire on all five statuses recognized by `IsTerminalTurnStatus`, not two (§5.1); terminal status is not currently a mutability boundary, so seals go stale silently unless post-terminal mutation is rejected or triggers a reseal (§5.1); the live in-progress turn is not cost-free and must be charged against the budget (§5.1); supersession must be derived from the seal sequence rather than written back into the immutable row (§5.3, §5.4); the session key needs `SourceType` or must name the numeric row id (§3.5); and the `delete_session` irreversibility warning should be kept, reversing an earlier recommendation, because no restore exists on the tool surface (§3.2). Open questions 6–8 added |
 | v0.1.0 | 2026-09-20 | Created by splitting proposed implementation out of the whitepaper (whitepaper v0.1.6) and folding in `implementation-recommendations-v0.1.md`, which this document replaces. Contents: deployment options (§6), recommendations (§7), roadmap and phase gates (§8), and immediate next actions (§9) moved from the whitepaper; code-grounded corrections (§3), existing capability (§4), the sealed-projection design (§5), phasing notes (§8.3), open questions (§10), and method (§11) carried over from the recommendations note. Two findings from that note are retracted in place — see §3.1 and §3.2 |
 
