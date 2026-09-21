@@ -1,11 +1,13 @@
 # Weighted Context Projection — Addendum: Retrospective Linking and Goal Metrics
 
 **Document:** addendum-retrospective-linking-and-goal-metrics-v0.1.md
-**Version:** v0.1.1
+**Version:** v0.1.2
 **Status:** Draft. Not reviewed. Proposes a capability beyond the v0.1.x scope of the whitepaper and the proposed implementation; nothing here is approved or scheduled.
 **Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.9) and `proposed-implementation-weighted-context-projection-v0.1.md` (v0.1.4)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
 **Date:** 2026-09-20
+**Grounding:** Byrd Development Process v4 (`docs/Development-Process-draft-v4.md`), the plan artifacts in `docs/plans/`, and `scripts/Validate-RequirementsTraceability.ps1`. §6 is written against that process rather than proposing a parallel one: the plan is the goal, and its declared requirements and acceptance criteria are the scope.
+
 **Origin:** Operator design session, 2026-09-20. Five proposals, recorded here in the order raised: a retrospective link index (§2–§4), continuous link revalidation (§5), per-goal scope and progress metrics (§6), per-turn result-with-explanation records (§7), and Hostile Validation as the adjudicator of those records rather than the acting agent (§6.3) — an operator correction to this draft's first version, which had the actor grading itself.
 
 **Cross-reference convention.** Bare `§N` refers to a section of this document. `WP §N` refers to the whitepaper. `IMPL §N` refers to the proposed implementation.
@@ -27,6 +29,8 @@ That trigger is circular for the cases that matter most.
 So the mechanism works for turns whose relevance is locally obvious — recency, repeated identifiers, the same file mentioned again — and fails for turns whose relevance is only apparent in hindsight. Those are exactly the turns re-admit was introduced to recover. WP §10 risk 2 ("bad scorer drops quiet constraints") names the symptom; its stated mitigation is a constraint detector at write time, which helps only for constraints recognizable as constraints when written.
 
 Nothing in the current design closes this. It is a structural hole, not a tuning problem.
+
+For provenance: the reinforcement idea this whole design rests on is stated in BDPv4's monitoring list, where a steering message that re-surfaces workspace instructions after compaction "reinforces the weight applied to those requirements, which over time help the compaction algorithm to retain such instructions" (`docs/Development-Process-draft-v4.md`, Implementation). Weighted projection is a mechanization of that observation, and §6 is the part that supplies the progress measurement the observation assumes.
 
 ---
 
@@ -130,14 +134,18 @@ IMPL §3.2.1 applies: if edge state is flipped through set-based updates, those 
 
 WP §5 scores weight as relevance "to current work progress," and nothing in the design measures progress. The central quantity is defined against an unmeasured one.
 
-**Proposal.** Track two values per goal:
+**The goal is the plan, not the turn.** This is the unit correction that makes the rest of §6 tractable, and an earlier draft got it wrong by treating each turn as a thing to be scored. A turn has no goal of its own; it either moves the plan or it does not. Byrd Development Process v4 already fixes the unit: "Completion is not a definitive end state, simply a declaration of a set of requirements and acceptance criteria and proof of achievement of both" (`docs/Development-Process-draft-v4.md`, Planning). A plan declares the criteria; a turn contributes proof.
 
-- **Scope** — the size and complexity of the goal as currently understood. Rises when the goal grows or proves more complex than believed.
-- **Progress** — work demonstrably completed against that goal.
+**Proposal.** Track two values per plan:
+
+- **Scope** — the declared requirement and acceptance-criteria set as currently understood. Rises when the plan grows or proves more complex than believed.
+- **Progress** — acceptance criteria with proof of achievement.
+
+This gives §6 the units it otherwise lacked. BDPv4 plans in this repository carry Functional, Technical and Testing requirements with stable identifiers, and `docs/plans/mcp-memory-002-ac-catalog.json` enumerates 283 acceptance criteria that each bind a statement to a requirement, a `TEST-*` id, a named test method, and a slice. Scope is the count of declared criteria; progress is the count whose bound test method passes. Commensurate by construction — the §6.3 commensurability requirement is satisfied by the artifact rather than by convention — and BDPv4's Validation gate ("the full test suite for the current increment plus all prior work must be green") reads progress from a test run rather than from anyone's judgment.
 
 Two independently moving lines, rather than a single percent-complete, which is the property that makes the pair robust to a goal changing underneath the measurement. A completion ratio alone cannot distinguish "advanced" from "target moved." This is the burn-up / earned-value shape, and that lineage should be cited if this enters the whitepaper — WP §12 is frozen for v0.1.x, so it is named here as a concept and needs a reference in v0.2 rather than a citation added now.
 
-The per-turn reading is then the pair of deltas:
+Both values belong to the plan. A turn's reading is the pair of plan-level deltas attributed to it:
 
 | Scope | Progress | Reading |
 |---|---|---|
@@ -153,6 +161,8 @@ The per-turn reading is then the pair of deltas:
 The rule "progress regresses with scope constant ⇒ the turn was harmful" is not sound as stated, and the correction matters because the exception is high-value.
 
 A turn that discovers earlier work was wrong reduces progress without changing scope. It is also frequently the most valuable turn in a session. Under the unqualified rule it is scored as harm, which optimizes directly against error detection.
+
+BDPv4 states this outcome as an expectation rather than a hazard, under "Resolving Defective Requirements": writing tests against acceptance criteria surfaces "paradoxes created by mismatched priorities, ambiguity and incorrect rules," and "Expect to refine requirements in each iteration... Expect to touch previously written code... This is not a failure of the process, but validation that the core philosophy of iterative improvement is alive and working." The argument below is therefore a restatement of existing process doctrine in metric terms, not a new finding, and it is cited here as precedent rather than presented as a discovery.
 
 The distinction is **introduced** versus **revealed**:
 
@@ -182,13 +192,26 @@ Divergence between the two is itself high-value signal. An actor claiming a crit
 
 **HV is not ground truth either.** It is an adversary with its own error modes, false accusation among them, and it may be wrong in the other direction. So verdicts are evidence rather than fact: append-only (§6.2), and anchored to checkable referents rather than to HV's unsupported opinion. WP §4.2's `pin` classes already include **acceptance**, which supplies the anchor — HV's job is to check acceptance criteria, tests, builds and artifacts, and to label any interpolation between them as interpolation rather than as measurement.
 
-**Where the gaming surface moves.** HV closes self-reporting; it does not eliminate gaming, it relocates it to criteria authorship. An actor that can write its own trivially-satisfiable acceptance criteria can pass hostile validation honestly and advance nothing. Criteria provenance therefore matters as much as verdict provenance — see §10 open questions 3 and 9.
+**Where the gaming surface moves.** HV closes self-reporting; it does not by itself stop an actor from arranging favorable criteria. That residual surface is closed by planning rather than by adjudication — see §6.4.
 
-**Cost.** Per-turn hostile validation is the largest new cost in this addendum, larger than §5.2's revalidation. WP §10 risk 6 already flags per-turn model-judgment cost with the mitigation "v1 rules by default; judge on schedule or on budget pressure," and the same tiering applies: cheap checkable assertions — did the test pass, does the artifact exist — run always; expensive model adjudication runs on turns that assert progress, on seal, or under pressure. Nothing here should be read as claiming HV is cheap or currently available; the existing document-level Perplexity HV remains blocked on an API key and must not be described as done.
+**Cost.** The base tier is not a model call. Because progress is criteria-with-passing-tests (§6.1), the cheap reading is the test suite BDPv4 already requires green before a phase exits, plus the mechanical traceability check in §6.4. Model adjudication is reserved for what tests cannot decide: whether a passing test actually demonstrates its criterion, and the introduced-versus-revealed attribution in §6.2. That ordering matters against WP §10 risk 6, which flags per-turn model-judgment cost with the mitigation "v1 rules by default; judge on schedule or on budget pressure." An earlier draft of this section had model adjudication as the default tier and called it the dominant cost; with the plan as the unit, most readings are free. Nothing here should be read as claiming HV is cheap or currently available; the existing document-level Perplexity HV remains blocked on an API key and must not be described as done.
 
 **Commensurability.** Scope and progress must share units, or independent movement means nothing. If scope counts known acceptance criteria, progress counts criteria met. If scope is in estimated units of work, progress must be in the same units. Mixing "complexity" with "criteria completed" produces two series whose deltas cannot be compared.
 
-**Descoping.** Removing scope inflates any completion ratio without work being done. Every scope change records direction, reason, and justification, and the ratio must never be a reward signal on its own. A scope reduction is a claim that work is unnecessary, and that claim is exactly as checkable as a progress claim.
+**Descoping.** Removing scope inflates any completion ratio without work being done. Every scope change records direction, reason, and justification, and the ratio must never be a reward signal on its own. A scope reduction is a claim that work is unnecessary, and that claim is exactly as checkable as a progress claim. BDPv4 places that decision outside the actor entirely: "stakeholders need the flexibility to iteratively approve or deny continued resource expenditure towards completion." Descoping is a stakeholder act, and an actor-initiated one is a request, not a scope change.
+
+### 6.4 Planning closes the criteria surface
+
+Criteria authorship is not left to the turn that will be judged by it. BDPv4 requires the criteria to exist before implementation: "Planning results in a set of artifacts that capture Functional Requirements... Technical Requirements... Testing Requirements... and Iterative Phases," and "System components need to be discovered, designed and all public interfaces documented before writing implementation code." Plans in `docs/plans/` name their requirement families in the header and withhold `Done` until independent gates pass — `PLAN-LLMSTRATEGY-001-bdpv4.md` records "leave `Done: false` until Codex READY, tests Failed 0/Skipped 0, and hostile AGREE." Three gates, none of which the acting agent controls.
+
+Two mechanical properties do the work that §6.3's adjudication cannot:
+
+- **Criteria precede the turn.** An actor cannot mint a favorable criterion mid-turn, because the criterion set is a plan artifact authored before implementation and versioned with it. Scope changes are visible as diffs to that artifact.
+- **Coverage is machine-checked.** `scripts/Validate-RequirementsTraceability.ps1` compares requirement identifiers against the mapping and traceability matrix and exits non-zero on any `FR-` missing from either, with a strict mode extending the same check to `TR-` and `TEST-` identifiers. Quietly dropping a criterion fails a script rather than requiring someone to notice.
+
+**The real gaming mode is narrower than criteria invention, and it is already documented.** BDPv4's monitoring list names it: an agent stuck in "unresolved loops of failing tests... can lead to the agent marking a test as invalid so it can keep moving forward while trying to be a useful assistant, losing its identity as a precise software engineer in the process." That is criteria gaming as actually observed — not authoring an easy criterion, but invalidating a criterion that is bound to a test and blocking. It is detectable as a diff: a test method named in the acceptance catalog changing state to skipped, deleted, or rewritten. This is why BDPv4's gates count skips (`Failed 0/Skipped 0`) rather than only failures, and why a test-state change touching a catalogued method should be treated as a scope change requiring stakeholder approval rather than as ordinary refactoring.
+
+**The residual is human.** BDPv4 does not claim automation closes this — its mitigations for all three monitored behaviors are an experienced human steering in real time, and for a session whose trust is broken, abandonment: "its impossible to fix the trust and get the model to behave correctly. Simply end that session, close that agent, and start over." Any claim that this addendum removes the operator from the loop would contradict the process it depends on.
 
 ---
 
@@ -205,6 +228,12 @@ Per §6.3, the explanation is an **HV output, not an actor output**. The actor c
 Moving authorship to HV removes the incentive to flatter; it does not by itself make an explanation checkable. An adversary can also be confidently wrong, and a fluent accusation is as unfalsifiable as a fluent excuse.
 
 So explanations — from either side — are constrained to verifiable referents: which acceptance criterion changed state, which test moved, which prior turn is contradicted, which file or identifier is implicated, which goal is affected and in which direction. Then the account is checkable rather than merely persuasive, and one citing nothing checkable is visibly weak on its face. This applies symmetrically to the actor's intent claim and to HV's verdict; neither gets to assert an outcome it cannot point at.
+
+#### 7.1.1 The explanation's destination is the plan, not just the metric
+
+BDPv4 already uses explanations this way, and for a purpose stronger than scoring: "ask the model what caused it to go on a tangent, and how the requirements and workspace guidelines could have guided it towards the correct path to take. Then have **THAT** model update the documentation and guidelines." The explanation is an input to criteria refinement.
+
+That closes a loop §6.4 would otherwise leave open. Criteria precede the turn, so an actor cannot revise them to suit its own result — but criteria are also frequently the thing at fault, which is BDPv4's "Resolving Defective Requirements" case. Routing explanations into requirement and guideline revision lets defective criteria be fixed without letting the actor fix them *for its own verdict*: the revision is a scope change to a plan artifact, visible as a diff and subject to the stakeholder approval in §6.3.
 
 ### 7.2 Explanations are append-only evidence
 
@@ -270,15 +299,15 @@ This capability must not be adopted on the argument that it sounds right. Hooks 
 
 1. **What generates edge candidates** without a vector index over turns (§8), and at what cost? Quadratic pairing is not viable; candidate generation is the load-bearing engineering problem, not the judgment step.
 2. **Is a harmful turn a fourth `projectionState`** or an annotation on `summarized` (§7.4)? The former is a schema change and touches WP §4.2; the latter risks being ignored by the projector.
-3. **Who owns goal decomposition?** Scope only means something relative to a goal boundary. If the agent may split goals freely, it can manufacture favorable scope deltas (§6.3).
-4. **How are turns attributed to goals** when a turn touches several, and how do nested goals aggregate scope and progress without double-counting?
+3. **How do plan phases aggregate?** BDPv4 decomposes a plan into iterative phases and slices (the acceptance catalog carries a `slice` field), so scope and progress exist at both levels. How do slice-level readings roll up without double-counting, and is the weight-facing reading the slice or the plan?
+4. **How are turns attributed** when one turn advances criteria in several slices, or in several plans at once?
 5. **What is the admission threshold** for a link-driven re-admit, and does it differ from the WP §6 step 7 weight threshold?
 6. **Does revalidation run on seal, on a schedule, or under budget pressure** (compare WP §10 risk 6's mitigation for re-score cost)?
 7. **Is the link sub-cap (§4) fixed or adaptive**, and what happens when link admissions and pins together approach `budgetTokens`?
 8. **Can an explanation be revised** if it was honestly wrong, given §7.2's append-only requirement? Presumably by appending a correction that supersedes it — mirroring the supersession-by-sequence resolution in IMPL §5.4.
-9. **Who authors acceptance criteria** (§6.3)? HV removes self-reported progress but relocates the gaming surface to criteria authorship, and an actor writing its own trivially-satisfiable criteria defeats adjudication without ever lying. Operator-authored criteria are the safe answer and the least scalable one.
-10. **What keeps HV independent in practice?** §6.3 requires a validator blind to the actor's account, but a validator sharing the same model, prompt lineage, or projection may reproduce the actor's blind spots and rubber-stamp them. Does independence require a different model, and is that affordable per turn?
-11. **What happens when HV and the actor deadlock** — the actor re-attempts, HV re-rejects, and progress oscillates without scope changing? This is §5.3's churn problem in the goal layer and probably needs an escalation path to the operator rather than another retry.
+9. **Does a passing test prove its criterion?** §6.4 closes criteria authorship, and the traceability script proves a criterion is *covered* — not that the covering test is honest. A test bound to `AC-FR-MCP-MEMORY-010-02` can pass while asserting less than the criterion states. This is the surviving gap in the mechanical tier, and it is the one place §6.3's adjudication is load-bearing rather than supplementary.
+10. **What keeps HV independent in practice?** §6.3 requires a validator blind to the actor's account, but a validator sharing the same model, prompt lineage, or projection may reproduce the actor's blind spots and rubber-stamp them. The hostile-review store records model and effort per run, so independence is at least auditable after the fact; whether a *different* model is required, and what that costs, is unsettled.
+11. **When does a deadlock become session abandonment?** BDPv4's answer for a session whose trust has broken is to end it rather than retry (§6.4). A metric loop needs a threshold: how many actor-versus-HV rejection cycles on the same criterion, with scope constant, before the correct action is to discard the session rather than record another regression?
 
 ---
 
@@ -292,6 +321,8 @@ Stated explicitly, because the underlying proposition — that retrospective lin
 - **No claim of code readiness.** §8's references are a snapshot of one baseline commit, read for shape rather than verified by building anything.
 - **No claim that self-reported signals are trustworthy.** §6.3 removes the actor from adjudication and §7.1 constrains both sides to checkable referents, precisely because the unconstrained versions are not trustworthy. Those constraints are reasoned, not demonstrated.
 - **No claim that Hostile Validation is available, cheap, or complete.** §6.3 proposes HV as a runtime adjudicator; that is a design proposal. The existing document-level Perplexity HV remains blocked on an API key after box reseed and has **not** been run. Per the standing rule in the README and IMPL §9, HV must never be described as done.
+- **No claim about how BDPv4 is practiced.** §6 and §6.4 quote `docs/Development-Process-draft-v4.md`, the plan artifacts in `docs/plans/`, and `scripts/Validate-RequirementsTraceability.ps1` as written. Whether those gates are applied consistently, whether the traceability script runs in CI, and whether the acceptance catalogs stay current were not checked. The process is cited as documented intent, not as observed practice.
+- **No claim that scope and progress can be read automatically today.** §6.1 derives them from acceptance-criteria state, which assumes a machine-readable catalog bound to test results. `docs/plans/mcp-memory-002-ac-catalog.json` shows the shape exists for one plan; no such binding was verified across plans, and nothing computes these values.
 - **No claim that an adversarial validator is correct.** §6.3 treats HV verdicts as evidence with their own error modes, including false accusation, and open question 10 records that a validator sharing the actor's model or lineage may simply reproduce its blind spots.
 
 ---
@@ -300,5 +331,6 @@ Stated explicitly, because the underlying proposition — that retrospective lin
 
 | Version | Date | Change |
 |---|---|---|
+| v0.1.2 | 2026-09-20 | Operator correction: **the plan is the goal, not the turn**, and planning — not adjudication — closes the criteria surface. §6.1 re-scoped to the plan and given real units from BDPv4's requirement/acceptance-criteria artifacts; new §6.4 on criteria preceding implementation, machine-checked traceability, and the narrower gaming mode BDPv4 already documents (invalidating a blocking test); §6.3's cost tier corrected — the base reading is a test run, not a model call; descoping assigned to stakeholders per BDPv4; new §7.1.1 routing explanations into requirement refinement. §6.2's introduced-versus-revealed argument **retracted as novel** and re-credited to BDPv4 "Resolving Defective Requirements." Open questions 3, 4, 9, 10 and 11 rewritten — criteria authorship is no longer open; test honesty is what survives |
 | v0.1.1 | 2026-09-20 | Operator correction before first review: progress, regression and explanation records are outputs of **Hostile Validation**, not of the acting agent. §6.3 rewritten around actor intent claim versus HV verdict, with claim-verdict divergence as the harm signal; §7 and §7.3 reworked so the outcome record pairs both halves; the blindness constraint from §5.1 generalized into a single rule covering both link revalidation and progress adjudication. Records where gaming relocates to (criteria authorship) and adds open questions 9–11 on criteria provenance, validator independence, and actor/HV deadlock |
 | v0.1.0 | 2026-09-20 | Initial draft. Captures four operator proposals from the 2026-09-20 design session: retrospective link index, continuous revalidation, per-goal scope and progress, and result-with-explanation records. Adds the re-admit circularity argument (§1), the joint-value representational limit (§2), the self-confirmation constraint on revalidation (§5.1), the introduced-versus-revealed correction to the harmful-turn rule (§6.2), and the traversal hazard that IMPL §3.2.3 creates for an unregistered edge table (§8) |
