@@ -123,18 +123,60 @@ rows themselves are never physically gone. Design Principle #1 holds, and WP §6
 recoverability invariant rests on infrastructure that already exists and already
 fail-closes. The eviction-versus-demotion distinction is sound.
 
+### 3.2.1 Correction: the ledger does not cover the bulk delete paths
+
+The paragraph above overstated the audit guarantee, and external review caught it. The
+claim "every mutation is mirrored" is true only of mutations that flow through the tracked
+save path, because `AppendAuditRows` runs inside `SaveChanges`.
+
+Session and turn deletion does not take that path. `DeleteTurnAsync` and
+`DeleteSessionAsync` call `SoftDeleteRowsAsync`, which issues `ExecuteUpdateAsync` directly
+against the query — a server-side bulk update that bypasses the change tracker and
+therefore never reaches `AppendAuditRows`. `RestoreRowsAsync`, used by
+`TryReviveTombstonedSessionAsync`, has the same shape.
+
+What survives and what does not:
+
+- **Content recoverability survives.** The bulk update only flips the shadow tombstone
+  columns. Row content is untouched, and physical deletion is still impossible through the
+  context, so the bytes of an omitted or tombstoned turn are still there to be read back.
+  WP §6's recoverability invariant holds.
+- **A complete deletion history does not.** There is no ledger row recording that a session
+  or turn was tombstoned, who did it, or when it was revived. The tombstone columns carry
+  `DeletedBy`/`DeleteReason` for the current state, but they are overwritten on revival and
+  keep no history of repeated delete/restore cycles.
+
+This is the **third** finding in this work stream to assert a property after reading only
+part of the path. The prior two asserted absence; this one asserted completeness from
+reading `AppendAuditRows` without checking whether every writer actually goes through
+`SaveChanges`. Recorded here rather than silently patched.
+
+**Added recommendation:** if the deletion history is to be auditable, the bulk paths must
+append ledger rows explicitly, since EF will not do it for them. Until then, no document in
+this set should claim a complete deletion/recovery trail.
+
 **Recommendation — now a much smaller one.** Nothing to build; two things to write down.
 
 1. **Cite the mechanism in the whitepaper.** WP §6 asserts recoverability without naming what
    guarantees it. Naming `BlockPhysicalDeletes` and `DataAuditLogEntity` turns an
    assumption into a verifiable claim, and stops the next reviewer from making the mistake
-   this section just made.
-2. **Fix the tool descriptions.** `sessionlog_delete_session` (line 306) advertises itself
-   as "Irreversible" and `sessionlog_delete_turn` (line 282) as deleting "all of its child
-   rows." Both are inaccurate against the storage layer. These strings are what an agent
-   reads when deciding whether a call is safe, so the inaccuracy is load-bearing in the
-   wrong direction — it makes agents more reluctant than the infrastructure requires, and
-   it misled this review.
+   this section just made — scoped, per §3.2.1, to what the ledger actually covers.
+2. **Correct the tool descriptions, but keep the warning.** `sessionlog_delete_turn`
+   (line 282) says it deletes "all of its child rows"; that is wrong against the storage
+   layer, since the children are tombstoned rather than removed, and the wording should be
+   fixed.
+
+   `sessionlog_delete_session` (line 306) is a different case, and an earlier draft of this
+   section got it backwards by recommending the "Irreversible" warning be dropped. From the
+   MCP tool surface that warning is **effectively accurate**. There is no
+   `sessionlog_restore` tool; revival happens only as a side effect of re-submitting the
+   same session, which requires the caller to still hold enough of the payload to rebuild
+   it. A deleted individual turn has no revival path on the tool surface at all. Rows
+   surviving in storage is not the same as a caller being able to undo the call.
+
+   So: keep the caution and make it precise — the data is recoverable by an operator with
+   database access, not by the agent that made the call. Weakening it would invite agents to
+   discard reachable session data expecting an undo that the tool surface does not offer.
 
 One genuine follow-up: recovery requires `IgnoreQueryFilters`, and there is no
 `sessionlog_restore` or equivalent tool. If WP §6 re-admit is ever to read a tombstoned turn
@@ -162,8 +204,24 @@ multi-table include rather than a column read.
 turn." It is not a projection weight. Reusing it would silently conflate turn quality
 with projection priority.
 
-**Recommendation.** Add `Weight` as a new column. `TokenCount` (`int?`, already present)
-can back `tokenEstimate` directly and should be reused rather than duplicated.
+**Recommendation.** Add `Weight` as a new column.
+
+**Correction — do not reuse `TokenCount` for `tokenEstimate`.** An earlier draft said
+`TokenCount` (`int?`, already present) could back `tokenEstimate` directly. Review caught
+that this is wrong, and the code confirms it: `QuadBrainOpenAiChatService` sets
+`TokenCount = response.Usage.TotalTokens`, and that total is `promptTokens +
+completionTokens` — provider usage for the whole call, including prompt and history. Other
+producers populate the same field with their own provider-specific counts.
+
+So `TokenCount` measures what a call cost, not how large the stored turn is when rendered
+into a projection. Feeding it into `density = weight / max(tokenEstimate, 1)` would distort
+the ordering: turns with long prompts look expensive regardless of their own payload size,
+and a turn whose stored content exceeds the provider count would be under-charged against
+the hard budget — exactly the overflow the budget invariant is supposed to prevent.
+
+`tokenEstimate` must be computed from the **actual serialized payload** the projector will
+send, under the tokenizer for the target model, and stored as its own column. Keep
+`TokenCount` as the provider-cost record it already is.
 
 ### 3.5 Workspace scoping is implicit, and turn tables are the gap
 
@@ -180,9 +238,23 @@ query that starts at `SessionLogTurns` directly instead of navigating from `Sess
 inherits no scoping.
 
 **Recommendation.** Have the projector navigate from `SessionLogEntity`, or filter
-`WorkspaceId` explicitly. Worth one line in WP §4.2 so the key is `(WorkspaceId, SessionLogId)`
-rather than `sessionId` alone. This is a code-style precaution, not a defect class. Under
-§5 it resolves once at seal time rather than on every projection read.
+`WorkspaceId` explicitly. Worth one line in WP §4.2 so the key is not `sessionId` alone.
+
+**Correction on the key.** An earlier draft wrote that key as `(WorkspaceId, SessionLogId)`,
+which is ambiguous in the damaging direction. The repository's actual uniqueness boundary is
+`(WorkspaceId, SourceType, SessionId)` — declared as a unique index on `SessionLogEntity` —
+because the external `SessionId` is provider-native and two different agents can legitimately
+present the same one. An imported Cursor session and an imported Copilot session sharing a
+provider ID would be conflated, and projection would assemble turns from the wrong agent.
+
+Use `(WorkspaceId, SourceType, SessionId)` when keying by external identity, or the numeric
+database primary key `SessionLogEntity.Id` when keying internally — and say which one is
+meant. Do not write `SessionLogId` without stating whether it is the DTO's session id or the
+row id.
+
+The missing `WorkspaceId` filter is a code-style precaution. Keying by `SessionId` without
+`SourceType` is not — it silently mixes two agents' transcripts, which is a correctness
+defect. Under §5 both resolve once at seal time rather than on every projection read.
 
 ## 4. What already exists
 
@@ -272,15 +344,66 @@ turn genuinely immutable.
 Projecting per write would produce many superseded versions per turn, which matters here
 for a specific reason: see §5.5.
 
-In-progress turns are read live from the mutable tables. This costs nothing, because the
-current turn is never a compaction candidate.
+In-progress turns are read live from the mutable tables.
+
+**Correction: the live turn is not free.** An earlier draft said reading it "costs nothing,
+because the current turn is never a compaction candidate." That is wrong on both halves. A
+long-running turn accumulates independently appended dialog and tool-trace items before it
+ever reaches `complete_turn` — `AppendProcessingDialogAsync` is its own call, and
+`SessionLogTurnEntity` documents that the model may append items independently. A tool-heavy
+turn can therefore exhaust the model window, or trip a vendor CLI's own compaction, inside a
+single oneshot.
+
+Treating it as cost-free puts those bytes **outside** the hard-budget invariant of WP §6,
+which is the specific failure the whole design exists to prevent — so the outer-orchestrator
+deployment would still lose context on exactly the turns that matter most.
+
+The live turn must be charged against `B` like any other content, and the projector needs a
+defined behavior when it alone approaches the budget: summarize or spill its intermediate
+trace while preserving the active request state (the standing constraints, the current
+objective, and the most recent tool results) verbatim. This is an unresolved design gap, not
+a settled mechanism, and it is added to §10.
 
 **Two triggers, not one.** `sessionlog_submit` is an upsert of an entire
-`UnifiedSessionLogDto`, so turns can arrive already carrying `completed` or `failed`
-status — the ingestion path (`SessionLogIngestor`, `MarkdownSessionLogParser`) does exactly
-this. Sealing must therefore fire on terminal-status turns arriving via `submit`, not only
-on the `complete_turn` / `fail_turn` transitions. Observed statuses in `SessionLogService`
-are `in_progress`, `completed`, `failed`.
+`UnifiedSessionLogDto`, so turns can arrive already carrying terminal status — the ingestion
+path (`SessionLogIngestor`, `MarkdownSessionLogParser`) does exactly this. Sealing must
+therefore fire on terminal-status turns arriving via `submit`, not only on the
+`complete_turn` / `fail_turn` transitions.
+
+**Correction: five terminal statuses, not two.** An earlier draft said the observed statuses
+were `in_progress`, `completed`, `failed`. `SessionLogService.IsTerminalTurnStatus` in fact
+recognizes `completed`, `failed`, `closed`, `cancelled`, and `canceled`, and `canceled` is
+not hypothetical: `IsSupersededHookPersist` tests for exactly it, and superseded hook turns
+are persisted with that status through `ReplaceTurnAsync` and the upsert path. A trigger set
+limited to complete and fail would leave those turns permanently unsealed and therefore
+absent from the sealed projection.
+
+**Do not restate the status list in the sealing code.** Call
+`IsTerminalTurnStatus` — promoted to whatever visibility the sealer needs — so the trigger
+and the predicate cannot drift apart. A copied list is exactly how this defect appears.
+
+**Correction: terminal status is not currently a mutability boundary.** §5.1 above assumed
+that reaching a terminal status ends authorship. It does not. `ReplaceTurnAsync`,
+`ReplaceTurnSectionAsync`, `DeleteTurnItemAsync`, `SetTurnTitleAsync`, and
+`AppendProcessingDialogAsync` all accept a turn that is already `completed` and mutate it
+**without changing its status** — none of them consults `IsTerminalTurnStatus`, whose only
+current caller is the compliance validator. (`SessionLogWorkflow` has an
+`EnsureTurnMutable` gate, but that guards the in-memory active turn in the REPL, not the
+service write paths.)
+
+A seal taken at terminal status therefore goes stale silently: projection would omit content
+appended after completion, or keep content deleted after it. Two acceptable resolutions,
+and the choice belongs to the operator:
+
+- **Reject post-terminal mutation.** Have the five paths above fail closed when the target
+  turn is terminal, forcing an explicit `begin_turn` re-open first. Cleanest invariant;
+  changes existing tool behavior and may break current callers.
+- **Reseal on every mutation path.** Leave the write paths permissive and re-seal whenever
+  one of them targets a terminal turn. Preserves behavior; costs a new sealed version per
+  post-hoc edit, which interacts with §5.5 growth and requires §5.4 to be settled first.
+
+What is **not** acceptable is the draft's implicit third option — sealing on the terminal
+transition and assuming nothing edits the turn afterward.
 
 ### 5.2 Payload schema: reuse `UnifiedRequestEntryDto`
 
@@ -306,7 +429,7 @@ The WP §4.2 field list divides cleanly, and should be stored as two tables:
 | `tokenEstimate` over that payload | `pin` |
 | turn identity (`sessionLogId`, `requestId`) | `projectionState` |
 | `workspaceId` | `projectionGeneration` |
-| seal sequence, superseded marker | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
+| seal sequence (supersession is derived, not stored — see §5.4) | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
 
 `weight` must **not** live in the immutable record. It is re-scored every turn under WP §10
 hysteresis, so storing it in an append-only structure would force a new sealed version on
@@ -319,11 +442,30 @@ every rescore — turning §5.5's growth concern from O(turns) into O(turns × p
 can rewrite a completed turn wholesale with PUT semantics.
 
 So sealing is not one-shot, and the immutable record cannot be updated in place without
-abandoning the property it exists to provide. The recommended handling: append a new
-sealed version under a monotonic sequence and mark the prior version superseded; readers
-take the highest non-superseded sequence per turn. `FederationOutboxEntity` already uses a
-database-generated monotonic `Sequence` for a comparable purpose and is a reasonable
-pattern to copy.
+abandoning the property it exists to provide.
+
+**Correction to the recommended handling.** An earlier draft said to append a new sealed
+version and then "mark the prior version superseded," with readers taking the highest
+non-superseded sequence. Review caught that this contradicts itself: the superseded marker
+sits in the immutable column group per §5.3, so setting it is an in-place update of a record
+that is supposed to be write-once. The versioning scheme would defeat the property it exists
+to provide.
+
+Supersession must be **derived, not written back**. Three workable forms, in order of
+preference:
+
+1. **Derive from the sequence.** The current seal for a turn is the row with the highest
+   seal sequence. No marker column, nothing to update, and the read is a single ranked
+   query. `FederationOutboxEntity`'s database-generated monotonic `Sequence` is the pattern
+   to copy.
+2. **Record the predecessor on the new row.** Each sealed version names the sequence it
+   replaces. Still append-only, and makes the chain explicit if history is to be walked.
+3. **Move supersession state to the mutable table.** Acceptable if an explicit marker is
+   wanted, but it must then be understood as scoring-side state, not part of the sealed
+   record.
+
+The §5.3 table is corrected accordingly: the immutable group holds the seal sequence only,
+and no superseded marker.
 
 What needs deciding: whether a re-opened turn's prior seal stays readable to projection
 (treat it as history) or is excluded immediately (treat it as retracted). This affects WP §6
@@ -484,9 +626,10 @@ Ordered against the whitepaper's own phases, with the above folded in.
 
 **Phase 1 — sealed projection, schema, and offline simulation.**
 Per §5: an immutable sealed-turn table (serialized `UnifiedRequestEntryDto`,
-`tokenEstimate`, identity, `workspaceId`, seal sequence, superseded marker) written at
-terminal status from both `complete_turn`/`fail_turn` and terminal-status turns arriving via
-`submit`; plus a mutable projection-state table (`Weight`, `Pin`, `ProjectionGeneration`,
+`tokenEstimate` computed over that payload, identity, `workspaceId`, seal sequence) written
+at every status recognized by `IsTerminalTurnStatus`, reached through `complete_turn` /
+`fail_turn`, through terminal-status turns arriving via `submit`, or through the
+post-terminal mutation paths per §5.1; plus a mutable projection-state table (`Weight`, `Pin`, `ProjectionGeneration`,
 `ProjectionState`, `SummaryText`, `ReAdmitCount`, `LastReAdmitGeneration`). Status and
 repair operations per §5.6. No tombstone or soft-delete work is needed (§3.2). Three
 provider migrations plus snapshot. Extend `SessionLogSchemaGuard`. Build the simulator as a
@@ -521,8 +664,10 @@ Concrete checklist for tomorrow—no need to re-derive the design:
 
 ## 10. Open questions for the operator
 
-1. **Should the `sessionlog_*` delete descriptions be corrected** (§3.2)? They tell agents
-   an operation is irreversible when the storage layer guarantees it is not.
+1. **Should the `sessionlog_*` delete descriptions be corrected** (§3.2)? Narrowed: the
+   `delete_turn` "all of its child rows" wording is wrong and should be fixed, but
+   `delete_session`'s irreversibility warning should **stay** — no restore exists on the tool
+   surface, so it is accurate from the caller's point of view.
 2. *(Withdrawn — this asked whether consolidation was an unbuilt assumption. `memory_consolidate`
    ships with a real schema and implementation; see the §3.1 retraction. No decision needed.)*
 3. **Which CLIs must the flag profile cover at Phase 2 exit?** Only `cline` has verified
@@ -531,6 +676,15 @@ Concrete checklist for tomorrow—no need to re-derive the design:
    approach is accepted, §9 may be deciding something it no longer needs to decide.
 5. **Re-opened turns (§5.4):** does a superseded seal stay readable to projection as
    history, or is it excluded as retracted? This changes WP §6 re-admit semantics.
+6. **Post-terminal mutation (§5.1):** reject it and require an explicit re-open, or allow it
+   and re-seal on every mutation path? The first is a cleaner invariant but changes shipped
+   tool behavior; the second preserves behavior at the cost of seal churn.
+7. **The live turn's budget (§5.1):** how is an in-progress turn charged against `B`, and
+   what gets summarized or spilled when that turn alone approaches the budget? Whatever the
+   answer, the active request state and standing constraints must survive verbatim.
+8. **Should the bulk delete paths append audit rows (§3.2.1)?** Today tombstoning and
+   revival bypass the ledger, so there is no history of deletion events — only the current
+   tombstone state. Content stays recoverable either way; the audit trail does not.
 
 ## 11. Method and limits
 
@@ -562,6 +716,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.1 | 2026-09-20 | Round-4 external review; eight findings accepted, all verified against `main` before editing. Corrections: the audit ledger does not cover the bulk tombstone/revival paths (new §3.2.1); `TokenCount` cannot back `tokenEstimate` because it is provider usage including prompt and history (§3.4); sealing must fire on all five statuses recognized by `IsTerminalTurnStatus`, not two (§5.1); terminal status is not currently a mutability boundary, so seals go stale silently unless post-terminal mutation is rejected or triggers a reseal (§5.1); the live in-progress turn is not cost-free and must be charged against the budget (§5.1); supersession must be derived from the seal sequence rather than written back into the immutable row (§5.3, §5.4); the session key needs `SourceType` or must name the numeric row id (§3.5); and the `delete_session` irreversibility warning should be kept, reversing an earlier recommendation, because no restore exists on the tool surface (§3.2). Open questions 6–8 added |
 | v0.1.0 | 2026-09-20 | Created by splitting proposed implementation out of the whitepaper (whitepaper v0.1.6) and folding in `implementation-recommendations-v0.1.md`, which this document replaces. Contents: deployment options (§6), recommendations (§7), roadmap and phase gates (§8), and immediate next actions (§9) moved from the whitepaper; code-grounded corrections (§3), existing capability (§4), the sealed-projection design (§5), phasing notes (§8.3), open questions (§10), and method (§11) carried over from the recommendations note. Two findings from that note are retracted in place — see §3.1 and §3.2 |
 
 **Non-claims.** This document inherits the whitepaper's non-claims and adds no measured results of its own. It asserts no benchmark outcome, no provider-metered cost figure, and no completed validation. No build was run and no tests were executed while writing it; every code claim is a read of `main` at the stated baseline and may be falsified by re-reading it.

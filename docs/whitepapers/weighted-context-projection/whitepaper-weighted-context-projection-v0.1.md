@@ -1,7 +1,7 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.6  
+**Version:** v0.1.7  
 **Status:** Draft for operator review (design only; implementation proposal split out)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
@@ -135,7 +135,7 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
 | `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
 | `summaryText` | Mid-tier stub when not expanded |
-| `tokenEstimate` | Local estimate for *budgeting only* (not billing proof) |
+| `tokenEstimate` | Local estimate of the turn's **own rendered payload**, for *budgeting only* (not billing proof). Distinct from any provider-reported usage count for the call that produced the turn, which includes prompt and history — see IMPL §3.4 |
 | `reAdmitCount` | How often this turn was pulled back from omit |
 | `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §10.1 reads |
 
@@ -215,12 +215,14 @@ Informal algorithm under hard budget `B`:
 
 **Recoverability invariant:** For every omitted turn, SessionLog still has the bytes (or blob). Projection never claims deletion.
 
-This is **an existing enforced property of the durable store, not an aspiration of this design.** Deletes of durable records are converted to tombstones rather than executed; physical deletion is rejected outright rather than merely discouraged; and every mutation is mirrored into an append-only audit ledger carrying before-and-after snapshots, so original writes and additive changes stay reconstitutable even for a tombstoned record. Projection therefore *inherits* recoverability instead of having to implement it.
+This is **an existing enforced property of the durable store, not an aspiration of this design.** Deletes of durable records are converted to tombstones rather than executed, and physical deletion is rejected outright rather than merely discouraged, so the content of a turn survives its own deletion. Writes and field-level updates that pass through the tracked save path are additionally mirrored into an append-only audit ledger carrying before-and-after snapshots, which is what makes original writes and additive changes reconstitutable. Projection therefore *inherits* recoverability instead of having to implement it.
+
+One limit is worth stating precisely, because an earlier revision of this paper overstated the guarantee: the ledger covers the tracked save path, **not** the bulk tombstone and revival operations, which update rows directly. Content recoverability is unaffected — those operations only flip deletion metadata and never touch stored content — but there is no audit record of the deletion events themselves. The projection design depends only on content recoverability, so it is unaffected; a claim of a complete deletion history would not be supportable. IMPL §3.2.1 records the mechanism.
 
 Two consequences the design must respect:
 
 - **Re-admit of an omitted turn is safe by construction** (step 7 above), because omitted turns are never deleted. Re-admit of a *tombstoned* turn is a different matter: recovery reads must bypass the default visibility filters, and no restore operation is exposed on the session-log tool surface today. Any design that depends on reviving deleted turns is depending on unbuilt work.
-- **The enforcement is not visible in the data model's type definitions,** which makes it easy to audit incorrectly and conclude the ledger is mutable. An earlier review of this paper did exactly that.
+- **The enforcement is not visible in the data model's type definitions,** which makes it easy to audit incorrectly and conclude the ledger is mutable. An earlier review of this paper did exactly that, and a later one then overstated the correction in the opposite direction. Both errors came from reading one part of the write path and generalizing.
 
 The specific classes, methods, guard behavior, and ledger contract that provide these guarantees are identified in the companion implementation note. This paper states the property; that note states the code.
 
@@ -382,6 +384,7 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 | v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the IMPL §8.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
 | v0.1.5 | 2026-09-20 | Separate design from implementation, and stop describing shipped work by ticket number. §3 and §6 now state recoverability as an *existing enforced property* of the durable store—tombstones instead of executed deletes, physical deletion rejected, mutations mirrored to an append-only snapshot ledger—so projection inherits the invariant rather than building it; the classes and methods providing it are delegated to the companion implementation note instead of named here. Records the two design-relevant consequences: re-admit of an *omitted* turn is safe by construction, while re-admit of a *tombstoned* turn depends on unbuilt restore capability. §1.2 describes the shipped capabilities directly instead of citing internal work-item identifiers (`MCP-MEMORY-002`, `PLAN-MANAGER-MEMORY-UI-001`), which meant nothing to an external reader |
 | v0.1.6 | 2026-09-20 | **Split design from proposed implementation.** Runtime deployment options, immediate next actions, recommendations, and the roadmap with its phase gates moved to `proposed-implementation-weighted-context-projection-v0.1.md`, together with the code-grounded findings that were previously a third document; remaining sections renumbered (old §8–§11 → §7–§10, old §15–§16 → §11–§12). Executive summary now names the memory **tools** (`memory_remember` / `memory_recall` / `memory_explore` / `memory_consolidate` / `memory_promote`) rather than describing `memory_remember` as an alias of a bare `remember` verb, which had the relationship backwards |
+| v0.1.7 | 2026-09-20 | Round-4 external review. Narrows the §6 recoverability paragraph: the audit ledger covers the tracked save path, not the bulk tombstone and revival operations, so content recoverability holds but a complete deletion history is not claimable. Defines `tokenEstimate` in §4.2 as an estimate of the turn's own rendered payload, explicitly not a provider usage count for the producing call |
 
 > **Note on numbering:** rows above v0.1.6 describe changes using **current** section numbers, not the numbers in force at the time, so that every reference in this table still resolves.
 
