@@ -283,6 +283,28 @@ public sealed class WorkspaceResolutionMiddlewareTests
         Assert.False(wsContext.IsResolved);
     }
 
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Bearer callers can reach memory routes without a workspace header
+    /// so Global creates work from the default or empty workspace context.
+    /// </summary>
+    [Fact]
+    public async Task BearerToken_WithoutWorkspaceHeader_AllowsMemoryRoute()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/mcpserver/memory", method: "POST", bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.Equal(200, ctx.Response.StatusCode);
+        Assert.False(wsContext.IsResolved);
+    }
+
     [Fact]
     public async Task BearerToken_WithoutWorkspaceHeader_AllowsWorkspaceRegistryRoute()
     {

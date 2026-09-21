@@ -12,7 +12,8 @@ public sealed partial class FwhMcpTools
     [McpServerTool(Name = "memory_remember"), Description(MemorySurfaceCatalog.RememberDescription)]
     [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
     public async Task<string> MemoryRemember(
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description(MemorySurfaceCatalog.CreateWorkspacePathDescription)]
+        [DefaultValue(null)] string? workspacePath,
         [Description("Memory content")] string content,
         [Description("Optional title")] string? title = null,
         [Description("Optional summary")] string? summary = null,
@@ -26,36 +27,42 @@ public sealed partial class FwhMcpTools
         [Description("Optional updater identity")] string? updatedBy = null,
         CancellationToken cancellationToken = default)
     {
-        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryScope(scope, out var parsedScope, out var error))
                 return SerializeJson(MemoryErrorEnvelope.Create(McpErrorClassifier.ValidationError, error ?? "Invalid scope.", 400));
 
-            var request = new MemoryRememberRequest
-            {
-                Id = id,
-                Title = title,
-                Summary = summary,
-                Content = content,
-                Type = type,
-                Tags = ParseTagList(tags),
-                Confidence = confidence,
-                SourceKind = sourceKind,
-                SourceRef = sourceRef,
-                Scope = parsedScope,
-                UpdatedBy = updatedBy,
-            };
+            var effectiveScope = parsedScope ?? MemoryScope.Workspace;
+            if (!TryOpenMemoryCreateWorkspace(workspacePath, effectiveScope, out var workspaceScope, out var workspaceError))
+                return SerializeJson(MemoryErrorEnvelope.Create(McpErrorClassifier.ValidationError, workspaceError ?? "Workspace memory requires an active workspace.", 400));
 
-            if (_memoryMutations is not null)
+            using (workspaceScope)
             {
-                var gated = await _memoryMutations.RememberAsync(request, cancellationToken).ConfigureAwait(false);
-                return SerializeJson(gated);
+                var request = new MemoryRememberRequest
+                {
+                    Id = id,
+                    Title = title,
+                    Summary = summary,
+                    Content = content,
+                    Type = type,
+                    Tags = ParseTagList(tags),
+                    Confidence = confidence,
+                    SourceKind = sourceKind,
+                    SourceRef = sourceRef,
+                    Scope = parsedScope,
+                    UpdatedBy = updatedBy,
+                };
+
+                if (_memoryMutations is not null)
+                {
+                    var gated = await _memoryMutations.RememberAsync(request, cancellationToken).ConfigureAwait(false);
+                    return SerializeJson(gated);
+                }
+
+                return await DispatchMemoryAsync(
+                    new RememberMemoryCommand(_workspaceContext.WorkspacePath ?? workspacePath ?? string.Empty, request),
+                    cancellationToken).ConfigureAwait(false);
             }
-
-            return await DispatchMemoryAsync(
-                new RememberMemoryCommand(_workspaceContext.WorkspacePath ?? workspacePath, request),
-                cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -257,6 +264,33 @@ public sealed partial class FwhMcpTools
 
     private McpServer.Cqrs.IDispatcher RequireMemoryDispatcher()
         => _dispatcher ?? throw new InvalidOperationException("CQRS dispatcher is not registered for memory surfaces.");
+
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Opens a workspace override for memory creates.
+    /// Global scope may use an empty or omitted path. Workspace scope requires a real path.
+    /// </summary>
+    private bool TryOpenMemoryCreateWorkspace(
+        string? workspacePath,
+        MemoryScope scope,
+        out IDisposable? workspaceScope,
+        out string? error)
+    {
+        workspaceScope = null;
+        error = null;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+        {
+            if (scope != MemoryScope.Global)
+            {
+                error = "Workspace memory requires an active workspace.";
+                return false;
+            }
+
+            return true;
+        }
+
+        workspaceScope = ApplyWorkspaceOverride(workspacePath);
+        return true;
+    }
 
     private static IReadOnlyList<string>? ParseTagList(string? tags)
     {

@@ -13,6 +13,9 @@ namespace McpServer.Support.Mcp.Middleware;
 /// If neither tier resolves a workspace, API-key and unauthenticated callers may continue on
 /// explicitly workspace-independent routes, but Bearer-authenticated callers must still supply
 /// <c>X-Workspace-Path</c> for tenant-scoped routes. Workspace-required routes receive a <c>404</c>.
+/// <c>/mcpserver/memory</c> is workspace-optional so Global memories can be created from the
+/// server default or empty workspace context (FR-MCP-MEMORY-001). Workspace-scoped memory writes
+/// still fail later when no real workspace is active.
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
 /// Non-<c>/mcpserver/</c> and non-<c>/mcp-transport</c> routes skip resolution.
 /// </summary>
@@ -40,6 +43,7 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcpserver/events",
         "/mcpserver/gh",
         "/mcpserver/context",
+        "/mcpserver/memory",
         "/mcpserver/configuration",
         "/mcpserver/voice",
         "/mcp-transport",
@@ -49,6 +53,7 @@ public sealed class WorkspaceResolutionMiddleware
     {
         "/mcpserver/workspace",
         "/mcpserver/tools",
+        "/mcpserver/memory",
         "/mcpserver/configuration",
     };
 

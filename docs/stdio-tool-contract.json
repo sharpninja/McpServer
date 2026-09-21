@@ -105,9 +105,9 @@
     },
     {
       "name": "memory_add",
-      "description": "Add a memory item. Defaults to Workspace scope.",
+      "description": "Add a memory item. Defaults to Workspace scope. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.",
       "parameters": {
-        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "workspacePath": { "type": "string", "required": false, "description": "Optional for Global scope: empty, omitted, or the configured default workspace. Required for Workspace scope." },
         "category": { "type": "string", "required": true, "description": "Memory category" },
         "text": { "type": "string", "required": true, "description": "Memory text" },
         "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "default": "Workspace", "description": "Memory scope: Global or Workspace" },
@@ -118,10 +118,10 @@
     },
     {
       "name": "memory_remember",
-      "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions.",
+      "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.",
       "additionalProperties": false,
       "parameters": {
-        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "workspacePath": { "type": "string", "required": false, "description": "Optional for Global scope: empty, omitted, or the configured default workspace. Required for Workspace scope." },
         "title": { "type": "string", "required": false, "description": "Optional title" },
         "summary": { "type": "string", "required": false, "description": "Optional summary" },
         "content": { "type": "string", "required": true, "description": "Memory content" },

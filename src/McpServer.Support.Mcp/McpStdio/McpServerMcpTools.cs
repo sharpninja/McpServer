@@ -464,9 +464,10 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>TR-MCP-MEMORY-006: Add a memory item in Global or Workspace scope.</summary>
-    [McpServerTool(Name = "memory_add"), Description("Add a memory item. Defaults to Workspace scope.")]
+    [McpServerTool(Name = "memory_add"), Description(MemorySurfaceCatalog.AddDescription)]
     public async Task<string> MemoryAdd(
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description(MemorySurfaceCatalog.CreateWorkspacePathDescription)]
+        [DefaultValue(null)] string? workspacePath,
         [Description("Memory category")] string category,
         [Description("Memory text")] string text,
         [Description("Memory scope: Global or Workspace (default Workspace)")] string? scope = null,
@@ -474,7 +475,6 @@ public sealed partial class FwhMcpTools
         [Description("Optional updater identity")] string? updatedBy = null,
         CancellationToken cancellationToken = default)
     {
-        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryScope(scope, MemoryScope.Workspace, out var parsedScope, out var error))
@@ -482,18 +482,29 @@ public sealed partial class FwhMcpTools
                 return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
             }
 
-            var request = new MemoryAddRequest
+            if (!TryOpenMemoryCreateWorkspace(workspacePath, parsedScope, out var workspaceScope, out var workspaceError))
             {
-                Id = id,
-                Category = category,
-                Scope = parsedScope,
-                Text = text,
-                UpdatedBy = updatedBy,
-            };
-            var result = _memoryMutations is null
-                ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
-                : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
-            return SerializeJson(result);
+                return SerializeJson(new MemoryMutationResult(
+                    false,
+                    workspaceError,
+                    FailureKind: MemoryMutationFailureKind.Validation));
+            }
+
+            using (workspaceScope)
+            {
+                var request = new MemoryAddRequest
+                {
+                    Id = id,
+                    Category = category,
+                    Scope = parsedScope,
+                    Text = text,
+                    UpdatedBy = updatedBy,
+                };
+                var result = _memoryMutations is null
+                    ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
+                    : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
+                return SerializeJson(result);
+            }
         }
         catch (Exception ex)
         {

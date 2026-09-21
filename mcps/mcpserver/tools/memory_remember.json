@@ -1,13 +1,14 @@
 {
   "name": "memory_remember",
-  "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Use this instead of memory_add when title, type, tags, confidence, or provenance matter.",
+  "description": "Remember a durable multi-layer memory when the operator or agent wants a fact, decision, preference, procedure, or entity to persist across sessions. Use this instead of memory_add when title, type, tags, confidence, or provenance matter. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.",
   "inputSchema": {
     "type": "object",
     "additionalProperties": false,
     "properties": {
       "workspacePath": {
-        "description": "Workspace path (required)",
-        "type": "string"
+        "description": "Workspace path. Optional for Global scope: empty, omitted, or the configured default workspace stores a Global memory with no workspace owner. Required for Workspace scope.",
+        "type": ["string", "null"],
+        "default": null
       },
       "content": {
         "description": "Memory content",
@@ -65,7 +66,6 @@
       }
     },
     "required": [
-      "workspacePath",
       "content"
     ]
   }
