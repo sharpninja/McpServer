@@ -1,9 +1,9 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.0
+**Version:** v0.1.3
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.5)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.9)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
 **Date:** 2026-09-20
 
@@ -166,12 +166,54 @@ reading `AppendAuditRows` without checking whether every writer actually goes th
 append ledger rows explicitly, since EF will not do it for them. Until then, no document in
 this set should claim a complete deletion/recovery trail.
 
+#### 3.2.2 Correction: physical-delete blocking is a tracked-path guard, not a schema constraint
+
+The correction above said content recoverability was "unaffected" because physical deletes are
+"still blocked." That phrasing was too strong, and review was right to press on it. Where the
+block actually lives:
+
+- `ApplySoftDeletes` and `BlockPhysicalDeletes` run from `PrepareDbFkChanges`, invoked by the
+  `SaveChanges` / `SaveChangesAsync` overrides.
+- `BlockPhysicalDeletes` enumerates `ChangeTracker.Entries()` and throws if any persistent
+  entity is in state `Deleted`.
+
+Both facts confine the guard to the **tracked** save path. `ExecuteDelete` / `ExecuteDeleteAsync`
+and raw `DELETE` SQL are translated straight to the server without materializing change-tracker
+entries, so they bypass the guard entirely — no exception, no tombstone. No database-level
+trigger or constraint backstops it.
+
+The repository is aware of this: `TransactionGatedSessionLogServiceTests` contains
+`TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes`, which reads the
+service's own source file and asserts it contains neither `ExecuteDelete` nor `DELETE FROM`.
+That is a **convention guard** — a source-text assertion over one file. It is real protection
+and it is deliberate, but it constrains what today's code says, not what the database permits.
+A new service, a new call site in another file, or a migration could delete rows outright
+without failing any test.
+
+**How to state the invariant.** Content survives deletion on every path the current services
+use, upheld by the tracked save path plus that guard test, above the database rather than in
+it. This design needs exactly that much and no more, since it only requires omitted turns to
+remain readable. What must not be said — and what WP §6 said until v0.1.8 — is that physical
+deletion is "rejected outright" as a structural property of the store.
+
+**Recommendation:** if recoverability is to be load-bearing for anything beyond this
+projection, move enforcement to the database (a delete-rejecting trigger, or revoking `DELETE`
+on the durable tables) so it cannot be undone by code that never reads this document.
+Otherwise, keep the guard test and treat it as the boundary it is. See open question 9.
+
+**Pattern note.** This is the fourth correction in this document to generalize from a partial
+read of a write path, and the second in a row to over-trust an application-layer guard. The
+recurring shape: a check is found, and the property it enforces is then described as holding
+unconditionally, without asking which call paths reach the check. Reading the guard is not the
+same as reading everything that can avoid it.
+
 **Recommendation — now a much smaller one.** Nothing to build; two things to write down.
 
 1. **Cite the mechanism in the whitepaper.** WP §6 asserts recoverability without naming what
    guarantees it. Naming `BlockPhysicalDeletes` and `DataAuditLogEntity` turns an
    assumption into a verifiable claim, and stops the next reviewer from making the mistake
-   this section just made — scoped, per §3.2.1, to what the ledger actually covers.
+   this section just made — scoped, per §3.2.1 and §3.2.2, to what the ledger actually covers
+   and to the paths on which the physical-delete guard actually fires.
 2. **Correct the tool descriptions, but keep the warning.** `sessionlog_delete_turn`
    (line 282) says it deletes "all of its child rows"; that is wrong against the storage
    layer, since the children are tombstoned rather than removed, and the wording should be
@@ -193,8 +235,9 @@ One genuine follow-up: recovery requires `IgnoreQueryFilters`, and there is no
 `sessionlog_restore` or equivalent tool. If WP §6 re-admit is ever to read a tombstoned turn
 rather than only a demoted one, it needs an explicit `IgnoreQueryFilters(SoftDeleteQueryFilter)`
 read path — the pattern already used in `RequirementsDatabaseDocumentService` and
-`ToolRegistryService`. Storage-layer recoverability is settled; operator-facing
-reconstitution is a small unbuilt convenience, not a missing invariant.
+`ToolRegistryService`. Storage-layer recoverability is settled *for the current service paths*
+(§3.2.2); operator-facing reconstitution is a small unbuilt convenience, not a missing
+invariant.
 
 ### 3.3 There is no `payload` field
 
@@ -728,6 +771,13 @@ Concrete checklist for tomorrow—no need to re-derive the design:
 8. **Should the bulk delete paths append audit rows (§3.2.1)?** Today tombstoning and
    revival bypass the ledger, so there is no history of deletion events — only the current
    tombstone state. Content stays recoverable either way; the audit trail does not.
+9. **Should physical-delete blocking move into the database (§3.2.2)?** Today it is a
+   tracked-path guard plus a source-text test, which set-based or raw-SQL deletes in new code
+   would bypass without failing anything. A delete-rejecting trigger or a revoked `DELETE`
+   grant would make recoverability structural. Not required by this projection, which only
+   needs omitted turns readable — but required by anything that wants to call the durable
+   store tamper-evident.
+Content stays recoverable either way; the audit trail does not.
 
 ## 11. Method and limits
 
@@ -759,6 +809,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.3 | 2026-09-20 | Round-5 follow-up (three findings from the automatic pass on `56996df`). Physical-delete blocking is a tracked-path guard plus a source-text test, not a schema constraint — new §3.2.2, WP §6 narrowed again, open question 9. The §3.2 delete-warning reversal was never propagated to the README review checklist, which still told the operator to correct the warning on the abandoned premise. Banner versions were stale against this document's own changelog (v0.1.0 vs v0.1.1) and against the companion (v0.1.5 vs v0.1.8) |
 | v0.1.2 | 2026-09-20 | Round-5 external review; two findings accepted. `tokenEstimate` cannot be a single frozen column in the seal, because Option B's `IList<ChatMessage>` and Option C's prompt blob render the same turn to different sizes under different tokenizers — the seal now carries a renderer-neutral payload size and the budget-facing estimate is derived per `(renderer, tokenizer)` (§3.4, §5.3, §5.7, Phase 1). Also confirmed that the whitepaper's remaining inverted memory-alias definitions needed fixing rather than being left alone, correcting §3.1's instruction |
 | v0.1.1 | 2026-09-20 | Round-4 external review; eight findings accepted, all verified against `main` before editing. Corrections: the audit ledger does not cover the bulk tombstone/revival paths (new §3.2.1); `TokenCount` cannot back `tokenEstimate` because it is provider usage including prompt and history (§3.4); sealing must fire on all five statuses recognized by `IsTerminalTurnStatus`, not two (§5.1); terminal status is not currently a mutability boundary, so seals go stale silently unless post-terminal mutation is rejected or triggers a reseal (§5.1); the live in-progress turn is not cost-free and must be charged against the budget (§5.1); supersession must be derived from the seal sequence rather than written back into the immutable row (§5.3, §5.4); the session key needs `SourceType` or must name the numeric row id (§3.5); and the `delete_session` irreversibility warning should be kept, reversing an earlier recommendation, because no restore exists on the tool surface (§3.2). Open questions 6–8 added |
 | v0.1.0 | 2026-09-20 | Created by splitting proposed implementation out of the whitepaper (whitepaper v0.1.6) and folding in `implementation-recommendations-v0.1.md`, which this document replaces. Contents: deployment options (§6), recommendations (§7), roadmap and phase gates (§8), and immediate next actions (§9) moved from the whitepaper; code-grounded corrections (§3), existing capability (§4), the sealed-projection design (§5), phasing notes (§8.3), open questions (§10), and method (§11) carried over from the recommendations note. Two findings from that note are retracted in place — see §3.1 and §3.2 |
