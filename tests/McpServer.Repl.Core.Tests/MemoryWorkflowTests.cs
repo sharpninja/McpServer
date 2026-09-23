@@ -65,7 +65,8 @@ public sealed class MemoryWorkflowTests
 
     /// <summary>
     /// TEST-MCP-MEMORY-004 / TEST-MCP-MEMORY-005 / triage-report-a6fb8ae08ce348799d0db61ae2e0734a:
-    /// workflow.memory.recall must keep live-API <c>items</c> as plugin-facing <c>hits</c>.
+    /// workflow.memory.recall must keep live-API <c>items</c> as plugin-facing <c>hits</c>
+    /// and must keep <c>rankingMode</c>.
     /// </summary>
     [Fact]
     public async Task RecallAsync_LiveItemsJson_PreservesHitsInPluginYaml()
@@ -101,9 +102,12 @@ public sealed class MemoryWorkflowTests
         var recall = Assert.IsType<MemoryRecallResult>(payload.Result);
         Assert.Equal("MEMORY-FACT-003", Assert.Single(recall.Hits!).Id);
         Assert.Equal("MEMORY-FACT-003", Assert.Single(recall.Items!).Id);
+        Assert.Equal("hybrid", recall.RankingMode);
 
         var yaml = new YamlSerializer().Serialize(response);
         Assert.Contains("hits:", yaml, StringComparison.Ordinal);
+        Assert.Contains("rankingMode:", yaml, StringComparison.Ordinal);
+        Assert.Contains("hybrid", yaml, StringComparison.Ordinal);
         Assert.Contains("MEMORY-FACT-003", yaml, StringComparison.Ordinal);
         Assert.Contains("Operator fact from Legion recall proof.", yaml, StringComparison.Ordinal);
     }

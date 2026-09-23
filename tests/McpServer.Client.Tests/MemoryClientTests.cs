@@ -92,8 +92,9 @@ public sealed class MemoryClientTests
 
     /// <summary>
     /// TEST-MCP-MEMORY-004 / triage-report-a6fb8ae08ce348799d0db61ae2e0734a:
-    /// Live recall JSON uses <c>items</c>. MemoryClient must surface those rows as non-empty
-    /// plugin-facing <c>hits</c> instead of dropping them on <see cref="MemorySurfaceResult"/>.
+    /// Live recall JSON uses <c>items</c> and <c>rankingMode</c>. MemoryClient must surface those
+    /// rows as non-empty plugin-facing <c>hits</c>, and must keep <c>rankingMode</c>, instead of
+    /// dropping them on <see cref="MemorySurfaceResult"/>.
     /// </summary>
     [Fact]
     public async System.Threading.Tasks.Task RecallAsync_LiveItemsJson_SurfacesHits()
@@ -116,6 +117,8 @@ public sealed class MemoryClientTests
         Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Hits!).Id);
         Assert.Equal("MEMORY-FACT-003", Assert.Single(result.Items!).Id);
         Assert.Equal(0.87, result.Hits![0].Score);
+        Assert.Equal("hybrid", result.RankingMode);
+        Assert.False(result.RerankApplied);
         Assert.Contains("Operator fact from Legion recall proof.", result.Hits[0].Content, StringComparison.Ordinal);
 
         var pluginFacing = JsonSerializer.Serialize(result, McpClientJsonContext.Default.MemoryRecallResult);
@@ -124,6 +127,7 @@ public sealed class MemoryClientTests
         Assert.Equal(JsonValueKind.Array, hits.ValueKind);
         Assert.NotEqual(0, hits.GetArrayLength());
         Assert.Equal("MEMORY-FACT-003", hits[0].GetProperty("id").GetString());
+        Assert.Equal("hybrid", document.RootElement.GetProperty("rankingMode").GetString());
         Assert.True(document.RootElement.TryGetProperty("items", out var items));
         Assert.Equal("MEMORY-FACT-003", items[0].GetProperty("id").GetString());
     }
