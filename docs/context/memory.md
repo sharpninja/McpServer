@@ -24,7 +24,7 @@ Use the required plugin or MCP tool surface for normal work:
 Additive verbs (MCP-MEMORY-002):
 
 - `memory_remember` persists a multi-layer memory. Injection later uses raw `Content` (or legacy `Text`) only. Title, summary, confidence, and tags are stored when provided but are never injected.
-- `memory_recall` returns ranked Effective hits by meaning or keyword (`query`, optional `minScore`, `topN`, `tags`, `type`, `scope`).
+- `memory_recall` returns ranked Effective hits by meaning or keyword (`query`, optional `minScore`, `topN`, `tags`, `type`, `scope`). `MemoryClient.RecallAsync` and `workflow.memory.recall` return `MemoryRecallResult` with `items`, per-hit `score`, and `rankingMode`. They do not collapse a live recall body down to status code only.
 - `memory_promote` copies an operator-selected `sessionlog` or `context` source (`sourceKind` + `sourceRef`) into memory. Do not promote unless the operator asks.
 - `memory_consolidate` plans a sleep/merge. Default is dry-run; apply writes only when `dryRun` is false.
 - `memory_revert` restores snapshot N and appends history.

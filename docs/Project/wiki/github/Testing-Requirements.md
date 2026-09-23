@@ -889,10 +889,12 @@ Real keyserver/subscriber integration tests SHALL validate the separate keyserve
 
 ### TEST-MCP-161
 
-MCP transaction gating tests SHALL verify coordinator commit/degraded paths, durable timeout rollback cancellation, pub-sub handoff/replay/retention, federation apply/control-plane gating, memory add/update/delete rollback, TODO CRUD rollback, repo/template/requirements/session/tool registry compensation, GraphRAG/GitHub/context/voice/agent-pool fail-closed gates, stdio routing, and generic client protected namespace policy.
+MCP transaction gating tests SHALL verify coordinator commit, degraded, rollback, durable timeout cancellation, and pub-sub handoff/replay/retention for QuadBrain brain-slot.invoke and brain-slot.weight-update (and other RequiresKeyserver operations). Generic REPL client protected-namespace policy remains in this TEST. First-party non-QuadBrain mutations (TODO, requirements, session-log including QBAgent, memory, repo, prompt templates, tool registry, GitHub, GraphRAG, voice, agent pool, ingest, context, federation apply/control) are governed by FR-MCP-173 / TEST-MCP-221 and SHALL persist without coordinator/keyserver; they are not fail-closed under this TEST. Covered by TurnTransactionCoordinatorTests, BrainSlotInvocationTransactionTests, QuadBrainOrchestrationServiceTests, and remaining TEST-MCP-168 pub-sub tests. Zero failures and zero skips in the executed QuadBrain/coordinator scope.
 
 **Acceptance Criteria:**
-- [x] Focused and full Support.Mcp/Repl.Core test suites cover transaction gating and fail-closed behavior with zero skipped tests in the executed scope.
+- [ ] TurnTransactionCoordinatorTests prove ExecuteAsync signs and commits for brain-slot.invoke when Enabled and RequiredForMutations are true, and bypasses SignManifestAsync for todo.update.
+- [ ] BrainSlotInvocationTransactionTests and QuadBrainOrchestrationServiceTests prove brain-slot.invoke and brain-slot.weight-update still hit ITurnTransactionCoordinator.
+- [ ] Generic REPL client protected-namespace policy tests remain in this TEST. Non-QuadBrain TransactionGated adapter persist/bypass is TEST-MCP-221, not this TEST.
 
 ### TEST-MCP-162
 
@@ -1133,6 +1135,11 @@ Pester in plugins/core covering FR-MCP-170/171/172: (1) Invoke-WorkflowAppendDia
 ### TEST-MCP-196
 
 C# tests covering FR-MCP-170 and TR-MCP-PERSIST-004: AppendProcessingDialogAsync appends items and GET returns them. Missing turn is 404 classified not-found retryable false. Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the SQLite file is valid. GET /health?nonce= still echoes nonce.
+
+
+### TEST-MCP-221
+
+Unit tests SHALL prove: (1) TurnTransactionKeyserverScope.RequiresKeyserver is true only for brain-slot:/brain-slot./quadbrain. and false for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest; (2) TransactionGated adapters and TransactionalTodoWorkflow persist/succeed while CapturingCoordinator.Request stays null even when TurnTransactions.Enabled and RequiredForMutations are true and the coordinator would reject or is degraded; (3) brain-slot.invoke still hits the coordinator; (4) TurnTransactionCoordinator.ExecuteAsync bypasses SignManifestAsync for todo.update. Covered by TurnTransactionKeyserverScopeTests, TransactionGated*Tests, TransactionalTodoWorkflowTests, TurnTransactionCoordinatorTests, BrainSlotInvocationTransactionTests. Zero failures and zero skips in those classes.
 
 
 

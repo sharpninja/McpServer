@@ -3244,6 +3244,22 @@ Scope: layer-1+
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+## TR-MCP-TXNKEY-001
+
+**Keyserver gate is QuadBrain/brain-slot only** — TurnTransactionKeyserverScope SHALL treat only publisher party ids with prefix brain-slot: and operation names with prefix brain-slot. or quadbrain. as requiring keyserver signing. TransactionGated adapters, TransactionalTodoWorkflow, TurnTransactionFederationOperationApplyService, RequirementsController ingest, ContextController mutations, FederationController control-plane mutations, and STDIO context mutations SHALL call ShouldBypassCoordinator and invoke the inner mutation directly for every non-QuadBrain operation even when Mcp:TurnTransactions:Enabled=true and RequiredForMutations=true. TurnTransactionCoordinator.ExecuteAsync SHALL also bypass SignManifestAsync unless RequiresKeyserver is true. RepairWorkspaceStampsAsync remains a workspace-wide fail-closed path.
+
+Acceptance Criteria:
+- ac-1: ShouldBypassCoordinator returns true for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest when a coordinator is registered.
+- ac-2: ShouldBypassCoordinator returns false for brain-slot.invoke and brain-slot.weight-update when a coordinator is registered.
+- ac-3: ExecuteAsync does not call SignManifestAsync for general-agent operation names even when Enabled and RequiredForMutations are true.
+**Covered by:** FR: FR-MCP-173; TEST: TEST-MCP-221
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ShouldBypassCoordinator returns true for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest when a coordinator is registered.
+- [ ] ShouldBypassCoordinator returns false for brain-slot.invoke and brain-slot.weight-update when a coordinator is registered.
+- [ ] ExecuteAsync does not call SignManifestAsync for general-agent operation names even when Enabled and RequiredForMutations are true.
+
 ## TR-MCP-USECASE-001
 
 **Use case EF storage multi-provider soft-delete** — Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped). Audit emission for mutable entities per TR-MCP-DB-004.

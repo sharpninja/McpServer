@@ -139,6 +139,8 @@ var plan = await client.Memory.ConsolidateAsync(new MemoryConsolidateRequest
 });
 ```
 
+`RecallAsync` returns `MemoryRecallResult`: `items` (id, score, content), `rankingMode`, and `rerankApplied`. `workflow.memory.recall` returns the same fields. A canned body that includes `rankingMode` still has that field after deserialization.
+
 Prefer plugin or REPL `workflow.memory.*` when those surfaces are required. Compat `ListAsync` / `AddAsync` / `UpdateAsync` / `RemoveAsync` remain. `Idempotency-Key` is not supported; a duplicate remember creates a second row. See `docs/context/memory.md`.
 
 ## Typed client: Use Cases

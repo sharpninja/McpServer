@@ -2,7 +2,7 @@
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Current line:** GitVersion `next-version` **1.4.38** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits. This refresh could not reach a running server (`GET /health` on `localhost:7147` failed), so no new live informational version is claimed. `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys on prior live checks: `status`, `version`, `checks`, `nonce`, `storage`.
+**Current line:** GitVersion `next-version` **1.4.39** (see `GitVersion.yml`). Live `/health` on this refresh was Healthy, storage `reachable`, version `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`. That informational version is the deployed service commit. Git HEAD is `5ca2ac28` (rankingMode test assertions on top of that deploy). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
 
 ## Key Features
 
@@ -203,7 +203,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish; optional Octopus LEGION2 release when `OCTOPUS_API_KEY` is set |
 | **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
 
-Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.38` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.39`). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
 
 ## Client Library
 

@@ -1301,8 +1301,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-LLMSTRATEGY-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-LLMSTRATEGY-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-LLMSTRATEGY-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-173 | Tracked | Functional-Requirements.md |
 | FR-MCP-QBPROGRESS-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBPROGRESS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-TXNKEY-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-221 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBPROGRESS-001 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
-| TR-MCP-QBPROGRESS-001 | Tracked | Technical-Requirements.md |
-| TEST-MCP-QBPROGRESS-001 | Tracked | Testing-Requirements.md |

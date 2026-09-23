@@ -5,7 +5,8 @@ MCP memories are durable operator guidance stored by McpServer and scoped by wor
 ## Scopes
 
 - `Global` memories apply to every workspace and must contain only guidance the operator intends to share everywhere.
-- `Workspace` memories apply only to the active workspace and must be stored with that workspace ownership.
+- Creating a `Global` memory succeeds when the active workspace is empty or is the configured default workspace. The stored row is `Scope=Global` and `WorkspaceId=null`. `memory_add` and `memory_remember` accept an empty, omitted, or configured default `workspacePath` for `Global` scope. On HTTP, only `POST /mcpserver/memory` and `POST /mcpserver/memory/remember` proceed without a resolved workspace; list, get, update, and remove still require one. Full auth (JWT or a full workspace API key) is required; a default read-only API key cannot write.
+- `Workspace` memories apply only to the active workspace and must be stored with that workspace ownership. Workspace scope still requires a real workspace path.
 - `Effective` listing returns `Global` memories first sorted by ID, then current `Workspace` memories sorted by ID.
 - Workspace-scoped memories must not be copied, applied, or replayed into a different workspace unless the operator explicitly asks for that new memory to exist there.
 
@@ -23,7 +24,7 @@ Use the required plugin or MCP tool surface for normal work:
 Additive verbs (MCP-MEMORY-002):
 
 - `memory_remember` persists a multi-layer memory. Injection later uses raw `Content` (or legacy `Text`) only. Title, summary, confidence, and tags are stored when provided but are never injected.
-- `memory_recall` returns ranked Effective hits by meaning or keyword (`query`, optional `minScore`, `topN`, `tags`, `type`, `scope`).
+- `memory_recall` returns ranked Effective hits by meaning or keyword (`query`, optional `minScore`, `topN`, `tags`, `type`, `scope`). `MemoryClient.RecallAsync` and `workflow.memory.recall` return `MemoryRecallResult` with `items`, per-hit `score`, and `rankingMode`. They do not collapse a live recall body down to status code only.
 - `memory_promote` copies an operator-selected `sessionlog` or `context` source (`sourceKind` + `sourceRef`) into memory. Do not promote unless the operator asks.
 - `memory_consolidate` plans a sleep/merge. Default is dry-run; apply writes only when `dryRun` is false.
 - `memory_revert` restores snapshot N and appends history.
