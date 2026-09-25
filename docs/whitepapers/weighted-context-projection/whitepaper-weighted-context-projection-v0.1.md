@@ -1,18 +1,20 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.4  
-**Status:** Draft for operator review (post Round-3 external review, follow-up pass)  
+**Version:** v0.1.9  
+**Status:** Draft for operator review (design only; implementation proposal split out)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
 **Date:** 2026-09-20 (America/Chicago)  
 **Authoring context:** Engineering design note derived from MCP memory workstreams, plugin-hook limits, and literature on long-horizon agent context management. Not a product claim sheet.
 
+**Scope.** This document argues a design. It deliberately contains no deployment choice, no roadmap, no phase gates, and no code-level specifics. Those live in the companion proposal, `proposed-implementation-weighted-context-projection-v0.1.md`, referred to below as **IMPL**. A bare `§N` refers to a section of this paper; `IMPL §N` refers to that companion.
+
 ---
 
 ## Executive summary
 
-Long-horizon agent sessions fail more often from **context loss under host auto-compaction** than from raw model capability limits **(operational observation; not a measured benchmark claim)**. Plugin hooks can inject memories and react to compact events, but they do not own the host transcript. Cross-session MCP memory (remember / recall / explore / consolidate / promote) is necessary and already shipping, yet it is the wrong primary store for *turn-by-turn task state*. Whitespace-token estimator benches (including `memory-bench-whitespace`) are **not** provider-metered savings proof and must not be rehabilitated as such.
+Long-horizon agent sessions fail more often from **context loss under host auto-compaction** than from raw model capability limits **(operational observation; not a measured benchmark claim)**. Plugin hooks can inject memories and react to compact events, but they do not own the host transcript. Cross-session MCP memory (the `memory_*` tools — remember / recall / explore / consolidate / promote, named in full in point 5 below) is necessary and already shipping, yet it is the wrong primary store for *turn-by-turn task state*. Whitespace-token estimator benches (including `memory-bench-whitespace`) are **not** provider-metered savings proof and must not be rehabilitated as such.
 
 This whitepaper proposes **Weighted Context Projection**:
 
@@ -20,8 +22,8 @@ This whitepaper proposes **Weighted Context Projection**:
 2. Each turn receives a **relative weight** for how much it advances **current work toward completion**.
 3. A live **`contextProjection`** under a hard token budget expands pinned / high-weight turns, summarizes mid-weight turns, and omits low-weight turns while keeping them recoverable.
 4. Reweighting can **re-admit** a previously omitted turn from SessionLog into the projection.
-5. MCP memory verbs (`remember` / `recall` / `explore` / `consolidate` / `promote`) bridge durable cross-session facts so the projection stays small; `memory_remember` is the bridge/API alias for the shipped `remember` verb.
-6. Prefer an **outer orchestrator** that assembles the projection and invokes frontier models via **sessionless CLI oneshots**, so host auto-compaction is unnecessary for the *model-facing* context—when we own assembly.
+5. MCP memory tools (`memory_remember` / `memory_recall` / `memory_explore` / `memory_consolidate` / `memory_promote`) bridge durable cross-session facts so the projection stays small. Where this paper uses the shorter verb forms, they are shorthand for those tool names.
+6. Prefer an **outer orchestrator** that assembles the projection and invokes frontier models via **sessionless CLI oneshots**, so host auto-compaction is unnecessary for the *model-facing* context—when we own assembly. The deployment alternatives and their trade-offs are analyzed in IMPL §6.
 
 The design goal is operational continuity after reproject (or after a host compact fallback), not token-savings theater. Success is: the agent continues the task without the operator re-pasting lost constraints.
 
@@ -37,9 +39,13 @@ That is the failure mode this paper addresses. It is not “we estimated fewer w
 
 ### 1.2 What already shipped (and what it is not)
 
-- **MCP-MEMORY-002** shipped `remember` / `recall` / `explore` / `consolidate` / `promote`, plus REQUIRED MEMORIES injection across eight plugins **(per MCP-MEMORY-002 ship scope)**. That layer is for durable, cross-session facts and standing instructions.
-- **PLAN-MANAGER-MEMORY-UI-001** (Manager Memory UI) is a separate Viewer CRUD surface. It is not SessionLog and not a projection engine.
-- Plugin hooks: Claude / Grok / Copilot are hook-richer than Codex / Cline / OpenCode today. Supported injection and reaction points include (where the host exposes them) `UserPromptSubmit`, `PreCompact`, and `PostCompact`. Hooks inject or react; they do **not** own the full host transcript and do **not** prevent the host from compacting.
+Three capabilities already exist. What matters for this paper is that none of them is the projection engine it proposes.
+
+**A durable cross-session memory layer.** Workspace-scoped tools persist facts, decisions, preferences, procedures, and entities across sessions. A typed write path carries title, type, tags, confidence, and provenance, alongside a thinner compatibility CRUD surface for plain records; retrieval, exploration, promotion between layers, consolidation of near-duplicates, and revert are all present. Each of the eight official host plugins injects the required-memory block at host-supported request boundaries. This layer holds standing truth that should outlive any one session. It does not answer which turns of the *current, unfinished* task still deserve space in the live window.
+
+**An operator-facing memory management surface.** A separate Viewer provides human inspect-and-edit CRUD over those memory records. It is a management view over the memory layer—not SessionLog, and not a projection engine. It is orthogonal to the scoring and packing this paper describes.
+
+**Plugin hooks, unevenly distributed.** Claude / Grok / Copilot expose more hook points than Codex / Cline / OpenCode today. Injection and reaction points include `UserPromptSubmit`, `PreCompact`, and `PostCompact`, where the host exposes them. Hooks inject and react; they do **not** own the full host transcript and do **not** prevent the host from compacting. That asymmetry is why IMPL §6 treats plugin-only deployment as interim hardening rather than an end state.
 
 ### 1.3 Estimator benches are not savings proof
 
@@ -60,18 +66,18 @@ Memory alone stores facts. Compaction alone discards history. Neither continuous
 | Manager Memory UI | Operator-facing CRUD | Memory records | Human inspect / edit | Orthogonal to projection algorithm |
 | Host transcript | Ephemeral / host-owned | Whatever the IDE keeps | Live chat UX | Subject to auto-compact; not authoritative |
 
-**Principle:** SessionLog is the append-only ledger. MCP already ships **`sessionlog_*` APIs** for session/turn logging; this design **extends** that ledger with weight / pin / projection metadata—it is not a wholly greenfield store. Memory is the cross-session digest. Projection is the ephemeral, budgeted view assembled for the model. UI is for humans.
+**Principle:** SessionLog is the append-only ledger—and append-only is an enforced property of the existing durable store, not an aspiration of this design (§6). MCP already ships **`sessionlog_*` APIs** for session/turn logging; this design **extends** that ledger with weight / pin / projection metadata—it is not a wholly greenfield store. Memory is the cross-session digest. Projection is the ephemeral, budgeted view assembled for the model. UI is for humans.
 
 ---
 
 ## 3. Design principles
 
-1. **Never permanently delete turns from SessionLog.** Omission from the projection is not deletion.
+1. **Never permanently delete turns from SessionLog.** Omission from the projection is not deletion. The durable store already enforces this, so the invariant is inherited rather than built (§6).
 2. **Weight relative to current work progress**, not raw self-information, recency alone, or “interestingness.”
 3. **Hard token budget** on the live projection. Soft targets without enforcement invite drift.
 4. **Re-admit is first-class.** If a quiet constraint suddenly matters, the scorer must be allowed to pull the full turn back from SessionLog.
 5. **Pins beat scores.** Explicit operator or agent pins (e.g., acceptance criteria, blocked-on facts) stay expanded until unpinned.
-6. **Memory bridges the long tail.** Standing facts leave the projection via MCP `remember` (bridge/API alias: `memory_remember`) rather than forever occupying mid-tier summary slots.
+6. **Memory bridges the long tail.** Standing facts leave the projection via the MCP memory write path (`memory_remember`) rather than forever occupying mid-tier summary slots.
 7. **Own assembly when possible.** If the orchestrator builds the prompt, host auto-compaction becomes optional for *model-facing* context—not for host UI chrome.
 8. **No fake metrics.** Do not claim savings from estimators; measure continuation quality and budget adherence.
 
@@ -99,7 +105,7 @@ Operator / Host UX
          | standing facts
          v
 +------------------+
-| MemoryBridge     | ----> MCP remember (alias memory_remember) / recall / REQUIRED MEMORIES
+| MemoryBridge     | ----> MCP memory_remember / memory_recall / REQUIRED MEMORIES
 +------------------+
          |
          v
@@ -129,9 +135,9 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
 | `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
 | `summaryText` | Mid-tier stub when not expanded |
-| `tokenEstimate` | Local estimate for *budgeting only* (not billing proof) |
+| `tokenEstimate` | Local estimate of the turn's **own rendered payload**, for *budgeting only* (not billing proof). Two distinctions matter. It is not a provider-reported usage count for the call that produced the turn, which includes prompt and history. And it is **not one fixed number per turn**: the same turn renders to different sizes under a `messages[]` assembly than under a prompt blob, and under different tokenizers, so the estimate is per renderer and target model (§10 risk 8; IMPL §3.4) |
 | `reAdmitCount` | How often this turn was pulled back from omit |
-| `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §11.1 reads |
+| `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §10.1 reads |
 
 Projection object:
 
@@ -191,7 +197,7 @@ Preferred: **after each turn**. Acceptable: at compact gates / budget pressure /
 Informal algorithm under hard budget `B`:
 
 1. Load SessionLog turns for `sessionId` plus standing memories from MemoryBridge.
-2. **Charge the fixed prefix against the budget first.** Compute `B_turns = B - tokens(system prefix) - tokens(standing memories)`, where the standing memories are those listed in `standingMemoryIds[]`. Standing memories are model-facing and therefore consume `budgetTokens` exactly as turns do; §7's stable-prefix guidance makes them cheap to cache, not free to send. Fail closed: if `B_turns <= 0`, surface error / demote or consolidate standing memories via `consolidate` / ask operator—do not silently overflow `B`.
+2. **Charge the fixed prefix against the budget first.** Compute `B_turns = B - tokens(system prefix) - tokens(standing memories)`, where the standing memories are those listed in `standingMemoryIds[]`. Standing memories are model-facing and therefore consume `budgetTokens` exactly as turns do; IMPL §6's stable-prefix guidance makes them cheap to cache, not free to send. Fail closed: if `B_turns <= 0`, surface error / demote or consolidate standing memories via `consolidate` / ask operator—do not silently overflow `B`.
 3. Ensure pins are marked `expanded` (fail closed: if pins alone exceed `B_turns`, surface error / force memory promotion / ask operator—do not silently drop pins).
 4. Score or refresh weights (respect hysteresis).
 5. Allocate the remaining `B_turns` by **value density**, not raw weight:
@@ -201,68 +207,36 @@ Informal algorithm under hard budget `B`:
    - For the next band, attach `summaryText` stubs, charged at the stub's own `tokenEstimate` rather than the full payload's.
    - Omit the rest; record `omittedTurnIds`.
 
-   **Why density and not raw weight:** sorting by weight alone lets a single high-weight, high-token payload (e.g. a 40k-token tool dump scored 0.9) consume the budget ahead of many smaller turns of nearly equal weight—including exactly the low-verbosity constraint turns §11.2 exists to protect. Density packing is the standard greedy approximation for a hard-capped budget; raw weight survives as the tie-break so that equal-cost turns still order by task relevance.
+   **Why density and not raw weight:** sorting by weight alone lets a single high-weight, high-token payload (e.g. a 40k-token tool dump scored 0.9) consume the budget ahead of many smaller turns of nearly equal weight—including exactly the low-verbosity constraint turns §10.2 exists to protect. Density packing is the standard greedy approximation for a hard-capped budget; raw weight survives as the tie-break so that equal-cost turns still order by task relevance.
 6. Emit `contextProjection` with `generation++`.
-7. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else, subject to the §11.1 cooldown.
+7. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else, subject to the §10.1 cooldown.
 
-**Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) ≤ B`. The §10.1 budget-adherence metric and the §14 Phase 1 adherence report both measure this full sum, not the turn portion alone.
+**Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) ≤ B`. The §9.1 budget-adherence metric and the IMPL §8 Phase 1 adherence report both measure this full sum, not the turn portion alone.
 
 **Recoverability invariant:** For every omitted turn, SessionLog still has the bytes (or blob). Projection never claims deletion.
+
+This is **an existing property of the durable store rather than an aspiration of this design**, but the enforcement is narrower than earlier revisions of this paper claimed, and the boundary has to be stated to be useful. On the **tracked save path**, deletes of durable records are converted to tombstones rather than executed, and an attempt to physically delete one throws rather than proceeding. Writes and field-level updates on that path are mirrored into an append-only audit ledger carrying before-and-after snapshots, which is what makes original writes and additive changes reconstitutable.
+
+What that does **not** amount to is a database-level prohibition. The guard inspects tracked change entries, so set-based deletes and raw `DELETE` statements never reach it; today's recoverability rests on the service layer not issuing them, protected by a test asserting that the session-log service source contains no bulk-delete call, rather than on the database refusing them. A second limit: the ledger covers the tracked path, not the bulk tombstone and revival operations, which update rows directly — so deletion *events* go unrecorded even though those operations only flip deletion metadata and never touch stored content.
+
+So the invariant the projection may safely inherit is: **content survives deletion on every path the current services use, enforced by convention and a guard test above the database, not by the schema.** That is enough for this design, which needs omitted turns to remain readable and never claims a complete deletion history. It is not enough to describe recoverability as structurally guaranteed, and a projection built on a future code path that bypasses the tracked save would not inherit it at all. IMPL §3.2.1 records both mechanisms.
+
+Two consequences the design must respect:
+
+- **Re-admit of an omitted turn is safe by construction** (step 7 above), because omitted turns are never deleted. Re-admit of a *tombstoned* turn is a different matter: recovery reads must bypass the default visibility filters, and no restore operation is exposed on the session-log tool surface today. Any design that depends on reviving deleted turns is depending on unbuilt work.
+- **The enforcement is not visible in the data model's type definitions,** which makes it easy to audit incorrectly and conclude the ledger is mutable. An earlier review of this paper did exactly that, and a later one then overstated the correction in the opposite direction. Both errors came from reading one part of the write path and generalizing.
+
+The specific classes, methods, guard behavior, and ledger contract that provide these guarantees are identified in the companion implementation note. This paper states the property; that note states the code.
 
 **Budget adherence:** Local token estimates may drive packing. They are engineering controls, not published savings metrics.
 
 ---
 
-## 7. Runtime deployment options
-
-Honest comparison of where this can live.
-
-### Option A — Stay inside IDE plugins
-
-**What works:** Hook injection of REQUIRED MEMORIES; PreCompact / PostCompact reactions; prompt prefixes; limited transcript glimpses depending on host APIs.
-
-**What fails:** Plugins do not own the full host transcript. The host can still auto-compact. Projection can *mitigate* loss but cannot guarantee that model-facing context equals SessionLog-derived projection.
-
-**Verdict:** Necessary interim hardening; not sufficient for the end state.
-
-### Option B — Microsoft Agent Framework with client-managed history
-
-MAF supports client-managed chat history patterns: an `AgentSession` holding local conversation state, plus a pluggable `ChatHistoryProvider` that controls where history lives and how it is retrieved (`InMemoryChatHistoryProvider` ships as the default; a `DatabaseChatHistoryProvider` is the application-implemented durable option). On invoke, the framework can obtain an exact history list from the provider (modulo system messages, tools, and context-provider contributions). That is materially stronger control than opaque host threads.
-
-**Caveat:** Foundry service-managed conversations (or any service-owned history store) weaken control: the service may retain or reshape history outside the projector. Prefer client-managed providers when the goal is weighted projection.
-
-**Naming note (v0.1.3):** earlier revisions of this whitepaper cited `ChatMessageStore` as the client-managed abstraction. That name is not used by the cited Agent Framework guidance—it is earlier-preview / Semantic Kernel terminology—and has been corrected to `AgentSession` / `ChatHistoryProvider` here and in §16.
-
-**Verdict:** Strong fit for API-shaped agents where message arrays are first-class. Weaker fit when the operational preference is frontier **CLI subscriptions** rather than per-token API burn.
-
-### Option C — Outer orchestrator (extend QBAgent) + sessionless frontier CLI oneshots
-
-**Shape:**
-
-1. SessionLog is source of truth.
-2. ContextProjector builds a prompt blob under budget.
-3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
-4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
-
-**Why sessionless:** Resuming a vendor CLI session reintroduces vendor-owned transcript and their compaction. Fresh oneshots preserve *our* projection as the model-facing context.
-
-**Trade-offs (engineering-honest):**
-
-- Control is **prompt-blob**, not a full structured `messages[]` API (unless the chosen CLI exposes one).
-- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Both are viable; split-brain tooling is the failure mode to avoid. **The spike must declare which owner it uses before starting**, because the two branches have different observability ceilings and therefore different acceptance gates (§14.1).
-- Fair-use / rate limits of CLI **subscriptions** still apply even for sessionless oneshots. This is not infinite capacity and is not a claim of uncapped API throughput.
-- Prompt-cache friendliness: keep a **stable prefix** (system + standing memories) and a **variable tail** (projection segments). Do not reshuffle the prefix every turn.
-- Host UI may still compact its *display* transcript; that is UX, not model-facing truth, if invocation bypasses the host model path.
-
-**Verdict:** Best match for escaping host auto-compaction on the *model-facing* path while remaining compatible with CLI subscription usage (fair-use still applies). **Primary recommendation for Phase 2 spike** (pending operator approve/reject in §12).
-
----
-
-## 8. Related work
+## 7. Related work
 
 Map each cited line of work to **shared ideas** vs **what it misses** relative to task-progress relative weights + re-admit from a full log.
 
-### 8.1 Research
+### 7.1 Research
 
 **MemGPT** ([arXiv:2310.08560](https://arxiv.org/abs/2310.08560))  
 Shares: tiered memory; explicit main context vs recall store; paging.  
@@ -297,7 +271,7 @@ Misses: importance from summarizer attention ≠ relative weight for unfinished 
 Shares: turn importance scores; retain / summarize / drop bands; dynamic budget.  
 Misses: importance mix (similarity, recency, dependency) is not explicitly *progress-toward-completion*; durable re-admit + MCP memory bridge + host-escape runtime need productization beyond the paper’s conversational benchmarks.
 
-### 8.2 Industry
+### 7.2 Industry
 
 **Haystack `SummarizationCompactor`** ([docs](https://docs.haystack.deepset.ai/docs/next/summarization-compactor))  
 Shares: progressive summarization under compaction hooks; preserve system + recent steps; replace older turns with summaries.  
@@ -309,7 +283,7 @@ Misses: same core gap—compaction as reduction, not continuous projection with 
 
 ---
 
-## 9. Comparison table
+## 8. Comparison table
 
 | Approach | Durable full turns | Task-progress weights | Re-admit | Hard budget projection | Cross-session memory bridge | Escapes host compact |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -327,25 +301,25 @@ Misses: same core gap—compaction as reduction, not continuous projection with 
 
 ---
 
-## 10. Evaluation plan
+## 9. Evaluation plan
 
 Measure what matters. Do **not** lead with whitespace estimator deltas.
 
-### 10.1 Primary success metrics
+### 9.1 Primary success metrics
 
 1. **Post-reproject (or post-compact fallback) task continuation** without operator re-paste of constraints, paths, or acceptance criteria.
-2. **Weight stability / hysteresis:** `projectionState` flip rate, defined as (state changes observed in a projection pass) / (turns present in that pass), averaged over the session. Provisional thrash budget: **≤ 0.10**, i.e. under one state change per ten turns per pass. Operator-adjustable, but a number must be fixed before Phase 4 can pass or fail (§14).
+2. **Weight stability / hysteresis:** `projectionState` flip rate, defined as (state changes observed in a projection pass) / (turns present in that pass), averaged over the session. Provisional thrash budget: **≤ 0.10**, i.e. under one state change per ten turns per pass. Operator-adjustable, but a number must be fixed before Phase 4 can pass or fail (IMPL §8).
 3. **Projection token budget adherence:** fraction of assemblies ≤ `budgetTokens` (local estimator OK for this engineering metric only).
 4. **Re-admit usefulness:** when a turn is re-admitted, did the subsequent action correctly use it (human or rubric check)?
 5. **Pin integrity:** zero silent pin drops.
 
-### 10.2 Explicit non-metrics (for now)
+### 9.2 Explicit non-metrics (for now)
 
 - Estimator-only “token savings %” as a published claim.
 - Provider bill deltas inferred from whitespace benches.
 - Vanity context-window fill charts without task outcomes.
 
-### 10.3 Protocol sketch
+### 9.3 Protocol sketch
 
 - Record real operator sessions into SessionLog (offline corpus).
 - Phase 1 simulator: replay scorer + projector; operators score blind continuations (full context vs projection vs host-compact summary).
@@ -354,92 +328,20 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 
 ---
 
-## 11. Risks and open questions
+## 10. Risks and open questions
 
 1. **Thrashing:** scores oscillate; projection churns; prompt cache dies. Mitigation: hysteresis, pin classes, cooldown on re-admit (enforced against `lastReAdmitGeneration`; see §4.2).
 2. **Bad scorer drops quiet constraints:** low-verbosity “never X” turns get omitted. Mitigation: constraint detector → pin or MemoryBridge; fail tests in eval protocol.
 3. **CLI Terms of Service / fair use:** sessionless high-frequency oneshots may trip rate or ToS limits. Mitigation: backoff, batching, respect vendor rules; do not pretend subscriptions are uncapped APIs.
 4. **Tool-loop ownership:** split between orchestrator and CLI causes missing traces in SessionLog. Mitigation: pick one owner per spike; log everything observable.
-5. **Host UI compact still happens:** operators may think context is gone when only the IDE view compacted. Mitigation: UX clarity that SessionLog + projection are authoritative on Option C.
+5. **Host UI compact still happens:** operators may think context is gone when only the IDE view compacted. Mitigation: UX clarity that SessionLog + projection are authoritative under the outer-orchestrator deployment (IMPL §6, Option C).
 6. **Re-score cost every turn:** LLM judge v2 can be expensive. Mitigation: v1 rules by default; judge on schedule or on budget pressure.
 7. **Evaluation honesty:** easy to overfit summaries that *look* complete. Mitigation: adversarial hidden constraints in replay tests.
 8. **Prompt-blob vs messages[] fidelity:** some tool schemas and multimodal parts may not round-trip cleanly through CLI stdin prompts.
 
 ---
 
-## 12. Immediate next actions (operator review)
-
-Concrete checklist for tomorrow—no need to re-derive the design:
-
-- [ ] **Approve or reject Option C** as the primary Phase 2 spike target (Claude or Grok CLI sessionless oneshot; prompt-blob control, not full `messages[]` unless that CLI exposes it).
-- [ ] **Approve Phase 1 SessionLog path:** extend existing MCP `sessionlog_*` with weight / pin / projection metadata **vs** stand up a new store (default recommendation: extend).
-- [ ] **Confirm success metric:** zero operator re-paste of constraints / paths / acceptance criteria after reproject (or compact fallback)—not estimator token deltas; not provider-metered savings claims from `memory-bench-whitespace`.
-- [ ] **Note:** Perplexity HV still **pending API key** after box reseed—do not treat HV as done.
-- [ ] **Note:** Full 19-file `add-profile` restore still needed when PAYTON-LEGION2 reconnects; standing rules currently restored from durable memory only. Never publish profile files publicly.
-- [ ] **Confirm IDs:** MCP-MEMORY-002 (memory verbs), PLAN-MANAGER-MEMORY-UI-001 (Manager UI)—no invented plan-name variants.
-- [ ] **Skim related-work table** for fairness (especially PACE proximity + re-admit gap); literature list is frozen for v0.1.x—no invented papers.
-
----
-
-## 13. Recommendations
-
-Mapped **1:1 to Roadmap phases** in §14. Cross-cutting constraints listed after.
-
-| Rec | Maps to | Action |
-| --- | --- | --- |
-| **R0** | **Phase 0** | Treat compaction / context loss as the primary problem; complete operator review of this whitepaper; run Hostile Validation when unblocked (Perplexity HV still pending API key). Keep MCP-MEMORY-002 as cross-session companion, not the turn ledger. |
-| **R1** | **Phase 1** | Extend MCP `sessionlog_*` with weight / pin / projection metadata (prefer extend over new store); ship offline projection simulator with the schema fields and I/O in §14 Phase 1 exit criteria. |
-| **R2** | **Phase 2** | Spike Option C (outer orchestrator + one Claude or Grok sessionless CLI oneshot) early—before over-investing in in-host projection theater. Meet the Phase 2 spike acceptance checklist in §14.1. |
-| **R3** | **Phase 3** | Keep Option A PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) during transition; measure re-paste rate vs baseline. |
-| **R4** | **Phase 4** | Scorer honesty: ship v1 rules with hysteresis before any learned / LLM judge (v2). |
-
-**Cross-cutting (all phases):**
-
-- Do **not** rehabilitate `memory-bench-whitespace` (whitespace/estimator multiturn bench) as provider-metered savings proof.
-- Success = task continuity without operator re-paste after reproject / compact fallback—not estimator deltas.
-- Prefer MAF client-managed history (**Option B**) when the runtime is API-native rather than CLI-subscription-native; Option B is a parallel path, not a substitute for the Phase 2 CLI spike unless the operator redirects.
-
----
-
-## 14. Roadmap
-
-| Phase | Deliverable | Exit criteria |
-| --- | --- | --- |
-| **0** | This whitepaper + Hostile Validation (HV) alignment | Operator review of open questions; HV still pending where blocked on API keys |
-| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
-| **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
-| **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
-| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | `projectionState` flip rate ≤ **0.10** per turn per pass (§10.1 metric 2, operator-adjustable but fixed before the phase opens); quiet-constraint eval suite green |
-
-### 14.1 Phase 2 spike acceptance checklist (pass/fail)
-
-All bullets must be **pass** before calling the Phase 2 spike done. Fail any → not done.
-
-- [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
-- [ ] **PASS/FAIL — Projection under budget:** Assembled prompt / projection is ≤ configured `budgetTokens` (local estimator OK for this engineering gate only).
-- [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§7 Option C, §11.4).
-- [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
-- [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
-- [ ] **PASS/FAIL — Re-admit demo:** One previously omitted turn is re-admitted into a later projection and used by a subsequent oneshot (receipt: turnIds + generations).
-- [ ] **PASS/FAIL — No estimator savings claim:** Spike write-up does **not** claim provider-metered token savings or cite `memory-bench-whitespace` deltas as cost proof.
-- [ ] **PASS/FAIL — Continuation:** Operator (or rubric) confirms task continues without re-pasting standing constraints after reproject.
-
-### 14.2 Out of scope for v0.1.x
-
-Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 decision window:
-
-- Learned / trained scorer weights or production v2 judge prompts
-- Full eight-CLI matrix (Codex / Cline / OpenCode / Copilot / …) oneshot certification
-- Legal opinion on vendor CLI Terms of Service for high-frequency sessionless oneshots
-- Provider-metered A/B cost studies or published “token savings %”
-- New SessionLog implementation code or production migrations (Phase 1 may prototype schema offline only)
-- Inventing additional literature beyond the frozen citation list in §16
-- Claiming Perplexity Hostile Validation complete while API key remains missing post-reseed
-- Publishing operator `add-profile` / standing-rules profile files publicly
-
----
-
-## 15. Appendix: glossary
+## 11. Appendix: glossary
 
 | Term | Meaning |
 | --- | --- |
@@ -449,7 +351,7 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | **Pin** | Hard retain-in-projection marker |
 | **contextProjection** | Budgeted model-facing assembly derived from SessionLog + memory |
 | **Re-admit** | Restoring an omitted turn into the projection from SessionLog |
-| **MemoryBridge** | Path between turn stream and MCP durable memory (`remember` / `recall` / `explore` / `consolidate` / `promote`; `memory_remember` = bridge/API alias) |
+| **MemoryBridge** | Path between turn stream and MCP durable memory. Binds to the shipped tools — `memory_remember` for provenance-carrying writes, `memory_recall` for meaning-ranked reads, with `memory_explore` / `memory_consolidate` / `memory_promote` alongside. The bare verb forms used in this paper's prose are shorthand for those tool names, not separate tools; `memory_add` is the thinner compatibility surface, not the canonical write path |
 | **Sessionless oneshot** | Fresh CLI invocation without vendor session resume |
 | **Host auto-compaction** | IDE/runtime irreversible (to the model) context reduction |
 | **Hysteresis** | Resistance to rapid weight/state flipping |
@@ -457,7 +359,7 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 
 ---
 
-## 16. References
+## 12. References
 
 1. Packer, C., et al. *MemGPT: Towards LLMs as Operating Systems.* arXiv:2310.08560. https://arxiv.org/abs/2310.08560  
 2. Li, Y., et al. *Compressing Context to Enhance Inference Efficiency of Large Language Models* (Selective Context). arXiv:2310.06201. https://arxiv.org/abs/2310.06201  
@@ -480,7 +382,14 @@ Explicitly **not** attempted in this whitepaper revision or the Phase 0–2 deci
 | v0.1 | 2026-09-20 | Initial whitepaper for operator review tomorrow |
 | v0.1.1 | 2026-09-20 | Round-1 self-eval: HV = Hostile Validation; SessionLog extends `sessionlog_*`; hook matrix honesty; Immediate next actions; Phase 1 exit criteria concreteness; memory verb / alias clarity |
 | v0.1.2 | 2026-09-20 | Round-2 hostile pass: remove soft overclaims; label assumptions; Phase 2 spike acceptance checklist; Out of scope for v0.1.x; Recommendations↔Roadmap 1:1 |
-| v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §11.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
-| v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the §14.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
+| v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §10.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
+| v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the IMPL §8.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
+| v0.1.5 | 2026-09-20 | Separate design from implementation, and stop describing shipped work by ticket number. §3 and §6 now state recoverability as an *existing enforced property* of the durable store—tombstones instead of executed deletes, physical deletion rejected, mutations mirrored to an append-only snapshot ledger—so projection inherits the invariant rather than building it; the classes and methods providing it are delegated to the companion implementation note instead of named here. Records the two design-relevant consequences: re-admit of an *omitted* turn is safe by construction, while re-admit of a *tombstoned* turn depends on unbuilt restore capability. §1.2 describes the shipped capabilities directly instead of citing internal work-item identifiers (`MCP-MEMORY-002`, `PLAN-MANAGER-MEMORY-UI-001`), which meant nothing to an external reader |
+| v0.1.6 | 2026-09-20 | **Split design from proposed implementation.** Runtime deployment options, immediate next actions, recommendations, and the roadmap with its phase gates moved to `proposed-implementation-weighted-context-projection-v0.1.md`, together with the code-grounded findings that were previously a third document; remaining sections renumbered (old §8–§11 → §7–§10, old §15–§16 → §11–§12). Executive summary now names the memory **tools** (`memory_remember` / `memory_recall` / `memory_explore` / `memory_consolidate` / `memory_promote`) rather than describing `memory_remember` as an alias of a bare `remember` verb, which had the relationship backwards |
+| v0.1.7 | 2026-09-20 | Round-4 external review. Narrows the §6 recoverability paragraph: the audit ledger covers the tracked save path, not the bulk tombstone and revival operations, so content recoverability holds but a complete deletion history is not claimable. Defines `tokenEstimate` in §4.2 as an estimate of the turn's own rendered payload, explicitly not a provider usage count for the producing call |
+| v0.1.8 | 2026-09-20 | Round-5 external review. Fixes the two remaining inverted memory-alias definitions that the v0.1.6 changelog wrongly implied were already handled — Principle 6 and the MemoryBridge glossary entry still presented a bare `remember` verb as canonical with `memory_remember` as its alias; both now bind to the shipped `memory_*` tools and mark the short verb forms as prose shorthand. Redefines `tokenEstimate` in §4.2 as per-renderer and per-model rather than one fixed number per turn, since a turn renders to different sizes under a `messages[]` assembly than under a prompt blob (§10 risk 8) |
+| v0.1.9 | 2026-09-20 | Round-5 follow-up. §6's recoverability paragraph narrowed a second time: physical-delete blocking is a guard over tracked change-tracker entries on the `SaveChanges` path, which set-based and raw-SQL deletes bypass, with no database-level trigger or constraint behind it. The inheritable invariant is now stated as content surviving deletion on the paths the current services use, upheld above the database by that guard plus a source-text test, rather than physical deletion being "rejected outright" as a structural property. IMPL §3.2.2 records the mechanism |
 
-**Non-claims:** This document does not assert measured token-cost reductions, benchmark wins against PACE/HiGMem/G-Long, ToS clearance for high-frequency CLI oneshots, or completed Perplexity HV. Those require separate empirical, legal/ops, and API-key-unblocked work. Design-target rows in §9 are not empirical results.
+> **Note on numbering:** rows above v0.1.6 describe changes using **current** section numbers, not the numbers in force at the time, so that every reference in this table still resolves.
+
+**Non-claims:** This document does not assert measured token-cost reductions, benchmark wins against PACE/HiGMem/G-Long, ToS clearance for high-frequency CLI oneshots, or completed Perplexity HV. Those require separate empirical, legal/ops, and API-key-unblocked work. Design-target rows in §8 are not empirical results.
