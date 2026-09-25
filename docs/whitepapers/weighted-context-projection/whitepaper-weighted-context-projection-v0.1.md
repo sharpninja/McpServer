@@ -1,11 +1,11 @@
 # Weighted Context Projection for Long-Horizon Agent Work: Escaping Host Auto-Compaction via SessionLog, Memory, and Sessionless Frontier CLIs
 
 **Document:** whitepaper-weighted-context-projection-v0.1.md  
-**Version:** v0.1.9  
+**Version:** v0.1.10  
 **Status:** Draft for operator review (design only; implementation proposal split out)  
 **Audience:** Operator Payton Byrd  
 **Author:** Payton Byrd  
-**Date:** 2026-09-20 (America/Chicago)  
+**Date:** 2026-09-20 (revised 2026-09-25, America/Chicago)  
 **Authoring context:** Engineering design note derived from MCP memory workstreams, plugin-hook limits, and literature on long-horizon agent context management. Not a product claim sheet.
 
 **Scope.** This document argues a design. It deliberately contains no deployment choice, no roadmap, no phase gates, and no code-level specifics. Those live in the companion proposal, `proposed-implementation-weighted-context-projection-v0.1.md`, referred to below as **IMPL**. A bare `§N` refers to a section of this paper; `IMPL §N` refers to that companion.
@@ -76,7 +76,7 @@ Memory alone stores facts. Compaction alone discards history. Neither continuous
 2. **Weight relative to current work progress**, not raw self-information, recency alone, or “interestingness.”
 3. **Hard token budget** on the live projection. Soft targets without enforcement invite drift.
 4. **Re-admit is first-class.** If a quiet constraint suddenly matters, the scorer must be allowed to pull the full turn back from SessionLog.
-5. **Pins beat scores.** Explicit operator or agent pins (e.g., acceptance criteria, blocked-on facts) stay expanded until unpinned.
+5. **Pins beat scores, and they beat stubbing.** Explicit operator, system, or acceptance pins stay expanded until unpinned. An `invalidates` edge or an introduced-harm verdict attaches a marker beside the expanded pin. It does not stub or omit the pin (§6.2). Unpinned targets of those events are marked stubs.
 6. **Memory bridges the long tail.** Standing facts leave the projection via the MCP memory write path (`memory_remember`) rather than forever occupying mid-tier summary slots.
 7. **Own assembly when possible.** If the orchestrator builds the prompt, host auto-compaction becomes optional for *model-facing* context—not for host UI chrome.
 8. **No fake metrics.** Do not claim savings from estimators; measure continuation quality and budget adherence.
@@ -130,14 +130,14 @@ Per turn (illustrative schema; Phase 1 formalizes):
 | `turnId` | Stable identity in SessionLog |
 | `sessionId` | Session scope |
 | `payload` | Full request + intermediates + response (or content-addressed blob ref) |
-| `weight` | Independent scalar score for current-work progress ∈ [0, 1]. Not a normalized distribution: weights do not sum to 1 across a session, so `Δweight` hysteresis thresholds (§5.2) and the density packing in §6 compare absolute values |
+| `weight` | Independent scalar relevance score ∈ [0, 1] for unfinished work. Not a normalized distribution: weights do not sum to 1 across a session, so `Δweight` hysteresis thresholds (§6.1) and the density packing in §6 compare absolute values. Not the progress count; the only progress quantity that may revise this score is ADD §6.1 |
 | `pin` | Boolean / pin class (operator, system, acceptance) |
 | `projectionGeneration` | Monotonic id of last scorer/projector pass |
-| `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state |
+| `projectionState` | `expanded` \| `summarized` \| `omitted`. A "stub" is the `summaryText` carried by a `summarized` turn; there is no separate `stubbed` state. `invalidated` and `introduced-harm` are annotations on `expanded` or `summarized`, not extra states (§6.2) |
 | `summaryText` | Mid-tier stub when not expanded |
 | `tokenEstimate` | Local estimate of the turn's **own rendered payload**, for *budgeting only* (not billing proof). Two distinctions matter. It is not a provider-reported usage count for the call that produced the turn, which includes prompt and history. And it is **not one fixed number per turn**: the same turn renders to different sizes under a `messages[]` assembly than under a prompt blob, and under different tokenizers, so the estimate is per renderer and target model (§10 risk 8; IMPL §3.4) |
 | `reAdmitCount` | How often this turn was pulled back from omit |
-| `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §10.1 reads |
+| `lastReAdmitGeneration` | `projectionGeneration` at which this turn was last re-admitted; the field the re-admit cooldown in §6.1 reads |
 
 Projection object:
 
@@ -156,6 +156,8 @@ Projection object:
 ### 5.1 What “relative weight” means
 
 Weight answers: **If we are trying to finish the current unit of work, how much does this turn still matter in the live window?**
+
+That question is relevance. It is not a progress count. This paper does not define a second numeric "progress." When the retrospective-linking addendum is applied, the only progress quantity that may revise `weight` is the authoritative plan-level series in ADD §6.1, and only by the revision rules in ADD §6.5. Pending intent, an actor's claim, and the "progress narrative" label below are not that quantity and MUST NOT be treated as inputs to packing.
 
 Examples of high weight:
 
@@ -178,13 +180,13 @@ Mid weight: progress narrative worth a summary (“tried A, failed for reason R,
 
 - Boost: pinned, open TODOs, files still in active edit set, last N turns, turns cited by current plan, turns containing unmet constraints.
 - Penalize: turns fully superseded by a later turn’s explicit “supersedes turnId”, pure ack turns, huge tool payloads already summarized into memory.
-- Hysteresis: require Δweight above a threshold before changing `projectionState`, to avoid thrashing.
+- Hysteresis applies only to discretionary score-driven `projectionState` changes. Require `|Δweight|` of at least the §6.1 threshold before such a change. Hysteresis MUST NOT block a mandatory override (pin, budget demotion, invalidation, introduced-harm).
 
 **v2 — LLM / learned judge:**
 
 - Periodic or per-turn judge prompt: given goal + recent projection + candidate turn stubs, re-score candidate turns under budget. The judge emits independent `∈ [0, 1]` scores per turn (see §4.2)—it does **not** redistribute a fixed normalized mass, because normalization would make one turn's score depend on unrelated turns and break `Δweight` hysteresis.
 - Still write results back to SessionLog; never delete.
-- Keep hysteresis and pin overrides.
+- Keep the §6.1 split: hysteresis on discretionary score changes, mandatory overrides above them.
 
 ### 5.3 Reweight triggers
 
@@ -194,13 +196,13 @@ Preferred: **after each turn**. Acceptable: at compact gates / budget pressure /
 
 ## 6. Projection algorithm
 
-Informal algorithm under hard budget `B`:
+Informal algorithm under hard budget `B`. The authoritative order is §6.1. This list is that procedure with the packing rule written out. Link admission and introduced-harm (steps 3 and 4 of §6.1) run before the density packing in step 5 here.
 
 1. Load SessionLog turns for `sessionId` plus standing memories from MemoryBridge.
 2. **Charge the fixed prefix against the budget first.** Compute `B_turns = B - tokens(system prefix) - tokens(standing memories)`, where the standing memories are those listed in `standingMemoryIds[]`. Standing memories are model-facing and therefore consume `budgetTokens` exactly as turns do; IMPL §6's stable-prefix guidance makes them cheap to cache, not free to send. Fail closed: if `B_turns <= 0`, surface error / demote or consolidate standing memories via `consolidate` / ask operator—do not silently overflow `B`.
-3. Ensure pins are marked `expanded` (fail closed: if pins alone exceed `B_turns`, surface error / force memory promotion / ask operator—do not silently drop pins).
-4. Score or refresh weights (respect hysteresis).
-5. Allocate the remaining `B_turns` by **value density**, not raw weight:
+3. Mark active pins `expanded` (§6.2). Fail closed: if pins alone, including their mandatory markers, exceed `B_turns`, surface error, force memory promotion, or ask the operator. Do not silently drop pins, and do not treat hysteresis as a reason to drop them.
+4. Refresh weights. The refresh may change `weight`. It MUST NOT by itself change `projectionState`. State changes follow §6.1.
+5. Allocate the remaining `B_turns` by **value density**, not raw weight, over turns not already forced by a mandatory override:
    - Compute `density = weight / max(tokenEstimate, 1)` for each non-pinned turn.
    - Sort by `density` descending (stable tie-break: `weight` descending, then recency, then `turnId`).
    - Expand while residual budget allows full payloads.
@@ -209,9 +211,61 @@ Informal algorithm under hard budget `B`:
 
    **Why density and not raw weight:** sorting by weight alone lets a single high-weight, high-token payload (e.g. a 40k-token tool dump scored 0.9) consume the budget ahead of many smaller turns of nearly equal weight—including exactly the low-verbosity constraint turns §10.2 exists to protect. Density packing is the standard greedy approximation for a hard-capped budget; raw weight survives as the tie-break so that equal-cost turns still order by task relevance.
 6. Emit `contextProjection` with `generation++`.
-7. On later reweight: if an omitted turn’s weight rises enough, **re-admit** full payload (or a richer summary) and demote something else, subject to the §10.1 cooldown.
+7. On a later pass, re-admit an omitted turn only through §6.1. A discretionary re-admit requires the weight rise to clear hysteresis and requires cooldown to allow it. A mandatory override does not wait on either. Demotion of some other turn, when the budget requires it, is a budget demotion under §6.1 even if that other turn's weight did not change.
 
-**Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) ≤ B`. The §9.1 budget-adherence metric and the IMPL §8 Phase 1 adherence report both measure this full sum, not the turn portion alone.
+### 6.1 Ordered transition and re-admit cooldown
+
+One procedure produces the next `projectionState`. It separates **mandatory overrides** from **discretionary score changes**. This section is the cooldown contract previously cited as §10.1. There is no §10.1. References to a cooldown spec resolve here.
+
+Mandatory overrides MUST be applied when their trigger is true even if `weight` is unchanged, even if `|Δweight|` is below the hysteresis threshold, and even if the turn is inside re-admit cooldown. Discretionary score changes MUST NOT be applied unless hysteresis and cooldown both allow them.
+
+**Hysteresis threshold.** A discretionary `projectionState` change requires `|Δweight| ≥ 0.05`. The threshold is absolute, on the independent scalar in §4.2. Provisional, operator-adjustable, and MUST be fixed before Phase 4 can pass or fail (IMPL §8).
+
+**Order inside a generation.** Weights are refreshed first (§6 step 4). Then, in this order:
+
+1. **Prefix.** Compute `B_turns` (§6 step 2). If `B_turns ≤ 0`, fail closed. No turn-state change substitutes for that failure.
+2. **Pins.** Every turn with an active pin is `expanded` (§6.2). If those pins, with mandatory markers, exceed `B_turns`, fail closed.
+3. **Link admission and invalidation** (ADD §3.1), for edges that are still eligible (ADD §5.2). This step runs before discretionary packing. An unpinned `invalidates` target already in the assembly is forced to the marked stub. A pinned target stays `expanded` and receives the invalidation marker. A link-admitted endpoint is then a packing candidate under the link sub-cap (ADD §4) and still under `B`.
+4. **Introduced-harm** (§6.2, ADD §7.4). An unpinned introduced-harm turn is forced to the marked stub. A pinned introduced-harm turn stays `expanded` and receives the harm marker.
+5. **Discretionary score changes.** Apply a score-driven expand, summarize, or omit only when `|Δweight|` meets the threshold, cooldown allows the change, and the turn is not held by steps 2-4.
+6. **Pack.** Spend residual budget by value density (§6 step 5) on turns that steps 2-4 have not already forced. Packing MAY demote an unpinned turn whose weight did not change when a new pin, a mandatory stub, or a link admission consumes budget that turn previously held. That demotion is a **budget demotion**, not a discretionary score change, and it is allowed during cooldown. The trace MUST record the cause as `budget-demotion`.
+7. **Emit** `contextProjection` and increment `generation`.
+
+**Unchanged-weight demotion under new pins.** When a pin is added, or an active pin's rendered size grows, packing MUST demote unpinned content as far as required even if those weights are unchanged and even if those turns are inside cooldown. Pins are not the demotion candidates. If every unpinned turn has been omitted or stubbed and the assembly is still over `B`, fail closed.
+
+**Invalidation during cooldown.** An `invalidates` admission, a reseal that voids a judgment (ADD §5.2), a tombstone, an evidence change that voids a judgment (ADD §5.2), or an introduced-harm verdict MUST still be applied while cooldown is open. Cooldown blocks only discretionary score-driven flips: omitting or summarizing a turn because its weight fell, or expanding it because its weight rose. It does not block steps 1-4 or a budget demotion.
+
+**Re-admit cooldown.** When a turn is re-admitted to `expanded` by a discretionary score change, set `lastReAdmitGeneration` to the current `projectionGeneration`. Until `projectionGeneration ≥ lastReAdmitGeneration + C`, the projector MUST NOT omit or summarize that turn solely because its weight fell or failed hysteresis. Provisional **`C = 2`** generations. Operator-adjustable, and MUST be fixed before Phase 4 can pass or fail. Cooldown does not grow `B` and does not override steps 1-4 or a budget demotion. A budget demotion during cooldown MUST be recorded and MUST NOT reset `lastReAdmitGeneration`. A mandatory stub of an unpinned turn (invalidation or introduced-harm) ends the expanded re-admit early, MUST be recorded as a mandatory override, and is not a cooldown violation.
+
+Edge admission uses the same constant `C` for discretionary confidence flips (ADD §5.3). Mandatory edge invalidation does not wait on `C`.
+
+The projection trace for a state change MUST name the cause: `pin`, `invalidation`, `introduced-harm`, `score`, or `budget-demotion`. IMPL §8 Phase 1's omit/re-admit trace includes that cause.
+
+### 6.2 Pins, invalidation, and introduced-harm
+
+Precedence, highest first. A lower rule MUST NOT override a higher one. ADD §3.1 and ADD §7.4 restate this rule; they do not define a second one.
+
+1. **Budget fail-closed.** If the mandatory set exceeds `B`, do not drop a member of that set to make the invariant look true. Surface an error, force memory promotion, or ask the operator (§6 step 2 and step 3).
+2. **Active pins stay expanded.** An operator, system, or acceptance pin stays `expanded` until unpinned. An `invalidates` edge that names the turn does not stub it. An introduced-harm verdict on the turn does not stub it, omit it, or suspend the pin. Principle 5 is this rule.
+3. **Markers are mandatory on those pins.** A pinned `invalidates` target MUST carry the invalidation marker beside the expanded payload: the result is obsolete, and which edge says so. A pinned introduced-harm turn MUST carry the harm marker beside the expanded payload: the approach, that HV judged it introduced a regression, the checkable referent (ADD §7.1), and an explicit statement that the payload is not the recommended next action. The marker is charged against `B`. If the pin plus its marker does not fit, rule 1 applies.
+4. **Unpinned mandatory stubs.** An unpinned `invalidates` target that is already in the assembly, and an unpinned introduced-harm turn, MUST be `summarized` with the same marker. They MUST NOT stay `expanded` and MUST NOT be silently `omitted` (omission would leave the failed approach available to retry with no marker).
+5. **Discretionary scores sit underneath.** Weight changes, hysteresis, and cooldown (§6.1) do not move a turn that rules 1-4 have fixed.
+
+`introduced-harm` and `invalidated` are annotations, not values of `projectionState`. A revealed regression (ADD §6.2) is not introduced-harm and does not force rule 3 or rule 4.
+
+### 6.3 Tool-loop budget
+
+The budget invariant below applies at **every model invocation** a deployment issues, not only when `contextProjection` is first assembled. That includes every call in a tool loop: the initial prompt and every later call that carries a new tool result, a continuation, or a reprojected tail.
+
+Live tool results and in-progress dialog are charged at their own `tokenEstimate` for the active renderer (IMPL §5.1). They are not free because the turn is unfinished.
+
+When that live content cannot fit in `B`:
+
+1. **Spill.** Demote unpinned prior tool payloads and other unpinned turns to SessionLog stubs or omissions, lowest density first, and re-assemble. A spill is a budget demotion (§6.1). It is allowed during cooldown. Record it.
+2. **Fail closed.** If the mandatory set still cannot fit, do not invoke the model. The mandatory set is the system prefix, standing memories, active pins with their mandatory markers, and the live tool result or user turn this invocation exists to deliver. Surface an error or ask the operator. Do not drop pins, do not truncate pinned content, and do not send an over-budget prompt.
+3. **Ownership.** The component that issues the call is the component that enforces this (risk 4). A deployment that claims the invariant MUST be able to measure each outgoing prompt and refuse the call. A CLI-owned inner loop whose intermediate model calls the orchestrator cannot measure is not a conforming claim of this invariant. The Phase 2 declaration (IMPL §8.1) records that gap as a fail for the budget gate, not as a silent pass.
+
+**Budget invariant:** `tokens(system prefix) + tokens(standing memories) + tokens(expanded) + tokens(stubs) + tokens(mandatory markers) + tokens(live tool results on this call) ≤ B`, at every issued model invocation. The §9.1 budget-adherence metric and the IMPL §8 Phase 1 adherence report both measure this full sum, not the turn portion alone.
 
 **Recoverability invariant:** For every omitted turn, SessionLog still has the bytes (or blob). Projection never claims deletion.
 
@@ -308,10 +362,11 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 ### 9.1 Primary success metrics
 
 1. **Post-reproject (or post-compact fallback) task continuation** without operator re-paste of constraints, paths, or acceptance criteria.
-2. **Weight stability / hysteresis:** `projectionState` flip rate, defined as (state changes observed in a projection pass) / (turns present in that pass), averaged over the session. Provisional thrash budget: **≤ 0.10**, i.e. under one state change per ten turns per pass. Operator-adjustable, but a number must be fixed before Phase 4 can pass or fail (IMPL §8).
-3. **Projection token budget adherence:** fraction of assemblies ≤ `budgetTokens` (local estimator OK for this engineering metric only).
-4. **Re-admit usefulness:** when a turn is re-admitted, did the subsequent action correctly use it (human or rubric check)?
-5. **Pin integrity:** zero silent pin drops.
+2. **State-flip rate.** Numerator: turns whose `projectionState` changed on this pass. Denominator: turns that were `expanded` or `summarized` on the previous pass (the previous active set), not every turn loaded for the session. Stable omissions are outside the denominator, so a quiet backlog cannot hide churn in the live window. Window: one projection pass. Session figure: the mean of per-pass rates. A pass marked as a phase-boundary flush (ADD §5.3) is excluded from the mean. Provisional bar: **≤ 0.10**. Operator-adjustable, and the number MUST be fixed before Phase 4 can pass or fail (IMPL §8).
+3. **Active-context token replacement.** Separate from the flip rate. A pass can replace the entire variable tail while flipping few states, or flip many tiny turns while leaving the tokens in place. Window: one projection pass. Denominator: tokens in the previous pass's variable tail (expanded payloads, stubs, and link-admitted segments). The stable prefix and standing memories are outside both sides, so a large cached prefix cannot dilute the ratio. Numerator: tokens of that previous tail that are absent from the new tail. Session figures: the per-pass mean and the per-pass maximum, excluding phase-boundary flushes. Provisional bar: **≤ 0.25** on each counted pass. Operator-adjustable, and the number MUST be fixed before Phase 4 can pass or fail. Both bars are required. Passing the flip rate does not pass this metric.
+4. **Projection token budget adherence:** fraction of issued model invocations, including tool-loop continuations (§6.3), whose measured assembly is ≤ `budgetTokens` (local estimator OK for this engineering metric only). An invocation that was refused by fail-closed is recorded as a refusal, not as adherence.
+5. **Re-admit usefulness:** when a turn is re-admitted, did the subsequent action correctly use it (human or rubric check)? Report score-admitted and link-admitted slices separately (ADD §9).
+6. **Pin integrity:** zero silent pin drops, including under invalidation, introduced-harm, budget pressure, and tool-loop spill (§6.2, §6.3).
 
 ### 9.2 Explicit non-metrics (for now)
 
@@ -330,10 +385,10 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 
 ## 10. Risks and open questions
 
-1. **Thrashing:** scores oscillate; projection churns; prompt cache dies. Mitigation: hysteresis, pin classes, cooldown on re-admit (enforced against `lastReAdmitGeneration`; see §4.2).
+1. **Thrashing:** scores oscillate; projection churns; prompt cache dies. Mitigation: discretionary hysteresis and re-admit cooldown (§6.1, enforced against `lastReAdmitGeneration`), which do not block mandatory overrides. Stability is the pair of metrics in §9.1 (state-flip rate and active-context token replacement), not the flip rate alone.
 2. **Bad scorer drops quiet constraints:** low-verbosity “never X” turns get omitted. Mitigation: constraint detector → pin or MemoryBridge; fail tests in eval protocol.
 3. **CLI Terms of Service / fair use:** sessionless high-frequency oneshots may trip rate or ToS limits. Mitigation: backoff, batching, respect vendor rules; do not pretend subscriptions are uncapped APIs.
-4. **Tool-loop ownership:** split between orchestrator and CLI causes missing traces in SessionLog. Mitigation: pick one owner per spike; log everything observable.
+4. **Tool-loop ownership:** split between orchestrator and CLI causes missing traces in SessionLog, and a CLI-owned inner loop can issue model calls the orchestrator cannot budget. Mitigation: one declared owner per spike; log everything observable; claim the §6.3 invariant only for calls the owner can measure and refuse.
 5. **Host UI compact still happens:** operators may think context is gone when only the IDE view compacted. Mitigation: UX clarity that SessionLog + projection are authoritative under the outer-orchestrator deployment (IMPL §6, Option C).
 6. **Re-score cost every turn:** LLM judge v2 can be expensive. Mitigation: v1 rules by default; judge on schedule or on budget pressure.
 7. **Evaluation honesty:** easy to overfit summaries that *look* complete. Mitigation: adversarial hidden constraints in replay tests.
@@ -347,14 +402,14 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 | --- | --- |
 | **SessionLog** | Append-only durable transcript of turns for a session; extends MCP `sessionlog_*` with weight/pin/projection metadata |
 | **Turn** | Full request + intermediates + response unit |
-| **Weight** | Independent scalar ∈ [0, 1] for advancing current work toward completion; not a normalized distribution (see §4.2) |
+| **Weight** | Independent scalar ∈ [0, 1] for whether a turn still matters to unfinished work; not a normalized distribution and not the progress count (see §4.2, §5.1, ADD §6.1) |
 | **Pin** | Hard retain-in-projection marker |
 | **contextProjection** | Budgeted model-facing assembly derived from SessionLog + memory |
 | **Re-admit** | Restoring an omitted turn into the projection from SessionLog |
 | **MemoryBridge** | Path between turn stream and MCP durable memory. Binds to the shipped tools — `memory_remember` for provenance-carrying writes, `memory_recall` for meaning-ranked reads, with `memory_explore` / `memory_consolidate` / `memory_promote` alongside. The bare verb forms used in this paper's prose are shorthand for those tool names, not separate tools; `memory_add` is the thinner compatibility surface, not the canonical write path |
 | **Sessionless oneshot** | Fresh CLI invocation without vendor session resume |
 | **Host auto-compaction** | IDE/runtime irreversible (to the model) context reduction |
-| **Hysteresis** | Resistance to rapid weight/state flipping |
+| **Hysteresis** | Resistance to discretionary score-driven `projectionState` flips (§6.1). Does not block pins, budget demotion, invalidation, or introduced-harm |
 | **HV** | Hostile Validation (accuracy + completeness gate; not “high-visibility / high-value”) |
 
 ---
@@ -382,13 +437,14 @@ Measure what matters. Do **not** lead with whitespace estimator deltas.
 | v0.1 | 2026-09-20 | Initial whitepaper for operator review tomorrow |
 | v0.1.1 | 2026-09-20 | Round-1 self-eval: HV = Hostile Validation; SessionLog extends `sessionlog_*`; hook matrix honesty; Immediate next actions; Phase 1 exit criteria concreteness; memory verb / alias clarity |
 | v0.1.2 | 2026-09-20 | Round-2 hostile pass: remove soft overclaims; label assumptions; Phase 2 spike acceptance checklist; Out of scope for v0.1.x; Recommendations↔Roadmap 1:1 |
-| v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the §10.1 re-admit cooldown is implementable before Phase 1 freezes the schema |
+| v0.1.3 | 2026-09-20 | Round-3 external review: correct MAF API attribution (`ChatMessageStore` → `AgentSession` / `ChatHistoryProvider`); §6 allocates by value density instead of raw weight; retire dead `stubbed` state and add `lastReAdmitGeneration` so the re-admit cooldown (now §6.1) is implementable before Phase 1 freezes the schema |
 | v0.1.4 | 2026-09-20 | Round-3 follow-up: charge system prefix + standing memories against `B` with a stated budget invariant; scope the IMPL §8.1 tool-trace gate to the declared tool owner and add a declaration gate; fix the thrash threshold at ≤ 0.10 flips/turn/pass; resolve `weight` as an independent scalar (not normalized mass); record HiGMem's Findings-of-ACL-2026 venue and 2603.29193's preprint provenance; complete refs 5, 7, 8; repair the §4.1 diagram alignment |
 | v0.1.5 | 2026-09-20 | Separate design from implementation, and stop describing shipped work by ticket number. §3 and §6 now state recoverability as an *existing enforced property* of the durable store—tombstones instead of executed deletes, physical deletion rejected, mutations mirrored to an append-only snapshot ledger—so projection inherits the invariant rather than building it; the classes and methods providing it are delegated to the companion implementation note instead of named here. Records the two design-relevant consequences: re-admit of an *omitted* turn is safe by construction, while re-admit of a *tombstoned* turn depends on unbuilt restore capability. §1.2 describes the shipped capabilities directly instead of citing internal work-item identifiers (`MCP-MEMORY-002`, `PLAN-MANAGER-MEMORY-UI-001`), which meant nothing to an external reader |
 | v0.1.6 | 2026-09-20 | **Split design from proposed implementation.** Runtime deployment options, immediate next actions, recommendations, and the roadmap with its phase gates moved to `proposed-implementation-weighted-context-projection-v0.1.md`, together with the code-grounded findings that were previously a third document; remaining sections renumbered (old §8–§11 → §7–§10, old §15–§16 → §11–§12). Executive summary now names the memory **tools** (`memory_remember` / `memory_recall` / `memory_explore` / `memory_consolidate` / `memory_promote`) rather than describing `memory_remember` as an alias of a bare `remember` verb, which had the relationship backwards |
 | v0.1.7 | 2026-09-20 | Round-4 external review. Narrows the §6 recoverability paragraph: the audit ledger covers the tracked save path, not the bulk tombstone and revival operations, so content recoverability holds but a complete deletion history is not claimable. Defines `tokenEstimate` in §4.2 as an estimate of the turn's own rendered payload, explicitly not a provider usage count for the producing call |
 | v0.1.8 | 2026-09-20 | Round-5 external review. Fixes the two remaining inverted memory-alias definitions that the v0.1.6 changelog wrongly implied were already handled — Principle 6 and the MemoryBridge glossary entry still presented a bare `remember` verb as canonical with `memory_remember` as its alias; both now bind to the shipped `memory_*` tools and mark the short verb forms as prose shorthand. Redefines `tokenEstimate` in §4.2 as per-renderer and per-model rather than one fixed number per turn, since a turn renders to different sizes under a `messages[]` assembly than under a prompt blob (§10 risk 8) |
 | v0.1.9 | 2026-09-20 | Round-5 follow-up. §6's recoverability paragraph narrowed a second time: physical-delete blocking is a guard over tracked change-tracker entries on the `SaveChanges` path, which set-based and raw-SQL deletes bypass, with no database-level trigger or constraint behind it. The inheritable invariant is now stated as content surviving deletion on the paths the current services use, upheld above the database by that guard plus a source-text test, rather than physical deletion being "rejected outright" as a structural property. IMPL §3.2.2 records the mechanism |
+| v0.1.10 | 2026-09-25 | Hostile review remediation (full-document Codex review). P1-01: §6.1 ordered transition, mandatory overrides versus discretionary scores, link admission before packing, unchanged-weight budget demotion, invalidation during cooldown. P1-02: §6.2 pin precedence over introduced-harm and invalidation stubbing; markers on expanded pins; unpinned turns are marked stubs; no fourth `projectionState`. P1-04: §5.1 weight is relevance; only ADD §6.1 progress may revise it. P1-09: §6.3 budget at every issued model call, spill then fail-closed. P2-02: §9.1 state-flip denominator is the previous active set; active-context token replacement is a separate bar. P3-01: cooldown contract is §6.1; dangling §10.1 references retargeted. Remaining findings P1-03, P1-05, P1-06, P1-07, P1-08, P2-01, P2-03, P2-04, P2-05 are closed in the addendum; the finding-to-section map is ADD §12 |
 
 > **Note on numbering:** rows above v0.1.6 describe changes using **current** section numbers, not the numbers in force at the time, so that every reference in this table still resolves.
 

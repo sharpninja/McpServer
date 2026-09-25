@@ -6,9 +6,9 @@ Operator-facing index for the whitepaper on escaping host auto-compaction via Se
 
 | File | Description |
 | --- | --- |
-| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.9** content; filename retained). Problem, architecture, scoring model, projection algorithm, related work, evaluation method, glossary, references |
-| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.4). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md` |
-| [addendum-retrospective-linking-and-goal-metrics-v0.1.md](./addendum-retrospective-linking-and-goal-metrics-v0.1.md) | **Draft addendum** (v0.1.6). Codex review from merged PR #56 incorporated; PR #58 keeps pinned `invalidates` targets expanded. Not operator-approved. Proposes work beyond v0.1.x: retrospective link index over sealed turns, continuous link revalidation, per-goal scope/progress metrics, and turn outcome records adjudicated by Hostile Validation. Read after the other two |
+| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.10** content; filename retained). Problem, architecture, scoring model, projection algorithm (ordered transition, pin/harm precedence, tool-loop budget), related work, evaluation method, glossary, references |
+| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.5). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md`. Phase gates follow WP v0.1.10 on tool-loop budget and the two stability metrics |
+| [addendum-retrospective-linking-and-goal-metrics-v0.1.md](./addendum-retrospective-linking-and-goal-metrics-v0.1.md) | **Draft addendum** (v0.1.7). Incorporates PR #56, the PR #58 pin exception, and the full-document hostile review (finding map in §12). Not operator-approved. Proposes work beyond v0.1.x: retrospective link index over sealed turns, continuous link revalidation, per-goal scope/progress metrics, and turn outcome records adjudicated by Hostile Validation. Read after the other two |
 | [self-eval-round1.md](./self-eval-round1.md) | Round-1 accuracy + actionability self-eval receipt |
 | [self-eval-round2.md](./self-eval-round2.md) | Round-2 hostile-pass self-eval receipt |
 
@@ -23,7 +23,7 @@ Long-horizon agent friction is **compaction / context loss**, not whitespace-est
 ## Self-eval / profile notes
 
 - Standing rules restored from durable memory only (`STANDING-RULES-FROM-MEMORY.md`, not tracked in this repo). Full 19-file `add-profile` **not** on box; PAYTON-LEGION2 disconnected. **Never publish** profile files publicly — the round-1/round-2 load receipts are intentionally absent from this folder for that reason.
-- Two self-eval rounds completed (receipts above, against v0.1.2). Paper version now **v0.1.9** after five external review passes (PRs #53, #54, and four rounds on PR #55); the self-evals predate those fixes.
+- Two self-eval rounds completed (receipts above, against v0.1.2). Paper version now **v0.1.10** after the hostile full-document review remediation; the self-evals predate those fixes.
 - **Perplexity Hostile Validation (HV) is still blocked on API key** after box reseed — **not done**. Do not claim HV was completed.
 
 ## Review checklist (for tomorrow)
@@ -51,4 +51,4 @@ Long-horizon agent friction is **compaction / context loss**, not whitespace-est
 
 ## Status
 
-Draft — whitepaper **v0.1.9**, proposed implementation **v0.1.4**, addendum **v0.1.6** — whitepaper and implementation 2026-09-20; addendum revised 2026-09-25 (America/Chicago). Awaiting operator Payton Byrd review. Author: Payton Byrd.
+Draft. Whitepaper **v0.1.10**, proposed implementation **v0.1.5**, addendum **v0.1.7**. Whitepaper and implementation revised 2026-09-25 for the hostile-review contract; addendum revised the same day (America/Chicago). Awaiting operator Payton Byrd review. Author: Payton Byrd.

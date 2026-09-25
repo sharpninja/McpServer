@@ -1,9 +1,9 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.4
+**Version:** v0.1.5
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.9)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.10)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
 **Date:** 2026-09-20
 
@@ -474,11 +474,13 @@ Treating it as cost-free puts those bytes **outside** the hard-budget invariant 
 which is the specific failure the whole design exists to prevent — so the outer-orchestrator
 deployment would still lose context on exactly the turns that matter most.
 
-The live turn must be charged against `B` like any other content, and the projector needs a
-defined behavior when it alone approaches the budget: summarize or spill its intermediate
-trace while preserving the active request state (the standing constraints, the current
-objective, and the most recent tool results) verbatim. This is an unresolved design gap, not
-a settled mechanism, and it is added to §10.
+The live turn must be charged against `B` like any other content. WP §6.3 is the normative
+rule: every orchestrator-issued model invocation, including a tool-loop continuation, spills
+unpinned intermediate trace or fails closed, and it does not drop pins or the live result
+this call exists to deliver. What remains open is only which in-progress dialog items count
+as the most recent tool results that must survive verbatim inside the turn, and how a
+renderer estimates them before the seal (§10 question 7). The existence of spill and
+fail-closed is not open.
 
 **Two triggers, not one.** `sessionlog_submit` is an upsert of an entire
 `UnifiedSessionLogDto`, so turns can arrive already carrying terminal status — the ingestion
@@ -548,7 +550,7 @@ The WP §4.2 field list divides cleanly, and should be stored as two tables:
 | `workspaceId` | `projectionGeneration` |
 | seal sequence (supersession is derived, not stored — see §5.4) | `reAdmitCount`, `lastReAdmitGeneration`, `summaryText` |
 
-`weight` must **not** live in the immutable record. It is re-scored every turn under WP §10
+`weight` must **not** live in the immutable record. It is re-scored every turn under WP §6.1
 hysteresis, so storing it in an append-only structure would force a new sealed version on
 every rescore — turning §5.5's growth concern from O(turns) into O(turns × passes).
 
@@ -622,10 +624,10 @@ for reasons unrelated to scoring — which reorders the pack and registers as fl
 
 Sealing fixes the *payload* at terminal status, and with it the denominator for any one
 renderer and tokenizer — which is the variance that mattered. It does not make the estimate
-renderer-independent (§3.4). Measured flip rate then attributes to the
-scorer alone, which is what the Phase 4 ≤ 0.10 flips/turn/pass gate in WP §9.1 and §8 needs
-in order to mean anything. Without a stable denominator that threshold measures the
-estimator as much as the scorer.
+renderer-independent (§3.4). Measured state-flip rate and active-context token
+replacement then attribute to the scorer, which is what the Phase 4 bars in WP §9.1
+(≤ 0.10 and ≤ 0.25) and §8 need in order to mean anything. Without a stable denominator
+those bars measure the estimator as much as the scorer.
 
 ### 5.8 Three copies — decide deliberately
 
@@ -663,7 +665,7 @@ MAF supports client-managed chat history patterns: an `AgentSession` holding loc
 **Shape:**
 
 1. SessionLog is source of truth.
-2. ContextProjector builds a prompt blob under budget.
+2. ContextProjector builds a prompt blob under budget. Every later model call in an orchestrator-owned tool loop is a new assembly under the same budget (WP §6.3): spill unpinned live trace, then fail closed if pins plus the live result still do not fit. A CLI-owned inner loop whose calls this orchestrator cannot measure is not a conforming claim of that invariant.
 3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
 4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
 
@@ -672,7 +674,7 @@ MAF supports client-managed chat history patterns: an `AgentSession` holding loc
 **Trade-offs (engineering-honest):**
 
 - Control is **prompt-blob**, not a full structured `messages[]` API (unless the chosen CLI exposes one).
-- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Both are viable; split-brain tooling is the failure mode to avoid. **The spike must declare which owner it uses before starting**, because the two branches have different observability ceilings and therefore different acceptance gates (§8.1).
+- Tool loops: either let the CLI own inner tools for that oneshot, or keep tools in the orchestrator and pass results in the next projection. Split-brain tooling is the failure mode to avoid. **The spike must declare which owner it uses before starting**, because the two branches have different observability ceilings and therefore different acceptance gates (§8.1). Only the orchestrator-owned branch can claim the WP §6.3 budget invariant. A CLI-owned inner loop that issues model calls the orchestrator cannot measure fails the §8.1 budget gate.
 - Fair-use / rate limits of CLI **subscriptions** still apply even for sessionless oneshots. This is not infinite capacity and is not a claim of uncapped API throughput.
 - Prompt-cache friendliness: keep a **stable prefix** (system + standing memories) and a **variable tail** (projection segments). Do not reshuffle the prefix every turn.
 - Host UI may still compact its *display* transcript; that is UX, not model-facing truth, if invocation bypasses the host model path.
@@ -706,17 +708,17 @@ Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed af
 | Phase | Deliverable | Exit criteria |
 | --- | --- | --- |
 | **0** | This whitepaper + Hostile Validation (HV) alignment | Operator review of open questions; HV still pending where blocked on API keys |
-| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace. Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
+| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace with the WP §6.1 cause (`pin`, `invalidation`, `introduced-harm`, `score`, or `budget-demotion`). Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
 | **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
 | **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
-| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | `projectionState` flip rate ≤ **0.10** per turn per pass (WP §9.1 metric 2, operator-adjustable but fixed before the phase opens); quiet-constraint eval suite green |
+| **4** | Scorer v1 rules → v2 LLM judge with hysteresis | Both WP §9.1 stability bars, operator-adjustable but fixed before the phase opens: state-flip rate ≤ **0.10** (metric 2, denominator = previous active set) and active-context token replacement ≤ **0.25** (metric 3). Quiet-constraint eval suite green |
 
 ### 8.1 Phase 2 spike acceptance checklist (pass/fail)
 
 All bullets must be **pass** before calling the Phase 2 spike done. Fail any → not done.
 
 - [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
-- [ ] **PASS/FAIL — Projection under budget:** Assembled prompt / projection is ≤ configured `budgetTokens` (local estimator OK for this engineering gate only).
+- [ ] **PASS/FAIL - Budget at every issued call:** Each orchestrator-issued model invocation, including calls after live tool results, is ≤ configured `budgetTokens`, or it is spilled or refused under WP §6.3 (local estimator OK for this engineering gate only). A spike that lets the CLI own inner model calls the orchestrator cannot measure MUST NOT mark this item pass. It records the gap. A silent over-budget call is a fail. An unpinned spill recorded as `budget-demotion` is a pass. Dropping a pin to fit is a fail.
 - [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§6 Option C, WP §10.4).
 - [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
 - [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
@@ -769,8 +771,8 @@ PreCompact-equivalent handling. `plugins/core/lib-node` and `plugins/core/lib-sh
 existing plugin seams.
 
 **Phase 4 — scorer v1.**
-Rules-based only, measured against the Phase 1 simulator, gated on the ≤ 0.10 flips per
-turn per pass threshold now fixed in WP §9.1 and §8.
+Rules-based only, measured against the Phase 1 simulator, gated on both WP §9.1 bars
+now fixed in §8: state-flip rate ≤ 0.10 and active-context token replacement ≤ 0.25.
 
 ## 9. Immediate next actions (operator review)
 
@@ -802,9 +804,11 @@ Concrete checklist for tomorrow—no need to re-derive the design:
 6. **Post-terminal mutation (§5.1):** reject it and require an explicit re-open, or allow it
    and re-seal on every mutation path? The first is a cleaner invariant but changes shipped
    tool behavior; the second preserves behavior at the cost of seal churn.
-7. **The live turn's budget (§5.1):** how is an in-progress turn charged against `B`, and
-   what gets summarized or spilled when that turn alone approaches the budget? Whatever the
-   answer, the active request state and standing constraints must survive verbatim.
+7. **Live-turn spill mechanics, narrowed by WP §6.3.** Every orchestrator-issued model
+   invocation charges live content and either spills unpinned trace or fails closed. Pins
+   and the live result this call exists to deliver stay. What remains open is which
+   in-progress dialog items count as the most recent tool results that must survive
+   verbatim, and how a renderer estimates them before the turn is sealed.
 8. **Should the bulk delete paths append audit rows (§3.2.1)?** Today tombstoning and
    revival bypass the ledger, so there is no history of deletion events — only the current
    tombstone state. Content stays recoverable either way; the audit trail does not.
@@ -846,6 +850,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.5 | 2026-09-25 | Consistency with WP v0.1.10 / ADD v0.1.7. §5.1 and open question 7 follow the WP §6.3 tool-loop budget (spill, then fail closed) instead of leaving that mechanism unresolved. Option C and the §8.1 budget gate require the check on every orchestrator-issued call. Phase 4 gates both stability metrics (state-flip rate and active-context token replacement). Phase 1 trace records the WP §6.1 transition cause. Hysteresis reference retargeted from WP §10 to WP §6.1 |
 | v0.1.4 | 2026-09-20 | Round-6 external review; one P1. New tables do not inherit tombstoning: `SoftDeleteTurnRowsAsync` and the revival path name seven tables explicitly and discover nothing, so a sealed-turn or projection-state row would keep `IsDeleted = false` after `sessionlog_delete_turn`/`delete_session` and could serve a turn the operator believes deleted. Phase 1 must register both tables in each path **and** join projection reads through the source turn (new §3.2.3); the Phase 1 line claiming no soft-delete work was needed is corrected. Also renumbered §3.2.1 to a consistent heading depth |
 | v0.1.3 | 2026-09-20 | Round-5 follow-up (three findings from the automatic pass on `56996df`). Physical-delete blocking is a tracked-path guard plus a source-text test, not a schema constraint — new §3.2.2, WP §6 narrowed again, open question 9. The §3.2 delete-warning reversal was never propagated to the README review checklist, which still told the operator to correct the warning on the abandoned premise. Banner versions were stale against this document's own changelog (v0.1.0 vs v0.1.1) and against the companion (v0.1.5 vs v0.1.8) |
 | v0.1.2 | 2026-09-20 | Round-5 external review; two findings accepted. `tokenEstimate` cannot be a single frozen column in the seal, because Option B's `IList<ChatMessage>` and Option C's prompt blob render the same turn to different sizes under different tokenizers — the seal now carries a renderer-neutral payload size and the budget-facing estimate is derived per `(renderer, tokenizer)` (§3.4, §5.3, §5.7, Phase 1). Also confirmed that the whitepaper's remaining inverted memory-alias definitions needed fixing rather than being left alone, correcting §3.1's instruction |
