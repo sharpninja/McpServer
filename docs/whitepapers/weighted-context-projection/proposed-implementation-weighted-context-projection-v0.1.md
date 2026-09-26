@@ -1,14 +1,15 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.15
+**Version:** v0.1.16
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.20) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.17)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.21) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.18)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-26, v0.1.15)
+**Date:** 2026-09-20 (revised 2026-09-26, v0.1.16)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
-> `§N` refers to a section of *this* document. The two numbering schemes overlap, so the
+> `§N` refers to a section of *this* document. `ADD §N` refers to
+> `addendum-retrospective-linking-and-goal-metrics-v0.1.md`. The numbering schemes overlap, so the
 > prefix is load-bearing.
 
 ## 1. Purpose and standing
@@ -484,14 +485,19 @@ own generation snapshot (WP §6.1). The snapshot includes the tombstone set. The
 is `sendFence`: the final read and the transport handoff are one critical section. A tombstone,
 reseal, evidence change, or superseding verdict cannot commit between that read and handoff.
 Exactly one of handoff or mutating commit wins. A re-read followed by a committed mutation
-and a handoff of the pre-mutation bytes is non-conforming. Spill unmarked unpinned content first. Shrink an unpinned active harm or
+and a handoff of the pre-mutation bytes is non-conforming. Before spill, pre-admission (WP §6.3)
+refuses a live tool payload whose `tokenEstimate` exceeds the residual mandatory ceiling
+`C_pre = B - M_fixed` and sends the deterministic omission marker instead. The full bytes stay
+in SessionLog. The refused payload is not a mandatory member. Spill unmarked unpinned content first. Shrink an unpinned active harm or
 invalidation stub to the marker. Fail closed if the mandatory set cannot fit: prefix,
-standing memories, pins with their markers, the live result, and every active harm,
-invalidation, or dependency-gap marker (ADD §7.4). Do not omit those active markers, do not
+standing memories, pins with their markers, each admitted live tool payload or its omission
+marker, the user turn, and every active harm, invalidation, or dependency-gap marker
+(ADD §7.4). Do not omit those active markers, do not truncate pins, do not
 keep a retired marker in the mandatory set, and do not expand an omitted turn only because
 residual capacity grew (WP §6 step 5). What remains open is only which in-progress dialog
 items count as the most recent tool results that must survive verbatim inside the turn, and
-how a renderer estimates them before the seal (§10 question 7). The existence of spill,
+how a renderer estimates them before the seal (§10 question 7). Whether an oversized live
+tool payload joins the mandatory set is not open. The existence of spill,
 active-marker retention, the send check, and fail-closed is not open.
 
 **Two triggers, not one.** `sessionlog_submit` is an upsert of an entire
@@ -677,7 +683,7 @@ MAF supports client-managed chat history patterns: an `AgentSession` holding loc
 **Shape:**
 
 1. SessionLog is source of truth.
-2. ContextProjector builds a prompt blob under budget. Every later model call in an orchestrator-owned tool loop is its own generation snapshot and a new assembly under the same budget (WP §6.1, WP §6.3): freeze tombstones with the other inputs, spill unmarked unpinned content first, keep active harm and invalidation markers, and fail closed if the mandatory set still does not fit. Final read and transport handoff share `sendFence` (WP §6.1). A mutation that wins the fence cancels handoff. A handoff that wins leaves the mutation for the next generation. Do not hand off bytes from before a tombstone that already committed. Do not expand a turn only because residual capacity grew. A CLI-owned inner loop whose calls this orchestrator cannot measure is not a conforming claim of that invariant.
+2. ContextProjector builds a prompt blob under budget. Every later model call in an orchestrator-owned tool loop is its own generation snapshot and a new assembly under the same budget (WP §6.1, WP §6.3): freeze tombstones with the other inputs, run live-tool pre-admission before spill, spill unmarked unpinned content first, keep active harm and invalidation markers, and fail closed if the mandatory set still does not fit. A live tool payload over the residual mandatory ceiling is replaced by the WP §6.3 omission marker. The stored bytes stay in SessionLog. Final read and transport handoff share `sendFence` (WP §6.1). A mutation that wins the fence cancels handoff. A handoff that wins leaves the mutation for the next generation. Do not hand off bytes from before a tombstone that already committed. Do not expand a turn only because residual capacity grew. A CLI-owned inner loop whose calls this orchestrator cannot measure is not a conforming claim of that invariant.
 3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
 4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
 
@@ -730,7 +736,7 @@ Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed af
 All bullets must be **pass** before calling the Phase 2 spike done. Fail any → not done.
 
 - [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
-- [ ] **PASS/FAIL - Budget at every issued call:** Each orchestrator-issued model invocation, including calls after live tool results, is one generation snapshot (WP §6.1) and is ≤ configured `budgetTokens`, or it is spilled or refused under WP §6.3 (local estimator OK for this engineering gate only). The snapshot includes tombstones. Final read and transport handoff share `sendFence`. A tombstone that wins the fence cancels handoff. A handoff of pre-tombstone bytes after that tombstone committed is a fail. A spike that lets the CLI own inner model calls the orchestrator cannot measure MUST NOT mark this item pass. It records the gap. A silent over-budget call is a fail. An unpinned spill of unmarked content recorded as `budget-demotion` is a pass. Omitting an active introduced-harm, invalidation, or dependency-gap marker is a fail. Keeping a retired marker in the mandatory set and failing closed for that reason is a fail. Dropping a pin to fit is a fail. Expanding an omitted or summarized turn only because residual capacity grew is a fail.
+- [ ] **PASS/FAIL - Budget at every issued call:** Each orchestrator-issued model invocation, including calls after live tool results, is one generation snapshot (WP §6.1) and is ≤ configured `budgetTokens`, or it is spilled or refused under WP §6.3 (local estimator OK for this engineering gate only). The snapshot includes tombstones. Final read and transport handoff share `sendFence`. A tombstone that wins the fence cancels handoff. A handoff of pre-tombstone bytes after that tombstone committed is a fail. A spike that lets the CLI own inner model calls the orchestrator cannot measure MUST NOT mark this item pass. It records the gap. A silent over-budget call is a fail. An unpinned spill of unmarked content recorded as `budget-demotion` is a pass. Omitting an active introduced-harm, invalidation, or dependency-gap marker is a fail. Keeping a retired marker in the mandatory set and failing closed for that reason is a fail. Dropping a pin to fit is a fail. Expanding an omitted or summarized turn only because residual capacity grew is a fail. Sending a WP §6.3 omission marker in place of a live tool payload that exceeded the pre-admission ceiling, with the full bytes retained in SessionLog and the sent assembly ≤ `budgetTokens`, is a pass. Sending that oversized payload, or truncating it into the prompt, is a fail.
 - [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§6 Option C, WP §10.4).
 - [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
 - [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
@@ -820,11 +826,19 @@ Concrete checklist for tomorrow—no need to re-derive the design:
    invocation is its own generation snapshot (WP §6.1), including the tombstone set, and
    `sendFence` is the commit point: final read and transport handoff are one critical section. It charges live content, spills unmarked unpinned content
    first, keeps active harm and invalidation markers, and fails closed if the mandatory
-   set cannot fit. Retired markers are not in that set (ADD §7.4). Pins, active markers,
-   and the live result this call exists to deliver stay. Capacity that appears because
+   set cannot fit. Retired markers are not in that set (ADD §7.4). Pins and active markers
+   stay expanded or marked as WP §6.2 requires. The user turn this call exists to deliver
+   stays in the mandatory set. A live tool result joins that set only after WP §6.3
+   pre-admission. A payload whose charged size `max(E, 1)` exceeds the remaining
+   ceiling, and a payload the renderer has not yet estimated, are omitted with the
+   deterministic `[wcp:live-tool-omitted ...]` marker when that marker fits. When the
+   marker does not fit, the call is refused and the result is not sent unmarked. The
+   full bytes stay in SessionLog. That admission decision is closed. Capacity that appears because
    something else shrank does not authorize an expansion (WP §6 step 5). What remains
    open is which in-progress dialog items count as the most recent tool results that
    must survive verbatim, and how a renderer estimates them before the turn is sealed.
+   Until that estimate exists, the payload does not enter the mandatory set (`estimate=-1`
+   on the marker).
 8. **Should the bulk delete paths append audit rows (§3.2.1)?** Today tombstoning and
    revival bypass the ledger, so there is no history of deletion events — only the current
    tombstone state. Content stays recoverable either way; the audit trail does not.
@@ -866,6 +880,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.16 | 2026-09-26 | Consistency with WP v0.1.21 / ADD v0.1.18. §5.1, Option C, §8.1, and open question 7 follow WP §6.3 pre-admission for an oversized live tool payload. Question 7 no longer leaves that admission open. Which in-progress dialog items are verbatim tool results, and how the renderer estimates them before the seal, stay open. No change to the packing-step floor. Perplexity secondary HV accepted gaps, claimed remediation pending re-review, not an AGREE. Astra AGREE 98 on tip `24416845` stays the prior gate |
 | v0.1.15 | 2026-09-26 | Confidence polish after round-11 AGREE 95 (receipt `20260926-115213-ct`). §1 repeats the ADD §6.4 traceability limits and the qualification prerequisites. No script change and no new runtime design. P2-11 stays closed. ADD §12 holds the polish map. Claimed remediation pending re-review, not an AGREE |
 | v0.1.14 | 2026-09-26 | Consistency with WP v0.1.19 / ADD v0.1.16 (Astra re-review, round 10). No script change and no new runtime design. P2-11 lives in the addendum. v0.1.14 was version and history sync. Round 11 closed P2-11 |
 | v0.1.13 | 2026-09-26 | Consistency with WP v0.1.18 / ADD v0.1.15 (Astra re-review, round 9). Phase 1 trace floors mixed pressure once on the packing-step total `R`. No new runtime design beyond that contract |
