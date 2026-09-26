@@ -1,11 +1,11 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.13
+**Version:** v0.1.14
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.18) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.15)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.19) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.16)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-26, v0.1.13)
+**Date:** 2026-09-20 (revised 2026-09-26, v0.1.14)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
 > `§N` refers to a section of *this* document. The two numbering schemes overlap, so the
@@ -862,6 +862,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.14 | 2026-09-26 | Consistency with WP v0.1.19 / ADD v0.1.16 (Astra re-review, round 10). No script change and no new runtime design. P2-11 lives in the addendum |
 | v0.1.13 | 2026-09-26 | Consistency with WP v0.1.18 / ADD v0.1.15 (Astra re-review, round 9). Phase 1 trace floors mixed pressure once on the packing-step total `R`. No new runtime design beyond that contract |
 | v0.1.12 | 2026-09-26 | Consistency with WP v0.1.17 / ADD v0.1.14 (Astra re-review, round 8). Phase 1 trace records a `pressureSource` list and the mixed-pressure split. No new runtime design beyond that contract |
 | v0.1.11 | 2026-09-26 | Consistency with WP v0.1.16 / ADD v0.1.13 (Astra re-review, round 7). Phase 1 trace records `pressureSource` on budget demotion. No new runtime design beyond that contract |
