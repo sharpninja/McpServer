@@ -1,11 +1,11 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.17
+**Version:** v0.1.18
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.22) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.19)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.23) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.20)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-26, v0.1.17)
+**Date:** 2026-09-20 (revised 2026-09-26, v0.1.18)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
 > `§N` refers to a section of *this* document. `ADD §N` refers to
@@ -486,12 +486,15 @@ is `sendFence`: the final read and the transport handoff are one critical sectio
 reseal, evidence change, or superseding verdict cannot commit between that read and handoff.
 Exactly one of handoff or mutating commit wins. A re-read followed by a committed mutation
 and a handoff of the pre-mutation bytes is non-conforming. Before spill, pre-admission (WP §6.3)
-classifies each live tool result against the sealed `M_fixed` rendering. Bytes already inside an
-expanded pin, or inside another `M_fixed` segment, are counted once there. The pin stays expanded.
-Those bytes do not get a second copy and do not get an omission marker. Only an absent span is
-tested against `C_pre = B - M_fixed`. An absent span whose charged size exceeds the remaining
-ceiling is replaced by the deterministic omission marker when that marker fits. When the marker
-does not fit, the call is refused and the absent span is not sent unmarked. The full bytes stay
+classifies each live tool result against the sealed `M_fixed` rendering. A measured full
+retention (`E_proven` = `E`) stays inside the expanded pin, is counted once, and does not get an
+omission marker. The pin stays expanded. An unidentified subset whose retained length is not
+measured is not full retention. Those unproven bytes take only the marker branch: send
+`scope=unproven-remainder` when that marker fits in `C_pre = B - M_fixed`, and refuse the call
+when it does not. Do not admit them as a second payload. A measured absent span whose charged
+size exceeds the remaining ceiling is replaced by the omission marker when that marker fits.
+When the marker does not fit, the call is refused and the unproven span is not sent unmarked.
+The full bytes stay
 in SessionLog. The refused absent span is not a mandatory member. Spill unmarked unpinned content first. Shrink an unpinned active harm or
 invalidation stub to the marker. Fail closed if the mandatory set cannot fit: prefix,
 standing memories, pins with their markers, each admitted live tool payload or its omission
@@ -687,7 +690,7 @@ MAF supports client-managed chat history patterns: an `AgentSession` holding loc
 **Shape:**
 
 1. SessionLog is source of truth.
-2. ContextProjector builds a prompt blob under budget. Every later model call in an orchestrator-owned tool loop is its own generation snapshot and a new assembly under the same budget (WP §6.1, WP §6.3): freeze tombstones with the other inputs, run live-tool pre-admission before spill, spill unmarked unpinned content first, keep active harm and invalidation markers, and fail closed if the mandatory set still does not fit. A live tool span that is absent from `M_fixed` and over the residual mandatory ceiling is replaced by the WP §6.3 omission marker. Bytes of that result already inside an expanded pin stay in the pin, are counted once, and do not receive that marker. The stored bytes stay in SessionLog. Final read and transport handoff share `sendFence` (WP §6.1). A mutation that wins the fence cancels handoff. A handoff that wins leaves the mutation for the next generation. Do not hand off bytes from before a tombstone that already committed. Do not expand a turn only because residual capacity grew. A CLI-owned inner loop whose calls this orchestrator cannot measure is not a conforming claim of that invariant.
+2. ContextProjector builds a prompt blob under budget. Every later model call in an orchestrator-owned tool loop is its own generation snapshot and a new assembly under the same budget (WP §6.1, WP §6.3): freeze tombstones with the other inputs, run live-tool pre-admission before spill, spill unmarked unpinned content first, keep active harm and invalidation markers, and fail closed if the mandatory set still does not fit. A live tool span that is absent from `M_fixed` and over the residual mandatory ceiling is replaced by the WP §6.3 omission marker. Bytes the renderer has measured as the entire result inside an expanded pin stay in the pin, are counted once, and do not receive that marker. An unidentified subset with no measured retained length does not suppress the marker. The stored bytes stay in SessionLog. Final read and transport handoff share `sendFence` (WP §6.1). A mutation that wins the fence cancels handoff. A handoff that wins leaves the mutation for the next generation. Do not hand off bytes from before a tombstone that already committed. Do not expand a turn only because residual capacity grew. A CLI-owned inner loop whose calls this orchestrator cannot measure is not a conforming claim of that invariant.
 3. AgentInvoker calls Claude / Grok / Codex / etc. as a **sessionless oneshot** using that CLI’s fresh-session / no-resume flags **(assumption: exact flag names are CLI-specific and must be verified in the Phase 2 spike; do not invent flags here)**.
 4. Capture the full turn back into SessionLog—including tool traces when the orchestrator owns the tool loop, or a recorded note that inner traces were CLI-owned and unobservable when it does not (see the tool-ownership declaration below); reweight; repeat.
 
@@ -740,7 +743,7 @@ Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed af
 All bullets must be **pass** before calling the Phase 2 spike done. Fail any → not done.
 
 - [ ] **PASS/FAIL — Fresh CLI flags:** Sessionless oneshot uses verified fresh-session / no-resume flags for the chosen CLI (Claude **or** Grok); flag names documented from that CLI’s real help/docs—not invented.
-- [ ] **PASS/FAIL - Budget at every issued call:** Each orchestrator-issued model invocation, including calls after live tool results, is one generation snapshot (WP §6.1) and is ≤ configured `budgetTokens`, or it is spilled or refused under WP §6.3 (local estimator OK for this engineering gate only). The snapshot includes tombstones. Final read and transport handoff share `sendFence`. A tombstone that wins the fence cancels handoff. A handoff of pre-tombstone bytes after that tombstone committed is a fail. A spike that lets the CLI own inner model calls the orchestrator cannot measure MUST NOT mark this item pass. It records the gap. A silent over-budget call is a fail. An unpinned spill of unmarked content recorded as `budget-demotion` is a pass. Omitting an active introduced-harm, invalidation, or dependency-gap marker is a fail. Keeping a retired marker in the mandatory set and failing closed for that reason is a fail. Dropping a pin to fit is a fail. Expanding an omitted or summarized turn only because residual capacity grew is a fail. Sending a WP §6.3 omission marker in place of a live tool span that is absent from `M_fixed` and exceeded the pre-admission ceiling, with the full bytes retained in SessionLog and the sent assembly ≤ `budgetTokens`, is a pass. Sending that oversized absent span, or truncating it into the prompt, is a fail. Emitting the omission marker while the same bytes remain inside an expanded pin is a fail. Keeping that pin expanded, counting those bytes once, and sending no omission marker is a pass. Dropping or truncating the pin to avoid the overlap is a fail.
+- [ ] **PASS/FAIL - Budget at every issued call:** Each orchestrator-issued model invocation, including calls after live tool results, is one generation snapshot (WP §6.1) and is ≤ configured `budgetTokens`, or it is spilled or refused under WP §6.3 (local estimator OK for this engineering gate only). The snapshot includes tombstones. Final read and transport handoff share `sendFence`. A tombstone that wins the fence cancels handoff. A handoff of pre-tombstone bytes after that tombstone committed is a fail. A spike that lets the CLI own inner model calls the orchestrator cannot measure MUST NOT mark this item pass. It records the gap. A silent over-budget call is a fail. An unpinned spill of unmarked content recorded as `budget-demotion` is a pass. Omitting an active introduced-harm, invalidation, or dependency-gap marker is a fail. Keeping a retired marker in the mandatory set and failing closed for that reason is a fail. Dropping a pin to fit is a fail. Expanding an omitted or summarized turn only because residual capacity grew is a fail. Sending a WP §6.3 omission marker in place of a live tool span that is absent from `M_fixed` and exceeded the pre-admission ceiling, with the full bytes retained in SessionLog and the sent assembly ≤ `budgetTokens`, is a pass. Sending that oversized absent span, or truncating it into the prompt, is a fail. Emitting the omission marker while the renderer has measured those same bytes as the entire result inside an expanded pin is a fail. Keeping that pin expanded, counting that measured result once, and sending no omission marker is a pass. Sending no omission marker when the pin holds an unidentified subset and the retained length is not measured is a fail. Sending `scope=unproven-remainder` when that marker fits, or refusing the call when it does not, is a pass. Dropping or truncating the pin to avoid the overlap is a fail.
 - [ ] **PASS/FAIL — Tool-ownership declaration:** The spike states in writing, before running, whether the orchestrator or the CLI owns the inner tool loop (§6 Option C, WP §10.4).
 - [ ] **PASS/FAIL — SessionLog append:** Full oneshot turn appends to SessionLog via extended `sessionlog_*` (or agreed interim path)—no silent drop. Scope depends on the declaration above: **orchestrator-owned tools** → request + response + full tool traces must all append; **CLI-owned tools** → request + response + whatever traces the CLI surfaces must append, *and* the turn must record that inner traces were CLI-owned and unobservable. An unobservable trace that is explicitly marked is a pass; an unobservable trace that is silently absent is a fail.
 - [ ] **PASS/FAIL — Reweight:** At least one scorer/projector pass updates `weight` / `projectionState` after append.
@@ -833,9 +836,11 @@ Concrete checklist for tomorrow—no need to re-derive the design:
    set cannot fit. Retired markers are not in that set (ADD §7.4). Pins and active markers
    stay expanded or marked as WP §6.2 requires. The user turn this call exists to deliver
    stays in the mandatory set. A live tool result joins that set only after WP §6.3
-   pre-admission. A result already rendered inside an expanded pin or another `M_fixed`
-   segment is counted once there. It does not receive an omission marker, and the pin
-   stays expanded. A span absent from `M_fixed` whose charged size `max(E, 1)` exceeds
+   pre-admission. A result the renderer has measured as entirely inside an expanded pin or
+   another `M_fixed` segment is counted once there. It does not receive an omission marker,
+   and the pin stays expanded. Identity presence without a measured retained length is not
+   that proof. The unproven bytes take `scope=unproven-remainder` when the marker fits, and
+   the call is refused when it does not. A span absent from `M_fixed` whose charged size `max(E, 1)` exceeds
    the remaining ceiling, and an absent span the renderer has not yet estimated, are
    omitted with the deterministic `[wcp:live-tool-omitted ...]` marker when that marker
    fits. When the marker does not fit, the call is refused and that absent span is not
@@ -886,6 +891,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.18 | 2026-09-26 | Consistency with WP v0.1.23 / ADD v0.1.20. Residual Astra P2-12 after tip `a26cbdbe` (receipt `20260926-145009-ct`, DISAGREE 97/100). §5.1 no longer treats an unmeasurable overlap as full retention. Unproven bytes take the omission marker or the call is refused. Measured full retention still counts once with no marker. P3-02 stays closed. No change to the packing-step floor. Claimed remediation pending re-review, not an AGREE |
 | v0.1.17 | 2026-09-26 | Consistency with WP v0.1.22 / ADD v0.1.19. Astra re-review of tip `6b395a4b` (receipt `20260926-142519-ct`, DISAGREE 97/100). §5.1, Option C, §8.1, and open question 7 follow the WP §6.3 overlap rule: bytes already inside an expanded pin are counted once and do not take an omission marker. §7 and §9 separate that secondary document pass from the operational Perplexity gate, which remains pending an API key. No change to the packing-step floor. Claimed remediation of Astra P2-12 and P3-02 pending re-review, not an AGREE. The 23 prior Astra closures stay closed |
 | v0.1.16 | 2026-09-26 | Consistency with WP v0.1.21 / ADD v0.1.18. §5.1, Option C, §8.1, and open question 7 follow WP §6.3 pre-admission for an oversized live tool payload. Question 7 no longer leaves that admission open. Which in-progress dialog items are verbatim tool results, and how the renderer estimates them before the seal, stay open. No change to the packing-step floor. Secondary document pass accepted gaps, claimed remediation pending re-review, not an AGREE. Astra AGREE 98 on tip `24416845` stays the prior gate |
 | v0.1.15 | 2026-09-26 | Confidence polish after round-11 AGREE 95 (receipt `20260926-115213-ct`). §1 repeats the ADD §6.4 traceability limits and the qualification prerequisites. No script change and no new runtime design. P2-11 stays closed. ADD §12 holds the polish map. Claimed remediation pending re-review, not an AGREE |
