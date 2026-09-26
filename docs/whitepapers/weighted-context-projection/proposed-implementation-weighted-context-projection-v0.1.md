@@ -1,11 +1,11 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.10
+**Version:** v0.1.11
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.15) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.12)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.16) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.13)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-25, v0.1.10)
+**Date:** 2026-09-20 (revised 2026-09-26, v0.1.11)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
 > `§N` refers to a section of *this* document. The two numbering schemes overlap, so the
@@ -716,7 +716,7 @@ Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed af
 | Phase | Deliverable | Exit criteria |
 | --- | --- | --- |
 | **0** | This whitepaper + Hostile Validation (HV) alignment | Operator review of open questions; HV still pending where blocked on API keys |
-| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace with WP §6.1 `turnCause`, `originCause`, and a `rendered-change` event whenever the sent segment changes, including an unchanged `projectionState` (token replacement counts `score`, `edge-score`, and `summary-rewrite`; state-flip still counts only a `projectionState` change whose `turnCause` is `score`). Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
+| **1** | SessionLog schema extension (weight/pin/projection) + offline projection simulator on recorded sessions | **Schema fields present:** `turnId`, `sessionId`, `payload`, `weight`, `pin`, `projectionGeneration`, `projectionState`, `summaryText`, `tokenEstimate`, `reAdmitCount`, `lastReAdmitGeneration`; projection object fields `budgetTokens`, `generation`, `segments[]`, `omittedTurnIds[]`, `standingMemoryIds[]`. **Simulator I/O:** inputs = recorded SessionLog turns + budget `B` + pin set; outputs = `contextProjection` JSON + budget-adherence report + omit/re-admit trace with WP §6.1 `turnCause`, `originCause`, `pressureSource`, and a `rendered-change` event whenever the sent segment changes, including an unchanged `projectionState` (token replacement counts `score`, `edge-score`, and `summary-rewrite`, including tokens a discretionary summary growth displaces; state-flip still counts only a `projectionState` change whose `turnCause` is `score`). Replay diffs vs full-context baseline; no production CLI dependency yet. Prefer extend `sessionlog_*` over a new store unless operator rejects. |
 | **2** | Outer-orchestrator spike (extend QBAgent) with **one** CLI (Claude or Grok) sessionless oneshot | End-to-end: log → score → project → oneshot → append → reweight; one re-admit demo; continuation without operator re-paste; **no** estimator-savings claim |
 | **3** | PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) | Inject projection / memory on compact gate; measure re-paste rate vs baseline |
 | **4** | Scorer v1 rules → v2 LLM judge with hysteresis | Both WP §9.1 stability bars, operator-adjustable but fixed before the phase opens: state-flip rate ≤ **0.10** (metric 2, denominator = previous active set) and active-context token replacement ≤ **0.25** (metric 3). Quiet-constraint eval suite green |
@@ -862,6 +862,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.11 | 2026-09-26 | Consistency with WP v0.1.16 / ADD v0.1.13 (Astra re-review, round 7). Phase 1 trace records `pressureSource` on budget demotion. No new runtime design beyond that contract |
 | v0.1.10 | 2026-09-25 | Consistency with WP v0.1.15 / ADD v0.1.12 (Astra re-review, round 6). Phase 1 trace records a `rendered-change` event for same-state summary rewrites. No new runtime design beyond that contract |
 | v0.1.9 | 2026-09-25 | Consistency with WP v0.1.14 / ADD v0.1.11 (Astra re-review, round 5). Phase 1 omit/re-admit trace records `turnCause` and `originCause`. No new runtime design beyond that contract |
 | v0.1.8 | 2026-09-25 | Consistency with WP v0.1.13 / ADD v0.1.10 (Astra re-review, round 4). `sendFence` joins the final read and transport handoff. No new runtime design beyond that contract |
