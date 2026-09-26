@@ -1,11 +1,11 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.14
+**Version:** v0.1.15
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.19) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.16)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.20) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.17)
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-26, v0.1.14)
+**Date:** 2026-09-20 (revised 2026-09-26, v0.1.15)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
 > `§N` refers to a section of *this* document. The two numbering schemes overlap, so the
@@ -25,6 +25,10 @@ can be re-checked or falsified. Where the whitepaper and the code disagree, the 
 as a statement of fact about the present, and the disagreement is recorded as a correction
 to be made — not as a defect in the design. No build was run and no tests were executed
 for this document.
+
+> **Traceability script limits.** `scripts/Validate-RequirementsTraceability.ps1` covers present identifiers only. `FR-` and `TR-` present identifiers are `##` headings. `TEST-` present identifiers are tokens in `Testing-Requirements.md`, not headings. Default mode fails when a present `## FR-` heading is absent from the mapping or the matrix. Default mode warns, and can still pass, when a present `## TR-` heading or a present `TEST-` token is absent from the matrix. `-StrictTrAndTestCoverage` makes those TR and TEST gaps fail. Deleting a definition while retaining the mapping or matrix rows can pass. The script does not check orphan rows, acceptance catalogs, named test methods, or test adequacy. The substantive statement is ADD §6.4. The same box is in the whitepaper, after Scope.
+>
+> **Qualification prerequisites.** Implemented WCP behavior, measured efficacy, operator approval, and independent operational HV / MCP audit closure remain qualification prerequisites. A documentation review does not establish those.
 
 This document does not amend the whitepaper, and it does not decide anything. §9 still
 owns the Phase 1 decision and the Option B/C decision; §10 lists what remains genuinely
@@ -862,7 +866,8 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
-| v0.1.14 | 2026-09-26 | Consistency with WP v0.1.19 / ADD v0.1.16 (Astra re-review, round 10). No script change and no new runtime design. P2-11 lives in the addendum |
+| v0.1.15 | 2026-09-26 | Confidence polish after round-11 AGREE 95 (receipt `20260926-115213-ct`). §1 repeats the ADD §6.4 traceability limits and the qualification prerequisites. No script change and no new runtime design. P2-11 stays closed. ADD §12 holds the polish map. Claimed remediation pending re-review, not an AGREE |
+| v0.1.14 | 2026-09-26 | Consistency with WP v0.1.19 / ADD v0.1.16 (Astra re-review, round 10). No script change and no new runtime design. P2-11 lives in the addendum. v0.1.14 was version and history sync. Round 11 closed P2-11 |
 | v0.1.13 | 2026-09-26 | Consistency with WP v0.1.18 / ADD v0.1.15 (Astra re-review, round 9). Phase 1 trace floors mixed pressure once on the packing-step total `R`. No new runtime design beyond that contract |
 | v0.1.12 | 2026-09-26 | Consistency with WP v0.1.17 / ADD v0.1.14 (Astra re-review, round 8). Phase 1 trace records a `pressureSource` list and the mixed-pressure split. No new runtime design beyond that contract |
 | v0.1.11 | 2026-09-26 | Consistency with WP v0.1.16 / ADD v0.1.13 (Astra re-review, round 7). Phase 1 trace records `pressureSource` on budget demotion. No new runtime design beyond that contract |
