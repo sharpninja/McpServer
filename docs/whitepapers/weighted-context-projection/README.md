@@ -6,9 +6,9 @@ Operator-facing index for the whitepaper on escaping host auto-compaction via Se
 
 | File | Description |
 | --- | --- |
-| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.9** content; filename retained). Problem, architecture, scoring model, projection algorithm, related work, evaluation method, glossary, references |
-| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.4). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md` |
-| [addendum-retrospective-linking-and-goal-metrics-v0.1.md](./addendum-retrospective-linking-and-goal-metrics-v0.1.md) | **Draft addendum** (v0.1.6). Codex review from merged PR #56 incorporated; PR #58 keeps pinned `invalidates` targets expanded. Not operator-approved. Proposes work beyond v0.1.x: retrospective link index over sealed turns, continuous link revalidation, per-goal scope/progress metrics, and turn outcome records adjudicated by Hostile Validation. Read after the other two |
+| [whitepaper-weighted-context-projection-v0.1.md](./whitepaper-weighted-context-projection-v0.1.md) | **Design only** (**v0.1.20** content; filename retained). Problem, architecture, scoring model, projection algorithm (ordered transition, generation snapshot with `sendFence`, pin/harm precedence, replacement-checked warning retirement, joint admission including depth truncation, token stability including the mixed-pressure split floored once per packing step), related work with MemGPT scored on the durable-store and hard-ceiling axes, evaluation method, glossary, references. Traceability-script limits and qualification prerequisites are in the box after Scope; the substantive script statement is the addendum |
+| [proposed-implementation-weighted-context-projection-v0.1.md](./proposed-implementation-weighted-context-projection-v0.1.md) | **Proposed implementation** (v0.1.15). Deployment options, code-grounded corrections against `main` @ `e7c43a12`, sealed-projection design, recommendations, roadmap and phase gates, next actions, open questions. Replaces `implementation-recommendations-v0.1.md`. Phase gates follow WP v0.1.20 on the send fence, active markers, and the two stability metrics. §1 repeats the traceability-script limits and the qualification prerequisites |
+| [addendum-retrospective-linking-and-goal-metrics-v0.1.md](./addendum-retrospective-linking-and-goal-metrics-v0.1.md) | **Draft addendum** (v0.1.17). Incorporates PR #56, the PR #58 pin exception, and Astra re-reviews through round 11 (finding maps in §12). v0.1.17 is confidence polish after round-11 AGREE 95, claimed remediation pending re-review. It is not an AGREE. Held closures stay closed, including P2-11. Not operator-approved. Proposes work beyond v0.1.x: retrospective link index over sealed turns, continuous link revalidation, per-goal scope/progress metrics, and turn outcome records adjudicated by Hostile Validation. Read after the other two |
 | [self-eval-round1.md](./self-eval-round1.md) | Round-1 accuracy + actionability self-eval receipt |
 | [self-eval-round2.md](./self-eval-round2.md) | Round-2 hostile-pass self-eval receipt |
 
@@ -23,7 +23,7 @@ Long-horizon agent friction is **compaction / context loss**, not whitespace-est
 ## Self-eval / profile notes
 
 - Standing rules restored from durable memory only (`STANDING-RULES-FROM-MEMORY.md`, not tracked in this repo). Full 19-file `add-profile` **not** on box; PAYTON-LEGION2 disconnected. **Never publish** profile files publicly — the round-1/round-2 load receipts are intentionally absent from this folder for that reason.
-- Two self-eval rounds completed (receipts above, against v0.1.2). Paper version now **v0.1.9** after five external review passes (PRs #53, #54, and four rounds on PR #55); the self-evals predate those fixes.
+- Two self-eval rounds completed (receipts above, against v0.1.2). Paper version now **v0.1.20** after the hostile full-document review, the Astra re-reviews through round 11, and the v0.1.17 confidence polish; the self-evals predate those fixes. The polish is claimed remediation pending re-review. It is not an AGREE. Held closures stay closed, including P2-11. A documentation review does not establish implemented behavior, measured efficacy, operator approval, or operational HV / MCP audit closure.
 - **Perplexity Hostile Validation (HV) is still blocked on API key** after box reseed — **not done**. Do not claim HV was completed.
 
 ## Review checklist (for tomorrow)
@@ -51,4 +51,4 @@ Long-horizon agent friction is **compaction / context loss**, not whitespace-est
 
 ## Status
 
-Draft — whitepaper **v0.1.9**, proposed implementation **v0.1.4**, addendum **v0.1.6** — whitepaper and implementation 2026-09-20; addendum revised 2026-09-25 (America/Chicago). Awaiting operator Payton Byrd review. Author: Payton Byrd.
+Draft. Whitepaper **v0.1.20**, proposed implementation **v0.1.15**, addendum **v0.1.17**. Whitepaper, implementation, and addendum revised 2026-09-26 for the hostile-review contract, the Astra re-review through round 11, and the confidence polish; America/Chicago. The polish is claimed remediation pending re-review. It is not an AGREE. Held closures stay closed, including P2-11. Awaiting operator Payton Byrd review. Author: Payton Byrd.
