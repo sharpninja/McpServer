@@ -1,11 +1,11 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.19
+**Version:** v0.1.20
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.24). Linking design is in that paper (§13 through §24 and Appendix A). `addendum-retrospective-linking-and-goal-metrics-v0.1.md` is a stub.
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.25). Linking design is in that paper (§13 through §24 and Appendix A). `addendum-retrospective-linking-and-goal-metrics-v0.1.md` is a stub.
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-27, v0.1.19)
+**Date:** 2026-09-20 (revised 2026-09-27, v0.1.20)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
 > `§N` refers to a section of *this* document. Former addendum section numbers resolve once,
@@ -891,6 +891,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.20 | 2026-09-27 | Companion pointer only, to WP v0.1.25. No new runtime design. No change to the packing-step floor or to §5.1 pre-admission. Astra P3-03 and P3-04 are whitepaper wording fixes, claimed remediation pending re-review, not an AGREE. Residual Astra P2-12 stays claimed remediation pending re-review. P3-02 stays closed. Held closures stay closed, including P2-07, P2-10, and P2-11. Parked Perplexity findings P1-02, P2-02, and P2-03 stay parked. Operational Perplexity HV remains pending an API key. |
 | v0.1.19 | 2026-09-27 | Consistency with WP v0.1.24. Former addendum sections retargeted: traceability substance is WP §19.4, active warnings are WP §20.4, and the secondary document pass is WP Appendix A. The alias table is WP §13. The addendum file is a stub. No new runtime design. No change to the packing-step floor or to §5.1 pre-admission. Residual Astra P2-12 stays claimed remediation pending re-review, not an AGREE. No Astra receipt on `2b70dcbe` or `ad1941a` closes it. The receipted Astra AGREE 98 remains `20260926-122217-ct` on tip `24416845`. P3-02 stays closed. Held closures stay closed, including P2-07, P2-10, and P2-11. Parked Perplexity findings P1-02, P2-02, and P2-03 stay parked. Operational Perplexity HV remains pending an API key. |
 | v0.1.18 | 2026-09-26 | Consistency with WP v0.1.23 / ADD v0.1.20. Residual Astra P2-12 after tip `a26cbdbe` (receipt `20260926-145009-ct`, DISAGREE 97/100). §5.1 no longer treats an unmeasurable overlap as full retention. Unproven bytes take the omission marker or the call is refused. Measured full retention still counts once with no marker. P3-02 stays closed. No change to the packing-step floor. Claimed remediation pending re-review, not an AGREE |
 | v0.1.17 | 2026-09-26 | Consistency with WP v0.1.22 / ADD v0.1.19. Astra re-review of tip `6b395a4b` (receipt `20260926-142519-ct`, DISAGREE 97/100). §5.1, Option C, §8.1, and open question 7 follow the WP §6.3 overlap rule: bytes already inside an expanded pin are counted once and do not take an omission marker. §7 and §9 separate that secondary document pass from the operational Perplexity gate, which remains pending an API key. No change to the packing-step floor. Claimed remediation of Astra P2-12 and P3-02 pending re-review, not an AGREE. The 23 prior Astra closures stay closed |
