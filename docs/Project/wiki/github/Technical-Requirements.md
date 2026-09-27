@@ -1,5 +1,7 @@
 # Technical Requirements (MCP Server)
 
+BDPv4 package note (2026-09-27): technical requirements that lacked a use case now have one, plus acceptance criteria where they were missing, and a TEST-MCP link inherited from the parent functional requirement or added as Planned. Evidence added in this pass is Unverified. Intentional gaps remain: TR-MCP-WS-001, TR-MCP-TODO-001, and the unsuffixed TR-PLANNED-CORE-013.
+
 ## []
 
 **[]** — Placeholder requirement backfilled for TODO link [].
@@ -12,11 +14,37 @@ Scope: layer-1+
 **Status:** deferred
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-01 - Legacy imported identifier retained for historical traceability.
+- Main flow: TR-01 - Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-02
 
 **TR-02** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub; deferred in audit notes; plugin updateTr rejects non-canonical id.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-02 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-02 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub; deferred in audit notes; plugin updateTr rejects non-canonical id.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-03
 
@@ -24,11 +52,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-03 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-03 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-04
 
 **TR-04** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-04 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-04 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-05
 
@@ -36,11 +90,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-05 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-05 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-06
 
 **TR-06** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-06 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-06 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-07
 
@@ -48,11 +128,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-07 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-07 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-08
 
 **TR-08** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-08 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-08 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-09
 
@@ -60,11 +166,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-09 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-09 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-10
 
 **TR-10** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-10 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-10 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-11
 
@@ -72,11 +204,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-11 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-11 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-12
 
 **TR-12** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-12 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-12 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-13
 
@@ -84,11 +242,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-13 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-13 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-14
 
 **TR-14** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-14 - Placeholder requirement backfilled by DB-FK-001.
+- Main flow: TR-14 - Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-GRAPHRAG-ADHOC-001
 
@@ -97,6 +281,20 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Ad-hoc text ingestion pipeline - GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist.
+- Main flow: Ad-hoc text ingestion pipeline - GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist ContextDocumentEntity and ContextChunkEntity rows with workspace scoping, register vectors in IVectorIndexService, and optionally trigger IndexAsync. Document ID format: "adhoc-{Guid:N}". Content hash: SHA256.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then ad-hoc text ingestion pipeline - GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist ContextDocumentEntity and ContextChunkEntity rows with workspace scoping, register vectors in IVectorIndexService, and optionally trigger IndexAsync.
+- [ ] Given the technical contract, when the implementation is exercised, then document ID format: "adhoc-{Guid:N}".
+- [ ] Given the technical contract, when the implementation is exercised, then content hash: SHA256.
+
+**Test Requirements:** TEST-MCP-BDP-078.
+
 ## TR-GRAPHRAG-ADHOC-002
 
 **Explicit graph entity and relationship storage** — New EF Core entities GraphEntityEntity (Id, WorkspaceId, Name, EntityType, Description, Metadata JSON, timestamps) and GraphRelationshipEntity (Id, WorkspaceId, SourceEntityId FK, TargetEntityId FK, RelationshipType, Description, Weight default 1.0, Metadata JSON, timestamps) with workspace query filters, cascade delete from entity to relationships, and indexes on Name, EntityType, SourceEntityId, TargetEntityId, RelationshipType.
@@ -104,12 +302,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Explicit graph entity and relationship storage - New EF Core entities GraphEntityEntity (Id, WorkspaceId, Name, EntityType, Description, Metadata JSON, timestamps) and GraphRelationshipEntity (Id, WorkspaceId.
+- Main flow: Explicit graph entity and relationship storage - New EF Core entities GraphEntityEntity (Id, WorkspaceId, Name, EntityType, Description, Metadata JSON, timestamps) and GraphRelationshipEntity (Id, WorkspaceId, SourceEntityId FK, TargetEntityId FK, RelationshipType, Description, Weight default 1.0, Metadata JSON, timestamps) with workspace query filters, cascade delete from entity to relationships, and indexes on Name, EntityType, SourceEntityId, TargetEntityId, RelationshipType.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then explicit graph entity and relationship storage - New EF Core entities GraphEntityEntity (Id, WorkspaceId, Name, EntityType, Description, Metadata JSON, timestamps) and GraphRelationshipEntity (Id, WorkspaceId, SourceEntityId FK, TargetEntityId FK, RelationshipType, Description, Weight default 1.0, Metadata JSON, timestamps) with workspace query filters, cascade delete from entity to relationships, and indexes on Name, EntityType, SourceEntityId, TargetEntityId, RelationshipType.
+
+**Test Requirements:** TEST-MCP-BDP-079.
+
 ## TR-GRAPHRAG-ADHOC-003
 
 **Document lifecycle with cascade delete and vector cleanup** — DeleteDocumentAsync shall query chunk IDs for the document, call IVectorIndexService.RemoveVector for each chunk, then delete the ContextDocumentEntity (EF cascade removes chunks). RemoveVector removes the chunk from internal HNSW dictionaries making the node unreachable; full rebuild reclaims space. ListDocumentsAsync shall return paginated results with ChunkCount and TotalTokens computed via subquery.
 **Covered by:** FR: FR-MCP-080
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Document lifecycle with cascade delete and vector cleanup - DeleteDocumentAsync shall query chunk IDs for the document, call IVectorIndexService.RemoveVector for each chunk, then delete the ContextDocumentEntity (EF.
+- Main flow: Document lifecycle with cascade delete and vector cleanup - DeleteDocumentAsync shall query chunk IDs for the document, call IVectorIndexService.RemoveVector for each chunk, then delete the ContextDocumentEntity (EF cascade removes chunks). RemoveVector removes the chunk from internal HNSW dictionaries making the node unreachable; full rebuild reclaims space. ListDocumentsAsync shall return paginated results with ChunkCount and TotalTokens computed via subquery.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then document lifecycle with cascade delete and vector cleanup - DeleteDocumentAsync shall query chunk IDs for the document, call IVectorIndexService.RemoveVector for each chunk, then delete the ContextDocumentEntity (EF cascade removes chunks).
+- [ ] Given the technical contract, when the implementation is exercised, then removeVector removes the chunk from internal HNSW dictionaries making the node unreachable; full rebuild reclaims space.
+- [ ] Given the technical contract, when the implementation is exercised, then listDocumentsAsync shall return paginated results with ChunkCount and TotalTokens computed via subquery.
+
+**Test Requirements:** TEST-MCP-BDP-080.
 
 ## TR-HANDOFF-AGENT-001
 
@@ -121,6 +345,15 @@ Scope: layer-1+
 - [ ] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft.
 - [ ] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO.
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Versioned HandoffTodoDraft one-shot extraction - Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
+- Main flow: Versioned HandoffTodoDraft one-shot extraction - Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-002.
+
 ## TR-HANDOFF-AUDIT-001
 
 **Normalized ingestion-run and diagnostic persistence** — Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
@@ -131,6 +364,15 @@ Scope: layer-1+
 - [ ] Every run stores normalized provenance and diagnostics independently of TODO rows.
 - [ ] Persisted records omit raw credentials and raw source content.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Normalized ingestion-run and diagnostic persistence - Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
+- Main flow: Normalized ingestion-run and diagnostic persistence - Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-006.
+
 ## TR-HANDOFF-CONTRACT-001
 
 **Documented handoff contracts** — Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
@@ -140,6 +382,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs.
 - [ ] Contracts serialize and deserialize with the shared client JSON context without silent field loss.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Documented handoff contracts - Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
+- Main flow: Documented handoff contracts - Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-001, TEST-MCP-BDP-HANDOFF-002.
 
 ## TR-HANDOFF-MODES-001
 
@@ -152,6 +403,15 @@ Scope: layer-1+
 - [ ] Approval revalidates the stored draft before TODO creation.
 - [ ] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Confidence gating, review approval, and idempotent replay - Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
+- Main flow: Confidence gating, review approval, and idempotent replay - Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-004, TEST-MCP-BDP-HANDOFF-005.
+
 ## TR-HANDOFF-SECURITY-001
 
 **Bounded workspace-contained handoff readers** — Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
@@ -161,6 +421,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Readers refuse more than 8 MiB of decoded input and unsupported formats.
 - [ ] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Bounded workspace-contained handoff readers - Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
+- Main flow: Bounded workspace-contained handoff readers - Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
+- Edge cases: Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-001.
 
 ## TR-HANDOFF-SURFACE-001
 
@@ -172,6 +441,15 @@ Scope: layer-1+
 - [ ] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService.
 - [ ] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Shared API, client, REPL, Director, MCP, and plugin delegation - Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
+- Main flow: Shared API, client, REPL, Director, MCP, and plugin delegation - Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-007.
+
 ## TR-HANDOFF-TODO-001
 
 **Exclusive TODO-service persistence** — Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
@@ -181,6 +459,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] The only TODO mutation path is ITodoService.CreateAsync.
 - [ ] Existing TODO IDs require review and are never silently renamed.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Exclusive TODO-service persistence - Persist approved TODOs exclusively through the existing TODO service.
+- Main flow: Exclusive TODO-service persistence - Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
+- Edge cases: Existing TODO IDs require review and are never silently renamed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-005.
 
 ## TR-HANDOFF-VALIDATE-001
 
@@ -192,12 +479,34 @@ Scope: layer-1+
 - [ ] Validation and normalization have no TODO or run-store side effects.
 - [ ] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Pure draft validation and normalization - Provide a pure draft validator and normalizer that emits field-specific diagnostics.
+- Main flow: Pure draft validation and normalization - Provide a pure draft validator and normalizer that emits field-specific diagnostics.
+- Edge cases: Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-HANDOFF-003, TEST-MCP-BDP-HANDOFF-004.
+
 ## TR-LOC-001
 
 **Localization Infrastructure** — Multi-language support for the MCP server. *(Planned - implementation scope TBD.)*
 **Covered by:** FR: FR-LOC-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Localization Infrastructure - Multi-language support for the MCP server.
+- Main flow: Localization Infrastructure - Multi-language support for the MCP server. *(Planned - implementation scope TBD.)*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then localization Infrastructure - Multi-language support for the MCP server.
+- [ ] Given the technical contract, when the implementation is exercised, then *(Planned - implementation scope TBD.)*.
+
+**Test Requirements:** TEST-MCP-BDP-LOC-001.
 
 ## TR-MCP-AGENT-001
 
@@ -206,6 +515,21 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent EF Core Entities - AgentDefinitionEntity (agent type definitions with defaults), AgentWorkspaceEntity (per-workspace agent configurations with overrides, banning, isolation strategy), and AgentEventLogEntity.
+- Main flow: Agent EF Core Entities - AgentDefinitionEntity (agent type definitions with defaults), AgentWorkspaceEntity (per-workspace agent configurations with overrides, banning, isolation strategy), and AgentEventLogEntity (lifecycle event audit log). All stored in primary instance SQLite via McpDbContext. Unique index on (AgentDefinitionId, WorkspacePath) for workspace configs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent EF Core Entities - AgentDefinitionEntity (agent type definitions with defaults), AgentWorkspaceEntity (per-workspace agent configurations with overrides, banning, isolation strategy), and AgentEventLogEntity (lifecycle event audit log).
+- [ ] Given the technical contract, when the implementation is exercised, then all stored in primary instance SQLite via McpDbContext.
+- [ ] Given the technical contract, when the implementation is exercised, then unique index on (AgentDefinitionId, WorkspacePath) for workspace configs.
+- [ ] Given the technical contract, when the implementation is exercised, then JSON serialization for list fields (DefaultModelsJson, ModelsOverrideJson, InstructionFilesOverrideJson).
+
+**Test Requirements:** TEST-MCP-032, TEST-MCP-033, TEST-MCP-BDP-028, TEST-MCP-034.
+
 ## TR-MCP-AGENT-002
 
 **Built-in Agent Type Defaults** — `AgentDefaults.GetBuiltInDefaults()` returns seed data for 7 built-in agent types: copilot, cline, cursor, windsurf, claude-code, aider, continue. Each includes default launch command, instruction file path, models, branch strategy, and seed prompt. `AgentService.SeedBuiltInDefaultsAsync` is idempotent - only inserts agents not already present. Built-in definitions cannot be deleted.
@@ -213,12 +537,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Built-in Agent Type Defaults - AgentDefaults.GetBuiltInDefaults() returns seed data for 7 built-in agent types: copilot, cline, cursor, windsurf, claude-code, aider, continue.
+- Main flow: Built-in Agent Type Defaults - AgentDefaults.GetBuiltInDefaults() returns seed data for 7 built-in agent types: copilot, cline, cursor, windsurf, claude-code, aider, continue. Each includes default launch command, instruction file path, models, branch strategy, and seed prompt. AgentService.SeedBuiltInDefaultsAsync is idempotent - only inserts agents not already present.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then built-in Agent Type Defaults - AgentDefaults.GetBuiltInDefaults() returns seed data for 7 built-in agent types: copilot, cline, cursor, windsurf, claude-code, aider, continue.
+- [ ] Given the technical contract, when the implementation is exercised, then each includes default launch command, instruction file path, models, branch strategy, and seed prompt.
+- [ ] Given the technical contract, when the implementation is exercised, then agentService.SeedBuiltInDefaultsAsync is idempotent - only inserts agents not already present.
+- [ ] Given the technical contract, when the implementation is exercised, then built-in definitions cannot be deleted.
+
+**Test Requirements:** TEST-MCP-032, TEST-MCP-033.
+
 ## TR-MCP-AGENT-003
 
 **Agent REST API** — `AgentController` at `/mcpserver/agents` with endpoints for: definition CRUD (`/definitions`), workspace agent CRUD (root), ban/unban (`/{agentId}/ban`, `/{agentId}/unban`), lifecycle events (`/{agentId}/events`), and YAML validation (`/validate`). Mutation endpoints require `[Authorize(Policy = "AgentManager")]` (JWT). Read endpoints use standard workspace API key auth.
 **Covered by:** `AgentController`, `IAgentService`, `AgentService`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent REST API - AgentController at /mcpserver/agents with endpoints for: definition CRUD (/definitions), workspace agent CRUD (root), ban/unban (/{agentId}/ban, /{agentId}/unban), lifecycle events (/{agentId}/events).
+- Main flow: Agent REST API - AgentController at /mcpserver/agents with endpoints for: definition CRUD (/definitions), workspace agent CRUD (root), ban/unban (/{agentId}/ban, /{agentId}/unban), lifecycle events (/{agentId}/events), and YAML validation (/validate). Mutation endpoints require [Authorize(Policy = "AgentManager")] (JWT). Read endpoints use standard workspace API key auth.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent REST API - AgentController at /mcpserver/agents with endpoints for: definition CRUD (/definitions), workspace agent CRUD (root), ban/unban (/{agentId}/ban, /{agentId}/unban), lifecycle events (/{agentId}/events), and YAML validation (/validate).
+- [ ] Given the technical contract, when the implementation is exercised, then mutation endpoints require [Authorize(Policy = "AgentManager")] (JWT).
+- [ ] Given the technical contract, when the implementation is exercised, then read endpoints use standard workspace API key auth.
+
+**Test Requirements:** TEST-MCP-032, TEST-MCP-033, TEST-MCP-BDP-028, TEST-MCP-034.
 
 ## TR-MCP-AGENT-004
 
@@ -229,6 +582,19 @@ Validation SHALL enforce unique `AgentName` values (case-insensitive), required 
 
 **Covered by:** `AgentPoolOptions` *(planned)*, `AgentPoolDefinitionOptions` *(planned)*, `Program.cs` *(planned extension)*
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent Pool Configuration Contract - Agent pool settings SHALL bind from configuration into a validated options model that includes AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters, IsInteractiveDefault.
+- Main flow: Agent Pool Configuration Contract - Agent pool settings SHALL bind from configuration into a validated options model that includes AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters, IsInteractiveDefault, IsTodoPlanDefault, IsTodoStatusDefault, and IsTodoImplementDefault. Validation SHALL enforce unique AgentName values (case-insensitive), required launch path, and unambiguous default-agent assignment for each intent-default flag.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Pool Configuration Contract - Agent pool settings SHALL bind from configuration into a validated options model that includes AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters, IsInteractiveDefault, IsTodoPlanDefault, IsTodoStatusDefault, and IsTodoImplementDefault.
+- [ ] Given the technical contract, when the implementation is exercised, then validation SHALL enforce unique AgentName values (case-insensitive), required launch path, and unambiguous default-agent assignment for each intent-default flag.
+
+**Test Requirements:** TEST-MCP-061, TEST-MCP-066, TEST-MCP-068, TEST-MCP-062.
 
 ## TR-MCP-AGENT-005
 
@@ -242,6 +608,20 @@ No alternate direct-launch path is permitted for pooled workloads; pooled agents
 **Covered by:** `IAgentPoolService` *(planned)*, `AgentPoolService` *(planned)*, `AgentPoolQueueService` *(planned)*
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Pooled Runtime and Queue Dispatcher - All agent execution SHALL flow through a singleton pool runtime service that maintains lifecycle state per configured pooled agent and dispatches queued one-shot jobs to eligible.
+- Main flow: Pooled Runtime and Queue Dispatcher - All agent execution SHALL flow through a singleton pool runtime service that maintains lifecycle state per configured pooled agent and dispatches queued one-shot jobs to eligible idle agents. Pool runtime SHALL support start/stop/recycle operations, busy/idle transitions, one-shot queue states (queued, processing, completed, failed, canceled), and concurrent interactive attachment to agents currently processing one-shot requests. No alternate direct-launch path is permitted for pooled workloads; pooled agents launch through the voice interactive session mechanism.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then pooled Runtime and Queue Dispatcher - All agent execution SHALL flow through a singleton pool runtime service that maintains lifecycle state per configured pooled agent and dispatches queued one-shot jobs to eligible idle agents.
+- [ ] Given the technical contract, when the implementation is exercised, then pool runtime SHALL support start/stop/recycle operations, busy/idle transitions, one-shot queue states (queued, processing, completed, failed, canceled), and concurrent interactive attachment to agents currently processing one-shot requests.
+- [ ] Given the technical contract, when the implementation is exercised, then no alternate direct-launch path is permitted for pooled workloads; pooled agents launch through the voice interactive session mechanism.
+
+**Test Requirements:** TEST-MCP-049, TEST-MCP-050, TEST-MCP-051, TEST-MCP-061, TEST-MCP-066, TEST-MCP-068, TEST-MCP-067, TEST-MCP-072.
+
 ## TR-MCP-AGENT-006
 
 **Hosted .NET 9 Microsoft Agent Framework Library** — The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework. The library SHALL expose DI-friendly registration and configuration APIs for MCP Server connectivity, agent construction, and host lifecycle integration so host applications do not need to assemble low-level MCP session-log or TODO plumbing themselves.
@@ -249,6 +629,19 @@ Scope: layer-1+
 
 **Covered by:** `ServiceCollectionExtensions`, `McpAgentOptions`, `McpAgentOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentFactory`, `McpHostedAgentRegistration`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Hosted .NET 9 Microsoft Agent Framework Library - The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework.
+- Main flow: Hosted .NET 9 Microsoft Agent Framework Library - The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework. The library SHALL expose DI-friendly registration and configuration APIs for MCP Server connectivity, agent construction, and host lifecycle integration so host applications do not need to assemble low-level MCP session-log or TODO plumbing themselves.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then hosted .NET 9 Microsoft Agent Framework Library - The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework.
+- [ ] Given the technical contract, when the implementation is exercised, then the library SHALL expose DI-friendly registration and configuration APIs for MCP Server connectivity, agent construction, and host lifecycle integration so host applications do not need to assemble low-level MCP session-log or TODO plumbing themselves.
+
+**Test Requirements:** TEST-MCP-089.
 
 ## TR-MCP-AGENT-007
 
@@ -258,12 +651,38 @@ Scope: layer-1+
 **Covered by:** `ISessionLogWorkflow`, `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `ITodoWorkflow`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `IMcpSessionIdentifierFactory`, `McpSessionIdentifierFactory`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents - The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update.
+- Main flow: Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents - The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, TODO plan/status/implementation flows, repository read/list/write operations, local desktop process launch using the existing MCP Server contracts, and persistent in-process PowerShell sessions hosted directly inside the current .NET agent process. The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs, SHALL keep repository access scoped to repo-relative paths, SHALL expose desktop launch through the.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents - The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, TODO plan/status/implementation flows, repository read/list/write operations, local desktop process launch using the existing MCP Server contracts, and persistent in-process PowerShell sessions hosted directly inside the current .NET agent process.
+- [ ] The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs, SHALL keep repository access scoped to repo-relative paths, SHALL expose desktop launch through the authenticated workspace context only when the server-side desktop-launch feature gate, executable allowlist, and privileged desktop-launch token requirements are satisfied, SHALL keep PowerShell session state local to the hosted agent instance, SHALL expose the same local PowerShell session manager to host applications through IMcpHostedAgent.PowerShellSessions, and SHALL prefer reuse of existing client abstractions where server contracts already exist instead of duplicating transport logic.
+
+**Test Requirements:** TEST-MCP-089.
+
 ## TR-MCP-AGENT-008
 
 **Agent Pool Orchestration** — Reserved/planned: orchestrates a pool of agents for parallel task processing. Not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
 **Covered by:** FR: FR-MCP-028, FR-MCP-050
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent Pool Orchestration - Reserved/planned: orchestrates a pool of agents for parallel task processing.
+- Main flow: Agent Pool Orchestration - Reserved/planned: orchestrates a pool of agents for parallel task processing. Not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Pool Orchestration - Reserved/planned: orchestrates a pool of agents for parallel task processing.
+- [ ] Given the technical contract, when the implementation is exercised, then not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
+
+**Test Requirements:** TEST-MCP-BDP-028, TEST-MCP-034, TEST-MCP-BDP-050.
 
 ## TR-MCP-AGENT-009
 
@@ -272,12 +691,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent Plugin Discovery - Reserved/planned: discovers installed agent plugins and validates their contracts.
+- Main flow: Agent Plugin Discovery - Reserved/planned: discovers installed agent plugins and validates their contracts. Not yet implemented; placeholder for FR-MCP-050 traceability.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Plugin Discovery - Reserved/planned: discovers installed agent plugins and validates their contracts.
+- [ ] Given the technical contract, when the implementation is exercised, then not yet implemented; placeholder for FR-MCP-050 traceability.
+
+**Test Requirements:** TEST-MCP-BDP-050.
+
 ## TR-MCP-AGENT-010
 
 **Agent Process Lifecycle** — Reserved/planned: manages start/stop/health of agent host processes. Not yet implemented; placeholder for FR-MCP-050 traceability.
 **Covered by:** FR: FR-MCP-050
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent Process Lifecycle - Reserved/planned: manages start/stop/health of agent host processes.
+- Main flow: Agent Process Lifecycle - Reserved/planned: manages start/stop/health of agent host processes. Not yet implemented; placeholder for FR-MCP-050 traceability.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Process Lifecycle - Reserved/planned: manages start/stop/health of agent host processes.
+- [ ] Given the technical contract, when the implementation is exercised, then not yet implemented; placeholder for FR-MCP-050 traceability.
+
+**Test Requirements:** TEST-MCP-BDP-050.
 
 ## TR-MCP-AGENT-011
 
@@ -286,12 +731,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent State Synchronization - Reserved/planned: synchronizes agent state across pool members.
+- Main flow: Agent State Synchronization - Reserved/planned: synchronizes agent state across pool members. Not yet implemented; placeholder for FR-MCP-050 traceability.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent State Synchronization - Reserved/planned: synchronizes agent state across pool members.
+- [ ] Given the technical contract, when the implementation is exercised, then not yet implemented; placeholder for FR-MCP-050 traceability.
+
+**Test Requirements:** TEST-MCP-BDP-050.
+
 ## TR-MCP-AGENT-012
 
 **Agent Notification Bus** — Reserved/planned: routes notifications between agents and the workspace event bus. Not yet implemented; placeholder for FR-MCP-050 traceability.
 **Covered by:** FR: FR-MCP-050
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Agent Notification Bus - Reserved/planned: routes notifications between agents and the workspace event bus.
+- Main flow: Agent Notification Bus - Reserved/planned: routes notifications between agents and the workspace event bus. Not yet implemented; placeholder for FR-MCP-050 traceability.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Notification Bus - Reserved/planned: routes notifications between agents and the workspace event bus.
+- [ ] Given the technical contract, when the implementation is exercised, then not yet implemented; placeholder for FR-MCP-050 traceability.
+
+**Test Requirements:** TEST-MCP-BDP-050.
 
 ## TR-MCP-AGENT-013
 
@@ -303,6 +774,20 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 **Covered by:** `tools/powershell/McpSession.psm1`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: PowerShell McpSession Dual-Path Session Cache Resolution - tools/powershell/McpSession.psm1 SHALL persist the canonical current session object to .mcpSession/current-session.json whenever session state is saved, SHALL.
+- Main flow: PowerShell McpSession Dual-Path Session Cache Resolution - tools/powershell/McpSession.psm1 SHALL persist the canonical current session object to .mcpSession/current-session.json whenever session state is saved, SHALL consult that current-session cache before falling back to the legacy .mcpServer/session.yaml wrapper when resolving the active session, and SHALL reuse the cached current-session sessionId during initialization when the cache matches the requested agent/model and the session is still active. When a session is completed, the module SHALL remove both the legacy wrapper cache and the .mcpSession current-session cache so a later bootstrap does not accidentally reuse a completed.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] PowerShell McpSession Dual-Path Session Cache Resolution - tools/powershell/McpSession.psm1 SHALL persist the canonical current session object to .mcpSession/current-session.json whenever session state is saved, SHALL consult that current-session cache before falling back to the legacy .mcpServer/session.yaml wrapper when resolving the active session, and SHALL reuse the cached current-session sessionId during initialization when the cache matches the requested agent/model and the session is still active.
+- [ ] When a session is completed, the module SHALL remove both the legacy wrapper cache and the .mcpSession current-session cache so a later bootstrap does not accidentally reuse a completed session.
+- [ ] Given the technical contract, when the implementation is exercised, then the implementation SHALL continue supporting the legacy wrapper file for backward compatibility.
+
+**Test Requirements:** TEST-MCP-100.
+
 ## TR-MCP-AGENT-014
 
 **PowerShell McpSession Trust Bootstrap Parity** — `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, and `tools/powershell/McpContext.psm1` SHALL use the same marker-signature verification, `/health` nonce echo verification, and `MCP_UNTRUSTED` fallback semantics before any follow-on MCP calls are allowed. The trust flow SHALL be explicit enough that session bootstrap, TODO bootstrap, and context bootstrap behave identically when trust succeeds or fails, and the failure path SHALL stop additional endpoint probing.
@@ -310,6 +795,19 @@ Scope: layer-1+
 
 **Covered by:** `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: PowerShell McpSession Trust Bootstrap Parity - tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, and tools/powershell/McpContext.psm1 SHALL use the same marker-signature verification, /health nonce echo.
+- Main flow: PowerShell McpSession Trust Bootstrap Parity - tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, and tools/powershell/McpContext.psm1 SHALL use the same marker-signature verification, /health nonce echo verification, and MCP_UNTRUSTED fallback semantics before any follow-on MCP calls are allowed. The trust flow SHALL be explicit enough that session bootstrap, TODO bootstrap, and context bootstrap behave identically when trust succeeds or fails, and the failure path SHALL stop additional endpoint probing.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then powerShell McpSession Trust Bootstrap Parity - tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, and tools/powershell/McpContext.psm1 SHALL use the same marker-signature verification, /health nonce echo verification, and MCP_UNTRUSTED fallback semantics before any follow-on MCP calls are allowed.
+- [ ] The trust flow SHALL be explicit enough that session bootstrap, TODO bootstrap, and context bootstrap behave identically when trust succeeds or fails, and the failure path SHALL stop additional endpoint probing.
+
+**Test Requirements:** TEST-MCP-101.
 
 ## TR-MCP-AGENT-015
 
@@ -322,6 +820,15 @@ Scope: layer-1+
 - [x] ACID run options preserve AllowMultipleToolCalls=false and FunctionInvokingChatClient.AllowConcurrentInvocation=false.
 - [x] ACID tool exposure is generated from an allowlist and excludes unsafe generic, shell, desktop, and mutation tools by default.
 - [x] All new public APIs have XMLDocs and are covered by focused tests.
+
+**Use Cases:**
+- Actor: AI agent.
+- Goal: ACID hosted-agent profile and sealed run contract - The McpServer.McpAgent package SHALL define an ACID tightly coupled profile that applies strict McpAgentOptions defaults, filters the model-visible tool surface to.
+- Main flow: ACID hosted-agent profile and sealed run contract - The McpServer.McpAgent package SHALL define an ACID tightly coupled profile that applies strict McpAgentOptions defaults, filters the model-visible tool surface to approved read/audit tools, seals ChatClientAgent run options with serialized function invocation, and documents the profile as fail-closed for unproven mutation paths.
+- Edge cases: ACID hosted-agent profile and sealed run contract - The McpServer.McpAgent package SHALL define an ACID tightly coupled profile that applies strict McpAgentOptions defaults, filters the model-visible tool surface to approved read/audit tools, seals ChatClientAgent run options with serialized function invocation, and.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-186.
 
 ## TR-MCP-AGENT-016
 
@@ -336,12 +843,34 @@ Scope: layer-1+
 - [x] Existing non-ACID hosted-agent registration remains backward compatible aside from the additional Quad Brain coding tool.
 - [x] All new public APIs have XMLDocs and are covered by focused tests.
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Hosted-agent Quad Brain coding adapter - RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001.
+- Main flow: Hosted-agent Quad Brain coding adapter - RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified the mcp_quadbrain_coding_execute hosted-agent tool routing to POST mcpserver/brain-slots/orchestrate through McpQuadBrainCodingAgentRouter. Both the tool and the router are removed: the tool was registered into the shared McpServer.McpAgent catalog for every host, which violates the rule that no QuadBrain capability is exposed outside QBAgent, and it was already non-functional for QBAgent because QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail.
+- Edge cases: Both the tool and the router are removed: the tool was registered into the shared McpServer.McpAgent catalog for every host, which violates the rule that no QuadBrain capability is exposed outside QBAgent, and it was already non-functional for QBAgent because QuadBrainInternalToolExecutor never had a case for it, so.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-187.
+
 ## TR-MCP-AGENT-PARITY-010
 
 **TR-MCP-AGENT-PARITY-010** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 **Covered by:** FR: FR-MCP-AGENT-PARITY-001
 **Status:** deferred
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-010 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-010 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-AGENT-PARITY-011
 
@@ -350,11 +879,37 @@ Scope: layer-1+
 **Status:** deferred
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-011 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-011 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-AGENT-PARITY-012
 
 **TR-MCP-AGENT-PARITY-012** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 **Status:** deferred
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-012 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-012 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-AGENT-PARITY-013
 
@@ -362,11 +917,37 @@ Scope: layer-1+
 **Status:** deferred
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-013 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-013 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-AGENT-PARITY-020
 
 **TR-MCP-AGENT-PARITY-020** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 **Status:** deferred
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-020 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-020 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-AGENT-PARITY-020..027
 
@@ -374,17 +955,56 @@ Scope: layer-1+
 **Status:** deferred
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: ..027.
+- Main flow: TR-MCP-AGENT-PARITY-020..027 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-AGENT-PARITY-020-027
 
 **TR-MCP-AGENT-PARITY-020-027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 **Status:** deferred
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-020-027 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-020-027 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-AGENT-PARITY-030
 
 **TR-MCP-AGENT-PARITY-030** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 **Status:** deferred
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-AGENT-PARITY-030 - Legacy agent-parity TODO link retained for historical traceability.
+- Main flow: TR-MCP-AGENT-PARITY-030 - Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-AIUNIT-001
 
@@ -402,12 +1022,39 @@ Add using Microsoft.Extensions.Configuration*; ensure _build.csproj and Director
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews - In build/Build.cs add public CreateAiUnitClient(string reviewType) that: - Builds IConfigurationRoot loading appsettings.aiunit.json.
+- Main flow: Implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews - In build/Build.cs add public CreateAiUnitClient(string reviewType) that: - Builds IConfigurationRoot loading appsettings.aiunit.json (root preferred, fallback to tests/McpServer.PlanReview.Tests/appsettings.aiunit.json), env. - Resolves ActiveStrategy. - Instantiates and returns a client (ResilientFrontierClient or adapter implementing SendAsync(FrontierRequest)->FrontierResponse) that actually delegates to the aiUnit strategy executor (cli etc).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews - In build/Build.cs add public CreateAiUnitClient(string reviewType) that: - Builds IConfigurationRoot loading appsettings.aiunit.json (root preferred, fallback to tests/McpServer.PlanReview.Tests/appsettings.aiunit.json), env.
+- [ ] Given the technical contract, when the implementation is exercised, then - Resolves ActiveStrategy.
+- [ ] Given the technical contract, when the implementation is exercised, then - Instantiates and returns a client (ResilientFrontierClient or adapter implementing SendAsync(FrontierRequest)->FrontierResponse) that actually delegates to the aiUnit strategy executor (cli etc).
+- [ ] Given the technical contract, when the implementation is exercised, then aiCodeReview / AiProjectReview targets (already sketched) call it and use the response to populate runlog + MD via WriteAiUnitReviewMarkdownFromData.
+
+**Test Requirements:** TEST-MCP-AIUNIT-001.
+
 ## TR-MCP-API-001
 
 REST routes for todo/session/context/repo/github with OpenAPI.
 **Covered by:** FR: FR-MCP-002, FR-MCP-005, FR-MCP-065, FR-SUPPORT-010
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: REST routes for todo/session/context/repo/github with OpenAPI.
+- Main flow: REST routes for todo/session/context/repo/github with OpenAPI.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then REST routes for todo/session/context/repo/github with OpenAPI.
+
+**Test Requirements:** TEST-MCP-002, TEST-MCP-005, TEST-MCP-088, TEST-MCP-BDP-SUPPORT-010.
 
 ## TR-MCP-API-002
 
@@ -425,6 +1072,21 @@ Template-mode and ad-hoc-mode payload validation SHALL enforce:
 **Covered by:** `AgentPoolController` *(planned)*, `AgentPoolIntentResolver` *(planned)*, request DTO validators *(planned)*
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: One-Shot Submission Contract and Intent Routing - One-shot APIs SHALL support explicit context values Plan, Status, Implement, and AdHoc.
+- Main flow: One-Shot Submission Contract and Intent Routing - One-shot APIs SHALL support explicit context values Plan, Status, Implement, and AdHoc. When AgentName is omitted, the runtime SHALL resolve request intent from context/prompt and select the configured default agent for that intent. Template-mode and ad-hoc-mode payload validation SHALL enforce: - promptTemplateId and ad-hoc prompt text cannot both be supplied in explicit mode.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then one-Shot Submission Contract and Intent Routing - One-shot APIs SHALL support explicit context values Plan, Status, Implement, and AdHoc.
+- [ ] When AgentName is omitted, the runtime SHALL resolve request intent from context/prompt and select the configured default agent for that intent.
+- [ ] Given the technical contract, when the implementation is exercised, then template-mode and ad-hoc-mode payload validation SHALL enforce: - promptTemplateId and ad-hoc prompt text cannot both be supplied in explicit mode.
+- [ ] Given the technical contract, when the implementation is exercised, then - At least one prompt source must be resolvable.
+
+**Test Requirements:** TEST-MCP-066, TEST-MCP-067, TEST-MCP-062, TEST-MCP-063, TEST-MCP-064, TEST-MCP-065.
+
 ## TR-MCP-API-003
 
 **Agent Pool Monitoring and Control APIs** — REST endpoints SHALL provide:
@@ -439,12 +1101,39 @@ Scope: layer-1+
 **Covered by:** `AgentPoolController` *(planned)*, `AgentPoolNotificationService` *(planned)*, `AgentPoolStreamService` *(planned)*
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent Pool Monitoring and Control APIs - REST endpoints SHALL provide: - Pooled agent availability snapshots.
+- Main flow: Agent Pool Monitoring and Control APIs - REST endpoints SHALL provide: - Pooled agent availability snapshots. - Runtime controls (connect, start, stop, immediate recycle). - Queue operations (list, enqueue, cancel/remove, queued-item move up/down).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Pool Monitoring and Control APIs - REST endpoints SHALL provide: - Pooled agent availability snapshots.
+- [ ] Given the technical contract, when the implementation is exercised, then - Runtime controls (connect, start, stop, immediate recycle).
+- [ ] Given the technical contract, when the implementation is exercised, then - Queue operations (list, enqueue, cancel/remove, queued-item move up/down).
+- [ ] Given the technical contract, when the implementation is exercised, then - Separate SSE notification stream emitting queue/agent lifecycle transitions with payload fields AgentName, LastRequestPrompt, and SessionId.
+
+**Test Requirements:** TEST-MCP-066, TEST-MCP-067, TEST-MCP-068, TEST-MCP-072, TEST-MCP-070, TEST-MCP-071.
+
 ## TR-MCP-ARCH-001
 
 ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 **Covered by:** FR: FR-MCP-007, FR-SUPPORT-010
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: ASP.NET Core 9 server with HTTP and STDIO MCP transport.
+- Main flow: ASP.NET Core 9 server with HTTP and STDIO MCP transport.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then ASP.NET Core 9 server with HTTP and STDIO MCP transport.
+
+**Test Requirements:** TEST-MCP-006, TEST-MCP-BDP-SUPPORT-010.
 
 ## TR-MCP-ARCH-002
 
@@ -459,6 +1148,21 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-059
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: DI Single Source of Truth and Pull-Based Change Notification - Architecture audit and remediation across McpServer.Support.Mcp SHALL enforce: - Stateful services, registries, managers, and providers must be DI-owned.
+- Main flow: DI Single Source of Truth and Pull-Based Change Notification - Architecture audit and remediation across McpServer.Support.Mcp SHALL enforce: - Stateful services, registries, managers, and providers must be DI-owned (singleton or scoped) and must not be instantiated via new or ActivatorUtilities.CreateInstance outside composition-root registration paths. - Authoritative mutable state must have a single owner in DI; peer services must pull current state from that owner instead of receiving pushed state payloads. - Observable state contracts must expose change signaling via INotifyPropertyChanged for data-availability/change notification, without embedding mutable payload transfer in event.
+- Edge cases: DI Single Source of Truth and Pull-Based Change Notification - Architecture audit and remediation across McpServer.Support.Mcp SHALL enforce: - Stateful services, registries, managers, and providers must be DI-owned (singleton or scoped) and must not be instantiated via new or ActivatorUtilities.CreateInstance outside.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then DI Single Source of Truth and Pull-Based Change Notification - Architecture audit and remediation across McpServer.Support.Mcp SHALL enforce: - Stateful services, registries, managers, and providers must be DI-owned (singleton or scoped) and must not be instantiated via new or ActivatorUtilities.CreateInstance outside composition-root registration paths.
+- [ ] Given the technical contract, when the implementation is exercised, then - Authoritative mutable state must have a single owner in DI; peer services must pull current state from that owner instead of receiving pushed state payloads.
+- [ ] Given the technical contract, when the implementation is exercised, then - Observable state contracts must expose change signaling via INotifyPropertyChanged for data-availability/change notification, without embedding mutable payload transfer in event arguments.
+- [ ] Given the technical contract, when the implementation is exercised, then - Race-condition remediation must prioritize ownership/lifetime design in DI (single owner + pull model); fire-and-forget propagation and ad-hoc synchronization used as state-sharing mechanisms are prohibited.
+
+**Test Requirements:** TEST-MCP-073.
+
 ## TR-MCP-AUDIT-001
 
 **Audited Copilot Client** — `AuditedCopilotClient` decorates `ICopilotClient`. Before each Copilot invocation: determines affected workspaces, creates `in_progress` session log entries per workspace. After invocation: logs `completed` entries with result and actions taken. Action type: `copilot_invocation`. Registered as DI decorator so all server-initiated Copilot calls are audited.
@@ -467,12 +1171,42 @@ Scope: layer-1+
 **Covered by:** `AuditedCopilotClient`, `Program.cs` (`ICopilotClient` decorator wiring), `McpStdioHost` (`ICopilotClient` decorator wiring), `CopilotServiceCollectionExtensions`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Audited Copilot Client - AuditedCopilotClient decorates ICopilotClient.
+- Main flow: Audited Copilot Client - AuditedCopilotClient decorates ICopilotClient. Before each Copilot invocation: determines affected workspaces, creates in_progress session log entries per workspace. After invocation: logs completed entries with result and actions taken.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then audited Copilot Client - AuditedCopilotClient decorates ICopilotClient.
+- [ ] Given the technical contract, when the implementation is exercised, then before each Copilot invocation: determines affected workspaces, creates in_progress session log entries per workspace.
+- [ ] Given the technical contract, when the implementation is exercised, then after invocation: logs completed entries with result and actions taken.
+- [ ] Given the technical contract, when the implementation is exercised, then action type: copilot_invocation.
+
+**Test Requirements:** TEST-MCP-086.
+
 ## TR-MCP-AUTH-001
 
 **OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (`mcp-server-api`), and optional client secret based on provider requirements. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
 **Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: OIDC JWT Bearer Authentication - ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (mcp-server-api), and optional client secret based on provider requirements.
+- Main flow: OIDC JWT Bearer Authentication - ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (mcp-server-api), and optional client secret based on provider requirements. OidcAuthOptions bound from Mcp:Auth configuration section. Management endpoints (agent mutations) require [Authorize(Policy = "AgentManager")]; read endpoints fall back to existing API key auth.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then OIDC JWT Bearer Authentication - ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (mcp-server-api), and optional client secret based on provider requirements.
+- [ ] Given the technical contract, when the implementation is exercised, then oidcAuthOptions bound from Mcp:Auth configuration section.
+- [ ] Given the technical contract, when the implementation is exercised, then management endpoints (agent mutations) require [Authorize(Policy = "AgentManager")]; read endpoints fall back to existing API key auth.
+- [ ] Given the technical contract, when the implementation is exercised, then requireHttpsMetadata configurable for local development.
+
+**Test Requirements:** TEST-MCP-BDP-026.
 
 ## TR-MCP-AUTH-002
 
@@ -481,12 +1215,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: GitHub Federation via OIDC Provider - OIDC provider setup may configure GitHub as a social Identity Provider with user:email read:org scopes.
+- Main flow: GitHub Federation via OIDC Provider - OIDC provider setup may configure GitHub as a social Identity Provider with user:email read:org scopes. First-login flow may auto-create users from GitHub accounts. GitHub username mapped to github_username user attribute.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub Federation via OIDC Provider - OIDC provider setup may configure GitHub as a social Identity Provider with user:email read:org scopes.
+- [ ] Given the technical contract, when the implementation is exercised, then first-login flow may auto-create users from GitHub accounts.
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub username mapped to github_username user attribute.
+- [ ] Given the technical contract, when the implementation is exercised, then setup scripts accept --GitHubClientId / --GitHubClientSecret parameters; GitHub federation is optional.
+
+**Test Requirements:** TEST-MCP-BDP-026.
+
 ## TR-MCP-AUTH-003
 
 **Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Device Authorization Flow for CLI Clients - OIDC mcp-director client configured as public with OAuth 2.0 Device Authorization Grant enabled.
+- Main flow: Device Authorization Flow for CLI Clients - OIDC mcp-director client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures mcp-server-api appears in token audience and includes realm_roles.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then device Authorization Flow for CLI Clients - OIDC mcp-director client configured as public with OAuth 2.0 Device Authorization Grant enabled.
+- [ ] Given the technical contract, when the implementation is exercised, then director CLI initiates device flow, displays user code and verification URI, polls for token completion.
+- [ ] Given the technical contract, when the implementation is exercised, then provider claim mapping ensures mcp-server-api appears in token audience and includes realm_roles.
+
+**Test Requirements:** TEST-MCP-BDP-026.
 
 ## TR-MCP-AUTH-010
 
@@ -498,6 +1261,15 @@ Scope: layer-1+
 - [x] Status 503 Service Unavailable is reserved for !WorkspaceTokenService.IsInitialized with Retry-After header and JSON body.
 - [x] Once token subsystem is initialized, unresolved workspace or non-validating credential yields 401 Unauthorized.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceAuthMiddleware 503/401 gating - The API-key branch of WorkspaceAuthMiddleware reserves StatusCodes.Status503ServiceUnavailable strictly for the case !WorkspaceTokenService.IsInitialized (no full token seeded.
+- Main flow: WorkspaceAuthMiddleware 503/401 gating - The API-key branch of WorkspaceAuthMiddleware reserves StatusCodes.Status503ServiceUnavailable strictly for the case !WorkspaceTokenService.IsInitialized (no full token seeded yet); that response includes a Retry-After header and JSON body. Once the token subsystem is initialized, an unresolved workspace or non-validating/missing credential yields 401 Unauthorized.
+- Edge cases: Once token subsystem is initialized, unresolved workspace or non-validating credential yields 401 Unauthorized.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-AUTH-010, TEST-MCP-AUTH-011, TEST-MCP-AUTH-012.
+
 ## TR-MCP-AUTH-011
 
 **WorkspaceTokenService.IsInitialized** — WorkspaceTokenService exposes bool IsInitialized => !_tokens.IsEmpty (true once at least one full-access token has been generated). Consumed by WorkspaceAuthMiddleware and WorkspaceReadinessHealthCheck to distinguish genuine startup-not-ready from a credential failure.
@@ -508,12 +1280,33 @@ Scope: layer-1+
 - [x] WorkspaceTokenService exposes IsInitialized property that returns true when at least one full-access token has been generated.
 - [x] IsInitialized is consumed by WorkspaceAuthMiddleware and WorkspaceReadinessHealthCheck to distinguish startup-not-ready from credential failure.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceTokenService.IsInitialized - WorkspaceTokenService exposes bool IsInitialized => !_tokens.IsEmpty (true once at least one full-access token has been generated).
+- Main flow: WorkspaceTokenService.IsInitialized - WorkspaceTokenService exposes bool IsInitialized => !_tokens.IsEmpty (true once at least one full-access token has been generated). Consumed by WorkspaceAuthMiddleware and WorkspaceReadinessHealthCheck to distinguish genuine startup-not-ready from a credential failure.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-AUTH-010, TEST-MCP-AUTH-011, TEST-MCP-AUTH-012.
+
 ## TR-MCP-BATCH-001
 
 **Robust Bash plugin batch records normalization** — Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
 **Covered by:** FR: FR-MCP-113, FR-MCP-BATCH-001, FR-MCP-PLUGIN-BATCH-001; TEST: TEST-MCP-153, TEST-MCP-BATCH-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Robust Bash plugin batch records normalization - Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before.
+- Main flow: Robust Bash plugin batch records normalization - Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then robust Bash plugin batch records normalization - Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
+
+**Test Requirements:** TEST-MCP-153, TEST-MCP-BATCH-001.
 
 ## TR-MCP-BATCH-109
 
@@ -522,12 +1315,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Requirements batch endpoint and workflow support - REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update.
+- Main flow: Requirements batch endpoint and workflow support - REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then requirements batch endpoint and workflow support - REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+
+**Test Requirements:** TEST-MCP-145, TEST-MCP-146.
+
 ## TR-MCP-BATCHTS-001
 
 **Robust TypeScript plugin batch records normalization** — TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion while preserving nested acceptanceCriteria booleans.
 **Covered by:** FR: FR-MCP-113; TEST: TEST-MCP-153
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Robust TypeScript plugin batch records normalization - TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion.
+- Main flow: Robust TypeScript plugin batch records normalization - TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion while preserving nested acceptanceCriteria booleans.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then robust TypeScript plugin batch records normalization - TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion while preserving nested acceptanceCriteria booleans.
+
+**Test Requirements:** TEST-MCP-153.
 
 ## TR-MCP-BYRD-001
 
@@ -537,6 +1354,19 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Services/Models/TodoExecutionModels.cs`, `src/McpServer.Services/Services/ITodoExecutionService.cs`, `src/McpServer.Services/Services/TodoExecutionService.cs`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace-Scoped Byrd Execution Store - The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under .mcpServer, with stable IDs for phases, TODOs, and.
+- Main flow: Workspace-Scoped Byrd Execution Store - The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under .mcpServer, with stable IDs for phases, TODOs, and checkpoints. The execution store SHALL coexist with the existing TODO providers without breaking legacy TODO CRUD behavior.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace-Scoped Byrd Execution Store - The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under .mcpServer, with stable IDs for phases, TODOs, and checkpoints.
+- [ ] Given the technical contract, when the implementation is exercised, then the execution store SHALL coexist with the existing TODO providers without breaking legacy TODO CRUD behavior.
+
+**Test Requirements:** TEST-MCP-103, TEST-MCP-104.
+
 ## TR-MCP-BYRD-002
 
 **Bounded Hydration and Delta Queries** — The server SHALL hydrate a bounded execution context for the active Byrd TODO using requirement snippets, recent session-turn summaries, relevant files, artifacts, validation state, and execution pointers. It SHALL also return checkpoint-based delta context that reports only the new turns, artifacts, commits, and next action since a specified checkpoint.
@@ -544,6 +1374,19 @@ Scope: layer-1+
 
 **Covered by:** `src/McpServer.Services/Services/TodoExecutionService.cs`, `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`, `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`, `src/McpServer.Client/TodoClient.cs`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Bounded Hydration and Delta Queries - The server SHALL hydrate a bounded execution context for the active Byrd TODO using requirement snippets, recent session-turn summaries, relevant files, artifacts, validation state.
+- Main flow: Bounded Hydration and Delta Queries - The server SHALL hydrate a bounded execution context for the active Byrd TODO using requirement snippets, recent session-turn summaries, relevant files, artifacts, validation state, and execution pointers. It SHALL also return checkpoint-based delta context that reports only the new turns, artifacts, commits, and next action since a specified checkpoint.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then bounded Hydration and Delta Queries - The server SHALL hydrate a bounded execution context for the active Byrd TODO using requirement snippets, recent session-turn summaries, relevant files, artifacts, validation state, and execution pointers.
+- [ ] Given the technical contract, when the implementation is exercised, then it SHALL also return checkpoint-based delta context that reports only the new turns, artifacts, commits, and next action since a specified checkpoint.
+
+**Test Requirements:** TEST-MCP-104.
 
 ## TR-MCP-BYRD-003
 
@@ -553,6 +1396,19 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Services/Services/TodoExecutionService.cs`, `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Byrd Progression Enforcement - The execution service SHALL enforce Byrd progression rules so implementation cannot begin before unit tests are defined, validation cannot begin without implementation evidence, blocked.
+- Main flow: Byrd Progression Enforcement - The execution service SHALL enforce Byrd progression rules so implementation cannot begin before unit tests are defined, validation cannot begin without implementation evidence, blocked TODOs require an explicit resume reason, and completion requires passing validation plus satisfied acceptance criteria. Test-plan updates, checkpoints, validation results, and session-turn linking SHALL update the persisted execution pointers used for resumption.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then byrd Progression Enforcement - The execution service SHALL enforce Byrd progression rules so implementation cannot begin before unit tests are defined, validation cannot begin without implementation evidence, blocked TODOs require an explicit resume reason, and completion requires passing validation plus satisfied acceptance criteria.
+- [ ] Given the technical contract, when the implementation is exercised, then test-plan updates, checkpoints, validation results, and session-turn linking SHALL update the persisted execution pointers used for resumption.
+
+**Test Requirements:** TEST-MCP-103, TEST-MCP-104.
+
 ## TR-MCP-BYRD-004
 
 **Structured TODO Execution Surfaces** — The server SHALL expose the Byrd execution workflow through REST endpoints, STDIO MCP tools, and typed client methods, including the safe `adb_step` action surface for Android validation. The exposed contracts SHALL remain structured and bounded for iteration phase creation, plan decomposition, active TODO selection, execution context hydration, checkpoint append, validation result recording, status progression, session-turn linking, and device actions.
@@ -561,12 +1417,37 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`, `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`, `src/McpServer.Client/Models/TodoModels.cs`, `src/McpServer.Client/TodoClient.cs`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Structured TODO Execution Surfaces - The server SHALL expose the Byrd execution workflow through REST endpoints, STDIO MCP tools, and typed client methods, including the safe adb_step action surface for Android.
+- Main flow: Structured TODO Execution Surfaces - The server SHALL expose the Byrd execution workflow through REST endpoints, STDIO MCP tools, and typed client methods, including the safe adb_step action surface for Android validation. The exposed contracts SHALL remain structured and bounded for iteration phase creation, plan decomposition, active TODO selection, execution context hydration, checkpoint append, validation result recording, status progression, session-turn linking, and device actions.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then structured TODO Execution Surfaces - The server SHALL expose the Byrd execution workflow through REST endpoints, STDIO MCP tools, and typed client methods, including the safe adb_step action surface for Android validation.
+- [ ] Given the technical contract, when the implementation is exercised, then the exposed contracts SHALL remain structured and bounded for iteration phase creation, plan decomposition, active TODO selection, execution context hydration, checkpoint append, validation result recording, status progression, session-turn linking, and device actions.
+
+**Test Requirements:** TEST-MCP-105.
+
 ## TR-MCP-BYRD-005
 
 **Byrd process plan creation requirements** — The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
 **Covered by:** FR: FR-MCP-104; TEST: TEST-MCP-137, TEST-MCP-141
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Byrd process plan creation requirements - The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD.
+- Main flow: Byrd process plan creation requirements - The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then byrd process plan creation requirements - The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
+
+**Test Requirements:** TEST-MCP-137, TEST-MCP-141.
 
 ## TR-MCP-CFG-001
 
@@ -575,6 +1456,18 @@ IOptions-based configuration for all filesystem and runtime settings.
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: IOptions-based configuration for all filesystem and runtime settings.
+- Main flow: IOptions-based configuration for all filesystem and runtime settings.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then IOptions-based configuration for all filesystem and runtime settings.
+
+**Test Requirements:** TEST-MCP-001.
+
 ## TR-MCP-CFG-002
 
 Port selection from `Mcp:Port` with `PORT` env override.
@@ -582,11 +1475,38 @@ Port selection from `Mcp:Port` with `PORT` env override.
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Port selection from Mcp:Port with PORT env override.
+- Main flow: Port selection from Mcp:Port with PORT env override.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then port selection from Mcp:Port with PORT env override.
+
+**Test Requirements:** TEST-MCP-001.
+
 ## TR-MCP-CFG-003
 
 **Workspace Configuration Schema** — Workspace state is persisted in `appsettings.json` under `Mcp:Workspaces` (not in EF/SQLite). Each entry includes: `WorkspacePath` (required, absolute path, primary key), `Name` (required), `WorkspacePort` (required), `TodoPath` (default: `docs/todo.yaml`), `DataDirectory` (optional override for mcp.db), `TunnelProvider` (optional: `ngrok`/`cloudflare`/`frp`), `RunAs` (optional Windows identity), `IsPrimary` (default: false), `IsEnabled` (default: true), `DateTimeCreated`, `DateTimeModified`. Port uniqueness enforced; auto-assignment from `max(existing) + 1`. File written atomically via `JsonNode` patching with `IConfigurationRoot.Reload()`.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Configuration Schema - Workspace state is persisted in appsettings.json under Mcp:Workspaces (not in EF/SQLite).
+- Main flow: Workspace Configuration Schema - Workspace state is persisted in appsettings.json under Mcp:Workspaces (not in EF/SQLite). Each entry includes: WorkspacePath (required, absolute path, primary key), Name (required), WorkspacePort (required), TodoPath (default: docs/todo.yaml), DataDirectory (optional override for mcp.db), TunnelProvider (optional: ngrok/cloudflare/frp), RunAs (optional Windows identity), IsPrimary (default: false), IsEnabled (default: true), DateTimeCreated, DateTimeModified. Port uniqueness enforced; auto-assignment from max(existing) + 1.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Configuration Schema - Workspace state is persisted in appsettings.json under Mcp:Workspaces (not in EF/SQLite).
+- [ ] Given the technical contract, when the implementation is exercised, then each entry includes: WorkspacePath (required, absolute path, primary key), Name (required), WorkspacePort (required), TodoPath (default: docs/todo.yaml), DataDirectory (optional override for mcp.db), TunnelProvider (optional: ngrok/cloudflare/frp), RunAs (optional Windows identity), IsPrimary (default: false), IsEnabled (default: true), DateTimeCreated, DateTimeModified.
+- [ ] Given the technical contract, when the implementation is exercised, then port uniqueness enforced; auto-assignment from max(existing) + 1.
+- [ ] Given the technical contract, when the implementation is exercised, then file written atomically via JsonNode patching with IConfigurationRoot.Reload().
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-CFG-003.
 
 ## TR-MCP-CFG-004
 
@@ -594,6 +1514,20 @@ Scope: layer-1+
 **Covered by:** `Program.cs`, `NetEscapades.Configuration.Yaml`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: YAML Configuration Support - Program.cs calls builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true) using NetEscapades.Configuration.Yaml.
+- Main flow: YAML Configuration Support - Program.cs calls builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true) using NetEscapades.Configuration.Yaml. YAML configuration merges with and can override appsettings.json values. Intended for local-only overrides not committed to source control.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then YAML Configuration Support - Program.cs calls builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true) using NetEscapades.Configuration.Yaml.
+- [ ] Given the technical contract, when the implementation is exercised, then YAML configuration merges with and can override appsettings.json values.
+- [ ] Given the technical contract, when the implementation is exercised, then intended for local-only overrides not committed to source control.
+
+**Test Requirements:** TEST-MCP-053.
 
 ## TR-MCP-CFG-005
 
@@ -609,6 +1543,21 @@ All three share the pattern of a compile-time default overridable via `IOptions<
 **Covered by:** `CopilotClientOptions`, `VoiceConversationOptions`, `AgentDefaults`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: System-Wide Default Copilot Model Propagation - Setting the default Copilot model for all session types requires updates to three locations: - CopilotClientOptions.Model default value (in McpServer.Common.Copilot) -.
+- Main flow: System-Wide Default Copilot Model Propagation - Setting the default Copilot model for all session types requires updates to three locations: - CopilotClientOptions.Model default value (in McpServer.Common.Copilot) - controls server-initiated CLI invocations via ICopilotClient. Configurable at runtime via Mcp:Copilot:Model. - VoiceConversationOptions.CopilotModel default value (in McpServer.Support.Mcp/Options/) - controls voice conversation session model.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then system-Wide Default Copilot Model Propagation - Setting the default Copilot model for all session types requires updates to three locations: - CopilotClientOptions.Model default value (in McpServer.Common.Copilot) - controls server-initiated CLI invocations via ICopilotClient.
+- [ ] Given the technical contract, when the implementation is exercised, then configurable at runtime via Mcp:Copilot:Model.
+- [ ] Given the technical contract, when the implementation is exercised, then - VoiceConversationOptions.CopilotModel default value (in McpServer.Support.Mcp/Options/) - controls voice conversation session model.
+- [ ] Given the technical contract, when the implementation is exercised, then configurable via Mcp:Voice:CopilotModel.
+
+**Test Requirements:** TEST-MCP-BDP-051.
+
 ## TR-MCP-CFG-006
 
 **Administrative Configuration Snapshot and YAML Patch API** — `ConfigurationController` SHALL expose `GET /mcpserver/configuration` returning the current flattened `IConfiguration` view as `section:key` pairs, and `PATCH /mcpserver/configuration` accepting a flattened dictionary that patches only the submitted keys into `appsettings.yaml`.
@@ -619,6 +1568,21 @@ Persistence SHALL be delegated to a dedicated helper service that resolves the c
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (JWT Bearer auth setup), `WorkspaceController` (shared appsettings helper reuse)
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Administrative Configuration Snapshot and YAML Patch API - ConfigurationController SHALL expose GET /mcpserver/configuration returning the current flattened IConfiguration view as section:key pairs, and PATCH.
+- Main flow: Administrative Configuration Snapshot and YAML Patch API - ConfigurationController SHALL expose GET /mcpserver/configuration returning the current flattened IConfiguration view as section:key pairs, and PATCH /mcpserver/configuration accepting a flattened dictionary that patches only the submitted keys into appsettings.yaml. Persistence SHALL be delegated to a dedicated helper service that resolves the correct loaded appsettings file path, serializes concurrent mutations across the full read-modify-write cycle, writes YAML or JSON via temp-file-plus-atomic-replace semantics, and reloads IConfigurationRoot after successful updates. WorkspaceController global-prompt updates SHALL reuse the.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then administrative Configuration Snapshot and YAML Patch API - ConfigurationController SHALL expose GET /mcpserver/configuration returning the current flattened IConfiguration view as section:key pairs, and PATCH /mcpserver/configuration accepting a flattened dictionary that patches only the submitted keys into appsettings.yaml.
+- [ ] Given the technical contract, when the implementation is exercised, then persistence SHALL be delegated to a dedicated helper service that resolves the correct loaded appsettings file path, serializes concurrent mutations across the full read-modify-write cycle, writes YAML or JSON via temp-file-plus-atomic-replace semantics, and reloads IConfigurationRoot after successful updates.
+- [ ] Given the technical contract, when the implementation is exercised, then workspaceController global-prompt updates SHALL reuse the same helper so shared configuration writes obey the same durability and reload guarantees.
+- [ ] The endpoints SHALL use standard JWT Bearer admin authorization and remain closed when OIDC is disabled.
+
+**Test Requirements:** TEST-MCP-091.
+
 ## TR-MCP-CFG-007
 
 **Encryption Configuration and Provider Settings Surface** — `Mcp:Database:Provider` and related connection-string settings SHALL support SQLite, PostgreSQL, and SQL Server selection through appsettings and environment-variable overrides. The configuration surface SHALL expose an explicit optional encryption-enabled flag plus the provider-specific connection, key, and prerequisite settings needed by the selected native at-rest encryption facility. Configuration resolution SHALL be centralized so runtime startup and design-time EF tooling can resolve the same effective provider and encryption inputs.
@@ -626,6 +1590,20 @@ Scope: layer-1+
 
 **Covered by:** `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/appsettings.yaml`, `src/McpServer.Support.Mcp/appsettings.Staging.yaml`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Encryption Configuration and Provider Settings Surface - Mcp:Database:Provider and related connection-string settings SHALL support SQLite, PostgreSQL, and SQL Server selection through appsettings and.
+- Main flow: Encryption Configuration and Provider Settings Surface - Mcp:Database:Provider and related connection-string settings SHALL support SQLite, PostgreSQL, and SQL Server selection through appsettings and environment-variable overrides. The configuration surface SHALL expose an explicit optional encryption-enabled flag plus the provider-specific connection, key, and prerequisite settings needed by the selected native at-rest encryption facility. Configuration resolution SHALL be centralized so runtime startup and design-time EF tooling can resolve the same effective provider and encryption inputs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then encryption Configuration and Provider Settings Surface - Mcp:Database:Provider and related connection-string settings SHALL support SQLite, PostgreSQL, and SQL Server selection through appsettings and environment-variable overrides.
+- [ ] Given the technical contract, when the implementation is exercised, then the configuration surface SHALL expose an explicit optional encryption-enabled flag plus the provider-specific connection, key, and prerequisite settings needed by the selected native at-rest encryption facility.
+- [ ] Given the technical contract, when the implementation is exercised, then configuration resolution SHALL be centralized so runtime startup and design-time EF tooling can resolve the same effective provider and encryption inputs.
+
+**Test Requirements:** TEST-MCP-BDP-077.
 
 ## TR-MCP-CI-001
 
@@ -637,12 +1615,42 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 **Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`, `README.md`, `docs/MCP-SERVER.md`, `docs/RELEASE-CHECKLIST.md`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Azure DevOps Repository Pipeline Definition - The repository SHALL use azure-pipelines.yml as the CI/CD definition for the core repo workflow.
+- Main flow: Azure DevOps Repository Pipeline Definition - The repository SHALL use azure-pipelines.yml as the CI/CD definition for the core repo workflow. The pipeline SHALL trigger on main and develop pushes and pull requests with path filters matching the tracked source, test, docs, script, template, and pipeline-definition files. The pipeline SHALL run repository config validation, restore/build/test the support MCP test project, compute package versioning from GitVersion, publish the server build artifact, lint and link-check documentation, build the DocFX site artifact, run Windows MSIX packaging as a non-blocking job, and pack the client NuGet package.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then azure DevOps Repository Pipeline Definition - The repository SHALL use azure-pipelines.yml as the CI/CD definition for the core repo workflow.
+- [ ] Given the technical contract, when the implementation is exercised, then the pipeline SHALL trigger on main and develop pushes and pull requests with path filters matching the tracked source, test, docs, script, template, and pipeline-definition files.
+- [ ] Given the technical contract, when the implementation is exercised, then the pipeline SHALL run repository config validation, restore/build/test the support MCP test project, compute package versioning from GitVersion, publish the server build artifact, lint and link-check documentation, build the DocFX site artifact, run Windows MSIX packaging as a non-blocking job, and pack the client NuGet package.
+- [ ] Package publication SHALL be branch-conditional: main publishes to nuget.org only when NuGetApiKey is configured, while non-main branches publish to Azure Artifacts only when AzureArtifactsFeedUrl is configured.
+
+**Test Requirements:** TEST-MCP-099.
+
 ## TR-MCP-CLEARSESSION-001
 
 **clear-session skill content contract** — The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST. AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it. AC3 - reload the agent instruction file selected by host: CLAUDE.md for claude/claude-cowork, AGENTS.md otherwise, always after re-reading AGENTS-README-FIRST.yaml, carried verbatim. AC4 - execute the add-profile skill. AC5 - report a readiness summary stating whether context was actually cleared or awaits user action. The skill SHALL be PowerShell-only (no bash/node/.sh references) and present byte-identical in all 8 agent plugin repositories.
 **Covered by:** FR: FR-MCP-CLEARSESSION-001; TEST: TEST-MCP-CLEARSESSION-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: clear-session skill content contract - The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper.
+- Main flow: clear-session skill content contract - The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST. AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it. AC3 - reload the agent instruction file selected by host.
+- Edge cases: clear-session skill content contract - The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then clear-session skill content contract - The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST.
+- [ ] AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it.
+- [ ] Given the technical contract, when the implementation is exercised, then AC3 - reload the agent instruction file selected by host: CLAUDE.md for claude/claude-cowork, AGENTS.md otherwise, always after re-reading AGENTS-README-FIRST.yaml, carried verbatim.
+- [ ] Given the technical contract, when the implementation is exercised, then AC4 - execute the add-profile skill.
+
+**Test Requirements:** TEST-MCP-CLEARSESSION-001.
 
 ## TR-MCP-CLIENT-001
 
@@ -651,12 +1659,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Typed client request bodies are registered for source-generated JSON - Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101.
+- Main flow: Typed client request bodies are registered for source-generated JSON - Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101. McpClientBase serializes every request through the source-generated McpClientJsonContext, whose TypeInfoResolver has no JsonTypeInfo for compiler-generated anonymous types. src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute.
+- Edge cases: src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then typed client request bodies are registered for source-generated JSON - Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101.
+- [ ] Given the technical contract, when the implementation is exercised, then mcpClientBase serializes every request through the source-generated McpClientJsonContext, whose TypeInfoResolver has no JsonTypeInfo for compiler-generated anonymous types.
+- [ ] Given the technical contract, when the implementation is exercised, then src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute.
+- [ ] Given the technical contract, when the implementation is exercised, then every request body in the typed client SHALL be a declared type carrying JsonPropertyName attributes and XML documentation, and SHALL be registered in McpClientJsonContext with JsonSerializable.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
+
 ## TR-MCP-COMP-001
 
 **Workspace Compliance Ban Lists** — `WorkspaceDto`, `WorkspaceCreateRequest`, and `WorkspaceUpdateRequest` include four `List<string>` properties: `BannedLicenses`, `BannedCountriesOfOrigin`, `BannedOrganizations`, `BannedIndividuals`. `MarkerFileService.BuildTemplateContext` exposes these as Handlebars context (null when empty). `DefaultPromptTemplate` uses `{{#if}}` / `{{#each}}` blocks to conditionally render compliance sections. Recognized action types: `license_violation`, `origin_violation`, `origin_review`, `entity_violation`, `dependency_add`.
 **Covered by:** `IWorkspaceService.cs`, `MarkerFileService.cs`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Compliance Ban Lists - WorkspaceDto, WorkspaceCreateRequest, and WorkspaceUpdateRequest include four List<string> properties: BannedLicenses, BannedCountriesOfOrigin, BannedOrganizations, BannedIndividuals.
+- Main flow: Workspace Compliance Ban Lists - WorkspaceDto, WorkspaceCreateRequest, and WorkspaceUpdateRequest include four List<string> properties: BannedLicenses, BannedCountriesOfOrigin, BannedOrganizations, BannedIndividuals. MarkerFileService.BuildTemplateContext exposes these as Handlebars context (null when empty). DefaultPromptTemplate uses {{#if}} / {{#each}} blocks to conditionally render compliance sections.
+- Edge cases: MarkerFileService.BuildTemplateContext exposes these as Handlebars context (null when empty).
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Compliance Ban Lists - WorkspaceDto, WorkspaceCreateRequest, and WorkspaceUpdateRequest include four List<string> properties: BannedLicenses, BannedCountriesOfOrigin, BannedOrganizations, BannedIndividuals.
+- [ ] MarkerFileService.BuildTemplateContext exposes these as Handlebars context (null when empty).
+- [ ] Given the technical contract, when the implementation is exercised, then defaultPromptTemplate uses {{#if}} / {{#each}} blocks to conditionally render compliance sections.
+- [ ] Given the technical contract, when the implementation is exercised, then recognized action types: license_violation, origin_violation, origin_review, entity_violation, dependency_add.
+
+**Test Requirements:** TEST-MCP-BDP-034.
 
 ## TR-MCP-COMP-002
 
@@ -665,12 +1703,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent Values Prompt Sections - DefaultPromptTemplate includes five mandatory non-configurable sections: (1) Absolute Honesty, (2) Correctness Above All, (3) Complete Decision Documentation, (4) Professional.
+- Main flow: Agent Values Prompt Sections - DefaultPromptTemplate includes five mandatory non-configurable sections: (1) Absolute Honesty, (2) Correctness Above All, (3) Complete Decision Documentation, (4) Professional Representation and Audit Trail, (5) Source Attribution. Each section specifies required session log action types (commit, pr_comment, issue_comment, web_reference, design_decision).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Values Prompt Sections - DefaultPromptTemplate includes five mandatory non-configurable sections: (1) Absolute Honesty, (2) Correctness Above All, (3) Complete Decision Documentation, (4) Professional Representation and Audit Trail, (5) Source Attribution.
+- [ ] Given the technical contract, when the implementation is exercised, then each section specifies required session log action types (commit, pr_comment, issue_comment, web_reference, design_decision).
+
+**Test Requirements:** TEST-MCP-BDP-035.
+
 ## TR-MCP-COMP-003
 
 **Session Continuity Protocol** — The `default-marker-prompt` template (YAML) includes Requirements Tracking, Design Decision Logging, and Session Continuity sections. Agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
 **Covered by:** `templates/prompt-templates.yaml` (`default-marker-prompt`), `PromptTemplateService`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Session Continuity Protocol - The default-marker-prompt template (YAML) includes Requirements Tracking, Design Decision Logging, and Session Continuity sections.
+- Main flow: Session Continuity Protocol - The default-marker-prompt template (YAML) includes Requirements Tracking, Design Decision Logging, and Session Continuity sections. Agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then session Continuity Protocol - The default-marker-prompt template (YAML) includes Requirements Tracking, Design Decision Logging, and Session Continuity sections.
+- [ ] Given the technical contract, when the implementation is exercised, then agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
+
+**Test Requirements:** TEST-MCP-BDP-038.
 
 ## TR-MCP-CQRS-001
 
@@ -680,6 +1744,21 @@ Scope: layer-1+
 **Covered by:** `McpServer.Cqrs` project
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Standalone CQRS Library - McpServer.Cqrs published as NuGet package SharpNinja.McpServer.Cqrs.
+- Main flow: Standalone CQRS Library - McpServer.Cqrs published as NuGet package SharpNinja.McpServer.Cqrs. Zero external dependencies beyond Microsoft.Extensions.Logging.Abstractions and Microsoft.Extensions.DependencyInjection.Abstractions. Provides: ICommand<TResult>, IQuery<TResult>, ICommandHandler<TCommand, TResult>, IQueryHandler<TQuery, TResult>, Dispatcher, CallContext, CorrelationId, Result<T>, IPipelineBehavior, and DI registration extensions.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then standalone CQRS Library - McpServer.Cqrs published as NuGet package SharpNinja.McpServer.Cqrs.
+- [ ] Given the technical contract, when the implementation is exercised, then zero external dependencies beyond Microsoft.Extensions.Logging.Abstractions and Microsoft.Extensions.DependencyInjection.Abstractions.
+- [ ] Given the technical contract, when the implementation is exercised, then provides: ICommand<TResult>, IQuery<TResult>, ICommandHandler<TCommand, TResult>, IQueryHandler<TQuery, TResult>, Dispatcher, CallContext, CorrelationId, Result<T>, IPipelineBehavior, and DI registration extensions.
+- [ ] Given the technical contract, when the implementation is exercised, then all dispatched calls are async (Task<Result<T>>).
+
+**Test Requirements:** TEST-MCP-026, TEST-MCP-027, TEST-MCP-028, TEST-MCP-029, TEST-MCP-030, TEST-MCP-031.
+
 ## TR-MCP-CQRS-002
 
 **Decimal Correlation IDs** — `CorrelationId` uses format `{baseId}.{counter}` where `baseId` is a random 8-digit long (stable for the entire call tree) and `counter` is a thread-safe (`Interlocked.Increment`) incrementing integer. Each pipeline step or handler call advances the counter. `CorrelationId.Parse(string)` reconstitutes from string. Propagated via HTTP headers (`X-Correlation-Id`).
@@ -687,6 +1766,21 @@ Scope: layer-1+
 
 **Covered by:** `CorrelationId`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Decimal Correlation IDs - CorrelationId uses format {baseId}.{counter} where baseId is a random 8-digit long (stable for the entire call tree) and counter is a thread-safe (Interlocked.Increment) incrementing integer.
+- Main flow: Decimal Correlation IDs - CorrelationId uses format {baseId}.{counter} where baseId is a random 8-digit long (stable for the entire call tree) and counter is a thread-safe (Interlocked.Increment) incrementing integer. Each pipeline step or handler call advances the counter. CorrelationId.Parse(string) reconstitutes from string.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then decimal Correlation IDs - CorrelationId uses format {baseId}.{counter} where baseId is a random 8-digit long (stable for the entire call tree) and counter is a thread-safe (Interlocked.Increment) incrementing integer.
+- [ ] Given the technical contract, when the implementation is exercised, then each pipeline step or handler call advances the counter.
+- [ ] Given the technical contract, when the implementation is exercised, then correlationId.Parse(string) reconstitutes from string.
+- [ ] Given the technical contract, when the implementation is exercised, then propagated via HTTP headers (X-Correlation-Id).
+
+**Test Requirements:** TEST-MCP-026, TEST-MCP-027, TEST-MCP-028, TEST-MCP-029, TEST-MCP-030, TEST-MCP-031.
 
 ## TR-MCP-CQRS-003
 
@@ -696,6 +1790,20 @@ Scope: layer-1+
 **Covered by:** `Dispatcher`, `DispatcherLogger`, `CallContext`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Dispatcher as ILoggerProvider with Context Registry - Dispatcher implements ILoggerProvider and maintains a ConcurrentDictionary<long, CallContext> of active contexts keyed by CorrelationId.BaseId.
+- Main flow: Dispatcher as ILoggerProvider with Context Registry - Dispatcher implements ILoggerProvider and maintains a ConcurrentDictionary<long, CallContext> of active contexts keyed by CorrelationId.BaseId. DispatcherLogger (created by the provider) extracts correlation IDs from log scopes, looks up the CallContext, and enriches structured log entries with decomposed fields: correlationId, correlationBaseId, correlationStep, operationName, userId, roles, elapsed. CallContext implements ILogger and captures log entries to an internal list.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then dispatcher as ILoggerProvider with Context Registry - Dispatcher implements ILoggerProvider and maintains a ConcurrentDictionary<long, CallContext> of active contexts keyed by CorrelationId.BaseId.
+- [ ] Given the technical contract, when the implementation is exercised, then dispatcherLogger (created by the provider) extracts correlation IDs from log scopes, looks up the CallContext, and enriches structured log entries with decomposed fields: correlationId, correlationBaseId, correlationStep, operationName, userId, roles, elapsed.
+- [ ] Given the technical contract, when the implementation is exercised, then callContext implements ILogger and captures log entries to an internal list.
+
+**Test Requirements:** TEST-MCP-026, TEST-MCP-027, TEST-MCP-028, TEST-MCP-029, TEST-MCP-030, TEST-MCP-031.
+
 ## TR-MCP-CQRS-004
 
 **Automatic Result Monad Logging** — After handler execution, the Dispatcher inspects the `Result<T>`: success results logged at `Debug` level with elapsed time; failures with `Exception` logged at `Error` level with exception details; failures without exception logged at `Warning` level. Dispatch calls themselves logged at `Debug` with full call context. All logging includes decomposed correlation ID fields.
@@ -703,6 +1811,20 @@ Scope: layer-1+
 
 **Covered by:** `Dispatcher`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Automatic Result Monad Logging - After handler execution, the Dispatcher inspects the Result<T>: success results logged at Debug level with elapsed time; failures with Exception logged at Error level with exception.
+- Main flow: Automatic Result Monad Logging - After handler execution, the Dispatcher inspects the Result<T>: success results logged at Debug level with elapsed time; failures with Exception logged at Error level with exception details; failures without exception logged at Warning level. Dispatch calls themselves logged at Debug with full call context. All logging includes decomposed correlation ID fields.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then automatic Result Monad Logging - After handler execution, the Dispatcher inspects the Result<T>: success results logged at Debug level with elapsed time; failures with Exception logged at Error level with exception details; failures without exception logged at Warning level.
+- [ ] Given the technical contract, when the implementation is exercised, then dispatch calls themselves logged at Debug with full call context.
+- [ ] Given the technical contract, when the implementation is exercised, then all logging includes decomposed correlation ID fields.
+
+**Test Requirements:** TEST-MCP-026, TEST-MCP-027, TEST-MCP-028, TEST-MCP-029, TEST-MCP-030, TEST-MCP-031.
 
 ## TR-MCP-CQRS-005
 
@@ -712,6 +1834,21 @@ Scope: layer-1+
 **Covered by:** `IPipelineBehavior`, `Dispatcher`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Pipeline Behaviors - IPipelineBehavior wraps handler execution with pre/post processing.
+- Main flow: Pipeline Behaviors - IPipelineBehavior wraps handler execution with pre/post processing. Behaviors receive the request, CallContext, and a next delegate. Behaviors can short-circuit by returning Result<T>.Failure() without calling next.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then pipeline Behaviors - IPipelineBehavior wraps handler execution with pre/post processing.
+- [ ] Given the technical contract, when the implementation is exercised, then behaviors receive the request, CallContext, and a next delegate.
+- [ ] Given the technical contract, when the implementation is exercised, then behaviors can short-circuit by returning Result<T>.Failure() without calling next.
+- [ ] Given the technical contract, when the implementation is exercised, then registration order determines execution order (outermost first).
+
+**Test Requirements:** TEST-MCP-026, TEST-MCP-027, TEST-MCP-028, TEST-MCP-029, TEST-MCP-030, TEST-MCP-031.
+
 ## TR-MCP-CRYPTO-001
 
 **Transactional Diffgram Cryptography** — Transaction manifests SHALL use canonical JSON, lowercase SHA-256 hashes, ECDSA P-256 signatures, nonces, monotonic sequence scopes, issued/expiry timestamps, diffgram body hashes, and encrypted body hashes. Protected subscriber diffgram envelopes SHALL use ECDH P-256, HKDF-SHA256, and AES-256-GCM with subscriber key-ring support for old and rotated keys.
@@ -720,12 +1857,38 @@ Scope: layer-1+
 **Covered by:** `TransactionSecurityModels`, `TransactionSecurityServices`, `TurnTransactionCoordinator`, `TransactionSecurityStateStores`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transactional Diffgram Cryptography - Transaction manifests SHALL use canonical JSON, lowercase SHA-256 hashes, ECDSA P-256 signatures, nonces, monotonic sequence scopes, issued/expiry timestamps, diffgram body hashes.
+- Main flow: Transactional Diffgram Cryptography - Transaction manifests SHALL use canonical JSON, lowercase SHA-256 hashes, ECDSA P-256 signatures, nonces, monotonic sequence scopes, issued/expiry timestamps, diffgram body hashes, and encrypted body hashes. Protected subscriber diffgram envelopes SHALL use ECDH P-256, HKDF-SHA256, and AES-256-GCM with subscriber key-ring support for old and rotated keys.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transactional Diffgram Cryptography - Transaction manifests SHALL use canonical JSON, lowercase SHA-256 hashes, ECDSA P-256 signatures, nonces, monotonic sequence scopes, issued/expiry timestamps, diffgram body hashes, and encrypted body hashes.
+- [ ] Given the technical contract, when the implementation is exercised, then protected subscriber diffgram envelopes SHALL use ECDH P-256, HKDF-SHA256, and AES-256-GCM with subscriber key-ring support for old and rotated keys.
+
+**Test Requirements:** TEST-MCP-158, TEST-MCP-160, TEST-MCP-166, TEST-MCP-159, TEST-MCP-167.
+
 ## TR-MCP-CTX-001
 
 **New Project Context Indexing** — Repo-local context indexing configuration must include src/McpServer.Cqrs/**/*.cs and src/McpServer.Cqrs.Mvvm/**/*.cs. The marker prompt Available Capabilities section must list only these repo-local core libraries; moved McpServer.UI.Core and McpServer.Director capabilities belong to McpServerManager.
 **Covered by:** FR: FR-MCP-039
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: New Project Context Indexing - Repo-local context indexing configuration must include src/McpServer.Cqrs//*.cs and src/McpServer.Cqrs.Mvvm//*.cs.
+- Main flow: New Project Context Indexing - Repo-local context indexing configuration must include src/McpServer.Cqrs//*.cs and src/McpServer.Cqrs.Mvvm//*.cs. The marker prompt Available Capabilities section must list only these repo-local core libraries; moved McpServer.UI.Core and McpServer.Director capabilities belong to McpServerManager.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then new Project Context Indexing - Repo-local context indexing configuration must include src/McpServer.Cqrs//*.cs and src/McpServer.Cqrs.Mvvm//*.cs.
+- [ ] Given the technical contract, when the implementation is exercised, then the marker prompt Available Capabilities section must list only these repo-local core libraries; moved McpServer.UI.Core and McpServer.Director capabilities belong to McpServerManager.
+
+**Test Requirements:** TEST-MCP-087.
 
 ## TR-MCP-DATA-001
 
@@ -734,12 +1897,36 @@ SQLite persistence for MCP metadata and optional TODO backend.
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SQLite persistence for MCP metadata and optional TODO backend.
+- Main flow: SQLite persistence for MCP metadata and optional TODO backend.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then SQLite persistence for MCP metadata and optional TODO backend.
+
+**Test Requirements:** TEST-MCP-002, TEST-MCP-BDP-003, TEST-MCP-BDP-SUPPORT-010.
+
 ## TR-MCP-DATA-002
 
 HNSW vector index with ONNX embeddings.
 **Covered by:** FR: FR-MCP-004
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: HNSW vector index with ONNX embeddings.
+- Main flow: HNSW vector index with ONNX embeddings.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then HNSW vector index with ONNX embeddings.
+
+**Test Requirements:** TEST-MCP-004.
 
 ## TR-MCP-DATA-003
 
@@ -748,12 +1935,36 @@ SQLite FTS5 full-text search support and hybrid ranking.
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SQLite FTS5 full-text search support and hybrid ranking.
+- Main flow: SQLite FTS5 full-text search support and hybrid ranking.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then SQLite FTS5 full-text search support and hybrid ranking.
+
+**Test Requirements:** TEST-MCP-004.
+
 ## TR-MCP-DB-001
 
 **Database-authoritative workspace registry** — Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
 **Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Database-authoritative workspace registry - Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after.
+- Main flow: Database-authoritative workspace registry - Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then database-authoritative workspace registry - Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
 
 ## TR-MCP-DB-002
 
@@ -762,12 +1973,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace foreign-key integrity - Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+- Main flow: Workspace foreign-key integrity - Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+- Edge cases: Workspace foreign-key integrity - Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace foreign-key integrity - Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
+
 ## TR-MCP-DB-003
 
 **Soft deletes for persistent MCP data** — Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
 **Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Soft deletes for persistent MCP data - Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain.
+- Main flow: Soft deletes for persistent MCP data - Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
+- Edge cases: Soft deletes for persistent MCP data - Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then soft deletes for persistent MCP data - Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
 
 ## TR-MCP-DB-004
 
@@ -776,12 +2011,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Generic audit ledger for mutable data - Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while.
+- Main flow: Generic audit ledger for mutable data - Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then generic audit ledger for mutable data - Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
+
 ## TR-MCP-DB-005
 
 **TODO and requirement relational links** — TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
 **Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: TODO and requirement relational links - TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced.
+- Main flow: TODO and requirement relational links - TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
+- Edge cases: TODO and requirement relational links - TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then TODO and requirement relational links - TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
 
 ## TR-MCP-DB-006
 
@@ -790,12 +2049,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Concurrent turn deletes serialized per session - Concurrent sessionlog_delete_turn operations on a single session SHALL be serialized through a process-wide per-session gate so a burst (observed: 13 parallel deletes).
+- Main flow: Concurrent turn deletes serialized per session - Concurrent sessionlog_delete_turn operations on a single session SHALL be serialized through a process-wide per-session gate so a burst (observed: 13 parallel deletes) cannot exhaust or poison the SQL Server connection pool; deletes on different sessions SHALL still run concurrently; the deployed SqlClient ConnectRetryCount=6/ConnectRetryInterval=10s defaults SHALL be preserved. Acceptance Criteria: (AC1) acquiring the per-session lock for the same key blocks a second acquirer until release, while a different key acquires without blocking (KeyedAsyncLock); (AC2) DeleteTurnAsync continues to soft-delete a turn and refresh the parent turn count.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006.
+
 ## TR-MCP-DESKTOP-001
 
 **Desktop Process Launcher** — `DesktopProcessLauncher` in `Native/` uses P/Invoke (`WTSQueryUserToken`, `DuplicateTokenEx`, `CreateProcessAsUser`) to launch processes on the interactive desktop from a LocalSystem service context. Two launch modes: `LaunchWithStdio` (redirected stdin/stdout/stderr pipes for Copilot CLI integration) and `LaunchVisible` (visible console window, no pipes). `ResolveCommandPathAsync` resolves WinGet shim paths via desktop PowerShell to find actual executable locations. Uses `CreateProcessAsUser` (not `CreateProcessWithTokenW`, which causes `STATUS_DLL_INIT_FAILED` under LocalSystem).
 **Covered by:** `DesktopProcessLauncher`, `NativeMethods`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Desktop Process Launcher - DesktopProcessLauncher in Native/ uses P/Invoke (WTSQueryUserToken, DuplicateTokenEx, CreateProcessAsUser) to launch processes on the interactive desktop from a LocalSystem service context.
+- Main flow: Desktop Process Launcher - DesktopProcessLauncher in Native/ uses P/Invoke (WTSQueryUserToken, DuplicateTokenEx, CreateProcessAsUser) to launch processes on the interactive desktop from a LocalSystem service context. Two launch modes: LaunchWithStdio (redirected stdin/stdout/stderr pipes for Copilot CLI integration) and LaunchVisible (visible console window, no pipes). ResolveCommandPathAsync resolves WinGet shim paths via desktop PowerShell to find actual executable locations.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then desktop Process Launcher - DesktopProcessLauncher in Native/ uses P/Invoke (WTSQueryUserToken, DuplicateTokenEx, CreateProcessAsUser) to launch processes on the interactive desktop from a LocalSystem service context.
+- [ ] Given the technical contract, when the implementation is exercised, then two launch modes: LaunchWithStdio (redirected stdin/stdout/stderr pipes for Copilot CLI integration) and LaunchVisible (visible console window, no pipes).
+- [ ] Given the technical contract, when the implementation is exercised, then resolveCommandPathAsync resolves WinGet shim paths via desktop PowerShell to find actual executable locations.
+- [ ] Given the technical contract, when the implementation is exercised, then uses CreateProcessAsUser (not CreateProcessWithTokenW, which causes STATUS_DLL_INIT_FAILED under LocalSystem).
+
+**Test Requirements:** TEST-MCP-052.
 
 ## TR-MCP-DIR-001
 
@@ -804,12 +2087,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-030, TEST-MCP-035, TEST-MCP-036, TEST-MCP-037, TEST-MCP-038.
+
 ## TR-MCP-DIR-002
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#tr-mcp-dir-002)*
 **Covered by:** FR: FR-MCP-030
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-030, TEST-MCP-035, TEST-MCP-036, TEST-MCP-037, TEST-MCP-038.
 
 ## TR-MCP-DIR-003
 
@@ -818,12 +2125,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-030, TEST-MCP-035, TEST-MCP-036, TEST-MCP-037, TEST-MCP-038, TEST-MCP-BDP-037.
+
 ## TR-MCP-DIR-004
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#tr-mcp-dir-004)*
 **Covered by:** FR: FR-MCP-057
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-072.
 
 ## TR-MCP-DIR-005
 
@@ -832,12 +2163,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-060.
+
 ## TR-MCP-DIR-006
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#tr-mcp-dir-006)*
 **Covered by:** FR: FR-MCP-060
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-060.
 
 ## TR-MCP-DIR-007
 
@@ -846,6 +2201,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-060.
+
 ## TR-MCP-DIR-008
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#tr-mcp-dir-008)*
@@ -853,12 +2220,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: *Moved to Requirements-Director.md*.
+- Main flow: *Moved to Requirements-Director.md*.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then *Moved to Requirements-Director.md*.
+
+**Test Requirements:** TEST-MCP-BDP-060.
+
 ## TR-MCP-DOC-001
 
 **Marketing documentation coverage** — Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio guidance, current pipeline references, and generated requirements wiki parity.
 **Covered by:** FR: FR-MCP-064; TEST: TEST-MCP-147
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Marketing documentation coverage - Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio.
+- Main flow: Marketing documentation coverage - Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio guidance, current pipeline references, and generated requirements wiki parity.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then marketing documentation coverage - Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio guidance, current pipeline references, and generated requirements wiki parity.
+
+**Test Requirements:** TEST-MCP-147.
 
 ## TR-MCP-DOC-002
 
@@ -868,6 +2259,20 @@ Scope: layer-1+
 
 **Covered by:** `.github/copilot-instructions.md`, `AGENTS.md`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Test XML Documentation Completeness *(DIRECTIVE)* - All test projects SHALL include XML documentation comments on test classes and test methods.
+- Main flow: Test XML Documentation Completeness *(DIRECTIVE)* - All test projects SHALL include XML documentation comments on test classes and test methods. Each test XML doc SHALL explicitly specify: what behavior is being tested, what test data/fixtures are used, why that data/fixtures are used, and which requirement IDs are being validated. No test project is exempt from this requirement.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then test XML Documentation Completeness *(DIRECTIVE)* - All test projects SHALL include XML documentation comments on test classes and test methods.
+- [ ] Given the technical contract, when the implementation is exercised, then each test XML doc SHALL explicitly specify: what behavior is being tested, what test data/fixtures are used, why that data/fixtures are used, and which requirement IDs are being validated.
+- [ ] Given the technical contract, when the implementation is exercised, then no test project is exempt from this requirement.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-DOC-002.
 
 ## TR-MCP-DOCFXWIKI-001
 
@@ -883,6 +2288,15 @@ Scope: layer-1+
 - [ ] DocFX output is converted to RequirementsRenderedDocument instances so manifest generation, atomic writes, and stale-file deletion remain single-path behavior.
 - [ ] Cancellation or workflow failure removes staging data and leaves the previously published wiki output unchanged.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Typed and isolated DocFX wiki workflow execution - DocFX workflows must be loaded through typed wiki configuration, executed without a shell through a bounded process abstraction, staged under the workspace, and merged.
+- Main flow: Typed and isolated DocFX wiki workflow execution - DocFX workflows must be loaded through typed wiki configuration, executed without a shell through a bounded process abstraction, staged under the workspace, and merged through the existing requirements wiki renderer and atomic export writer.
+- Edge cases: Each workflow has bounded timeout, output-root, target-root, and platform settings; duplicate target paths and unsupported files fail validation.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-DOCFXWIKI-001.
+
 ## TR-MCP-DRY-001
 
 **DRY - No Duplication in Code or Scripts** *(DIRECTIVE)* - All code and scripts must follow the DRY principle without exception. Shared logic must be extracted into a single reusable location (service, helper, function, shared script module). Inline duplication of validation, parsing, formatting, or business logic across files is prohibited. Scripts must share common operations via parameterized functions or a shared module.
@@ -891,12 +2305,40 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: DRY - No Duplication in Code or Scripts *(DIRECTIVE)* - All code and scripts must follow the DRY principle without exception.
+- Main flow: DRY - No Duplication in Code or Scripts *(DIRECTIVE)* - All code and scripts must follow the DRY principle without exception. Shared logic must be extracted into a single reusable location (service, helper, function, shared script module). Inline duplication of validation, parsing, formatting, or business logic across files is prohibited.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then DRY - No Duplication in Code or Scripts *(DIRECTIVE)* - All code and scripts must follow the DRY principle without exception.
+- [ ] Given the technical contract, when the implementation is exercised, then shared logic must be extracted into a single reusable location (service, helper, function, shared script module).
+- [ ] Given the technical contract, when the implementation is exercised, then inline duplication of validation, parsing, formatting, or business logic across files is prohibited.
+- [ ] Given the technical contract, when the implementation is exercised, then scripts must share common operations via parameterized functions or a shared module.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-DRY-001.
+
 ## TR-MCP-DTO-001
 
 **Extended Session Log Entry Fields** — `UnifiedRequestEntryDto` extended with: `designDecisions` (`List<string>`), `requirementsDiscovered` (`List<string>` of requirement IDs), `filesModified` (`List<string>` of file paths), `blockers` (`List<string>`). All fields are REQUIRED in the marker prompt session logging instructions except `blockers` which is RECOMMENDED.
 **Covered by:** `UnifiedSessionLogDto.cs`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Extended Session Log Entry Fields - UnifiedRequestEntryDto extended with: designDecisions (List<string>), requirementsDiscovered (List<string> of requirement IDs), filesModified (List<string> of file paths), blockers.
+- Main flow: Extended Session Log Entry Fields - UnifiedRequestEntryDto extended with: designDecisions (List<string>), requirementsDiscovered (List<string> of requirement IDs), filesModified (List<string> of file paths), blockers (List<string>). All fields are REQUIRED in the marker prompt session logging instructions except blockers which is RECOMMENDED.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then extended Session Log Entry Fields - UnifiedRequestEntryDto extended with: designDecisions (List<string>), requirementsDiscovered (List<string> of requirement IDs), filesModified (List<string> of file paths), blockers (List<string>).
+- [ ] Given the technical contract, when the implementation is exercised, then all fields are REQUIRED in the marker prompt session logging instructions except blockers which is RECOMMENDED.
+
+**Test Requirements:** TEST-MCP-BDP-038.
 
 ## TR-MCP-EVT-001
 
@@ -905,12 +2347,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: In-Process Change Event Bus - ChannelChangeEventBus SHALL be registered as a singleton IChangeEventBus and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000).
+- Main flow: In-Process Change Event Bus - ChannelChangeEventBus SHALL be registered as a singleton IChangeEventBus and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000) with non-blocking publish behavior. When a subscriber buffer is full, delivery to that subscriber SHALL be rejected and logged at warning level instead of silently discarding already queued events.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then in-Process Change Event Bus - ChannelChangeEventBus SHALL be registered as a singleton IChangeEventBus and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000) with non-blocking publish behavior.
+- [ ] When a subscriber buffer is full, delivery to that subscriber SHALL be rejected and logged at warning level instead of silently discarding already queued events.
+
+**Test Requirements:** TEST-MCP-075, TEST-MCP-076, TEST-MCP-077, TEST-MCP-078, TEST-MCP-079, TEST-MCP-080.
+
 ## TR-MCP-EVT-002
 
 **Service-Layer Mutation Publishing** — Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
 **Covered by:** `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `WorkspaceProcessManager`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Service-Layer Mutation Publishing - Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+- Main flow: Service-Layer Mutation Publishing - Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then service-Layer Mutation Publishing - Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+
+**Test Requirements:** TEST-MCP-075, TEST-MCP-076, TEST-MCP-077, TEST-MCP-078, TEST-MCP-079, TEST-MCP-080.
 
 ## TR-MCP-EVT-003
 
@@ -919,6 +2386,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SSE Delivery Endpoint - EventStreamController SHALL stream notifications as text/event-stream with Cache-Control: no-cache and support optional category filtering via ?category= query parameter.
+- Main flow: SSE Delivery Endpoint - EventStreamController SHALL stream notifications as text/event-stream with Cache-Control: no-cache and support optional category filtering via ?category= query parameter.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then SSE Delivery Endpoint - EventStreamController SHALL stream notifications as text/event-stream with Cache-Control: no-cache and support optional category filtering via ?category= query parameter.
+
+**Test Requirements:** TEST-MCP-075, TEST-MCP-076, TEST-MCP-077, TEST-MCP-078, TEST-MCP-079, TEST-MCP-080.
+
 ## TR-MCP-EVT-004
 
 **Change Event Contract** — Change events SHALL include `Category`, `Action`, optional `EntityId`, optional `ResourceUri`, and UTC `Timestamp` to support correlation by consumers.
@@ -926,12 +2405,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Change Event Contract - Change events SHALL include Category, Action, optional EntityId, optional ResourceUri, and UTC Timestamp to support correlation by consumers.
+- Main flow: Change Event Contract - Change events SHALL include Category, Action, optional EntityId, optional ResourceUri, and UTC Timestamp to support correlation by consumers.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then change Event Contract - Change events SHALL include Category, Action, optional EntityId, optional ResourceUri, and UTC Timestamp to support correlation by consumers.
+
+**Test Requirements:** TEST-MCP-075, TEST-MCP-076, TEST-MCP-077, TEST-MCP-078, TEST-MCP-079, TEST-MCP-080.
+
 ## TR-MCP-EVT-005
 
 **Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
 **Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Notification Category Coverage - The notification system SHALL support at minimum the categories: todo, session_log, repo, context, tool_registry, tool_bucket, workspace, github, marker, agent, and requirements.
+- Main flow: Workspace Notification Category Coverage - The notification system SHALL support at minimum the categories: todo, session_log, repo, context, tool_registry, tool_bucket, workspace, github, marker, agent, and requirements.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Notification Category Coverage - The notification system SHALL support at minimum the categories: todo, session_log, repo, context, tool_registry, tool_bucket, workspace, github, marker, agent, and requirements.
+
+**Test Requirements:** TEST-MCP-075, TEST-MCP-076, TEST-MCP-077, TEST-MCP-078, TEST-MCP-079, TEST-MCP-080.
 
 ## TR-MCP-FAILSAFE-001
 
@@ -941,6 +2444,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Failsafe drain abort markers include backend_unavailable and HTTP 503 and do not burn drainAttempts
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Failsafe drain abort markers include backend_unavailable and HTTP 503 - Test-ReplFailsafeBackendUnreachable matches backend_unavailable and HTTP 503.
+- Main flow: Failsafe drain abort markers include backend_unavailable and HTTP 503 - Test-ReplFailsafeBackendUnreachable matches backend_unavailable and HTTP 503. Invoke-ReplFailsafeDrainOnFirstSuccess does not set completed before a 503 pass and does not increment drainAttempts or quarantine on that abort. Covered by FR-MCP-FAILSAFE-001 TEST-MCP-FAILSAFE-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-FAILSAFE-001.
 
 ## TR-MCP-FED-001
 
@@ -955,6 +2467,15 @@ Scope: layer-1+
 - [ ] LocalProxy queue eligibility rejects local-only, unknown, and non-replayable routes.
 - [ ] Queued replay preserves domain, resource id, body, headers, base version, operation id, source operation id, and global workspace id.
 - [ ] Hub stale-version detection records conflicts and suppresses fanout for stale operations.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Hub Proxy Federation Contract - Federation configuration SHALL include Role, HubBaseUrl, ProxyId, EnrollmentToken, queue settings, and sync settings while preserving existing target/route configuration.
+- Main flow: Hub Proxy Federation Contract - Federation configuration SHALL include Role, HubBaseUrl, ProxyId, EnrollmentToken, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-136, TEST-MCP-MEMORY-FED-001.
 
 ## TR-MCP-FED-MEMORY-001
 
@@ -973,6 +2494,15 @@ Scope: layer-1+
 - [ ] Memory delete is an idempotent soft delete; missing or already deleted rows return applied success.
 - [ ] Workspace-scoped memory rows cannot be applied to a different workspace.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Memory Federation Adapter Contract - Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations.
+- Main flow: Memory Federation Adapter Contract - Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on MemoryEntity.Version. Workspace-scoped memory rows SHALL only apply when the operation GlobalWorkspaceId matches the row owner.
+- Edge cases: Memory create applies only with an explicit valid ID and conflicts on invalid JSON, invalid IDs, deleted duplicates, or duplicate non-identical rows.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-136, TEST-MCP-MEMORY-FED-001.
+
 ## TR-MCP-FILETOOLS-001
 
 **Server-owned repository discovery core** — A single read-only repository discovery service must implement OpenAI-compatible read_file, list_dir, and grep_files behavior while enforcing active-workspace containment, allowlists, traversal rejection, and reparse-point safety.
@@ -985,6 +2515,15 @@ Scope: layer-1+
 - [ ] grep_files applies bounded regex search, optional glob filtering, a 30-second bound, a 2000-result maximum, and modification-time ordering.
 - [ ] All paths remain inside the active workspace and pass existing allowlist and reparse-point protections.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Server-owned repository discovery core - A single read-only repository discovery service must implement OpenAI-compatible read_file, list_dir, and grep_files behavior while enforcing active-workspace containment.
+- Main flow: Server-owned repository discovery core - A single read-only repository discovery service must implement OpenAI-compatible read_file, list_dir, and grep_files behavior while enforcing active-workspace containment, allowlists, traversal rejection, and reparse-point safety.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-FILETOOLS-001, TEST-MCP-FILETOOLSINT-001.
+
 ## TR-MCP-GH-001
 
 **GitHub OAuth Bootstrap Configuration Contract** — The server SHALL bind GitHub integration settings from `Mcp:GitHub`, including OAuth client metadata (`ClientId`, `RedirectUri`, `AuthorizeEndpoint`, `Scopes`) and token store path/fallback policy flags. REST endpoints under `/mcpserver/gh/oauth/*` SHALL expose the effective bootstrap configuration and authorize URL composition.
@@ -992,6 +2531,19 @@ Scope: layer-1+
 
 **Covered by:** `GitHubIntegrationOptions`, `Program.cs` options binding/post-configure, `McpStdioHost` options binding/post-configure, `GitHubController` (`/oauth/config`, `/oauth/authorize-url`)
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: GitHub OAuth Bootstrap Configuration Contract - The server SHALL bind GitHub integration settings from Mcp:GitHub, including OAuth client metadata (ClientId, RedirectUri, AuthorizeEndpoint, Scopes) and token store.
+- Main flow: GitHub OAuth Bootstrap Configuration Contract - The server SHALL bind GitHub integration settings from Mcp:GitHub, including OAuth client metadata (ClientId, RedirectUri, AuthorizeEndpoint, Scopes) and token store path/fallback policy flags. REST endpoints under /mcpserver/gh/oauth/* SHALL expose the effective bootstrap configuration and authorize URL composition.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub OAuth Bootstrap Configuration Contract - The server SHALL bind GitHub integration settings from Mcp:GitHub, including OAuth client metadata (ClientId, RedirectUri, AuthorizeEndpoint, Scopes) and token store path/fallback policy flags.
+- [ ] Given the technical contract, when the implementation is exercised, then REST endpoints under /mcpserver/gh/oauth/* SHALL expose the effective bootstrap configuration and authorize URL composition.
+
+**Test Requirements:** TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, TEST-MCP-093.
 
 ## TR-MCP-GH-002
 
@@ -1001,6 +2553,19 @@ Scope: layer-1+
 **Covered by:** `IGitHubWorkspaceTokenStore`, `FileGitHubWorkspaceTokenStore`, `GitHubController` auth endpoints, `Program.cs` DI registration
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Encrypted Workspace GitHub Token Persistence - Workspace GitHub tokens SHALL be stored encrypted-at-rest using ASP.NET Core Data Protection with atomic file writes and normalized workspace-path keys.
+- Main flow: Encrypted Workspace GitHub Token Persistence - Workspace GitHub tokens SHALL be stored encrypted-at-rest using ASP.NET Core Data Protection with atomic file writes and normalized workspace-path keys. The server SHALL expose /mcpserver/gh/auth/status, /mcpserver/gh/auth/token (PUT), and /mcpserver/gh/auth/token (DELETE) for token lifecycle management.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then encrypted Workspace GitHub Token Persistence - Workspace GitHub tokens SHALL be stored encrypted-at-rest using ASP.NET Core Data Protection with atomic file writes and normalized workspace-path keys.
+- [ ] Given the technical contract, when the implementation is exercised, then the server SHALL expose /mcpserver/gh/auth/status, /mcpserver/gh/auth/token (PUT), and /mcpserver/gh/auth/token (DELETE) for token lifecycle management.
+
+**Test Requirements:** TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, TEST-MCP-093.
+
 ## TR-MCP-GH-003
 
 **Authenticated GitHub CLI Execution Path with Policy-Governed Fallback** — GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as `GH_TOKEN` when present. The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on `AllowCliFallback`. When a workspace path is known, gh commands SHALL execute with that workspace root as the working directory.
@@ -1008,6 +2573,20 @@ Scope: layer-1+
 
 **Covered by:** `IProcessRunner` (`ProcessRunRequest` overload), `ProcessRunner`, `GitHubCliService` token resolution + auth-mode selection logs, `GitHubIntegrationOptions`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Authenticated GitHub CLI Execution Path with Policy-Governed Fallback - GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as GH_TOKEN when present.
+- Main flow: Authenticated GitHub CLI Execution Path with Policy-Governed Fallback - GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as GH_TOKEN when present. The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on AllowCliFallback. When a workspace path is known, gh commands SHALL execute with that workspace root as the working directory.
+- Edge cases: The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on AllowCliFallback.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Authenticated GitHub CLI Execution Path with Policy-Governed Fallback - GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as GH_TOKEN when present.
+- [ ] The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on AllowCliFallback.
+- [ ] When a workspace path is known, gh commands SHALL execute with that workspace root as the working directory.
+
+**Test Requirements:** TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, TEST-MCP-093.
 
 ## TR-MCP-GH-004
 
@@ -1017,6 +2596,18 @@ Scope: layer-1+
 **Covered by:** `IGitHubCliService`, `GitHubCliService`, `GitHubController` actions endpoints, `McpServer.Client` (`GitHubClient`, `Models/GitHubModels.cs`)
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: GitHub Actions Workflow Run API Surface - The server SHALL support workflow run list/detail/rerun/cancel operations via gh CLI and expose them at /mcpserver/gh/actions/runs* with typed model contracts and client parity.
+- Main flow: GitHub Actions Workflow Run API Surface - The server SHALL support workflow run list/detail/rerun/cancel operations via gh CLI and expose them at /mcpserver/gh/actions/runs* with typed model contracts and client parity.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub Actions Workflow Run API Surface - The server SHALL support workflow run list/detail/rerun/cancel operations via gh CLI and expose them at /mcpserver/gh/actions/runs* with typed model contracts and client parity.
+
+**Test Requirements:** TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, TEST-MCP-093.
+
 ## TR-MCP-GH-005
 
 **Workspace-Scoped gh Repository Execution** — GitHub issue and sync operations that rely on the local gh CLI SHALL execute inside the resolved workspace root so repository-scoped gh commands run against the correct checkout. This SHALL apply to both stored-token and fallback-auth execution modes.
@@ -1024,6 +2615,19 @@ Scope: layer-1+
 
 **Covered by:** `WorkspaceServiceAccessor`, `GitHubCliService`, `ProcessRunRequest`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace-Scoped gh Repository Execution - GitHub issue and sync operations that rely on the local gh CLI SHALL execute inside the resolved workspace root so repository-scoped gh commands run against the correct checkout.
+- Main flow: Workspace-Scoped gh Repository Execution - GitHub issue and sync operations that rely on the local gh CLI SHALL execute inside the resolved workspace root so repository-scoped gh commands run against the correct checkout. This SHALL apply to both stored-token and fallback-auth execution modes.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace-Scoped gh Repository Execution - GitHub issue and sync operations that rely on the local gh CLI SHALL execute inside the resolved workspace root so repository-scoped gh commands run against the correct checkout.
+- [ ] Given the technical contract, when the implementation is exercised, then this SHALL apply to both stored-token and fallback-auth execution modes.
+
+**Test Requirements:** TEST-MCP-BDP-032, TEST-MCP-092.
 
 ## TR-MCP-GH-006
 
@@ -1033,6 +2637,19 @@ Scope: layer-1+
 **Covered by:** `IssueTodoSyncService`, `GitHubCliService`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments - TODO-to-GitHub issue sync SHALL canonicalize priority labels to priority: HIGH|MEDIUM|LOW, SHALL remove stale or.
+- Main flow: Canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments - TODO-to-GitHub issue sync SHALL canonicalize priority labels to priority: HIGH|MEDIUM|LOW, SHALL remove stale or non-canonical priority labels, and SHALL treat the MCP TODO priority as authoritative even if GitHub labels drift. GitHub-to-TODO refresh for existing ISSUE-* items SHALL preserve the current local priority and description, and endpoint-triggered ISSUE updates SHALL add a GitHub issue comment that summarizes the applied local change set after sync completes.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments - TODO-to-GitHub issue sync SHALL canonicalize priority labels to priority: HIGH|MEDIUM|LOW, SHALL remove stale or non-canonical priority labels, and SHALL treat the MCP TODO priority as authoritative even if GitHub labels drift.
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub-to-TODO refresh for existing ISSUE-* items SHALL preserve the current local priority and description, and endpoint-triggered ISSUE updates SHALL add a GitHub issue comment that summarizes the applied local change set after sync completes.
+
+**Test Requirements:** TEST-MCP-094.
+
 ## TR-MCP-GH-007
 
 **Generated GitHub Comment Note Sections and TODO Comment Round-Trip** — GitHub-to-TODO sync for existing `ISSUE-*` items SHALL rebuild a generated note section that contains GitHub issue comments inside explicit begin/end markers, SHALL preserve user-authored TODO note text outside that generated section, and SHALL continue to avoid mutating the established TODO description. TODO-to-GitHub comment export SHALL detect newly appended user-authored note text and publish that text as a GitHub issue comment rather than collapsing the change to a generic note-update summary. When GitHub marks the issue closed, the next GitHub-to-TODO sync SHALL reconcile the TODO as done.
@@ -1041,12 +2658,38 @@ Scope: layer-1+
 **Covered by:** `IssueTodoSyncService`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Generated GitHub Comment Note Sections and TODO Comment Round-Trip - GitHub-to-TODO sync for existing ISSUE-* items SHALL rebuild a generated note section that contains GitHub issue comments inside explicit begin/end.
+- Main flow: Generated GitHub Comment Note Sections and TODO Comment Round-Trip - GitHub-to-TODO sync for existing ISSUE-* items SHALL rebuild a generated note section that contains GitHub issue comments inside explicit begin/end markers, SHALL preserve user-authored TODO note text outside that generated section, and SHALL continue to avoid mutating the established TODO description. TODO-to-GitHub comment export SHALL detect newly appended user-authored note text and publish that text as a GitHub issue comment rather than collapsing the change to a generic note-update summary. When GitHub marks the issue closed, the next GitHub-to-TODO sync SHALL reconcile the TODO as done.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then generated GitHub Comment Note Sections and TODO Comment Round-Trip - GitHub-to-TODO sync for existing ISSUE-* items SHALL rebuild a generated note section that contains GitHub issue comments inside explicit begin/end markers, SHALL preserve user-authored TODO note text outside that generated section, and SHALL continue to avoid mutating the established TODO description.
+- [ ] Given the technical contract, when the implementation is exercised, then TODO-to-GitHub comment export SHALL detect newly appended user-authored note text and publish that text as a GitHub issue comment rather than collapsing the change to a generic note-update summary.
+- [ ] When GitHub marks the issue closed, the next GitHub-to-TODO sync SHALL reconcile the TODO as done.
+
+**Test Requirements:** TEST-MCP-095.
+
 ## TR-MCP-GH-008
 
 **Ownership-safe GitHub CLI repository selection** — GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a command-scoped safe.directory Git configuration for the active workspace when a workspace working directory is required.
 **Covered by:** FR: FR-MCP-116; TEST: TEST-MCP-156
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Ownership-safe GitHub CLI repository selection - GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a.
+- Main flow: Ownership-safe GitHub CLI repository selection - GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a command-scoped safe.directory Git configuration for the active workspace when a workspace working directory is required.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Ownership-safe GitHub CLI repository selection - GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a command-scoped safe.directory Git configuration for the active workspace when a workspace working directory is required.
+
+**Test Requirements:** TEST-MCP-156.
 
 ## TR-MCP-HEALTH-002
 
@@ -1058,12 +2701,36 @@ Scope: layer-1+
 - [x] WorkspaceReadinessHealthCheck is registered as AddCheck with "workspace-ready" tag on /ready endpoint.
 - [x] Returns Unhealthy when !WorkspaceTokenService.IsInitialized, when no enabled workspace is registered, or when primary workspace has no seeded token.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceReadinessHealthCheck - A new IHealthCheck registered as AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]) and surfaced on /ready.
+- Main flow: WorkspaceReadinessHealthCheck - A new IHealthCheck registered as AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]) and surfaced on /ready. It returns Unhealthy when !WorkspaceTokenService.IsInitialized, when no enabled workspace is registered, or when the primary workspace has no seeded token; Healthy otherwise.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-HEALTH-002, TEST-MCP-HEALTH-003.
+
 ## TR-MCP-HEALTH-003
 
 **Health reflects storage reachability and backend errors are typed** — Implements FR-MCP-143 and closes BUG-TRIAGE-096. GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails. Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and the plugin wrapper returned an opaque 30-second timeout, so no caller could tell that storage was simply down. The server SHALL expose storage reachability on the health path, either by degrading the status or by an explicit storage field, WITHOUT breaking the nonce echo that marker trust bootstrap depends on. Backend-unavailable conditions SHALL surface as one typed error consistently across REST and the MCP tools, distinguishable from a malformed request. Coverage SHALL simulate an unreachable store and assert the misleading Healthy result before the fix.
 **Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Health reflects storage reachability and backend errors are typed - Implements FR-MCP-143 and closes BUG-TRIAGE-096.
+- Main flow: Health reflects storage reachability and backend errors are typed - Implements FR-MCP-143 and closes BUG-TRIAGE-096. GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails. Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred".
+- Edge cases: Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then health reflects storage reachability and backend errors are typed - Implements FR-MCP-143 and closes BUG-TRIAGE-096.
+- [ ] GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails.
+- [ ] Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and the plugin wrapper returned an opaque 30-second timeout, so no caller could tell that storage was simply down.
+- [ ] Given the technical contract, when the implementation is exercised, then the server SHALL expose storage reachability on the health path, either by degrading the status or by an explicit storage field, WITHOUT breaking the nonce echo that marker trust bootstrap depends on.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
 
 ## TR-MCP-HELP-001
 
@@ -1072,12 +2739,36 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent Help options and startup validation - AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident.
+- Main flow: Agent Help options and startup validation - AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
+- Edge cases: Agent Help options and startup validation - AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Help options and startup validation - AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
+
+**Test Requirements:** TEST-MCP-HELP-004.
+
 ## TR-MCP-HELP-002
 
 **Agent Help HTTP and WebSocket API surface** — AgentHelpController exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under /mcpserver/agent-help.
 **Covered by:** FR: FR-MCP-HELP-001, FR-MCP-HELP-008; TEST: TEST-MCP-HELP-004, TEST-MCP-HELP-005, TEST-MCP-HELP-SEC-007
 **Status:** completed
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent Help HTTP and WebSocket API surface - AgentHelpController exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under /mcpserver/agent-help.
+- Main flow: Agent Help HTTP and WebSocket API surface - AgentHelpController exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under /mcpserver/agent-help.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then agent Help HTTP and WebSocket API surface - AgentHelpController exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under /mcpserver/agent-help.
+
+**Test Requirements:** TEST-MCP-HELP-004, TEST-MCP-HELP-005, TEST-MCP-HELP-SEC-007.
 
 ## TR-MCP-HELP-003
 
@@ -1086,12 +2777,36 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Help transcript JSONL writer - HelpTranscriptWriter appends one JSON object per line under the configured transcript directory and reads all entries for a session.
+- Main flow: Help transcript JSONL writer - HelpTranscriptWriter appends one JSON object per line under the configured transcript directory and reads all entries for a session.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then help transcript JSONL writer - HelpTranscriptWriter appends one JSON object per line under the configured transcript directory and reads all entries for a session.
+
+**Test Requirements:** TEST-MCP-HELP-001, TEST-MCP-HELP-005.
+
 ## TR-MCP-HELP-004
 
 **Deterministic inbound guard** — AgentHelpInboundGuard applies stable injection and benign-bypass rules before helper execution.
 **Covered by:** FR: FR-MCP-HELP-002; TEST: TEST-MCP-HELP-002, TEST-MCP-HELP-SEC-001, TEST-MCP-HELP-SEC-002, TEST-MCP-HELP-SEC-003, TEST-MCP-HELP-SEC-004, TEST-MCP-HELP-SEC-005, TEST-MCP-HELP-SEC-006
 **Status:** completed
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Deterministic inbound guard - AgentHelpInboundGuard applies stable injection and benign-bypass rules before helper execution.
+- Main flow: Deterministic inbound guard - AgentHelpInboundGuard applies stable injection and benign-bypass rules before helper execution.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then deterministic inbound guard - AgentHelpInboundGuard applies stable injection and benign-bypass rules before helper execution.
+
+**Test Requirements:** TEST-MCP-HELP-002, TEST-MCP-HELP-SEC-001, TEST-MCP-HELP-SEC-002, TEST-MCP-HELP-SEC-003, TEST-MCP-HELP-SEC-004, TEST-MCP-HELP-SEC-005, TEST-MCP-HELP-SEC-006.
 
 ## TR-MCP-HELP-005
 
@@ -1100,12 +2815,36 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Guard incident JSON logger - AgentHelpIncidentLogger writes one incident file per blocked inbound message and supports session-scoped reads.
+- Main flow: Guard incident JSON logger - AgentHelpIncidentLogger writes one incident file per blocked inbound message and supports session-scoped reads.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then guard incident JSON logger - AgentHelpIncidentLogger writes one incident file per blocked inbound message and supports session-scoped reads.
+
+**Test Requirements:** TEST-MCP-HELP-003, TEST-MCP-HELP-SEC-006.
+
 ## TR-MCP-HELP-006
 
 **Stub corpus bootstrap** — AgentHelpCorpusService returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
 **Covered by:** FR: FR-MCP-HELP-005; TEST: TEST-MCP-HELP-004
 **Status:** completed
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Stub corpus bootstrap - AgentHelpCorpusService returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
+- Main flow: Stub corpus bootstrap - AgentHelpCorpusService returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Stub corpus bootstrap - AgentHelpCorpusService returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
+
+**Test Requirements:** TEST-MCP-HELP-004.
 
 ## TR-MCP-HELP-007
 
@@ -1114,12 +2853,36 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: In-memory conversation orchestration - AgentHelpConversationService maintains the session registry, evaluates inbound guards, executes helper turns, and coordinates transcript and incident persistence.
+- Main flow: In-memory conversation orchestration - AgentHelpConversationService maintains the session registry, evaluates inbound guards, executes helper turns, and coordinates transcript and incident persistence.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then in-memory conversation orchestration - AgentHelpConversationService maintains the session registry, evaluates inbound guards, executes helper turns, and coordinates transcript and incident persistence.
+
+**Test Requirements:** TEST-MCP-HELP-004, TEST-MCP-HELP-005.
+
 ## TR-MCP-HELP-008
 
 **Outcome analysis recommendations** — AgentHelpOutcomeService derives triage and documentation TODO recommendations from help session transcripts and incidents.
 **Covered by:** FR: FR-MCP-HELP-005; TEST: TEST-MCP-HELP-004
 **Status:** completed
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Outcome analysis recommendations - AgentHelpOutcomeService derives triage and documentation TODO recommendations from help session transcripts and incidents.
+- Main flow: Outcome analysis recommendations - AgentHelpOutcomeService derives triage and documentation TODO recommendations from help session transcripts and incidents.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then outcome analysis recommendations - AgentHelpOutcomeService derives triage and documentation TODO recommendations from help session transcripts and incidents.
+
+**Test Requirements:** TEST-MCP-HELP-004.
 
 ## TR-MCP-HELP-009
 
@@ -1128,6 +2891,18 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: MCP STDIO and typed client adapters - FwhMcpTools.AgentHelp exposes agent_help tools; AgentHelpClient and McpServerClient.AgentHelp mirror the REST controller contracts.
+- Main flow: MCP STDIO and typed client adapters - FwhMcpTools.AgentHelp exposes agent_help tools; AgentHelpClient and McpServerClient.AgentHelp mirror the REST controller contracts.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then MCP STDIO and typed client adapters - FwhMcpTools.AgentHelp exposes agent_help tools; AgentHelpClient and McpServerClient.AgentHelp mirror the REST controller contracts.
+
+**Test Requirements:** TEST-MCP-HELP-006, TEST-MCP-HELP-007, TEST-MCP-HELP-008.
+
 ## TR-MCP-HELP-010
 
 **GrokCliAgentExecutionStrategy one-shot grok invocation** — GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable via ProcessEnvironmentService, be registered in AddAgentExecutionStrategies, and be resolvable by name grok-cli with grok-build normalizing to grok-cli; AgentHelpOptions.DefaultExecutionStrategy defaults to grok-cli.
@@ -1135,12 +2910,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: GrokCliAgentExecutionStrategy one-shot grok invocation - GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable.
+- Main flow: GrokCliAgentExecutionStrategy one-shot grok invocation - GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable via ProcessEnvironmentService, be registered in AddAgentExecutionStrategies, and be resolvable by name grok-cli with grok-build normalizing to grok-cli; AgentHelpOptions.DefaultExecutionStrategy defaults to grok-cli.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then grokCliAgentExecutionStrategy one-shot grok invocation - GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable via ProcessEnvironmentService, be registered in AddAgentExecutionStrategies, and be resolvable by name grok-cli with grok-build normalizing to grok-cli; AgentHelpOptions.DefaultExecutionStrategy defaults to grok-cli.
+
+**Test Requirements:** TEST-MCP-HELP-008.
+
 ## TR-MCP-HTTP-001
 
 **MCP Streamable HTTP Endpoint** — `app.MapMcp("/mcp-transport")` maps the native MCP protocol handler at a path separate from the REST routes (`/mcpserver/*`). The endpoint requires an `Accept: application/json, text/event-stream` header and returns HTTP 406 without it. Uses `ModelContextProtocol.AspNetCore` 0.9.0-preview.1.
 **Covered by:** FR: FR-MCP-016, FR-MCP-042
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: MCP Streamable HTTP Endpoint - app.MapMcp("/mcp-transport") maps the native MCP protocol handler at a path separate from the REST routes (/mcpserver/*).
+- Main flow: MCP Streamable HTTP Endpoint - app.MapMcp("/mcp-transport") maps the native MCP protocol handler at a path separate from the REST routes (/mcpserver/*). The endpoint requires an Accept: application/json, text/event-stream header and returns HTTP 406 without it. Uses ModelContextProtocol.AspNetCore 0.9.0-preview.1.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then MCP Streamable HTTP Endpoint - app.MapMcp("/mcp-transport") maps the native MCP protocol handler at a path separate from the REST routes (/mcpserver/*).
+- [ ] Given the technical contract, when the implementation is exercised, then the endpoint requires an Accept: application/json, text/event-stream header and returns HTTP 406 without it.
+- [ ] Given the technical contract, when the implementation is exercised, then uses ModelContextProtocol.AspNetCore 0.9.0-preview.1.
+
+**Test Requirements:** TEST-MCP-012, TEST-MCP-043.
 
 ## TR-MCP-HTTP-002
 
@@ -1150,12 +2951,38 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Support.Mcp/Program.cs` `InvalidModelStateResponseFactory` (centralized RFC 7807 ProblemDetails emission for binder/validation failures, paired with `ValidationProblem` / `Problem` controller helpers for domain errors); `SessionLogController.SubmitAsync` and `GetByIdAsync` route through the centralized path. Sanitization defers to ASP.NET Core's default ProblemDetails serialization, which omits stack traces outside the Development environment.
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Detailed and Sanitized HTTP 500 Error Contract - All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing.
+- Main flow: Detailed and Sanitized HTTP 500 Error Contract - All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller. The contract SHALL be applied centrally so endpoint implementations do not duplicate exception-to-response formatting. Response detail SHALL be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces, while server-side logs SHALL retain the full exception detail needed for root-cause analysis.
+- Edge cases: Detailed and Sanitized HTTP 500 Error Contract - All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then detailed and Sanitized HTTP 500 Error Contract - All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller.
+- [ ] Given the technical contract, when the implementation is exercised, then the contract SHALL be applied centrally so endpoint implementations do not duplicate exception-to-response formatting.
+- [ ] Given the technical contract, when the implementation is exercised, then response detail SHALL be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces, while server-side logs SHALL retain the full exception detail needed for root-cause analysis.
+
+**Test Requirements:** TEST-MCP-090, TEST-MCP-BDP-SUPPORT-013.
+
 ## TR-MCP-INGEST-001
 
 Pluggable ingestors for repo/session/external/github/issues.
 **Covered by:** FR: FR-MCP-003, FR-MCP-005, FR-MCP-006, FR-SUPPORT-010
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Pluggable ingestors for repo/session/external/github/issues.
+- Main flow: Pluggable ingestors for repo/session/external/github/issues.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then pluggable ingestors for repo/session/external/github/issues.
+
+**Test Requirements:** TEST-MCP-BDP-003, TEST-MCP-005, TEST-MCP-BDP-006, TEST-MCP-BDP-SUPPORT-010.
 
 ## TR-MCP-INGEST-002
 
@@ -1164,12 +2991,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Markdown Session Log Parser - MarkdownSessionLogParser.TryParse recognizes Markdown files with a # Session Log - {title} or # Copilot Session Log - {title} header and parses them into UnifiedSessionLogDto.
+- Main flow: Markdown Session Log Parser - MarkdownSessionLogParser.TryParse recognizes Markdown files with a # Session Log - {title} or # Copilot Session Log - {title} header and parses them into UnifiedSessionLogDto. Extracts date, status, branch, model, duration, and known sections (Session Overview, Changes Made, Technical Requirements, Testing, etc.) as a summary entry. Individual ### Request subsections are parsed as separate UnifiedRequestEntryDto entries.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then markdown Session Log Parser - MarkdownSessionLogParser.TryParse recognizes Markdown files with a # Session Log - {title} or # Copilot Session Log - {title} header and parses them into UnifiedSessionLogDto.
+- [ ] Given the technical contract, when the implementation is exercised, then extracts date, status, branch, model, duration, and known sections (Session Overview, Changes Made, Technical Requirements, Testing, etc.) as a summary entry.
+- [ ] Given the technical contract, when the implementation is exercised, then individual ### Request subsections are parsed as separate UnifiedRequestEntryDto entries.
+- [ ] Given the technical contract, when the implementation is exercised, then normalizeToStructuredText produces a structured plain-text representation for FTS5 and vector embedding.
+
+**Test Requirements:** TEST-MCP-BDP-006, TEST-MCP-015.
+
 ## TR-MCP-INGEST-003
 
 **Direct Website URL Ingestion** — Add `WebsiteIngestor` with a dedicated `HttpClient` and bounded crawl behavior. Only `http`/`https` URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs). Redirects are bounded and re-validated at each hop. Per-request controls include max pages, max depth, max bytes per page, force refresh, and optional GraphRAG index trigger. Ingested pages upsert as `SourceType=external-web` with canonical URL source keys and deterministic document IDs.
 **Covered by:** FR: FR-MCP-065
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Direct Website URL Ingestion - Add WebsiteIngestor with a dedicated HttpClient and bounded crawl behavior.
+- Main flow: Direct Website URL Ingestion - Add WebsiteIngestor with a dedicated HttpClient and bounded crawl behavior. Only http/https URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then direct Website URL Ingestion - Add WebsiteIngestor with a dedicated HttpClient and bounded crawl behavior.
+- [ ] Given the technical contract, when the implementation is exercised, then only http/https URLs are allowed.
+- [ ] Given the technical contract, when the implementation is exercised, then SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs).
+- [ ] Given the technical contract, when the implementation is exercised, then redirects are bounded and re-validated at each hop.
+
+**Test Requirements:** TEST-MCP-088.
 
 ## TR-MCP-KEYSERVER-001
 
@@ -1179,11 +3036,39 @@ Scope: layer-1+
 **Covered by:** `McpServer.KeyServer`, `KeyServerController`, `KeyServerClient`, `HttpKeyServerManifestService`, `TransactionSecurityServices`, `TransactionSecurityOptions`, `TransactionSecurityServiceCollectionExtensions`, `TransactionSecurityStateStores`, `TransactionSecurityModels`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transaction Keyserver Service - Provide shared keyserver services and a separate McpServer.KeyServer host with service-local SQLite storage, party/key registry, public-key descriptors, manifest sign/verify endpoints.
+- Main flow: Transaction Keyserver Service - Provide shared keyserver services and a separate McpServer.KeyServer host with service-local SQLite storage, party/key registry, public-key descriptors, manifest sign/verify endpoints, replay nonce and sequence checks, expiry checks, signed manifest trace persistence/reporting, audit records, XMLDocs, typed client contracts, and health endpoint. Private signing material may be provisioned from file-backed startup configuration but must not be returned or logged.
+- Edge cases: Private signing material may be provisioned from file-backed startup configuration but must not be returned or logged.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transaction Keyserver Service - Provide shared keyserver services and a separate McpServer.KeyServer host with service-local SQLite storage, party/key registry, public-key descriptors, manifest sign/verify endpoints, replay nonce and sequence checks, expiry checks, signed manifest trace persistence/reporting, audit records, XMLDocs, typed client contracts, and health endpoint.
+- [ ] Given the technical contract, when the implementation is exercised, then private signing material may be provisioned from file-backed startup configuration but must not be returned or logged.
+
+**Test Requirements:** TEST-MCP-158, TEST-MCP-160, TEST-MCP-166.
+
 ## TR-MCP-LOG-001
 
 **Exception Logging in Catch Blocks** *(DIRECTIVE)* - Every `catch` block that handles an exception must log the exception. Unexpected exceptions must use `LogError` with `ex.ToString()` as the message body. Expected/anticipated exceptions (e.g., `OperationCanceledException` on shutdown, `InvalidOperationException` for process-already-exited races, validation exceptions returned as HTTP 4xx) must use `LogWarning` with `ex.ToString()`. Catch blocks must not silently swallow exceptions with empty bodies or comments-only. The only permitted exception is re-throwing (`throw;`) without logging, where the exception will be logged by an outer handler.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Exception Logging in Catch Blocks *(DIRECTIVE)* - Every catch block that handles an exception must log the exception.
+- Main flow: Exception Logging in Catch Blocks *(DIRECTIVE)* - Every catch block that handles an exception must log the exception. Unexpected exceptions must use LogError with ex.ToString() as the message body. Expected/anticipated exceptions (e.g., OperationCanceledException on shutdown, InvalidOperationException for process-already-exited races, validation exceptions returned as HTTP 4xx) must use LogWarning with ex.ToString().
+- Edge cases: Catch blocks must not silently swallow exceptions with empty bodies or comments-only.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then exception Logging in Catch Blocks *(DIRECTIVE)* - Every catch block that handles an exception must log the exception.
+- [ ] Given the technical contract, when the implementation is exercised, then unexpected exceptions must use LogError with ex.ToString() as the message body.
+- [ ] Given the technical contract, when the implementation is exercised, then expected/anticipated exceptions (e.g., OperationCanceledException on shutdown, InvalidOperationException for process-already-exited races, validation exceptions returned as HTTP 4xx) must use LogWarning with ex.ToString().
+- [ ] Given the technical contract, when the implementation is exercised, then catch blocks must not silently swallow exceptions with empty bodies or comments-only.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-LOG-001.
 
 ## TR-MCP-LOG-002
 
@@ -1193,6 +3078,21 @@ Scope: layer-1+
 **Covered by:** `TodoValidator`, `TodoService`, `EfTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Identifier Naming Validation - TodoValidator SHALL validate persisted TODO IDs against the canonical regex set ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$ or ^ISSUE-\d+$ for create/update dependency paths across all.
+- Main flow: Identifier Naming Validation - TodoValidator SHALL validate persisted TODO IDs against the canonical regex set ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$ or ^ISSUE-\d+$ for create/update dependency paths across all configured TODO storage providers (yaml and database per TR-MCP-TODO-005). ISSUE-NEW SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier. SessionLogIdentifierValidator SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (SessionId starts with {sourceType}- or {agent}-).
+- Edge cases: Invalid values return HTTP 400 at controller boundaries and ArgumentException for direct service invocation.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then identifier Naming Validation - TodoValidator SHALL validate persisted TODO IDs against the canonical regex set ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$ or ^ISSUE-\d+$ for create/update dependency paths across all configured TODO storage providers (yaml and database per TR-MCP-TODO-005).
+- [ ] Given the technical contract, when the implementation is exercised, then ISSUE-NEW SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier.
+- [ ] Given the technical contract, when the implementation is exercised, then sessionLogIdentifierValidator SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (SessionId starts with {sourceType}- or {agent}-).
+- [ ] Given the technical contract, when the implementation is exercised, then invalid values return HTTP 400 at controller boundaries and ArgumentException for direct service invocation.
+
+**Test Requirements:** TEST-MCP-074.
+
 ## TR-MCP-LOG-003
 
 **Parseable Event Field-Cap Enforcement** — `ParseableEventFormatter` SHALL emit no more than 250 top-level fields for any individual Parseable event payload. The formatter SHALL always preserve the canonical Parseable metadata keys (`timestamp`, `level`, `message`, and `exception` when present), SHALL prevent user-supplied structured properties from overwriting those reserved keys, and SHALL drop excess non-reserved properties once the remaining field budget is exhausted. Property selection for retained non-reserved fields SHALL be deterministic so tests and operational analysis can reason about which fields survive truncation.
@@ -1201,12 +3101,41 @@ Scope: layer-1+
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Parseable Event Field-Cap Enforcement - ParseableEventFormatter SHALL emit no more than 250 top-level fields for any individual Parseable event payload.
+- Main flow: Parseable Event Field-Cap Enforcement - ParseableEventFormatter SHALL emit no more than 250 top-level fields for any individual Parseable event payload. The formatter SHALL always preserve the canonical Parseable metadata keys (timestamp, level, message, and exception when present), SHALL prevent user-supplied structured properties from overwriting those reserved keys, and SHALL drop excess non-reserved properties once the remaining field budget is exhausted. Property selection for retained non-reserved fields SHALL be deterministic so tests and operational analysis can reason about which fields survive truncation.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then parseable Event Field-Cap Enforcement - ParseableEventFormatter SHALL emit no more than 250 top-level fields for any individual Parseable event payload.
+- [ ] The formatter SHALL always preserve the canonical Parseable metadata keys (timestamp, level, message, and exception when present), SHALL prevent user-supplied structured properties from overwriting those reserved keys, and SHALL drop excess non-reserved properties once the remaining field budget is exhausted.
+- [ ] Given the technical contract, when the implementation is exercised, then property selection for retained non-reserved fields SHALL be deterministic so tests and operational analysis can reason about which fields survive truncation.
+
+**Test Requirements:** TEST-MCP-098.
+
 ## TR-MCP-MARKER-004
 
 **RemoveSingleFile deletes rather than archives; tombstone builder removed** — Implements FR-MCP-MARKER-004. MarkerFileService.RemoveSingleFile calls File.Delete on the marker path instead of File.Move to a BuildArchivedMarkerPath candidate, and BuildArchivedMarkerPath is deleted. The IOException and UnauthorizedAccessException handling and the existing log line are retained, with the message restated as a delete rather than an archive. Callers are unchanged: Program.cs registers MarkerFileService.RemoveMarker on ApplicationStopping, which is the path that produced one tombstone per graceful shutdown. The existing unit test MarkerFileServiceTests.RemoveMarker_ArchivesMarkerFileInsteadOfDeletingIt is retargeted to assert the inverse, since it encoded the defect as intended behavior and cites TR-MCP-DB-003, a requirement scoped to persistent MCP domain rows rather than filesystem artifacts. Existing tombstones in the workspace are moved to the Windows Recycle Bin rather than hard-deleted, so the cleanup itself stays reversible.
 **Covered by:** FR: FR-MCP-MARKER-004; TEST: TEST-MCP-MARKER-004
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: RemoveSingleFile deletes rather than archives; tombstone builder removed - Implements FR-MCP-MARKER-004.
+- Main flow: RemoveSingleFile deletes rather than archives; tombstone builder removed - Implements FR-MCP-MARKER-004. MarkerFileService.RemoveSingleFile calls File.Delete on the marker path instead of File.Move to a BuildArchivedMarkerPath candidate, and BuildArchivedMarkerPath is deleted. The IOException and UnauthorizedAccessException handling and the existing log line are retained, with the message restated as a delete rather than an archive.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then removeSingleFile deletes rather than archives; tombstone builder removed - Implements FR-MCP-MARKER-004.
+- [ ] Given the technical contract, when the implementation is exercised, then markerFileService.RemoveSingleFile calls File.Delete on the marker path instead of File.Move to a BuildArchivedMarkerPath candidate, and BuildArchivedMarkerPath is deleted.
+- [ ] Given the technical contract, when the implementation is exercised, then the IOException and UnauthorizedAccessException handling and the existing log line are retained, with the message restated as a delete rather than an archive.
+- [ ] Given the technical contract, when the implementation is exercised, then callers are unchanged: Program.cs registers MarkerFileService.RemoveMarker on ApplicationStopping, which is the path that produced one tombstone per graceful shutdown.
+
+**Test Requirements:** TEST-MCP-MARKER-004.
 
 ## TR-MCP-MEMORY-001
 
@@ -1222,6 +3151,15 @@ Scope: layer-1+
 - [x] Soft-delete metadata hides removed memories by default.
 - [x] Indexes exist for `Scope`, `WorkspaceId`, `Category`, and `UpdatedAtUtc`.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: EF memory storage model - Add MemoryEntity and DbSet<MemoryEntity> to the shared EF model.
+- Main flow: EF memory storage model - Add MemoryEntity and DbSet<MemoryEntity> to the shared EF model. Id is unique across the memory store. Scope is required and constrained to Global or Workspace.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-001.
+
 ## TR-MCP-MEMORY-002
 
 **Provider memory migrations** — Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.
@@ -1234,6 +3172,15 @@ Scope: layer-1+
 - [x] Migrations create the memory table, unique ID constraint, scope/workspace indexes, category/update-time indexes, and soft-delete metadata.
 - [x] Provider projects compile.
 - [x] Scope and `WorkspaceId` consistency is enforced by provider-appropriate constraints or service-level validation.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Provider memory migrations - Add provider migrations for SQLite, SQL Server, and PostgreSQL.
+- Main flow: Provider memory migrations - Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null WorkspaceId and Workspace rows with required WorkspaceId.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-002.
 
 ## TR-MCP-MEMORY-003
 
@@ -1249,6 +3196,15 @@ Scope: layer-1+
 - [x] Update increments `Version` and can change scope under validation.
 - [x] Remove soft-deletes without physically deleting the row.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Memory service layer - Add XML-documented IMemoryService and MemoryService contracts for add, list, update, and remove.
+- Main flow: Memory service layer - Add XML-documented IMemoryService and MemoryService contracts for add, list, update, and remove. The service validates IDs, categories, scopes, text, duplicate active IDs, and scope transitions; generates globally unique MEMORY-{CATEGORY}-{NNN} IDs per category; preserves raw text; increments Version on update; and soft-deletes on remove.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-003.
+
 ## TR-MCP-MEMORY-004
 
 **Memory REST and typed client contract** — Add `MemoryController`, `MemoryClient`, and client models under `/mcpserver/memory`. Create, list, update, and remove models include scope where applicable. `McpServerClient.Memory` exists and participates in `_allClients` propagation for workspace path, API key, bearer token, and port.
@@ -1261,6 +3217,15 @@ Scope: layer-1+
 - [x] `McpServerClient.Memory` exists.
 - [x] Workspace path, API key, bearer token, and port propagate through `_allClients`.
 - [x] Client models serialize and deserialize Global and Workspace scope values.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Memory REST and typed client contract - Add MemoryController, MemoryClient, and client models under /mcpserver/memory.
+- Main flow: Memory REST and typed client contract - Add MemoryController, MemoryClient, and client models under /mcpserver/memory. Create, list, update, and remove models include scope where applicable. McpServerClient.Memory exists and participates in _allClients propagation for workspace path, API key, bearer token, and port.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-004, TEST-MCP-MEMORY-006.
 
 ## TR-MCP-MEMORY-005
 
@@ -1276,6 +3241,15 @@ Scope: layer-1+
 - [x] The REPL dispatcher routes `workflow.memory.*` methods through typed workflow code.
 - [x] The TypeScript REPL client exposes memory helpers.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: MCP stdio and REPL memory tools - Add memory_add, memory_list, memory_update, and memory_remove to MCP stdio tools, and route workflow.memory.add, workflow.memory.list, workflow.memory.update, and workflow.memory.remove.
+- Main flow: MCP stdio and REPL memory tools - Add memory_add, memory_list, memory_update, and memory_remove to MCP stdio tools, and route workflow.memory.add, workflow.memory.list, workflow.memory.update, and workflow.memory.remove through typed REPL workflow code. Stdio tools require workspacePath, call ApplyWorkspaceOverride, and return compact JSON including scope for add, list, and update.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-005.
+
 ## TR-MCP-MEMORY-006
 
 **Memory schema and contract coverage** — Update canonical REPL YAML schema, plugin schema copies, and `docs/stdio-tool-contract.json` for all memory surfaces. Schemas validate required fields, `MEMORY-{CATEGORY}-{NNN}` IDs, `Global`/`Workspace`/`Effective` scope values where applicable, and invalid method/payload cases.
@@ -1289,6 +3263,15 @@ Scope: layer-1+
 - [x] Schemas validate required fields, memory ID format, and allowed scope values.
 - [x] Valid schema examples pass and invalid examples fail.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Memory schema and contract coverage - Update canonical REPL YAML schema, plugin schema copies, and docs/stdio-tool-contract.json for all memory surfaces.
+- Main flow: Memory schema and contract coverage - Update canonical REPL YAML schema, plugin schema copies, and docs/stdio-tool-contract.json for all memory surfaces. Schemas validate required fields, MEMORY-{CATEGORY}-{NNN} IDs, Global/Workspace/Effective scope values where applicable, and invalid method/payload cases.
+- Edge cases: Valid schema examples pass and invalid examples fail.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-008.
+
 ## TR-MCP-MEMORY-007
 
 **Scope-aware effective memory querying** — Add query/service helpers that resolve active memories for a workspace. Effective queries include active Global memories plus active memories for the current workspace, exclude deleted and other-workspace rows, and apply Global-first then Workspace ordering by ID. Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection all use this ordering contract.
@@ -1300,6 +3283,15 @@ Scope: layer-1+
 - [x] Effective queries exclude deleted rows and rows from other workspaces.
 - [x] Effective queries apply Global-first then Workspace ordering by ID.
 - [x] Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection use the same ordering contract.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Scope-aware effective memory querying - Add query/service helpers that resolve active memories for a workspace.
+- Main flow: Scope-aware effective memory querying - Add query/service helpers that resolve active memories for a workspace. Effective queries include active Global memories plus active memories for the current workspace, exclude deleted and other-workspace rows, and apply Global-first then Workspace ordering by ID. Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection all use this ordering contract.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-MEMORY-008, TEST-MCP-MEMORY-007, TEST-MCP-MEMORY-009.
 
 ## TR-MCP-MEMORY-008
 
@@ -1314,12 +3306,35 @@ Scope: layer-1+
 - [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement. (evidence: Updated shell wrappers, TypeScript handlers, Bats tests, and Jest tests.)
 - [x] Plugins without automatic injection expose explicit memory-list fallback behavior. (evidence: memory_list plugin tests and fallback behavior.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent plugin memory integration - Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces.
+- Main flow: Agent plugin memory integration - Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces. Plugins with host request-boundary injection hooks render the exact REQUIRED MEMORIES block on supported user prompts. Plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-MEMORY-008.
+
 ## TR-MCP-MT-001
 
 **WorkspaceContext Scoped Per-Request Service** — `WorkspaceContext` is a scoped service holding resolved workspace identity: `WorkspacePath`, `WorkspaceName`, `DataDirectory`, `TodoFilePath`, `SessionsPath`, `ExternalDocsPath`, `IsDefaultKey`, `IsResolved`. Populated by `WorkspaceResolutionMiddleware` before downstream services execute. Downstream services inject `WorkspaceContext` instead of reading `IConfiguration["Mcp:RepoRoot"]`.
 **Covered by:** `WorkspaceContext`, `WorkspaceResolutionMiddleware`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceContext Scoped Per-Request Service - WorkspaceContext is a scoped service holding resolved workspace identity: WorkspacePath, WorkspaceName, DataDirectory, TodoFilePath, SessionsPath, ExternalDocsPath.
+- Main flow: WorkspaceContext Scoped Per-Request Service - WorkspaceContext is a scoped service holding resolved workspace identity: WorkspacePath, WorkspaceName, DataDirectory, TodoFilePath, SessionsPath, ExternalDocsPath, IsDefaultKey, IsResolved. Populated by WorkspaceResolutionMiddleware before downstream services execute. Downstream services inject WorkspaceContext instead of reading IConfiguration["Mcp:RepoRoot"].
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspaceContext Scoped Per-Request Service - WorkspaceContext is a scoped service holding resolved workspace identity: WorkspacePath, WorkspaceName, DataDirectory, TodoFilePath, SessionsPath, ExternalDocsPath, IsDefaultKey, IsResolved.
+- [ ] Given the technical contract, when the implementation is exercised, then populated by WorkspaceResolutionMiddleware before downstream services execute.
+- [ ] Given the technical contract, when the implementation is exercised, then downstream services inject WorkspaceContext instead of reading IConfiguration["Mcp:RepoRoot"].
+
+**Test Requirements:** TEST-MCP-007, TEST-MCP-003, TEST-MCP-044, TEST-MCP-046, TEST-MCP-047, TEST-MCP-073.
 
 ## TR-MCP-MT-002
 
@@ -1328,6 +3343,21 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceResolutionMiddleware - Runs before WorkspaceAuthMiddleware in the pipeline.
+- Main flow: WorkspaceResolutionMiddleware - Runs before WorkspaceAuthMiddleware in the pipeline. Only activates for /mcpserver/* and /mcp-transport routes. Resolution chain: (1) X-Workspace-Path header validated against registered workspaces - returns 400 for unregistered paths; (2) API key reverse lookup via WorkspaceTokenService.ResolveWorkspaceByToken(); (3) Mcp:RepoRoot config fallback; (4) primary workspace from workspace list.
+- Edge cases: Resolution chain: (1) X-Workspace-Path header validated against registered workspaces - returns 400 for unregistered paths; (2) API key reverse lookup via WorkspaceTokenService.ResolveWorkspaceByToken(); (3) Mcp:RepoRoot config fallback; (4) primary workspace from workspace list.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspaceResolutionMiddleware - Runs before WorkspaceAuthMiddleware in the pipeline.
+- [ ] Given the technical contract, when the implementation is exercised, then only activates for /mcpserver/* and /mcp-transport routes.
+- [ ] Given the technical contract, when the implementation is exercised, then resolution chain: (1) X-Workspace-Path header validated against registered workspaces - returns 400 for unregistered paths; (2) API key reverse lookup via WorkspaceTokenService.ResolveWorkspaceByToken(); (3) Mcp:RepoRoot config fallback; (4) primary workspace from workspace list.
+- [ ] Given the technical contract, when the implementation is exercised, then populates WorkspaceContext scoped service.
+
+**Test Requirements:** TEST-MCP-009, TEST-MCP-003, TEST-MCP-044, TEST-MCP-046, TEST-MCP-047.
+
 ## TR-MCP-MT-003
 
 **EF Core Global Query Filter for WorkspaceId** — `McpDbContext` accepts optional `WorkspaceContext` to capture `_workspaceId` per-instance. `OnModelCreating` applies `.HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId)` on all 14 entity types. Empty `_workspaceId` disables filtering (backward compatible). `IgnoreQueryFilters()` escapes for cross-workspace admin queries. `WorkspaceId TEXT NOT NULL DEFAULT ''` column with indexes on all entity tables.
@@ -1335,12 +3365,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: EF Core Global Query Filter for WorkspaceId - McpDbContext accepts optional WorkspaceContext to capture _workspaceId per-instance.
+- Main flow: EF Core Global Query Filter for WorkspaceId - McpDbContext accepts optional WorkspaceContext to capture _workspaceId per-instance. OnModelCreating applies .HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId) on all 14 entity types. Empty _workspaceId disables filtering (backward compatible).
+- Edge cases: Empty _workspaceId disables filtering (backward compatible).
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then EF Core Global Query Filter for WorkspaceId - McpDbContext accepts optional WorkspaceContext to capture _workspaceId per-instance.
+- [ ] Given the technical contract, when the implementation is exercised, then onModelCreating applies .HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId) on all 14 entity types.
+- [ ] Given the technical contract, when the implementation is exercised, then empty _workspaceId disables filtering (backward compatible).
+- [ ] Given the technical contract, when the implementation is exercised, then ignoreQueryFilters() escapes for cross-workspace admin queries.
+
+**Test Requirements:** TEST-MCP-045, TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-MT-003A
 
 `SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
 **Covered by:** FR: FR-SUPPORT-010A, FR-SUPPORT-010C, FR-SUPPORT-011; TEST: TEST-SUPPORT-010A-1, TEST-SUPPORT-010A-2, TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SessionLogService injects an optional WorkspaceContext and stamps WorkspaceId on every entity it persists.
+- Main flow: SessionLogService injects an optional WorkspaceContext and stamps WorkspaceId on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on McpDbContext.SaveChangesAsync to auto-fill WorkspaceId for Added entities from the DbContext's resolved _workspaceId. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+- Edge cases: This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then sessionLogService injects an optional WorkspaceContext and stamps WorkspaceId on every entity it persists.
+- [ ] When the context is null (ingestion / batch import path), the service skips stamping and relies on McpDbContext.SaveChangesAsync to auto-fill WorkspaceId for Added entities from the DbContext's resolved _workspaceId.
+- [ ] This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-010A, TEST-MCP-BDP-SUPPORT-010C, TEST-MCP-BDP-SUPPORT-011.
 
 ## TR-MCP-MT-004
 
@@ -1354,6 +3413,15 @@ Scope: layer-1+
 - [ ] POST/GET round-trips work correctly under the same workspace context
 - [ ] Existing rows with empty WorkspaceId remain visible when no workspace header is set
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: WorkspaceId stamping in SessionLogService - SessionLogService injects an optional WorkspaceContext and stamps WorkspaceId on every entity it persists.
+- Main flow: WorkspaceId stamping in SessionLogService - SessionLogService injects an optional WorkspaceContext and stamps WorkspaceId on every entity it persists. When the context is null (ingestion/batch import path), the service skips stamping and relies on McpDbContext.SaveChangesAsync to auto-fill WorkspaceId for Added entities from the DbContext's resolved _workspaceId. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+- Edge cases: Existing rows with empty WorkspaceId remain visible when no workspace header is set.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-011.
+
 ## TR-MCP-NUKE-001
 
 **Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive. Live deployment guidance SHALL use the same flags.
@@ -1361,12 +3429,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Non-interactive PowerShell hosts for Nuke automation - The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an.
+- Main flow: Non-interactive PowerShell hosts for Nuke automation - The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive. Live deployment guidance SHALL use the same flags.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then non-interactive PowerShell hosts for Nuke automation - The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive.
+- [ ] Given the technical contract, when the implementation is exercised, then live deployment guidance SHALL use the same flags.
+
+**Test Requirements:** TEST-MCP-148.
+
 ## TR-MCP-OPS-001
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
 **Covered by:** FR: FR-MCP-008
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Operational scripts for startup, health checks, packaging, config validation, and migration.
+- Main flow: Operational scripts for startup, health checks, packaging, config validation, and migration.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then operational scripts for startup, health checks, packaging, config validation, and migration.
+
+**Test Requirements:** TEST-MCP-BDP-008.
 
 ## TR-MCP-PERSIST-001
 
@@ -1379,6 +3472,15 @@ Acceptance Criteria:
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Plugin appendDialog uses incremental dialog POST - Invoke-WorkflowAppendDialog SHALL call SessionLogClient.AppendDialogAsync (or equivalent POST .../dialog) when a current turn exists.
+- Main flow: Plugin appendDialog uses incremental dialog POST - Invoke-WorkflowAppendDialog SHALL call SessionLogClient.AppendDialogAsync (or equivalent POST .../dialog) when a current turn exists. Failsafe for incremental dialog SHALL replay the dialog POST, not a full-session SubmitAsync upsert. - Pester proves appendDialog does not invoke client.SessionLog.SubmitAsync for an existing turn.
+- Edge cases: - Missing turn is not-found, retryable false.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-195, TEST-MCP-196.
+
 ## TR-MCP-PERSIST-002
 
 **PersistTurn maps 503 to timeout degrade-queue** — Invoke-ReplPersistTurn SHALL treat HTTP 503 and payload code backend_unavailable the same as timeout|timed out|command_timeout: return false, set LastReplPersistenceDetails degraded/queued, retain failsafe, do not throw.
@@ -1389,6 +3491,15 @@ Acceptance Criteria:
 **Covered by:** FR: FR-MCP-171; TEST: TEST-MCP-195
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: PersistTurn maps 503 to timeout degrade-queue - Invoke-ReplPersistTurn SHALL treat HTTP 503 and payload code backend_unavailable the same as timeout|timed out|command_timeout: return false, set.
+- Main flow: PersistTurn maps 503 to timeout degrade-queue - Invoke-ReplPersistTurn SHALL treat HTTP 503 and payload code backend_unavailable the same as timeout|timed out|command_timeout: return false, set LastReplPersistenceDetails degraded/queued, retain failsafe, do not throw. - Pester PersistTurn 503 does not throw and leaves failsafe on disk. - current-turn.yaml remains in_progress.
+- Edge cases: PersistTurn maps 503 to timeout degrade-queue - Invoke-ReplPersistTurn SHALL treat HTTP 503 and payload code backend_unavailable the same as timeout|timed out|command_timeout: return false, set LastReplPersistenceDetails degraded/queued, retain failsafe, do not throw.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-195.
 
 ## TR-MCP-PERSIST-003
 
@@ -1401,6 +3512,15 @@ Acceptance Criteria:
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Failsafe drain inspects errors without Write-Error Stop skip - Invoke-ReplFailsafeDrain SHALL inspect Invoke-ReplRaw failures without Write-Error under ErrorActionPreference Stop skipping.
+- Main flow: Failsafe drain inspects errors without Write-Error Stop skip - Invoke-ReplFailsafeDrain SHALL inspect Invoke-ReplRaw failures without Write-Error under ErrorActionPreference Stop skipping Test-ReplFailsafeBackendUnreachable. Drain of SessionLog.SubmitAsync SHALL abort on timeout/503 without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted. Drain MUST NOT block the successful caller for the full 30s SubmitAsync timeout (bounded drain timeout or drain after return).
+- Edge cases: Drain of SessionLog.SubmitAsync SHALL abort on timeout/503 without incrementing drainAttempts and without latching ReplFailsafeDrainCompleted.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-195.
+
 ## TR-MCP-PERSIST-004
 
 **SQLITE_BUSY under budget is persist contention not storage-down** — SessionLog SaveChanges SQLITE_BUSY or lock wait inside the storage command budget SHALL NOT be classified as backend_unavailable/storage-down when subsequent TODO/requirements reads succeed. Prefer SQLite busy-timeout/retry. GET /health remains process liveness plus nonce echo. Do not change /health liveness semantics.
@@ -1412,6 +3532,15 @@ Acceptance Criteria:
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SQLITE_BUSY under budget is persist contention not storage-down - SessionLog SaveChanges SQLITE_BUSY or lock wait inside the storage command budget SHALL NOT be classified as backend_unavailable/storage-down when.
+- Main flow: SQLITE_BUSY under budget is persist contention not storage-down - SessionLog SaveChanges SQLITE_BUSY or lock wait inside the storage command budget SHALL NOT be classified as backend_unavailable/storage-down when subsequent TODO/requirements reads succeed. Prefer SQLite busy-timeout/retry. GET /health remains process liveness plus nonce echo.
+- Edge cases: SQLITE_BUSY under budget is persist contention not storage-down - SessionLog SaveChanges SQLITE_BUSY or lock wait inside the storage command budget SHALL NOT be classified as backend_unavailable/storage-down when subsequent TODO/requirements reads succeed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-195, TEST-MCP-196.
+
 ## TR-MCP-PLAN-001
 
 **Safe session wrap-up and deploy sequencing** — Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
@@ -1419,12 +3548,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Safe session wrap-up and deploy sequencing - Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service.
+- Main flow: Safe session wrap-up and deploy sequencing - Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then safe session wrap-up and deploy sequencing - Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
+
+**Test Requirements:** TEST-MCP-143.
+
 ## TR-MCP-PLUGIN-008
 
 **Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
 **Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Codex requirements update command fallback parity - The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command.
+- Main flow: Codex requirements update command fallback parity - The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then codex requirements update command fallback parity - The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
+
+**Test Requirements:** TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013.
 
 ## TR-MCP-PLUGIN-009
 
@@ -1435,12 +3588,33 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Affected session and compact hook scripts no longer contain hookSpecificOutput or additionalContext emissions for status-only paths. (evidence: Targeted rg search over the affected session and compact scripts found no hookSpecificOutput or additionalContext after the fix.)
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Session and compaction hook output contract - Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}.
+- Main flow: Session and compaction hook output contract - Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}. Hook-specific output may be emitted only for event schemas that support it, and every hookSpecificOutput payload SHALL include the matching hookEventName. PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
+- Edge cases: PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-155.
+
 ## TR-MCP-PLUGIN-010
 
 **PowerShell wrapper process timeout control** — Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
 **Covered by:** FR: FR-MCP-117; TEST: TEST-MCP-157
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: PowerShell wrapper process timeout control - Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid.
+- Main flow: PowerShell wrapper process timeout control - Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
+- Edge cases: PowerShell wrapper process timeout control - Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then powerShell wrapper process timeout control - Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
+
+**Test Requirements:** TEST-MCP-157.
 
 ## TR-MCP-PLUGIN-011
 
@@ -1449,12 +3623,30 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Stop gate no-ops phantom turns and counts commits - The Claude plugin Stop gate (Close-PluginTurnIfNeeded) SHALL NOT block session end for phantom/empty turns and SHALL count commits toward audit completeness.
+- Main flow: Stop gate no-ops phantom turns and counts commits - The Claude plugin Stop gate (Close-PluginTurnIfNeeded) SHALL NOT block session end for phantom/empty turns and SHALL count commits toward audit completeness. Acceptance Criteria: (AC1) an in_progress turn whose prompt is a system-event wrapper (first line matching <task-notification>, <user_query>, <command-name|message|args>, <local-command-*>) OR that has zero recorded work (auditActions+auditFiles+auditDialog+auditDecisions+auditCommits == 0 AND codeEdits == 0) is no-op'd (empty {} result), not blocked, and does not invoke completeTurn; (AC2) a completed code-edit turn whose only audit signal is auditCommits>0 is not blocked with 'audit.
+- Edge cases: Stop gate no-ops phantom turns and counts commits - The Claude plugin Stop gate (Close-PluginTurnIfNeeded) SHALL NOT block session end for phantom/empty turns and SHALL count commits toward audit completeness.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013.
+
 ## TR-MCP-PLUGIN-012
 
 **Session rotation re-binds current-turn cache** — When the plugin session id rotates (Start-PluginSession mints a new sessionId) while a current-turn cache still carries the old sessionId, Assert-ReplCurrentTurnFresh SHALL re-bind the turn to the active session and treat it as fresh, rather than hard-rejecting every subsequent completeTurn/appendActions as stale. Marker drift (wrong-workspace) SHALL still be rejected separately. Acceptance Criteria: (AC1) with session-state.yaml sessionId=B and current-turn.yaml sessionId=A (same/absent marker), Assert-ReplCurrentTurnFresh returns true and rewrites current-turn.yaml sessionId to B; (AC2) the failsafe persist path (ReplFailsafe) is unaffected. Origin: BUG-TRIAGE-071/075 (Start-PluginSession rotated the sessionId without superseding current-turn.yaml, so the sessionId-mismatch branch rejected completeTurn indefinitely). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-PLUGIN-012.
 **Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Session rotation re-binds current-turn cache - When the plugin session id rotates (Start-PluginSession mints a new sessionId) while a current-turn cache still carries the old sessionId, Assert-ReplCurrentTurnFresh SHALL.
+- Main flow: Session rotation re-binds current-turn cache - When the plugin session id rotates (Start-PluginSession mints a new sessionId) while a current-turn cache still carries the old sessionId, Assert-ReplCurrentTurnFresh SHALL re-bind the turn to the active session and treat it as fresh, rather than hard-rejecting every subsequent completeTurn/appendActions as stale. Marker drift (wrong-workspace) SHALL still be rejected separately. Acceptance Criteria: (AC1) with session-state.yaml sessionId=B and current-turn.yaml sessionId=A (same/absent marker), Assert-ReplCurrentTurnFresh returns true and rewrites current-turn.yaml sessionId to B; (AC2) the failsafe persist path (ReplFailsafe) is unaffected.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013.
 
 ## TR-MCP-PLUGIN-013
 
@@ -1463,12 +3655,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: UserPromptSubmit hook opens exactly one turn per prompt - The UserPromptSubmit plugin hook SHALL open exactly one session-log turn per user prompt even when both the plugin hooks.json registration and the settings.json.
+- Main flow: UserPromptSubmit hook opens exactly one turn per prompt - The UserPromptSubmit plugin hook SHALL open exactly one session-log turn per user prompt even when both the plugin hooks.json registration and the settings.json bridge deliver the prompt; a repeated identical prompt reuses the already-open turn. AC1: the second delivery of the same prompt returns turn-already-open and does not call beginTurn. AC2: a differing prompt opens a new turn.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] UserPromptSubmit hook opens exactly one turn per prompt - The UserPromptSubmit plugin hook SHALL open exactly one session-log turn per user prompt even when both the plugin hooks.json registration and the settings.json bridge deliver the prompt; a repeated identical prompt reuses the already-open turn.
+- [ ] Given the technical contract, when the implementation is exercised, then AC1: the second delivery of the same prompt returns turn-already-open and does not call beginTurn.
+- [ ] Given the technical contract, when the implementation is exercised, then AC2: a differing prompt opens a new turn.
+- [ ] Given the technical contract, when the implementation is exercised, then guards BUG-TRIAGE-077 via TEST-MCP-PLUGIN-013 (HookTurnDedupe.Tests.ps1).
+
+**Test Requirements:** TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013.
+
 ## TR-MCP-PLUGINCORE-001
 
 **sync-plugin-core + check-core-integrity (sh+ps1)** — Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
 **Covered by:** FR: FR-MCP-PLUGINCORE-001; TEST: TEST-MCP-PLUGINCORE-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: sync-plugin-core + check-core-integrity (sh+ps1) - Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
+- Main flow: sync-plugin-core + check-core-integrity (sh+ps1) - Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
+- Edge cases: sync-plugin-core + check-core-integrity (sh+ps1) - Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then sync-plugin-core + check-core-integrity (sh+ps1) - Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
+
+**Test Requirements:** TEST-MCP-PLUGINCORE-001.
 
 ## TR-MCP-PLUGINCORE-002
 
@@ -1477,12 +3696,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: core-guard.yml no-duplication job - CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+- Main flow: core-guard.yml no-duplication job - CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then core-guard.yml no-duplication job - CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+
+**Test Requirements:** TEST-MCP-PLUGINCORE-002.
+
 ## TR-MCP-PLUGINCORE-003
 
 **repl-daemon.js TCP broker + repl-persistent.sh wrapper** — Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to spawn-per-call.
 **Covered by:** FR: FR-MCP-PLUGINCORE-003; TEST: TEST-MCP-PLUGINCORE-003
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: repl-daemon.js TCP broker + repl-persistent.sh wrapper - Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to.
+- Main flow: repl-daemon.js TCP broker + repl-persistent.sh wrapper - Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to spawn-per-call.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then repl-daemon.js TCP broker + repl-persistent.sh wrapper - Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to spawn-per-call.
+
+**Test Requirements:** TEST-MCP-PLUGINCORE-003.
 
 ## TR-MCP-PLUGINCORE-004
 
@@ -1494,6 +3737,15 @@ Scope: layer-1+
 - [ ] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output.
 - [ ] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed.
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Dictionary-safe plugin dialog parsing - The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
+- Main flow: Dictionary-safe plugin dialog parsing - The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
+- Edge cases: Dictionary-safe plugin dialog parsing - The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005.
+
 ## TR-MCP-PLUGINCORE-005
 
 **PowerShell.MCP cross-volume text-edit workaround documented** — Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets (Add-LinesToFile/Update-LinesInFile/Update-MatchInFile/Remove-LinesFromFile) stage a replacement file and move it into place, and that move fails when TEMP/TMP are on a different volume than the target; the fix is to set TEMP/TMP to a directory on the same volume as the edit target and to verify the edit landed afterward, since a failed move can leave the edit unapplied while still previewing the diff. Acceptance Criteria: (AC1) templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML; (AC2) the added guidance contains no em-dashes. Origin: BUG-TRIAGE-084 (third-party PowerShell.MCP module cross-volume replacement-move failure; prior art 054/056 resolved as an undocumented operational workaround). The module is unpinned in Confirm-PowerShellMcpRuntime; a version pin is a future option. Validated by TEST-MCP-PLUGINCORE-005.
@@ -1501,12 +3753,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: PowerShell.MCP cross-volume text-edit workaround documented - Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets.
+- Main flow: PowerShell.MCP cross-volume text-edit workaround documented - Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets (Add-LinesToFile/Update-LinesInFile/Update-MatchInFile/Remove-LinesFromFile) stage a replacement file and move it into place, and that move fails when TEMP/TMP are on a different volume than the target; the fix is to set TEMP/TMP to a directory on the same volume as the edit target and to verify the edit landed afterward, since a failed move can leave the edit unapplied while still previewing the diff. Acceptance Criteria: (AC1) templates/prompt-templates.yaml and its graphrag.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005.
+
 ## TR-MCP-PLUGIN-HEADER-001
 
 **Observed-only resolution of agent runtime header fields** — agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous unconditional fallback to (Join-Path CacheDir 'session.jsonl') is removed. Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails. agentSessionId MUST come only from a provider-native source (hook payload session_id or host env) and MUST NOT fall back to the MCP SessionId. Resolve-McpPluginAgentHeaderFields MUST accept ProviderSessionId and TranscriptPath, and plugin-hook.ps1 MUST supply the host hook payload session_id and transcript_path (Read-HookInput memoized with StrictMode-safe initialization). Invoke-ReplPersistTurn in repl-invoke.ps1 MUST apply the same existence rule at the submit layer and MUST clear agentSessionId when it equals the MCP session id, so a pre-fix session-state cache cannot re-submit a fabricated value. Validated by TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005. Covered by FR: FR-MCP-PLUGIN-HEADER-001. Status: implemented. Scope: layer-1+.
 **Covered by:** FR: FR-MCP-PLUGIN-HEADER-001; TEST: TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Observed-only resolution of agent runtime header fields - agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous.
+- Main flow: Observed-only resolution of agent runtime header fields - agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous unconditional fallback to (Join-Path CacheDir 'session.jsonl') is removed. Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails. agentSessionId MUST come only from a provider-native source (hook payload session_id or host env) and MUST NOT fall back to the MCP SessionId.
+- Edge cases: Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then observed-only resolution of agent runtime header fields - agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous unconditional fallback to (Join-Path CacheDir 'session.jsonl') is removed.
+- [ ] Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails.
+- [ ] Given the technical contract, when the implementation is exercised, then agentSessionId MUST come only from a provider-native source (hook payload session_id or host env) and MUST NOT fall back to the MCP SessionId.
+- [ ] Given the technical contract, when the implementation is exercised, then resolve-McpPluginAgentHeaderFields MUST accept ProviderSessionId and TranscriptPath, and plugin-hook.ps1 MUST supply the host hook payload session_id and transcript_path (Read-HookInput memoized with StrictMode-safe initialization).
+
+**Test Requirements:** TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005.
 
 ## TR-MCP-PLUGININT-001
 
@@ -1522,12 +3798,33 @@ Scope: layer-1+
 - [ ] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate.
 - [ ] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped.
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Shared multi-plugin Session Log integration harness - A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared.
+- Main flow: Shared multi-plugin Session Log integration harness - A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-PLUGININT-001.
+
 ## TR-MCP-PLUGIN-SKILLS-001
 
 **Probe TR id pattern** — Probe only; should not be created if id validation fails or duplicate cleanup is needed.
 **Covered by:** FR: FR-MCP-PLUGIN-SKILLS-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Probe TR id pattern - Probe only; should not be created if id validation fails or duplicate cleanup is needed.
+- Main flow: Probe TR id pattern - Probe only; should not be created if id validation fails or duplicate cleanup is needed.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then probe TR id pattern - Probe only; should not be created if id validation fails or duplicate cleanup is needed.
+
+**Test Requirements:** TEST-MCP-149, TEST-MCP-150, TEST-MCP-151.
 
 ## TR-MCP-PLUGIN-TRIAGE-001
 
@@ -1537,6 +3834,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Plugin skills document triage commands, asynchronous behavior, and when not to use triage.
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Triage plugin guidance - Plugin skills and wrapper commands expose triage consistently.
+- Main flow: Triage plugin guidance - Plugin skills and wrapper commands expose triage consistently.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-PLUGIN-TRIAGE-001.
+
 ## TR-MCP-POL-001
 
 **Natural Language Policy Management** — `PolicyManagementTool` MCP STDIO tool + `POST /mcpserver/workspace/policy` REST endpoint. Accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via `IWorkspaceService.UpdateAsync`, logs `policy_change` actions per affected workspace session log.
@@ -1545,12 +3851,40 @@ Scope: layer-1+
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Natural Language Policy Management - PolicyManagementTool MCP STDIO tool + POST /mcpserver/workspace/policy REST endpoint.
+- Main flow: Natural Language Policy Management - PolicyManagementTool MCP STDIO tool + POST /mcpserver/workspace/policy REST endpoint. Accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via IWorkspaceService.UpdateAsync, logs policy_change actions per affected workspace session log.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then natural Language Policy Management - PolicyManagementTool MCP STDIO tool + POST /mcpserver/workspace/policy REST endpoint.
+- [ ] Given the technical contract, when the implementation is exercised, then accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via IWorkspaceService.UpdateAsync, logs policy_change actions per affected workspace session log.
+
+**Test Requirements:** TEST-MCP-085.
+
 ## TR-MCP-PRODUCT-API-001
 
 **Product CQRS and adapters** — Commands/queries live under McpServer.Support.Mcp/Products/. REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only. No public IProductService facade. GET /mcpserver/requirements/effective gains productScope=product|local (default product). AC: controller/MCP/REPL tests prove dispatch-only; invalid key 400; duplicate 409.
 **Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-003; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Product CQRS and adapters - Commands/queries live under McpServer.Support.Mcp/Products/.
+- Main flow: Product CQRS and adapters - Commands/queries live under McpServer.Support.Mcp/Products/. REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only. No public IProductService facade.
+- Edge cases: AC: controller/MCP/REPL tests prove dispatch-only; invalid key 400; duplicate 409.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then product CQRS and adapters - Commands/queries live under McpServer.Support.Mcp/Products/.
+- [ ] Given the technical contract, when the implementation is exercised, then REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only.
+- [ ] Given the technical contract, when the implementation is exercised, then no public IProductService facade.
+- [ ] Given the technical contract, when the implementation is exercised, then GET /mcpserver/requirements/effective gains productScope=product|local (default product).
+
+**Test Requirements:** TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002.
 
 ## TR-MCP-PRODUCT-AUTH-001
 
@@ -1559,12 +3893,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Product authorization and transaction gating - Authorization lives in CQRS handlers (or a helper used only by those handlers).
+- Main flow: Product authorization and transaction gating - Authorization lives in CQRS handlers (or a helper used only by those handlers). Owner-only mutate except self-leave. Non-member get is 404.
+- Edge cases: Non-member get is 404.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then product authorization and transaction gating - Authorization lives in CQRS handlers (or a helper used only by those handlers).
+- [ ] Given the technical contract, when the implementation is exercised, then owner-only mutate except self-leave.
+- [ ] Given the technical contract, when the implementation is exercised, then non-member get is 404.
+- [ ] Mutating product commands fail closed when turn transactions are required and degraded.
+
+**Test Requirements:** TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002.
+
 ## TR-MCP-PRODUCT-CTX-001
 
 **Product requirement context source** — Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows. Chunks are tagged with origin workspace. AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
 **Covered by:** FR: FR-MCP-PRODUCT-005; TEST: TEST-MCP-PRODUCT-006
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Product requirement context source - Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows.
+- Main flow: Product requirement context source - Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows. Chunks are tagged with origin workspace. AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then product requirement context source - Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows.
+- [ ] Given the technical contract, when the implementation is exercised, then chunks are tagged with origin workspace.
+- [ ] Given the technical contract, when the implementation is exercised, then AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
+
+**Test Requirements:** TEST-MCP-PRODUCT-006.
 
 ## TR-MCP-PRODUCT-MODEL-001
 
@@ -1573,12 +3936,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Product storage model - Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter).
+- Main flow: Product storage model - Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter). Unique Key matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ among non-deleted rows. Audit rows on mutations (TR-MCP-DB-004).
+- Edge cases: AC: unique filtered index on Key; membership composite PK ProductId+WorkspaceId; apply migrations on empty and production-shaped DBs.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then product storage model - Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter).
+- [ ] Given the technical contract, when the implementation is exercised, then unique Key matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ among non-deleted rows.
+- [ ] Given the technical contract, when the implementation is exercised, then audit rows on mutations (TR-MCP-DB-004).
+- [ ] Given the technical contract, when the implementation is exercised, then migrations apply on SQLite, PostgreSQL, and SQL Server without re-adding unrelated columns.
+
+**Test Requirements:** TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005.
+
 ## TR-MCP-PRODUCT-SHARE-001
 
 **Product requirement share query** — CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products. Layer filter uses the origin workspace catalog. Results include originWorkspaceId. Never merge two rows that share an id across origins. AC: union includes sibling in-scope rows; missing origin layer key excludes sibling; productScope=local is local-only.
 **Covered by:** FR: FR-MCP-PRODUCT-003, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Product requirement share query - CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products.
+- Main flow: Product requirement share query - CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products. Layer filter uses the origin workspace catalog. Results include originWorkspaceId.
+- Edge cases: Never merge two rows that share an id across origins.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then product requirement share query - CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products.
+- [ ] Given the technical contract, when the implementation is exercised, then layer filter uses the origin workspace catalog.
+- [ ] Given the technical contract, when the implementation is exercised, then results include originWorkspaceId.
+- [ ] Given the technical contract, when the implementation is exercised, then never merge two rows that share an id across origins.
+
+**Test Requirements:** TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003.
 
 ## TR-MCP-QA-001
 
@@ -1587,12 +3980,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Entity Tenancy - QuestionEntity, AnswerEntity, CommentEntity use composite PK (WorkspaceId, Id) plus global query filter (mirrors TR-MCP-MT-003).
+- Main flow: QA Entity Tenancy - QuestionEntity, AnswerEntity, CommentEntity use composite PK (WorkspaceId, Id) plus global query filter (mirrors TR-MCP-MT-003).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Entity Tenancy - QuestionEntity, AnswerEntity, CommentEntity use composite PK (WorkspaceId, Id) plus global query filter (mirrors TR-MCP-MT-003).
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128, TEST-MCP-115, TEST-MCP-125.
+
 ## TR-MCP-QA-002
 
 **QA Question Tags JSON** — Tags stored as `TagsJson` string column on `QuestionEntity` (no separate Tag table), serialized via the same pattern as `TodoItemEntity.DescriptionJson`.
 **Covered by:** FR: FR-MCP-085, FR-MCP-088; TEST: TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-113
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Question Tags JSON - Tags stored as TagsJson string column on QuestionEntity (no separate Tag table), serialized via the same pattern as TodoItemEntity.DescriptionJson.
+- Main flow: QA Question Tags JSON - Tags stored as TagsJson string column on QuestionEntity (no separate Tag table), serialized via the same pattern as TodoItemEntity.DescriptionJson.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Question Tags JSON - Tags stored as TagsJson string column on QuestionEntity (no separate Tag table), serialized via the same pattern as TodoItemEntity.DescriptionJson.
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-113.
 
 ## TR-MCP-QA-003
 
@@ -1601,12 +4018,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Provider Migrations - Q&A storage works on all three providers: SQLite, PostgreSQL, SQL Server.
+- Main flow: QA Provider Migrations - Q&A storage works on all three providers: SQLite, PostgreSQL, SQL Server. One migration per provider project.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Provider Migrations - Q&A storage works on all three providers: SQLite, PostgreSQL, SQL Server.
+- [ ] Given the technical contract, when the implementation is exercised, then one migration per provider project.
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128.
+
 ## TR-MCP-QA-004
 
 **QA Denormalized Vote Counters** — `VoteCount` is an `int` column on Question and Answer; vote endpoints use atomic `UPDATE ... SET VoteCount = VoteCount + @delta` via raw SQL or EF interceptor pattern. Voter identity is NOT stored on the Question/Answer row itself - it is captured per vote in the audit history (TR-MCP-QA-019 records `Actor` on every `vote_up` / `vote_down` audit row), preserving full provenance without bloating the hot read path.
 **Covered by:** FR: FR-MCP-089; TEST: TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Denormalized Vote Counters - VoteCount is an int column on Question and Answer; vote endpoints use atomic UPDATE.
+- Main flow: QA Denormalized Vote Counters - VoteCount is an int column on Question and Answer; vote endpoints use atomic UPDATE ... SET VoteCount = VoteCount + @delta via raw SQL or EF interceptor pattern. Voter identity is NOT stored on the Question/Answer row itself - it is captured per vote in the audit history (TR-MCP-QA-019 records Actor on every vote_up / vote_down audit row), preserving full provenance without bloating the hot read path.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Denormalized Vote Counters - VoteCount is an int column on Question and Answer; vote endpoints use atomic UPDATE ...
+- [ ] Given the technical contract, when the implementation is exercised, then SET VoteCount = VoteCount + @delta via raw SQL or EF interceptor pattern.
+- [ ] Given the technical contract, when the implementation is exercised, then voter identity is NOT stored on the Question/Answer row itself - it is captured per vote in the audit history (TR-MCP-QA-019 records Actor on every vote_up / vote_down audit row), preserving full provenance without bloating the hot read path.
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135.
 
 ## TR-MCP-QA-005
 
@@ -1615,12 +4059,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Accepted Answer Storage - AcceptedAnswerId is a nullable string FK on QuestionEntity; accepting writes AcceptedAnswerId + AcceptedAt; un-accepting clears both.
+- Main flow: QA Accepted Answer Storage - AcceptedAnswerId is a nullable string FK on QuestionEntity; accepting writes AcceptedAnswerId + AcceptedAt; un-accepting clears both.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Accepted Answer Storage - AcceptedAnswerId is a nullable string FK on QuestionEntity; accepting writes AcceptedAnswerId + AcceptedAt; un-accepting clears both.
+
+**Test Requirements:** TEST-MCP-112, TEST-MCP-116.
+
 ## TR-MCP-QA-006
 
 **QA Service Shape** — `EfQaService` follows the `EfTodoService` shape: `IServiceScopeFactory` for scoped DbContext access, `IWriteAuditLog` for audit, optional `IChangeEventBus` for events, internal `SemaphoreSlim` for write serialization.
 **Covered by:** FR: FR-MCP-085, FR-MCP-086, FR-MCP-087, FR-MCP-090; TEST: TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128, TEST-MCP-112, TEST-MCP-116, TEST-MCP-115, TEST-MCP-125
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Service Shape - EfQaService follows the EfTodoService shape: IServiceScopeFactory for scoped DbContext access, IWriteAuditLog for audit, optional IChangeEventBus for events, internal SemaphoreSlim for write.
+- Main flow: QA Service Shape - EfQaService follows the EfTodoService shape: IServiceScopeFactory for scoped DbContext access, IWriteAuditLog for audit, optional IChangeEventBus for events, internal SemaphoreSlim for write serialization.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Service Shape - EfQaService follows the EfTodoService shape: IServiceScopeFactory for scoped DbContext access, IWriteAuditLog for audit, optional IChangeEventBus for events, internal SemaphoreSlim for write serialization.
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128, TEST-MCP-112, TEST-MCP-116, TEST-MCP-115, TEST-MCP-125.
 
 ## TR-MCP-QA-007
 
@@ -1629,12 +4097,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA REST Surface - QaController routes at /mcpserver/qa; WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes adds "/mcpserver/qa" (joining /mcpserver/todo and /mcpserver/sessionlog).
+- Main flow: QA REST Surface - QaController routes at /mcpserver/qa; WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes adds "/mcpserver/qa" (joining /mcpserver/todo and /mcpserver/sessionlog). Auth is enforced by existing WorkspaceAuthMiddleware.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA REST Surface - QaController routes at /mcpserver/qa; WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes adds "/mcpserver/qa" (joining /mcpserver/todo and /mcpserver/sessionlog).
+- [ ] Given the technical contract, when the implementation is exercised, then auth is enforced by existing WorkspaceAuthMiddleware.
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128, TEST-MCP-113, TEST-MCP-120, TEST-MCP-121.
+
 ## TR-MCP-QA-008
 
 **QA Search Indexing** — Q&A search integration: `IQaSearchIndexer` writes a `ContextDocumentEntity` (`SourceType = "qa-question"` or `"qa-answer"`, `SourceKey = $"qa/{kind}/{id}"`) and a `ContextChunkEntity` (`Content = Title + "\n\n" + Body + "\n\nTags: " + tags`) on create/update, and removes both on delete. Existing FTS5 triggers and `EmbeddingService` handle the rest; no new FTS virtual table.
 **Covered by:** FR: FR-MCP-085, FR-MCP-086; TEST: TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Search Indexing - Q&A search integration: IQaSearchIndexer writes a ContextDocumentEntity (SourceType = "qa-question" or "qa-answer", SourceKey = $"qa/{kind}/{id}") and a ContextChunkEntity (Content = Title + "\n\n".
+- Main flow: QA Search Indexing - Q&A search integration: IQaSearchIndexer writes a ContextDocumentEntity (SourceType = "qa-question" or "qa-answer", SourceKey = $"qa/{kind}/{id}") and a ContextChunkEntity (Content = Title + "\n\n" + Body + "\n\nTags: " + tags) on create/update, and removes both on delete. Existing FTS5 triggers and EmbeddingService handle the rest; no new FTS virtual table.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Search Indexing - Q&A search integration: IQaSearchIndexer writes a ContextDocumentEntity (SourceType = "qa-question" or "qa-answer", SourceKey = $"qa/{kind}/{id}") and a ContextChunkEntity (Content = Title + "\n\n" + Body + "\n\nTags: " + tags) on create/update, and removes both on delete.
+- [ ] Given the technical contract, when the implementation is exercised, then existing FTS5 triggers and EmbeddingService handle the rest; no new FTS virtual table.
+
+**Test Requirements:** TEST-MCP-110, TEST-MCP-117, TEST-MCP-119, TEST-MCP-111, TEST-MCP-128.
 
 ## TR-MCP-QA-009
 
@@ -1643,12 +4137,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Author Resolver - IQaAuthorResolver reads HttpContext.User.FindFirst("sub"), the X-Api-Key header via WorkspaceTokenService, and a request-body author field, applying the precedence in FR-MCP-QA-008.
+- Main flow: QA Author Resolver - IQaAuthorResolver reads HttpContext.User.FindFirst("sub"), the X-Api-Key header via WorkspaceTokenService, and a request-body author field, applying the precedence in FR-MCP-QA-008.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Author Resolver - IQaAuthorResolver reads HttpContext.User.FindFirst("sub"), the X-Api-Key header via WorkspaceTokenService, and a request-body author field, applying the precedence in FR-MCP-QA-008.
+
+**Test Requirements:** TEST-MCP-118.
+
 ## TR-MCP-QA-010
 
 **QA MCP STDIO Tools** — MCP STDIO tools live on the existing `FwhMcpTools` class (file `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`); each Q&A tool accepts optional `workspacePath` and calls the existing `ApplyWorkspaceOverride` helper.
 **Covered by:** FR: FR-MCP-094; TEST: TEST-MCP-120, TEST-MCP-121
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA MCP STDIO Tools - MCP STDIO tools live on the existing FwhMcpTools class (file src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs); each Q&A tool accepts optional workspacePath and calls the existing.
+- Main flow: QA MCP STDIO Tools - MCP STDIO tools live on the existing FwhMcpTools class (file src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs); each Q&A tool accepts optional workspacePath and calls the existing ApplyWorkspaceOverride helper.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA MCP STDIO Tools - MCP STDIO tools live on the existing FwhMcpTools class (file src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs); each Q&A tool accepts optional workspacePath and calls the existing ApplyWorkspaceOverride helper.
+
+**Test Requirements:** TEST-MCP-120, TEST-MCP-121.
 
 ## TR-MCP-QA-011
 
@@ -1657,6 +4175,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA FAQ Query Projection - FAQ projection executes as a single EF query: Questions.Where(q => q.AcceptedAnswerId != null).Include(q => q.AcceptedAnswer).OrderByDescending(q =>.
+- Main flow: QA FAQ Query Projection - FAQ projection executes as a single EF query: Questions.Where(q => q.AcceptedAnswerId != null).Include(q => q.AcceptedAnswer).OrderByDescending(q => q.AcceptedAnswer!.VoteCount).ThenByDescending(q => q.VoteCount).Take(limit).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA FAQ Query Projection - FAQ projection executes as a single EF query: Questions.Where(q => q.AcceptedAnswerId != null).Include(q => q.AcceptedAnswer).OrderByDescending(q => q.AcceptedAnswer!.VoteCount).ThenByDescending(q => q.VoteCount).Take(limit).
+
+**Test Requirements:** TEST-MCP-112, TEST-MCP-116, TEST-MCP-128.
+
 ## TR-MCP-QA-012
 
 **QA Typed Client** — `QaClient` ships in `McpServer.Client` (NuGet `SharpNinja.McpServer.Client`); wired into `McpServerClient.Qa` via `McpServerClientFactory`.
@@ -1664,11 +4194,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Typed Client - QaClient ships in McpServer.Client (NuGet SharpNinja.McpServer.Client); wired into McpServerClient.Qa via McpServerClientFactory.
+- Main flow: QA Typed Client - QaClient ships in McpServer.Client (NuGet SharpNinja.McpServer.Client); wired into McpServerClient.Qa via McpServerClientFactory.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Typed Client - QaClient ships in McpServer.Client (NuGet SharpNinja.McpServer.Client); wired into McpServerClient.Qa via McpServerClientFactory.
+
+**Test Requirements:** TEST-MCP-120, TEST-MCP-121.
+
 ## TR-MCP-QA-013
 
 **QA XML Documentation** — XML docs on every new public type and member (CS1591 enforced). Test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA XML Documentation - XML docs on every new public type and member (CS1591 enforced).
+- Main flow: QA XML Documentation - XML docs on every new public type and member (CS1591 enforced). Test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA XML Documentation - XML docs on every new public type and member (CS1591 enforced).
+- [ ] Given the technical contract, when the implementation is exercised, then test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-QA-013.
 
 ## TR-MCP-QA-014
 
@@ -1677,12 +4232,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA REPL Workflow - REPL exposure: IQaWorkflow in McpServer.Repl.Core wraps McpServerClient.Qa; QaWorkflow registered as singleton in McpServer.Repl.Core/ServiceCollectionExtensions.cs; QaCommandShapes defines.
+- Main flow: QA REPL Workflow - REPL exposure: IQaWorkflow in McpServer.Repl.Core wraps McpServerClient.Qa; QaWorkflow registered as singleton in McpServer.Repl.Core/ServiceCollectionExtensions.cs; QaCommandShapes defines MethodNamespace = "workflow.qa" and per-method constants; ReplCommandDispatcher constructor takes IQaWorkflow and switches on workflow.qa.* methods.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA REPL Workflow - REPL exposure: IQaWorkflow in McpServer.Repl.Core wraps McpServerClient.Qa; QaWorkflow registered as singleton in McpServer.Repl.Core/ServiceCollectionExtensions.cs; QaCommandShapes defines MethodNamespace = "workflow.qa" and per-method constants; ReplCommandDispatcher constructor takes IQaWorkflow and switches on workflow.qa.* methods.
+
+**Test Requirements:** TEST-MCP-122, TEST-MCP-123.
+
 ## TR-MCP-QA-015
 
 **QA PowerShell Module** — PowerShell module `tools/powershell/McpQa.psm1` reads `AGENTS-README-FIRST.yaml` via existing `Find-McpMarkerFile`/`ConvertFrom-McpMarkerContent` helpers, exports `Get-McpQuestion`, `Search-McpQuestion`, `New-McpQuestion`, `Set-McpQuestion`, `Remove-McpQuestion`, `Add-McpAnswer`, `Approve-McpAnswer`, `Add-McpQaVote`, `Add-McpQaComment`, `Get-McpFaq`.
 **Covered by:** FR: FR-MCP-095; TEST: TEST-MCP-122, TEST-MCP-123
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA PowerShell Module - PowerShell module tools/powershell/McpQa.psm1 reads AGENTS-README-FIRST.yaml via existing Find-McpMarkerFile/ConvertFrom-McpMarkerContent helpers, exports Get-McpQuestion, Search-McpQuestion.
+- Main flow: QA PowerShell Module - PowerShell module tools/powershell/McpQa.psm1 reads AGENTS-README-FIRST.yaml via existing Find-McpMarkerFile/ConvertFrom-McpMarkerContent helpers, exports Get-McpQuestion, Search-McpQuestion, New-McpQuestion, Set-McpQuestion, Remove-McpQuestion, Add-McpAnswer, Approve-McpAnswer, Add-McpQaVote, Add-McpQaComment, Get-McpFaq.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA PowerShell Module - PowerShell module tools/powershell/McpQa.psm1 reads AGENTS-README-FIRST.yaml via existing Find-McpMarkerFile/ConvertFrom-McpMarkerContent helpers, exports Get-McpQuestion, Search-McpQuestion, New-McpQuestion, Set-McpQuestion, Remove-McpQuestion, Add-McpAnswer, Approve-McpAnswer, Add-McpQaVote, Add-McpQaComment, Get-McpFaq.
+
+**Test Requirements:** TEST-MCP-122, TEST-MCP-123.
 
 ## TR-MCP-QA-016
 
@@ -1691,12 +4270,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Plugin Skill - Plugin skills: each sibling plugin repo adds skills/qa/SKILL.md with the standard YAML frontmatter (name, description with trigger phrases, version).
+- Main flow: QA Plugin Skill - Plugin skills: each sibling plugin repo adds skills/qa/SKILL.md with the standard YAML frontmatter (name, description with trigger phrases, version). Body documents the workflow.qa.* command namespace, request envelope shape, response shape, and explicitly positions Q&A as a workspace knowledge source (read FAQ first; if no accepted answer matches, ask; if a peer answers and accepts, future agents inherit the answer via FAQ + hybrid search).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Plugin Skill - Plugin skills: each sibling plugin repo adds skills/qa/SKILL.md with the standard YAML frontmatter (name, description with trigger phrases, version).
+- [ ] Given the technical contract, when the implementation is exercised, then body documents the workflow.qa.* command namespace, request envelope shape, response shape, and explicitly positions Q&A as a workspace knowledge source (read FAQ first; if no accepted answer matches, ask; if a peer answers and accepts, future agents inherit the answer via FAQ + hybrid search).
+
+**Test Requirements:** TEST-MCP-124, TEST-MCP-129.
+
 ## TR-MCP-QA-017
 
 **QA Documentation Surface** — Documentation: a new `docs/context/qa-schema.md` defines the on-demand schema reference (entities, IDs, FAQ projection); `docs/USER-GUIDE.md`, `docs/CLIENT-INTEGRATION.md`, `docs/context/api-capabilities.md`, `docs/REPL-USER-GUIDE.md`, `docs/REPL-AGENT-GUIDE.md`, `docs/FAQ.md`, `AGENTS.md`, and the root `README.md` are updated to surface the subsystem; `CLAUDE.md` `Context Loading by Task Type` adds a Q&A row.
 **Covered by:** FR: FR-MCP-096; TEST: TEST-MCP-132
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Documentation Surface - Documentation: a new docs/context/qa-schema.md defines the on-demand schema reference (entities, IDs, FAQ projection); docs/USER-GUIDE.md, docs/CLIENT-INTEGRATION.md.
+- Main flow: QA Documentation Surface - Documentation: a new docs/context/qa-schema.md defines the on-demand schema reference (entities, IDs, FAQ projection); docs/USER-GUIDE.md, docs/CLIENT-INTEGRATION.md, docs/context/api-capabilities.md, docs/REPL-USER-GUIDE.md, docs/REPL-AGENT-GUIDE.md, docs/FAQ.md, AGENTS.md, and the root README.md are updated to surface the subsystem; CLAUDE.md Context Loading by Task Type adds a Q&A row.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Documentation Surface - Documentation: a new docs/context/qa-schema.md defines the on-demand schema reference (entities, IDs, FAQ projection); docs/USER-GUIDE.md, docs/CLIENT-INTEGRATION.md, docs/context/api-capabilities.md, docs/REPL-USER-GUIDE.md, docs/REPL-AGENT-GUIDE.md, docs/FAQ.md, AGENTS.md, and the root README.md are updated to surface the subsystem; CLAUDE.md Context Loading by Task Type adds a Q&A row.
+
+**Test Requirements:** TEST-MCP-132.
 
 ## TR-MCP-QA-018
 
@@ -1705,12 +4309,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Audit Storage - Audit storage: QaAuditHistoryEntity (composite PK (WorkspaceId, Id), columns EntityKind enum question/answer/comment, EntityId, Action enum.
+- Main flow: QA Audit Storage - Audit storage: QaAuditHistoryEntity (composite PK (WorkspaceId, Id), columns EntityKind enum question/answer/comment, EntityId, Action enum create/update/delete/accept/unaccept/vote_up/vote_down/comment_add/comment_delete, Version int, Actor, SnapshotJson, CreatedAt) lives in src/McpServer.Storage/Entities/ with the same global query filter as Q&A entities. Composite index on (EntityKind, EntityId, Version).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Audit Storage - Audit storage: QaAuditHistoryEntity (composite PK (WorkspaceId, Id), columns EntityKind enum question/answer/comment, EntityId, Action enum create/update/delete/accept/unaccept/vote_up/vote_down/comment_add/comment_delete, Version int, Actor, SnapshotJson, CreatedAt) lives in src/McpServer.Storage/Entities/ with the same global query filter as Q&A entities.
+- [ ] Given the technical contract, when the implementation is exercised, then composite index on (EntityKind, EntityId, Version).
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135, TEST-MCP-115, TEST-MCP-125, TEST-MCP-126.
+
 ## TR-MCP-QA-019
 
 **QA Audit Emission** — Audit emission: `EfQaService` injects `IWriteAuditLog` and calls it before persisting each mutation, capturing the pre-mutation snapshot (post-mutation for create) and computing `Version = MAX(Version) + 1` for that `(EntityKind, EntityId)` pair (mirrors `EfTodoService` audit pattern at line ~374).
 **Covered by:** FR: FR-MCP-089, FR-MCP-090, FR-MCP-098; TEST: TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135, TEST-MCP-115, TEST-MCP-125, TEST-MCP-126
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Audit Emission - Audit emission: EfQaService injects IWriteAuditLog and calls it before persisting each mutation, capturing the pre-mutation snapshot (post-mutation for create) and computing Version = MAX(Version) +.
+- Main flow: QA Audit Emission - Audit emission: EfQaService injects IWriteAuditLog and calls it before persisting each mutation, capturing the pre-mutation snapshot (post-mutation for create) and computing Version = MAX(Version) + 1 for that (EntityKind, EntityId) pair (mirrors EfTodoService audit pattern at line ~374).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Audit Emission - Audit emission: EfQaService injects IWriteAuditLog and calls it before persisting each mutation, capturing the pre-mutation snapshot (post-mutation for create) and computing Version = MAX(Version) + 1 for that (EntityKind, EntityId) pair (mirrors EfTodoService audit pattern at line ~374).
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135, TEST-MCP-115, TEST-MCP-125, TEST-MCP-126.
 
 ## TR-MCP-QA-020
 
@@ -1719,12 +4348,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Audit Query - Audit query: IQaService.GetAuditAsync returns QaAuditQueryResult with TotalCount + paged QaAuditEntryDto rows; filterable by entityKind, entityId, action, from, to, actor.
+- Main flow: QA Audit Query - Audit query: IQaService.GetAuditAsync returns QaAuditQueryResult with TotalCount + paged QaAuditEntryDto rows; filterable by entityKind, entityId, action, from, to, actor. EfQaService.GetAuditAsync uses an EF query mirroring EfTodoService.GetAuditAsync.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Audit Query - Audit query: IQaService.GetAuditAsync returns QaAuditQueryResult with TotalCount + paged QaAuditEntryDto rows; filterable by entityKind, entityId, action, from, to, actor.
+- [ ] Given the technical contract, when the implementation is exercised, then efQaService.GetAuditAsync uses an EF query mirroring EfTodoService.GetAuditAsync.
+
+**Test Requirements:** TEST-MCP-125, TEST-MCP-126, TEST-MCP-127.
+
 ## TR-MCP-QA-021
 
 **QA Audit Surfaces** — Audit surfaces: `QaController` adds `[HttpGet("questions/{id}/audit")]`, `[HttpGet("answers/{id}/audit")]`, `[HttpGet("comments/{id}/audit")]`, and `[HttpGet("audit")]`; MCP tool `qa_get_audit`; client `QaClient.GetAuditAsync`; REPL `workflow.qa.audit`; PowerShell `Get-McpQaAudit`; plugin skill documents audit access as a knowledge-provenance tool.
 **Covered by:** FR: FR-MCP-098; TEST: TEST-MCP-125, TEST-MCP-126, TEST-MCP-127
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Audit Surfaces - Audit surfaces: QaController adds [HttpGet("questions/{id}/audit")], [HttpGet("answers/{id}/audit")], [HttpGet("comments/{id}/audit")], and [HttpGet("audit")]; MCP tool qa_get_audit; client.
+- Main flow: QA Audit Surfaces - Audit surfaces: QaController adds [HttpGet("questions/{id}/audit")], [HttpGet("answers/{id}/audit")], [HttpGet("comments/{id}/audit")], and [HttpGet("audit")]; MCP tool qa_get_audit; client QaClient.GetAuditAsync; REPL workflow.qa.audit; PowerShell Get-McpQaAudit; plugin skill documents audit access as a knowledge-provenance tool.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Audit Surfaces - Audit surfaces: QaController adds [HttpGet("questions/{id}/audit")], [HttpGet("answers/{id}/audit")], [HttpGet("comments/{id}/audit")], and [HttpGet("audit")]; MCP tool qa_get_audit; client QaClient.GetAuditAsync; REPL workflow.qa.audit; PowerShell Get-McpQaAudit; plugin skill documents audit access as a knowledge-provenance tool.
+
+**Test Requirements:** TEST-MCP-125, TEST-MCP-126, TEST-MCP-127.
 
 ## TR-MCP-QA-022
 
@@ -1733,12 +4387,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Answer Sources JSON - Answer payload supports a structured sources[] array (each entry: { url, title?, fetchedAt, contentHash?.
+- Main flow: QA Answer Sources JSON - Answer payload supports a structured sources[] array (each entry: { url, title?, fetchedAt, contentHash? }) so web-search-derived answers carry their citations. Stored on AnswerEntity as SourcesJson (nullable string column).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Answer Sources JSON - Answer payload supports a structured sources[] array (each entry: { url, title?, fetchedAt, contentHash?.
+- [ ] Given the technical contract, when the implementation is exercised, then }) so web-search-derived answers carry their citations.
+- [ ] Given the technical contract, when the implementation is exercised, then stored on AnswerEntity as SourcesJson (nullable string column).
+- [ ] Given the technical contract, when the implementation is exercised, then DTO AnswerDto.Sources, request CreateAnswerRequest.Sources.
+
+**Test Requirements:** TEST-MCP-111, TEST-MCP-117, TEST-MCP-128, TEST-MCP-116, TEST-MCP-129.
+
 ## TR-MCP-QA-023
 
 **QA Mandatory Web Capture Skill Rule** — Plugin skill mandate: every `skills/qa/SKILL.md` opens with a mandatory rule block, formatted as a callout (`> [!IMPORTANT]`), stating: "Any time you invoke an internet search, web fetch, browser MCP, or any external HTTP retrieval to help answer a workspace question, you MUST create a Q&A entry capturing the question, the synthesized answer, and the source URLs in the `sources[]` array. If you verified the answer, accept it. This is required, not optional." Skill also documents the exact `workflow.qa.create` + `workflow.qa.createAnswer` + `workflow.qa.accept` sequence and the `sources[]` schema.
 **Covered by:** FR: FR-MCP-097, FR-MCP-099; TEST: TEST-MCP-124, TEST-MCP-129
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Mandatory Web Capture Skill Rule - Plugin skill mandate: every skills/qa/SKILL.md opens with a mandatory rule block, formatted as a callout (> [!IMPORTANT]), stating: "Any time you invoke an internet search, web.
+- Main flow: QA Mandatory Web Capture Skill Rule - Plugin skill mandate: every skills/qa/SKILL.md opens with a mandatory rule block, formatted as a callout (> [!IMPORTANT]), stating: "Any time you invoke an internet search, web fetch, browser MCP, or any external HTTP retrieval to help answer a workspace question, you MUST create a Q&A entry capturing the question, the synthesized answer, and the source URLs in the sources[] array. If you verified the answer, accept it. This is required, not optional." Skill also documents the exact workflow.qa.create + workflow.qa.createAnswer + workflow.qa.accept sequence and the sources[] schema.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Mandatory Web Capture Skill Rule - Plugin skill mandate: every skills/qa/SKILL.md opens with a mandatory rule block, formatted as a callout (> [!IMPORTANT]), stating: "Any time you invoke an internet search, web fetch, browser MCP, or any external HTTP retrieval to help answer a workspace question, you MUST create a Q&A entry capturing the question, the synthesized answer, and the source URLs in the sources[] array.
+- [ ] Given the technical contract, when the implementation is exercised, then if you verified the answer, accept it.
+- [ ] Given the technical contract, when the implementation is exercised, then this is required, not optional." Skill also documents the exact workflow.qa.create + workflow.qa.createAnswer + workflow.qa.accept sequence and the sources[] schema.
+
+**Test Requirements:** TEST-MCP-124, TEST-MCP-129.
 
 ## TR-MCP-QA-024
 
@@ -1747,12 +4430,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Companion Web Skill Cross References - Companion skills in each plugin that perform web research (web-research, browser, search, or equivalents already shipped in each plugin) get an inline "Required follow-up".
+- Main flow: QA Companion Web Skill Cross References - Companion skills in each plugin that perform web research (web-research, browser, search, or equivalents already shipped in each plugin) get an inline "Required follow-up" section pointing back at the Q&A skill, so the mandate is visible from both directions. Implementation step: enumerate each sibling plugin's existing skills and add the cross-reference where applicable.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Companion Web Skill Cross References - Companion skills in each plugin that perform web research (web-research, browser, search, or equivalents already shipped in each plugin) get an inline "Required follow-up" section pointing back at the Q&A skill, so the mandate is visible from both directions.
+- [ ] Given the technical contract, when the implementation is exercised, then implementation step: enumerate each sibling plugin's existing skills and add the cross-reference where applicable.
+
+**Test Requirements:** TEST-MCP-124, TEST-MCP-129.
+
 ## TR-MCP-QA-025
 
 **QA Close and Duplicate Storage** — Close / duplicate storage: extend `QuestionEntity` with `IsClosed` (bool), `ClosedAt` (DateTimeOffset?), `ClosedByActor` (string?), `CloseReason` (enum string `closed`/`duplicate`/`off-topic`/`resolved`/`other`), `DuplicateOfQuestionId` (nullable, with a self-referencing FK + index). FAQ projection filters out closed questions unless `?includeClosed=true`. Search indexer emits a `closed` flag in the `ContextChunkEntity.Metadata` JSON so hybrid-search consumers can filter.
 **Covered by:** FR: FR-MCP-100; TEST: TEST-MCP-130
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Close and Duplicate Storage - Close / duplicate storage: extend QuestionEntity with IsClosed (bool), ClosedAt (DateTimeOffset?), ClosedByActor (string?), CloseReason (enum string.
+- Main flow: QA Close and Duplicate Storage - Close / duplicate storage: extend QuestionEntity with IsClosed (bool), ClosedAt (DateTimeOffset?), ClosedByActor (string?), CloseReason (enum string closed/duplicate/off-topic/resolved/other), DuplicateOfQuestionId (nullable, with a self-referencing FK + index). FAQ projection filters out closed questions unless ?includeClosed=true. Search indexer emits a closed flag in the ContextChunkEntity.Metadata JSON so hybrid-search consumers can filter.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Close and Duplicate Storage - Close / duplicate storage: extend QuestionEntity with IsClosed (bool), ClosedAt (DateTimeOffset?), ClosedByActor (string?), CloseReason (enum string closed/duplicate/off-topic/resolved/other), DuplicateOfQuestionId (nullable, with a self-referencing FK + index).
+- [ ] Given the technical contract, when the implementation is exercised, then FAQ projection filters out closed questions unless ?includeClosed=true.
+- [ ] Given the technical contract, when the implementation is exercised, then search indexer emits a closed flag in the ContextChunkEntity.Metadata JSON so hybrid-search consumers can filter.
+
+**Test Requirements:** TEST-MCP-130.
 
 ## TR-MCP-QA-026
 
@@ -1761,12 +4471,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Close and Duplicate Surfaces - Close / duplicate endpoints: POST /mcpserver/qa/questions/{id}/close (body { reason, duplicateOfQuestionId?.
+- Main flow: QA Close and Duplicate Surfaces - Close / duplicate endpoints: POST /mcpserver/qa/questions/{id}/close (body { reason, duplicateOfQuestionId? }), POST /mcpserver/qa/questions/{id}/reopen, both writing audit rows with action close / reopen / mark_duplicate. Surface in MCP tool (qa_close_question, qa_reopen_question), client (CloseQuestionAsync, ReopenQuestionAsync), REPL (workflow.qa.close, workflow.qa.reopen), PowerShell (Close-McpQuestion, Open-McpQuestion), and skill body.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Close and Duplicate Surfaces - Close / duplicate endpoints: POST /mcpserver/qa/questions/{id}/close (body { reason, duplicateOfQuestionId?.
+- [ ] Given the technical contract, when the implementation is exercised, then }), POST /mcpserver/qa/questions/{id}/reopen, both writing audit rows with action close / reopen / mark_duplicate.
+- [ ] Given the technical contract, when the implementation is exercised, then surface in MCP tool (qa_close_question, qa_reopen_question), client (CloseQuestionAsync, ReopenQuestionAsync), REPL (workflow.qa.close, workflow.qa.reopen), PowerShell (Close-McpQuestion, Open-McpQuestion), and skill body.
+
+**Test Requirements:** TEST-MCP-130.
+
 ## TR-MCP-QA-027
 
 **QA Body Rendering** — Sanitization pipeline: add NuGet packages `Markdig` (markdown -> HTML) and `Ganss.Xss` to `Directory.Packages.props` (central package management). New service `IQaBodyRenderer` (impl `QaBodyRenderer`) renders + sanitizes using a strict allow-list: tags `p, h1, h2, h3, ul, ol, li, code, pre, strong, em, a, blockquote, table, thead, tbody, tr, th, td, hr, br, img`; attributes `href, src, alt, title, class` (with `class` restricted to a set of code-highlight classes); URLs limited to `http`, `https`, `mailto`; force `rel="nofollow noopener"` on all `<a>`; drop `script`, `iframe`, `object`, `embed`, `form`, all `on*` attributes, and `javascript:` URLs. Renderer is called by `EfQaService` on every Create / Update for Question, Answer, and Comment, populating sibling columns `TitleHtml?` (Question only), `BodyHtml`, plus answer/comment equivalents. Audit snapshots also store the rendered HTML so historical views are safe.
 **Covered by:** FR: FR-MCP-101; TEST: TEST-MCP-131
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Body Rendering - Sanitization pipeline: add NuGet packages Markdig (markdown -> HTML) and Ganss.Xss to Directory.Packages.props (central package management).
+- Main flow: QA Body Rendering - Sanitization pipeline: add NuGet packages Markdig (markdown -> HTML) and Ganss.Xss to Directory.Packages.props (central package management). New service IQaBodyRenderer (impl QaBodyRenderer) renders + sanitizes using a strict allow-list: tags p, h1, h2, h3, ul, ol, li, code, pre, strong, em, a, blockquote, table, thead, tbody, tr, th, td, hr, br, img; attributes href, src, alt, title, class (with class restricted to a set of code-highlight classes); URLs limited to http, https, mailto; force rel="nofollow noopener" on all <a>; drop script, iframe, object, embed, form, all on* attributes, and javascript: URLs. Renderer is called by EfQaService on every Create / Update for.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Body Rendering - Sanitization pipeline: add NuGet packages Markdig (markdown -> HTML) and Ganss.Xss to Directory.Packages.props (central package management).
+- [ ] Given the technical contract, when the implementation is exercised, then new service IQaBodyRenderer (impl QaBodyRenderer) renders + sanitizes using a strict allow-list: tags p, h1, h2, h3, ul, ol, li, code, pre, strong, em, a, blockquote, table, thead, tbody, tr, th, td, hr, br, img; attributes href, src, alt, title, class (with class restricted to a set of code-highlight classes); URLs limited to http, https, mailto; force rel="nofollow noopener" on all <a>; drop script, iframe, object, embed, form, all on* attributes, and javascript: URLs.
+- [ ] Given the technical contract, when the implementation is exercised, then renderer is called by EfQaService on every Create / Update for Question, Answer, and Comment, populating sibling columns TitleHtml?.
+- [ ] Given the technical contract, when the implementation is exercised, then (Question only), BodyHtml, plus answer/comment equivalents.
+
+**Test Requirements:** TEST-MCP-131.
 
 ## TR-MCP-QA-028
 
@@ -1775,12 +4514,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Sanitization Tests - Sanitization tests: tests/McpServer.Support.Mcp.Tests/Services/QaBodyRendererTests.cs covers a canonical XSS-payload corpus (script tags, <img onerror>, javascript: href, data URLs, nested HTML.
+- Main flow: QA Sanitization Tests - Sanitization tests: tests/McpServer.Support.Mcp.Tests/Services/QaBodyRendererTests.cs covers a canonical XSS-payload corpus (script tags, <img onerror>, javascript: href, data URLs, nested HTML in markdown, comment-out attacks, html entities). Same corpus runs against the live controller via tests/McpServer.Qa.Validation/ErrorTests/SanitizationTests.cs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Sanitization Tests - Sanitization tests: tests/McpServer.Support.Mcp.Tests/Services/QaBodyRendererTests.cs covers a canonical XSS-payload corpus (script tags, <img onerror>, javascript: href, data URLs, nested HTML in markdown, comment-out attacks, html entities).
+- [ ] Given the technical contract, when the implementation is exercised, then same corpus runs against the live controller via tests/McpServer.Qa.Validation/ErrorTests/SanitizationTests.cs.
+
+**Test Requirements:** TEST-MCP-131.
+
 ## TR-MCP-QA-029
 
 **QA FAQ Wiki Generation Target** — FAQ wiki page generation: add a Nuke build target (e.g. `BuildFaqWikiPage`) in `build/Build.cs` (or whatever the existing target file is) that POSTs `GET /mcpserver/qa/faq?limit=500&includeSources=true` to a configured workspace (env-var-driven endpoint + API key, mirroring existing wiki publication patterns), formats the response into Markdown, writes `docs/Project/wiki/azure/FAQ.md` and `docs/Project/wiki/github/FAQ.md`, and updates `Home.md`, `_Sidebar.md`, and `.order` entries to list the FAQ page. Target is wired into the existing publication target so `./build.ps1` rebuilds the FAQ page alongside the requirements wiki.
 **Covered by:** FR: FR-MCP-102; TEST: TEST-MCP-132
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA FAQ Wiki Generation Target - FAQ wiki page generation: add a Nuke build target (e.g.
+- Main flow: QA FAQ Wiki Generation Target - FAQ wiki page generation: add a Nuke build target (e.g. BuildFaqWikiPage) in build/Build.cs (or whatever the existing target file is) that POSTs GET /mcpserver/qa/faq?limit=500&includeSources=true to a configured workspace (env-var-driven endpoint + API key, mirroring existing wiki publication patterns), formats the response into Markdown, writes docs/Project/wiki/azure/FAQ.md and docs/Project/wiki/github/FAQ.md, and updates Home.md, _Sidebar.md, and .order entries to list the FAQ page. Target is wired into the existing publication target so ./build.ps1 rebuilds the FAQ page alongside the requirements wiki.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA FAQ Wiki Generation Target - FAQ wiki page generation: add a Nuke build target (e.g.
+- [ ] Given the technical contract, when the implementation is exercised, then buildFaqWikiPage) in build/Build.cs (or whatever the existing target file is) that POSTs GET /mcpserver/qa/faq?limit=500&includeSources=true to a configured workspace (env-var-driven endpoint + API key, mirroring existing wiki publication patterns), formats the response into Markdown, writes docs/Project/wiki/azure/FAQ.md and docs/Project/wiki/github/FAQ.md, and updates Home.md, _Sidebar.md, and .order entries to list the FAQ page.
+- [ ] Given the technical contract, when the implementation is exercised, then target is wired into the existing publication target so ./build.ps1 rebuilds the FAQ page alongside the requirements wiki.
+
+**Test Requirements:** TEST-MCP-132.
 
 ## TR-MCP-QA-030
 
@@ -1789,12 +4555,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA FAQ Wiki Snapshot Tests - FAQ wiki content tests: a tests/Build.Tests/FaqWikiPageTests.cs test invokes BuildFaqWikiPage against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in.
+- Main flow: QA FAQ Wiki Snapshot Tests - FAQ wiki content tests: a tests/Build.Tests/FaqWikiPageTests.cs test invokes BuildFaqWikiPage against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in expected output to catch unintended formatting changes, and asserts the wiki index files reference the new page.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA FAQ Wiki Snapshot Tests - FAQ wiki content tests: a tests/Build.Tests/FaqWikiPageTests.cs test invokes BuildFaqWikiPage against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in expected output to catch unintended formatting changes, and asserts the wiki index files reference the new page.
+
+**Test Requirements:** TEST-MCP-132.
+
 ## TR-MCP-QA-031
 
 **QA Voter History** — Voter-history endpoints (derived from audit): `GET /mcpserver/qa/questions/{id}/voters` and `GET /mcpserver/qa/answers/{id}/voters` return the audit rows for that entity filtered to `Action IN ('vote_up','vote_down','vote_change','vote_revoke')`, projected as `{ actor, action, createdAt }` with paging. Same surface exposed through MCP (`qa_get_voters`), client (`QaClient.GetVotersAsync`), REPL (`workflow.qa.voters`), and PowerShell (`Get-McpQaVoters`). The plugin skill documents this endpoint as the canonical way to answer "who voted on X". A companion `GET .../votes` endpoint returns the current per-voter state (one row per active voter) from `QaVoteEntity` for "what is each voter's current position" queries.
 **Covered by:** FR: FR-MCP-089; TEST: TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Voter History - Voter-history endpoints (derived from audit): GET /mcpserver/qa/questions/{id}/voters and GET /mcpserver/qa/answers/{id}/voters return the audit rows for that entity filtered to Action IN.
+- Main flow: QA Voter History - Voter-history endpoints (derived from audit): GET /mcpserver/qa/questions/{id}/voters and GET /mcpserver/qa/answers/{id}/voters return the audit rows for that entity filtered to Action IN ('vote_up','vote_down','vote_change','vote_revoke'), projected as { actor, action, createdAt } with paging. Same surface exposed through MCP (qa_get_voters), client (QaClient.GetVotersAsync), REPL (workflow.qa.voters), and PowerShell (Get-McpQaVoters). The plugin skill documents this endpoint as the canonical way to answer "who voted on X".
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Voter History - Voter-history endpoints (derived from audit): GET /mcpserver/qa/questions/{id}/voters and GET /mcpserver/qa/answers/{id}/voters return the audit rows for that entity filtered to Action IN ('vote_up','vote_down','vote_change','vote_revoke'), projected as { actor, action, createdAt } with paging.
+- [ ] Given the technical contract, when the implementation is exercised, then same surface exposed through MCP (qa_get_voters), client (QaClient.GetVotersAsync), REPL (workflow.qa.voters), and PowerShell (Get-McpQaVoters).
+- [ ] Given the technical contract, when the implementation is exercised, then the plugin skill documents this endpoint as the canonical way to answer "who voted on X".
+- [ ] Given the technical contract, when the implementation is exercised, then a companion GET .../votes endpoint returns the current per-voter state (one row per active voter) from QaVoteEntity for "what is each voter's current position" queries.
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135.
 
 ## TR-MCP-QA-032
 
@@ -1803,12 +4596,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Vote State Storage - Per-voter state storage: new QaVoteEntity (composite PK (WorkspaceId, Id); columns EntityKind (question/answer), EntityId, VoterActor, VoteValue (1 or -1), CreatedAt, UpdatedAt).
+- Main flow: QA Vote State Storage - Per-voter state storage: new QaVoteEntity (composite PK (WorkspaceId, Id); columns EntityKind (question/answer), EntityId, VoterActor, VoteValue (1 or -1), CreatedAt, UpdatedAt). Unique index (WorkspaceId, EntityKind, EntityId, VoterActor) enforces one-vote-per-user-per-entity at the database layer (prevents race conditions even under concurrent vote calls). Global query filter on WorkspaceId matches other Q&A entities.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Vote State Storage - Per-voter state storage: new QaVoteEntity (composite PK (WorkspaceId, Id); columns EntityKind (question/answer), EntityId, VoterActor, VoteValue (1 or -1), CreatedAt, UpdatedAt).
+- [ ] Given the technical contract, when the implementation is exercised, then unique index (WorkspaceId, EntityKind, EntityId, VoterActor) enforces one-vote-per-user-per-entity at the database layer (prevents race conditions even under concurrent vote calls).
+- [ ] Given the technical contract, when the implementation is exercised, then global query filter on WorkspaceId matches other Q&A entities.
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135.
+
 ## TR-MCP-QA-033
 
 **QA Vote State Machine** — Vote state machine: `EfQaService.VoteAsync(entityKind, entityId, delta, actor)` runs in a single transaction that (a) looks up the existing `QaVoteEntity` row, (b) applies one of `no-op` (same vote already exists), `apply` (no existing vote -> insert + counter +/- 1), `change` (opposite vote exists -> update row + counter +/- 2), or `revoke` (delta is 0 and a vote exists -> delete row + counter -/+ 1), (c) writes the corresponding audit row with action `vote_up` / `vote_down` / `vote_change` / `vote_revoke` (no audit row on `no-op`), (d) updates the Question/Answer counter via atomic `UPDATE`. Returns the resulting state so callers know which branch ran.
 **Covered by:** FR: FR-MCP-089; TEST: TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Vote State Machine - Vote state machine: EfQaService.VoteAsync(entityKind, entityId, delta, actor) runs in a single transaction that (a) looks up the existing QaVoteEntity row, (b) applies one of no-op (same vote.
+- Main flow: QA Vote State Machine - Vote state machine: EfQaService.VoteAsync(entityKind, entityId, delta, actor) runs in a single transaction that (a) looks up the existing QaVoteEntity row, (b) applies one of no-op (same vote already exists), apply (no existing vote -> insert + counter +/- 1), change (opposite vote exists -> update row + counter +/- 2), or revoke (delta is 0 and a vote exists -> delete row + counter -/+ 1), (c) writes the corresponding audit row with action vote_up / vote_down / vote_change / vote_revoke (no audit row on no-op), (d) updates the Question/Answer counter via atomic UPDATE. Returns the resulting state so callers know which branch ran.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Vote State Machine - Vote state machine: EfQaService.VoteAsync(entityKind, entityId, delta, actor) runs in a single transaction that (a) looks up the existing QaVoteEntity row, (b) applies one of no-op (same vote already exists), apply (no existing vote -> insert + counter +/- 1), change (opposite vote exists -> update row + counter +/- 2), or revoke (delta is 0 and a vote exists -> delete row + counter -/+ 1), (c) writes the corresponding audit row with action vote_up / vote_down / vote_change / vote_revoke (no audit row on no-op), (d) updates the Question/Answer counter via atomic UPDATE.
+- [ ] Given the technical contract, when the implementation is exercised, then returns the resulting state so callers know which branch ran.
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135.
 
 ## TR-MCP-QA-034
 
@@ -1817,12 +4637,40 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QA Vote Audit Actions - Vote audit-action enum extends to: vote_up, vote_down, vote_change, vote_revoke.
+- Main flow: QA Vote Audit Actions - Vote audit-action enum extends to: vote_up, vote_down, vote_change, vote_revoke. Migration adds the new values to the audit action enum check constraint (where one exists - SQLite stores as string, SqlServer / Postgres via check constraint).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QA Vote Audit Actions - Vote audit-action enum extends to: vote_up, vote_down, vote_change, vote_revoke.
+- [ ] Given the technical contract, when the implementation is exercised, then migration adds the new values to the audit action enum check constraint (where one exists - SQLite stores as string, SqlServer / Postgres via check constraint).
+
+**Test Requirements:** TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135.
+
 ## TR-MCP-QB-001
 
 **Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog** — Implements FR-MCP-142. Four independent exposures were identified and all four SHALL be removed; removing only the first leaves QuadBrain reachable. (1) Shared Node plugin core: delete plugins/core/lib-node/src/tools/brain-slots.ts and tests/brain-slots.test.ts, remove the import at runtime/host-context.ts:15, the brainSlotTools spread at :40, the dispatch branch at :290, the public re-export at index.ts:49, and the brain_slot_status assertion at tests/host-context.test.ts:127, then rebuild dist because dist is gitignored and stale compiled output keeps exporting the tools. (2) Server MCP transports: delete src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.BrainSlots.cs, which declares all eleven brain_slot tools and is registered by assembly scan at Program.cs:706 WithToolsFromAssembly and by McpStdioHost, with zero identity filtering anywhere in the project, so every MCP client sees them; prune the brain-slot entries from docs/stdio-tool-contract.json and retire tests/McpServer.Support.Mcp.Tests/McpStdio/BrainSlotContractArtifactTests.cs, keeping the artifact for MemoryContractArtifactTests. (3) Named client passthrough: remove the BRAINSLOTS mapping at src/McpServer.Repl.Core/GenericClientPassthrough.cs:168 and its BrainSlot result-unwrapping cases, closing the client-invoke back door that survives tool removal. (4) Shared hosted-agent catalog: remove mcp_quadbrain_coding_execute from McpHostedAgentToolAdapter, IMcpHostedAgent, QBAgentDefinition, and McpQuadBrainCodingAgentRouter; it is advertised to every McpServer.McpAgent host and is already dead for QBAgent because QuadBrainInternalToolExecutor has no case for it. Also delete the eleven mcps/mcpserver/tools/brain_slot_*.json descriptors, which have no in-repo consumer. BrainSlotClient itself remains, because the server-side orchestration path and its tests use it; only the agent-reachable routes to it are removed.
 **Covered by:** FR: FR-MCP-142; TEST: TEST-MCP-193
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog - Implements FR-MCP-142.
+- Main flow: Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog - Implements FR-MCP-142. Four independent exposures were identified and all four SHALL be removed; removing only the first leaves QuadBrain reachable. (1) Shared Node plugin core: delete plugins/core/lib-node/src/tools/brain-slots.ts and tests/brain-slots.test.ts, remove the import at runtime/host-context.ts:15, the brainSlotTools spread at :40, the dispatch branch at :290, the public re-export at index.ts:49, and the brain_slot_status assertion at tests/host-context.test.ts:127, then rebuild dist because dist is gitignored and stale compiled output keeps exporting the tools.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog - Implements FR-MCP-142.
+- [ ] Given the technical contract, when the implementation is exercised, then four independent exposures were identified and all four SHALL be removed; removing only the first leaves QuadBrain reachable.
+- [ ] Given the technical contract, when the implementation is exercised, then (1) Shared Node plugin core: delete plugins/core/lib-node/src/tools/brain-slots.ts and tests/brain-slots.test.ts, remove the import at runtime/host-context.ts:15, the brainSlotTools spread at :40, the dispatch branch at :290, the public re-export at index.ts:49, and the brain_slot_status assertion at tests/host-context.test.ts:127, then rebuild dist because dist is gitignored and stale compiled output keeps exporting the tools.
+- [ ] Given the technical contract, when the implementation is exercised, then (2) Server MCP transports: delete src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.BrainSlots.cs, which declares all eleven brain_slot tools and is registered by assembly scan at Program.cs:706 WithToolsFromAssembly and by McpStdioHost, with zero identity filtering anywhere in the project, so every MCP client sees them; prune the brain-slot entries from docs/stdio-tool-contract.json and retire tests/McpServer.Support.Mcp.Tests/McpStdio/BrainSlotContractArtifactTests.cs, keeping the artifact for MemoryContractArtifactTests.
+
+**Test Requirements:** TEST-MCP-193.
 
 ## TR-MCP-QBAGENT-001
 
@@ -1831,12 +4679,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: QuadBrain hosted agent.
+- Goal: QBAgent marker bootstrap and graceful no-marker exit - QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the.
+- Main flow: QBAgent marker bootstrap and graceful no-marker exit - QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] QBAgent marker bootstrap and graceful no-marker exit - QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
+
+**Test Requirements:** TEST-MCP-QBAGENT-001, TEST-MCP-QBAGENTINT-001.
+
 ## TR-MCP-QBEXEC-001
 
 **QuadBrain internal-tool interception** — server-side execution and stripping seam.
 **Covered by:** FR: FR-MCP-QBEXEC-001; TEST: TEST-MCP-QBEXEC-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QuadBrain internal-tool interception - server-side execution and stripping seam.
+- Main flow: QuadBrain internal-tool interception - server-side execution and stripping seam.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then quadBrain internal-tool interception - server-side execution and stripping seam.
+
+**Test Requirements:** TEST-MCP-QBEXEC-001.
 
 ## TR-MCP-QBEXEC-002
 
@@ -1845,12 +4717,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Internal-tool executor dispatch - QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name, deserializes Arguments, calls the transaction-gated service for the capability, and maps results to.
+- Main flow: Internal-tool executor dispatch - QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name, deserializes Arguments, calls the transaction-gated service for the capability, and maps results to InternalToolExecutionOutcome Ok/Fail/Unhandled; replaces NoopInternalToolExecutor in DI.
+- Edge cases: Internal-tool executor dispatch - QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name, deserializes Arguments, calls the transaction-gated service for the capability, and maps results to InternalToolExecutionOutcome Ok/Fail/Unhandled; replaces NoopInternalToolExecutor in DI.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then internal-tool executor dispatch - QuadBrainInternalToolExecutor dispatches on toolCall.Function.Name, deserializes Arguments, calls the transaction-gated service for the capability, and maps results to InternalToolExecutionOutcome Ok/Fail/Unhandled; replaces NoopInternalToolExecutor in DI.
+
+**Test Requirements:** TEST-MCP-QBEXEC-002.
+
 ## TR-MCP-QBEXEC-003
 
 **Full-text inter-brain session-log capture** — Brain-slot invocations and AoT reconciliation write full prompt+output text to the session log via ISessionLogService correlated by TurnId, retaining the hashed BrainSlotInvocationEntity audit row; internal-tool executed/failed outcomes are logged; secrets are redacted.
 **Covered by:** FR: FR-MCP-QBEXEC-003; TEST: TEST-MCP-QBEXEC-003
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Full-text inter-brain session-log capture - Brain-slot invocations and AoT reconciliation write full prompt+output text to the session log via ISessionLogService correlated by TurnId, retaining the hashed.
+- Main flow: Full-text inter-brain session-log capture - Brain-slot invocations and AoT reconciliation write full prompt+output text to the session log via ISessionLogService correlated by TurnId, retaining the hashed BrainSlotInvocationEntity audit row; internal-tool executed/failed outcomes are logged; secrets are redacted.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then full-text inter-brain session-log capture - Brain-slot invocations and AoT reconciliation write full prompt+output text to the session log via ISessionLogService correlated by TurnId, retaining the hashed BrainSlotInvocationEntity audit row; internal-tool executed/failed outcomes are logged; secrets are redacted.
+
+**Test Requirements:** TEST-MCP-QBEXEC-003.
 
 ## TR-MCP-QBOLLAMA-002
 
@@ -1859,12 +4755,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: OllamaServerController with injectable probe, launcher, and ownership-scoped teardown - Implements FR-MCP-QBOLLAMA-002.
+- Main flow: OllamaServerController with injectable probe, launcher, and ownership-scoped teardown - Implements FR-MCP-QBOLLAMA-002. OllamaServerController lives in tests/TestSupport.Shared with no xunit dependency; its probe delegate, executable resolver, process launcher, poll interval, timeout, delay, and clock are injected so the policy is unit-testable without a real Ollama binary. It is linked into McpServer.Support.Mcp.Tests and McpServer.Support.Mcp.IntegrationTests through tests/Directory.Build.targets following the Validation.Shared linked-source idiom.
+- Edge cases: OllamaServerController lives in tests/TestSupport.Shared with no xunit dependency; its probe delegate, executable resolver, process launcher, poll interval, timeout, delay, and clock are injected so the policy is unit-testable without a real Ollama binary.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then ollamaServerController with injectable probe, launcher, and ownership-scoped teardown - Implements FR-MCP-QBOLLAMA-002.
+- [ ] Given the technical contract, when the implementation is exercised, then ollamaServerController lives in tests/TestSupport.Shared with no xunit dependency; its probe delegate, executable resolver, process launcher, poll interval, timeout, delay, and clock are injected so the policy is unit-testable without a real Ollama binary.
+- [ ] Given the technical contract, when the implementation is exercised, then it is linked into McpServer.Support.Mcp.Tests and McpServer.Support.Mcp.IntegrationTests through tests/Directory.Build.targets following the Validation.Shared linked-source idiom.
+- [ ] EnsureRunningAsync probes first, launches only when the probe fails, then polls until the probe succeeds or the timeout elapses; on timeout it terminates any process it started before throwing.
+
+**Test Requirements:** TEST-MCP-QBOLLAMA-002.
+
 ## TR-MCP-QBOPENAI-001
 
 **OpenAI chat-completions surface over QuadBrain orchestration** — Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output. Subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming. QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
 **Covered by:** FR: FR-MCP-QBOPENAI-001; TEST: TEST-MCP-QBINT-001, TEST-MCP-QBOPENAI-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: OpenAI chat-completions surface over QuadBrain orchestration - Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain.
+- Main flow: OpenAI chat-completions surface over QuadBrain orchestration - Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output. Subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming. QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then openAI chat-completions surface over QuadBrain orchestration - Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output.
+- [ ] Given the technical contract, when the implementation is exercised, then subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming.
+- [ ] Given the technical contract, when the implementation is exercised, then QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
+
+**Test Requirements:** TEST-MCP-QBINT-001, TEST-MCP-QBOPENAI-001.
 
 ## TR-MCP-QBSEED-002
 
@@ -1877,12 +4802,33 @@ Scope: layer-1+
 - [x] BrainSlotStartupSeeder provisions GLOBAL quad on StartAsync with idempotency keyed by SlotId.
 - [x] WorkspaceResolutionMiddleware resolves /v1 requests and scopes internal-tool mutations to workspace context.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping - BrainSlotOptions gains Slots (List<BrainSlotSeedDefinition>), each carrying a SlotId plus UpsertBrainSlotRequest fields with safe credential.
+- Main flow: Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping - BrainSlotOptions gains Slots (List<BrainSlotSeedDefinition>), each carrying a SlotId plus UpsertBrainSlotRequest fields with safe credential references. BrainSlotStartupSeeder provisions the GLOBAL quad on StartAsync with idempotency keyed by SlotId. WorkspaceResolutionMiddleware resolves /v1 requests from X-Workspace-Path header or Bearer/X-Api-Key token, scoping internal-tool mutations to that workspace while brains remain global.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-QBSEED-001.
+
 ## TR-MCP-QBSKILLS-001
 
 **SKILL.md manifest model and parser** — SkillManifest + SkillManifestParser parse agentskills.io frontmatter (name+description required; optional license/version/allowed-tools) using the YAML library already used by QBAgentBootstrapper; folder model supports optional scripts/references/assets.
 **Covered by:** FR: FR-MCP-QBSKILLS-001; TEST: TEST-MCP-QBSKILLS-001, TEST-MCP-QBSKILLS-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SKILL.md manifest model and parser - SkillManifest + SkillManifestParser parse agentskills.io frontmatter (name+description required; optional license/version/allowed-tools) using the YAML library already used by.
+- Main flow: SKILL.md manifest model and parser - SkillManifest + SkillManifestParser parse agentskills.io frontmatter (name+description required; optional license/version/allowed-tools) using the YAML library already used by QBAgentBootstrapper; folder model supports optional scripts/references/assets.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then SKILL.md manifest model and parser - SkillManifest + SkillManifestParser parse agentskills.io frontmatter (name+description required; optional license/version/allowed-tools) using the YAML library already used by QBAgentBootstrapper; folder model supports optional scripts/references/assets.
+
+**Test Requirements:** TEST-MCP-QBSKILLS-001, TEST-MCP-QBSKILLS-002.
 
 ## TR-MCP-QBSKILLS-002
 
@@ -1891,6 +4837,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Skill storage layout and dotnet/skills vendoring - Skills live under skills/ at the repo root; dotnet/skills is vendored at skills/vendor/dotnet-skills as a git submodule (mirroring tools/McpServerTools) or synced via a.
+- Main flow: Skill storage layout and dotnet/skills vendoring - Skills live under skills/ at the repo root; dotnet/skills is vendored at skills/vendor/dotnet-skills as a git submodule (mirroring tools/McpServerTools) or synced via a build target; the registry scans both roots path-safely via IRepoFileService.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then skill storage layout and dotnet/skills vendoring - Skills live under skills/ at the repo root; dotnet/skills is vendored at skills/vendor/dotnet-skills as a git submodule (mirroring tools/McpServerTools) or synced via a build target; the registry scans both roots path-safely via IRepoFileService.
+
+**Test Requirements:** TEST-MCP-QBSKILLS-002.
+
 ## TR-MCP-QBSKILLS-003
 
 **Discovery-list injection** — Only the size-bounded discovery list (name+description per skill) is injected into the QBAgent system prompt; full SKILL.md bodies are fetched on demand via load_skill.
@@ -1898,11 +4856,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Discovery-list injection - Only the size-bounded discovery list (name+description per skill) is injected into the QBAgent system prompt; full SKILL.md bodies are fetched on demand via load_skill.
+- Main flow: Discovery-list injection - Only the size-bounded discovery list (name+description per skill) is injected into the QBAgent system prompt; full SKILL.md bodies are fetched on demand via load_skill.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then discovery-list injection - Only the size-bounded discovery list (name+description per skill) is injected into the QBAgent system prompt; full SKILL.md bodies are fetched on demand via load_skill.
+
+**Test Requirements:** TEST-MCP-QBSKILLS-003.
+
 ## TR-MCP-QBTOOLS-000
 
 **Single core per capability (anti-duplication)** — Each tool capability (edit, bash, git) has exactly one core service carrying path-safety/transaction contracts. The internal plane calls the transaction-gated core directly; the external plane calls the same core via the MCP client. Tool classes contain only transport and JSON-shape adaptation, no business logic.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Single core per capability (anti-duplication) - Each tool capability (edit, bash, git) has exactly one core service carrying path-safety/transaction contracts.
+- Main flow: Single core per capability (anti-duplication) - Each tool capability (edit, bash, git) has exactly one core service carrying path-safety/transaction contracts. The internal plane calls the transaction-gated core directly; the external plane calls the same core via the MCP client. Tool classes contain only transport and JSON-shape adaptation, no business logic.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then single core per capability (anti-duplication) - Each tool capability (edit, bash, git) has exactly one core service carrying path-safety/transaction contracts.
+- [ ] Given the technical contract, when the implementation is exercised, then the internal plane calls the transaction-gated core directly; the external plane calls the same core via the MCP client.
+- [ ] Given the technical contract, when the implementation is exercised, then tool classes contain only transport and JSON-shape adaptation, no business logic.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-QBTOOLS-000.
 
 ## TR-MCP-QBTOOLS-001
 
@@ -1911,12 +4895,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: External tool surface project and registration - Agent-side external tools live in src/McpServer.QBAgent.Tools, are built with AIFunctionFactory.Create (non-mcp_ names), and are injected via.
+- Main flow: External tool surface project and registration - Agent-side external tools live in src/McpServer.QBAgent.Tools, are built with AIFunctionFactory.Create (non-mcp_ names), and are injected via baseOptions.ChatOptions.Tools into agent.CreateRunOptions; file tools delegate to the MCP client Repo surface.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then external tool surface project and registration - Agent-side external tools live in src/McpServer.QBAgent.Tools, are built with AIFunctionFactory.Create (non-mcp_ names), and are injected via baseOptions.ChatOptions.Tools into agent.CreateRunOptions; file tools delegate to the MCP client Repo surface.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-001, TEST-MCP-QBTOOLSINT-001.
+
 ## TR-MCP-QBTOOLS-002
 
 **run_powershell backed by HostedPowerShellSessionManager** — run_powershell reuses the in-process HostedPowerShellSessionManager runspace and returns captured streams.
 **Covered by:** FR: FR-MCP-QBTOOLS-002; TEST: TEST-MCP-QBTOOLS-007
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: run_powershell backed by HostedPowerShellSessionManager - run_powershell reuses the in-process HostedPowerShellSessionManager runspace and returns captured streams.
+- Main flow: run_powershell backed by HostedPowerShellSessionManager - run_powershell reuses the in-process HostedPowerShellSessionManager runspace and returns captured streams.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then run_powershell backed by HostedPowerShellSessionManager - run_powershell reuses the in-process HostedPowerShellSessionManager runspace and returns captured streams.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-007.
 
 ## TR-MCP-QBTOOLS-003
 
@@ -1925,12 +4933,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: run_bash via ProcessRunner with PATH resolution - run_bash resolves bash.exe through IProcessEnvironmentService.ResolveExecutable and runs via ProcessRunner; absent bash yields a structured available=false result.
+- Main flow: run_bash via ProcessRunner with PATH resolution - run_bash resolves bash.exe through IProcessEnvironmentService.ResolveExecutable and runs via ProcessRunner; absent bash yields a structured available=false result.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then run_bash via ProcessRunner with PATH resolution - run_bash resolves bash.exe through IProcessEnvironmentService.ResolveExecutable and runs via ProcessRunner; absent bash yields a structured available=false result.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-003.
+
 ## TR-MCP-QBTOOLS-004
 
 **git tool via ProcessRunner with push guard** — git tool builds an argument list per the GitHubCliService pattern and runs via ProcessRunner; a subcommand allowlist gates status/diff/log/branch/add/commit/checkout/push/reset; push is constrained to the origin remote and current branch; an opt-in McpAgentOptions.AllowGitPush defaults off for first ship.
 **Covered by:** FR: FR-MCP-QBTOOLS-004; TEST: TEST-MCP-QBTOOLS-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: git tool via ProcessRunner with push guard - git tool builds an argument list per the GitHubCliService pattern and runs via ProcessRunner; a subcommand allowlist gates.
+- Main flow: git tool via ProcessRunner with push guard - git tool builds an argument list per the GitHubCliService pattern and runs via ProcessRunner; a subcommand allowlist gates status/diff/log/branch/add/commit/checkout/push/reset; push is constrained to the origin remote and current branch; an opt-in McpAgentOptions.AllowGitPush defaults off for first ship.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then git tool via ProcessRunner with push guard - git tool builds an argument list per the GitHubCliService pattern and runs via ProcessRunner; a subcommand allowlist gates status/diff/log/branch/add/commit/checkout/push/reset; push is constrained to the origin remote and current branch; an opt-in McpAgentOptions.AllowGitPush defaults off for first ship.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-002.
 
 ## TR-MCP-QBTOOLS-005
 
@@ -1939,12 +4971,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Server-side adapter tools mcp_repo_edit/mcp_bash/mcp_git - McpHostedAgentToolAdapter.CreateFunctions adds mcp_repo_edit, mcp_bash, and mcp_git with mcp_ prefix; mutating variants execute through the transaction-gated.
+- Main flow: Server-side adapter tools mcp_repo_edit/mcp_bash/mcp_git - McpHostedAgentToolAdapter.CreateFunctions adds mcp_repo_edit, mcp_bash, and mcp_git with mcp_ prefix; mutating variants execute through the transaction-gated core services.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then server-side adapter tools mcp_repo_edit/mcp_bash/mcp_git - McpHostedAgentToolAdapter.CreateFunctions adds mcp_repo_edit, mcp_bash, and mcp_git with mcp_ prefix; mutating variants execute through the transaction-gated core services.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-006.
+
 ## TR-MCP-QBTOOLS-006
 
 **RepoFileService.EditAsync semantics** — IRepoFileService.EditAsync(path, oldString, newString, expectedOccurrences?) reuses NormalizeRelative/TryResolveFullPath/IsAllowed/ComputeSha256/PublishChange; missing oldString fails; ambiguous match fails unless replaceAll/expectedOccurrences; returns RepoEditResult.
 **Covered by:** FR: FR-MCP-QBTOOLS-006; TEST: TEST-MCP-QBTOOLS-004, TEST-MCP-QBTOOLS-005
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: RepoFileService.EditAsync semantics - IRepoFileService.EditAsync(path, oldString, newString, expectedOccurrences?) reuses NormalizeRelative/TryResolveFullPath/IsAllowed/ComputeSha256/PublishChange; missing oldString.
+- Main flow: RepoFileService.EditAsync semantics - IRepoFileService.EditAsync(path, oldString, newString, expectedOccurrences?) reuses NormalizeRelative/TryResolveFullPath/IsAllowed/ComputeSha256/PublishChange; missing oldString fails; ambiguous match fails unless replaceAll/expectedOccurrences; returns RepoEditResult.
+- Edge cases: RepoFileService.EditAsync semantics - IRepoFileService.EditAsync(path, oldString, newString, expectedOccurrences?) reuses NormalizeRelative/TryResolveFullPath/IsAllowed/ComputeSha256/PublishChange; missing oldString fails; ambiguous match fails unless replaceAll/expectedOccurrences; returns RepoEditResult.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then repoFileService.EditAsync semantics - IRepoFileService.EditAsync(path, oldString, newString, expectedOccurrences?) reuses NormalizeRelative/TryResolveFullPath/IsAllowed/ComputeSha256/PublishChange; missing oldString fails; ambiguous match fails unless replaceAll/expectedOccurrences; returns RepoEditResult.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-004, TEST-MCP-QBTOOLS-005.
 
 ## TR-MCP-QBTOOLS-007
 
@@ -1953,12 +5009,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transaction-gated EditAsync compensation - TransactionGatedRepoFileService gates EditAsync (operation repo.edit) through ITurnTransactionCoordinator using the IRepoFileCompensation snapshot for rollback on reject.
+- Main flow: Transaction-gated EditAsync compensation - TransactionGatedRepoFileService gates EditAsync (operation repo.edit) through ITurnTransactionCoordinator using the IRepoFileCompensation snapshot for rollback on reject; degraded coordinator fails.
+- Edge cases: Transaction-gated EditAsync compensation - TransactionGatedRepoFileService gates EditAsync (operation repo.edit) through ITurnTransactionCoordinator using the IRepoFileCompensation snapshot for rollback on reject; degraded coordinator fails.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transaction-gated EditAsync compensation - TransactionGatedRepoFileService gates EditAsync (operation repo.edit) through ITurnTransactionCoordinator using the IRepoFileCompensation snapshot for rollback on reject; degraded coordinator fails.
+
+**Test Requirements:** TEST-MCP-QBTOOLS-004, TEST-MCP-QBTOOLS-005.
+
 ## TR-MCP-QBTOOLS-008
 
 **QBAgent tool/skill DI wiring** — AddQBAgentTools and AddQBAgentSkills register the external tool and skill surfaces; Program.cs composes baseOptions.ChatOptions.Tools from both and injects the skill discovery list into the system prompt.
 **Covered by:** FR: FR-MCP-QBTOOLS-007; TEST: TEST-MCP-QBTOOLSINT-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: QBAgent tool/skill DI wiring - AddQBAgentTools and AddQBAgentSkills register the external tool and skill surfaces; Program.cs composes baseOptions.ChatOptions.Tools from both and injects the skill discovery list into.
+- Main flow: QBAgent tool/skill DI wiring - AddQBAgentTools and AddQBAgentSkills register the external tool and skill surfaces; Program.cs composes baseOptions.ChatOptions.Tools from both and injects the skill discovery list into the system prompt.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then QBAgent tool/skill DI wiring - AddQBAgentTools and AddQBAgentSkills register the external tool and skill surfaces; Program.cs composes baseOptions.ChatOptions.Tools from both and injects the skill discovery list into the system prompt.
+
+**Test Requirements:** TEST-MCP-QBTOOLSINT-001.
 
 ## TR-MCP-QUAD-001
 
@@ -1970,6 +5050,15 @@ Scope: layer-1+
 - [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection. (evidence: BrainSlotRegistryServiceTests; BrainSlotDefinitionEntity; BrainSlotInvocationEntity)
 - [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Brain-slot storage, DTOs, CRUD, and validation - Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles.
+- Main flow: Brain-slot storage, DTOs, CRUD, and validation - Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete, and readiness status.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-163, TEST-MCP-170, TEST-MCP-171, TEST-MCP-174, TEST-MCP-175, TEST-MCP-176, TEST-MCP-177, TEST-MCP-178.
+
 ## TR-MCP-QUAD-002
 
 **External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
@@ -1979,6 +5068,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Credential references resolve from env:, config:, and file: sources without persisting or logging raw secrets. (evidence: BrainSlotCredentialResolverTests)
 - [x] OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates. (evidence: BrainSlotProviderTests and invocation tests)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: External model provider adapter, credentials, endpoint allowlist, timeout, and redaction - Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat.
+- Main flow: External model provider adapter, credentials, endpoint allowlist, timeout, and redaction - Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
+- Edge cases: OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-174, TEST-MCP-175, TEST-MCP-176, TEST-MCP-177, TEST-MCP-178.
 
 ## TR-MCP-QUAD-003
 
@@ -1990,6 +5088,15 @@ Scope: layer-1+
 - [x] Invocation rejects until execution, slot, endpoint, credential, party/key, and required transaction gates pass. (evidence: BrainSlotInvocationTransactionTests)
 - [x] brain-slot.invoke diffgrams include slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before output is returned. (evidence: BrainSlotInvocationTransactionTests)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Keyserver party mapping and transaction diffgram admission - Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled.
+- Main flow: Keyserver party mapping and transaction diffgram admission - Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit brain-slot.invoke diffgrams before returning output.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-174, TEST-MCP-175, TEST-MCP-176, TEST-MCP-177, TEST-MCP-178, TEST-MCP-179, TEST-MCP-181, TEST-MCP-182, TEST-MCP-184, TEST-MCP-185.
+
 ## TR-MCP-QUAD-004
 
 **Quad branch containment and authorization** — Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
@@ -1999,6 +5106,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Authorized AoT reconciliation, full orchestration, and weight updates route through FR-MCP-134/135 services only. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed. (evidence: BrainSlotContainmentTests)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Quad branch containment and authorization - Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135.
+- Main flow: Quad branch containment and authorization - Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
+- Edge cases: Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-174, TEST-MCP-180, TEST-MCP-181, TEST-MCP-183.
 
 ## TR-MCP-QUAD-005
 
@@ -2010,6 +5126,15 @@ Scope: layer-1+
 - [x] Quad orchestration DTOs, services, REST endpoints, typed client methods, STDIO tools, and Node plugin tools are present for orchestrate, AoT reconcile, and weight update operations. (evidence: BrainSlotContracts; BrainSlotsController; BrainSlotClient; FwhMcpTools; brain-slots.ts)
 - [x] Public contract tests prove route/tool parity and mutation failsafe classification. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Quad orchestration service and contracts - Add service, DTO, REST, client, STDIO, and plugin contracts for full Quad-Brain orchestration and AoT reconciliation while reusing the existing transaction-gated brain-slot.
+- Main flow: Quad orchestration service and contracts - Add service, DTO, REST, client, STDIO, and plugin contracts for full Quad-Brain orchestration and AoT reconciliation while reusing the existing transaction-gated brain-slot invocation path.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-174, TEST-MCP-180, TEST-MCP-181, TEST-MCP-183, TEST-MCP-182, TEST-MCP-184, TEST-MCP-185.
+
 ## TR-MCP-QUAD-006
 
 **AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
@@ -2019,6 +5144,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: AoT reconciliation decision loop - Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram.
+- Main flow: AoT reconciliation decision loop - Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-181, TEST-MCP-182, TEST-MCP-184, TEST-MCP-185.
 
 ## TR-MCP-QUAD-007
 
@@ -2030,6 +5164,15 @@ Scope: layer-1+
 - [x] Weight updates require AoT approval, admin approval, safety gates, reason text, valid enabled roles, valid weights, and expected versions before mutation. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Approved updates persist weight/version/timestamp changes, audit before/after snapshots, and provide rollback metadata through the transaction coordinator. (evidence: QuadBrainOrchestrationService; AddBrainSlotWeights migrations; QuadBrainOrchestrationServiceTests)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Durable weight versioning and safety gates - Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update.
+- Main flow: Durable weight versioning and safety gates - Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update APIs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-174, TEST-MCP-180, TEST-MCP-181, TEST-MCP-183, TEST-MCP-184, TEST-MCP-185.
+
 ## TR-MCP-QUAD-SESSION-001
 
 **Per-session QuadBrain instance attachment over global brains** — QuadBrainOpenAiController reads X-Session-Id (and optional X-Turn-Id) request headers and passes them to IQuadBrainOpenAiChatService.CompleteAsync. The service writes sessionId/turnId into QuadBrainOrchestrationRequest.Metadata for orchestration session attachment via IBrainInteractionSessionLogger. Because brain definitions are global and the orchestration holds no shared mutable per-instance state, concurrent /v1 requests with distinct X-Session-Id values run as independent instances over the same global quad.
@@ -2040,6 +5183,15 @@ Scope: layer-1+
 - [x] QuadBrainOpenAiController reads X-Session-Id and X-Turn-Id headers from requests.
 - [x] Service writes sessionId/turnId into orchestration metadata for session attachment.
 - [x] Concurrent /v1 requests with distinct X-Session-Id values run as independent instances over global quad.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Per-session QuadBrain instance attachment over global brains - QuadBrainOpenAiController reads X-Session-Id (and optional X-Turn-Id) request headers and passes them to IQuadBrainOpenAiChatService.CompleteAsync.
+- Main flow: Per-session QuadBrain instance attachment over global brains - QuadBrainOpenAiController reads X-Session-Id (and optional X-Turn-Id) request headers and passes them to IQuadBrainOpenAiChatService.CompleteAsync. The service writes sessionId/turnId into QuadBrainOrchestrationRequest.Metadata for orchestration session attachment via IBrainInteractionSessionLogger. Because brain definitions are global and the orchestration holds no shared mutable per-instance state, concurrent /v1 requests with distinct X-Session-Id values run as independent instances over the same global quad.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-QUAD-SESSION-001.
 
 ## TR-MCP-QUALITY-001
 
@@ -2071,6 +5223,15 @@ Scope: layer-1+
 - [x] NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan. (evidence: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive)
 - [x] ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition. (evidence: Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Warning suppression decision register and aiUnit audit - Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory.
+- Main flow: Warning suppression decision register and aiUnit audit - Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory validation, and a dedicated aiUnit governance review.
+- Edge cases: CA1055 is not approved. String return APIs must not advertise URI semantics.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-AIUNIT-002.
+
 ## TR-MCP-REPL-001
 
 **YAML Envelope Protocol** — The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `type`, `payload` with method-specific parameters, and optional `correlationId`/`requestId`. Response envelopes SHALL contain `type` (`result`/`error`/`event`), `payload` with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.
@@ -2078,6 +5239,20 @@ Scope: layer-1+
 
 **Covered by:** `McpServer.Repl.Core` (`IYamlEnvelope`, `IYamlSerializer`, `IReplProtocol`)
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: YAML Envelope Protocol - The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing type, payload with method-specific parameters, and optional correlationId/requestId.
+- Main flow: YAML Envelope Protocol - The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing type, payload with method-specific parameters, and optional correlationId/requestId. Response envelopes SHALL contain type (result/error/event), payload with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then YAML Envelope Protocol - The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing type, payload with method-specific parameters, and optional correlationId/requestId.
+- [ ] Given the technical contract, when the implementation is exercised, then response envelopes SHALL contain type (result/error/event), payload with result data or error details, and echoed identifiers.
+- [ ] Given the technical contract, when the implementation is exercised, then malformed YAML SHALL emit structured error responses rather than crashing the process.
+
+**Test Requirements:** TEST-MCP-REPL-001, TEST-MCP-REPL-002, TEST-MCP-TRACE-REPL-001.
 
 ## TR-MCP-REPL-002
 
@@ -2087,6 +5262,20 @@ Scope: layer-1+
 **Covered by:** `McpServer.Repl.Host` (`ServiceCollectionExtensions`, `Program.cs`), `McpServer.Repl.Core` workflow interfaces
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: DI-Integrated REPL Host - The REPL host SHALL use DI composition for workflow and service registration.
+- Main flow: DI-Integrated REPL Host - The REPL host SHALL use DI composition for workflow and service registration. The command loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via new or ActivatorUtilities.CreateInstance outside DI registration paths. Workflows SHALL be registered as scoped services and resolved from the service provider.
+- Edge cases: The command loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via new or ActivatorUtilities.CreateInstance outside DI registration paths.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then DI-Integrated REPL Host - The REPL host SHALL use DI composition for workflow and service registration.
+- [ ] Given the technical contract, when the implementation is exercised, then the command loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via new or ActivatorUtilities.CreateInstance outside DI registration paths.
+- [ ] Given the technical contract, when the implementation is exercised, then workflows SHALL be registered as scoped services and resolved from the service provider.
+
+**Test Requirements:** TEST-MCP-REPL-001, TEST-MCP-REPL-002, TEST-MCP-TRACE-REPL-001.
+
 ## TR-MCP-REPL-003
 
 **Command Loop Lifecycle** — The REPL host SHALL support graceful startup with command loop initialization, interactive STDIO processing, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit. The command loop SHALL read YAML envelopes from stdin, dispatch to workflow handlers, serialize responses as YAML to stdout, and maintain session context across commands. Unhandled exceptions SHALL emit structured error responses and continue the loop.
@@ -2094,6 +5283,20 @@ Scope: layer-1+
 
 **Covered by:** `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `McpServer.Repl.Core` (`SessionLogErrorEnvelope`)
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Command Loop Lifecycle - The REPL host SHALL support graceful startup with command loop initialization, interactive STDIO processing, structured error handling with typed error codes, and clean shutdown on EOF or.
+- Main flow: Command Loop Lifecycle - The REPL host SHALL support graceful startup with command loop initialization, interactive STDIO processing, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit. The command loop SHALL read YAML envelopes from stdin, dispatch to workflow handlers, serialize responses as YAML to stdout, and maintain session context across commands. Unhandled exceptions SHALL emit structured error responses and continue the loop.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then command Loop Lifecycle - The REPL host SHALL support graceful startup with command loop initialization, interactive STDIO processing, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit.
+- [ ] Given the technical contract, when the implementation is exercised, then the command loop SHALL read YAML envelopes from stdin, dispatch to workflow handlers, serialize responses as YAML to stdout, and maintain session context across commands.
+- [ ] Given the technical contract, when the implementation is exercised, then unhandled exceptions SHALL emit structured error responses and continue the loop.
+
+**Test Requirements:** TEST-MCP-REPL-002, TEST-MCP-REPL-013, TEST-MCP-REPL-014.
 
 ## TR-MCP-REPL-004
 
@@ -2103,6 +5306,20 @@ Scope: layer-1+
 **Covered by:** `McpServer.Repl.Core` (`ITodoWorkflow`, `ISessionLogWorkflow`, `IRequirementsWorkflow`, `IGenericClientPassthrough`), `McpServer.Repl.Host` (`TodoWorkflow`, `SessionLogWorkflow`, `RequirementsWorkflow`, `GenericClientPassthrough`)
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Command Registry and Dispatcher - Workflow handlers SHALL implement typed interfaces (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough) with async operation methods.
+- Main flow: Command Registry and Dispatcher - Workflow handlers SHALL implement typed interfaces (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough) with async operation methods. Command dispatch SHALL resolve workflow instances from DI per invocation and SHALL pass deserialized parameters as strongly typed method arguments via YamlDotNet model binding. Command routing SHALL map YAML method names to workflow operations.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then command Registry and Dispatcher - Workflow handlers SHALL implement typed interfaces (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough) with async operation methods.
+- [ ] Given the technical contract, when the implementation is exercised, then command dispatch SHALL resolve workflow instances from DI per invocation and SHALL pass deserialized parameters as strongly typed method arguments via YamlDotNet model binding.
+- [ ] Given the technical contract, when the implementation is exercised, then command routing SHALL map YAML method names to workflow operations.
+
+**Test Requirements:** TEST-MCP-REPL-006, TEST-MCP-REPL-007, TEST-MCP-REPL-008, TEST-MCP-REPL-009, TEST-MCP-REPL-011, TEST-MCP-REPL-019.
+
 ## TR-MCP-REPL-005
 
 **Namespace Organization and Handler Parity** — Command names SHALL use dot-delimited namespaces: `workflow.todo.*`, `workflow.session.*`, `workflow.requirements.*`, `client.*`. Handler implementations SHALL delegate to existing client contracts (`TodoClient`, `SessionLogClient`, `RequirementsClient`, `ContextClient`, `RepoClient`, `DesktopClient`) without duplicating business logic. Workflows SHALL maintain stateful context (TODO selection, session state) within the REPL process.
@@ -2110,6 +5327,20 @@ Scope: layer-1+
 
 **Covered by:** `McpServer.Repl.Core` (`TodoCommandShapes`, `SessionLogCommandShapes`, `RequirementsCommandShapes`, `ClientCommandShapes`), `McpServer.Repl.Host` (`TodoWorkflow`, `SessionLogWorkflow`, `RequirementsWorkflow`, `GenericClientPassthrough`)
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Namespace Organization and Handler Parity - Command names SHALL use dot-delimited namespaces: workflow.todo.*, workflow.session.*, workflow.requirements.*, client.*.
+- Main flow: Namespace Organization and Handler Parity - Command names SHALL use dot-delimited namespaces: workflow.todo.*, workflow.session.*, workflow.requirements.*, client.*. Handler implementations SHALL delegate to existing client contracts (TodoClient, SessionLogClient, RequirementsClient, ContextClient, RepoClient, DesktopClient) without duplicating business logic. Workflows SHALL maintain stateful context (TODO selection, session state) within the REPL process.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then namespace Organization and Handler Parity - Command names SHALL use dot-delimited namespaces: workflow.todo.*, workflow.session.*, workflow.requirements.*, client.*.
+- [ ] Given the technical contract, when the implementation is exercised, then handler implementations SHALL delegate to existing client contracts (TodoClient, SessionLogClient, RequirementsClient, ContextClient, RepoClient, DesktopClient) without duplicating business logic.
+- [ ] Given the technical contract, when the implementation is exercised, then workflows SHALL maintain stateful context (TODO selection, session state) within the REPL process.
+
+**Test Requirements:** TEST-MCP-REPL-006, TEST-MCP-REPL-007, TEST-MCP-REPL-008, TEST-MCP-REPL-009, TEST-MCP-REPL-011, TEST-MCP-REPL-019.
 
 ## TR-MCP-REPL-006
 
@@ -2119,6 +5350,21 @@ Scope: layer-1+
 **Covered by:** `McpServer.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `McpServer.Repl.Host` (`AgentStdioHandler`)
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Trust Bootstrap and Token Validation - The REPL host SHALL implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands.
+- Main flow: Trust Bootstrap and Token Validation - The REPL host SHALL implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands. API key authentication SHALL use per-workspace token semantics from marker files. The host SHALL detect API key rotation between commands via marker file watch and SHALL emit warnings when tokens become stale.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then trust Bootstrap and Token Validation - The REPL host SHALL implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands.
+- [ ] Given the technical contract, when the implementation is exercised, then API key authentication SHALL use per-workspace token semantics from marker files.
+- [ ] The host SHALL detect API key rotation between commands via marker file watch and SHALL emit warnings when tokens become stale.
+- [ ] Given the technical contract, when the implementation is exercised, then trust verification SHALL use the same contract as PowerShell modules.
+
+**Test Requirements:** TEST-MCP-REPL-003, TEST-MCP-REPL-004, TEST-MCP-REPL-005, TEST-MCP-REPL-006.
+
 ## TR-MCP-REPL-007
 
 **State Query Commands** — The REPL host SHALL expose commands for querying workspace state via generic client passthrough: context search, repository operations, desktop launch validation, and requirements operations. Handlers SHALL query current service state snapshots through typed client interfaces without blocking on long-running operations. All client operations SHALL support the generic passthrough pattern for extensibility.
@@ -2127,12 +5373,41 @@ Scope: layer-1+
 **Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: State Query Commands - The REPL host SHALL expose commands for querying workspace state via generic client passthrough: context search, repository operations, desktop launch validation, and requirements operations.
+- Main flow: State Query Commands - The REPL host SHALL expose commands for querying workspace state via generic client passthrough: context search, repository operations, desktop launch validation, and requirements operations. Handlers SHALL query current service state snapshots through typed client interfaces without blocking on long-running operations. All client operations SHALL support the generic passthrough pattern for extensibility.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then state Query Commands - The REPL host SHALL expose commands for querying workspace state via generic client passthrough: context search, repository operations, desktop launch validation, and requirements operations.
+- [ ] Given the technical contract, when the implementation is exercised, then handlers SHALL query current service state snapshots through typed client interfaces without blocking on long-running operations.
+- [ ] Given the technical contract, when the implementation is exercised, then all client operations SHALL support the generic passthrough pattern for extensibility.
+
+**Test Requirements:** TEST-MCP-BDP-MCP-REPL-005.
+
 ## TR-MCP-REPL-008
 
 `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
 **Covered by:** FR: FR-MCP-REPL-007; TEST: TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error) returns success/failure plus a human-readable diagnostic.
+- Main flow: MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error) returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". FindMarkerFile(startPath, out searchedPaths) exposes the same path list for callers that want raw enumeration.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then markerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error) returns success/failure plus a human-readable diagnostic.
+- [ ] The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch".
+- [ ] Given the technical contract, when the implementation is exercised, then findMarkerFile(startPath, out searchedPaths) exposes the same path list for callers that want raw enumeration.
+- [ ] Given the technical contract, when the implementation is exercised, then the legacy parameterless Resolve() remains for back-compat.
+
+**Test Requirements:** TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3.
 
 ## TR-MCP-REPL-009
 
@@ -2146,6 +5421,15 @@ Scope: layer-1+
 - [x] Verified marker cache writes use a bounded inter-process lock and atomic replacement to avoid concurrent agent read-modify-write races. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs)
 - [x] Resolver fallback surfaces a construction-time diagnostic before legacy resolution is used. (evidence: src/McpServer.Repl.Host/Program.cs)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Explicit agent identity propagation - REPL host, plugin launchers, and verified marker cache resolution must use a single agent identity precedence and canonical cache key so Codex, Claude, Grok, and other agents cannot.
+- Main flow: Explicit agent identity propagation - REPL host, plugin launchers, and verified marker cache resolution must use a single agent identity precedence and canonical cache key so Codex, Claude, Grok, and other agents cannot share stale trust or cache state accidentally.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REPL-018.
+
 ## TR-MCP-REPL-010
 
 **Independent REPL session-log persistence strategies** — McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
@@ -2158,12 +5442,30 @@ Scope: layer-1+
 - [ ] Failsafe writes use an atomic replace or move and return the final absolute artifact path.
 - [ ] Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Independent REPL session-log persistence strategies - McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator.
+- Main flow: Independent REPL session-log persistence strategies - McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
+- Edge cases: Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028.
+
 ## TR-MCP-REPL-011
 
 **PascalCase session-id agent + openSession persistence** — Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server sessionId regex ^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$; and workflow.sessionlog.openSession SHALL persist an explicit valid sessionId into session-state.yaml instead of being a success no-op. Acceptance Criteria: (AC1) Get-ReplCanonicalAgentName maps 'default' to 'Default' (regex-valid), 'claude-code'/'claudecode' to 'ClaudeCode', 'codex' to 'Codex', 'grok' to 'GrokCode', and its output always matches ^[A-Z][A-Za-z0-9]*$; New-ReplPluginSessionId composes the agent segment through it; (AC2) Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified + that sessionId into session-state.yaml and returns true. Origin: BUG-TRIAGE-085 (AgentName fell back to lowercase 'default' producing server-rejected ids; openSession never persisted an explicit id). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib; do not relax server validation. Validated by TEST-MCP-REPL-011.
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: PascalCase session-id agent + openSession persistence - Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server.
+- Main flow: PascalCase session-id agent + openSession persistence - Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server sessionId regex ^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$; and workflow.sessionlog.openSession SHALL persist an explicit valid sessionId into session-state.yaml instead of being a success no-op. Acceptance Criteria: (AC1) Get-ReplCanonicalAgentName maps 'default' to 'Default' (regex-valid), 'claude-code'/'claudecode' to 'ClaudeCode', 'codex' to 'Codex', 'grok' to 'GrokCode', and its output always matches ^[A-Z][A-Za-z0-9]*$; New-ReplPluginSessionId composes the agent.
+- Edge cases: PascalCase session-id agent + openSession persistence - Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server sessionId regex ^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$; and.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028.
 
 ## TR-MCP-REPL-012
 
@@ -2172,12 +5474,35 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Per-method REPL invocation timeout - REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements.
+- Main flow: Per-method REPL invocation timeout - REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget (REPL_LONG_TIMEOUT, default 300s) while all other methods keep the short default (REPL_TIMEOUT, default 30s). Acceptance Criteria: (AC1) Get-ReplMethodTimeoutSeconds returns >30 for analyzeRequirements/generateDocument and 30 for sessionlog methods; (AC2) REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses.
+- Edge cases: Per-method REPL invocation timeout - REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028.
+
 ## TR-MCP-REPL-013
 
 **Marker-bearing current directory outranks inherited workspace env for repl resolution** — A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active workspace, so a hook launched from the correct repo binds to that repo's marker rather than a stale inherited MCP_WORKSPACE_PATH. AC1: with a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd. Guards BUG-TRIAGE-077 via TEST-MCP-REPL-028 (ReplWorkspaceResolution.Tests.ps1).
 **Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Marker-bearing current directory outranks inherited workspace env for repl resolution - A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active.
+- Main flow: Marker-bearing current directory outranks inherited workspace env for repl resolution - A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active workspace, so a hook launched from the correct repo binds to that repo's marker rather than a stale inherited MCP_WORKSPACE_PATH. AC1: with a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd. Guards BUG-TRIAGE-077 via TEST-MCP-REPL-028 (ReplWorkspaceResolution.Tests.ps1).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Marker-bearing current directory outranks inherited workspace env for repl resolution - A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active workspace, so a hook launched from the correct repo binds to that repo's marker rather than a stale inherited MCP_WORKSPACE_PATH.
+- [ ] Given the technical contract, when the implementation is exercised, then AC1: with a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd.
+- [ ] Given the technical contract, when the implementation is exercised, then guards BUG-TRIAGE-077 via TEST-MCP-REPL-028 (ReplWorkspaceResolution.Tests.ps1).
+
+**Test Requirements:** TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028.
 
 ## TR-MCP-REPL-014
 
@@ -2186,12 +5511,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Plugin setTurnTitle and setSessionTitle handlers - repl-invoke.ps1 Invoke-ReplMethod MUST dispatch workflow.sessionlog.setTurnTitle to a handler that updates current-turn.yaml queryTitle (Set-ReplTurnCacheField) and.
+- Main flow: Plugin setTurnTitle and setSessionTitle handlers - repl-invoke.ps1 Invoke-ReplMethod MUST dispatch workflow.sessionlog.setTurnTitle to a handler that updates current-turn.yaml queryTitle (Set-ReplTurnCacheField) and calls the server turn title-update path, and workflow.sessionlog.setSessionTitle to a handler that read-modify-writes session-state.yaml title and calls the server session title-update path. Both MUST fail closed (non-zero result) when no active session/turn cache is present. Validated by TEST-MCP-REPL-029.
+- Edge cases: Both MUST fail closed (non-zero result) when no active session/turn cache is present.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then plugin setTurnTitle and setSessionTitle handlers - repl-invoke.ps1 Invoke-ReplMethod MUST dispatch workflow.sessionlog.setTurnTitle to a handler that updates current-turn.yaml queryTitle (Set-ReplTurnCacheField) and calls the server turn title-update path, and workflow.sessionlog.setSessionTitle to a handler that read-modify-writes session-state.yaml title and calls the server session title-update path.
+- [ ] Both MUST fail closed (non-zero result) when no active session/turn cache is present.
+- [ ] Given the technical contract, when the implementation is exercised, then validated by TEST-MCP-REPL-029.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR: FR-MCP-REPL-010.
+
+**Test Requirements:** TEST-MCP-REPL-029, TEST-MCP-REPL-030.
+
 ## TR-MCP-REPL-015
 
 **Plugin omits titles on incidental whole-session re-submit** — Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn, completeTurn) unless a title is explicitly supplied in that operation. Because the server preserves omitted fields (FR-SUPPORT-015), an agent-set or server-preserved title then survives the whole-session re-submit instead of being clobbered by the stale local cache value. beginTurn still seeds the new turn's provisional QueryTitle, and seeds the session Title only on the first turn (when session-state has no title yet); an explicit queryTitle param on appendActions/appendDialog/updateTurn/completeTurn still updates the turn title. Validated by TEST-MCP-REPL-030. Covered by FR: FR-MCP-REPL-010. Status: pending. Scope: layer-1+.
 **Covered by:** FR: FR-MCP-REPL-010; TEST: TEST-MCP-REPL-029, TEST-MCP-REPL-030
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Plugin omits titles on incidental whole-session re-submit - Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn.
+- Main flow: Plugin omits titles on incidental whole-session re-submit - Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn, completeTurn) unless a title is explicitly supplied in that operation. Because the server preserves omitted fields (FR-SUPPORT-015), an agent-set or server-preserved title then survives the whole-session re-submit instead of being clobbered by the stale local cache value. beginTurn still seeds the new turn's provisional QueryTitle, and seeds the session Title only on the first turn (when session-state has no title yet); an explicit queryTitle param on.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then plugin omits titles on incidental whole-session re-submit - Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn, completeTurn) unless a title is explicitly supplied in that operation.
+- [ ] Given the technical contract, when the implementation is exercised, then because the server preserves omitted fields (FR-SUPPORT-015), an agent-set or server-preserved title then survives the whole-session re-submit instead of being clobbered by the stale local cache value.
+- [ ] beginTurn still seeds the new turn's provisional QueryTitle, and seeds the session Title only on the first turn (when session-state has no title yet); an explicit queryTitle param on appendActions/appendDialog/updateTurn/completeTurn still updates the turn title.
+- [ ] Given the technical contract, when the implementation is exercised, then validated by TEST-MCP-REPL-030.
+
+**Test Requirements:** TEST-MCP-REPL-029, TEST-MCP-REPL-030.
 
 ## TR-MCP-REPL-016
 
@@ -2200,12 +5555,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Failsafe queue drains oldest-first after a proven-reachable backend call - BUG-TRIAGE-097.
+- Main flow: Failsafe queue drains oldest-first after a proven-reachable backend call - BUG-TRIAGE-097. The plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14). plugins/core/lib-ps/repl-invoke.ps1 MUST expose Invoke-ReplFailsafeDrain, which walks the failsafe directory oldest-first (the file name is prefixed with the UTC capture stamp, so a name sort is a chronological sort) and re-issues each record's captured method and params through Invoke-ReplRaw.
+- Edge cases: The plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14).
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then failsafe queue drains oldest-first after a proven-reachable backend call - BUG-TRIAGE-097.
+- [ ] Given the technical contract, when the implementation is exercised, then the plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14).
+- [ ] Given the technical contract, when the implementation is exercised, then plugins/core/lib-ps/repl-invoke.ps1 MUST expose Invoke-ReplFailsafeDrain, which walks the failsafe directory oldest-first (the file name is prefixed with the UTC capture stamp, so a name sort is a chronological sort) and re-issues each record's captured method and params through Invoke-ReplRaw.
+- [ ] Given the technical contract, when the implementation is exercised, then a record MUST be deleted only after its submission succeeds; a record whose submission fails MUST stay on disk.
+
+**Test Requirements:** TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039.
+
 ## TR-MCP-REPL-017
 
 **Failsafe quarantine and truthful pending queue depth in plugin status** — BUG-TRIAGE-097. A failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn. plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5). Quarantined records MUST NOT be counted as live queue depth. plugins/core/lib-ps/resolve-cache-dir.ps1 MUST own the single resolution of the queue location (Get-McpFailsafeDir and Get-McpFailsafeQuarantineDir, honouring MCPSERVER_FAILSAFE_DIR then MCP_FAILSAFE_DIR then the workspace cache) so the writer, the drain, and the status reporter cannot disagree. plugins/core/lib-ps/mcp-status.ps1 MUST count the failsafe directory: pendingCount previously counted only the cache pending directory and therefore reported 0 while 33 captured submits sat undrained, so pendingCount MUST be the sum of pending turn records and queued failsafe records, and the status document MUST additionally expose pendingTurnCount, failsafeDir, failsafeCount, and failsafeQuarantineCount. A read-only workflow.failsafe.status verb MUST report the same depth without replaying anything.
 **Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Failsafe quarantine and truthful pending queue depth in plugin status - BUG-TRIAGE-097.
+- Main flow: Failsafe quarantine and truthful pending queue depth in plugin status - BUG-TRIAGE-097. A failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn. plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5).
+- Edge cases: Quarantined records MUST NOT be counted as live queue depth.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then failsafe quarantine and truthful pending queue depth in plugin status - BUG-TRIAGE-097.
+- [ ] Given the technical contract, when the implementation is exercised, then a failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn.
+- [ ] plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5).
+- [ ] Given the technical contract, when the implementation is exercised, then quarantined records MUST NOT be counted as live queue depth.
+
+**Test Requirements:** TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039.
 
 ## TR-MCP-REPL-018
 
@@ -2214,6 +5599,21 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Turn upsert accepts a deliberately empty title - Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101.
+- Main flow: Turn upsert accepts a deliberately empty title - Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101. plugins/core/lib-ps/repl-invoke.ps1 declares the turn-upsert Title parameter as [Parameter(Mandatory)][string] with no [AllowEmptyString()] at line 944, while callers deliberately pass an empty string per TR-MCP-REPL-015 so a stale cached title is not resubmitted. PowerShell rejects the bind before any request is made, so appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path all fail with a mandatory-parameter binding error rather than persisting.
+- Edge cases: Turn upsert accepts a deliberately empty title - Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then turn upsert accepts a deliberately empty title - Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101.
+- [ ] Given the technical contract, when the implementation is exercised, then plugins/core/lib-ps/repl-invoke.ps1 declares the turn-upsert Title parameter as [Parameter(Mandatory)][string] with no [AllowEmptyString()] at line 944, while callers deliberately pass an empty string per TR-MCP-REPL-015 so a stale cached title is not resubmitted.
+- [ ] Given the technical contract, when the implementation is exercised, then powerShell rejects the bind before any request is made, so appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path all fail with a mandatory-parameter binding error rather than persisting.
+- [ ] Given the technical contract, when the implementation is exercised, then the parameter SHALL accept an empty string, and every call path that legitimately passes one SHALL persist.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
+
 ## TR-MCP-REPL-019
 
 **Supersede preserves a server-refined turn title** — Implements FR-MCP-143 and closes BUG-TRIAGE-086. Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt. The hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two. The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text. Coverage SHALL prove that a refined title survives a supersede and that a genuinely absent title still results in a persisted turn.
@@ -2221,12 +5621,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Supersede preserves a server-refined turn title - Implements FR-MCP-143 and closes BUG-TRIAGE-086.
+- Main flow: Supersede preserves a server-refined turn title - Implements FR-MCP-143 and closes BUG-TRIAGE-086. Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt. The hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two.
+- Edge cases: The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then supersede preserves a server-refined turn title - Implements FR-MCP-143 and closes BUG-TRIAGE-086.
+- [ ] Given the technical contract, when the implementation is exercised, then invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt.
+- [ ] Given the technical contract, when the implementation is exercised, then the hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two.
+- [ ] The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
+
 ## TR-MCP-REPL-020
 
 **failTurn resolves the active turn from the plugin cache** — Implements FR-MCP-143 and closes BUG-TRIAGE-099. Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists". The result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever. failTurn SHALL resolve the active session and turn the same way the rest of the plugin does, falling back to the cache when the in-process state is empty, and SHALL close the turn as failed when the cache identifies one. Coverage SHALL prove the current refusal before the fix and a successful fail-close afterwards, using a temporary cache directory.
 **Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: failTurn resolves the active turn from the plugin cache - Implements FR-MCP-143 and closes BUG-TRIAGE-099.
+- Main flow: failTurn resolves the active turn from the plugin cache - Implements FR-MCP-143 and closes BUG-TRIAGE-099. Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists". The result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever.
+- Edge cases: Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then failTurn resolves the active turn from the plugin cache - Implements FR-MCP-143 and closes BUG-TRIAGE-099.
+- [ ] Given the technical contract, when the implementation is exercised, then plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists".
+- [ ] Given the technical contract, when the implementation is exercised, then the result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever.
+- [ ] failTurn SHALL resolve the active session and turn the same way the rest of the plugin does, falling back to the cache when the in-process state is empty, and SHALL close the turn as failed when the cache identifies one.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
 
 ## TR-MCP-REPL-TRIAGE-001
 
@@ -2236,12 +5666,36 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] All triage operations are available through client.triage.* and workflow.triage.* envelopes.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Triage REPL surface - REPL parity for triage through client passthrough and typed workflow wrappers.
+- Main flow: Triage REPL surface - REPL parity for triage through client passthrough and typed workflow wrappers.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-REPL-TRIAGE-001.
+
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
 **Covered by:** FR: FR-MCP-023
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: AI Requirements Analysis Service - RequirementsService invokes ICopilotClient with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR.
+- Main flow: AI Requirements Analysis Service - RequirementsService invokes ICopilotClient with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from docs/Project/ and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (FR-[A-Z]+-\d{3} / TR-[A-Z]+-\d{3}) for robustness.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then AI Requirements Analysis Service - RequirementsService invokes ICopilotClient with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments.
+- [ ] Given the technical contract, when the implementation is exercised, then the prompt instructs Copilot to identify existing FRs/TRs from docs/Project/ and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs.
+- [ ] Given the technical contract, when the implementation is exercised, then response parsing first attempts structured JSON extraction; falls back to regex (FR-[A-Z]+-\d{3} / TR-[A-Z]+-\d{3}) for robustness.
+- [ ] Given the technical contract, when the implementation is exercised, then discovered IDs are merged (deduplicated, order-preserved) back into the TODO via ITodoService.UpdateAsync.
+
+**Test Requirements:** TEST-MCP-014.
 
 ## TR-MCP-REQ-002
 
@@ -2250,12 +5704,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Requirements Document Management Service - RequirementsDocumentService parses the canonical requirements documents (Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md).
+- Main flow: Requirements Document Management Service - RequirementsDocumentService parses the canonical requirements documents (Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows. It renders Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, and Requirements-Matrix.md for exports. Matrix rendering preserves existing matrix rows and appends missing FR/TR/TEST identifiers so generated exports satisfy traceability validation without discarding hand-maintained status/source metadata.
+- Edge cases: Matrix rendering preserves existing matrix rows and appends missing FR/TR/TEST identifiers so generated exports satisfy traceability validation without discarding hand-maintained status/source metadata.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then requirements Document Management Service - RequirementsDocumentService parses the canonical requirements documents (Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows.
+- [ ] Given the technical contract, when the implementation is exercised, then it renders Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, and Requirements-Matrix.md for exports.
+- [ ] Given the technical contract, when the implementation is exercised, then matrix rendering preserves existing matrix rows and appends missing FR/TR/TEST identifiers so generated exports satisfy traceability validation without discarding hand-maintained status/source metadata.
+
+**Test Requirements:** TEST-MCP-039, TEST-MCP-040, TEST-MCP-042, TEST-MCP-041.
+
 ## TR-MCP-REQ-003
 
 **Requirements REST + STDIO Tool Integration** — The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list, requirements_generate, requirements_create, requirements_update, requirements_delete). Document generation supports individual Markdown documents, including `doc=matrix` / `docType=matrix` for `Requirements-Matrix.md`, and `doc=all` workspace exports with canonical filenames including `Requirements-Matrix.md`.
 **Covered by:** FR: FR-MCP-040, FR-MCP-041, FR-MCP-042
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Requirements REST + STDIO Tool Integration - The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list.
+- Main flow: Requirements REST + STDIO Tool Integration - The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list, requirements_generate, requirements_create, requirements_update, requirements_delete). Document generation supports individual Markdown documents, including doc=matrix / docType=matrix for Requirements-Matrix.md, and doc=all workspace exports with canonical filenames including Requirements-Matrix.md.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then requirements REST + STDIO Tool Integration - The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list, requirements_generate, requirements_create, requirements_update, requirements_delete).
+- [ ] Given the technical contract, when the implementation is exercised, then document generation supports individual Markdown documents, including doc=matrix / docType=matrix for Requirements-Matrix.md, and doc=all workspace exports with canonical filenames including Requirements-Matrix.md.
+
+**Test Requirements:** TEST-MCP-039, TEST-MCP-040, TEST-MCP-042, TEST-MCP-041, TEST-MCP-043.
 
 ## TR-MCP-REQ-004
 
@@ -2264,12 +5745,40 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Dual Wiki Workspace Renderer - Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata.
+- Main flow: Dual Wiki Workspace Renderer - Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, Requirements-Matrix.md, and .mcp-requirements-manifest.json with generatedAtUtc. Azure Wiki output SHALL include .order; GitHub Wiki output SHALL include _Sidebar.md and _Footer.md.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then dual Wiki Workspace Renderer - Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata.
+- [ ] Given the technical contract, when the implementation is exercised, then each platform folder SHALL include canonical requirements markdown documents, Requirements-Matrix.md, and .mcp-requirements-manifest.json with generatedAtUtc.
+- [ ] Given the technical contract, when the implementation is exercised, then azure Wiki output SHALL include .order; GitHub Wiki output SHALL include _Sidebar.md and _Footer.md.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, McpServerMcpTools.
+
+**Test Requirements:** TEST-MCP-106, TEST-MCP-107, TEST-MCP-108, TEST-MCP-109.
+
 ## TR-MCP-REQ-005
 
 **Wiki Import Selection and Authoritative Sync** — Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc. Wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
 **Covered by:** FR: FR-MCP-084, FR-MCP-LIVE-CODEX-20260603T2014Z, FR-MCP-LIVE-CODEX-20260603T2015Z; TEST: TEST-MCP-106, TEST-MCP-107, TEST-MCP-108, TEST-MCP-109, TEST-MCP-REQACPLUGIN-LIVE
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Wiki Import Selection and Authoritative Sync - Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc.
+- Main flow: Wiki Import Selection and Authoritative Sync - Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc. Wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
+- Edge cases: Wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then wiki Import Selection and Authoritative Sync - Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc.
+- [ ] Given the technical contract, when the implementation is exercised, then wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
+
+**Test Requirements:** TEST-MCP-106, TEST-MCP-107, TEST-MCP-108, TEST-MCP-109, TEST-MCP-REQACPLUGIN-LIVE.
 
 ## TR-MCP-REQAC-001
 
@@ -2283,12 +5792,33 @@ Scope: layer-1+
 - [x] Requirement create/update/read paths round-trip ordered criteria, checked state, evidence text, and empty/null criteria distinctly. (evidence: docs/Project/Technical-Requirements.md)
 - [x] Requirements document generation renders persisted criteria as Markdown checklist bullets while keeping the database as the authoritative store. (evidence: docs/Project/Technical-Requirements.md)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Acceptance criteria persistence - Persist requirement acceptance criteria as a nullable AcceptanceCriteriaJson column on RequirementEntity using the existing JSON-column pattern and the shared AcceptanceCriterion type.
+- Main flow: Acceptance criteria persistence - Persist requirement acceptance criteria as a nullable AcceptanceCriteriaJson column on RequirementEntity using the existing JSON-column pattern and the shared AcceptanceCriterion type. Provider migrations for SQLite, SQL Server, and PostgreSQL include the column, and create/update/read plus document generation round-trip ordered checklist criteria with checked state and evidence.
+- Edge cases: Requirement create/update/read paths round-trip ordered criteria, checked state, evidence text, and empty/null criteria distinctly.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003, TEST-MCP-REQAC-004.
+
 ## TR-MCP-REQAC-002
 
 **Acceptance criteria markdown rendering** — Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
 **Covered by:** FR: FR-MCP-REQAC-001; TEST: TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Acceptance criteria markdown rendering - Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
+- Main flow: Acceptance criteria markdown rendering - Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then acceptance criteria markdown rendering - Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
+
+**Test Requirements:** TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003.
 
 ## TR-MCP-REQAC-PLUGIN-001
 
@@ -2299,12 +5829,34 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Nested YAML acceptanceCriteria is normalized into typed client request models and persisted by the requirements REST API. (evidence: GenericClientPassthroughYamlBindingTests passed and live workflow/REST round-trip returned AC-CODEXBIND-001.)
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Plugin typed request shaping preserves acceptanceCriteria - Plugin typed-parameter builders and REPL passthrough binding must emit structured acceptanceCriteria without flattening or dropping nested boolean/list fields.
+- Main flow: Plugin typed request shaping preserves acceptanceCriteria - Plugin typed-parameter builders and REPL passthrough binding must emit structured acceptanceCriteria without flattening or dropping nested boolean/list fields.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REQAC-PLUGIN-BASH, TEST-MCP-REQAC-PLUGIN-TS.
+
 ## TR-MCP-REQACPLUGIN-001
 
 **Plugin-side schema + shaper changes for AcceptanceCriteria** — Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest. TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
 **Covered by:** FR: FR-MCP-REQACPLUGIN-001; TEST: TEST-MCP-REQACPLUGIN-BASH, TEST-MCP-REQACPLUGIN-LIVE, TEST-MCP-REQACPLUGIN-TS
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Plugin-side schema + shaper changes for AcceptanceCriteria - Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for.
+- Main flow: Plugin-side schema + shaper changes for AcceptanceCriteria - Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest. TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then plugin-side schema + shaper changes for AcceptanceCriteria - Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest.
+- [ ] Given the technical contract, when the implementation is exercised, then TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
+
+**Test Requirements:** TEST-MCP-REQACPLUGIN-BASH, TEST-MCP-REQACPLUGIN-LIVE, TEST-MCP-REQACPLUGIN-TS.
 
 ## TR-MCP-REQACPLUGIN-002
 
@@ -2317,6 +5869,15 @@ Scope: layer-1+
 - [x] TypeScript plugins enforce the same check after workflow and typed successful create/update responses through shared response inspection. (evidence: Cline, Cline v2, and OpenCode focused Jest tests passed.)
 - [x] The guard is scoped to FR/TR/TEST create/update mutations with caller-supplied acceptanceCriteria and keeps no-criteria mutations compatible. (evidence: Focused shell no-AC assertions, focused Jest files, and npm builds passed.)
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Plugin-side AcceptanceCriteria capture verification - Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty acceptanceCriteria.
+- Main flow: Plugin-side AcceptanceCriteria capture verification - Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty acceptanceCriteria list when the caller supplied a non-null criteria array, while preserving backward compatibility for responses that omit the field.
+- Edge cases: Plugin-side AcceptanceCriteria capture verification - Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty acceptanceCriteria list when the caller supplied a non-null criteria array, while preserving backward compatibility for.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-REQACPLUGIN-002.
+
 ## TR-MCP-REQEXPORT-001
 
 **Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC** — The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description text and a nested Acceptance Criteria checklist generated from the structured acceptanceCriteria field.
@@ -2327,12 +5888,30 @@ Scope: layer-1+
 - [x] Wiki testing export output contains per-TEST headings and description paragraphs. (evidence: RequirementsWikiDocumentRenderer now renders grouped TEST entries as Markdown sections headed by TEST requirement IDs.)
 - [x] Structured acceptanceCriteria entries render as bullet/checklist list items with evidence when supplied. (evidence: RequirementsDocumentRenderer.AppendAcceptanceCriteria is reused by wiki rendering and focused tests assert checklist output.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC - The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description.
+- Main flow: Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC - The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description text and a nested Acceptance Criteria checklist generated from the structured acceptanceCriteria field.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001.
+
 ## TR-MCP-REQEXPORT-002
 
 **Wiki generate surfaces real exception, never opaque 500** — The requirements generate endpoint (GET /mcpserver/requirements/generate?format=wiki) SHALL surface the real exception - message, exceptionType, stage, details - as a structured HTTP 500 for any failure outside the pre-existing catch list (RequirementsConflictException/ArgumentException/InvalidOperationException/UnauthorizedAccessException/IOException); no wiki generation failure may reach the global exception middleware and return an opaque internal_server_error. Acceptance Criteria: (AC1) an exception type outside the listed set (e.g. KeyNotFoundException) returns a structured 500 body naming exceptionType and the message; (AC2) successful wiki export still returns the ZIP; (AC3) the existing structured 400/409 paths (config load, transaction, zip assembly) are unchanged. Origin: BUG-TRIAGE-073 (wiki branch had no catch-all; yaml/all path succeeds while wiki/all 500s opaquely in some workspaces). Validated by TEST-MCP-REQEXPORT-002.
 **Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Wiki generate surfaces real exception, never opaque 500 - The requirements generate endpoint (GET /mcpserver/requirements/generate?format=wiki) SHALL surface the real exception - message, exceptionType, stage, details -.
+- Main flow: Wiki generate surfaces real exception, never opaque 500 - The requirements generate endpoint (GET /mcpserver/requirements/generate?format=wiki) SHALL surface the real exception - message, exceptionType, stage, details - as a structured HTTP 500 for any failure outside the pre-existing catch list (RequirementsConflictException/ArgumentException/InvalidOperationException/UnauthorizedAccessException/IOException); no wiki generation failure may reach the global exception middleware and return an opaque internal_server_error. Acceptance Criteria: (AC1) an exception type outside the listed set (e.g. KeyNotFoundException) returns a structured 500 body naming exceptionType and the message; (AC2).
+- Edge cases: Wiki generate surfaces real exception, never opaque 500 - The requirements generate endpoint (GET /mcpserver/requirements/generate?format=wiki) SHALL surface the real exception - message, exceptionType, stage, details - as a structured HTTP 500 for any failure outside the pre-existing catch list.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001.
 
 ## TR-MCP-REQEXPORT-003
 
@@ -2341,12 +5920,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Requirements generateDocument accepts markdown for all non-wiki docTypes - generateDocument SHALL accept format=markdown for every non-wiki docType (functional, technical, testing, mapping, matrix) at the JSON schema.
+- Main flow: Requirements generateDocument accepts markdown for all non-wiki docTypes - generateDocument SHALL accept format=markdown for every non-wiki docType (functional, technical, testing, mapping, matrix) at the JSON schema, ReplYamlMessageValidator, and RequirementsWorkflow layers. AC1: a call {format:markdown,docType:matrix} returns markdown content, not a format rejection. AC2: no layer restricts format to {yaml,wiki}.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then requirements generateDocument accepts markdown for all non-wiki docTypes - generateDocument SHALL accept format=markdown for every non-wiki docType (functional, technical, testing, mapping, matrix) at the JSON schema, ReplYamlMessageValidator, and RequirementsWorkflow layers.
+- [ ] Given the technical contract, when the implementation is exercised, then AC1: a call {format:markdown,docType:matrix} returns markdown content, not a format rejection.
+- [ ] Given the technical contract, when the implementation is exercised, then AC2: no layer restricts format to {yaml,wiki}.
+- [ ] Given the technical contract, when the implementation is exercised, then encodes BUG-TRIAGE-074 (non-reproducing) so a future enum narrowing fails TEST-MCP-REQEXPORT-003.
+
+**Test Requirements:** TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001.
+
 ## TR-MCP-REQEXPORT-004
 
 **Requirements generateDocument honors explicit workspacePath override end-to-end** — generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails 401 and never silently exports the session-bound workspace. AC1: an explicit workspacePath with a valid key returns that workspace's requirements. AC2: an unauthorized cross-workspace call returns 401, not a silent fallback to the session-bound workspace. Guards BUG-TRIAGE-078 via TEST-MCP-REQWS-001.
 **Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Requirements generateDocument honors explicit workspacePath override end-to-end - generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails.
+- Main flow: Requirements generateDocument honors explicit workspacePath override end-to-end - generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails 401 and never silently exports the session-bound workspace. AC1: an explicit workspacePath with a valid key returns that workspace's requirements. AC2: an unauthorized cross-workspace call returns 401, not a silent fallback to the session-bound workspace.
+- Edge cases: Requirements generateDocument honors explicit workspacePath override end-to-end - generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails 401 and never silently exports the session-bound workspace.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then requirements generateDocument honors explicit workspacePath override end-to-end - generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails 401 and never silently exports the session-bound workspace.
+- [ ] Given the technical contract, when the implementation is exercised, then AC1: an explicit workspacePath with a valid key returns that workspace's requirements.
+- [ ] Given the technical contract, when the implementation is exercised, then AC2: an unauthorized cross-workspace call returns 401, not a silent fallback to the session-bound workspace.
+- [ ] Given the technical contract, when the implementation is exercised, then guards BUG-TRIAGE-078 via TEST-MCP-REQWS-001.
+
+**Test Requirements:** TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001.
 
 ## TR-MCP-REQSCOPE-001
 
@@ -2355,12 +5964,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-REQSCOPE-001 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-001.
+- Main flow: TR-MCP-REQSCOPE-001 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-REQSCOPE-002
 
 **TR-MCP-REQSCOPE-002** — Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-002.
 **Covered by:** FR: FR-MCP-REQSCOPE-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-REQSCOPE-002 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-002.
+- Main flow: TR-MCP-REQSCOPE-002 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-002.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-REQSCOPE-003
 
@@ -2369,12 +6004,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-REQSCOPE-003 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-003.
+- Main flow: TR-MCP-REQSCOPE-003 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-003.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
+
 ## TR-MCP-REQSCOPE-004
 
 **TR-MCP-REQSCOPE-004** — Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-004.
 **Covered by:** FR: FR-MCP-REQSCOPE-004
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-MCP-REQSCOPE-004 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-004.
+- Main flow: TR-MCP-REQSCOPE-004 - Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-004.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-MCP-SCHEMA-109
 
@@ -2383,6 +6044,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: REPL request schema enforcement - Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+- Main flow: REPL request schema enforcement - Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then REPL request schema enforcement - Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+
+**Test Requirements:** TEST-MCP-145, TEST-MCP-146.
+
 ## TR-MCP-SEC-001
 
 **Per-Workspace Auth Tokens** — `WorkspaceResolutionMiddleware` resolves workspace identity per-request using a three-tier chain: (1) `X-Workspace-Path` header, (2) API key reverse lookup via `WorkspaceTokenService`, (3) default workspace from config. `WorkspaceAuthMiddleware` then validates the token against the resolved workspace. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
@@ -2390,12 +6063,40 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Per-Workspace Auth Tokens - WorkspaceResolutionMiddleware resolves workspace identity per-request using a three-tier chain: (1) X-Workspace-Path header, (2) API key reverse lookup via WorkspaceTokenService, (3) default.
+- Main flow: Per-Workspace Auth Tokens - WorkspaceResolutionMiddleware resolves workspace identity per-request using a three-tier chain: (1) X-Workspace-Path header, (2) API key reverse lookup via WorkspaceTokenService, (3) default workspace from config. WorkspaceAuthMiddleware then validates the token against the resolved workspace. WorkspaceTokenService generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then per-Workspace Auth Tokens - WorkspaceResolutionMiddleware resolves workspace identity per-request using a three-tier chain: (1) X-Workspace-Path header, (2) API key reverse lookup via WorkspaceTokenService, (3) default workspace from config.
+- [ ] Given the technical contract, when the implementation is exercised, then workspaceAuthMiddleware then validates the token against the resolved workspace.
+- [ ] Given the technical contract, when the implementation is exercised, then workspaceTokenService generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
+
+**Test Requirements:** TEST-MCP-009, TEST-MCP-003, TEST-MCP-044, TEST-MCP-046, TEST-MCP-047.
+
 ## TR-MCP-SEC-002
 
 **Pairing Session Security** — `PairingSessionService` verifies passwords using SHA-256 with `CryptographicOperations.FixedTimeEquals` for constant-time comparison. Session state is stored in HttpOnly cookies with the Secure flag enabled on HTTPS. `PairingOptions` binds `Mcp:ApiKey` and `Mcp:PairingUsers` from configuration.
 **Covered by:** FR: FR-MCP-014
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Pairing Session Security - PairingSessionService verifies passwords using SHA-256 with CryptographicOperations.FixedTimeEquals for constant-time comparison.
+- Main flow: Pairing Session Security - PairingSessionService verifies passwords using SHA-256 with CryptographicOperations.FixedTimeEquals for constant-time comparison. Session state is stored in HttpOnly cookies with the Secure flag enabled on HTTPS. PairingOptions binds Mcp:ApiKey and Mcp:PairingUsers from configuration.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then pairing Session Security - PairingSessionService verifies passwords using SHA-256 with CryptographicOperations.FixedTimeEquals for constant-time comparison.
+- [ ] Given the technical contract, when the implementation is exercised, then session state is stored in HttpOnly cookies with the Secure flag enabled on HTTPS.
+- [ ] Given the technical contract, when the implementation is exercised, then pairingOptions binds Mcp:ApiKey and Mcp:PairingUsers from configuration.
+
+**Test Requirements:** TEST-MCP-010.
 
 ## TR-MCP-SEC-003
 
@@ -2405,6 +6106,20 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Signed Marker Bootstrap and Health Nonce Verification - MarkerFileService SHALL render a top-level marker signature block and a top-level trust_bootstrap block into AGENTS-README-FIRST.yaml using a deterministic.
+- Main flow: Signed Marker Bootstrap and Health Nonce Verification - MarkerFileService SHALL render a top-level marker signature block and a top-level trust_bootstrap block into AGENTS-README-FIRST.yaml using a deterministic canonical payload. The rendered marker SHALL instruct agents to verify the signature first, generate a nonce for /health, require the response to echo the nonce exactly, and stop using MCP endpoints when verification fails. McpSession, McpTodo, and McpContext SHALL share the same trust-verification contract so bootstrap parity is preserved across the public PowerShell modules.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then signed Marker Bootstrap and Health Nonce Verification - MarkerFileService SHALL render a top-level marker signature block and a top-level trust_bootstrap block into AGENTS-README-FIRST.yaml using a deterministic canonical payload.
+- [ ] The rendered marker SHALL instruct agents to verify the signature first, generate a nonce for /health, require the response to echo the nonce exactly, and stop using MCP endpoints when verification fails.
+- [ ] Given the technical contract, when the implementation is exercised, then mcpSession, McpTodo, and McpContext SHALL share the same trust-verification contract so bootstrap parity is preserved across the public PowerShell modules.
+
+**Test Requirements:** TEST-MCP-101.
+
 ## TR-MCP-SEC-004
 
 **Provider-Native At-Rest Encryption with No-Loss Transition Procedures** — The storage layer SHALL support optional at-rest encryption using only provider-native or provider-extension facilities: SQLite SEE, PostgreSQL `pg_tde` on Percona Server for PostgreSQL, and native SQL Server TDE. The implementation SHALL detect desired-versus-actual encryption state at startup, SHALL refuse to silently continue when the configured state and live state differ, and SHALL require explicit no-data-loss enable/disable/rotation procedures that preserve existing data when configuration changes. SQL Server LocalDB may be used for provider and migration coverage, but SQL Server TDE validation requires a non-LocalDB SQL Server target.
@@ -2413,6 +6128,20 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Provider-Native At-Rest Encryption with No-Loss Transition Procedures - The storage layer SHALL support optional at-rest encryption using only provider-native or provider-extension facilities: SQLite SEE, PostgreSQL.
+- Main flow: Provider-Native At-Rest Encryption with No-Loss Transition Procedures - The storage layer SHALL support optional at-rest encryption using only provider-native or provider-extension facilities: SQLite SEE, PostgreSQL pg_tde on Percona Server for PostgreSQL, and native SQL Server TDE. The implementation SHALL detect desired-versus-actual encryption state at startup, SHALL refuse to silently continue when the configured state and live state differ, and SHALL require explicit no-data-loss enable/disable/rotation procedures that preserve existing data when configuration changes. SQL Server LocalDB may be used for provider and migration coverage, but SQL Server TDE validation requires a.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then provider-Native At-Rest Encryption with No-Loss Transition Procedures - The storage layer SHALL support optional at-rest encryption using only provider-native or provider-extension facilities: SQLite SEE, PostgreSQL pg_tde on Percona Server for PostgreSQL, and native SQL Server TDE.
+- [ ] The implementation SHALL detect desired-versus-actual encryption state at startup, SHALL refuse to silently continue when the configured state and live state differ, and SHALL require explicit no-data-loss enable/disable/rotation procedures that preserve existing data when configuration changes.
+- [ ] Given the technical contract, when the implementation is exercised, then SQL Server LocalDB may be used for provider and migration coverage, but SQL Server TDE validation requires a non-LocalDB SQL Server target.
+
+**Test Requirements:** TEST-MCP-BDP-077.
+
 ## TR-MCP-SEC-005
 
 **Self-describing marker signature payload** — Implements FR-MCP-140. MarkerFileService SHALL declare an ordered SignaturePayloadFields array naming every canonical field used to build the marker-v1 HMAC-SHA256 payload, and BuildSignaturePayload SHALL derive its output order from that same array so the emitted list and the computed payload cannot diverge. The MarkerSignature model SHALL carry a fields array and a format string describing the key=value newline per-field encoding, the trailing LF on the final line, and UTF-8 encoding, and both SHALL be written into the signature block of AGENTS-README-FIRST.yaml. The conditional agentPlugins.policy and agentPlugins.contractDigest tail SHALL be represented faithfully: the fields array SHALL reflect the same conditional the payload builder applies for the marker being written. A test SHALL bind the documented field order in docs/REPL-AGENT-GUIDE.md to SignaturePayloadFields so the prose spec cannot drift from the code. Recovered from origin/claude/dreamy-brahmagupta; the CLAUDE.md session-start rewrite in that commit is deliberately NOT re-landed because it directs agents to PowerShell-module or hand-rolled verification, contradicting the current plugin-first trust contract.
@@ -2420,11 +6149,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Self-describing marker signature payload - Implements FR-MCP-140.
+- Main flow: Self-describing marker signature payload - Implements FR-MCP-140. MarkerFileService SHALL declare an ordered SignaturePayloadFields array naming every canonical field used to build the marker-v1 HMAC-SHA256 payload, and BuildSignaturePayload SHALL derive its output order from that same array so the emitted list and the computed payload cannot diverge. The MarkerSignature model SHALL carry a fields array and a format string describing the key=value newline per-field encoding, the trailing LF on the final line, and UTF-8 encoding, and both SHALL be written into the signature block of AGENTS-README-FIRST.yaml.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then self-describing marker signature payload - Implements FR-MCP-140.
+- [ ] Given the technical contract, when the implementation is exercised, then markerFileService SHALL declare an ordered SignaturePayloadFields array naming every canonical field used to build the marker-v1 HMAC-SHA256 payload, and BuildSignaturePayload SHALL derive its output order from that same array so the emitted list and the computed payload cannot diverge.
+- [ ] Given the technical contract, when the implementation is exercised, then the MarkerSignature model SHALL carry a fields array and a format string describing the key=value newline per-field encoding, the trailing LF on the final line, and UTF-8 encoding, and both SHALL be written into the signature block of AGENTS-README-FIRST.yaml.
+- [ ] Given the technical contract, when the implementation is exercised, then the conditional agentPlugins.policy and agentPlugins.contractDigest tail SHALL be represented faithfully: the fields array SHALL reflect the same conditional the payload builder applies for the marker being written.
+
+**Test Requirements:** TEST-MCP-189.
+
 ## TR-MCP-SEC-006
 
 **Brain-slot signing keys follow a renamed party id** — CORRECTED 2026-07-20 after the original specification was proven wrong by test. Context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1". On any migrated installation the renamed party therefore starts with no key and the quad reports NotReady. WHAT WAS WRONG: the first version of this requirement said to COPY the legacy party's signing key material forward. That is impossible and harmful. PartyKeyDescriptor and KeyServerPartyKeyEntity expose only PublicKeyPem, so only the public half can ever be read; InMemoryKeyServerService retains a private ECDsa handle only for a pair it generated itself, and CreateSigningKey given a public PEM with no private PEM stores an empty private-key set. The result passed every readiness gate and could never sign: turn transactions were rejected with TransactionFailureReason.UnknownKey after the model provider had already been invoked and billed, and persisting that row also suppressed TurnTransactionCoordinator.EnsureDefaultPartiesAsync, which mints a working pair only when no key row exists. CORRECT BEHAVIOR: when a brain slot's party has no active signing key and a legacy party id exists (brain-slot:left-hemisphere for Creativity, brain-slot:right-hemisphere for Logic), the runtime SHALL register the renamed party with NO key material so the keyserver mints a fresh pair and retains its private half, and SHALL leave the legacy party and key rows untouched. Historical verification is unaffected because a manifest carries its own PublisherPartyId and VerifyManifestAsync resolves the public key from that legacy party. Reconciliation remains idempotent, is a no-op when the new key already exists or no legacy party is found, and never rotates an existing key. Proven by TEST-MCP-192 and by BrainSlotAdoptedPartyKeySigningTests, which now assert a committed turn transaction under the renamed party and continued verification of a legacy-signed manifest.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Brain-slot signing keys follow a renamed party id - CORRECTED 2026-07-20 after the original specification was proven wrong by test.
+- Main flow: Brain-slot signing keys follow a renamed party id - CORRECTED 2026-07-20 after the original specification was proven wrong by test. Context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1". On any migrated installation the renamed party therefore starts with no key and the quad reports NotReady.
+- Edge cases: Context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then brain-slot signing keys follow a renamed party id - CORRECTED 2026-07-20 after the original specification was proven wrong by test.
+- [ ] Given the technical contract, when the implementation is exercised, then context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1".
+- [ ] Given the technical contract, when the implementation is exercised, then on any migrated installation the renamed party therefore starts with no key and the quad reports NotReady.
+- [ ] Given the technical contract, when the implementation is exercised, then WHAT WAS WRONG: the first version of this requirement said to COPY the legacy party's signing key material forward.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-SEC-006.
 
 ## TR-MCP-SESSIONATTR-001
 
@@ -2435,6 +6194,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] SessionLogService validates filesModified/commit paths against workspace root
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Validate filesModified and commit paths against workspace root - SessionLogService or turn append validates filesModified and commit paths against X-Workspace-Path.
+- Main flow: Validate filesModified and commit paths against workspace root - SessionLogService or turn append validates filesModified and commit paths against X-Workspace-Path. Outside-root paths require foreignRepo or equivalent or are rejected. Covered by FR-MCP-SESSIONATTR-001 TEST-MCP-SESSIONATTR-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONATTR-001.
+
 ## TR-MCP-SESSIONEND-001
 
 **SessionEnd cache flush no-ops when cache cannot be resolved** — Invoke-CacheFlushHook and cache-manager do not throw on unresolved cache. CLAUDE_PROJECT_DIR is a Resolve-McpCacheDir fallback. Covered by FR-MCP-SESSIONEND-001 TEST-MCP-SESSIONEND-001.
@@ -2444,12 +6212,30 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] SessionEnd cache flush no-ops when cache cannot be resolved
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: SessionEnd cache flush no-ops when cache cannot be resolved - Invoke-CacheFlushHook and cache-manager do not throw on unresolved cache.
+- Main flow: SessionEnd cache flush no-ops when cache cannot be resolved - Invoke-CacheFlushHook and cache-manager do not throw on unresolved cache. CLAUDE_PROJECT_DIR is a Resolve-McpCacheDir fallback. Covered by FR-MCP-SESSIONEND-001 TEST-MCP-SESSIONEND-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONEND-001.
+
 ## TR-MCP-SESSIONLOG-001
 
 **Session-log lifecycle tools return structured errors** — The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a valid or null turnJson still returns {success:true}. Origin: BUG-TRIAGE-070/075 (JsonSerializer.Deserialize and ApplyWorkspaceOverride were outside the try in FinalizeLifecycleTurnToolAsync/UpsertLifecycleTurnToolAsync, FwhMcpTools.SessionLog.cs). Validated by TEST-MCP-SESSIONLOG-001.
 **Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Session-log lifecycle tools return structured errors - The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a.
+- Main flow: Session-log lifecycle tools return structured errors - The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005.
 
 ## TR-MCP-SESSIONLOG-002
 
@@ -2458,6 +6244,15 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Session-log text search covers dialog and child collections - Session-log query text search SHALL match content in processing-dialog items, actions (description/type/filePath), commits (message/sha/branch/files).
+- Main flow: Session-log text search covers dialog and child collections - Session-log query text search SHALL match content in processing-dialog items, actions (description/type/filePath), commits (message/sha/branch/files), string-list sections (design decisions / requirements discovered / files modified / blockers), tags, and context items - not only the four turn scalar fields (QueryText, QueryTitle, Response, Interpretation). Acceptance Criteria: (AC1) a query whose term exists only in a processing-dialog item returns the session; (AC2) a query whose term exists only in an action description returns the session; (AC3) existing scalar-field and boolean queries still return the correct sessions.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005.
+
 ## TR-MCP-SESSIONLOG-003
 
 **Terminal-turn compliance gate is QBAgent-only** — The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) SHALL be able to complete or fail a turn with no decision/action/commit items. The sessionlog_complete_turn and sessionlog_fail_turn MCP tool descriptions SHALL state this QBAgent-only scope so operators/triage do not misattribute plugin-side completion failures to a server gate. Acceptance Criteria: (AC1) UpsertTurnAsync with a completed empty turn is accepted for a ClaudeCode session and rejected (ArgumentException) for a QBAgent session; (AC2) the complete/fail tool descriptions state the gate is QBAgent-only. Origin: BUG-TRIAGE-082/083 (reporter hypothesized the server gate blocked ClaudeCode completions; the gate is QBAgent-only, so the real cause is plugin-local). Validated by TEST-MCP-SESSIONLOG-003.
@@ -2465,12 +6260,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Terminal-turn compliance gate is QBAgent-only - The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode.
+- Main flow: Terminal-turn compliance gate is QBAgent-only - The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) SHALL be able to complete or fail a turn with no decision/action/commit items. The sessionlog_complete_turn and sessionlog_fail_turn MCP tool descriptions SHALL state this QBAgent-only scope so operators/triage do not misattribute plugin-side completion failures to a server gate. Acceptance Criteria: (AC1) UpsertTurnAsync with a completed empty turn is accepted for a ClaudeCode session and rejected (ArgumentException) for a QBAgent session; (AC2) the.
+- Edge cases: Terminal-turn compliance gate is QBAgent-only - The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) SHALL be able to complete or fail a turn with no decision/action/commit items.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005.
+
 ## TR-MCP-SESSIONLOG-005
 
 **Dedicated session and turn title-update service, endpoints, and client** — ISessionLogService MUST expose SetSessionTitleAsync(sourceType, sessionId, title) and SetTurnTitleAsync(sourceType, sessionId, requestId, title) that unconditionally set the title on an existing session or turn (throwing when the session or turn does not exist), save, and publish a change event. SessionLogService, the TransactionGated decorator, and the Federated decorator MUST implement or delegate these. The capability MUST be reachable via REST on SessionLogController and via the typed SessionLogClient. Validated by TEST-MCP-SESSIONLOG-005. Covered by FR: FR-SUPPORT-012. Status: pending. Scope: layer-1+.
 **Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Dedicated session and turn title-update service, endpoints, and client - ISessionLogService MUST expose SetSessionTitleAsync(sourceType, sessionId, title) and SetTurnTitleAsync(sourceType, sessionId, requestId, title).
+- Main flow: Dedicated session and turn title-update service, endpoints, and client - ISessionLogService MUST expose SetSessionTitleAsync(sourceType, sessionId, title) and SetTurnTitleAsync(sourceType, sessionId, requestId, title) that unconditionally set the title on an existing session or turn (throwing when the session or turn does not exist), save, and publish a change event. SessionLogService, the TransactionGated decorator, and the Federated decorator MUST implement or delegate these. The capability MUST be reachable via REST on SessionLogController and via the typed SessionLogClient.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Dedicated session and turn title-update service, endpoints, and client - ISessionLogService MUST expose SetSessionTitleAsync(sourceType, sessionId, title) and SetTurnTitleAsync(sourceType, sessionId, requestId, title) that unconditionally set the title on an existing session or turn (throwing when the session or turn does not exist), save, and publish a change event.
+- [ ] Given the technical contract, when the implementation is exercised, then sessionLogService, the TransactionGated decorator, and the Federated decorator MUST implement or delegate these.
+- [ ] Given the technical contract, when the implementation is exercised, then the capability MUST be reachable via REST on SessionLogController and via the typed SessionLogClient.
+- [ ] Given the technical contract, when the implementation is exercised, then validated by TEST-MCP-SESSIONLOG-005.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005.
 
 ## TR-MCP-SESSIONLOG-006
 
@@ -2488,6 +6307,15 @@ Scope: layer-1+
 - [ ] SessionLogClient.BeginTurnAsync, McpAgent BeginTurnAsync, and REPL beginTurn serialize and persist the supplied values.
 - [ ] Read projection copies planFile and todoId onto a clone. Source is unchanged. None is not rewritten.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Required planFile and todoId scalars with None sentinel and backfill - Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId.
+- Main flow: Required planFile and todoId scalars with None sentinel and backfill - Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None.
+- Edge cases: todoId is None, canonical TODO id, or ISSUE-N. FR/TR/TEST ids fail. planFile is None or a normalized relative/exact/~/ path, max 2048, no .. .
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-006.
+
 ## TR-MCP-SESSIONLOGSAN-001
 
 **Bounded outbound session-log sanitizer** — A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.
@@ -2502,12 +6330,30 @@ Scope: layer-1+
 - [ ] SessionLogSanitizingService is the outermost ISessionLogService read decorator for HTTP/federation and is also registered in stdio.
 - [ ] Regex timeout during a read fails closed for the affected value, emits rule diagnostics without the input value, and never returns the unsanitized value.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Bounded outbound session-log sanitizer - A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and.
+- Main flow: Bounded outbound session-log sanitizer - A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.
+- Edge cases: SessionLogSanitizationOptions limits rule count, pattern length, and per-match timeout; invalid or duplicate rule IDs fail options validation with the offending ID.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002.
+
 ## TR-MCP-SESSIONLOGSAN-002
 
 **Sanitizer timeout fail-open is deterministically testable** — The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so its timeout fail-open behavior can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no flake); (AC2) production behavior is unchanged (default invoker is Regex.Replace). Origin: BUG-TRIAGE-081 (SessionLogSanitizerTimeoutTests flaked under scheduler jitter; the deployed 1ms->100ms budget was a mitigation, not deterministic). Validated by TEST-MCP-SESSIONLOGSAN-002.
 **Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Sanitizer timeout fail-open is deterministically testable - The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in.
+- Main flow: Sanitizer timeout fail-open is deterministically testable - The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so its timeout fail-open behavior can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no.
+- Edge cases: Sanitizer timeout fail-open is deterministically testable - The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so its timeout fail-open behavior can be verified deterministically - forcing exactly one.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002.
 
 ## TR-MCP-SKILLS-001
 
@@ -2516,12 +6362,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use supported plugin MCP bridge paths - Skill content uses each plugin's supported MCP bridge or wrapper path and forbids raw REST for normal MCP mutations.
+- Main flow: Use supported plugin MCP bridge paths - Skill content uses each plugin's supported MCP bridge or wrapper path and forbids raw REST for normal MCP mutations.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use supported plugin MCP bridge paths - Skill content uses each plugin's supported MCP bridge or wrapper path and forbids raw REST for normal MCP mutations.
+
+**Test Requirements:** TEST-MCP-149, TEST-MCP-150, TEST-MCP-151.
+
 ## TR-MCP-SKILLS-002
 
 **Preserve commit-sync pause acknowledgement contract** — commit-sync skill content preserves the pause-and-acknowledge contract before staging, committing, or pushing.
 **Covered by:** FR: FR-MCP-111; TEST: TEST-MCP-149, TEST-MCP-150, TEST-MCP-151
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Preserve commit-sync pause acknowledgement contract - commit-sync skill content preserves the pause-and-acknowledge contract before staging, committing, or pushing.
+- Main flow: Preserve commit-sync pause acknowledgement contract - commit-sync skill content preserves the pause-and-acknowledge contract before staging, committing, or pushing.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then preserve commit-sync pause acknowledgement contract - commit-sync skill content preserves the pause-and-acknowledge contract before staging, committing, or pushing.
+
+**Test Requirements:** TEST-MCP-149, TEST-MCP-150, TEST-MCP-151.
 
 ## TR-MCP-SKILLS-003
 
@@ -2530,12 +6400,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Package skills through existing plugin distribution metadata - Plugin manifests and package metadata expose or package the new skills according to each plugin's existing distribution model.
+- Main flow: Package skills through existing plugin distribution metadata - Plugin manifests and package metadata expose or package the new skills according to each plugin's existing distribution model.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then package skills through existing plugin distribution metadata - Plugin manifests and package metadata expose or package the new skills according to each plugin's existing distribution model.
+
+**Test Requirements:** TEST-MCP-149, TEST-MCP-150, TEST-MCP-151.
+
 ## TR-MCP-STDIO-109
 
 **Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
 **Covered by:** FR: FR-MCP-109; TEST: TEST-MCP-145, TEST-MCP-146
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Plugin stdio JSON request envelopes - Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall.
+- Main flow: Plugin stdio JSON request envelopes - Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then plugin stdio JSON request envelopes - Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
+
+**Test Requirements:** TEST-MCP-145, TEST-MCP-146.
 
 ## TR-MCP-STRICTCOUNT-001
 
@@ -2546,12 +6440,33 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] updateTurn collection fields use null-safe enumeration under StrictMode
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Null-safe Count for updateTurn collection fields under StrictMode - New-McpPluginTurnUpsertRequest and Invoke-WorkflowUpdateTurn enumerate tags and contextList with @() or equivalent under Set-StrictMode Latest.
+- Main flow: Null-safe Count for updateTurn collection fields under StrictMode - New-McpPluginTurnUpsertRequest and Invoke-WorkflowUpdateTurn enumerate tags and contextList with @() or equivalent under Set-StrictMode Latest. Covered by FR-MCP-STRICTCOUNT-001 TEST-MCP-STRICTCOUNT-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-STRICTCOUNT-001.
+
 ## TR-MCP-SUBLOG-001
 
 **Subscriber message-log sink** — Parseable sink test
 **Covered by:** FR: FR-MCP-SUBLOG-001; TEST: TEST-MCP-SUBLOG-001
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Subscriber message-log sink - Parseable sink test.
+- Main flow: Subscriber message-log sink - Parseable sink test.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then subscriber message-log sink - Parseable sink test.
+
+**Test Requirements:** TEST-MCP-SUBLOG-001.
 
 ## TR-MCP-SUBSCRIBER-001
 
@@ -2561,12 +6476,39 @@ Scope: layer-1+
 **Covered by:** `McpServer.Subscriber`, `SubscriberController`, `SubscriberClient`, `TransactionSecurityServices`, `TransactionSecurityOptions`, `TransactionSecurityStateStores`, `TransactionSecurityModels`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transaction Subscriber Service - Provide shared subscriber commit services and a separate McpServer.Subscriber host with durable commit/status storage, keyserver-backed manifest verification, protected-envelope.
+- Main flow: Transaction Subscriber Service - Provide shared subscriber commit services and a separate McpServer.Subscriber host with durable commit/status storage, keyserver-backed manifest verification, protected-envelope decrypt/hash validation, idempotent duplicate commit handling, conflict rejection, abort/status endpoints, subscriber encryption key-ring binding, XMLDocs, typed client contracts, and deterministic failure reasons.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transaction Subscriber Service - Provide shared subscriber commit services and a separate McpServer.Subscriber host with durable commit/status storage, keyserver-backed manifest verification, protected-envelope decrypt/hash validation, idempotent duplicate commit handling, conflict rejection, abort/status endpoints, subscriber encryption key-ring binding, XMLDocs, typed client contracts, and deterministic failure reasons.
+
+**Test Requirements:** TEST-MCP-159, TEST-MCP-160, TEST-MCP-167.
+
 ## TR-MCP-SVC-001
 
 **Windows Service Configuration** — `UseWindowsService(options => { options.ServiceName = "McpServer"; })` in `Program.cs` enables Windows Service hosting. The service is published as a self-contained single-file executable to `C:\ProgramData\McpServer`. The `Manage-McpService.ps1` script handles Install, Uninstall, Start, Stop, Restart, Status, and Publish operations with gsudo elevation. Recovery policy restarts the service on failure with a 60 s delay.
 **Covered by:** FR: FR-MCP-017
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Windows Service Configuration - UseWindowsService(options => { options.ServiceName = "McpServer"; }) in Program.cs enables Windows Service hosting.
+- Main flow: Windows Service Configuration - UseWindowsService(options => { options.ServiceName = "McpServer"; }) in Program.cs enables Windows Service hosting. The service is published as a self-contained single-file executable to C:\ProgramData\McpServer. The Manage-McpService.ps1 script handles Install, Uninstall, Start, Stop, Restart, Status, and Publish operations with gsudo elevation.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then windows Service Configuration - UseWindowsService(options => { options.ServiceName = "McpServer"; }) in Program.cs enables Windows Service hosting.
+- [ ] Given the technical contract, when the implementation is exercised, then the service is published as a self-contained single-file executable to C:\ProgramData\McpServer.
+- [ ] Given the technical contract, when the implementation is exercised, then the Manage-McpService.ps1 script handles Install, Uninstall, Start, Stop, Restart, Status, and Publish operations with gsudo elevation.
+- [ ] Given the technical contract, when the implementation is exercised, then recovery policy restarts the service on failure with a 60 s delay.
+
+**Test Requirements:** TEST-MCP-BDP-017.
 
 ## TR-MCP-SVC-002
 
@@ -2575,12 +6517,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Executable resolution skips WindowsApps App-Execution-Alias stubs - Implements FR-MCP-141.
+- Main flow: Executable resolution skips WindowsApps App-Execution-Alias stubs - Implements FR-MCP-141. IProcessEnvironmentService.ResolveExecutable in src/McpServer.Common.AgentCli/ProcessEnvironmentService.cs SHALL skip any PATH directory whose path contains Microsoft\WindowsApps when probing for an executable, because those entries are zero-byte App-Execution-Alias reparse points that a service account cannot launch, failing with Win32Exception 1920. The guard SHALL be an exact containment test on Microsoft\WindowsApps and SHALL NOT match the genuine C:\Program Files\WindowsApps MSIX install root, which holds real executables such as the packaged PowerShell.
+- Edge cases: The guard SHALL be an exact containment test on Microsoft\WindowsApps and SHALL NOT match the genuine C:\Program Files\WindowsApps MSIX install root, which holds real executables such as the packaged PowerShell.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then executable resolution skips WindowsApps App-Execution-Alias stubs - Implements FR-MCP-141.
+- [ ] IProcessEnvironmentService.ResolveExecutable in src/McpServer.Common.AgentCli/ProcessEnvironmentService.cs SHALL skip any PATH directory whose path contains Microsoft\WindowsApps when probing for an executable, because those entries are zero-byte App-Execution-Alias reparse points that a service account cannot launch, failing with Win32Exception 1920.
+- [ ] Given the technical contract, when the implementation is exercised, then the guard SHALL be an exact containment test on Microsoft\WindowsApps and SHALL NOT match the genuine C:\Program Files\WindowsApps MSIX install root, which holds real executables such as the packaged PowerShell.
+- [ ] Given the technical contract, when the implementation is exercised, then this affects every ResolveExecutable caller including the Agent CLI client, the Codex, Grok, and OneShot execution strategies, and ProcessRunner, not only tunnel providers.
+
+**Test Requirements:** TEST-MCP-190, TEST-MCP-191.
+
 ## TR-MCP-SYNC-001
 
 **Node core vendor package uses a version-less stable file name** — SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it. Rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package; the versioned name is also why the constant existed at all, since consumer package.json files reference the tarball path and a version bump would break the reference. The vendor step SHALL discover consumer vendor directories by matching any sharpninja-mcpserver-plugin-core*.tgz variant so first-run migration finds the legacy versioned files, copy the packed artifact to the stable name, delete superseded variants from the vendor directory, and rewrite the consumer package.json dependency reference file:vendor/sharpninja-mcpserver-plugin-core*.tgz to the stable name via a targeted in-place replacement that preserves the file's formatting. The step SHALL also assert that npm pack produced a tarball whose embedded version matches plugins/core/lib-node/package.json, so a silent pack-versus-manifest drift fails the sync instead of shipping.
 **Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Node core vendor package uses a version-less stable file name - SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name.
+- Main flow: Node core vendor package uses a version-less stable file name - SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it. Rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package.
+- Edge cases: Node core vendor package uses a version-less stable file name - SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then node core vendor package uses a version-less stable file name - SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it.
+- [ ] Given the technical contract, when the implementation is exercised, then rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package; the versioned name is also why the constant existed at all, since consumer package.json files reference the tarball path and a version bump would break the reference.
+- [ ] Given the technical contract, when the implementation is exercised, then the vendor step SHALL discover consumer vendor directories by matching any sharpninja-mcpserver-plugin-core*.tgz variant so first-run migration finds the legacy versioned files, copy the packed artifact to the stable name, delete superseded variants from the vendor directory, and rewrite the consumer package.json dependency reference file:vendor/sharpninja-mcpserver-plugin-core*.tgz to the stable name via a targeted in-place replacement that preserves the file's formatting.
+- [ ] Given the technical contract, when the implementation is exercised, then the step SHALL also assert that npm pack produced a tarball whose embedded version matches plugins/core/lib-node/package.json, so a silent pack-versus-manifest drift fails the sync instead of shipping.
+
+**Test Requirements:** TEST-MCP-194, TEST-MCP-REPL-040.
 
 ## TR-MCP-TEMPVOL-001
 
@@ -2591,12 +6563,36 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Plugin entrypoints set TEMP/TMP on the workspace volume
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Plugin entrypoints set TEMP TMP on the workspace volume - session-start and wrapper entrypoints set TEMP and TMP to a workspace-drive directory when volumes differ.
+- Main flow: Plugin entrypoints set TEMP TMP on the workspace volume - session-start and wrapper entrypoints set TEMP and TMP to a workspace-drive directory when volumes differ. Covered by FR-MCP-TEMPVOL-001 TEST-MCP-TEMPVOL-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TEMPVOL-001.
+
 ## TR-MCP-TODO-002
 
 **Cross-Workspace TODO Move** — `TodoController.MoveAsync` at `POST /mcpserver/todo/{id}/move` reads the item from the source workspace (resolved via header/API key), creates it in the target workspace (resolved via `IWorkspaceService.GetAsync` + `TodoServiceResolver.Resolve`), then deletes from the source. Request body: `TodoMoveRequest { TargetWorkspacePath }`. Error responses: 400 (null request or unknown target workspace), 404 (item not found), 409 (create failed in target), 500 (created in target but delete from source failed). MCP STDIO parity via `todo_move` tool in `FwhMcpTools`.
 **Covered by:** `TodoController`, `FwhMcpTools`, `TodoMoveRequest`, `TodoServiceResolver`, `IWorkspaceService`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Cross-Workspace TODO Move - TodoController.MoveAsync at POST /mcpserver/todo/{id}/move reads the item from the source workspace (resolved via header/API key), creates it in the target workspace (resolved via.
+- Main flow: Cross-Workspace TODO Move - TodoController.MoveAsync at POST /mcpserver/todo/{id}/move reads the item from the source workspace (resolved via header/API key), creates it in the target workspace (resolved via IWorkspaceService.GetAsync + TodoServiceResolver.Resolve), then deletes from the source. Request body: TodoMoveRequest { TargetWorkspacePath }. Error responses: 400 (null request or unknown target workspace), 404 (item not found), 409 (create failed in target), 500 (created in target but delete from source failed).
+- Edge cases: Error responses: 400 (null request or unknown target workspace), 404 (item not found), 409 (create failed in target), 500 (created in target but delete from source failed).
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then cross-Workspace TODO Move - TodoController.MoveAsync at POST /mcpserver/todo/{id}/move reads the item from the source workspace (resolved via header/API key), creates it in the target workspace (resolved via IWorkspaceService.GetAsync + TodoServiceResolver.Resolve), then deletes from the source.
+- [ ] Given the technical contract, when the implementation is exercised, then request body: TodoMoveRequest { TargetWorkspacePath }.
+- [ ] Given the technical contract, when the implementation is exercised, then error responses: 400 (null request or unknown target workspace), 404 (item not found), 409 (create failed in target), 500 (created in target but delete from source failed).
+- [ ] Given the technical contract, when the implementation is exercised, then MCP STDIO parity via todo_move tool in FwhMcpTools.
+
+**Test Requirements:** TEST-MCP-048.
 
 ## TR-MCP-TODO-003
 
@@ -2608,6 +6604,21 @@ The `ISSUE-NEW` flow SHALL be implemented through a shared creation path so HTTP
 **Covered by:** `TodoCreationService`, `TodoValidator`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`, `TodoService`, `EfTodoService`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: GitHub-Backed TODO Creation Alias - The server SHALL accept ISSUE-NEW only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical.
+- Main flow: GitHub-Backed TODO Creation Alias - The server SHALL accept ISSUE-NEW only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical ISSUE-{number} value returned by GitHub, and SHALL return that canonical identifier to the caller. Persisted TODO validation SHALL accept both ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$ and ^ISSUE-\d+$. Dependency validation SHALL use the same persisted-ID rule set.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then gitHub-Backed TODO Creation Alias - The server SHALL accept ISSUE-NEW only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical ISSUE-{number} value returned by GitHub, and SHALL return that canonical identifier to the caller.
+- [ ] Given the technical contract, when the implementation is exercised, then persisted TODO validation SHALL accept both ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$ and ^ISSUE-\d+$.
+- [ ] Given the technical contract, when the implementation is exercised, then dependency validation SHALL use the same persisted-ID rule set.
+- [ ] Given the technical contract, when the implementation is exercised, then the ISSUE-NEW flow SHALL be implemented through a shared creation path so HTTP, MCP/STDIO, and voice-driven TODO creation all apply the same rewrite and persistence behavior.
+
+**Test Requirements:** TEST-MCP-074, TEST-MCP-092.
+
 ## TR-MCP-TODO-004
 
 **Shared ISSUE-* TODO Update Orchestration** — All server-side TODO update entry points that can mutate existing TODO items SHALL route `ISSUE-{number}` updates through shared orchestration instead of writing directly to the TODO store. The shared path SHALL suppress description changes after first sync, SHALL reuse the existing TODO store for the local mutation, and SHALL trigger the GitHub sync/comment flow after a successful local update.
@@ -2615,6 +6626,19 @@ Scope: layer-1+
 
 **Covered by:** `TodoUpdateService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Shared ISSUE-* TODO Update Orchestration - All server-side TODO update entry points that can mutate existing TODO items SHALL route ISSUE-{number} updates through shared orchestration instead of writing directly to the.
+- Main flow: Shared ISSUE-* TODO Update Orchestration - All server-side TODO update entry points that can mutate existing TODO items SHALL route ISSUE-{number} updates through shared orchestration instead of writing directly to the TODO store. The shared path SHALL suppress description changes after first sync, SHALL reuse the existing TODO store for the local mutation, and SHALL trigger the GitHub sync/comment flow after a successful local update.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then shared ISSUE-* TODO Update Orchestration - All server-side TODO update entry points that can mutate existing TODO items SHALL route ISSUE-{number} updates through shared orchestration instead of writing directly to the TODO store.
+- [ ] Given the technical contract, when the implementation is exercised, then the shared path SHALL suppress description changes after first sync, SHALL reuse the existing TODO store for the local mutation, and SHALL trigger the GitHub sync/comment flow after a successful local update.
+
+**Test Requirements:** TEST-MCP-094.
 
 ## TR-MCP-TODO-005
 
@@ -2626,6 +6650,21 @@ Projection failures after a committed authoritative mutation SHALL surface an ex
 **Covered by:** `EfTodoService`, `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (Todo DbSets), `McpDatabaseProviderFactory`, `TodoYamlFileSerializer`, `TodoServiceFactory`, `TodoStorageOptions`, `McpInstanceResolver`, `appsettings.yaml`, `appsettings.Staging.yaml`, `src/McpServer.Support.Mcp/appsettings.yaml`, `src/McpServer.Support.Mcp/appsettings.Staging.yaml`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection - The TODO subsystem SHALL use the configured Mcp:Database:Provider (SQLite, SQL Server, or PostgreSQL) via.
+- Main flow: Provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection - The TODO subsystem SHALL use the configured Mcp:Database:Provider (SQLite, SQL Server, or PostgreSQL) via McpDatabaseProviderFactory (TR-MCP-CFG-007) as the authoritative current-state store for workspace TODO items. Service initialization SHALL perform EF Core schema migration, one-time bootstrap import from an existing TODO.yaml when the authoritative database is empty, and deterministic projection back to the configured TODO YAML path after successful mutations. The authoritative store SHALL preserve projection metadata needed to rehydrate ordered sections, code-review-remediation phases, notes.
+- Edge cases: Service initialization SHALL perform EF Core schema migration, one-time bootstrap import from an existing TODO.yaml when the authoritative database is empty, and deterministic projection back to the configured TODO YAML path after successful mutations.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection - The TODO subsystem SHALL use the configured Mcp:Database:Provider (SQLite, SQL Server, or PostgreSQL) via McpDatabaseProviderFactory (TR-MCP-CFG-007) as the authoritative current-state store for workspace TODO items.
+- [ ] Service initialization SHALL perform EF Core schema migration, one-time bootstrap import from an existing TODO.yaml when the authoritative database is empty, and deterministic projection back to the configured TODO YAML path after successful mutations.
+- [ ] Given the technical contract, when the implementation is exercised, then the authoritative store SHALL preserve projection metadata needed to rehydrate ordered sections, code-review-remediation phases, notes, completed, and the code-review reference without treating YAML as runtime source of truth.
+- [ ] Given the technical contract, when the implementation is exercised, then projection failures after a committed authoritative mutation SHALL surface an explicit failure result instead of silent success.
+
+**Test Requirements:** TEST-MCP-096, TEST-MCP-097.
+
 ## TR-MCP-TODO-006
 
 **Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract** — TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose `GET /mcpserver/todo/{id}/audit` together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
@@ -2636,6 +6675,21 @@ Mutation results SHALL include a machine-readable failure classification so call
 **Covered by:** `ITodoService`, `ITodoStore`, `EfTodoService`, `TodoAuditHistoryEntity`, `TodoYamlFileSerializer`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract - TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item.
+- Main flow: Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract - TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose GET /mcpserver/todo/{id}/audit together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists. Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only.
+- Edge cases: Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then append-Only TODO Audit History, Projection Failure Classification, and Repair Contract - TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions.
+- [ ] The server SHALL expose GET /mcpserver/todo/{id}/audit together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
+- [ ] Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed.
+- [ ] Given the technical contract, when the implementation is exercised, then for database-backed TODO storage (the authoritative mode per TR-MCP-TODO-005), a projection failure SHALL preserve committed authoritative database state, record operator-visible projection failure metadata, and leave TODO.yaml repairable without replaying the mutation.
+
+**Test Requirements:** TEST-MCP-096, TEST-MCP-097.
+
 ## TR-MCP-TODO-007
 
 **Legacy SQLite TODO Storage One-Shot Migration** — When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy `mcp.db` SQLite TODO store is present at the deprecated `Mcp:TodoStorage:SqliteDataSource` path, the server SHALL copy rows from `todo_items`, `todo_item_history`, and `todo_document_metadata` into the configured authoritative database on first boot, preserving primary keys, audit identifiers, and monotonic per-item versions. The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder. The migrator SHALL honor the `Mcp:TodoStorage:MigrateFromLegacySqlite` feature flag and SHALL run as a background hosted service so it never blocks the SCM 30-second service-start window. Failures SHALL log per-row context and continue with the next row rather than aborting the whole migration.
@@ -2645,6 +6699,21 @@ Scope: layer-1+
 
 **Covered by:** `TodoBootstrapImporter` (replaces legacy migrator), per-workspace YAML bootstrap path
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Legacy SQLite TODO Storage One-Shot Migration - When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy mcp.db SQLite TODO store is present at the deprecated Mcp:TodoStorage:SqliteDataSource.
+- Main flow: Legacy SQLite TODO Storage One-Shot Migration - When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy mcp.db SQLite TODO store is present at the deprecated Mcp:TodoStorage:SqliteDataSource path, the server SHALL copy rows from todo_items, todo_item_history, and todo_document_metadata into the configured authoritative database on first boot, preserving primary keys, audit identifiers, and monotonic per-item versions. The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder. The migrator SHALL honor the Mcp:TodoStorage:MigrateFromLegacySqlite.
+- Edge cases: The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Legacy SQLite TODO Storage One-Shot Migration - When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy mcp.db SQLite TODO store is present at the deprecated Mcp:TodoStorage:SqliteDataSource path, the server SHALL copy rows from todo_items, todo_item_history, and todo_document_metadata into the configured authoritative database on first boot, preserving primary keys, audit identifiers, and monotonic per-item versions.
+- [ ] The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder.
+- [ ] Given the technical contract, when the implementation is exercised, then the migrator SHALL honor the Mcp:TodoStorage:MigrateFromLegacySqlite feature flag and SHALL run as a background hosted service so it never blocks the SCM 30-second service-start window.
+- [ ] Given the technical contract, when the implementation is exercised, then failures SHALL log per-row context and continue with the next row rather than aborting the whole migration.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-TODO-007.
 
 ## TR-MCP-TODO-008
 
@@ -2660,12 +6729,39 @@ The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows with 
 **Covered by:** `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (query filters + composite keys), `EfTodoService`, `TodoBootstrapImporter`, `TodoServiceFactory.CreateForWorkspace`, per-provider migration assemblies
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap - Database-backed TODO storage (TR-MCP-TODO-005) SHALL scope every TODO row, audit-history row, and document-metadata row to the active.
+- Main flow: Workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap - Database-backed TODO storage (TR-MCP-TODO-005) SHALL scope every TODO row, audit-history row, and document-metadata row to the active workspace via a WorkspaceId column populated from the resolved WorkspaceContext.WorkspacePath, matching the TR-MCP-MT-003 multi-tenant pattern used by context, session-log, agent, tool, and graph entities. McpDbContext SHALL install a global query filter on all three Todo entities so reads, updates, and deletes never cross workspace boundaries. TodoItemEntity SHALL use composite primary key (WorkspaceId, Id) so the same canonical TODO id MAY exist in multiple workspaces without.
+- Edge cases: McpDbContext SHALL install a global query filter on all three Todo entities so reads, updates, and deletes never cross workspace boundaries.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap - Database-backed TODO storage (TR-MCP-TODO-005) SHALL scope every TODO row, audit-history row, and document-metadata row to the active workspace via a WorkspaceId column populated from the resolved WorkspaceContext.WorkspacePath, matching the TR-MCP-MT-003 multi-tenant pattern used by context, session-log, agent, tool, and graph entities.
+- [ ] Given the technical contract, when the implementation is exercised, then mcpDbContext SHALL install a global query filter on all three Todo entities so reads, updates, and deletes never cross workspace boundaries.
+- [ ] Given the technical contract, when the implementation is exercised, then todoItemEntity SHALL use composite primary key (WorkspaceId, Id) so the same canonical TODO id MAY exist in multiple workspaces without collision.
+- [ ] Given the technical contract, when the implementation is exercised, then todoDocumentMetadataEntity SHALL use composite primary key (WorkspaceId, SingletonId = 1) so each workspace owns exactly one document-metadata singleton.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-TODO-008.
+
 ## TR-MCP-TODO-009
 
 **Preserve TODO description Markdown** — TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
 **Covered by:** FR: FR-MCP-108; TEST: TEST-MCP-144
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Preserve TODO description Markdown - TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation.
+- Main flow: Preserve TODO description Markdown - TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then preserve TODO description Markdown - TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
+
+**Test Requirements:** TEST-MCP-144.
 
 ## TR-MCP-TODO-010
 
@@ -2675,6 +6771,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Root-level done serialization ignores nested implementationTasks[].done values. (evidence: Plugin tests/repl-invoke-shim.bats now asserts no top-level done is emitted when only implementation task done values are present.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Root-scoped TODO done serialization - TODO update serializers in MCP plugin wrappers SHALL read the parent done field only from the request root and SHALL NOT derive it from nested implementationTasks[].done values.
+- Main flow: Root-scoped TODO done serialization - TODO update serializers in MCP plugin wrappers SHALL read the parent done field only from the request root and SHALL NOT derive it from nested implementationTasks[].done values. Structured root-level parsing is required for boolean root fields when building HTTP or workflow update bodies.
+- Edge cases: Root-scoped TODO done serialization - TODO update serializers in MCP plugin wrappers SHALL read the parent done field only from the request root and SHALL NOT derive it from nested implementationTasks[].done values.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-154.
 
 ## TR-MCP-TODO-CLOSE-001
 
@@ -2687,12 +6792,36 @@ Scope: layer-1+
 - [x] The server owns the completion timestamp and formats it as a UTC ISO 8601 value. (evidence: TodoController.CloseAsync uses DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture) and tests parse zero offset.)
 - [x] The operation reuses existing TODO update validation, workspace scoping, transaction gate, and external sync behavior. (evidence: TodoController.CloseAsync delegates through TodoUpdateService or ITransactionGatedTodoMutationService.UpdateAsync; gated path covered by CloseAsync_WhenTransactionGateRegistered_UsesGatedUpdateService.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: TODO close operation surfaces - Add a dedicated close-by-id operation on the TODO controller and typed client that delegates through the existing TODO mutation path with done true and a UTC completion timestamp.
+- Main flow: TODO close operation surfaces - Add a dedicated close-by-id operation on the TODO controller and typed client that delegates through the existing TODO mutation path with done true and a UTC completion timestamp.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TODO-CLOSE-001.
+
 ## TR-MCP-TPL-001
 
 **Prompt Template YAML Storage** — `PromptTemplateService` persists templates in a single YAML file (default `templates/prompt-templates.yaml`) using YamlDotNet with `HyphenatedNamingConvention`. Root structure: `templates:` → map of template-id → entry object (title, category, tags, description, engine, variables, content). Read/write serialization uses `SemaphoreSlim(1,1)` for write safety. Templates are loaded on-demand and not cached (file is source of truth).
 **Covered by:** `PromptTemplateService`, `TemplateStorageOptions`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Prompt Template YAML Storage - PromptTemplateService persists templates in a single YAML file (default templates/prompt-templates.yaml) using YamlDotNet with HyphenatedNamingConvention.
+- Main flow: Prompt Template YAML Storage - PromptTemplateService persists templates in a single YAML file (default templates/prompt-templates.yaml) using YamlDotNet with HyphenatedNamingConvention. Root structure: templates: → map of template-id → entry object (title, category, tags, description, engine, variables, content). Read/write serialization uses SemaphoreSlim(1,1) for write safety.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then prompt Template YAML Storage - PromptTemplateService persists templates in a single YAML file (default templates/prompt-templates.yaml) using YamlDotNet with HyphenatedNamingConvention.
+- [ ] Given the technical contract, when the implementation is exercised, then root structure: templates: → map of template-id → entry object (title, category, tags, description, engine, variables, content).
+- [ ] Given the technical contract, when the implementation is exercised, then read/write serialization uses SemaphoreSlim(1,1) for write safety.
+- [ ] Given the technical contract, when the implementation is exercised, then templates are loaded on-demand and not cached (file is source of truth).
+
+**Test Requirements:** TEST-MCP-054, TEST-MCP-055, TEST-MCP-056, TEST-MCP-057, TEST-MCP-058, TEST-MCP-059, TEST-MCP-060.
 
 ## TR-MCP-TPL-002
 
@@ -2701,12 +6830,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Prompt Template Rendering - PromptTemplateRenderer compiles Handlebars templates via HandlebarsDotNet with content-hash-based caching in a ConcurrentDictionary.
+- Main flow: Prompt Template Rendering - PromptTemplateRenderer compiles Handlebars templates via HandlebarsDotNet with content-hash-based caching in a ConcurrentDictionary. Variable validation checks required variables against supplied data and reports missing values. RenderAsync returns PromptTemplateTestResult with RenderedContent on success or MissingVariables/Error on failure.
+- Edge cases: Variable validation checks required variables against supplied data and reports missing values.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then prompt Template Rendering - PromptTemplateRenderer compiles Handlebars templates via HandlebarsDotNet with content-hash-based caching in a ConcurrentDictionary.
+- [ ] Given the technical contract, when the implementation is exercised, then variable validation checks required variables against supplied data and reports missing values.
+- [ ] Given the technical contract, when the implementation is exercised, then renderAsync returns PromptTemplateTestResult with RenderedContent on success or MissingVariables/Error on failure.
+- [ ] Given the technical contract, when the implementation is exercised, then thread-safe for concurrent rendering.
+
+**Test Requirements:** TEST-MCP-054, TEST-MCP-055, TEST-MCP-056, TEST-MCP-057, TEST-MCP-058, TEST-MCP-059, TEST-MCP-060.
+
 ## TR-MCP-TPL-003
 
 **Prompt Template REST + MCP Endpoints** — `PromptTemplateController` exposes 7 REST endpoints at `/mcpserver/templates` (list/filter with query params, CRUD by ID, test stored template, test inline template). `FwhMcpTools` exposes 6 MCP tools (`prompt_template_list`, `prompt_template_get`, `prompt_template_create`, `prompt_template_update`, `prompt_template_delete`, `prompt_template_test`). Both delegate to `IPromptTemplateService`.
 **Covered by:** `PromptTemplateController`, `FwhMcpTools`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Prompt Template REST + MCP Endpoints - PromptTemplateController exposes 7 REST endpoints at /mcpserver/templates (list/filter with query params, CRUD by ID, test stored template, test inline template).
+- Main flow: Prompt Template REST + MCP Endpoints - PromptTemplateController exposes 7 REST endpoints at /mcpserver/templates (list/filter with query params, CRUD by ID, test stored template, test inline template). FwhMcpTools exposes 6 MCP tools (prompt_template_list, prompt_template_get, prompt_template_create, prompt_template_update, prompt_template_delete, prompt_template_test). Both delegate to IPromptTemplateService.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then prompt Template REST + MCP Endpoints - PromptTemplateController exposes 7 REST endpoints at /mcpserver/templates (list/filter with query params, CRUD by ID, test stored template, test inline template).
+- [ ] Given the technical contract, when the implementation is exercised, then fwhMcpTools exposes 6 MCP tools (prompt_template_list, prompt_template_get, prompt_template_create, prompt_template_update, prompt_template_delete, prompt_template_test).
+- [ ] Given the technical contract, when the implementation is exercised, then both delegate to IPromptTemplateService.
+
+**Test Requirements:** TEST-MCP-054, TEST-MCP-055, TEST-MCP-056, TEST-MCP-057, TEST-MCP-058, TEST-MCP-059, TEST-MCP-060.
 
 ## TR-MCP-TPL-004
 
@@ -2715,12 +6873,42 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Prompt Template CQRS + Director UI - Full 4-layer CQRS stack: TemplateMessages.cs defines queries/commands/results, 6 handlers (ListTemplatesQueryHandler, GetTemplateQueryHandler, TestTemplateQueryHandler.
+- Main flow: Prompt Template CQRS + Director UI - Full 4-layer CQRS stack: TemplateMessages.cs defines queries/commands/results, 6 handlers (ListTemplatesQueryHandler, GetTemplateQueryHandler, TestTemplateQueryHandler, CreateTemplateCommandHandler, UpdateTemplateCommandHandler, DeleteTemplateCommandHandler) delegate to ITemplateApiClient. TemplateApiClientAdapter bridges to McpServerClient.Template. TemplateListViewModel and TemplateDetailViewModel drive TemplatesScreen in Director TUI.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then prompt Template CQRS + Director UI - Full 4-layer CQRS stack: TemplateMessages.cs defines queries/commands/results, 6 handlers (ListTemplatesQueryHandler, GetTemplateQueryHandler, TestTemplateQueryHandler, CreateTemplateCommandHandler, UpdateTemplateCommandHandler, DeleteTemplateCommandHandler) delegate to ITemplateApiClient.
+- [ ] Given the technical contract, when the implementation is exercised, then templateApiClientAdapter bridges to McpServerClient.Template.
+- [ ] Given the technical contract, when the implementation is exercised, then templateListViewModel and TemplateDetailViewModel drive TemplatesScreen in Director TUI.
+- [ ] Given the technical contract, when the implementation is exercised, then authorization: McpArea.Templates with Viewer (read) and Admin (write) roles.
+
+**Test Requirements:** TEST-MCP-054, TEST-MCP-055, TEST-MCP-056, TEST-MCP-057, TEST-MCP-058, TEST-MCP-059, TEST-MCP-060.
+
 ## TR-MCP-TPL-005
 
 **System Template Externalization** — Three provider interfaces decouple system prompt templates from inline C# constants: (1) `IMarkerPromptProvider` / `FileMarkerPromptProvider` reads `templates/prompt-templates.yaml` via `IPromptTemplateService` (id: `default-marker-prompt`), throwing a critical exception on file-missing. Fallback to `MarkerFileService.DefaultPromptTemplate` is REMOVED. Injected into `WorkspaceProcessManager` with precedence: config override (`Mcp:MarkerPromptTemplate`) > file template. (2) `ITodoPromptProvider` / `TodoPromptProvider` looks up templates from `IPromptTemplateService` by well-known IDs (`todo-status-prompt`, `todo-implement-prompt`, `todo-plan-prompt`), falling back to `TodoPromptDefaults` constants. Injected into `TodoPromptService` with precedence: `IOptionsMonitor<TodoPromptOptions>` > file template > built-in default. (3) `PairingHtmlRenderer` replaces static `PairingHtml` calls with DI-injected instance class, loading templates from `IPromptTemplateService` by well-known IDs (`pairing-login-page`, `pairing-key-page`, `pairing-not-configured-page`) using `string.Replace` token substitution (`{errorBanner}`, `{apiKey}`, `{serverUrl}`), falling back to `PairingHtml` static methods. Template YAML files ship via `.csproj` Content items and are preserved across deployments.
 **Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`, `templates/prompt-templates.yaml`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: System Template Externalization - Three provider interfaces decouple system prompt templates from inline C# constants: (1) IMarkerPromptProvider / FileMarkerPromptProvider reads templates/prompt-templates.yaml via.
+- Main flow: System Template Externalization - Three provider interfaces decouple system prompt templates from inline C# constants: (1) IMarkerPromptProvider / FileMarkerPromptProvider reads templates/prompt-templates.yaml via IPromptTemplateService (id: default-marker-prompt), throwing a critical exception on file-missing. Fallback to MarkerFileService.DefaultPromptTemplate is REMOVED. Injected into WorkspaceProcessManager with precedence: config override (Mcp:MarkerPromptTemplate) > file template.
+- Edge cases: System Template Externalization - Three provider interfaces decouple system prompt templates from inline C# constants: (1) IMarkerPromptProvider / FileMarkerPromptProvider reads templates/prompt-templates.yaml via IPromptTemplateService (id: default-marker-prompt), throwing a critical exception on file-missing.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then system Template Externalization - Three provider interfaces decouple system prompt templates from inline C# constants: (1) IMarkerPromptProvider / FileMarkerPromptProvider reads templates/prompt-templates.yaml via IPromptTemplateService (id: default-marker-prompt), throwing a critical exception on file-missing.
+- [ ] Given the technical contract, when the implementation is exercised, then fallback to MarkerFileService.DefaultPromptTemplate is REMOVED.
+- [ ] Given the technical contract, when the implementation is exercised, then injected into WorkspaceProcessManager with precedence: config override (Mcp:MarkerPromptTemplate) > file template.
+- [ ] Given the technical contract, when the implementation is exercised, then (2) ITodoPromptProvider / TodoPromptProvider looks up templates from IPromptTemplateService by well-known IDs (todo-status-prompt, todo-implement-prompt, todo-plan-prompt), falling back to TodoPromptDefaults constants.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-TPL-005.
 
 ## TR-MCP-TPL-006
 
@@ -2739,12 +6927,39 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 **Covered by:** `PromptTemplateController` *(planned extension)*, `PromptTemplateRenderer`, `AgentPoolController` *(planned)*
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Template Resolution for One-Shot Requests - Template rendering SHALL support: - Explicit template mode: promptTemplateId + optional values dictionary.
+- Main flow: Template Resolution for One-Shot Requests - Template rendering SHALL support: - Explicit template mode: promptTemplateId + optional values dictionary. - Context resolution mode: context-based template selection when template ID is omitted. - Value precedence: caller-provided values override workspace-context-derived values on key collision.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then template Resolution for One-Shot Requests - Template rendering SHALL support: - Explicit template mode: promptTemplateId + optional values dictionary.
+- [ ] - Context resolution mode: context-based template selection when template ID is omitted.
+- [ ] Given the technical contract, when the implementation is exercised, then - Value precedence: caller-provided values override workspace-context-derived values on key collision.
+- [ ] Given the technical contract, when the implementation is exercised, then - Placeholder binding: request id injected into render variables for {id} substitution.
+
+**Test Requirements:** TEST-MCP-063, TEST-MCP-064, TEST-MCP-065.
+
 ## TR-MCP-TPL-007
 
 **Marker template requires actionable requirements-backed plans** — The default marker prompt must instruct every agent in every workspace to make plans decision-complete, capture FR/TR/TEST requirements, include explicit TDD unit-test expectations, and preserve Byrd gates so implementation agents can execute the plan directly.
 **Covered by:** FR: FR-MCP-104; TEST: TEST-MCP-137, TEST-MCP-141
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Marker template requires actionable requirements-backed plans - The default marker prompt must instruct every agent in every workspace to make plans decision-complete, capture FR/TR/TEST requirements, include explicit.
+- Main flow: Marker template requires actionable requirements-backed plans - The default marker prompt must instruct every agent in every workspace to make plans decision-complete, capture FR/TR/TEST requirements, include explicit TDD unit-test expectations, and preserve Byrd gates so implementation agents can execute the plan directly.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then marker template requires actionable requirements-backed plans - The default marker prompt must instruct every agent in every workspace to make plans decision-complete, capture FR/TR/TEST requirements, include explicit TDD unit-test expectations, and preserve Byrd gates so implementation agents can execute the plan directly.
+
+**Test Requirements:** TEST-MCP-137, TEST-MCP-141.
 
 ## TR-MCP-TR-001
 
@@ -2753,6 +6968,20 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tool Registry Service - Keyword search across tool tags (bidirectional singular/plural contains matching), name, and description.
+- Main flow: Tool Registry Service - Keyword search across tool tags (bidirectional singular/plural contains matching), name, and description. Results combine global tools (WorkspacePath == null) with workspace-scoped tools. Full CRUD for ToolDefinitionEntity and ToolDefinitionTagEntity.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tool Registry Service - Keyword search across tool tags (bidirectional singular/plural contains matching), name, and description.
+- [ ] Given the technical contract, when the implementation is exercised, then results combine global tools (WorkspacePath == null) with workspace-scoped tools.
+- [ ] Given the technical contract, when the implementation is exercised, then full CRUD for ToolDefinitionEntity and ToolDefinitionTagEntity.
+
+**Test Requirements:** TEST-MCP-008.
+
 ## TR-MCP-TR-002
 
 **Tool Bucket Service** — GitHub repository browsing via `gh api /repos/{owner}/{repo}/contents{path}?ref={branch}`. Reads and parses `stdio-tool-contract.json` manifests for install and sync operations. Persists bucket state to `ToolBucketEntity`.
@@ -2760,12 +6989,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tool Bucket Service - GitHub repository browsing via gh api /repos/{owner}/{repo}/contents{path}?ref={branch}.
+- Main flow: Tool Bucket Service - GitHub repository browsing via gh api /repos/{owner}/{repo}/contents{path}?ref={branch}. Reads and parses stdio-tool-contract.json manifests for install and sync operations. Persists bucket state to ToolBucketEntity.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tool Bucket Service - GitHub repository browsing via gh api /repos/{owner}/{repo}/contents{path}?ref={branch}.
+- [ ] Given the technical contract, when the implementation is exercised, then reads and parses stdio-tool-contract.json manifests for install and sync operations.
+- [ ] Given the technical contract, when the implementation is exercised, then persists bucket state to ToolBucketEntity.
+
+**Test Requirements:** TEST-MCP-008.
+
 ## TR-MCP-TR-003
 
 **Tool Registry Default Bucket Seeding** — On startup, `Program.cs` reads `Mcp:ToolRegistry:DefaultBuckets` and calls `IToolBucketService.EnsureDefaultBucketsAsync` to register any configured buckets not already in the database. Idempotent: existing buckets are not modified.
 **Covered by:** FR: FR-MCP-012, FR-MCP-022
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tool Registry Default Bucket Seeding - On startup, Program.cs reads Mcp:ToolRegistry:DefaultBuckets and calls IToolBucketService.EnsureDefaultBucketsAsync to register any configured buckets not already in the database.
+- Main flow: Tool Registry Default Bucket Seeding - On startup, Program.cs reads Mcp:ToolRegistry:DefaultBuckets and calls IToolBucketService.EnsureDefaultBucketsAsync to register any configured buckets not already in the database. Idempotent: existing buckets are not modified.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tool Registry Default Bucket Seeding - On startup, Program.cs reads Mcp:ToolRegistry:DefaultBuckets and calls IToolBucketService.EnsureDefaultBucketsAsync to register any configured buckets not already in the database.
+- [ ] Given the technical contract, when the implementation is exercised, then idempotent: existing buckets are not modified.
+
+**Test Requirements:** TEST-MCP-008.
 
 ## TR-MCP-TRANSCRIPT-001
 
@@ -2776,6 +7032,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Readers enforce byte, line, record, timeout, cancellation, recursion, and archive limits with diagnostics. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: IngestionService_RejectsOversizedJsonlLine; upload ZIP/security tests.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Bounded transcript reader and parser registry - Implement streaming transcript readers with size, line, record, timeout, and cancellation bounds plus deterministic source adapter selection.
+- Main flow: Bounded transcript reader and parser registry - Implement streaming transcript readers with size, line, record, timeout, and cancellation bounds plus deterministic source adapter selection.
+- Edge cases: Readers enforce byte, line, record, timeout, cancellation, recursion, and archive limits with diagnostics.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-009.
+
 ## TR-MCP-TRANSCRIPT-002
 
 **Source adapters and bundle detection** — Implement adapters for Claude, Codex, Grok, Cline, Copilot, and OpenCode plus bundle detection for native files, folders, ZIPs, and SQLite snapshots.
@@ -2784,6 +7049,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Each supported provider has verified fixtures and adapter-specific diagnostics. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: real fixture manifest; RealTranscriptFixtureIntegrationTests; adapter diagnostics for all six providers.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Source adapters and bundle detection - Implement adapters for Claude, Codex, Grok, Cline, Copilot, and OpenCode plus bundle detection for native files, folders, ZIPs, and SQLite snapshots.
+- Main flow: Source adapters and bundle detection - Implement adapters for Claude, Codex, Grok, Cline, Copilot, and OpenCode plus bundle detection for native files, folders, ZIPs, and SQLite snapshots.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012.
 
 ## TR-MCP-TRANSCRIPT-003
 
@@ -2794,6 +7068,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Projectors preserve provenance, tool pairing, reasoning, usage, and derived-value markers. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: IngestionService_NormalizesRealTranscriptFixtures; compatibility projector and diagnostics tests.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Neutral event model and projectors - Define loss-aware neutral transcript events and Claude, Codex, and Grok compatibility projectors while preserving provenance and derived-value markers.
+- Main flow: Neutral event model and projectors - Define loss-aware neutral transcript events and Claude, Codex, and Grok compatibility projectors while preserving provenance and derived-value markers.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-004, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012.
+
 ## TR-MCP-TRANSCRIPT-004
 
 **Canonical YAML and write-ahead persistence** — Use existing SessionLogIngestor, UnifiedSessionLog DTOs, and IYamlSerializer to write deterministic importRecovery YAML and persist through the current session-log path.
@@ -2802,6 +7085,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Failsafe pending artifacts are atomically written before submission and deleted only after non-degraded persistence success. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: PersistWritesRunArtifactsAndPendingFailsafeEnvelope; PersistNamesFailsafeDocumentsByRootIdWithoutOverwrite; TEST-MCP-REPL-025 Pester failsafe tests.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Canonical YAML and write-ahead persistence - Use existing SessionLogIngestor, UnifiedSessionLog DTOs, and IYamlSerializer to write deterministic importRecovery YAML and persist through the current session-log path.
+- Main flow: Canonical YAML and write-ahead persistence - Use existing SessionLogIngestor, UnifiedSessionLog DTOs, and IYamlSerializer to write deterministic importRecovery YAML and persist through the current session-log path.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-004, TEST-MCP-TRANSCRIPT-005.
 
 ## TR-MCP-TRANSCRIPT-005
 
@@ -2812,6 +7104,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Claude, Codex, and Grok plugin packages contain no transcript ingestion helper or skill and instruct models to use workflow.sessionlog tools for live session logging. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: plugin Pester TEST-MCP-TRANSCRIPT-010 endpoint absence, marker prompt model-authored logging, legacy parser removal.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: REPL import and model-owned session logging - Expose shared transcript conversion/import through non-plugin typed server, client, MCP, and REPL surfaces while keeping plugin packages free of transcript ingestion.
+- Main flow: REPL import and model-owned session logging - Expose shared transcript conversion/import through non-plugin typed server, client, MCP, and REPL surfaces while keeping plugin packages free of transcript ingestion endpoints, helpers, skills, handwritten YAML, and parser forks.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-006, TEST-MCP-TRANSCRIPT-010.
+
 ## TR-MCP-TRANSCRIPT-006
 
 **Recursive discovery upload extraction and path security** — Implement recursive bundle discovery, upload extraction, ZIP defenses, allowlisted roots, traversal rejection, and symlink/reparse escape prevention.
@@ -2820,6 +7121,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Traversal, duplicate canonical paths, links, external absolute paths, reparse escapes, and decompression ratio violations are rejected. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: PersistRejectsTraversalOutsideWorkspaceAndProviderRoots; RejectsDuplicateZipPaths; RejectsZipTraversal.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Recursive discovery upload extraction and path security - Implement recursive bundle discovery, upload extraction, ZIP defenses, allowlisted roots, traversal rejection, and symlink/reparse escape prevention.
+- Main flow: Recursive discovery upload extraction and path security - Implement recursive bundle discovery, upload extraction, ZIP defenses, allowlisted roots, traversal rejection, and symlink/reparse escape prevention.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-008.
 
 ## TR-MCP-TRANSCRIPT-007
 
@@ -2830,6 +7140,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] HTTP, stdio MCP, typed client, and REPL expose matching option defaults and receipt fields. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: Client ingest tests; Repl.Core transcript tests; TranscriptMcpTool/StdioHost; McpTransport transcript tools.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: HTTP client MCP and REPL contracts - Add typed REST request/result models, SessionLogClient ingestion methods, native MCP tools, and REPL commands for path ingestion and normalization.
+- Main flow: HTTP client MCP and REPL contracts - Add typed REST request/result models, SessionLogClient ingestion methods, native MCP tools, and REPL commands for path ingestion and normalization.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-008.
+
 ## TR-MCP-TRANSCRIPT-008
 
 **Provider normalization and native stores** — Support secondary provider normalization for Cline paired JSON, Copilot event streams, OpenCode JSONL exports, and read-only OpenCode SQLite snapshots.
@@ -2839,6 +7158,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Cline, Copilot, and OpenCode native storage tests verify loss-aware normalization and OpenCode snapshot read-only behavior. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: real fixture normalization; OpenCodeSqliteTranscriptTests no DB/WAL writes and WAL snapshot capture.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Provider normalization and native stores - Support secondary provider normalization for Cline paired JSON, Copilot event streams, OpenCode JSONL exports, and read-only OpenCode SQLite snapshots.
+- Main flow: Provider normalization and native stores - Support secondary provider normalization for Cline paired JSON, Copilot event streams, OpenCode JSONL exports, and read-only OpenCode SQLite snapshots.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012.
+
 ## TR-MCP-TRANSCRIPT-009
 
 **Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records** — Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not emit codex_missing_role or codex_unknown_record warnings. AC1: ingesting a Codex rollout fixture produces 0 warnings for these known classes and the full event count (vs the old ~2432 warnings). Guards BUG-TRIAGE-080 via TEST-MCP-TRANSCRIPT-011 and TEST-MCP-TRANSCRIPT-012.
@@ -2846,12 +7174,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records - Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not.
+- Main flow: Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records - Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not emit codex_missing_role or codex_unknown_record warnings. AC1: ingesting a Codex rollout fixture produces 0 warnings for these known classes and the full event count (vs the old ~2432 warnings). Guards BUG-TRIAGE-080 via TEST-MCP-TRANSCRIPT-011 and TEST-MCP-TRANSCRIPT-012.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then codex transcript ingestion normalizes tool-call, reasoning, and turn_context records - Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not emit codex_missing_role or codex_unknown_record warnings.
+- [ ] Given the technical contract, when the implementation is exercised, then AC1: ingesting a Codex rollout fixture produces 0 warnings for these known classes and the full event count (vs the old ~2432 warnings).
+- [ ] Given the technical contract, when the implementation is exercised, then guards BUG-TRIAGE-080 via TEST-MCP-TRANSCRIPT-011 and TEST-MCP-TRANSCRIPT-012.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012.
+
 ## TR-MCP-TRANSCRIPT-010
 
 **Int32.MaxValue transcript ceilings with streaming JSONL reader** — Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged. RequestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant. (3) ReadJsonLinesAsync streams lines through a StreamReader instead of calling File.ReadAllLinesAsync, so a ceiling of int.MaxValue does not convert a rejection into an out-of-memory kill. IMPLEMENTED 2026-07-20. Evidence: red gate IngestionService_AcceptsJsonlLineAboveFormerCeiling failed with "Transcript JSONL line exceeds the 8 MiB limit" at TranscriptUtilities.cs:104 (1 failed, 1 passed); green gate Support.Mcp.Tests 1692/0/0, Repl.Core.Tests 810/0/0, Client.Tests 259/0/0, transcript integration subset 10/0/0. Deployed to the McpServer Windows service (1.4.20, pid 39404) and verified live: sessionlog_ingest_path accepted a 9,437,285-byte single-line JSONL returning totalSessions 1 with zero diagnostics.
 **Covered by:** FR: FR-MCP-TRANSCRIPT-009; TEST: TEST-MCP-TRANSCRIPT-013
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Int32.MaxValue transcript ceilings with streaming JSONL reader - Implements FR-MCP-TRANSCRIPT-009.
+- Main flow: Int32.MaxValue transcript ceilings with streaming JSONL reader - Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then int32.MaxValue transcript ceilings with streaming JSONL reader - Implements FR-MCP-TRANSCRIPT-009.
+- [ ] Given the technical contract, when the implementation is exercised, then (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue.
+- [ ] Given the technical contract, when the implementation is exercised, then (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged.
+- [ ] Given the technical contract, when the implementation is exercised, then requestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-013.
 
 ## TR-MCP-TRANSCRIPT-SEARCH-001
 
@@ -2862,6 +7219,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] CodexTranscriptAdapter handles tool_search and inter_agent
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: CodexTranscriptAdapter cases for tool_search and inter_agent - CodexTranscriptAdapter.NormalizeAsync handles inter_agent_communication_metadata, tool_search_call, and tool_search_output.
+- Main flow: CodexTranscriptAdapter cases for tool_search and inter_agent - CodexTranscriptAdapter.NormalizeAsync handles inter_agent_communication_metadata, tool_search_call, and tool_search_output. Coverage tests use inline JSONL. Covered by FR-MCP-TRANSCRIPT-SEARCH-001 TEST-MCP-TRANSCRIPT-SEARCH-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRANSCRIPT-SEARCH-001.
+
 ## TR-MCP-TRIAGE-001
 
 **Durable triage storage** — Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
@@ -2870,6 +7236,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Triage reports, groups, and research runs persist in the MCP database and are query-filtered by workspace.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Durable triage storage - Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
+- Main flow: Durable triage storage - Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGE-001.
 
 ## TR-MCP-TRIAGE-002
 
@@ -2881,6 +7256,15 @@ Scope: layer-1+
 - [ ] Matching reports in one workspace share a group; matching reports across workspaces do not unless routed to the registered McpServer workspace by MCP Server bug detection.
 - [ ] MCP Server core and plugin bug reports target the registered McpServer workspace only when the workspace registry contains it.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Deterministic triage grouping - The grouping service uses workspace, dedupeKey, component, path, symbol, error signature, normalized title tokens, and McpServer workspace routing for MCP Server core and plugin bugs.
+- Main flow: Deterministic triage grouping - The grouping service uses workspace, dedupeKey, component, path, symbol, error signature, normalized title tokens, and McpServer workspace routing for MCP Server core and plugin bugs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGE-002.
+
 ## TR-MCP-TRIAGE-003
 
 **Async triage worker** — A background worker handles quiet-period expiry, configured agent execution, prompt rendering, and timeouts.
@@ -2889,6 +7273,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] The worker dispatches only after the configured quiet period unless a group is manually flushed.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Async triage worker - A background worker handles quiet-period expiry, configured agent execution, prompt rendering, and timeouts.
+- Main flow: Async triage worker - A background worker handles quiet-period expiry, configured agent execution, prompt rendering, and timeouts.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGE-003.
 
 ## TR-MCP-TRIAGE-004
 
@@ -2899,12 +7292,36 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Valid research output creates one backlog TODO and failed output creates none.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Triage schema and TODO creation - Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.
+- Main flow: Triage schema and TODO creation - Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006.
+
 ## TR-MCP-TRIAGE-005
 
 **Triage Grok runner omits CLI-rejected flags** — The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup. AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel. AC2: effort is pinned to 'high' (HighestEffort), never 'max'. Guards BUG-TRIAGE-076 via TEST-MCP-BUGTRIAGE-043.
 **Covered by:** FR: FR-MCP-TRIAGE-004; TEST: TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Triage Grok runner omits CLI-rejected flags - The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup.
+- Main flow: Triage Grok runner omits CLI-rejected flags - The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup. AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel. AC2: effort is pinned to 'high' (HighestEffort), never 'max'.
+- Edge cases: Triage Grok runner omits CLI-rejected flags - The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then triage Grok runner omits CLI-rejected flags - The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup.
+- [ ] AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel.
+- [ ] Given the technical contract, when the implementation is exercised, then AC2: effort is pinned to 'high' (HighestEffort), never 'max'.
+- [ ] Given the technical contract, when the implementation is exercised, then guards BUG-TRIAGE-076 via TEST-MCP-BUGTRIAGE-043.
+
+**Test Requirements:** TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006.
 
 ## TR-MCP-TRIAGEERR-001
 
@@ -2915,6 +7332,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Shared error classifier and envelope - One shared classifier produces code, message, retryable, and details.
+- Main flow: Shared error classifier and envelope - One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGEERR-001.
+
 ## TR-MCP-TRIAGEHELP-001
 
 **Agent Help no completed echo and long timeout** — AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
@@ -2923,6 +7349,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Agent Help no completed echo and long timeout - AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed.
+- Main flow: Agent Help no completed echo and long timeout - AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+- Edge cases: AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGEHELP-001.
 
 ## TR-MCP-TRIAGEPLUGIN-001
 
@@ -2933,6 +7368,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
 
+**Use Cases:**
+- Actor: Agent plugin.
+- Goal: Sticky root session cache rebind and degraded persist - plugins/core cache-scope keeps root session-state for UserPromptSubmit.
+- Main flow: Sticky root session cache rebind and degraded persist - plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail.
+- Edge cases: plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGEPLUGIN-001, TEST-MCP-TRIAGEPLUGIN-002, TEST-MCP-TRIAGEPLUGIN-003, TEST-MCP-TRIAGEPLUGIN-004, TEST-MCP-TRIAGEPLUGIN-005.
+
 ## TR-MCP-TRIAGEREQ-001
 
 **ValidateTrId create only** — RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
@@ -2941,6 +7385,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: ValidateTrId create only - RequirementsWorkflow applies TrIdPattern only on create and batch create.
+- Main flow: ValidateTrId create only - RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+- Edge cases: RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGEREQ-001.
 
 ## TR-MCP-TRIAGESCHEMA-001
 
@@ -2951,6 +7404,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Startup probe for AgentSession header columns - Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion.
+- Main flow: Startup probe for AgentSession header columns - Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable LocalDB, and Postgres 20260818205822_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on disposable local PostgreSQL. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+- Edge cases: Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply Sqlite 20260818205751_AddSessionLogTagsAndAgentSessionHeaders via MigrateAsync, SqlServer 20260818205807_AddSessionLogTagsAndAgentSessionHeaders via captured Up() SQL on.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGESCHEMA-001.
+
 ## TR-MCP-TRIAGESTORE-001
 
 **Session-log merge tags replace supersede** — SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
@@ -2959,6 +7421,15 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Session-log merge tags replace supersede - SessionLogService SameAction identity is order plus type plus filePath plus description.
+- Main flow: Session-log merge tags replace supersede - SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404.
+- Edge cases: SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGESTORE-001, TEST-MCP-TRIAGESTORE-002, TEST-MCP-TRIAGESTORE-003, TEST-MCP-TRIAGESTORE-004, TEST-MCP-TRIAGESTORE-005, TEST-MCP-TRIAGESTORE-006, TEST-MCP-TRIAGESTORE-007.
 
 ## TR-MCP-TRIAGESTORE-002
 
@@ -2969,6 +7440,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Five second intake and submit storage budget - TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget.
+- Main flow: Five second intake and submit storage budget - TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGESTORE-007.
+
 ## TR-MCP-TRIAGETODO-001
 
 **Durable EXEC fallback and soft-delete id allocate** — TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
@@ -2978,12 +7458,34 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Durable EXEC fallback and soft-delete id allocate - TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records.
+- Main flow: Durable EXEC fallback and soft-delete id allocate - TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-TRIAGETODO-001, TEST-MCP-TRIAGETODO-002.
+
 ## TR-MCP-TUN-001
 
 **Tunnel Strategy Pattern** — DI registration in `Program.cs` reads `Mcp:Tunnel:Provider`, normalizes to uppercase, and uses `ActivatorUtilities.CreateInstance<T>` to instantiate the matching provider (`NgrokTunnelProvider`, `CloudflareTunnelProvider`, or `FrpTunnelProvider`). The provider is registered as both a singleton and an `IHostedService`, conditionally on the provider name being non-empty.
 **Covered by:** FR: FR-MCP-015, FR-MCP-059
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tunnel Strategy Pattern - DI registration in Program.cs reads Mcp:Tunnel:Provider, normalizes to uppercase, and uses ActivatorUtilities.CreateInstance<T> to instantiate the matching provider (NgrokTunnelProvider.
+- Main flow: Tunnel Strategy Pattern - DI registration in Program.cs reads Mcp:Tunnel:Provider, normalizes to uppercase, and uses ActivatorUtilities.CreateInstance<T> to instantiate the matching provider (NgrokTunnelProvider, CloudflareTunnelProvider, or FrpTunnelProvider). The provider is registered as both a singleton and an IHostedService, conditionally on the provider name being non-empty.
+- Edge cases: The provider is registered as both a singleton and an IHostedService, conditionally on the provider name being non-empty.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tunnel Strategy Pattern - DI registration in Program.cs reads Mcp:Tunnel:Provider, normalizes to uppercase, and uses ActivatorUtilities.CreateInstance<T> to instantiate the matching provider (NgrokTunnelProvider, CloudflareTunnelProvider, or FrpTunnelProvider).
+- [ ] Given the technical contract, when the implementation is exercised, then the provider is registered as both a singleton and an IHostedService, conditionally on the provider name being non-empty.
+
+**Test Requirements:** TEST-MCP-011, TEST-MCP-073.
 
 ## TR-MCP-TUN-002
 
@@ -2992,6 +7494,21 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tunnel Process Lifecycle - Process.Kill() is wrapped in a try-catch for InvalidOperationException to handle races.
+- Main flow: Tunnel Process Lifecycle - Process.Kill() is wrapped in a try-catch for InvalidOperationException to handle races. WaitForExit(5000) enforces a 5 s shutdown timeout. FRP config files written to temp storage are deleted on stop.
+- Edge cases: WaitForExit(5000) enforces a 5 s shutdown timeout.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tunnel Process Lifecycle - Process.Kill() is wrapped in a try-catch for InvalidOperationException to handle races.
+- [ ] Given the technical contract, when the implementation is exercised, then waitForExit(5000) enforces a 5 s shutdown timeout.
+- [ ] Given the technical contract, when the implementation is exercised, then FRP config files written to temp storage are deleted on stop.
+- [ ] Given the technical contract, when the implementation is exercised, then all three providers log start, stop, and error events.
+
+**Test Requirements:** TEST-MCP-011.
+
 ## TR-MCP-TUN-003
 
 **Ngrok Auth Token Security** — The ngrok auth token is passed via the `NGROK_AUTHTOKEN` environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
@@ -2999,12 +7516,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Ngrok Auth Token Security - The ngrok auth token is passed via the NGROK_AUTHTOKEN environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
+- Main flow: Ngrok Auth Token Security - The ngrok auth token is passed via the NGROK_AUTHTOKEN environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then ngrok Auth Token Security - The ngrok auth token is passed via the NGROK_AUTHTOKEN environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
+
+**Test Requirements:** TEST-MCP-011.
+
 ## TR-MCP-TUN-004
 
 **Tunnel provider inherits the interactive user environment** — Implements FR-MCP-141 and extends TR-MCP-TUN-003, which already establishes that NgrokTunnelProvider manipulates child-process environment variables. NgrokTunnelProvider SHALL take IProcessEnvironmentService and apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the ProcessStartInfo of the ngrok child process, so ngrok.yml resolves when the server runs under LocalSystem instead of the provider silently starting with the service account profile. The provider SHALL resolve the ngrok binary through ResolveExecutable against that enriched PATH rather than relying on the literal string ngrok. When the binary cannot be found the provider SHALL log at Warning rather than Error, and the message SHALL name the Windows-service and Store-alias causes and the available remedies. Recovered from origin/claude/busy-dubinsky. Note that develop ships Tunnel Provider empty and Ngrok.Enabled false, so this path is dormant under stock configuration.
 **Covered by:** FR: FR-MCP-141; TEST: TEST-MCP-190, TEST-MCP-191
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Tunnel provider inherits the interactive user environment - Implements FR-MCP-141 and extends TR-MCP-TUN-003, which already establishes that NgrokTunnelProvider manipulates child-process environment variables.
+- Main flow: Tunnel provider inherits the interactive user environment - Implements FR-MCP-141 and extends TR-MCP-TUN-003, which already establishes that NgrokTunnelProvider manipulates child-process environment variables. NgrokTunnelProvider SHALL take IProcessEnvironmentService and apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the ProcessStartInfo of the ngrok child process, so ngrok.yml resolves when the server runs under LocalSystem instead of the provider silently starting with the service account profile. The provider SHALL resolve the ngrok binary through ResolveExecutable against that enriched PATH rather than relying on the literal string ngrok.
+- Edge cases: Note that develop ships Tunnel Provider empty and Ngrok.Enabled false, so this path is dormant under stock configuration.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then tunnel provider inherits the interactive user environment - Implements FR-MCP-141 and extends TR-MCP-TUN-003, which already establishes that NgrokTunnelProvider manipulates child-process environment variables.
+- [ ] NgrokTunnelProvider SHALL take IProcessEnvironmentService and apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the ProcessStartInfo of the ngrok child process, so ngrok.yml resolves when the server runs under LocalSystem instead of the provider silently starting with the service account profile.
+- [ ] Given the technical contract, when the implementation is exercised, then the provider SHALL resolve the ngrok binary through ResolveExecutable against that enriched PATH rather than relying on the literal string ngrok.
+- [ ] When the binary cannot be found the provider SHALL log at Warning rather than Error, and the message SHALL name the Windows-service and Store-alias causes and the available remedies.
+
+**Test Requirements:** TEST-MCP-190, TEST-MCP-191.
 
 ## TR-MCP-TXN-001
 
@@ -3014,6 +7558,19 @@ Scope: layer-1+
 **Covered by:** `TurnTransactionCoordinator`, `TransactionPubSubServices`, `TransactionPubSubReplayWorker`, `TurnTransactionFederationOperationApplyService`, `TransactionGatedMemoryService`, `TransactionGatedTodoMutationService`, `TransactionGatedRepoFileService`, `TransactionGatedPromptTemplateService`, `TransactionGatedRequirementsDocumentService`, `TransactionGatedSessionLogService`, `TransactionGatedToolRegistryService`, `TransactionGatedToolBucketService`, `TransactionGatedGraphRagService`, `TransactionGatedGitHubCliService`, `TransactionGatedIssueTodoSyncService`, `TransactionGatedVoiceConversationService`, `TransactionGatedAgentPoolService`, `ClientMutationPolicy`, `FederationController`, `MemoryController`, `TodoController`, `McpServerMcpTools`, `TransactionalTodoWorkflow`, `TurnTransactionCoordinatorTests`, `TransactionPubSubTests`, `TransactionGatedMemoryServiceTests`, `TransactionGatedTodoMutationServiceTests`, `TransactionGatedSessionLogServiceTests`, `ClientMutationPolicyTests`, `TransactionalTodoWorkflowTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Turn Transaction Coordinator - Add Mcp:TurnTransactions, ITurnTransactionCoordinator, transaction request/result models, keyserver/subscriber client handoff, direct/HTTP/external broker pub-sub adapters, durable local.
+- Main flow: Turn Transaction Coordinator - Add Mcp:TurnTransactions, ITurnTransactionCoordinator, transaction request/result models, keyserver/subscriber client handoff, direct/HTTP/external broker pub-sub adapters, durable local pub-sub outbox/replay, degraded status, pending-commit cancellation, and first-party mutation gates. Mutation paths SHALL either use compensation-capable coordinator execution or fail closed before uncompensated side effects while required turn transactions are active.
+- Edge cases: Mutation paths SHALL either use compensation-capable coordinator execution or fail closed before uncompensated side effects while required turn transactions are active.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then turn Transaction Coordinator - Add Mcp:TurnTransactions, ITurnTransactionCoordinator, transaction request/result models, keyserver/subscriber client handoff, direct/HTTP/external broker pub-sub adapters, durable local pub-sub outbox/replay, degraded status, pending-commit cancellation, and first-party mutation gates.
+- [ ] Given the technical contract, when the implementation is exercised, then mutation paths SHALL either use compensation-capable coordinator execution or fail closed before uncompensated side effects while required turn transactions are active.
+
+**Test Requirements:** TEST-MCP-161, TEST-MCP-168, TEST-MCP-169, TEST-MCP-186.
+
 ## TR-MCP-TXNAIUNIT-001
 
 **aiUnit Plan Review Gate** — Add a test-only aiUnit plan-review evidence gate for PLAN-TURNTRANSACTIONS-001. The gate SHALL validate committed aiUnit run-log evidence, require the reviewed scope to include FR-MCP-118 through FR-MCP-128 and TEST-MCP-158 through TEST-MCP-173, and fail when critical/high findings are present.
@@ -3021,6 +7578,19 @@ Scope: layer-1+
 
 **Covered by:** `PlanTransactionReviewTests`, `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: aiUnit Plan Review Gate - Add a test-only aiUnit plan-review evidence gate for PLAN-TURNTRANSACTIONS-001.
+- Main flow: aiUnit Plan Review Gate - Add a test-only aiUnit plan-review evidence gate for PLAN-TURNTRANSACTIONS-001. The gate SHALL validate committed aiUnit run-log evidence, require the reviewed scope to include FR-MCP-118 through FR-MCP-128 and TEST-MCP-158 through TEST-MCP-173, and fail when critical/high findings are present.
+- Edge cases: The gate SHALL validate committed aiUnit run-log evidence, require the reviewed scope to include FR-MCP-118 through FR-MCP-128 and TEST-MCP-158 through TEST-MCP-173, and fail when critical/high findings are present.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then aiUnit Plan Review Gate - Add a test-only aiUnit plan-review evidence gate for PLAN-TURNTRANSACTIONS-001.
+- [ ] The gate SHALL validate committed aiUnit run-log evidence, require the reviewed scope to include FR-MCP-118 through FR-MCP-128 and TEST-MCP-158 through TEST-MCP-173, and fail when critical/high findings are present.
+
+**Test Requirements:** TEST-MCP-164.
 
 ## TR-MCP-TXNARCH-001
 
@@ -3030,6 +7600,18 @@ Scope: layer-1+
 **Covered by:** `TurnTransactions-Architecture-Round1.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transaction Architecture Rounds - Preserve a first architecture round that defines component ownership, trust boundaries, storage boundaries, threat model, rollback/audit rules, and gap analysis before implementation.
+- Main flow: Transaction Architecture Rounds - Preserve a first architecture round that defines component ownership, trust boundaries, storage boundaries, threat model, rollback/audit rules, and gap analysis before implementation closeout.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transaction Architecture Rounds - Preserve a first architecture round that defines component ownership, trust boundaries, storage boundaries, threat model, rollback/audit rules, and gap analysis before implementation closeout.
+
+**Test Requirements:** TEST-MCP-172, TEST-MCP-173.
+
 ## TR-MCP-TXNAUDIT-001
 
 **Transaction Audit Actions** — Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without deleting durable audit rows during rollback.
@@ -3037,6 +7619,18 @@ Scope: layer-1+
 
 **Covered by:** `TransactionSecurityStateStores`, `TransactionPubSubServices`, `TurnTransactionCoordinator`, `TransactionGatedSessionLogService`, `TurnTransactionsControllerTests`, `TransactionPubSubTests`, `DurableTransactionSecurityStorageTests`, `PlanTransactionReviewTests`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Transaction Audit Actions - Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without.
+- Main flow: Transaction Audit Actions - Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without deleting durable audit rows during rollback.
+- Edge cases: Transaction Audit Actions - Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without deleting durable audit rows during rollback.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then transaction Audit Actions - Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without deleting durable audit rows during rollback.
+
+**Test Requirements:** TEST-MCP-161, TEST-MCP-169, TEST-MCP-186.
 
 ## TR-MCP-TXNBYRD-001
 
@@ -3046,6 +7640,19 @@ Scope: layer-1+
 **Covered by:** `Functional-Requirements.md`, `Testing-Requirements.md`, `Requirements-Matrix.md`, `TurnTransactionPlanArtifactTests`, `ValidateTraceability`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Byrd v4 Transaction Gates - Transaction implementation work SHALL be split into requirements-first, test-first, mock-first, implementation, refactor, and validation gates.
+- Main flow: Byrd v4 Transaction Gates - Transaction implementation work SHALL be split into requirements-first, test-first, mock-first, implementation, refactor, and validation gates. Executed validation scopes SHALL exit with zero failures and zero skips; deferred work belongs in TODO/requirements state rather than skipped test placeholders.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then byrd v4 Transaction Gates - Transaction implementation work SHALL be split into requirements-first, test-first, mock-first, implementation, refactor, and validation gates.
+- [ ] Given the technical contract, when the implementation is exercised, then executed validation scopes SHALL exit with zero failures and zero skips; deferred work belongs in TODO/requirements state rather than skipped test placeholders.
+
+**Test Requirements:** TEST-MCP-164.
+
 ## TR-MCP-TXNCOMPAT-001
 
 **Federation Compatibility** — Existing `Mcp:Federation` HMAC envelopes SHALL remain backward compatible. Transaction crypto is additive and separate from federation envelope signing. Federation apply paths route through the coordinator, and federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
@@ -3053,6 +7660,20 @@ Scope: layer-1+
 
 **Covered by:** `TurnTransactionFederationOperationApplyService`, `FederationController`, `FederationOperationApplyServiceTests`, `FederationControllerTests`, `FederationControllerPushTests`, `ClientMutationPolicyTests`, `TurnTransactions-Mutation-Endpoint-Audit.md`
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Federation Compatibility - Existing Mcp:Federation HMAC envelopes SHALL remain backward compatible.
+- Main flow: Federation Compatibility - Existing Mcp:Federation HMAC envelopes SHALL remain backward compatible. Transaction crypto is additive and separate from federation envelope signing. Federation apply paths route through the coordinator, and federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+- Edge cases: Federation apply paths route through the coordinator, and federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then federation Compatibility - Existing Mcp:Federation HMAC envelopes SHALL remain backward compatible.
+- [ ] Given the technical contract, when the implementation is exercised, then transaction crypto is additive and separate from federation envelope signing.
+- [ ] Given the technical contract, when the implementation is exercised, then federation apply paths route through the coordinator, and federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+
+**Test Requirements:** TEST-MCP-163.
 
 ## TR-MCP-TXNDESIGN-001
 
@@ -3062,6 +7683,18 @@ Scope: layer-1+
 **Covered by:** `TurnTransactions-Design-Round2.md`, `TransactionSecurityModels`, `TransactionSecurityOptions`, `TransactionSecurityServices`, `TurnTransactions-Mutation-Endpoint-Audit.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Implementable Transaction Design Contracts - Preserve a second design round that defines public DTOs, durable entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations.
+- Main flow: Implementable Transaction Design Contracts - Preserve a second design round that defines public DTOs, durable entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, canonicalization, test mappings, and explicit deferred scope before closeout.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then implementable Transaction Design Contracts - Preserve a second design round that defines public DTOs, durable entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, canonicalization, test mappings, and explicit deferred scope before closeout.
+
+**Test Requirements:** TEST-MCP-172, TEST-MCP-173.
+
 ## TR-MCP-TXNDIAGRAMS-001
 
 **Imported Diagram Traceability** — Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings. In-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred.
@@ -3070,12 +7703,38 @@ Scope: layer-1+
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Imported Diagram Traceability - Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings.
+- Main flow: Imported Diagram Traceability - Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings. In-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then imported Diagram Traceability - Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings.
+- [ ] Given the technical contract, when the implementation is exercised, then in-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred.
+
+**Test Requirements:** TEST-MCP-162, TEST-MCP-165, TEST-MCP-166, TEST-MCP-167, TEST-MCP-168.
+
 ## TR-MCP-USECASE-001
 
 **Use case EF storage multi-provider soft-delete** — Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped). Audit emission for mutable entities per TR-MCP-DB-004.
 **Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use case EF storage multi-provider soft-delete - Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to.
+- Main flow: Use case EF storage multi-provider soft-delete - Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped). Audit emission for mutable entities per TR-MCP-DB-004.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use case EF storage multi-provider soft-delete - Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped).
+- [ ] Given the technical contract, when the implementation is exercised, then audit emission for mutable entities per TR-MCP-DB-004.
+
+**Test Requirements:** TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005.
 
 ## TR-MCP-USECASE-002
 
@@ -3084,12 +7743,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use case CQRS commands and queries - All use case domain mutations and reads go through McpServer.Cqrs ICommand/IQuery handlers registered with Dispatcher.
+- Main flow: Use case CQRS commands and queries - All use case domain mutations and reads go through McpServer.Cqrs ICommand/IQuery handlers registered with Dispatcher. Controllers and MCP tools only dispatch; they do not open DbContext for domain logic.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use case CQRS commands and queries - All use case domain mutations and reads go through McpServer.Cqrs ICommand/IQuery handlers registered with Dispatcher.
+- [ ] Given the technical contract, when the implementation is exercised, then controllers and MCP tools only dispatch; they do not open DbContext for domain logic.
+
+**Test Requirements:** TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005.
+
 ## TR-MCP-USECASE-003
 
 **Use Case REST controller** — Thin /mcpserver/usecases dispatching CQRS. Covered by FR-MCP-USECASE-001; TEST-MCP-USECASE-002. Controller unit tests map Result failures to HTTP status codes.
 **Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use Case REST controller - Thin /mcpserver/usecases dispatching CQRS.
+- Main flow: Use Case REST controller - Thin /mcpserver/usecases dispatching CQRS. Covered by FR-MCP-USECASE-001; TEST-MCP-USECASE-002. Controller unit tests map Result failures to HTTP status codes.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use Case REST controller - Thin /mcpserver/usecases dispatching CQRS.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-001; TEST-MCP-USECASE-002.
+- [ ] Given the technical contract, when the implementation is exercised, then controller unit tests map Result failures to HTTP status codes.
+
+**Test Requirements:** TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004.
 
 ## TR-MCP-USECASE-004
 
@@ -3098,12 +7784,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use Case diagram service - DI-owned pure generator; mermaid + one extra format.
+- Main flow: Use Case diagram service - DI-owned pure generator; mermaid + one extra format. Covered by FR-MCP-USECASE-005; TEST-MCP-USECASE-003.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use Case diagram service - DI-owned pure generator; mermaid + one extra format.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-005; TEST-MCP-USECASE-003.
+
+**Test Requirements:** TEST-MCP-USECASE-003.
+
 ## TR-MCP-USECASE-005
 
 **Use Case MCP tools, client, plugins** — usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases. Covered by FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST-MCP-USECASE-004, TEST-MCP-USECASE-010.
 **Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use Case MCP tools, client, plugins - usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases.
+- Main flow: Use Case MCP tools, client, plugins - usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases. Covered by FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST-MCP-USECASE-004, TEST-MCP-USECASE-010.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use Case MCP tools, client, plugins - usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST-MCP-USECASE-004, TEST-MCP-USECASE-010.
+
+**Test Requirements:** TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011.
 
 ## TR-MCP-USECASE-006
 
@@ -3112,12 +7824,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: FR projection, coverage, audit - linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops.
+- Main flow: FR projection, coverage, audit - linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops. Covered by FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST-MCP-USECASE-005, TEST-MCP-USECASE-007.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then FR projection, coverage, audit - linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST-MCP-USECASE-005, TEST-MCP-USECASE-007.
+
+**Test Requirements:** TEST-MCP-USECASE-001, TEST-MCP-USECASE-005.
+
 ## TR-MCP-USECASE-007
 
 **Use Case UI hosting** — Static /usecases/ assets REST-only. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-008.
 **Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use Case UI hosting - Static /usecases/ assets REST-only.
+- Main flow: Use Case UI hosting - Static /usecases/ assets REST-only. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-008.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use Case UI hosting - Static /usecases/ assets REST-only.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-008.
+
+**Test Requirements:** TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011.
 
 ## TR-MCP-USECASE-008
 
@@ -3126,12 +7864,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Approval and product API - CQRS + REST for approval and ProductKey.
+- Main flow: Approval and product API - CQRS + REST for approval and ProductKey. Covered by FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST-MCP-USECASE-009.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then approval and product API - CQRS + REST for approval and ProductKey.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST-MCP-USECASE-009.
+
+**Test Requirements:** TEST-MCP-USECASE-009.
+
 ## TR-MCP-USECASE-009
 
 **Validation seams** — Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings. Covered by FR-MCP-USECASE-010; TEST-MCP-USECASE-005.
 **Covered by:** FR: FR-MCP-USECASE-010; TEST: TEST-MCP-USECASE-005
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Validation seams - Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings.
+- Main flow: Validation seams - Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings. Covered by FR-MCP-USECASE-010; TEST-MCP-USECASE-005.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then validation seams - Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-010; TEST-MCP-USECASE-005.
+
+**Test Requirements:** TEST-MCP-USECASE-005.
 
 ## TR-MCP-USECASE-010
 
@@ -3140,12 +7904,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Use Case service deploy - Nuke UpdateService only; config backup/restore; live health and routes.
+- Main flow: Use Case service deploy - Nuke UpdateService only; config backup/restore; live health and routes. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-011.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then use Case service deploy - Nuke UpdateService only; config backup/restore; live health and routes.
+- [ ] Given the technical contract, when the implementation is exercised, then covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-011.
+
+**Test Requirements:** TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011.
+
 ## TR-MCP-USECASE-011
 
 **Graph storage** — JSON column graph storage; multi-provider migrations; soft-delete and workspace filters. ACs AC-T11-1..3.
 **Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Graph storage - JSON column graph storage; multi-provider migrations; soft-delete and workspace filters.
+- Main flow: Graph storage - JSON column graph storage; multi-provider migrations; soft-delete and workspace filters.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then graph storage - JSON column graph storage; multi-provider migrations; soft-delete and workspace filters.
+
+**Test Requirements:** TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016.
 
 ## TR-MCP-USECASE-012
 
@@ -3154,12 +7943,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Diagram graph CQRS - GetGraph/PutGraph/Export handlers; thin controller.
+- Main flow: Diagram graph CQRS - GetGraph/PutGraph/Export handlers; thin controller.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then diagram graph CQRS - GetGraph/PutGraph/Export handlers; thin controller.
+
+**Test Requirements:** TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016.
+
 ## TR-MCP-USECASE-013
 
 **Diagram graph REST** — GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains. ACs AC-T13-1..3.
 **Covered by:** FR: FR-MCP-USECASE-012, FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016, TEST-MCP-USECASE-012
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Diagram graph REST - GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains.
+- Main flow: Diagram graph REST - GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then diagram graph REST - GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains.
+
+**Test Requirements:** TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016, TEST-MCP-USECASE-012.
 
 ## TR-MCP-USECASE-014
 
@@ -3168,6 +7981,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: UML serialization service - Pure DI service graph to Mermaid and PlantUML.
+- Main flow: UML serialization service - Pure DI service graph to Mermaid and PlantUML.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then UML serialization service - Pure DI service graph to Mermaid and PlantUML.
+
+**Test Requirements:** TEST-MCP-USECASE-012, TEST-MCP-USECASE-014.
+
 ## TR-MCP-USECASE-015
 
 **Canvas UI hosting** — Static /usecases/ canvas assets; palette; umlCanvas; REST-only. ACs AC-T15-1..2.
@@ -3175,12 +8000,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Canvas UI hosting - Static /usecases/ canvas assets; palette; umlCanvas; REST-only.
+- Main flow: Canvas UI hosting - Static /usecases/ canvas assets; palette; umlCanvas; REST-only.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then canvas UI hosting - Static /usecases/ canvas assets; palette; umlCanvas; REST-only.
+
+**Test Requirements:** TEST-MCP-USECASE-015, TEST-MCP-USECASE-017.
+
 ## TR-MCP-USECASE-016
 
 **Graph put audit** — Put graph emits DataAuditLog. AC-T16-1.
 **Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Graph put audit - Put graph emits DataAuditLog.
+- Main flow: Graph put audit - Put graph emits DataAuditLog.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then graph put audit - Put graph emits DataAuditLog.
+
+**Test Requirements:** TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016.
 
 ## TR-MCP-VERIFYWRAP-001
 
@@ -3191,12 +8040,34 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] code-verify catches disk-full and enforces wrapper timeout
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: code-verify catch disk-full and enforce wrapper timeout - code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released.
+- Main flow: code-verify catch disk-full and enforce wrapper timeout - code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001.
+- Edge cases: code-verify catches disk-full and enforces wrapper timeout.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-VERIFYWRAP-001.
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
 **Covered by:** `VoiceConversationService`, `VoiceConversationOptions`, `CopilotInteractiveSession`
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Voice Conversation Service - VoiceConversationService manages the full voice session lifecycle: session creation with CopilotInteractiveSession spawned via DesktopProcessLauncher (or standard Process.Start), turn.
+- Main flow: Voice Conversation Service - VoiceConversationService manages the full voice session lifecycle: session creation with CopilotInteractiveSession spawned via DesktopProcessLauncher (or standard Process.Start), turn processing with tool-call loop (max MaxToolSteps iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via VoiceConversationOptions bound from Mcp:Voice configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then voice Conversation Service - VoiceConversationService manages the full voice session lifecycle: session creation with CopilotInteractiveSession spawned via DesktopProcessLauncher (or standard Process.Start), turn processing with tool-call loop (max MaxToolSteps iterations), in-memory transcript storage, tool-call record tracking, and session cleanup.
+- [ ] Given the technical contract, when the implementation is exercised, then configurable via VoiceConversationOptions bound from Mcp:Voice configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
+
+**Test Requirements:** TEST-MCP-049, TEST-MCP-050, TEST-MCP-051.
 
 ## TR-MCP-VOICE-002
 
@@ -3205,12 +8076,39 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Voice Controller REST API - VoiceController at /mcpserver/voice/session/* exposes 8 endpoints: POST / (create session with DeviceId/Language/ClientName), GET /?deviceId= (find by device), POST /{id}/turn (synchronous.
+- Main flow: Voice Controller REST API - VoiceController at /mcpserver/voice/session/* exposes 8 endpoints: POST / (create session with DeviceId/Language/ClientName), GET /?deviceId= (find by device), POST /{id}/turn (synchronous turn), POST /{id}/turn/stream (SSE streaming turn), POST /{id}/interrupt (cancel active turn), POST /{id}/escape (send ESC chars to Copilot stdin), GET /{id} (session status), GET /{id}/transcript (transcript entries), DELETE /{id} (destroy session). DTOs: VoiceSessionCreateRequest/Response, VoiceTurnRequest/Response, VoiceInterruptResponse, VoiceSessionStatusDto, VoiceTranscriptEntryDto/Response, VoiceToolCallRecordDto, VoiceTurnStreamEvent.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then voice Controller REST API - VoiceController at /mcpserver/voice/session/* exposes 8 endpoints: POST / (create session with DeviceId/Language/ClientName), GET /?deviceId= (find by device), POST /{id}/turn (synchronous turn), POST /{id}/turn/stream (SSE streaming turn), POST /{id}/interrupt (cancel active turn), POST /{id}/escape (send ESC chars to Copilot stdin), GET /{id} (session status), GET /{id}/transcript (transcript entries), DELETE /{id} (destroy session).
+- [ ] Given the technical contract, when the implementation is exercised, then DTOs: VoiceSessionCreateRequest/Response, VoiceTurnRequest/Response, VoiceInterruptResponse, VoiceSessionStatusDto, VoiceTranscriptEntryDto/Response, VoiceToolCallRecordDto, VoiceTurnStreamEvent.
+
+**Test Requirements:** TEST-MCP-049, TEST-MCP-050, TEST-MCP-051.
+
 ## TR-MCP-VOICE-003
 
 **Voice Session Lifecycle Management** — One active session per device enforced via `DeviceId` lookup; creating a new session for a device with an active session returns the existing session. Idle timeout (`SessionIdleTimeoutMinutes`, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session. `UseDesktopLaunch` option (default true) selects `CreateProcessAsUser` for Windows service context.
 **Covered by:** `VoiceConversationService.OnIdleCleanupTick` / `CleanupIdleSessionsAsync` (60s timer-driven idle-shutdown orchestrator), `VoiceConversationOptions.SessionIdleTimeoutMinutes`, `VoiceConversationOptions.IdleShutdownCommand` (config string sent to Copilot), `VoiceConversationOptions.IdleShutdownSentinel` (config string awaited as the shutdown confirmation). Note: `IdleShutdownCommand` and `IdleShutdownSentinel` are configured strings on `VoiceConversationOptions`, not CLR message types.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Voice Session Lifecycle Management - One active session per device enforced via DeviceId lookup; creating a new session for a device with an active session returns the existing session.
+- Main flow: Voice Session Lifecycle Management - One active session per device enforced via DeviceId lookup; creating a new session for a device with an active session returns the existing session. Idle timeout (SessionIdleTimeoutMinutes, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session. UseDesktopLaunch option (default true) selects CreateProcessAsUser for Windows service context.
+- Edge cases: Idle timeout (SessionIdleTimeoutMinutes, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then voice Session Lifecycle Management - One active session per device enforced via DeviceId lookup; creating a new session for a device with an active session returns the existing session.
+- [ ] Given the technical contract, when the implementation is exercised, then idle timeout (SessionIdleTimeoutMinutes, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session.
+- [ ] Given the technical contract, when the implementation is exercised, then useDesktopLaunch option (default true) selects CreateProcessAsUser for Windows service context.
+
+**Test Requirements:** TEST-MCP-049, TEST-MCP-050, TEST-MCP-051.
 
 ## TR-MCP-VOICE-004
 
@@ -3224,6 +8122,21 @@ Presence signaling SHALL be excluded from one-shot sessions.
 **Covered by:** `VoiceConversationService` *(planned extension)*, `AgentPoolStreamService` *(planned)*
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Interactive Presence Signals on Stream State Changes - On interactive stream disconnect, the runtime SHALL send User is AFK.
+- Main flow: Interactive Presence Signals on Stream State Changes - On interactive stream disconnect, the runtime SHALL send User is AFK. to the associated interactive agent session. On interactive stream reconnect, after response stream establishment, the runtime SHALL send User is here.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then interactive Presence Signals on Stream State Changes - On interactive stream disconnect, the runtime SHALL send User is AFK.
+- [ ] Given the technical contract, when the implementation is exercised, then to the associated interactive agent session.
+- [ ] Given the technical contract, when the implementation is exercised, then on interactive stream reconnect, after response stream establishment, the runtime SHALL send User is here.
+- [ ] Given the technical contract, when the implementation is exercised, then to the associated interactive agent session.
+
+**Test Requirements:** TEST-MCP-070, TEST-MCP-071.
+
 ## TR-MCP-WEB-001
 
 **Web UI Ownership Boundary** — Web UI implementation work for the former McpServer.UI.Core and McpServer.Director surfaces SHALL be owned by the McpServerManager repository. This repository SHALL keep only server-side contracts, API behavior, and compatibility documentation required by those external UI clients.
@@ -3233,6 +8146,15 @@ Scope: layer-1+
 - [ ] New Web UI implementation code is not added under this repository moved UI surfaces. (evidence: Deferred to McpServerManager.)
 - [ ] Server-side API changes needed by McpServerManager are tracked as MCP FR/TR/TEST items in this repository. (evidence: Deferred until next integration slice.)
 - [ ] Cross-repo handoffs identify the owning repository and do not silently reopen moved UI projects here. (evidence: Deferred until next integration slice.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Web UI Ownership Boundary - Web UI implementation work for the former McpServer.UI.Core and McpServer.Director surfaces SHALL be owned by the McpServerManager repository.
+- Main flow: Web UI Ownership Boundary - Web UI implementation work for the former McpServer.UI.Core and McpServer.Director surfaces SHALL be owned by the McpServerManager repository. This repository SHALL keep only server-side contracts, API behavior, and compatibility documentation required by those external UI clients.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-WEB-001.
 
 ## TR-MCP-WEB-002
 
@@ -3244,6 +8166,15 @@ Scope: layer-1+
 - [ ] Breaking changes include a migration note and compatibility test coverage. (evidence: Deferred until next integration slice.)
 - [ ] Generated requirements/wiki output reflects the current cross-repo API contract. (evidence: Deferred until next integration slice.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Web UI API Compatibility Contract - Server APIs consumed by external web-management clients SHALL remain documented and version-compatible across McpServer and McpServerManager.
+- Main flow: Web UI API Compatibility Contract - Server APIs consumed by external web-management clients SHALL remain documented and version-compatible across McpServer and McpServerManager. Breaking API changes require explicit requirements updates, migration notes, and tests in the server repository before deployment.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-WEB-002.
+
 ## TR-MCP-WEB-003
 
 **Web UI Authentication And Workspace Boundary** — External web-management clients SHALL authenticate through the existing MCP workspace auth/token model and SHALL preserve workspace isolation. This repository SHALL provide the server-side policy and tests; client UX and screen implementation remain in McpServerManager.
@@ -3254,6 +8185,15 @@ Scope: layer-1+
 - [ ] Workspace-scoped requests remain isolated by the resolved workspace path. (evidence: Deferred until next integration slice.)
 - [ ] Any new server endpoint used by web clients includes auth and workspace-isolation tests. (evidence: Deferred until next integration slice.)
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Web UI Authentication And Workspace Boundary - External web-management clients SHALL authenticate through the existing MCP workspace auth/token model and SHALL preserve workspace isolation.
+- Main flow: Web UI Authentication And Workspace Boundary - External web-management clients SHALL authenticate through the existing MCP workspace auth/token model and SHALL preserve workspace isolation. This repository SHALL provide the server-side policy and tests; client UX and screen implementation remain in McpServerManager.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-WEB-003.
+
 ## TR-MCP-WEB-004
 
 **Web UI Deployment And Handoff Documentation** — Deployment guidance for web-management surfaces SHALL distinguish server deployment in this repository from UI/client deployment in McpServerManager. This repository SHALL document only the server prerequisites, endpoint contracts, and compatibility expectations needed for the external UI.
@@ -3263,6 +8203,15 @@ Scope: layer-1+
 - [ ] Server deployment docs do not instruct agents to deploy moved UI projects from this repository. (evidence: Deferred until next integration slice.)
 - [ ] Handoff docs name McpServerManager as the owner for UI implementation and client deployment. (evidence: Deferred until next integration slice.)
 - [ ] Server readiness/config validation covers the endpoints and auth policy that external UI clients depend on. (evidence: Deferred until next integration slice.)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Web UI Deployment And Handoff Documentation - Deployment guidance for web-management surfaces SHALL distinguish server deployment in this repository from UI/client deployment in McpServerManager.
+- Main flow: Web UI Deployment And Handoff Documentation - Deployment guidance for web-management surfaces SHALL distinguish server deployment in this repository from UI/client deployment in McpServerManager. This repository SHALL document only the server prerequisites, endpoint contracts, and compatibility expectations needed for the external UI.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-MCP-WEB-004.
 
 ## TR-MCP-WIKIEXPORT-001
 
@@ -3278,6 +8227,15 @@ Scope: layer-1+
 - [x] The exporter validates all configured content before calling RequirementsDocumentExportWriter so invalid config leaves existing export files unchanged.
 - [x] Generated platform side files remain managed by the exporter, including .mcp-requirements-manifest.json, GitHub _Sidebar.md and _Footer.md, and Azure .order files.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: docs/wiki.yaml export configuration loader and renderer integration - Implement a typed YamlDotNet-backed docs/wiki.yaml loader, validation layer, and wiki renderer integration shared by database-backed and.
+- Main flow: docs/wiki.yaml export configuration loader and renderer integration - Implement a typed YamlDotNet-backed docs/wiki.yaml loader, validation layer, and wiki renderer integration shared by database-backed and document-backed requirements services.
+- Edge cases: Validation rejects unsupported schema values, missing required fields, duplicate document ids, duplicate targets per platform, path traversal, reserved managed target files, unsupported generated sources, invalid platform names, missing source files, and navigation/document mismatches.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-WIKIEXPORT-001.
+
 ## TR-MCP-WIKIEXPORT-002
 
 **Marker writer default wiki.yaml serializer** — Extend MarkerFileService.WriteMarkerAsync with an idempotent default wiki.yaml writer that builds typed objects and serializes them with YamlDotNet before writing docs/wiki.yaml.
@@ -3291,12 +8249,35 @@ Scope: layer-1+
 - [x] The default config targets Home.md, Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, and Requirements-Matrix.md on both platforms.
 - [x] A failure to create the default wiki.yaml is logged through the marker writer warning path and does not leave a partially written file.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Marker writer default wiki.yaml serializer - Extend MarkerFileService.WriteMarkerAsync with an idempotent default wiki.yaml writer that builds typed objects and serializes them with YamlDotNet before writing.
+- Main flow: Marker writer default wiki.yaml serializer - Extend MarkerFileService.WriteMarkerAsync with an idempotent default wiki.yaml writer that builds typed objects and serializes them with YamlDotNet before writing docs/wiki.yaml.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-WIKIEXPORT-002.
+
 ## TR-MCP-WS-002
 
 **Workspace Service** — CRUD operations for workspace entities persisted in EF Core SQLite. Auto-port assignment starts at base 7147 and increments from the current maximum registered port. Init scaffolding creates the workspace directory, `docs/Project/TODO.yaml`, `docs/sessions/`, `docs/external/`, and `mcp.db`.
 **Covered by:** FR: FR-MCP-009
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Service - CRUD operations for workspace entities persisted in EF Core SQLite.
+- Main flow: Workspace Service - CRUD operations for workspace entities persisted in EF Core SQLite. Auto-port assignment starts at base 7147 and increments from the current maximum registered port. Init scaffolding creates the workspace directory, docs/Project/TODO.yaml, docs/sessions/, docs/external/, and mcp.db.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Service - CRUD operations for workspace entities persisted in EF Core SQLite.
+- [ ] Given the technical contract, when the implementation is exercised, then auto-port assignment starts at base 7147 and increments from the current maximum registered port.
+- [ ] Given the technical contract, when the implementation is exercised, then init scaffolding creates the workspace directory, docs/Project/TODO.yaml, docs/sessions/, docs/external/, and mcp.db.
+
+**Test Requirements:** TEST-MCP-007.
 
 ## TR-MCP-WS-003
 
@@ -3305,12 +8286,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Process Manager - Manages workspace marker file lifecycle.
+- Main flow: Workspace Process Manager - Manages workspace marker file lifecycle. On startup, generates tokens and writes AGENTS-README-FIRST.yaml marker files for all registered workspaces - all pointing to the single shared host port. On stop, removes marker files.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Process Manager - Manages workspace marker file lifecycle.
+- [ ] Given the technical contract, when the implementation is exercised, then on startup, generates tokens and writes AGENTS-README-FIRST.yaml marker files for all registered workspaces - all pointing to the single shared host port.
+- [ ] Given the technical contract, when the implementation is exercised, then on stop, removes marker files.
+- [ ] Given the technical contract, when the implementation is exercised, then no longer spawns child WebApplication instances (replaced by single-app multi-tenant model, see TR-MCP-MT-001 through TR-MCP-MT-003).
+
+**Test Requirements:** TEST-MCP-013.
+
 ## TR-MCP-WS-004
 
 **Workspace Controller** — REST API at `/mcpserver/workspace` with Base64URL-encoded path keys. Provides create, read, update, delete, init, start, stop, status, and prompt (GET/PUT) endpoints. All `/mcpserver/*` routes protected by `WorkspaceAuthMiddleware` (per-workspace token).
 **Covered by:** FR: FR-MCP-009
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Controller - REST API at /mcpserver/workspace with Base64URL-encoded path keys.
+- Main flow: Workspace Controller - REST API at /mcpserver/workspace with Base64URL-encoded path keys. Provides create, read, update, delete, init, start, stop, status, and prompt (GET/PUT) endpoints. All /mcpserver/* routes protected by WorkspaceAuthMiddleware (per-workspace token).
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Controller - REST API at /mcpserver/workspace with Base64URL-encoded path keys.
+- [ ] Given the technical contract, when the implementation is exercised, then provides create, read, update, delete, init, start, stop, status, and prompt (GET/PUT) endpoints.
+- [ ] Given the technical contract, when the implementation is exercised, then all /mcpserver/* routes protected by WorkspaceAuthMiddleware (per-workspace token).
+
+**Test Requirements:** TEST-MCP-007.
 
 ## TR-MCP-WS-005
 
@@ -3319,12 +8329,40 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Marker File Service - MarkerFileService.WriteMarkerAsync writes AGENTS-README-FIRST.yaml to the workspace root.
+- Main flow: Marker File Service - MarkerFileService.WriteMarkerAsync writes AGENTS-README-FIRST.yaml to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context.
+- Edge cases: CRITICAL: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then marker File Service - MarkerFileService.WriteMarkerAsync writes AGENTS-README-FIRST.yaml to the workspace root.
+- [ ] Given the technical contract, when the implementation is exercised, then all markers point to the same shared host port.
+- [ ] Given the technical contract, when the implementation is exercised, then uses Handlebars.Net templating with full workspace context.
+- [ ] Given the technical contract, when the implementation is exercised, then the marker template MUST be loaded from templates/prompt-templates.yaml via PromptTemplateService (id: default-marker-prompt).
+
+**Test Requirements:** TEST-MCP-013.
+
 ## TR-MCP-WS-006
 
 **Workspace Host Controller Isolation** — *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002). `ExcludeControllerFeatureProvider` can be removed.
 **Covered by:** FR: FR-MCP-019
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Host Controller Isolation - *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002).
+- Main flow: Workspace Host Controller Isolation - *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002). ExcludeControllerFeatureProvider can be removed.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Host Controller Isolation - *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002).
+- [ ] Given the technical contract, when the implementation is exercised, then excludeControllerFeatureProvider can be removed.
+
+**Test Requirements:** TEST-MCP-BDP-019.
 
 ## TR-MCP-WS-007
 
@@ -3333,12 +8371,37 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Auto-Start on Service Startup - WorkspaceProcessManager, as an IHostedService, queries all registered workspaces on StartAsync and writes marker files for each.
+- Main flow: Workspace Auto-Start on Service Startup - WorkspaceProcessManager, as an IHostedService, queries all registered workspaces on StartAsync and writes marker files for each. Failures on individual workspace marker writes are logged and skipped rather than aborting global startup.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Auto-Start on Service Startup - WorkspaceProcessManager, as an IHostedService, queries all registered workspaces on StartAsync and writes marker files for each.
+- [ ] Given the technical contract, when the implementation is exercised, then failures on individual workspace marker writes are logged and skipped rather than aborting global startup.
+
+**Test Requirements:** TEST-MCP-013.
+
 ## TR-MCP-WS-008
 
 **Workspace Auto-Init and Auto-Start on Creation** — `WorkspaceController` POST calls `WorkspaceService.InitAsync` to scaffold the directory structure, then calls `WorkspaceProcessManager.StartAsync` to bring the host online, all within a single request, before returning 201 Created.
 **Covered by:** FR: FR-MCP-021
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Workspace Auto-Init and Auto-Start on Creation - WorkspaceController POST calls WorkspaceService.InitAsync to scaffold the directory structure, then calls WorkspaceProcessManager.StartAsync to bring the host online, all.
+- Main flow: Workspace Auto-Init and Auto-Start on Creation - WorkspaceController POST calls WorkspaceService.InitAsync to scaffold the directory structure, then calls WorkspaceProcessManager.StartAsync to bring the host online, all within a single request, before returning 201 Created.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then workspace Auto-Init and Auto-Start on Creation - WorkspaceController POST calls WorkspaceService.InitAsync to scaffold the directory structure, then calls WorkspaceProcessManager.StartAsync to bring the host online, all within a single request, before returning 201 Created.
+
+**Test Requirements:** TEST-MCP-007.
 
 ## TR-MCP-WS-009
 
@@ -3347,12 +8410,38 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Primary Workspace Detection and IsEnabled Gating - WorkspaceProcessManager.IHostedService.StartAsync resolves the primary workspace: first by IsPrimary = true + lowest port among enabled workspaces; then by lowest-port.
+- Main flow: Primary Workspace Detection and IsEnabled Gating - WorkspaceProcessManager.IHostedService.StartAsync resolves the primary workspace: first by IsPrimary = true + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary. For the primary workspace, only a marker file is written - no child WebApplication is created. Workspaces with IsEnabled = false are skipped during auto-start but can be started manually.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then primary Workspace Detection and IsEnabled Gating - WorkspaceProcessManager.IHostedService.StartAsync resolves the primary workspace: first by IsPrimary = true + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary.
+- [ ] Given the technical contract, when the implementation is exercised, then for the primary workspace, only a marker file is written - no child WebApplication is created.
+- [ ] Given the technical contract, when the implementation is exercised, then workspaces with IsEnabled = false are skipped during auto-start but can be started manually.
+
+**Test Requirements:** TEST-MCP-BDP-025.
+
 ## TR-MCP-WS-UI-001
 
 **McpServer Management Web UI** — Reserved/planned: web-based management UI for workspace and server administration. Tracks FR-MCP-031.
 **Covered by:** FR: FR-MCP-031
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: McpServer Management Web UI - Reserved/planned: web-based management UI for workspace and server administration.
+- Main flow: McpServer Management Web UI - Reserved/planned: web-based management UI for workspace and server administration.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then mcpServer Management Web UI - Reserved/planned: web-based management UI for workspace and server administration.
+
+**Test Requirements:** TEST-MCP-BDP-031.
 
 ## TR-MCP-XAGENT-001
 
@@ -3363,11 +8452,34 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Assert-ReplCurrentTurnFresh refuses different sourceType prefixes
 
+**Use Cases:**
+- Actor: AI agent.
+- Goal: Assert-ReplCurrentTurnFresh refuses different sourceType prefixes - Assert-ReplCurrentTurnFresh compares sessionId sourceType prefix.
+- Main flow: Assert-ReplCurrentTurnFresh refuses different sourceType prefixes - Assert-ReplCurrentTurnFresh compares sessionId sourceType prefix. Different prefix refuses CompleteTurn persist. Same prefix still rebinds.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-XAGENT-001.
+
 ## TR-PLANNED-013A
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: AddControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints.
+- Main flow: AddControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints. The factory strips the action parameter name (dto, body, turn) from the errors keys, replacing them with $ so callers see the canonical JSON root marker instead of a misleading wrapper field name. SessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation to keep the response shape uniform.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then addControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints.
+- [ ] Given the technical contract, when the implementation is exercised, then the factory strips the action parameter name (dto, body, turn) from the errors keys, replacing them with $ so callers see the canonical JSON root marker instead of a misleading wrapper field name.
+- [ ] Given the technical contract, when the implementation is exercised, then sessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation to keep the response shape uniform.
+
+**Test Requirements:** TEST-MCP-BDP-TR-PLANNED-013A.
 
 ## TR-PLANNED-CORE-014
 
@@ -3380,6 +8492,15 @@ Scope: layer-1+
 - [ ] SessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation
 - [ ] Response shape is uniform across model binding and domain validation failures
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Problem+JSON response factory for model binding failures - AddControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding.
+- Main flow: Problem+JSON response factory for model binding failures - AddControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints. The factory strips the action parameter name (dto, body, turn) from the errors keys, replacing them with $ so callers see the canonical JSON root marker instead of a misleading wrapper field name. SessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation to keep the response shape uniform.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TR-PLANNED-CORE-014.
+
 ## TR-SUPPORT-010E
 
 **Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
@@ -3387,12 +8508,36 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Stateless lifecycle controller + client + tool adapters - SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+- Main flow: Stateless lifecycle controller + client + tool adapters - SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+- Edge cases: Stateless lifecycle controller + client + tool adapters - SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then stateless lifecycle controller + client + tool adapters - SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-010E.
+
 ## TR-SUPPORT-010F
 
 **Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
 **Covered by:** FR: FR-SUPPORT-010F, FR-SUPPORT-015; TEST: TEST-SUPPORT-010F, TEST-SUPPORT-015
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Merge-on-null mapping for partial submits - MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
+- Main flow: Merge-on-null mapping for partial submits - MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then merge-on-null mapping for partial submits - MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-010F, TEST-MCP-BDP-SUPPORT-015.
 
 ## TR-SUPPORT-CORE-014
 
@@ -3406,6 +8551,15 @@ Scope: layer-1+
 - [ ] MCP tools delegate to SessionLogController lifecycle endpoints
 - [ ] UpsertTurnAsync is the single point of truth for all turn state transitions
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Stateless lifecycle controller with client and tool adapters - SessionLogController exposes open/begin/complete/fail endpoints keyed by ids; SessionLogClient and MCP tools delegate to these endpoints; UpsertTurnAsync.
+- Main flow: Stateless lifecycle controller with client and tool adapters - SessionLogController exposes open/begin/complete/fail endpoints keyed by ids; SessionLogClient and MCP tools delegate to these endpoints; UpsertTurnAsync underpins all lifecycle operations to provide a single point of truth for turn state transitions.
+- Edge cases: SessionLogController exposes open/begin/complete/fail lifecycle endpoints keyed by ids.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-014.
+
 ## TR-SUPPORT-CORE-015
 
 **Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars when mapping DTOs to entities; UpsertTurns passes mergeOmittedFields:true to enable partial updates; collections use append-only semantics to preserve existing items when partial submits occur.
@@ -3418,6 +8572,15 @@ Scope: layer-1+
 - [ ] Collections use append-only semantics during partial submits
 - [ ] Existing entity fields not present in DTO remain unchanged
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Merge-on-null mapping for partial submits - MapDtoToEntity merges non-null scalars when mapping DTOs to entities; UpsertTurns passes mergeOmittedFields:true to enable partial updates; collections use append-only.
+- Main flow: Merge-on-null mapping for partial submits - MapDtoToEntity merges non-null scalars when mapping DTOs to entities; UpsertTurns passes mergeOmittedFields:true to enable partial updates; collections use append-only semantics to preserve existing items when partial submits occur.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-SUPPORT-015.
+
 ## TR-SUPPORT-LOG-010
 
 **Session-log ProblemDetails contract** — Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as dto.
@@ -3425,12 +8588,38 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Session-log ProblemDetails contract - Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures.
+- Main flow: Session-log ProblemDetails contract - Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as dto.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given the technical contract, when the implementation is exercised, then session-log ProblemDetails contract - Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures.
+- [ ] Given the technical contract, when the implementation is exercised, then error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as dto.
+
+**Test Requirements:** TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005.
+
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
 **Covered by:** FR: FR-TEST-002
 **Status:** pending
 Scope: layer-1+
+
+**Use Cases:**
+- Actor: Requirements maintainer.
+- Goal: TR-TEST-001 - Placeholder requirement backfilled for TODO link TR-TEST-001.
+- Main flow: TR-TEST-001 - Placeholder requirement backfilled for TODO link TR-TEST-001.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Acceptance Criteria:**
+- [ ] Given this technical id is a placeholder, legacy stub, or superseded row, when requirements are reviewed, then it is not marked Complete.
+- [ ] Given this technical id, when an implementer looks for a contract, then no new runtime behavior is authorized beyond the superseding requirement.
+
+**Test Requirements:** TEST-MCP-BDP-PLACEHOLDER.
 
 ## TR-TRIAGE-CLIENT-001
 
@@ -3443,6 +8632,15 @@ Scope: layer-1+
 - [ ] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters.
 - [ ] Existing QueryGroupsAsync, GetGroupAsync, and GetReportAsync remain compatible for the planned shared UI.Core view model.
 
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Typed triage dashboard client endpoints - SharpNinja.McpServer.Client exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current.
+- Main flow: Typed triage dashboard client endpoints - SharpNinja.McpServer.Client exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TRIAGE-001.
+
 ## TR-TRIAGE-CLIENT-002
 
 **Typed triage TODO client endpoint** — REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
@@ -3453,4 +8651,13 @@ Scope: layer-1+
 - [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+
+**Use Cases:**
+- Actor: Workspace operator or AI agent.
+- Goal: Typed triage TODO client endpoint - REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and.
+- Main flow: Typed triage TODO client endpoint - REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+- Edge cases: None are stated in the source text. An acceptance test must still cover one rejected, missing, or unauthorized input before this requirement is treated as Complete. Evidence: Unverified.
+- Evidence status: Unverified. Added 2026-09-27 from the requirement statement. This narrative is not a completion claim.
+
+**Test Requirements:** TEST-MCP-BDP-TRIAGE-002.
 

@@ -1,5 +1,7 @@
 # Director Requirements
 
+BDPv4 note (2026-09-27): use cases, acceptance criteria, and TEST-MCP links for FR-MCP-030, FR-MCP-037, and FR-MCP-060 are on the canonical entries in Functional-Requirements.md. This file remains the historical Director detail.
+
 This document tracks functional and technical requirements for the `McpServer.Director` CLI and TUI application.
 
 Ownership note: `McpServer.Director` and `McpServer.UI.Core` were moved to the separate

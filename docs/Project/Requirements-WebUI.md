@@ -1,5 +1,7 @@
 # Web UI Requirements
 
+BDPv4 note (2026-09-27): use cases, acceptance criteria, and TEST-MCP links for FR-MCP-014 and FR-MCP-031 are on the canonical entries in Functional-Requirements.md. This file remains the historical Web UI detail.
+
 This document tracks functional and technical requirements for the browser-based interfaces of McpServer, including the Pairing UI and the Management Dashboard.
 
 ## Functional Requirements

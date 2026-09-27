@@ -76,6 +76,8 @@
   Scope: layer-1+
 - TEST-MCP-013: Given a workspace, when `StartAsync` completes, then `AGENTS-README-FIRST.yaml` exists at the workspace root with the shared host port, endpoint paths, and auth token. When `StopAsync` completes, then the marker file is removed.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] When the host starts, every enabled registered workspace receives an AGENTS-README-FIRST.yaml marker. Evidence: Unverified addition on 2026-09-27 for FR-MCP-020.
 - TEST-MCP-014: Given a TODO item with a title and description, when `RequirementsService.AnalyzeAsync` is called, then `ExtractRequirementIds` correctly parses both JSON-block and regex-fallback response formats and returns distinct, non-empty FR/TR ID lists.
   Scope: layer-1+
 - TEST-MCP-015: Given a Markdown file with a `# Session Log - {title}` header, when `MarkdownSessionLogParser.TryParse` is called, then it returns a `UnifiedSessionLogDto` with matching title, model, status, and at least one entry. Given a file without the header, then `TryParse` returns null.
@@ -1356,3 +1358,495 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+
+## BDPv4 acceptance tests added 2026-09-27
+
+These BDP acceptance records close linkage gaps. Status is Planned. Evidence is Unverified. They are written so an acceptance test can be implemented without inventing the rule.
+
+- TEST-MCP-BDP-PLACEHOLDER: Acceptance tests for FR-MCP-AGENT-PARITY-001, FR-MCP-AGENT-PARITY-002, FR-MCP-REQSCOPE-001, FR-MCP-REQSCOPE-002, FR-MCP-REQSCOPE-003, FR-MCP-REQSCOPE-004, FR-MCP-WORKSPACE-LAYER-001, the functional backfill row for item 002.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a functional or technical id whose text says it is a placeholder, legacy stub, or superseded row, when traceability is reviewed, then the id has a use case and acceptance criteria and is not marked Complete.
+  - [ ] Given one of those ids, when an implementer searches for authorized behavior, then the id does not require new runtime behavior beyond the requirement that superseded it.
+  Covers: FR-MCP-AGENT-PARITY-001, FR-MCP-AGENT-PARITY-002, FR-MCP-REQSCOPE-001, FR-MCP-REQSCOPE-002, FR-MCP-REQSCOPE-003, FR-MCP-REQSCOPE-004, FR-MCP-WORKSPACE-LAYER-001, the functional backfill row for item 002
+- TEST-MCP-BDP-003: Acceptance tests for FR-MCP-003.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a workspace-scoped session log, when the server ingests it, then a search query in that same workspace returns the session.
+  - [ ] Given a session log owned by workspace A, when workspace B runs the same query, then the session is not returned.
+  - [ ] Given a query with no matching text, when search runs, then the result set is empty and the call does not fail as an internal error.
+  Covers: FR-MCP-003
+- TEST-MCP-BDP-006: Acceptance tests for FR-MCP-006.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given repository files, a session log, an external document, and issue content, when multi-source ingestion runs, then each source is stored under its own source key and is searchable.
+  - [ ] Given the same source key ingested twice, when the second ingest completes, then the stored document is updated rather than duplicated as a second unrelated source.
+  - [ ] Given a source the ingestor cannot read, when ingestion runs, then that source is reported as a failure and the other sources are not silently dropped.
+  Covers: FR-MCP-006
+- TEST-MCP-BDP-008: Acceptance tests for FR-MCP-008.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the repository Dockerfile and docker-compose.mcp.yml, when an operator builds the image and starts the compose service, then the server process listens and answers a health request.
+  - [ ] Given a container start with no extra config file, when the process boots, then it starts from the image defaults instead of failing on a missing host path.
+  Covers: FR-MCP-008
+- TEST-MCP-BDP-017: Acceptance tests for FR-MCP-017.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a Windows host, when the PowerShell management script installs the service, then the service is registered for automatic startup.
+  - [ ] Given the service process has failed, when recovery policy elapses, then Windows restarts the service after a 60 second delay.
+  - [ ] Given the management script, when update and uninstall run, then the service registration matches the requested operation and does not leave a second service name behind.
+  Covers: FR-MCP-017
+- TEST-MCP-BDP-019: Acceptance tests for FR-MCP-019.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the single-host multi-tenant model, when any workspace request arrives, then controllers run in the host application rather than a per-workspace child host.
+  - [ ] Given a caller who is not an administrator, when they call workspace lifecycle management endpoints, then the call is rejected.
+  - [ ] Given this id is marked obsolete, when traceability is reviewed, then FR-MCP-043 is the replacement behavior and this id is not marked Complete on the strength of the old per-process design.
+  Covers: FR-MCP-019
+- TEST-MCP-BDP-025: Acceptance tests for FR-MCP-025.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given several enabled workspaces and one with IsPrimary true, when the host selects the primary workspace, then it selects the enabled primary with the lowest port and does not start a child WebApplication for it.
+  - [ ] Given no workspace has IsPrimary true, when the host selects the primary workspace, then it selects the enabled workspace with the lowest port.
+  - [ ] Given no workspace is enabled, when the host selects the primary workspace, then no primary workspace is chosen.
+  Covers: FR-MCP-025
+- TEST-MCP-BDP-026: Acceptance tests for FR-MCP-026.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given OIDC is configured, when a caller invokes an agent mutation endpoint with a valid JWT and without an API key, then the call is authorized.
+  - [ ] Given OIDC is configured, when a caller invokes an agent mutation endpoint with no JWT, then the call is rejected.
+  - [ ] Given a read endpoint, when a caller presents the workspace API key and no JWT, then the existing API key path still authorizes the read.
+  Covers: FR-MCP-026
+- TEST-MCP-BDP-028: Acceptance tests for FR-MCP-028. Related existing ids: TEST-MCP-034.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a workspace agent override for launch command, model, branch strategy, seed prompt, instruction files, isolation, restart policy, or marker text, when the agent is launched in that workspace, then the override is the value that runs.
+  - [ ] Given BanAgentAsync with Global false, when the ban is stored, then only that workspace's agent is banned. Global true bans the agent in every workspace. Unban clears the ban.
+  - [ ] Given an agent lifecycle event (add, launch, exit, ban, unban, delete, merge, or init), when the event completes, then an audit record is written.
+  Covers: FR-MCP-028
+- TEST-MCP-BDP-030: Acceptance tests for FR-MCP-030. Related existing ids: TEST-MCP-035, TEST-MCP-036, TEST-MCP-037, TEST-MCP-038.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the Director command set init, add, launch, ban, unban, delete, merge, login, list, agents, validate, and interactive, when each command is invoked with valid arguments, then it dispatches through CQRS and returns a success result.
+  - [ ] Given the device authorization flow, when login succeeds, then a token is cached. When the flow times out, then login fails with an error result.
+  - [ ] Given an unknown command or a missing workspace path, when the operator invokes Director, then the process returns a failure result and does not claim the command ran.
+  Covers: FR-MCP-030
+- TEST-MCP-BDP-031: Acceptance tests for FR-MCP-031.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the management UI is still planned, when an operator opens the documented management routes, then the requirement stays Planned until workspace, agent, session, TODO, and health views are present and gated by OIDC.
+  - [ ] Given an unauthenticated browser session, when a management view is requested, then the UI does not reveal workspace tokens or TODO contents.
+  Covers: FR-MCP-031
+- TEST-MCP-BDP-032: Acceptance tests for FR-MCP-032.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given GitHub federation through the configured OIDC provider, when a user authenticates, then management operations accept that identity according to the OIDC requirement.
+  - [ ] Given GitHub OAuth for an agent workspace, when the operator connects a repository, then PR workflow calls use the workspace OAuth token rather than a token from another workspace.
+  - [ ] Given this capability is still marked planned, when traceability is reviewed, then the status stays Planned until those two paths have passing acceptance tests.
+  Covers: FR-MCP-032
+- TEST-MCP-BDP-034: Acceptance tests for FR-MCP-034.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a workspace with BannedLicenses, BannedCountriesOfOrigin, BannedOrganizations, and BannedIndividuals set, when the marker file is written, then the Handlebars prompt renders those lists.
+  - [ ] Given a ban list that is empty, when the marker file is written, then that list is omitted rather than rendered as an empty prohibition.
+  - [ ] Given a dependency whose license, origin, organization, or individual matches a ban, when an agent is about to add it, then the agent must refuse the dependency and log the violation.
+  Covers: FR-MCP-034
+- TEST-MCP-BDP-035: Acceptance tests for FR-MCP-035.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given marker generation, when the default marker prompt is rendered, then it always contains sections for absolute honesty, correctness above speed, decision documentation, professional audit of commits and reviews, and source attribution.
+  - [ ] Given a workspace policy that tries to remove one of those sections, when the marker is rendered, then the section is still present.
+  Covers: FR-MCP-035
+- TEST-MCP-BDP-037: Acceptance tests for FR-MCP-037.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a registered view-model name and JSON input, when director exec runs, then the named view model is created, properties are populated from JSON, the primary command runs, and stdout is JSON.
+  - [ ] Given a successful command result, when the process exits, then the exit code is 0. Given a failed result or an unknown view-model name, then the exit code is 1.
+  Covers: FR-MCP-037
+- TEST-MCP-BDP-038: Acceptance tests for FR-MCP-038.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a new agent session, when the agent follows session start, then it reads the marker file, queries recent session logs with limit 5, queries current TODOs, and reads Requirements-Matrix.md before other work.
+  - [ ] Given a session that continues for about 10 interactions, when the next interval is reached, then the agent posts an updated session log.
+  - [ ] Given a new requirement or design decision discovered mid-session, when the agent continues, then the decision is recorded in that session rather than deferred to an unlogged note.
+  Covers: FR-MCP-038
+- TEST-MCP-BDP-050: Acceptance tests for FR-MCP-050.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a workspace-bound agent, when an operator launches, stops, and queries status, then each operation returns the process state for that workspace only.
+  - [ ] Given isolation mode none, worktree, or clone, and branch strategy direct, feature-branch, or worktree, when the agent starts, then the selected strategy is the one that prepares the workspace.
+  - [ ] Given a restart policy and a process exit, when the health monitor runs, then it restarts or reports according to that policy and writes a session-log link to the known agent definition.
+  Covers: FR-MCP-050
+- TEST-MCP-BDP-051: Acceptance tests for FR-MCP-051.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a system-wide default Copilot model, when a server-initiated CLI invocation, a voice session, and a built-in agent default are created with no explicit model, then all three use that configured model.
+  - [ ] Given a workspace agent override or an explicit invocation parameter, when that call runs, then the override wins over the system default.
+  - [ ] Given the default is unset, when a Copilot session starts, then the built-in fallback is used and the call does not fail closed solely because the optional default is empty.
+  Covers: FR-MCP-051
+- TEST-MCP-BDP-060: Acceptance tests for FR-MCP-060.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given an administrative area exposed both as a Director tab and as director exec, when each path runs the same operation, then both dispatch the same CQRS command or query and the same authorization rule.
+  - [ ] Given a screen, when it renders, then it does not call the HTTP client directly for domain mutations; the view model does.
+  - [ ] Given a role that is not allowed to see a tab, when the shell composes tabs, then that tab is absent.
+  Covers: FR-MCP-060
+- TEST-MCP-BDP-077: Acceptance tests for FR-MCP-077.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given federation enabled with a default target and a per-workspace override, when a request arrives for the overridden workspace, then it is proxied to the override target. A workspace without an override uses the default target.
+  - [ ] Given X-Mcp-Federation-Hop already at the configured maximum, when another proxy hop would be added, then the request is rejected and is not forwarded.
+  - [ ] Given a streaming /mcp-transport request, when federation is enabled, then the proxy forwards the stream rather than buffering it into a single JSON body.
+  - [ ] Given the management API at /mcpserver/federation, when an operator reads the registry, then configured targets and tunnel-discovered targets are listed.
+  Covers: FR-MCP-077
+- TEST-MCP-BDP-078: Acceptance tests for FR-MCP-078.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given raw text or markdown posted to the ad-hoc GraphRAG ingest endpoint or MCP tool, when ingestion completes, then the server chunks the content, stores embeddings, and registers vectors.
+  - [ ] Given no caller source type, when ingestion completes, then the source type is adhoc-text. Given a caller title, source type, and source key, then those values are stored.
+  - [ ] Given empty content, when ingestion is requested, then the call fails with a diagnostic and does not create a document.
+  Covers: FR-MCP-078
+- TEST-MCP-BDP-079: Acceptance tests for FR-MCP-079.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given a workspace, when an operator creates, reads, updates, lists, and deletes a graph entity and a relationship, then each operation persists the documented fields and timestamps.
+  - [ ] Given a relationship whose endpoint id does not exist, when create is called, then the call is rejected.
+  - [ ] Given an entity in workspace A, when workspace B requests it, then the entity is not returned.
+  Covers: FR-MCP-079
+- TEST-MCP-BDP-080: Acceptance tests for FR-MCP-080.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given stored ad-hoc documents, when list is called with a page size and a filter, then the page contains only matching documents in a stable order.
+  - [ ] Given a document id, when chunks are requested, then they return in chunk order.
+  - [ ] Given a document delete, when the delete completes, then the document, its chunks, and its vectors are removed.
+  Covers: FR-MCP-080
+- TEST-MCP-BDP-HANDOFF-001: Acceptance tests for FR-HANDOFF-001. Related existing ids: TEST-HANDOFF-001, TEST-HANDOFF-002.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then supports Markdown, text, JSON, and YAML inputs.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then maximum decoded input is 8 MiB.
+  Covers: FR-HANDOFF-001
+- TEST-MCP-BDP-HANDOFF-002: Acceptance tests for FR-HANDOFF-002. Related existing ids: TEST-HANDOFF-003.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then extraction uses a versioned prompt and strict JSON contract.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then malformed output produces diagnostics and never creates a TODO.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then unknown or missing source information is not silently discarded.
+  Covers: FR-HANDOFF-002
+- TEST-MCP-BDP-HANDOFF-003: Acceptance tests for FR-HANDOFF-003. Related existing ids: TEST-HANDOFF-004.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then invalid or conflicting values produce field-specific diagnostics.
+  Covers: FR-HANDOFF-003
+- TEST-MCP-BDP-HANDOFF-004: Acceptance tests for FR-HANDOFF-004. Related existing ids: TEST-HANDOFF-004.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then draftOnly is the default and never mutates TODO state.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then requireReview persists an approvable run without creating a TODO.
+  - [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+  Covers: FR-HANDOFF-004
+- TEST-MCP-BDP-HANDOFF-005: Acceptance tests for FR-HANDOFF-005. Related existing ids: TEST-HANDOFF-005.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then successful creation produces exactly one TODO.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then replay of the same workspace, content hash, and prompt version returns the existing receipt.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then ID collisions require review and are never silently renamed.
+  Covers: FR-HANDOFF-005
+- TEST-MCP-BDP-HANDOFF-006: Acceptance tests for FR-HANDOFF-006. Related existing ids: TEST-HANDOFF-007.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then raw credentials or source content are not copied into logs.
+  Covers: FR-HANDOFF-006
+- TEST-MCP-BDP-HANDOFF-007: Acceptance tests for FR-HANDOFF-007. Related existing ids: TEST-HANDOFF-006.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+  Covers: FR-HANDOFF-007
+- TEST-MCP-BDP-LOC-001: Acceptance tests for FR-LOC-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given localization is still planned with no implementation scope, when traceability is reviewed, then FR-LOC-001 stays Planned and is not marked Complete.
+  - [ ] Given a future locale resource, when an acceptance test is written for this id, then it must show a user-visible string resolved from the active locale and a fallback when the key is missing.
+  Covers: FR-LOC-001
+- TEST-MCP-BDP-MCP-REPL-005: Acceptance tests for FR-MCP-REPL-005.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then the REPL host shall expose commands for querying agent pool state, active voice sessions, queued one-shot requests, and workspace notification subscriptions.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then state queries shall return current snapshots without blocking on long-running operations.
+  Covers: FR-MCP-REPL-005
+- TEST-MCP-BDP-SUPPORT-010: Acceptance tests for FR-SUPPORT-010.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the local MCP server, when an agent calls context retrieval, TODO management, repository access, session logging, and ingestion, then each capability answers on the shared authenticated surface.
+  - [ ] Given a request without a workspace API key, when any of those capabilities is called under /mcpserver, then the server returns 401.
+  Covers: FR-SUPPORT-010
+- TEST-MCP-BDP-SUPPORT-010A: Acceptance tests for FR-SUPPORT-010A. Related existing ids: TEST-SUPPORT-010A-1, TEST-SUPPORT-010A-2.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record.
+  - [ ] When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from _workspaceId if available.
+  Covers: FR-SUPPORT-010A
+- TEST-MCP-BDP-SUPPORT-010B: Acceptance tests for FR-SUPPORT-010B. Related existing ids: TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then error responses cite the offending JSON path under errors, never the action-parameter name.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then content-Type is application/problem+json.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then the accepted top-level shape is documented in the response detail.
+  Covers: FR-SUPPORT-010B
+- TEST-MCP-BDP-SUPPORT-010C: Acceptance tests for FR-SUPPORT-010C. Related existing ids: TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /mcpserver/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId).
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then unsupported verbs on either route return 405 Method Not Allowed with an Allow header.
+  Covers: FR-SUPPORT-010C
+- TEST-MCP-BDP-SUPPORT-010E: Acceptance tests for FR-SUPPORT-010E. Related existing ids: TEST-SUPPORT-010E.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then the session-log API SHALL expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+  Covers: FR-SUPPORT-010E
+- TEST-MCP-BDP-SUPPORT-010F: Acceptance tests for FR-SUPPORT-010F. Related existing ids: TEST-SUPPORT-010F.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
+  Covers: FR-SUPPORT-010F
+- TEST-MCP-BDP-SUPPORT-011: Acceptance tests for FR-SUPPORT-011. Related existing ids: TEST-SUPPORT-010A-1, TEST-SUPPORT-010A-2.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then session log POST stamps resolved workspace ID on parent and all child entities.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then POST followed by GET under same workspace returns same record with workspace ID preserved.
+  - [ ] When no workspace context is resolved, WorkspaceId defaults to empty string and DbContext auto-stamp populates from _workspaceId if available.
+  Covers: FR-SUPPORT-011
+- TEST-MCP-BDP-SUPPORT-013: Acceptance tests for FR-SUPPORT-013. Related existing ids: TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then GET /mcpserver/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then POST /mcpserver/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then unsupported verbs return 405 Method Not Allowed with Allow header.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents.
+  Covers: FR-SUPPORT-013
+- TEST-MCP-BDP-SUPPORT-014: Acceptance tests for FR-SUPPORT-014. Related existing ids: TEST-SUPPORT-014.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then session-log API exposes stateless open/begin/complete/fail lifecycle operations.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then lifecycle operations are keyed by (agent, sessionId, requestId) tuple.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then operations require no in-process active-session state to function.
+  Covers: FR-SUPPORT-014
+- TEST-MCP-BDP-SUPPORT-015: Acceptance tests for FR-SUPPORT-015. Related existing ids: TEST-SUPPORT-015.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then whole-session submit merges additively without overwriting omitted fields.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then omitted session fields are never overwritten during additive merge.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then omitted turn fields are never overwritten during additive merge.
+  Covers: FR-SUPPORT-015
+- TEST-MCP-BDP-TRIAGE-001: Acceptance tests for FR-TRIAGE-001. Related existing ids: TEST-TRIAGE-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then a read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data.
+  - [ ] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then the API supports workspace-scoped queries so Director and MCP Web can use the active workspace path.
+  Covers: FR-TRIAGE-001
+- TEST-MCP-BDP-TRIAGE-002: Acceptance tests for FR-TRIAGE-002. Related existing ids: TEST-TRIAGE-002.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then a read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime.
+  - [ ] Given the requirement scope, when the actor exercises the behavior, then the endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces.
+  - [ ] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available.
+  Covers: FR-TRIAGE-002
+- TEST-MCP-BDP-TR-MCP-CFG-003: Acceptance tests for TR-MCP-CFG-003.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then workspace Configuration Schema - Workspace state is persisted in appsettings.json under Mcp:Workspaces (not in EF/SQLite).
+  - [ ] Given the technical contract, when the implementation is exercised, then each entry includes: WorkspacePath (required, absolute path, primary key), Name (required), WorkspacePort (required), TodoPath (default: docs/todo.yaml), DataDirectory (optional override for mcp.db), TunnelProvider (optional: ngrok/cloudflare/frp), RunAs (optional Windows identity), IsPrimary (default: false), IsEnabled (default: true), DateTimeCreated, DateTimeModified.
+  - [ ] Given the technical contract, when the implementation is exercised, then port uniqueness enforced; auto-assignment from max(existing) + 1.
+  - [ ] Given the technical contract, when the implementation is exercised, then file written atomically via JsonNode patching with IConfigurationRoot.Reload().
+  Covers: TR-MCP-CFG-003
+- TEST-MCP-BDP-TR-MCP-DOC-002: Acceptance tests for TR-MCP-DOC-002.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then test XML Documentation Completeness *(DIRECTIVE)* - All test projects SHALL include XML documentation comments on test classes and test methods.
+  - [ ] Given the technical contract, when the implementation is exercised, then each test XML doc SHALL explicitly specify: what behavior is being tested, what test data/fixtures are used, why that data/fixtures are used, and which requirement IDs are being validated.
+  - [ ] Given the technical contract, when the implementation is exercised, then no test project is exempt from this requirement.
+  Covers: TR-MCP-DOC-002
+- TEST-MCP-BDP-TR-MCP-DRY-001: Acceptance tests for TR-MCP-DRY-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then DRY - No Duplication in Code or Scripts *(DIRECTIVE)* - All code and scripts must follow the DRY principle without exception.
+  - [ ] Given the technical contract, when the implementation is exercised, then shared logic must be extracted into a single reusable location (service, helper, function, shared script module).
+  - [ ] Given the technical contract, when the implementation is exercised, then inline duplication of validation, parsing, formatting, or business logic across files is prohibited.
+  - [ ] Given the technical contract, when the implementation is exercised, then scripts must share common operations via parameterized functions or a shared module.
+  Covers: TR-MCP-DRY-001
+- TEST-MCP-BDP-TR-MCP-LOG-001: Acceptance tests for TR-MCP-LOG-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then exception Logging in Catch Blocks *(DIRECTIVE)* - Every catch block that handles an exception must log the exception.
+  - [ ] Given the technical contract, when the implementation is exercised, then unexpected exceptions must use LogError with ex.ToString() as the message body.
+  - [ ] Given the technical contract, when the implementation is exercised, then expected/anticipated exceptions (e.g., OperationCanceledException on shutdown, InvalidOperationException for process-already-exited races, validation exceptions returned as HTTP 4xx) must use LogWarning with ex.ToString().
+  - [ ] Given the technical contract, when the implementation is exercised, then catch blocks must not silently swallow exceptions with empty bodies or comments-only.
+  Covers: TR-MCP-LOG-001
+- TEST-MCP-BDP-TR-MCP-MEMORY-008: Acceptance tests for TR-MCP-MEMORY-008.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then agent plugin memory integration - Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces.
+  - [ ] Given the technical contract, when the implementation is exercised, then plugins with host request-boundary injection hooks render the exact REQUIRED MEMORIES block on supported user prompts.
+  - [ ] Given the technical contract, when the implementation is exercised, then plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
+  Covers: TR-MCP-MEMORY-008
+- TEST-MCP-BDP-TR-MCP-PLUGIN-TRIAGE-001: Acceptance tests for TR-MCP-PLUGIN-TRIAGE-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then triage plugin guidance - Plugin skills and wrapper commands expose triage consistently.
+  Covers: TR-MCP-PLUGIN-TRIAGE-001
+- TEST-MCP-BDP-TR-MCP-QA-013: Acceptance tests for TR-MCP-QA-013.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then QA XML Documentation - XML docs on every new public type and member (CS1591 enforced).
+  - [ ] Given the technical contract, when the implementation is exercised, then test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
+  Covers: TR-MCP-QA-013
+- TEST-MCP-BDP-TR-MCP-QBTOOLS-000: Acceptance tests for TR-MCP-QBTOOLS-000.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then single core per capability (anti-duplication) - Each tool capability (edit, bash, git) has exactly one core service carrying path-safety/transaction contracts.
+  - [ ] Given the technical contract, when the implementation is exercised, then the internal plane calls the transaction-gated core directly; the external plane calls the same core via the MCP client.
+  - [ ] Given the technical contract, when the implementation is exercised, then tool classes contain only transport and JSON-shape adaptation, no business logic.
+  Covers: TR-MCP-QBTOOLS-000
+- TEST-MCP-BDP-TR-MCP-REPL-TRIAGE-001: Acceptance tests for TR-MCP-REPL-TRIAGE-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then triage REPL surface - REPL parity for triage through client passthrough and typed workflow wrappers.
+  Covers: TR-MCP-REPL-TRIAGE-001
+- TEST-MCP-BDP-TR-MCP-SEC-006: Acceptance tests for TR-MCP-SEC-006.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then brain-slot signing keys follow a renamed party id - CORRECTED 2026-07-20 after the original specification was proven wrong by test.
+  - [ ] Given the technical contract, when the implementation is exercised, then context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1".
+  - [ ] Given the technical contract, when the implementation is exercised, then on any migrated installation the renamed party therefore starts with no key and the quad reports NotReady.
+  - [ ] Given the technical contract, when the implementation is exercised, then WHAT WAS WRONG: the first version of this requirement said to COPY the legacy party's signing key material forward.
+  Covers: TR-MCP-SEC-006
+- TEST-MCP-BDP-TR-MCP-TODO-007: Acceptance tests for TR-MCP-TODO-007.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Legacy SQLite TODO Storage One-Shot Migration - When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy mcp.db SQLite TODO store is present at the deprecated Mcp:TodoStorage:SqliteDataSource path, the server SHALL copy rows from todo_items, todo_item_history, and todo_document_metadata into the configured authoritative database on first boot, preserving primary keys, audit identifiers, and monotonic per-item versions.
+  - [ ] The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder.
+  - [ ] Given the technical contract, when the implementation is exercised, then the migrator SHALL honor the Mcp:TodoStorage:MigrateFromLegacySqlite feature flag and SHALL run as a background hosted service so it never blocks the SCM 30-second service-start window.
+  - [ ] Given the technical contract, when the implementation is exercised, then failures SHALL log per-row context and continue with the next row rather than aborting the whole migration.
+  Covers: TR-MCP-TODO-007
+- TEST-MCP-BDP-TR-MCP-TODO-008: Acceptance tests for TR-MCP-TODO-008.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap - Database-backed TODO storage (TR-MCP-TODO-005) SHALL scope every TODO row, audit-history row, and document-metadata row to the active workspace via a WorkspaceId column populated from the resolved WorkspaceContext.WorkspacePath, matching the TR-MCP-MT-003 multi-tenant pattern used by context, session-log, agent, tool, and graph entities.
+  - [ ] Given the technical contract, when the implementation is exercised, then mcpDbContext SHALL install a global query filter on all three Todo entities so reads, updates, and deletes never cross workspace boundaries.
+  - [ ] Given the technical contract, when the implementation is exercised, then todoItemEntity SHALL use composite primary key (WorkspaceId, Id) so the same canonical TODO id MAY exist in multiple workspaces without collision.
+  - [ ] Given the technical contract, when the implementation is exercised, then todoDocumentMetadataEntity SHALL use composite primary key (WorkspaceId, SingletonId = 1) so each workspace owns exactly one document-metadata singleton.
+  Covers: TR-MCP-TODO-008
+- TEST-MCP-BDP-TR-MCP-TPL-005: Acceptance tests for TR-MCP-TPL-005.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then system Template Externalization - Three provider interfaces decouple system prompt templates from inline C# constants: (1) IMarkerPromptProvider / FileMarkerPromptProvider reads templates/prompt-templates.yaml via IPromptTemplateService (id: default-marker-prompt), throwing a critical exception on file-missing.
+  - [ ] Given the technical contract, when the implementation is exercised, then fallback to MarkerFileService.DefaultPromptTemplate is REMOVED.
+  - [ ] Given the technical contract, when the implementation is exercised, then injected into WorkspaceProcessManager with precedence: config override (Mcp:MarkerPromptTemplate) > file template.
+  - [ ] Given the technical contract, when the implementation is exercised, then (2) ITodoPromptProvider / TodoPromptProvider looks up templates from IPromptTemplateService by well-known IDs (todo-status-prompt, todo-implement-prompt, todo-plan-prompt), falling back to TodoPromptDefaults constants.
+  Covers: TR-MCP-TPL-005
+- TEST-MCP-BDP-TR-MCP-WEB-001: Acceptance tests for TR-MCP-WEB-001.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then web UI Ownership Boundary - Web UI implementation work for the former McpServer.UI.Core and McpServer.Director surfaces SHALL be owned by the McpServerManager repository.
+  - [ ] Given the technical contract, when the implementation is exercised, then this repository SHALL keep only server-side contracts, API behavior, and compatibility documentation required by those external UI clients.
+  Covers: TR-MCP-WEB-001
+- TEST-MCP-BDP-TR-MCP-WEB-002: Acceptance tests for TR-MCP-WEB-002.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then web UI API Compatibility Contract - Server APIs consumed by external web-management clients SHALL remain documented and version-compatible across McpServer and McpServerManager.
+  - [ ] Given the technical contract, when the implementation is exercised, then breaking API changes require explicit requirements updates, migration notes, and tests in the server repository before deployment.
+  Covers: TR-MCP-WEB-002
+- TEST-MCP-BDP-TR-MCP-WEB-003: Acceptance tests for TR-MCP-WEB-003.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then web UI Authentication And Workspace Boundary - External web-management clients SHALL authenticate through the existing MCP workspace auth/token model and SHALL preserve workspace isolation.
+  - [ ] Given the technical contract, when the implementation is exercised, then this repository SHALL provide the server-side policy and tests; client UX and screen implementation remain in McpServerManager.
+  Covers: TR-MCP-WEB-003
+- TEST-MCP-BDP-TR-MCP-WEB-004: Acceptance tests for TR-MCP-WEB-004.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then web UI Deployment And Handoff Documentation - Deployment guidance for web-management surfaces SHALL distinguish server deployment in this repository from UI/client deployment in McpServerManager.
+  - [ ] Given the technical contract, when the implementation is exercised, then this repository SHALL document only the server prerequisites, endpoint contracts, and compatibility expectations needed for the external UI.
+  Covers: TR-MCP-WEB-004
+- TEST-MCP-BDP-TR-PLANNED-013A: Acceptance tests for TR-PLANNED-013A.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then addControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints.
+  - [ ] Given the technical contract, when the implementation is exercised, then the factory strips the action parameter name (dto, body, turn) from the errors keys, replacing them with $ so callers see the canonical JSON root marker instead of a misleading wrapper field name.
+  - [ ] Given the technical contract, when the implementation is exercised, then sessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation to keep the response shape uniform.
+  Covers: TR-PLANNED-013A
+- TEST-MCP-BDP-TR-PLANNED-CORE-014: Acceptance tests for TR-PLANNED-CORE-014.
+  Scope: layer-1+
+  Status: Planned. Evidence: Unverified. Added 2026-09-27 so a tester can implement the acceptance record. Do not read this status as Complete.
+  **Acceptance Criteria:**
+  - [ ] Given the technical contract, when the implementation is exercised, then problem+JSON response factory for model binding failures - AddControllers().ConfigureApiBehaviorOptions installs an InvalidModelStateResponseFactory that produces application/problem+json responses for body-binding failures on /mcpserver/* endpoints.
+  - [ ] Given the technical contract, when the implementation is exercised, then the factory strips the action parameter name (dto, body, turn) from the errors keys, replacing them with $ so callers see the canonical JSON root marker instead of a misleading wrapper field name.
+  - [ ] Given the technical contract, when the implementation is exercised, then sessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation to keep the response shape uniform.
+  Covers: TR-PLANNED-CORE-014
