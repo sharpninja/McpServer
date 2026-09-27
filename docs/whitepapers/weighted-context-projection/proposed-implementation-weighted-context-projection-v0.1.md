@@ -1,16 +1,16 @@
 # Weighted Context Projection — Proposed Implementation
 
 **Document:** proposed-implementation-weighted-context-projection-v0.1.md
-**Version:** v0.1.18
+**Version:** v0.1.19
 **Status:** Proposed. Requires operator approval before any build work begins.
-**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.23) and `addendum-retrospective-linking-and-goal-metrics-v0.1.md` (v0.1.20)
+**Companion to:** `whitepaper-weighted-context-projection-v0.1.md` (v0.1.24). Linking design is in that paper (§13 through §24 and Appendix A). `addendum-retrospective-linking-and-goal-metrics-v0.1.md` is a stub.
 **Code baseline:** `main` @ `e7c43a125e1bb4837b5b9b9d4021ae2b592f931f`
-**Date:** 2026-09-20 (revised 2026-09-26, v0.1.18)
+**Date:** 2026-09-20 (revised 2026-09-27, v0.1.19)
 
 > **Cross-reference convention.** `WP §N` refers to a section of the whitepaper. A bare
-> `§N` refers to a section of *this* document. `ADD §N` refers to
-> `addendum-retrospective-linking-and-goal-metrics-v0.1.md`. The numbering schemes overlap, so the
-> prefix is load-bearing.
+> `§N` refers to a section of *this* document. Former addendum section numbers resolve once,
+> in WP §13. Live references use the whitepaper numbers: former ADD §6.4 is WP §19.4,
+> former ADD §7.4 is WP §20.4, and former ADD §12 is WP Appendix A.
 
 ## 1. Purpose and standing
 
@@ -27,7 +27,7 @@ as a statement of fact about the present, and the disagreement is recorded as a 
 to be made — not as a defect in the design. No build was run and no tests were executed
 for this document.
 
-> **Traceability script limits.** `scripts/Validate-RequirementsTraceability.ps1` covers present identifiers only. `FR-` and `TR-` present identifiers are `##` headings. `TEST-` present identifiers are tokens in `Testing-Requirements.md`, not headings. Default mode fails when a present `## FR-` heading is absent from the mapping or the matrix. Default mode warns, and can still pass, when a present `## TR-` heading or a present `TEST-` token is absent from the matrix. `-StrictTrAndTestCoverage` makes those TR and TEST gaps fail. Deleting a definition while retaining the mapping or matrix rows can pass. The script does not check orphan rows, acceptance catalogs, named test methods, or test adequacy. The substantive statement is ADD §6.4. The same box is in the whitepaper, after Scope.
+> **Traceability script limits.** `scripts/Validate-RequirementsTraceability.ps1` covers present identifiers only. `FR-` and `TR-` present identifiers are `##` headings. `TEST-` present identifiers are tokens in `Testing-Requirements.md`, not headings. Default mode fails when a present `## FR-` heading is absent from the mapping or the matrix. Default mode warns, and can still pass, when a present `## TR-` heading or a present `TEST-` token is absent from the matrix. `-StrictTrAndTestCoverage` makes those TR and TEST gaps fail. Deleting a definition while retaining the mapping or matrix rows can pass. The script does not check orphan rows, acceptance catalogs, named test methods, or test adequacy. The substantive statement is WP §19.4. The same box is in the whitepaper, after Scope.
 >
 > **Qualification prerequisites.** Implemented WCP behavior, measured efficacy, operator approval, and independent operational HV / MCP audit closure remain qualification prerequisites. A documentation review does not establish those.
 
@@ -499,7 +499,7 @@ in SessionLog. The refused absent span is not a mandatory member. Spill unmarked
 invalidation stub to the marker. Fail closed if the mandatory set cannot fit: prefix,
 standing memories, pins with their markers, each admitted live tool payload or its omission
 marker, the user turn, and every active harm, invalidation, or dependency-gap marker
-(ADD §7.4). Do not omit those active markers, do not truncate pins, do not
+(WP §20.4). Do not omit those active markers, do not truncate pins, do not
 keep a retired marker in the mandatory set, and do not expand an omitted turn only because
 residual capacity grew (WP §6 step 5). What remains open is only which in-progress dialog
 items count as the most recent tool results that must survive verbatim inside the turn, and
@@ -714,7 +714,7 @@ Mapped **1:1 to the roadmap phases** in §8. Cross-cutting constraints listed af
 
 | Rec | Maps to | Action |
 | --- | --- | --- |
-| **R0** | **Phase 0** | Treat compaction / context loss as the primary problem; complete operator review of the whitepaper and of this proposal; run the operational Perplexity HV gate when unblocked (that gate is still pending an API key). The secondary document pass in ADD §12 is a separate finding list and is not that gate. Keep the durable memory layer as the cross-session companion, not the turn ledger. |
+| **R0** | **Phase 0** | Treat compaction / context loss as the primary problem; complete operator review of the whitepaper and of this proposal; run the operational Perplexity HV gate when unblocked (that gate is still pending an API key). The secondary document pass in WP Appendix A is a separate finding list and is not that gate. Keep the durable memory layer as the cross-session companion, not the turn ledger. |
 | **R1** | **Phase 1** | Extend MCP `sessionlog_*` with weight / pin / projection metadata (prefer extend over new store); ship offline projection simulator with the schema fields and I/O in §8 Phase 1 exit criteria. |
 | **R2** | **Phase 2** | Spike Option C (outer orchestrator + one Claude or Grok sessionless CLI oneshot) early—before over-investing in in-host projection theater. Meet the Phase 2 spike acceptance checklist in §8.1. |
 | **R3** | **Phase 3** | Keep Option A PreCompact fallback for hook-rich hosts (Claude / Grok / Copilot) during transition; measure re-paste rate vs baseline. |
@@ -761,7 +761,7 @@ Explicitly **not** attempted in this proposal or the Phase 0–2 decision window
 - Provider-metered A/B cost studies or published “token savings %”
 - New SessionLog implementation code or production migrations (Phase 1 may prototype schema offline only)
 - Inventing additional literature beyond the frozen citation list in WP §12
-- Claiming the operational Perplexity HV gate complete while its API key remains missing post-reseed. The ADD §12 secondary document pass is not that gate
+- Claiming the operational Perplexity HV gate complete while its API key remains missing post-reseed. The secondary document pass in WP Appendix A is not that gate
 - Publishing operator `add-profile` / standing-rules profile files publicly
 
 ---
@@ -806,7 +806,7 @@ Concrete checklist for tomorrow—no need to re-derive the design:
 - [ ] **Approve or reject Option C** as the primary Phase 2 spike target (Claude or Grok CLI sessionless oneshot; prompt-blob control, not full `messages[]` unless that CLI exposes it).
 - [ ] **Approve Phase 1 SessionLog path:** extend existing MCP `sessionlog_*` with weight / pin / projection metadata **vs** stand up a new store (default recommendation: extend).
 - [ ] **Confirm success metric:** zero operator re-paste of constraints / paths / acceptance criteria after reproject (or compact fallback)—not estimator token deltas; not provider-metered savings claims from `memory-bench-whitespace`.
-- [ ] **Note:** The operational Perplexity HV gate is still **pending API key** after box reseed. Do not treat that gate as done. The secondary document pass in ADD §12 is a separate finding list and is not this gate.
+- [ ] **Note:** The operational Perplexity HV gate is still **pending API key** after box reseed. Do not treat that gate as done. The secondary document pass in WP Appendix A is a separate finding list and is not this gate.
 - [ ] **Note:** Full 19-file `add-profile` restore still needed when PAYTON-LEGION2 reconnects; standing rules currently restored from durable memory only. Never publish profile files publicly.
 - [ ] **Skim related-work table** for fairness (especially PACE proximity + re-admit gap); literature list is frozen for v0.1.x—no invented papers.
 
@@ -833,7 +833,7 @@ Concrete checklist for tomorrow—no need to re-derive the design:
    invocation is its own generation snapshot (WP §6.1), including the tombstone set, and
    `sendFence` is the commit point: final read and transport handoff are one critical section. It charges live content, spills unmarked unpinned content
    first, keeps active harm and invalidation markers, and fails closed if the mandatory
-   set cannot fit. Retired markers are not in that set (ADD §7.4). Pins and active markers
+   set cannot fit. Retired markers are not in that set (WP §20.4). Pins and active markers
    stay expanded or marked as WP §6.2 requires. The user turn this call exists to deliver
    stays in the mandatory set. A live tool result joins that set only after WP §6.3
    pre-admission. A result the renderer has measured as entirely inside an expanded pin or
@@ -891,6 +891,7 @@ Line numbers are accurate as of the baseline commits and will drift.
 
 | Version | Date (CT) | Notes |
 | --- | --- | --- |
+| v0.1.19 | 2026-09-27 | Consistency with WP v0.1.24. Former addendum sections retargeted: traceability substance is WP §19.4, active warnings are WP §20.4, and the secondary document pass is WP Appendix A. The alias table is WP §13. The addendum file is a stub. No new runtime design. No change to the packing-step floor or to §5.1 pre-admission. Residual Astra P2-12 stays claimed remediation pending re-review, not an AGREE. No Astra receipt on `2b70dcbe` or `ad1941a` closes it. The receipted Astra AGREE 98 remains `20260926-122217-ct` on tip `24416845`. P3-02 stays closed. Held closures stay closed, including P2-07, P2-10, and P2-11. Parked Perplexity findings P1-02, P2-02, and P2-03 stay parked. Operational Perplexity HV remains pending an API key. |
 | v0.1.18 | 2026-09-26 | Consistency with WP v0.1.23 / ADD v0.1.20. Residual Astra P2-12 after tip `a26cbdbe` (receipt `20260926-145009-ct`, DISAGREE 97/100). §5.1 no longer treats an unmeasurable overlap as full retention. Unproven bytes take the omission marker or the call is refused. Measured full retention still counts once with no marker. P3-02 stays closed. No change to the packing-step floor. Claimed remediation pending re-review, not an AGREE |
 | v0.1.17 | 2026-09-26 | Consistency with WP v0.1.22 / ADD v0.1.19. Astra re-review of tip `6b395a4b` (receipt `20260926-142519-ct`, DISAGREE 97/100). §5.1, Option C, §8.1, and open question 7 follow the WP §6.3 overlap rule: bytes already inside an expanded pin are counted once and do not take an omission marker. §7 and §9 separate that secondary document pass from the operational Perplexity gate, which remains pending an API key. No change to the packing-step floor. Claimed remediation of Astra P2-12 and P3-02 pending re-review, not an AGREE. The 23 prior Astra closures stay closed |
 | v0.1.16 | 2026-09-26 | Consistency with WP v0.1.21 / ADD v0.1.18. §5.1, Option C, §8.1, and open question 7 follow WP §6.3 pre-admission for an oversized live tool payload. Question 7 no longer leaves that admission open. Which in-progress dialog items are verbatim tool results, and how the renderer estimates them before the seal, stay open. No change to the packing-step floor. Secondary document pass accepted gaps, claimed remediation pending re-review, not an AGREE. Astra AGREE 98 on tip `24416845` stays the prior gate |
