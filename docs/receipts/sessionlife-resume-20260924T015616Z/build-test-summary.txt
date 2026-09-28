@@ -1,0 +1,7 @@
+ExitCode=0
+ElapsedSec=1878.6
+CaptureLen=67878
+NonZeroFailedLines=0
+NonZeroSkippedLines=0
+rg=C:\Users\kingd\scoop\shims\rg.exe
+mcpserver-repl=C:\Users\kingd\.dotnet\tools\mcpserver-repl.exe

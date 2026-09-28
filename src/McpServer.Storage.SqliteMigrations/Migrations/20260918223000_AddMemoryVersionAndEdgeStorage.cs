@@ -99,7 +99,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            throw new NotSupportedException("Memory version/edge storage is forward-only.");
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
         }
     }
 }

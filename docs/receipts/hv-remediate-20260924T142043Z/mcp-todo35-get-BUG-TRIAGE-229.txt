@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142333Z-730e
+  result:
+    id: BUG-TRIAGE-229
+    title: sessionlog_begin_turn SaveChanges fails after successful sessionlog_open
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - sessionlog_open persists only the SessionLogs row and succeeds. The immediately following sessionlog_begin_turn inserts the first SessionLogTurns row via UpsertTurnAsync and dies at SaveChanges with a non-retryable 500. Unlike SubmitAsync (used by open), UpsertTurnAsync does not run SessionLogSchemaGuard, does not retry UNIQUE races, and uses raw SaveChangesAsync. REST BeginTurn/UpsertLifecycleTurnAsync also does not catch DbUpdateException, so the EF message An error occurred while saving the entity changes escapes as internal_server_error retryable=false. The first-turn-after-open shape matches a SessionLogTurns schema or constraint failure that SessionLogs-only open never hits, especially missing PlanFile/TodoId columns (required, migration AddSessionLogTurnPlanFileAndTodoId) which the schema guard never probes.
+    - 'Triage group: triage-group-c935adecf602ba5e'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After sessionlog_open succeeds for a new Codex (or any agent) session, sessionlog_begin_turn with a valid requestId and planFile/todoId (including None/None) persists an in_progress turn and returns success without internal_server_error.'
+    - '- A DbUpdateException during begin_turn is classified as persistence_error or conflict with details.inner set to the provider text, retryable only for SQLITE_BUSY, and is never returned as internal_server_error with the raw EF saving-entity-changes message.'
+    - '- If SessionLogTurns is missing PlanFile or TodoId (or other required turn columns), begin_turn fails closed with pending_migration before SaveChanges, matching the SessionLogs agent-header guard used by open/query.'
+    - '- A UNIQUE constraint on SessionLogTurns (SessionLogId, RequestId) during begin_turn is retried as an update of the existing turn, the same way SubmitAsync retries SessionLogs UNIQUE races.'
+    - 'Implementation notes:'
+    - '- Primary persist path: FwhMcpTools.SessionLogBeginTurn -> UpsertLifecycleTurnToolAsync -> SessionLogService.UpsertTurnAsync -> _db.SaveChangesAsync. Open path: OpenSessionAsync -> SubmitAsync (schema guard, SaveChangesBudgetedAsync, UNIQUE retry).'
+    - '- REST gap: SessionLogController.UpsertLifecycleTurnAsync catches only ArgumentException and InvalidOperationException. SubmitAsync also catches DbUpdateException. An uncaught DbUpdateException becomes HTTP 500 internal_server_error retryable=false via GlobalExceptionHandlerMiddleware fallback/detail sanitization.'
+    - '- Schema gap: SessionLogSchemaGuard probes only SessionLogs AgentSession header columns. SessionLogTurns.PlanFile and TodoId are required (SQLite snapshot unique index SessionLogId+RequestId). QueryAsync maps missing header columns to SessionLogSchemaPendingMigrationException; UpsertTurnAsync does not.'
+    - '- Happy-path coverage already exists in SessionLogLifecycleToolErrorTests.SessionLogBeginTurn_NoneNone_ReturnsSuccess on an in-memory EnsureCreated schema. Add a SQLite predecessor-schema test (open succeeds, begin must not 500) and a REST BeginTurn DbUpdateException envelope test.'
+    - '- Do not treat this as a requestId format bug: req-20260916T170000Z-commit-valhalla-dependency matches SessionLogIdentifierValidator.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

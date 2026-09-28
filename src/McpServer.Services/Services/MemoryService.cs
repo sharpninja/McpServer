@@ -283,7 +283,11 @@ public sealed partial class MemoryService : IMemoryService
             return new MemoryMutationResult(false, $"Memory '{normalizedId}' not found.", FailureKind: MemoryMutationFailureKind.NotFound);
 
         var item = MemoryLayerMapper.ToItem(entity);
-        _db.Memories.Remove(entity);
+        var entry = _db.Entry(entity);
+        entry.Property<bool>("IsDeleted").CurrentValue = true;
+        entry.Property<DateTimeOffset?>("DeletedAtUtc").CurrentValue = DateTimeOffset.UtcNow;
+        entry.Property<string?>("DeletedBy").CurrentValue = "MemoryService";
+        entry.Property<string?>("DeleteReason").CurrentValue = "memory_remove";
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await MemorySessionLogHook.TryAppendAsync(_db, entity.Id, "memory_remove", cancellationToken).ConfigureAwait(false);
         _logger.LogInformation("Memory removed: {MemoryId}", entity.Id);

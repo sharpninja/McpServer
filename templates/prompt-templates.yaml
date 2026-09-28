@@ -467,7 +467,7 @@ templates:
       3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
       4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
-      ## PowerShell.MCP Command Routing
+      ## PowerShell.Mcp Command Routing
       For every PowerShell Core (`pwsh`) invocation on every operating system:
       - Use PowerShell.MCP 1.14.0 or newer from PSGallery as the command runner. Install or update it with `Install-PSResource PowerShell.MCP` when the agent environment does not provide a current version.
       - `execute_command` is the primary MCP tool for PowerShell cmdlets, CLI tools, navigation, builds, tests, file-system work, and process management. Do not use the removed `invoke_expression` name. Host-qualified names depend on the configured server key: for example, `mcp__powershell__execute_command` for `powershell` and `mcp__pwsh__execute_command` for `pwsh`.
@@ -481,7 +481,7 @@ templates:
       - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
       - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
       - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
-      - For text reads and edits inside PowerShell.MCP, use `Show-TextFiles`, `Add-LinesToFile`, `Update-LinesInFile`, `Update-MatchInFile`, and `Remove-LinesFromFile`; pass literal content through `var1` to `var4`. Version 1.12.0 and newer stage replacements beside the target, so do not apply the obsolete same-volume `TEMP`/`TMP` workaround. Re-read or diff every edit before claiming it landed.
+      - For text reads and edits inside PowerShell.MCP, use `Show-TextFiles`, `Add-LinesToFile`, `Update-LinesInFile`, `Update-MatchInFile`, and `Remove-LinesFromFile`; pass literal content through `var1` to `var4`. Version 1.12.0 and newer stage replacements beside the target, so do not apply the obsolete same volume `TEMP`/`TMP` workaround. Re-read or diff every edit and verify the edit landed before claiming it landed.
       ## Byrd Development Process
       `Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process` refer to `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`.
 

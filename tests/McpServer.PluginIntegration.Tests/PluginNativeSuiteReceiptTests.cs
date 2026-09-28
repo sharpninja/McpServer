@@ -18,7 +18,7 @@ public sealed class PluginNativeSuiteReceiptTests
     {
         var repoRoot = FindRepositoryRoot();
         var catalog = PluginSessionLogCatalog.LoadAndValidate(repoRoot);
-        var receipt = PluginNativeSuiteReceipt.LoadLatest(repoRoot);
+        var receipt = PluginNativeSuiteReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(repoRoot));
         Assert.Equal(8, catalog.Count);
         Assert.Equal(8, receipt.Plugins.Count);
         foreach (var scenario in catalog)
@@ -43,7 +43,7 @@ public sealed class PluginNativeSuiteReceiptTests
     {
         var repoRoot = FindRepositoryRoot();
         var catalog = PluginSessionLogCatalog.LoadAndValidate(repoRoot);
-        var receipt = PluginNativeSuiteReceipt.LoadLatest(repoRoot);
+        var receipt = PluginNativeSuiteReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(repoRoot));
         Assert.Equal(8, receipt.AfterSync.Count);
         foreach (var scenario in catalog)
         {
@@ -64,7 +64,7 @@ public sealed class PluginNativeSuiteReceiptTests
     [Fact]
     public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()
     {
-        var receipt = PluginNativeSuiteReceipt.LoadLatest(FindRepositoryRoot());
+        var receipt = PluginNativeSuiteReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(FindRepositoryRoot()));
         Assert.False(string.IsNullOrWhiteSpace(receipt.Branch));
         Assert.Matches("^[0-9a-f]{40}$", receipt.Sha);
         Assert.Equal(0, receipt.UnrelatedCommitCount);

@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142344Z-6876
+  result:
+    id: BUG-TRIAGE-241
+    title: Session-log wrapper exits 1 with no diagnostic when appendDialog/completeTurn persist is queued
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - 'A 12834-character Nashville review body was already confirmed on the server via QueryAsync. The following workflow.sessionlog.appendDialog/completeTurn sequence failed with only Plugin command failed with exit code 1. Live status was available with pendingCount 1, failsafeCount 1, quarantine 0, and the turn was still unclaimed. That matches the plugin degrade path: repl-invoke.ps1 writes a failsafe record then returns false and exits 1 without printing the persist message, while Invoke-McpPlugin.ps1 throws using stdout only and drops stderr. The queued record is retained; completion is not durable until drain/retry succeeds.'
+    - 'Triage group: triage-group-6b33badacd78a229'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When appendDialog or completeTurn persist times out or returns HTTP 503, the plugin wrapper surfaces a structured failure that includes degraded=true, queued=true, the failsafe path or pendingCount, and the persist message. It must not throw only Plugin command failed with exit code 1.'
+    - '- On that failure the current turn stays in_progress, the failsafe record remains pending (not quarantined), and workflow.failsafe.status reports pendingCount greater than 0.'
+    - '- After a successful failsafe drain or retry, completeTurn marks the turn completed and QueryAsync still returns the verified review body.'
+    - '- A non-zero plugin exit includes child stderr (and any LastReplPersistenceDetails message) in the wrapper error payload, not only stdout.'
+    - 'Implementation notes:'
+    - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog timeout/503 branch writes failsafe and returns false with no Console.Error line. Invoke-WorkflowCompleteTurn also returns false with no diagnostic when Invoke-ReplPersistTurn returns false; the degraded message is emitted only after a successful persist.'
+    - '- plugins/core/lib-ps/Invoke-McpPlugin.ps1 appends stdout to the thrown exit-code message and omits stderr, so even written diagnostics are dropped if the host only catches the exception.'
+    - '- Recover the existing queued session_submit/session_dialog record with failsafe drain, then retry completeTurn against the same requestId and confirm server status. Do not treat the already-verified QueryAsync body as lost.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

@@ -251,6 +251,11 @@ public sealed class SessionLogController : ControllerBase
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             return ClassifiedError(ex);
         }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return ClassifiedError(ex);
+        }
     }
 
     /// <summary>

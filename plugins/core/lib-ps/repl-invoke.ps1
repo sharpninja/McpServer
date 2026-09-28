@@ -137,13 +137,25 @@ function Complete-ReplBeginTurnAfterPersist {
         [hashtable]$TurnState = $null
     )
     if (Test-ReplBeginTurnDegradedQueued -Persisted $Persisted -Degraded $Degraded) {
-        if ($CurrentTurnFile -and $TurnState) {
-            $lines = @(
-                "turnRequestId: $($TurnState.turnRequestId)"
-                "sessionId: $($TurnState.sessionId)"
-                "status: in_progress"
-            )
-            Set-Content -LiteralPath $CurrentTurnFile -Value ($lines -join [Environment]::NewLine) -Encoding utf8
+        # FR-MCP-SESSIONLIFE-001: keep the turn file already written. Record degraded
+        # on that object. Do not replace queryText, planFile, todoId, or audit fields.
+        if ($CurrentTurnFile) {
+            if (Test-Path -LiteralPath $CurrentTurnFile) {
+                $text = [System.IO.File]::ReadAllText($CurrentTurnFile)
+                if ($text -notmatch '(?m)^degraded:\s*') {
+                    if (-not $text.EndsWith("`n") -and -not $text.EndsWith("`r`n")) { $text += "`n" }
+                    $text += "degraded: true`n"
+                }
+                [System.IO.File]::WriteAllText($CurrentTurnFile, $text)
+            } elseif ($TurnState) {
+                $lines = @(
+                    "turnRequestId: $($TurnState.turnRequestId)"
+                    "sessionId: $($TurnState.sessionId)"
+                    'status: in_progress'
+                    'degraded: true'
+                )
+                [System.IO.File]::WriteAllText($CurrentTurnFile, ($lines -join "`n") + "`n")
+            }
         }
         return @{ ok = $true; degraded = $true; failsafeRetained = (Test-Path -LiteralPath $FailsafePath) }
     }
@@ -174,6 +186,8 @@ function Get-ReplOpenSessionStatePath {
 }
 
 function Get-ReplCompleteTurnPersistSessionId {
+    # Do not overwrite it with the rotated active session id. A cached turn
+    # session id is the persist target. The active id is only a fallback.
     param(
         [string]$CurrentTurnSessionId,
         [string]$ActiveSessionId
@@ -694,16 +708,22 @@ function Invoke-ReplRawCore {
         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
 
         $proc = [System.Diagnostics.Process]::Start($psi)
+        $budget = [System.Diagnostics.Stopwatch]::StartNew()
         $envFile = Join-Path (Get-ReplInvokeCacheDir) "envelope-$requestId.tmp"
         [System.IO.File]::WriteAllText($envFile, $envelope, [System.Text.Encoding]::UTF8)
-        try {
-            $fs = [System.IO.File]::OpenRead($envFile)
-            $fs.CopyTo($proc.StandardInput.BaseStream)
-            $fs.Close()
-        } finally {
+        $copyStream = [System.IO.File]::OpenRead($envFile)
+        $copyTask = $copyStream.CopyToAsync($proc.StandardInput.BaseStream)
+        $copyBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
+        if (-not $copyTask.Wait($copyBudget)) {
+            try { $copyStream.Dispose() } catch { }
+            try { $proc.Kill($true) } catch { }
+            try { [void]$proc.WaitForExit(2000) } catch { }
             Remove-Item $envFile -ErrorAction SilentlyContinue
+            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
         }
+        $copyStream.Dispose()
         $proc.StandardInput.Close()
+        Remove-Item $envFile -ErrorAction SilentlyContinue
 
         # Drain stdout BEFORE waiting for exit. With a redirected pipe, the
         # child blocks on stdout writes once the pipe buffer (~4 KB on
@@ -711,13 +731,15 @@ function Invoke-ReplRawCore {
         # streams the buffer concurrently and resolves when the child closes
         # stdout (which happens at process exit).
         $readTask = $proc.StandardOutput.ReadToEndAsync()
-        if (-not $readTask.Wait($timeout * 1000)) {
+        $readBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
+        if (-not $readTask.Wait($readBudget)) {
             try { $proc.Kill($true) } catch { }
             try { [void]$proc.WaitForExit(2000) } catch { }
             return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
         }
         $output = $readTask.Result
-        if (-not $proc.WaitForExit($timeout * 1000)) {
+        $exitBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
+        if (-not $proc.WaitForExit($exitBudget)) {
             try { $proc.Kill($true) } catch { }
             try { [void]$proc.WaitForExit(2000) } catch { }
             return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
@@ -906,7 +928,10 @@ function Test-ReplFailsafeBackendUnreachable {
         'Unable to resolve the active workspace cache',
         'backend_unavailable',
         'HTTP 503',
-        'http 503'
+        'http 503',
+        'database is locked',
+        'SQLITE_BUSY',
+        'SQLite Error 5'
     )
     foreach ($marker in $markers) {
         if ($Detail -like "*$marker*") { return $true }
@@ -942,6 +967,36 @@ function Move-ReplFailsafeToQuarantine {
     catch {
         [Console]::Error.WriteLine("Failsafe quarantine failed for '$Path': $($_.Exception.Message)")
         return ''
+    }
+}
+
+function Repair-ReplFailsafeQueuedRecord {
+    param([Parameter(Mandatory)]$Document)
+
+    $script:ReplFailsafeRepaired = $false
+    if ($Document -isnot [System.Collections.IDictionary]) { return }
+    if (-not $Document.Contains('params') -or $Document['params'] -isnot [System.Collections.IDictionary]) { return }
+    $params = $Document['params']
+    if (-not $params.Contains('turns')) { return }
+    $turns = $params['turns']
+    if ($turns -is [System.Collections.IDictionary]) {
+        $ordered = [System.Collections.Generic.List[object]]::new()
+        foreach ($key in @($turns.Keys | Sort-Object { [int]$_ })) {
+            $turn = $turns[$key]
+            if ($turn -is [System.Collections.IDictionary]) {
+                if (-not $turn.Contains('planFile') -or [string]::IsNullOrWhiteSpace([string]$turn['planFile'])) { $turn['planFile'] = 'None' }
+                if (-not $turn.Contains('todoId') -or [string]::IsNullOrWhiteSpace([string]$turn['todoId'])) { $turn['todoId'] = 'None' }
+            }
+            $ordered.Add($turn)
+        }
+        $params['turns'] = $ordered
+        $script:ReplFailsafeRepaired = $true
+    } elseif ($turns -is [System.Collections.IEnumerable] -and $turns -isnot [string]) {
+        foreach ($turn in @($turns)) {
+            if ($turn -isnot [System.Collections.IDictionary]) { continue }
+            if (-not $turn.Contains('planFile') -or [string]::IsNullOrWhiteSpace([string]$turn['planFile'])) { $turn['planFile'] = 'None'; $script:ReplFailsafeRepaired = $true }
+            if (-not $turn.Contains('todoId') -or [string]::IsNullOrWhiteSpace([string]$turn['todoId'])) { $turn['todoId'] = 'None'; $script:ReplFailsafeRepaired = $true }
+        }
     }
 }
 
@@ -1033,6 +1088,7 @@ function Invoke-ReplFailsafeDrain {
                 if ($document -isnot [System.Collections.IDictionary]) {
                     $parseError = 'record root is not a YAML mapping'
                 } else {
+                    Repair-ReplFailsafeQueuedRecord -Document $document
                     if ($document.Contains('method')) { $method = [string]$document['method'] }
                     if ($document.Contains('params')) { $recordParams = $document['params'] }
                     if ([string]::IsNullOrWhiteSpace($method)) {
@@ -1051,7 +1107,9 @@ function Invoke-ReplFailsafeDrain {
             }
 
             $attempts = 0
-            if ($document.Contains('drainAttempts')) {
+            if ($script:ReplFailsafeRepaired) {
+                $attempts = 0
+            } elseif ($document.Contains('drainAttempts')) {
                 try { $attempts = [int]$document['drainAttempts'] } catch { $attempts = 0 }
             }
             if ($attempts -ge $MaxAttempts) {
@@ -1181,7 +1239,18 @@ function Invoke-ReplTurnUpsertParams {
     )
 
     $queryText = Get-ReplCurrentTurnQueryText
-    if (-not $queryText) { $queryText = $Title }
+    if ([string]::IsNullOrWhiteSpace($queryText)) {
+        # FR-MCP-SESSIONLIFE-001: complete/supersede recover a missing query.
+        # Update, append, and fail omit it so the server QueryText stays.
+        if ($Status -eq 'completed' -or $Status -eq 'canceled' -or $Status -eq 'cancelled') {
+            $queryText = Get-ReplCurrentTurnValue -Key 'queryTitle'
+            if ([string]::IsNullOrWhiteSpace($queryText)) {
+                $queryText = 'Recovered session-log turn'
+            }
+        } else {
+            $queryText = ''
+        }
+    }
     $timestamp = Get-ReplCurrentTurnValue -Key 'openedAt'
     if (-not $timestamp) { $timestamp = (Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ssZ") }
     $model = Get-ReplSessionStateValue -Key 'model'
@@ -1565,7 +1634,9 @@ function Assert-ReplCurrentTurnFresh {
     # TR-MCP-PLUGIN-012 AC1: session rotation rewrites current-turn.yaml sessionId
     # to the active session. Persist still uses Get-ReplCompleteTurnPersistSessionId
     # on the (now rebound) turn value. Fill an empty turn sessionId from active too.
-    if ($activeSessionId -and (($staleReasons -contains 'sessionId') -or -not $turnSessionId)) {
+    # FR-MCP-SESSIONLIFE-002: fill only an empty turn session id. Do not rebind
+    # a cached session onto a post-restart active session.
+    if ($activeSessionId -and -not $turnSessionId) {
         $turnState['sessionId'] = $activeSessionId
     }
     if ($snapshot) {
@@ -1579,6 +1650,44 @@ function Assert-ReplCurrentTurnFresh {
 
 function New-ReplBeginTurnRequestId {
     return ('req-{0}-turn-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff))
+}
+
+function Get-ReplServerDialogCount {
+    # TEST-MCP-SESSIONLIFE-005: count processingDialog items stored for one turn.
+    # Returns -1 when the query cannot see that turn, so complete does not invent a count.
+    param([Parameter(Mandatory)][string]$RequestId)
+
+    $meta = Get-ReplSessionMeta
+    if (-not $meta) { return -1 }
+
+    try {
+        $callParams = [ordered]@{
+            agent = $meta.SourceType
+            limit = 25
+        }
+        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+        $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
+        if (-not $result.Success) { return -1 }
+
+        $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
+        $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
+        $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
+        if ($null -eq $details) { $details = $payload }
+        $items = Get-ReplObjectValue -InputObject $details -Name 'items'
+        foreach ($session in @($items)) {
+            if ([string](Get-ReplObjectValue -InputObject $session -Name 'sessionId') -ne $meta.SessionId) { continue }
+            foreach ($turn in @((Get-ReplObjectValue -InputObject $session -Name 'turns'))) {
+                if ([string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') -ne $RequestId) { continue }
+                $dialog = Get-ReplObjectValue -InputObject $turn -Name 'processingDialog'
+                if ($null -eq $dialog) { return 0 }
+                return @($dialog).Count
+            }
+        }
+    } catch {
+        return -1
+    }
+
+    return -1
 }
 
 function Get-ReplServerTurnTitle {
@@ -1693,10 +1802,15 @@ function Invoke-WorkflowBeginTurn {
     $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
     $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
     $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
+    $cachedPlan = Get-ReplCurrentTurnValue -Key 'planFile'
+    $cachedTodo = Get-ReplCurrentTurnValue -Key 'todoId'
+    $cachedDegraded = Get-ReplCurrentTurnValue -Key 'degraded'
     $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
-    if (-not $isReopen) {
-        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
-        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    $isDegradedTurn = $cachedDegraded -match '^(?i:true|1)$'
+    $isDurableReopen = $isReopen -and -not $isDegradedTurn
+    if (-not $isDurableReopen) {
+        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedPlan)) { $cachedPlan } else { 'None' }) }
+        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedTodo)) { $cachedTodo } else { 'None' }) }
     }
 
     $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
@@ -1715,7 +1829,7 @@ function Invoke-WorkflowBeginTurn {
         auditCommits = 0
         queryText = $queryText
     }
-    if (-not $isReopen) {
+    if (-not $isDurableReopen) {
         $turnState['planFile'] = $planFile
         $turnState['todoId'] = $todoId
     }
@@ -1738,8 +1852,10 @@ function Invoke-WorkflowBeginTurn {
         if ($seedSessionTitle) {
             Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
         }
-        if ($isReopen) {
+        if ($isDurableReopen) {
             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+        } elseif ($isReopen) {
+            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
         } else {
             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
         }
@@ -1792,6 +1908,12 @@ function Invoke-WorkflowAppendActions {
     }
 
     if ($ParamsYaml -and $ParamsYaml.Trim()) {
+        $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
+        $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
+        if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
+            [Console]::Error.WriteLine("workflow.sessionlog.appendActions refused requestId '$explicitRequest' because the current turn is '$cachedRequest'.")
+            return $false
+        }
         $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
         if ($added -gt 0) {
             Update-ReplTurnCacheEdits -Increment $added | Out-Null
@@ -1808,9 +1930,21 @@ function Invoke-WorkflowAppendActions {
         # TR-MCP-REPL-015: send the turn title only when explicitly set this call;
         # otherwise omit so a stale cache title cannot clobber the server value.
         $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
-        $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Actions appended.' `
-            -ActionsYaml $actionsBlock
+            -ActionsYaml $actionsBlock)
+        if (-not $persisted) {
+            $queued = $false
+            if ($script:LastReplPersistenceDetails) {
+                $queued = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'queued')
+            }
+            if ($queued) {
+                [Console]::Error.WriteLine("workflow.sessionlog.appendActions queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+                return $true
+            }
+            [Console]::Error.WriteLine("workflow.sessionlog.appendActions did not persist '$reqId' and no failsafe was retained.")
+            return $false
+        }
     }
     return $true
 }
@@ -1889,19 +2023,39 @@ function Invoke-WorkflowAppendDialog {
 
     $combined = "$($result.Output) $($result.Error)"
     if ($combined -match 'not_found|not found|HTTP 404|http 404') {
+        $degradedTurn = Get-ReplTurnCacheField -Field 'degraded'
+        if ($degradedTurn -eq 'true' -or $degradedTurn -eq $true) {
+            $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
+            $script:LastReplPersistenceDetails = [ordered]@{
+                persisted = $false
+                degraded = $true
+                queued = $true
+                persistenceStrategy = 'failsafe-queue'
+                method = 'client.SessionLog.AppendDialogAsync'
+                requestId = $reqId
+                failsafePath = [string]$failsafe
+                message = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
+            }
+            [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
+            return $true
+        }
         [Console]::Error.WriteLine("workflow.sessionlog.appendDialog turn not found (retryable false); failsafe not used. $($result.Error)$($result.Output)")
         return $false
     }
     if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
-        $null = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
+        $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
         $script:LastReplPersistenceDetails = [ordered]@{
             persisted = $false
             degraded = $true
             queued = $true
             persistenceStrategy = 'failsafe-queue'
-            message = 'appendDialog persist timed out or returned HTTP 503; dialog failsafe retained.'
+            method = 'client.SessionLog.AppendDialogAsync'
+            requestId = $reqId
+            failsafePath = [string]$failsafe
+            message = "appendDialog persist timed out or returned HTTP 503; dialog failsafe retained requestId=$reqId"
         }
-        return $false
+        [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
+        return $true
     }
 
     [Console]::Error.WriteLine("workflow.sessionlog.appendDialog server call failed: $($result.Error)$($result.Output)")
@@ -1964,13 +2118,24 @@ function Invoke-WorkflowUpdateTurn {
     # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     try {
-        return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText $responseText `
             -Interpretation $interpretation -TokenCount $tokenCount -Tags $tags -ContextList $contextList)
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
         return $false
     }
+    if ($persisted) { return $true }
+    $queued = $false
+    if ($script:LastReplPersistenceDetails) {
+        $queued = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'queued')
+    }
+    if ($queued) {
+        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+        return $true
+    }
+    [Console]::Error.WriteLine("workflow.sessionlog.updateTurn did not persist '$reqId' and no failsafe was retained.")
+    return $false
 }
 
 function Invoke-WorkflowCompleteTurn {
@@ -2017,6 +2182,11 @@ function Invoke-WorkflowCompleteTurn {
     }
     if (-not $persisted) {
         return $false
+    }
+
+    $serverDialogCount = Get-ReplServerDialogCount -RequestId $reqId
+    if ($serverDialogCount -ge 0) {
+        Set-ReplTurnCacheField -Field 'auditDialog' -Value ([string]$serverDialogCount) | Out-Null
     }
 
     Update-ReplTurnCacheStatus -NewStatus 'completed' | Out-Null
@@ -2106,7 +2276,9 @@ function Invoke-WorkflowFailsafeDrain {
     }
 
     $summary = Invoke-ReplFailsafeDrain -MaxRecords $maxRecords -MaxAttempts $maxAttempts
-    $script:ReplFailsafeDrainCompleted = $true
+    if (-not $summary.aborted) {
+        $script:ReplFailsafeDrainCompleted = $true
+    }
     return [pscustomobject]@{
         Success = (-not $summary.aborted)
         Output = (ConvertTo-Yaml -Data $summary -Options WithIndentedSequences)

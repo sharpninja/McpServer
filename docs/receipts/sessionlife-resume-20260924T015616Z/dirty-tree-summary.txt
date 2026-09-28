@@ -1,0 +1,53 @@
+branch=grok/session-lifecycle
+HEAD=6a565d87
+porcelainCount=50
+ M docs/benchmarks/results/memory-bench-20260919T091800Z.json
+ M docs/benchmarks/results/memory-bench-20260919T091800Z.md
+ M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json
+ M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md
+ M plugins/core/lib-ps/McpPluginShim.psm1
+ M plugins/core/lib-ps/plugin-hook.ps1
+ M plugins/core/lib-ps/repl-invoke.ps1
+ M plugins/core/lib-ps/resolve-cache-dir.ps1
+ M plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1
+ M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
+ M src/McpServer.Services/Services/MemoryService.cs
+ M src/McpServer.Services/Services/SessionLogService.cs
+ M src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs
+ M src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs
+ M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs
+ M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs
+ M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs
+ M src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs
+ M src/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs
+ M src/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs
+ M src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs
+ M src/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs
+ M src/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs
+ M src/McpServer.Storage/McpDbContext.cs
+ M src/McpServer.Support.Mcp/Controllers/SessionLogController.cs
+ M templates/prompt-templates.yaml
+ M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
+ M tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+ M tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs
+ M tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
+ M tests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs
+ M tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs
+?? docs/receipts/_sessionlife-resume-latest.txt
+?? docs/receipts/hv/20260924T031139Z-sessionlife-resume.request.jsonl
+?? docs/receipts/hv/20260924T031139Z-sessionlife-resume.response.jsonl
+?? docs/receipts/sessionlife-resume-20260924T015616Z/
+?? plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1
+?? plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1
+?? plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1
+?? plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1
+?? src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs
+?? tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/
+?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs
+?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs
+?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs

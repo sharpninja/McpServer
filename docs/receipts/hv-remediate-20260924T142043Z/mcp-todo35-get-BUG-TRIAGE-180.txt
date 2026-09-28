@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142259Z-ceeb
+  result:
+    id: BUG-TRIAGE-180
+    title: Codex prompt hook reports turn-opened for a store-missing requestId
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - user-prompt-submit (Open-PluginTurn) treats workflow.sessionlog.beginTurn as success when persist is queued/degraded. beginTurn writes current-turn.yaml before SubmitAsync, then returns true on timeout/503 while the failsafe session_submit envelope is retained and the turn never lands in the session store. The hook still emits status turn-opened for that requestId (example req-20260904T022234Z-prompt-36ed). Later workflow.sessionlog.appendDialog posts client.SessionLog.AppendDialogAsync against the cached requestId, gets HTTP 404 not_found, and explicitly skips failsafe (retryable false). Incremental audit dialog is dropped even though the local turn remains in_progress.
+    - 'Triage group: triage-group-9aed94594cc7e59c'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After user-prompt-submit reports turn-opened for a requestId, either the session store contains that turn or the hook does not report turn-opened; a queued/degraded beginTurn must be surfaced as degraded rather than a durable open.'
+    - '- When current-turn.yaml is in_progress for a requestId that the store does not have, workflow.sessionlog.appendDialog must not return HTTP 404 not_found with failsafe refused. It must recover by persisting the missing turn then appending, or retain a replayable failsafe envelope, and the dialog items must not be lost.'
+    - '- A Codex prompt-submit that logs beginTurn queued/degraded followed by appendDialog must still produce durable dialog (store or failsafe) for that requestId.'
+    - 'Implementation notes:'
+    - '- plugins/core/lib-ps/plugin-hook.ps1 Open-PluginTurn reports turn-opened after beginTurn exit 0 and current-turn.yaml matching the new requestId. It does not inspect LastReplPersistenceDetails.degraded/queued.'
+    - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowBeginTurn writes current-turn.yaml, then Invoke-ReplPersistTurn. Timeout/503 sets degraded queued failsafe-queue and Complete-ReplBeginTurnAfterPersist returns ok=true with current-turn left in_progress, so beginTurn returns true.'
+    - "- Invoke-WorkflowAppendDialog uses incremental POST client.SessionLog.AppendDialogAsync. Combined output matching not_found|HTTP 404 logs 'turn not found (retryable false); failsafe not used' and returns false without Write-ReplFailsafe. Timeout/503 is the only appendDialog failsafe path."
+    - '- Fix at the seam: do not advertise a store-backed open until SubmitAsync (or failsafe drain) creates the turn; and/or on appendDialog 404, re-submit the cached turn then retry dialog (or queue a combined failsafe) instead of refusing persist.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

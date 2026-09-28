@@ -1,0 +1,121 @@
+1680|
+1681|    $sessionId = Get-ReplSessionStateValue -Key 'sessionId'
+1682|    if ([string]::IsNullOrWhiteSpace($sessionId)) {
+1683|        [Console]::Error.WriteLine("workflow.sessionlog.beginTurn requires session-state.yaml with sessionId. $(Get-ReplRecoveryGuidance)")
+1684|        return $false
+1685|    }
+1686|
+1687|    $requestId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
+1688|    if ([string]::IsNullOrWhiteSpace($requestId)) { $requestId = New-ReplBeginTurnRequestId }
+1689|    $queryTitle = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryTitle'
+1690|    if ([string]::IsNullOrWhiteSpace($queryTitle)) { $queryTitle = 'User prompt' }
+1691|    $queryText = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryText'
+1692|    if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
+1693|    $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
+1694|    $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+1695|    $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
+1696|    $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
+1697|    if (-not $isReopen) {
+1698|        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
+1699|        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+1700|    }
+1701|
+1702|    $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+1703|    $turnState = [ordered]@{
+1704|        turnRequestId = $requestId
+1705|        queryTitle = $queryTitle
+1706|        openedAt = $openedAt
+1707|        status = 'in_progress'
+1708|        sessionId = $sessionId
+1709|        codeEdits = 0
+1710|        lastBuildStatus = 'unknown'
+1711|        auditActions = 0
+1712|        auditDialog = 0
+1713|        auditDecisions = 0
+1714|        auditFiles = 0
+1715|        auditCommits = 0
+1716|        queryText = $queryText
+1717|    }
+1718|    if (-not $isReopen) {
+1719|        $turnState['planFile'] = $planFile
+1720|        $turnState['todoId'] = $todoId
+1721|    }
+1722|
+1723|    try {
+1724|        $snapshot = Get-MarkerFileSnapshot -StartDir (Resolve-ReplWorkspaceDirectory)
+1725|        $turnState['markerFilePath'] = $snapshot.markerFilePath
+1726|        $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+1727|    } catch {
+1728|    }
+1729|
+1730|    try {
+1731|        Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId $requestId
+1732|        Write-ReplCurrentTurnState -State $turnState
+1733|        # TR-MCP-REPL-015: seed the session title from the first turn only. Once
+1734|        # session-state has a title, later turns omit it (so the session is not
+1735|        # retitled to each new prompt); setSessionTitle changes it explicitly.
+1736|        $existingSessionTitle = Get-ReplSessionStateValue -Key 'title'
+1737|        $seedSessionTitle = ([string]::IsNullOrWhiteSpace($existingSessionTitle) -and -not [string]::IsNullOrWhiteSpace($queryTitle))
+1738|        if ($seedSessionTitle) {
+1739|            Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
+1740|        }
+1741|        if ($isReopen) {
+1742|            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+1743|        } else {
+1744|            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+1745|        }
+1746|        if (-not $persisted) {
+1747|            $degraded = $false
+1748|            if ($script:LastReplPersistenceDetails) {
+1749|                $degraded = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'degraded')
+1750|            }
+1751|            $failsafePath = ''
+1752|            if ($script:LastReplPersistenceDetails) {
+1753|                $failsafePath = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'failsafePath')
+1754|            }
+1755|            $turnFile = Get-ReplCurrentTurnFile
+1756|            $beginResult = Complete-ReplBeginTurnAfterPersist -Persisted $persisted -Degraded $degraded -FailsafePath $failsafePath -CurrentTurnFile $turnFile -TurnState @{
+1757|                turnRequestId = $requestId
+1758|                sessionId = $sessionId
+1759|            }
+1760|            if ($beginResult.degraded) {
+1761|                [Console]::Error.WriteLine("workflow.sessionlog.beginTurn queued/degraded for '$requestId'. Failsafe retained; current-turn remains active.")
+1762|                return $true
+1763|            }
+1764|            [Console]::Error.WriteLine("workflow.sessionlog.beginTurn did not confirm durable persistence for '$requestId'.")
+1765|            return $false
+1766|        }
+1767|        return $true
+1768|    } catch {
+1769|        [Console]::Error.WriteLine("workflow.sessionlog.beginTurn failed for '$requestId': $_")
+1770|        return $false
+1771|    }
+1772|}
+1773|
+1774|function Invoke-WorkflowAppendActions {
+1775|    param([string]$ParamsYaml)
+1776|    $turnFile = Get-ReplCurrentTurnFile
+1777|    if (-not (Test-Path $turnFile)) {
+1778|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendActions')
+1779|    }
+1780|    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.appendActions')) {
+1781|        return $false
+1782|    }
+1783|
+1784|    $added = 0
+1785|    $actionsBlock = ''
+1786|    if ($ParamsYaml) {
+1787|        $p = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
+1788|        $actionsBlock = Get-ReplNormalizedActionsBlock -ParamsYaml $p
+1789|        # Count only real filePath: fields (with value) for codeEdits. Substring matches in
+1790|        # descriptions must be ignored. Non-file actions (design_decision etc.) must persist.
+1791|        $added = ([regex]::Matches($p, '(?m)^\s*(?:-\s*)?filePath:\s*\S')).Count
+1792|    }
+1793|
+1794|    if ($ParamsYaml -and $ParamsYaml.Trim()) {
+1795|        $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
+1796|        if ($added -gt 0) {
+1797|            Update-ReplTurnCacheEdits -Increment $added | Out-Null
+1798|        }
+1799|        $actionC = ([regex]::Matches($ParamsYaml, '(?m)^\s*(?:-\s*)?type:')).Count
+1800|        $decC = ([regex]::Matches($ParamsYaml, '(?m)^\s*(?:-\s*)?type:\s*design_decision\b')).Count

@@ -73,6 +73,7 @@ public sealed class PluginHostProcessAdapter
         }
 
         environment["PLUGIN_AGENT_NAME"] = scenario.AgentSourceType;
+        environment["MCP_PLUGIN_ROOT"] = pluginRoot;
 
         var arguments = new List<string>();
         string executable;
@@ -186,8 +187,7 @@ public sealed class PluginHostProcessAdapter
     private static string ResolvePluginRoot(string repositoryName)
     {
         var repoRoot = FindRepositoryRoot();
-        var parent = Directory.GetParent(repoRoot)?.FullName
-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
         if (!Directory.Exists(pluginRoot))
         {

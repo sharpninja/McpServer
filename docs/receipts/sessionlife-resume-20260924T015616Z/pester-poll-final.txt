@@ -1,0 +1,9 @@
+PSVersion=7.6.5
+ElapsedSec=93.8
+Result=Passed
+TotalCount=180
+PassedCount=180
+FailedCount=0
+SkippedCount=0
+FailedBlocksCount=0
+FailedContainersCount=0

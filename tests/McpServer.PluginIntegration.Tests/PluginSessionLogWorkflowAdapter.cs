@@ -599,8 +599,7 @@ public sealed partial class PluginSessionLogWorkflowAdapter
         {
             if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
             {
-                var parent = Directory.GetParent(directory.FullName)?.FullName
-                    ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+                var parent = PluginSessionLogCatalog.SiblingPluginParent(directory.FullName);
                 var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
                 if (!Directory.Exists(pluginRoot))
                 {

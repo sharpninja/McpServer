@@ -1,0 +1,3 @@
+Quarantined 174 stale GrokCode failsafe pending YAML files to:
+F:\GitHub\McpServer\.mcpServer\failsafe\GrokCode\workspaces\RjpcR2l0SHViXE1jcFNlcnZlcg\quarantine-hv-remediate-20260924T0320
+Reason: failsafe round drain was blocking workflow.sessionlog.beginTurn (120s/item backlog). Invalid default-agent pendings already quarantined separately. No product code change. Look-before-delete: moved not deleted.

@@ -1,0 +1,8 @@
+﻿Durable=False
+Reason=PAYTON-DESKTOP SQL port 1433 flapped down after S0/TODO proofs; SessionLog.SubmitAsync returned internal_server_error; queryHistory backend_unavailable; subsequent health storage=unreachable and health GETs timing out
+FailsafePath=F:\GitHub\McpServer\.mcpServer\failsafe\GrokCode\workspaces\RjpcR2l0SHViXE1jcFNlcnZlcg\pending\20260924T142702Z-session_submit-0f98.yaml
+FailsafeNote=Submit bound to stale session GrokCode-20260924T003543Z-plugin-session rather than intended hv2c session (openSession local cache did not stick)
+LastAttemptSessionId=GrokCode-20260924T142658Z-hv2c
+LastAttemptRequestId=req-20260924T142658Z-hv2c-001
+Poll=12 attempts tcp=False storage=health_fail or unreachable
+TimestampUtc=20260924T143056Z

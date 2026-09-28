@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142320Z-1c47
+  result:
+    id: BUG-TRIAGE-205
+    title: Degraded beginTurn caches an uncommitted turn; appendDialog 404 refuses failsafe
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Invoke-WorkflowBeginTurn writes current-turn.yaml before the server commit. When persist fails as degraded/queued, Complete-ReplBeginTurnAfterPersist keeps that cache in_progress and beginTurn returns success (FR-MCP-171). The next workflow.sessionlog.appendDialog then calls client.SessionLog.AppendDialogAsync because the cache file exists (FR-MCP-170). SessionLogService throws Entry not found for the never-committed requestId, which surfaces as HTTP 404. Invoke-WorkflowAppendDialog matches not_found/HTTP 404 and explicitly skips Write-ReplFailsafe (retryable false). Session logging stays stuck on a ghost turn until an operator writes a supported failsafe by hand. The 404 classifier is correct for a truly missing turn; the defect is treating a degraded local cache as a durable server turn.
+    - 'Triage group: triage-group-6f8863a6fc9027e4'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After beginTurn persist fails as degraded or queued, current-turn.yaml must not cause later appendDialog to POST incremental dialog against a requestId the server never stored.'
+    - "- appendDialog against that ghost turn must not return false with 'turn not found (retryable false); failsafe not used' and must either create the turn (SubmitAsync or equivalent), replay the retained beginTurn failsafe then append, or queue a dialog/session failsafe."
+    - '- After that recovery, a following appendDialog or completeTurn on the same requestId succeeds without a manually written failsafe file.'
+    - '- A genuine appendDialog to a requestId that was never opened locally still classifies as not-found, retryable false, and does not write failsafe.'
+    - 'Implementation notes:'
+    - '- plugins/core/lib-ps/repl-invoke.ps1: Invoke-WorkflowBeginTurn writes the turn file then Complete-ReplBeginTurnAfterPersist keeps it when Test-ReplBeginTurnDegradedQueued is true; Invoke-WorkflowAppendDialog lines 1891-1893 refuse failsafe on not_found/HTTP 404.'
+    - "- src/McpServer.Services/Services/SessionLogService.cs AppendDialogAsync throws InvalidOperationException 'Entry not found: {sourceType}/{sessionId}/{requestId}' when no turn row exists."
+    - "- Do not weaken FR-MCP-170's true-missing-turn 404 rule. Gate the recovery on locally active/degraded current-turn.yaml (or a persisted=false marker) so only the ghost-turn path falls back to create-or-failsafe."
+    - '- Pester already locks degraded beginTurn cache retention (TriagePluginIdentity BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued). Add a follow-on case: degraded beginTurn then appendDialog must not take the 404 no-failsafe branch.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

@@ -30,8 +30,7 @@ public sealed class PluginHostProcessAdapterTests
         var repoRoot = FindRepositoryRoot();
         var scenario = PluginSessionLogCatalog.LoadAndValidate(repoRoot)
             .Single(row => row.HostKind == hostKind);
-        var parent = Directory.GetParent(repoRoot)?.FullName
-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
         var entrypointPath = Path.Combine(pluginRoot, scenario.Entrypoint.Replace('/', Path.DirectorySeparatorChar));
         var stdin = "{\"hostKind\":\"" + hostKind + "\",\"method\":\"workflow.sessionlog.beginTurn\"}";
@@ -77,6 +76,7 @@ public sealed class PluginHostProcessAdapterTests
         Assert.Equal(scenario.AgentSourceType, fake.LastRequest.Environment["PLUGIN_AGENT_NAME"]);
         var rootVariable = scenario.RequiredEnvironmentVariables.First(name => name.EndsWith("_PLUGIN_ROOT", StringComparison.Ordinal));
         Assert.Equal(pluginRoot, fake.LastRequest.Environment[rootVariable], StringComparer.OrdinalIgnoreCase);
+        Assert.Equal(pluginRoot, fake.LastRequest.Environment["MCP_PLUGIN_ROOT"], StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -152,8 +152,7 @@ public sealed class PluginHostProcessAdapterTests
         var repoRoot = FindRepositoryRoot();
         var scenario = PluginSessionLogCatalog.LoadAndValidate(repoRoot)
             .Single(row => row.HostKind == hostKind);
-        var parent = Directory.GetParent(repoRoot)?.FullName
-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
         var envelope = stdin ?? "{\"hostKind\":\"" + hostKind + "\",\"method\":\"workflow.sessionlog.beginTurn\"}";
         var fake = new FakePluginProcessRunner

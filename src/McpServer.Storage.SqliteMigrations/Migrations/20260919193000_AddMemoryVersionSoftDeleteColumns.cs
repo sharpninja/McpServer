@@ -28,7 +28,9 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            throw new NotSupportedException("Memory version soft-delete columns are forward-only.");
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+            // SQLite cannot emit DropColumn. Leaving the columns in place lets a
+            // later Down migration still run. Callers must not depend on removal.
         }
 
         private static void AddSoftDeleteColumns(MigrationBuilder migrationBuilder, string table)

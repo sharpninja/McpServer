@@ -5100,12 +5100,19 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
     It 'Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds' {
         . (Join-Path $script:LibRoot 'repl-invoke.ps1')
         $script:ReplFailsafeDraining = $true
+        $priorDrain = $env:REPL_FAILSAFE_DRAIN_TIMEOUT
+        $priorTimeout = $env:REPL_TIMEOUT
         try {
+            Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue
+            Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue
             $seconds = Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync'
-            $seconds | Should -BeGreaterThan 2
-            $seconds | Should -BeGreaterOrEqual 120
+            $seconds | Should -Be 120
+            $env:REPL_TIMEOUT = '180'
+            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Be 180
         } finally {
             $script:ReplFailsafeDraining = $false
+            if ($null -eq $priorDrain) { Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_FAILSAFE_DRAIN_TIMEOUT = $priorDrain }
+            if ($null -eq $priorTimeout) { Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_TIMEOUT = $priorTimeout }
         }
     }
 

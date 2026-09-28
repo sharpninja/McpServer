@@ -1,0 +1,46 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142153Z-27e0
+  result:
+    id: BUG-TRIAGE-082
+    title: Stop-gate completeTurn fails repeatedly though all session turns are completed
+    section: Backlog
+    priority: medium
+    done: true
+    note: DONE (D1, plugin core 1.74.0). Stop-gate now includes auditCommits in the audit-completeness sum and reconciles local turn vs server state. Server-side re-completion is idempotent (refuted the server-side hypothesis; cause was plugin-local). StopGateHardening.Tests.ps1 green. TR-MCP-PLUGIN-011.
+    description:
+    - >-
+      The PowerShell stop gate reports "workflow.sessionlog.completeTurn failed; current turn remains in_progress" on every turn end for workspace F:\GitHub\BBCrawler, and keeps recurring after manual remediation.
+
+
+      Verified via sessionlog_query: session ClaudeCode-20260715T054735Z-plugin-session has exactly 3 turns (ff2c, de19, 59f5), ALL status=completed. I also completed a dangling in_progress turn in the prior session (ClaudeCode-20260714T223639Z, req-20260714T223643Z-prompt-2051). No ClaudeCode turn remains in_progress in either session. Manual sessionlog_complete_turn calls succeed (turnIds 16535, 16537, 16331). The stop gate still fails identically after each.
+
+
+      Two duplicate-turn instances were observed for single prompts: de19+59f5 both opened for "1 -> 2 -> 3", and 2051+de2d both opened for "process claude.md" (de2d auto-closed, 2051 left open). Consistent with the known resume/dup-turn UpsertTurn hazard.
+
+
+      Likely root cause: the stop-gate auto-completeTurn either (a) re-targets an already-completed current turn (server rejects re-completion), or (b) submits a payload lacking a design decision/action/commit (server 400s per the completeTurn-requires-action-item rule), so it can never succeed regardless of turn state. A completeTurn that ALSO includes commits/filesModified as plain string arrays errors (only designDecisions-as-strings is accepted), which may be the same schema issue the hook hits.
+
+
+      Impact: cosmetic/log-gate only; the user's code task completed and verified. Blocked capability: clean automatic stop-gate turn closure.
+    - 'Triage group: triage-group-48e1e1eecc1aa4c7'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Investigate and resolve the grouped triage report.'
+    - '- Add or update validation that proves the triage issue is fixed.'
+    - '- Verify the workflow no longer reproduces this triage report.'
+    - 'Implementation notes:'
+    - '- Fallback TODO created because successful triage research output contained no JSON object.'
+    - "- Research validation error: Triage research output failed schema validation: 'I' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."
+    - '- Raw triage research output is preserved on run triage-run-b8e8cd1f8d68476187ddee6a4fd4ca1d.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

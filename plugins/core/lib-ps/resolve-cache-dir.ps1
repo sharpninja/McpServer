@@ -94,14 +94,20 @@ function Resolve-McpCacheDir {
         }
     }
 
+    $explicitWorkspace = @(
+        $env:MCP_WORKSPACE_PATH,
+        $env:MCPSERVER_WORKSPACE_PATH,
+        $env:CLAUDE_PROJECT_DIR
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) -and (Test-Path -LiteralPath $_ -PathType Container) } | Select-Object -First 1
+
+    if ([string]::IsNullOrWhiteSpace($StartPath) -and $explicitWorkspace) {
+        return (Join-McpWorkspaceCachePath -WorkspacePath ((Resolve-Path -LiteralPath $explicitWorkspace).ProviderPath))
+    }
+
     $startCandidates = if (-not [string]::IsNullOrWhiteSpace($StartPath)) {
         @($StartPath)
     } else {
         @(
-            $env:MCP_WORKSPACE_START_DIR,
-            $env:MCP_WORKSPACE_PATH,
-            $env:MCPSERVER_WORKSPACE_PATH,
-            $env:CLAUDE_PROJECT_DIR,
             $env:CODEX_CWD,
             (Get-Location).Path
         ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
@@ -158,12 +164,17 @@ function Get-McpFailsafeAgentSegment {
     [CmdletBinding()]
     param()
 
-    $agent = @(
-        $env:PLUGIN_AGENT_NAME,
-        $env:MCP_AGENT_NAME,
-        $env:PLUGIN_AGENT_DEFAULT,
-        $env:MCP_PLUGIN_HOST
-    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    $inheritedAgent = @($env:PLUGIN_AGENT_NAME, $env:MCP_AGENT_NAME) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ($env:MCP_PLUGIN_HOST -match '^(?i:codex)$' -and $inheritedAgent -match 'grok') {
+        $agent = 'Codex'
+    } else {
+        $agent = @(
+            $env:PLUGIN_AGENT_NAME,
+            $env:MCP_AGENT_NAME,
+            $env:PLUGIN_AGENT_DEFAULT,
+            $env:MCP_PLUGIN_HOST
+        ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    }
 
     if (-not $agent) {
         return (Get-McpCacheAgentKey)

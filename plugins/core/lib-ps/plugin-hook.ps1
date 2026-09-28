@@ -900,10 +900,12 @@ function Open-PluginTurn {
         return
     }
 
+    $degradedFlag = Get-YamlScalar -Path $turnFile -Key 'degraded'
+    $openStatus = if ($degradedFlag -eq 'true') { 'turn-opened-degraded' } else { 'turn-opened' }
     Write-PluginJson ([ordered]@{
         hookSpecificOutput = [ordered]@{
             hookEventName = 'UserPromptSubmit'
-            status = 'turn-opened'
+            status = $openStatus
             turnRequestId = $turnRequestId
             additionalContext = if ($env:MCP_CODEX_INTERNAL_TODO -eq '1' -or $env:MCPSERVER_CODEX_INTERNAL_TODO -eq '1' -or $env:CODEX_MCP_TODO -eq '1') {
                 "session log turn $turnRequestId is now active. MCP-backed internal TODO tracking is enabled. Continue the current task after any incidental triage submission."
@@ -925,24 +927,45 @@ function Close-PluginTurnIfNeeded {
     }
 
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+    $sessionAgeStale = $false
     if (Test-Path -LiteralPath $sessionFile) {
+        $cutoff = (Get-Date).ToUniversalTime().AddHours(-24)
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
-        if (-not $timestampText) { $timestampText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated' }
+        $updatedText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated'
+        $timestampStale = $false
+        $updatedStale = $true
+        $parsedTimestamp = [datetime]::MinValue
+        if ($timestampText -and [datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
+            $timestampStale = $parsedTimestamp.ToUniversalTime() -lt $cutoff
+        }
+        $parsedUpdated = [datetime]::MinValue
+        if ($updatedText -and [datetime]::TryParse($updatedText.Trim('"'), [ref]$parsedUpdated)) {
+            $updatedStale = $parsedUpdated.ToUniversalTime() -lt $cutoff
+        }
+        # A fresh lastUpdated does not clear a stale timestamp pin.
         if ($timestampText) {
-            $parsedTimestamp = [datetime]::MinValue
-            if ([datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
-                if ($parsedTimestamp.ToUniversalTime() -lt (Get-Date).ToUniversalTime().AddHours(-24)) {
-                    $requestId = if (Test-Path -LiteralPath $turnFile) { Get-YamlScalar -Path $turnFile -Key 'turnRequestId' } else { '' }
-                    Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
-                    return
-                }
-            }
+            $sessionAgeStale = $timestampStale
+        } else {
+            $sessionAgeStale = $updatedStale
         }
     }
 
     if (-not (Test-Path -LiteralPath $turnFile)) {
+        if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
+            Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
+        }
         Write-PluginJson ([ordered]@{})
         return
+    }
+
+    $status = Get-YamlScalar -Path $turnFile -Key 'status'
+    if ($sessionAgeStale -and $status -eq 'in_progress') {
+        $requestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
+        Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+        return
+    }
+    if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
+        Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
     }
 
     $status = Get-YamlScalar -Path $turnFile -Key 'status'

@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142350Z-ceeb
+  result:
+    id: BUG-TRIAGE-245
+    title: Degraded Codex beginTurn drops query text and blocks updateTurn
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - After a healthy marker rewrite, UserPromptSubmit calls workflow.sessionlog.beginTurn. When SubmitAsync is queued to failsafe (timeout or HTTP 503), beginTurn still returns success and Complete-ReplBeginTurnAfterPersist rewrites current-turn.yaml to only turnRequestId, sessionId, and status in_progress, dropping queryText and queryTitle. The begin failsafe record still has the prompt, but workflow.sessionlog.updateTurn does not accept queryText, omits queryTitle unless that call sets it, and submits queryText as an empty string. If the server turn is not created yet, that submit is a first persist with no planFile or todoId and SessionLogTurnContextValidator.ValidateForNewEntry rejects it. If the turn already exists, ApplyValue treats the empty queryText as supplied and clears the stored query. Replaying beginTurn is the only path that writes queryText again.
+    - 'Triage group: triage-group-5c25c7ead8bad7d3'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After UserPromptSubmit beginTurn for a request such as req-20260923T164803Z-prompt-ccb9 is queued to failsafe following a healthy marker rewrite, current-turn.yaml remains status in_progress and still contains the original queryText and queryTitle.'
+    - '- workflow.sessionlog.updateTurn on that turn succeeds, and the server turn with the same requestId is queryable with that same queryText, without replaying beginTurn.'
+    - '- An updateTurn persist does not store an empty queryText over a server turn that already has query text.'
+    - '- While the begin payload is still only in the failsafe queue, updateTurn does not fail for a missing planFile or todoId that the queued begin payload already captured.'
+    - 'Implementation notes:'
+    - '- Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1 replaces the full current-turn.yaml from Invoke-WorkflowBeginTurn with a three-field stub. Keep queryText, queryTitle, openedAt, planFile, todoId, and the marker snapshot on the degraded in_progress cache.'
+    - '- Invoke-ReplTurnUpsertParams copies query text only from the cache, then from Title. Invoke-WorkflowUpdateTurn leaves Title empty unless queryTitle is passed, and ReplYamlMessageValidator does not allow queryText on workflow.sessionlog.updateTurn. Omit an empty queryText from the SubmitAsync payload so SessionLogService.ApplyValue does not treat "" as supplied.'
+    - '- The begin failsafe record is written before the stub overwrite and already contains queryText, planFile, and todoId. Replay that record before the update submit, or copy those fields onto the update payload.'
+    - '- BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued only checks the stub fields. Extend it so a degraded begin keeps queryText.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+
