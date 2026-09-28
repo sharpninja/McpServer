@@ -3,6 +3,7 @@ using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -125,8 +126,9 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     }
 
     /// <summary>
-    /// TEST-MCP-TRIAGESTORE-007: SessionLogService SaveChanges is wrapped in the 5s
-    /// storage budget and surfaces backend_unavailable when the save cannot finish.
+    /// TEST-MCP-TRIAGESTORE-007: Submit SaveChanges uses the configured command budget
+    /// and surfaces backend_unavailable when that budget elapses. This fixture sets 1 second
+    /// so the test does not wait for the 30 second default.
     /// </summary>
     [Fact]
     public async Task SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable()
@@ -142,7 +144,8 @@ public sealed class SessionLogTriageStoreTests : IDisposable
             db,
             NullLogger<SessionLogService>.Instance,
             Substitute.For<IChangeEventBus>(),
-            new WorkspaceContext { WorkspacePath = WorkspacePath });
+            new WorkspaceContext { WorkspacePath = WorkspacePath },
+            Microsoft.Extensions.Options.Options.Create(new SessionLogSubmitOptions { SubmitCommandBudgetSeconds = 1 }));
 
         var clock = Stopwatch.StartNew();
         var ex = await Assert.ThrowsAsync<StorageCommandBudgetExceededException>(() =>
@@ -150,7 +153,8 @@ public sealed class SessionLogTriageStoreTests : IDisposable
             .ConfigureAwait(true);
         clock.Stop();
 
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"SaveChanges budget took {clock.Elapsed}.");
+        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(4), $"SaveChanges budget took {clock.Elapsed}.");
+        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(5), $"Submit still used the 5 second intake budget: {clock.Elapsed}.");
         var classified = McpErrorClassifier.Classify(ex);
         Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
         Assert.True(classified.Retryable);

@@ -65,9 +65,13 @@ public static class McpStdioHost
         builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
         builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
+        builder.Services.AddOptions<SessionLogSubmitOptions>()
+            .Bind(builder.Configuration.GetSection(SessionLogSubmitOptions.SectionName))
+            .ValidateOnStart();
         builder.Services.AddOptions<SessionLogSanitizationOptions>()
             .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
             .ValidateOnStart();
+        builder.Services.AddSingleton<IValidateOptions<SessionLogSubmitOptions>, SessionLogSubmitOptionsValidator>();
         builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
         var requiredRepoAllowlistPatterns = new[]
         {

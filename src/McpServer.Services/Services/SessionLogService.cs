@@ -6,10 +6,12 @@ using McpServer.Cqrs.Search;
 using McpServer.McpAgent;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -28,24 +30,29 @@ public sealed class SessionLogService : ISessionLogService
     private readonly ILogger<SessionLogService> _logger;
     private readonly WorkspaceContext? _workspaceContext;
     private readonly SessionLogTurnContextExtractor _turnContextExtractor;
+    private readonly TimeSpan _submitCommandBudget;
 
     /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <remarks>
     /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
     /// ingestion / batch import paths (which run without an HTTP scope) keep
     /// working; in those cases <c>WorkspaceId</c> defaults to empty string.
+    /// TR-MCP-TRIAGESTORE-002: <paramref name="submitOptions"/> sets the Submit SaveChanges
+    /// budget. Null uses the 30 second default. Triage intake stays at 5 seconds.
     /// </remarks>
     public SessionLogService(
         McpDbContext db,
         ILogger<SessionLogService> logger,
         IChangeEventBus? eventBus = null,
-        WorkspaceContext? workspaceContext = null)
+        WorkspaceContext? workspaceContext = null,
+        IOptions<SessionLogSubmitOptions>? submitOptions = null)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
         _workspaceContext = workspaceContext;
         _turnContextExtractor = new SessionLogTurnContextExtractor();
+        _submitCommandBudget = (submitOptions?.Value ?? new SessionLogSubmitOptions()).GetSubmitCommandBudget();
     }
 
     private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
@@ -206,7 +213,7 @@ public sealed class SessionLogService : ISessionLogService
 
         try
         {
-            await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
+            await SaveChangesBudgetedAsync(cancellationToken, _submitCommandBudget).ConfigureAwait(false);
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true)
         {
@@ -224,7 +231,7 @@ public sealed class SessionLogService : ISessionLogService
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
             StampWorkspaceId(existing);
 
-            await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
+            await SaveChangesBudgetedAsync(cancellationToken, _submitCommandBudget).ConfigureAwait(false);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
             wasCreated = false;
         }
@@ -1698,8 +1705,12 @@ public sealed class SessionLogService : ISessionLogService
     private static bool SameSessionTag(SessionLogTagEntity left, SessionLogTagEntity right) =>
         string.Equals(left.Tag, right.Tag, StringComparison.Ordinal);
 
-    private Task SaveChangesBudgetedAsync(CancellationToken cancellationToken)
-        => StorageCommandBudget.ExecuteAsync(ct => _db.SaveChangesAsync(ct), cancellationToken);
+    /// <summary>
+    /// TR-MCP-TRIAGESTORE-002: SaveChanges under the 5 second intake budget, or under
+    /// <paramref name="budget"/> when session-log Submit supplies its configured limit.
+    /// </summary>
+    private Task SaveChangesBudgetedAsync(CancellationToken cancellationToken, TimeSpan? budget = null)
+        => StorageCommandBudget.ExecuteAsync(ct => _db.SaveChangesAsync(ct), cancellationToken, budget);
 
     /// <summary>
     /// FR-MCP-SESSIONATTR-001: reject unmarked filesModified/commit paths outside the workspace.

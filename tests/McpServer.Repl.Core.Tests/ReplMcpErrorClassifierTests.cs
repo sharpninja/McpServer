@@ -62,6 +62,16 @@ public sealed class ReplMcpErrorClassifierTests
         Assert.True(classified.Retryable);
     }
 
+    /// <summary>TR-MCP-TRIAGESTORE-002: a longer Submit storage command budget is still backend_unavailable.</summary>
+    [Fact]
+    public void FromException_SubmitStorageCommandBudget_IsBackendUnavailable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(
+            new InvalidOperationException("The storage backend did not respond within the 30 second storage command budget."));
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
     /// <summary>TimeoutException is retryable timeout.</summary>
     [Fact]
     public void FromException_Timeout_IsRetryableTimeout()
