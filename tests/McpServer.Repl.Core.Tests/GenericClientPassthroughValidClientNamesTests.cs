@@ -148,7 +148,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
         });
 
     /// <summary>

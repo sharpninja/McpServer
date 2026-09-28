@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-09-23T17:02:00.2628149+00:00",
+  "generatedAtUtc": "2026-09-28T17:04:34.8206147+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -46,6 +46,7 @@
     "YAML-Object-Mutation.md",
     "Session-Log-Workflow-API.md",
     "Scratch-Workspace-Integration-Tests.md",
-    "Memory-Benchmarks.md"
+    "Memory-Benchmarks.md",
+    "Setup/Frontier-Agent-Setup-Prompt-Draft.md"
   ]
 }

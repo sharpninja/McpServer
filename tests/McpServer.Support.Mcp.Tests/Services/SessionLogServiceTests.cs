@@ -190,7 +190,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var sessionId = BuildSessionId("Codex", "agent-runtime-header");
         var dto = CreateTestDto("Codex", sessionId);
         dto.AgentSessionId = "Codex-20260722T213000Z-agent";
-        dto.AgentSessionTranscriptFile = @"F:\GitHub\McpServer\.mcpServer\codex\transcripts\session.jsonl";
+        dto.AgentSessionTranscriptFile = @"Q:\__mcp_unit_test__\McpServer\.mcpServer\codex\transcripts\session.jsonl";
         dto.AgentExecutablePath = @"C:\Users\kingd\AppData\Roaming\npm\codex.cmd";
         dto.AgentExecutableVersion = "1.2.3";
 

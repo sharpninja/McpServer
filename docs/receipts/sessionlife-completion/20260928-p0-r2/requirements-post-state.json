@@ -1,0 +1,578 @@
+{
+  "schemaVersion": 2,
+  "revision": "20260928-p0-r2",
+  "capturedAtUtc": "2026-09-28T03:49:03.2346671Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "status": "read-only-poststate-no-store-mutation",
+  "baselineR1": {
+    "postState": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "sha256": "FE7F7E970D003B8576CD0173C89C5C781220286FEE39A14F2C90E7B1B383C775"
+    },
+    "acceptanceManifest": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "sha256": "D662F206B2471DDC12EE7B2AEEFD1B15C12339E0896DE8FEC5E81612012A1CB8"
+    },
+    "pathInventory": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "sha256": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364"
+    },
+    "reconciliation": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-reconciliation.json",
+      "sha256": "21DFA3A977AAA19D785E60F5653982D9245F49A34CD7C4CE8F69E29447ACEF2E"
+    },
+    "reusePolicy": "Unchanged R1 full snapshots and source-hash inputs are incorporated by path and SHA-256 reference; R2 records only targeted live readback and the artifact-only correction."
+  },
+  "targetedLiveReadback": {
+    "functionalRequirement": {
+      "requestId": "req-20260928T034447Z-dd97",
+      "responseSha256": "77796C98971A71F5A714515799E99402517CCE9C1D78225B58064833B4E841EE",
+      "record": {
+        "id": "FR-MCP-SESSIONLIFE-002",
+        "notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+        "area": "MCP",
+        "title": "Durability before verb mode for plan and todo metadata",
+        "scopeStartLayerKey": "layer-1",
+        "updatedAt": "2026-09-28T03:44:48.6403729+00:00",
+        "status": "pending",
+        "createdAt": "2026-09-28T03:44:48.6402802+00:00",
+        "acceptanceCriteria": [
+          {
+            "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+            "id": "FR-MCP-SESSIONLIFE-002-AC001",
+            "isSatisfied": false
+          },
+          {
+            "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+            "id": "FR-MCP-SESSIONLIFE-002-AC002",
+            "isSatisfied": false
+          },
+          {
+            "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+            "id": "FR-MCP-SESSIONLIFE-002-AC003",
+            "isSatisfied": false
+          },
+          {
+            "text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+            "id": "FR-MCP-SESSIONLIFE-002-AC004",
+            "isSatisfied": false
+          },
+          {
+            "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+            "id": "FR-MCP-SESSIONLIFE-002-AC005",
+            "isSatisfied": false
+          }
+        ],
+        "priority": "high",
+        "description": "Resolve durability first. A matching requestId is omit-unbound only when the turn is already durable. Otherwise beginTurn, update, append, and complete use explicit values, then cached values, then exact None. Ordinary raw first persist rejects an omitted pair. canceled and cancelled supersede first persists may omit either field and receive exact None. Durable reopen omits unbound fields. Assert-ReplCurrentTurnFresh does not rewrite a cached session id. Wrong-workspace marker paths and marker drift are rejected. Get-ReplCompleteTurnPersistSessionId stays unchanged."
+      }
+    },
+    "todo": {
+      "requestId": "req-20260928T034448Z-0c86",
+      "responseSha256": "A31B7FD6AB7FA52F0719B10BDA7B2FBF7A5C9D875C507BEF425A348E5A9DB925",
+      "record": {
+        "id": "BUG-TRIAGE-246",
+        "section": "Backlog",
+        "done": false,
+        "title": "Degraded beginTurn recovery omits planFile and todoId and gets HTTP 400",
+        "dependsOn": [],
+        "technicalDetails": [
+          "Acceptance criteria:",
+          "- After beginTurn persist times out or returns degraded, a later beginTurn for the same requestId that supplies only requestId, queryTitle, and queryText is accepted and stores planFile and todoId as None, or as the values captured before the failed persist.",
+          "- That recovery submit does not return HTTP 400 validation_error for omitted planFile or todoId.",
+          "- A beginTurn for a requestId that is already durably stored still omits planFile and todoId so the stored pair is left unchanged.",
+          "- A first persist that reaches the server with both fields omitted still returns HTTP 400 validation_error, except a canceled or cancelled supersede persist, which stamps None and succeeds.",
+          "- The beginTurn examples in docs/context/module-bootstrap.md and docs/REPL-USER-GUIDE.md, and the required params in docs/context/repl-yaml-message.schema.json, state that first persist requires planFile and todoId and that None is the sentinel when there is no plan or TODO.",
+          "Implementation notes:",
+          "- Do not classify a degraded, never-persisted beginTurn as a same-requestId reopen. Stamp planFile and todoId before SubmitAsync: use the values written on the failed attempt, otherwise the exact sentinel None.",
+          "- Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1 rewrites current-turn.yaml without planFile and todoId. Keep those fields on the degraded turn file so recovery can resubmit them.",
+          "- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 omits blank planFile and todoId. A recovery payload must set both before that helper runs.",
+          "- Server rule stays in SessionLogTurnContextValidator.ValidateForNewEntry and SessionLogService.ApplyTurnContext. Only IsSupersededHookPersist may stamp None when status is canceled or cancelled. Do not relax first-persist validation for in_progress turns.",
+          "- Invoke-WorkflowBeginTurn already defaults blanks to None when current-turn.yaml does not already hold that requestId. plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1 covers that default and the durable reopen omission. Add a degraded-retry case that expects None/None on the second persist."
+        ],
+        "implementationTasks": [
+          {
+            "done": false,
+            "task": "RED: add or verify mock-backed consumer coverage and a real-code assertion for: Explicit, verified-cache, and None precedence agrees with raw API validation and all three contract documents. Record the intended failing assertion before any production edit unless this is explicitly proof-first existing behavior."
+          },
+          {
+            "done": false,
+            "task": "GREEN: implement only the minimum accepted change across plugins/core metadata resolver, freshness validation, first-persist boundary, and contract documents. Preserve unrelated behavior, identity, existing requirement history, and write-ahead durability."
+          },
+          {
+            "done": false,
+            "task": "VALIDATE: query exact persisted state and run the cumulative session-lifecycle Pester, Nuke Test, and Build.Tests gate through the run-scoped report validator. Require zero failures, zero skips, no missing or duplicate reports, no stale or zero-discovery results, and no Pester failed blocks or containers."
+          },
+          {
+            "done": false,
+            "task": "REVIEW: obtain the required independent code/document review with accuracy and completeness at least 98 percent, preserve complete durable receipts, and keep this TODO open until its individual acceptance-manifest row is accepted."
+          }
+        ],
+        "technicalRequirements": [
+          "TR-MCP-TRIAGE-004",
+          "TR-MCP-SESSIONLIFE-002"
+        ],
+        "functionalRequirements": [
+          "FR-MCP-TRIAGE-002",
+          "FR-MCP-SESSIONLIFE-002"
+        ],
+        "priority": "medium",
+        "description": [
+          "workflow.sessionlog.beginTurn documents requestId, queryTitle, and queryText as the required params. On a real first persist, Invoke-WorkflowBeginTurn stamps omitted planFile and todoId to the exact sentinel None before client.SessionLog.SubmitAsync. SessionLogService.ApplyTurnContext calls ValidateForNewEntry for any turn that is not already stored, and an omitted field becomes HTTP 400 validation_error. After a timed-out or HTTP 503 beginTurn, Complete-ReplBeginTurnAfterPersist leaves current-turn.yaml active with only turnRequestId, sessionId, and status. The retry uses the same requestId, so the adapter treats it as a same-requestId reopen and submits the in_progress turn with both fields omitted. The turn was never stored, so the server treats that recovery submit as a first persist and returns HTTP 400. New-McpPluginTurnUpsertRequest also drops blank planFile and todoId from the payload. The generic examples in module-bootstrap.md and REPL-USER-GUIDE.md, and repl-yaml-message.schema.json, still show beginTurn without planFile or todoId. session-log-workflow-api.md already states the None default and the reopen-omission rule.",
+          "Triage group: triage-group-a79f78791a361214",
+          "Reports: 1"
+        ]
+      }
+    },
+    "batchTodos": {
+      "queryRequestId": "req-20260928T034556Z-8959",
+      "responseSha256": "D68A722C4B5BCC0BA6EDACA35DB738ED8ABF97625E6B93028ABFB45533054FE4",
+      "expectedIds": [
+        "BUG-TRIAGE-165",
+        "BUG-TRIAGE-170",
+        "BUG-TRIAGE-171",
+        "BUG-TRIAGE-172",
+        "BUG-TRIAGE-173",
+        "BUG-TRIAGE-175",
+        "BUG-TRIAGE-180",
+        "BUG-TRIAGE-181",
+        "BUG-TRIAGE-182",
+        "BUG-TRIAGE-184",
+        "BUG-TRIAGE-185",
+        "BUG-TRIAGE-186",
+        "BUG-TRIAGE-198",
+        "BUG-TRIAGE-199",
+        "BUG-TRIAGE-200",
+        "BUG-TRIAGE-202",
+        "BUG-TRIAGE-204",
+        "BUG-TRIAGE-205",
+        "BUG-TRIAGE-208",
+        "BUG-TRIAGE-210",
+        "BUG-TRIAGE-213",
+        "BUG-TRIAGE-214",
+        "BUG-TRIAGE-221",
+        "BUG-TRIAGE-226",
+        "BUG-TRIAGE-229",
+        "BUG-TRIAGE-232",
+        "BUG-TRIAGE-234",
+        "BUG-TRIAGE-236",
+        "BUG-TRIAGE-239",
+        "BUG-TRIAGE-240",
+        "BUG-TRIAGE-241",
+        "BUG-TRIAGE-243",
+        "BUG-TRIAGE-244",
+        "BUG-TRIAGE-245",
+        "BUG-TRIAGE-246"
+      ],
+      "foundCount": 35,
+      "openCount": 35,
+      "doneCount": 0,
+      "missingIds": [],
+      "doneIds": [],
+      "records": [
+        {
+          "id": "BUG-TRIAGE-165",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-170",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-171",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-172",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-173",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-175",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-180",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-181",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-182",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-184",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-185",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-186",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-198",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-199",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-200",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-202",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-204",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-205",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-208",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-210",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-213",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-214",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-221",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-226",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-229",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-232",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-234",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-236",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-239",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-240",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-241",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-243",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-244",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-245",
+          "done": false,
+          "priority": "high",
+          "section": "Backlog"
+        },
+        {
+          "id": "BUG-TRIAGE-246",
+          "done": false,
+          "priority": "medium",
+          "section": "Backlog"
+        }
+      ]
+    },
+    "mappings": {
+      "functionalRequirementCount": 11,
+      "edgeCount": 47,
+      "duplicateCount": 0,
+      "exactFrozenSetMatch": true,
+      "missingFrozenEdges": [],
+      "extraLiveEdges": [],
+      "records": [
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-143"
+          ],
+          "trIds": [
+            "TR-MCP-PLAN-001"
+          ],
+          "frId": "FR-MCP-107"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-195",
+            "TEST-MCP-196",
+            "TEST-MCP-SESSIONLIFE-002",
+            "TEST-MCP-SESSIONLIFE-004"
+          ],
+          "trIds": [
+            "TR-MCP-PERSIST-001",
+            "TR-MCP-PERSIST-004"
+          ],
+          "frId": "FR-MCP-170"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-221",
+            "TEST-MCP-SESSIONLIFE-003"
+          ],
+          "trIds": [
+            "TR-MCP-TXNKEY-001"
+          ],
+          "frId": "FR-MCP-173"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-REPL-025",
+            "TEST-MCP-REPL-026",
+            "TEST-MCP-REPL-027",
+            "TEST-MCP-REPL-028"
+          ],
+          "trIds": [
+            "TR-MCP-REPL-010",
+            "TR-MCP-REPL-011",
+            "TR-MCP-REPL-012",
+            "TR-MCP-REPL-013"
+          ],
+          "frId": "FR-MCP-REPL-009"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-REPL-031",
+            "TEST-MCP-REPL-032",
+            "TEST-MCP-REPL-033",
+            "TEST-MCP-REPL-034",
+            "TEST-MCP-REPL-035",
+            "TEST-MCP-REPL-036",
+            "TEST-MCP-REPL-037",
+            "TEST-MCP-REPL-038",
+            "TEST-MCP-REPL-039",
+            "TEST-MCP-SESSIONLIFE-005"
+          ],
+          "trIds": [
+            "TR-MCP-REPL-012",
+            "TR-MCP-REPL-016",
+            "TR-MCP-REPL-017"
+          ],
+          "frId": "FR-MCP-REPL-011"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLIFE-001"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLIFE-001"
+          ],
+          "frId": "FR-MCP-SESSIONLIFE-001"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLIFE-002"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLIFE-002"
+          ],
+          "frId": "FR-MCP-SESSIONLIFE-002"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLIFE-002"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLIFE-003"
+          ],
+          "frId": "FR-MCP-SESSIONLIFE-003"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLIFE-002",
+            "TEST-MCP-SESSIONLIFE-004",
+            "TEST-MCP-SESSIONLIFE-005"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLIFE-004"
+          ],
+          "frId": "FR-MCP-SESSIONLIFE-004"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLIFE-002",
+            "TEST-MCP-SESSIONLIFE-004"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLIFE-005"
+          ],
+          "frId": "FR-MCP-SESSIONLIFE-005"
+        },
+        {
+          "workspaceId": "F:\\GitHub\\McpServer",
+          "testIds": [
+            "TEST-MCP-SESSIONLOG-006"
+          ],
+          "trIds": [
+            "TR-MCP-SESSIONLOG-006"
+          ],
+          "frId": "FR-MCP-SESSIONLOGCTX-001"
+        }
+      ]
+    }
+  },
+  "invariantReadback": {
+    "acceptanceManifestRows": 109,
+    "todoManifestRows": 35,
+    "mappingEdges": 47,
+    "allThirtyFiveTodosOpen": true,
+    "allAcceptanceStatesRemainNotAccepted": true,
+    "noRequirementSatisfactionChanged": true,
+    "noMutationPerformed": true,
+    "r1StoreSatisfiedTrue": 7,
+    "r2StoreSatisfiedTrue": 7
+  },
+  "sourceHashInputs": {
+    "approvedPlan": {
+      "path": "docs/plans/sessionlife-batch-completion-20260927.md",
+      "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12"
+    },
+    "inspectedSources": [
+      {
+        "path": "docs/context/module-bootstrap.md",
+        "sha256": "D30A09BB6D87D09662A4A6F024C64A28EA98676E1EA8027DB8F9E6BCBD160187"
+      },
+      {
+        "path": "docs/REPL-USER-GUIDE.md",
+        "sha256": "95A4B153BB06D65D6442475086D5E179CB1FE000B93D86ABF8FA478A2924E50D"
+      },
+      {
+        "path": "docs/context/repl-yaml-message.schema.json",
+        "sha256": "524F4D2DA14776AC5841D6B92BCEE1155638C28C0BB76A320579458B0EBE9FBA"
+      },
+      {
+        "path": "src/McpServer.Repl.Core/SessionLogCommandShapes.cs",
+        "sha256": "BAEA8CAE216F1C589F02848BCA8519211BA9AEF0A37D7A9E8DC4877BF9A90FCB"
+      },
+      {
+        "path": "src/McpServer.Repl.Core/SessionLogWorkflow.cs",
+        "sha256": "865BA93E846F1291E2340116DA7F70CB1CD2CCCB900EF571D4C464082E853488"
+      },
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "sha256": "D31F13DA66E64FBD2EEE8FDAB8602DD2FC51D271D719FB7C1AAC909544084211"
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "sha256": "D844B4A24F1599F7DABDC99CAF29ADEE44AB19FCDD8ECEEF7F792C4A15487E5D"
+      }
+    ]
+  }
+}

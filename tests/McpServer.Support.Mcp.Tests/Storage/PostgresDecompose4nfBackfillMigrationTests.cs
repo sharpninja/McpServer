@@ -19,7 +19,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<EphemeralPostgresFixture>, IDisposable
 {
     private const string PreSliceMigration = "20260628194746_RepairTriageCreatedTodoWorkspace";
-    private const string WorkspacePath = "F:\\GitHub\\McpServer";
+    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer";
     private readonly string _serverConnectionString;
     private readonly string _databaseName = $"mcp_backfill_{Guid.NewGuid():N}";
     private DbContextOptions<McpDbContext>? _options;

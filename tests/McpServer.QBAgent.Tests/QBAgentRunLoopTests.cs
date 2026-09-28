@@ -121,8 +121,8 @@ public sealed class QBAgentRunLoopTests
     [Fact]
     public void FormatOpenTodos_EmptyWithWorkspace_IncludesPath()
         => Assert.Equal(
-            "No open TODOs (done: false) in F:\\GitHub\\McpServerManager.",
-            QBAgentOpenTodoList.Format(new TodoQueryResult(), @"F:\GitHub\McpServerManager"));
+            "No open TODOs (done: false) in Q:\\__mcp_unit_test__\\McpServerManager.",
+            QBAgentOpenTodoList.Format(new TodoQueryResult(), @"Q:\__mcp_unit_test__\McpServerManager"));
 
     [Fact]
     public void FormatOpenTodos_IncludesIdPriorityTitle()

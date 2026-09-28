@@ -18,8 +18,8 @@ namespace McpServer.Repl.Core.Tests;
 /// </summary>
 public sealed class RequirementsWorkflowWorkspaceOverrideTests
 {
-    private const string BoundWorkspace = @"F:\GitHub\MouseKeyProxy";
-    private const string OverrideWorkspace = @"F:\GitHub\McpServer";
+    private const string BoundWorkspace = @"Q:\__mcp_unit_test__\MouseKeyProxy";
+    private const string OverrideWorkspace = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>An explicit workspacePath replaces the bound X-Workspace-Path header on the generate call.</summary>
     [Fact]

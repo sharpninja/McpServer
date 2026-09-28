@@ -1,0 +1,25 @@
+OverallVerdict=AGREE
+DraftScopeVerdict=AGREE
+AccuracyScore=99
+CompletenessScore=99
+DraftPASS=26 DraftFAIL=0 DraftUNKNOWN=0
+ReviewerOnlyPASS=7 ReviewerOnlyFAIL=0 ReviewerOnlyUNKNOWN=0
+FAIL_LIST=none
+ImagePath=28/28 PASS
+Encoding=0 non-ASCII
+Themes=G1 PASS; G2 PASS; G3 PASS; G4 PASS; D1 PASS; D2 PASS; D3 PASS
+Model=gpt-6-astra Effort=xhigh
+SECRET_SCAN_HITS=0
+DRAFT_SHA=9933BAB3B92198E90BA23588CE9F459E191684D0BAB3140F1C0A8C10448910C0
+DRAFT_CHANGED=False
+HV_ROUNDS=1
+STALE_ABORTED=20260928T160920Z-setupprompt-postgaps (SHA 7DDF8C82)
+stamp=20260928T161208Z-setupprompt-postdryrun
+md=F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-postdryrun-20260928T161208Z.md
+json=F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-postdryrun-20260928T161208Z.json
+prompt=F:\github\McpServer\docs\receipts\hv\20260928T161208Z-setupprompt-postdryrun.prompt.txt
+resp=F:\github\McpServer\docs\receipts\hv\20260928T161208Z-setupprompt-postdryrun.response.jsonl
+last=F:\github\McpServer\docs\receipts\hv\20260928T161208Z-setupprompt-postdryrun.last-message.txt
+done=F:\github\McpServer\docs\receipts\hv\20260928T161208Z-setupprompt-postdryrun.DONE
+OverallAGREE=yes
+NoCommitPush=true

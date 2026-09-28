@@ -32,7 +32,7 @@ public sealed class TranscriptSessionLogPersisterTests
         var request = new TranscriptIngestionRequest(sourcePath)
         {
             Agent = "Codex",
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
             Persist = true
         };
         var session = new TranscriptSession(
@@ -57,7 +57,7 @@ public sealed class TranscriptSessionLogPersisterTests
             "sourceType: Codex\n",
             nativeSessionId: "native-1",
             model: "gpt-5",
-            workspacePath: "F:\\GitHub\\McpServer",
+            workspacePath: "Q:\\__mcp_unit_test__\\McpServer",
             sourceFiles: [sourcePath]);
         var receipt = new TranscriptSessionReceipt(
             TranscriptSourceKind.Codex,
@@ -77,7 +77,7 @@ public sealed class TranscriptSessionLogPersisterTests
         Assert.Equal("gpt-5", capturedDto.Model);
         Assert.Equal("completed", capturedDto.Status);
         Assert.Equal(2, capturedDto.TurnCount);
-        Assert.Equal("F:\\GitHub\\McpServer", capturedDto.Workspace?.Repository);
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", capturedDto.Workspace?.Repository);
         Assert.Equal(yamlPath, capturedSourceFilePath);
         Assert.Equal("hash", capturedContentHash);
         Assert.NotNull(capturedDto.Turns);

@@ -39,7 +39,7 @@ public sealed class MemoryWorkflowTests
     public async Task AddAsync_PostsMemoryRequest()
     {
         var handler = new JsonHandler("""
-            {"success":true,"memory":{"id":"MEMORY-AGENT-001","category":"AGENT","scope":"Workspace","workspacePath":"F:\\GitHub\\McpServer","text":"Use wrappers.","version":1,"createdAtUtc":"2026-06-08T07:00:00Z","updatedAtUtc":"2026-06-08T07:00:00Z","updatedBy":"Codex"},"failureKind":"None"}
+            {"success":true,"memory":{"id":"MEMORY-AGENT-001","category":"AGENT","scope":"Workspace","workspacePath":"Q:\\__mcp_unit_test__\\McpServer","text":"Use wrappers.","version":1,"createdAtUtc":"2026-06-08T07:00:00Z","updatedAtUtc":"2026-06-08T07:00:00Z","updatedBy":"Codex"},"failureKind":"None"}
             """);
         using var http = new HttpClient(handler);
         var sut = new MemoryWorkflow(new MemoryClient(http, Options));

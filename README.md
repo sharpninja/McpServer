@@ -2,7 +2,7 @@
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Current line:** GitVersion `next-version` **1.4.39** (see `GitVersion.yml`). Live `/health` on this refresh was Healthy, storage `reachable`, version `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`. That informational version is the deployed service commit. Git HEAD is `5ca2ac28` (rankingMode test assertions on top of that deploy). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
+**Current line:** GitVersion `next-version` **1.4.39** (see `GitVersion.yml`). Live `/health` on this refresh was Healthy, storage `reachable`, version `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`. That informational version is the deployed service commit. Git HEAD is `d18ba00b` (frontier agent setup prompt draft + HV receipts on top of that deploy; MCP-SETUPPROMPT-001 draft AGREE). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
 
 ## Key Features
 
@@ -33,6 +33,13 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 ```
 
 Open Swagger at `http://localhost:7147/swagger`.
+
+## Frontier agent setup prompt (draft)
+
+Operator-facing copy-paste setup prompt for frontier coding agents (MCP-SETUPPROMPT-001). Status: **DRAFT** with hostile-validator overall **AGREE** (Accuracy 99, Completeness 99) on 2026-09-28 CT; live install dry-runs remain outside that draft acceptance.
+
+- Draft: [docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md](docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md)
+- Receipts: docs/receipts/setup/ and docs/receipts/hv/hostile-validator-setupprompt-*
 
 ## Architecture
 

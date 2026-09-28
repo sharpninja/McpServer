@@ -1,0 +1,71 @@
+﻿# setup-implementation.plan (paper dry-run B)
+
+## Summary
+- host.os: windows (PAYTON-LEGION2); endpoint.port: 7147; baseUrl: http://localhost:7147
+- workspacePath: F:\github\McpServer
+- agents: [agent-grok / GrokCode, agent-claude-code / Claude]
+- playbooks.agentCombo: agent-multi
+- process: process-deferred
+- storage: storage-sqlite; details.dataSource: C:\ProgramData\McpServer\mcp.db
+- unsupportedFlags: [SQLITE_MULTI_AGENT] with operator risk acknowledgment
+- service: service-windowsService — same as paper-A (ProgramData / 7147 / LocalSystem / McpServer.Support.Mcp.exe)
+- PAPER ONLY: no live mutations
+
+## Contradiction walk (draft steps vs intake B)
+- agent-multi + SQLITE_MULTI_AGENT: draft conflict table = Caution/redirect, continue only with informed risk note in unsupportedFlags — MATCH (ack recorded).
+- Dual smoke required (every selected agent) — plan includes both.
+- Claude activate: hooks / .mcp.json / claude-hook-validation / install-claude-mcp-hooks.ps1 — expected evidence documented; not executed.
+- Same WindowsService path as A; config-before-start still required (Provider=sqlite + DataSource + RepoRoot/Workspaces) before UpdateService.
+- No refuse-level contradiction. Caution path correctly exercised.
+- Draft does not hard-refuse multi-agent+SQLite without topology evidence — aligned.
+
+## Obtain (paper — proposed only)
+- [ ] pending — pwsh + PowerShell.MCP >= 1.14.0
+- [ ] pending — Pull workspace + mcpserver-grok-plugin + mcpserver-claude-code-plugin
+- [ ] pending — PRIMARY REPL: ./build.ps1 InstallReplTool only (do not run); no plugin ensure-repl
+- [ ] pending — Grok skills mirror evidence when skillMirror set
+- [ ] pending — Claude: confirm plugin root; note hook install script path exists for later Configure
+- Stop: MCP_PLUGIN_UNAVAILABLE / MISSING_PLUGIN_ROOT
+
+## Configure-before-start (paper — no live writes)
+- [ ] pending — appsettings.yaml: Provider=sqlite; Sqlite:DataSource=C:\ProgramData\McpServer\mcp.db; omit empty connection strings; RepoRoot + primary Workspaces = workspacePath
+- [ ] pending — ACL/data dir writable by LocalSystem (paper note only)
+- [ ] pending — Grok session env (MCP_* / GrokCode)
+- [ ] pending — Claude session env: CLAUDE_PLUGIN_ROOT / PLUGIN_AGENT_NAME=Claude / MCP_WORKSPACE_PATH
+- [ ] pending — Claude hooks EXPECTED EVIDENCE (document only; do not install):
+  - Run (live later): install-claude-mcp-hooks.ps1 then -VerifyOnly
+  - ~/.claude/settings.json contains UserPromptSubmit / Stop / PostToolUse MCP hooks
+  - Restart Claude Code after install
+  - claude-hook-validation skill pass
+  - Optional: .mcp.json mcpserver entry present
+- Stop: SECRET_IN_MANIFEST N/A for sqlite file path (non-secret); still no secrets in manifest
+
+## Install (paper — DO NOT EXECUTE)
+- [ ] pending — Same elevated UpdateService as A after configure-before-start
+- Evidence: deployment manifest generatedBy approved; exe; LocalSystem; quoted ImagePath
+
+## Verify (fail-closed — paper)
+1. Trust/nonce /health
+2. Endpoint 7147
+3. Windows service identity (strict ImagePath quotes + StartName + PID join + artifacts)
+4. SQLite resolved provider + non-secret identity provenance (NOT yaml DataSource alone) — else VERIFY_EVIDENCE_UNAVAILABLE
+5. Workspace registry match
+6. Dual agent smoke:
+   - Grok: lib\repl-invoke.ps1 Invoke-ReplMethod workflow.todo.query -> type: result
+   - Claude: host-matched plugin PowerShell invoke helpers -> read-only todo query type: result (do not substitute Grok plugin)
+7. unsupportedFlags SQLITE_MULTI_AGENT retained in evidence summary
+
+### Paper simulate (read-only)
+- Same ImagePath unquoted FAIL vs draft strict regex as paper-A
+- mcp.db at ProgramData: exists=False (would be created on real sqlite configure/start — not created here)
+- Claude plugin root exists; install-claude-mcp-hooks.ps1 exists; ~/.claude/settings.json exists — path surfaces present; hook content NOT validated (paper expected-evidence only)
+- Dual smokes NOT executed
+
+## Rollback notes
+- Update-McpService -Restore (not run)
+- Claude hooks: restore settings backup from hook installer if a live install were reversed (not applicable to paper)
+
+## Paper-B result
+- Intake/playbook walk: PASS (SQLITE_MULTI_AGENT caution correctly acknowledged; dual-smoke + Claude hook evidence spelled)
+- Live verify simulation: FAIL ImagePath quoting; sqlite identity provenance unavailable on paper; smokes not run
+- Overall paper-B (intake dry-run): PASS with live-sim notes

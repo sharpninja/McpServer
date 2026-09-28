@@ -14,7 +14,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 public sealed class RemoveTodoRecordsMigrationTests : IDisposable
 {
     private const string PreviousMigration = "20260628102336_AddTriageRunAgentStreams";
-    private const string WorkspacePath = "F:\\GitHub\\McpServer";
+    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer";
     private const string StaleAnchorWorkspacePath = "C:\\ProgramData\\McpServer";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;

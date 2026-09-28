@@ -108,7 +108,7 @@ public sealed class RequirementScopeLayerWorkflowTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer"
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
         };
         var requirementsWorkflow = new RequirementsWorkflow(new RequirementsClient(http, options));
         var passthrough = new GenericClientPassthrough(new McpServerClient(http, options));

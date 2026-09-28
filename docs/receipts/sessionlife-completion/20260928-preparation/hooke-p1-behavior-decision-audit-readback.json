@@ -1,0 +1,29 @@
+{
+  "capturedAtUtc": "2026-09-28T08:09:37.6219342+00:00",
+  "sessionId": "Codex-20260928T064107Z-sessionlife-p1-r3-red",
+  "requestId": "req-20260928T073456Z-sessionlife-p1-behavior-red",
+  "beforeQuery": "req-20260928T080154Z-567f",
+  "afterQuery": "req-20260928T080930Z-f77b",
+  "queryOk": true,
+  "queryExit": 0,
+  "status": "completed",
+  "responseCharacters": 794,
+  "responseSha256": "1829EBDF5CF9FC55FCCA46D72D25760AE4F15978C5F85E7521A18CFE8E8DD826",
+  "actionsBefore": 8,
+  "actionsAfter": 14,
+  "decisionStrings": 6,
+  "decisionActions": 6,
+  "decisionDialogs": 6,
+  "analysisDialogs": 1,
+  "preservationErrors": [],
+  "runtime": {
+    "agentSessionId": "01a0e5c4-42a5-7672-a323-661996de9511",
+    "nativeTranscriptId": "01a0e5c4-42a5-7672-a323-661996de9511",
+    "transcriptExists": true,
+    "executableExists": true,
+    "headerVersion": "codex-cli 0.157.1",
+    "actualVersion": "codex-cli 0.157.1"
+  },
+  "lateAdditiveRepairNotOriginalCompliance": true,
+  "noSourceChange": true
+}

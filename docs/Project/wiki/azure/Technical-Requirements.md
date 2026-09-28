@@ -1516,7 +1516,7 @@ Scope: layer-1+
 Acceptance Criteria:
 - Pester proves appendDialog does not invoke client.SessionLog.SubmitAsync for an existing turn.
 - Missing turn is not-found, retryable false.
-**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196
+**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196, TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004
 **Status:** pending
 Scope: layer-1+
 
@@ -1553,7 +1553,7 @@ Scope: layer-1+
 Acceptance Criteria:
 - Concurrent TODO query during SubmitAsync does not yield backend_unavailable when the DB file is valid.
 - /health?nonce= still echoes the nonce.
-**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196
+**Covered by:** FR: FR-MCP-170; TEST: TEST-MCP-195, TEST-MCP-196, TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004
 **Status:** pending
 Scope: layer-1+
 
@@ -1563,6 +1563,11 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-107; TEST: TEST-MCP-143
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each cumulative session-lifecycle validation run accepts one explicit unique run ID and writes deterministic run-scoped outputs beneath TestResults/<runId>, including selected-project inventory and per-project TRX for Nuke Test and provider targets without silently changing project exclusions.
+- [ ] Invoke-SessionLifeUnitGate.ps1 orchestrates the complete Pester directory, Nuke Test, and Build.Tests; consumes Nuke selected-project inventory rather than maintaining a competing list; and emits native structured Pester counters.
+- [ ] The gate validates fresh reports against run start plus source-file and tool-version manifests and rejects missing or duplicate project reports, stale reports, zero discovery or total zero, executed less than total, failures, skipped or notExecuted results, and Pester failed blocks or containers.
+- [ ] Candidate-source manifest drift invalidates affected evidence and requires a fresh run; each command exit is independently mandatory so a later zero exit cannot hide an earlier failure.
 
 ## TR-MCP-PLUGIN-008
 
@@ -2336,7 +2341,7 @@ Scope: layer-1+
 ## TR-MCP-REPL-012
 
 **Per-method REPL invocation timeout** — REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget (REPL_LONG_TIMEOUT, default 300s) while all other methods keep the short default (REPL_TIMEOUT, default 30s). Acceptance Criteria: (AC1) Get-ReplMethodTimeoutSeconds returns >30 for analyzeRequirements/generateDocument and 30 for sessionlog methods; (AC2) REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds. Origin: BUG-TRIAGE-072 (workflow.todo.analyzeRequirements, which blocks on an external Copilot CLI, was killed at the flat 30s REPL_TIMEOUT). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-REPL-027.
-**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
+**Covered by:** FR: FR-MCP-REPL-009, FR-MCP-REPL-011; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028, TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039, TEST-MCP-SESSIONLIFE-005
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -2370,14 +2375,14 @@ Scope: layer-1+
 ## TR-MCP-REPL-016
 
 **Failsafe queue drains oldest-first after a proven-reachable backend call** — BUG-TRIAGE-097. The plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14). plugins/core/lib-ps/repl-invoke.ps1 MUST expose Invoke-ReplFailsafeDrain, which walks the failsafe directory oldest-first (the file name is prefixed with the UTC capture stamp, so a name sort is a chronological sort) and re-issues each record's captured method and params through Invoke-ReplRaw. A record MUST be deleted only after its submission succeeds; a record whose submission fails MUST stay on disk. client.SessionLog.SubmitAsync is an upsert keyed by sessionId plus requestId, so a replay is idempotent. A record rejected by the backend MUST NOT block the newer records behind it: the drain increments that record's drainAttempts counter and continues the walk. A transport-level failure (MCP_UNTRUSTED, mcpserver-repl not on PATH, timeout, refused connection) MUST abort the pass without consuming any attempt budget, because the backend and not the record is at fault. The drain MUST skip the record belonging to the submit currently in flight, so a drain triggered inside an active submit cannot double-submit or delete the live turn. The drain MUST be wired to the first successful Invoke-ReplRaw in the process (Invoke-ReplFailsafeDrainOnFirstSuccess, latched to run at most once and disabled by MCP_FAILSAFE_DRAIN_DISABLED=1) rather than to bootstrap: bootstrap only proves the marker file is fresh, does not prove the backend answers, and runs inside Invoke-ReplRaw, so draining there would recurse. Operators MUST be able to force a full pass with the plugin-local verb workflow.failsafe.drain (optional maxRecords and maxAttempts params), which prints the drain summary as YAML and exits non-zero only when the pass aborted.
-**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039, TEST-MCP-SESSIONLIFE-005
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-REPL-017
 
 **Failsafe quarantine and truthful pending queue depth in plugin status** — BUG-TRIAGE-097. A failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn. plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5). Quarantined records MUST NOT be counted as live queue depth. plugins/core/lib-ps/resolve-cache-dir.ps1 MUST own the single resolution of the queue location (Get-McpFailsafeDir and Get-McpFailsafeQuarantineDir, honouring MCPSERVER_FAILSAFE_DIR then MCP_FAILSAFE_DIR then the workspace cache) so the writer, the drain, and the status reporter cannot disagree. plugins/core/lib-ps/mcp-status.ps1 MUST count the failsafe directory: pendingCount previously counted only the cache pending directory and therefore reported 0 while 33 captured submits sat undrained, so pendingCount MUST be the sum of pending turn records and queued failsafe records, and the status document MUST additionally expose pendingTurnCount, failsafeDir, failsafeCount, and failsafeQuarantineCount. A read-only workflow.failsafe.status verb MUST report the same depth without replaying anything.
-**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039, TEST-MCP-SESSIONLIFE-005
 **Status:** pending
 Scope: layer-1+
 
@@ -2617,6 +2622,63 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] SessionEnd cache flush no-ops when cache cannot be resolved
+
+## TR-MCP-SESSIONLIFE-001
+
+**Plugin keeps degraded turn cache and honest hook status** — Complete-ReplBeginTurnAfterPersist must not replace the turn file. Open-PluginTurn emits turn-opened-degraded while degraded. appendDialog 404 on a degraded local turn resubmits or queues session_dialog.
+**Covered by:** FR: FR-MCP-SESSIONLIFE-001; TEST: TEST-MCP-SESSIONLIFE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.
+- [ ] Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.
+- [ ] Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.
+
+## TR-MCP-SESSIONLIFE-002
+
+**Metadata durability and freshness rebind** — Snapshot cached metadata before replacing turn state. Same-request beginTurn is omit-unbound only when durable. Assert-ReplCurrentTurnFresh must not rewrite a cached session id. Three documentation files state ordinary rejection, supersede None, and durable reopen omission.
+**Covered by:** FR: FR-MCP-SESSIONLIFE-002; TEST: TEST-MCP-SESSIONLIFE-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.
+- [ ] Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.
+- [ ] Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.
+
+## TR-MCP-SESSIONLIFE-003
+
+**Wrapper three-outcome exit contract** — Invoke-McpPlugin reports primary success, classified queued success, or nonzero failure. appendActions honors requestId. updateTurn dedupes. Child REPL has one deadline with process-tree cleanup.
+**Covered by:** FR: FR-MCP-SESSIONLIFE-003; TEST: TEST-MCP-SESSIONLIFE-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.
+- [ ] Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.
+- [ ] Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.
+
+## TR-MCP-SESSIONLIFE-004
+
+**Quarantine repair, import recovery, and contention drain** — Repair the three named quarantine files. Transcript ingestion scans importRecovery yaml and deletes only the envelope after durable success. McpErrorClassifier and both drain entry points keep contention retryable and unlatched.
+**Covered by:** FR: FR-MCP-SESSIONLIFE-004; TEST: TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004, TEST-MCP-SESSIONLIFE-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A shared replay and quarantine repair core parses supported historical object shapes, validates canonical identity and paths, and preserves recovery artifacts on any failure.
+- [ ] Both drain entry points use one contention classifier and identical attempt, latch, ordering, and delete-after-durable-success rules; true storage outage also drives health.storage=unreachable while contention remains retryable.
+- [ ] Import recovery follows the canonical session persistence path, supports validated canonical-only or reconstructed bundles, and never exposes transcript ingestion through agent plugins.
+- [ ] Replay enforces workspace containment, reparse containment, file and record bounds, cancellation, content identity, idempotency, and concurrency safety before destructive cleanup.
+
+## TR-MCP-SESSIONLIFE-005
+
+**Stop-hook stale pin and upsert uniqueness** — Close-PluginTurnIfNeeded runs build and audit gates first and allows a stale pin only with authoritative server completion. SessionLogSchemaGuard, SessionLogService.UpsertTurnAsync, and SessionLogController implement predecessor-schema detection, details.inner, and one uniqueness retry.
+**Covered by:** FR: FR-MCP-SESSIONLIFE-005; TEST: TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Stop enforcement obtains exact-turn server proof through the supported typed client after build and audit gates and before any state mutation.
+- [ ] A shared cache-state lock snapshots identity and content hashes, releases for bounded network I/O, then conditionally mutates only if the same state remains current.
+- [ ] Schema predecessor detection and provider error classification occur before mutation and preserve useful credential-safe details.inner.
+- [ ] Upsert retries once only for the known same-session/request unique race and merges the winning row without duplicate child collections.
 
 ## TR-MCP-SESSIONLOG-001
 
@@ -3252,7 +3314,7 @@ Acceptance Criteria:
 - ac-1: ShouldBypassCoordinator returns true for todo.update, requirements.fr.update, sessionlog.submit, memory.add, repo.write, github.cli, workflow.todo.update, federation.control, context.mutate, and requirements.ingest when a coordinator is registered.
 - ac-2: ShouldBypassCoordinator returns false for brain-slot.invoke and brain-slot.weight-update when a coordinator is registered.
 - ac-3: ExecuteAsync does not call SignManifestAsync for general-agent operation names even when Enabled and RequiredForMutations are true.
-**Covered by:** FR: FR-MCP-173; TEST: TEST-MCP-221
+**Covered by:** FR: FR-MCP-173; TEST: TEST-MCP-221, TEST-MCP-SESSIONLIFE-003
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**

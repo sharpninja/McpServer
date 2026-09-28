@@ -182,7 +182,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
 
         public static ReconcilerFixture Create()
         {
-            var workspace = new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" };
+            var workspace = new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
             var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
                 .UseInMemoryDatabase("brain-slot-reconcile-" + Guid.NewGuid().ToString("N"))
                 .Options;

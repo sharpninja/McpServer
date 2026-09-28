@@ -99,7 +99,7 @@ public sealed class UnifiedSessionLogDtoContractTests
               "sourceType": "Codex",
               "sessionId": "Mcp-20260722T213000Z-test",
               "agentSessionId": "Codex-20260722T213000Z-agent",
-              "agentSessionTranscriptFile": "F:/GitHub/McpServer/.mcpServer/codex/transcripts/session.jsonl",
+              "agentSessionTranscriptFile": "Q:/__mcp_unit_test__/McpServer/.mcpServer/codex/transcripts/session.jsonl",
               "agentExecutablePath": "C:/Users/kingd/AppData/Roaming/npm/codex.cmd",
               "agentExecutableVersion": "1.2.3"
             }
@@ -109,7 +109,7 @@ public sealed class UnifiedSessionLogDtoContractTests
 
         Assert.NotNull(dto);
         Assert.Equal("Codex-20260722T213000Z-agent", dto!.AgentSessionId);
-        Assert.Equal("F:/GitHub/McpServer/.mcpServer/codex/transcripts/session.jsonl", dto.AgentSessionTranscriptFile);
+        Assert.Equal("Q:/__mcp_unit_test__/McpServer/.mcpServer/codex/transcripts/session.jsonl", dto.AgentSessionTranscriptFile);
         Assert.Equal("C:/Users/kingd/AppData/Roaming/npm/codex.cmd", dto.AgentExecutablePath);
         Assert.Equal("1.2.3", dto.AgentExecutableVersion);
 

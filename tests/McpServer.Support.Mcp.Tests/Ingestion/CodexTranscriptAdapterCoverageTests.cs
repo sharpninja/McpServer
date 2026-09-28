@@ -139,13 +139,13 @@ public sealed class CodexTranscriptAdapterCoverageTests
     public async Task IngestionService_CodexTurnContextContributesModelAndWorkspacePath()
     {
         var session = await NormalizeAsync([
-            "{\"timestamp\":\"2026-07-03T01:03:25.211Z\",\"type\":\"turn_context\",\"payload\":{\"turn_id\":\"turn-1\",\"cwd\":\"F:/GitHub/Sample\",\"model\":\"gpt-5.5\",\"effort\":\"xhigh\"}}",
+            "{\"timestamp\":\"2026-07-03T01:03:25.211Z\",\"type\":\"turn_context\",\"payload\":{\"turn_id\":\"turn-1\",\"cwd\":\"Q:/__mcp_unit_test__/Sample\",\"model\":\"gpt-5.5\",\"effort\":\"xhigh\"}}",
             "{\"timestamp\":\"2026-07-03T01:03:26.211Z\",\"type\":\"response_item\",\"payload\":{\"id\":\"msg-1\",\"type\":\"message\",\"role\":\"user\",\"content\":[{\"type\":\"input_text\",\"text\":\"hi\"}]}}"
         ]).ConfigureAwait(true);
 
         Assert.Single(session.Events);
         Assert.Equal("gpt-5.5", session.Model);
-        Assert.Equal("F:/GitHub/Sample", session.WorkspacePath);
+        Assert.Equal("Q:/__mcp_unit_test__/Sample", session.WorkspacePath);
         Assert.Empty(session.Diagnostics);
     }
 

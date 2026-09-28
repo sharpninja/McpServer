@@ -1,0 +1,55 @@
+You are the independent HOSTILE VALIDATOR (Codex / gpt-6-astra xhigh) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify live model/effort in the receipt.
+Work class: Project documentation draft review. Not claiming MCP-SETUPPROMPT-001 done.
+Identity note: Runner is GrokCode on PAYTON-LEGION2; you remain Codex hostile validator.
+
+FIRST ACTION: Execute add-profile skill; read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full.
+Follow C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md surfaces A-D. Receipt-only writes under docs/receipts/hv/. Do NOT write MCP session logs. Do not mark TODO done. No Python. Prefer PowerShell.MCP execute_command for ALL pwsh work from the FIRST command (do not use tools.exec_command / unmanaged pwsh).
+
+PRIMARY (do not edit unless you find NEW draft FAILs that block Overall AGREE):
+  F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+Candidate SHA-256 (pre-check): 5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766
+Prior receipt: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T140120Z.md (+ .json)
+Prior DraftScopeVerdict: AGREE 99/99. Prior OverallVerdict: DISAGREE solely due to reviewer-only R01 (live marker credential leaked in tool output as query-string apiKey). Do NOT treat prior R01 as a draft defect unless you find NEW draft FAILs.
+
+=== CRITICAL: Reviewer credential hygiene (OverallVerdict gate) ===
+Reviewer hygiene is IN-SCOPE for OverallVerdict. Any live credential echo in tool output / receipts / response JSONL = FAIL for Overall only (reviewer-only), NOT a draft FAIL.
+BEFORE writing ANY tool output into the HV response, receipt MD/JSON, session log, or JSONL:
+1) Redact query-string credentials (apiKey, token, key, password, secret) to placeholders (e.g. REDACTED_API_KEY) BEFORE persistence.
+2) Never paste live marker credentials into any authored artifact; use placeholders only.
+3) If a tool returns a URL with secrets, strip/replace them in ALL persisted artifacts immediately.
+4) Prefer reading marker auth metadata without echoing raw URLs/query strings; if you must show evidence, show redacted forms only.
+5) Self-check receipts for apiKey=/token=/password=/secret= query forms before declaring Overall AGREE.
+The runner also pre-redacts artifacts after your run so Overall can AGREE when the draft is clean and this run has no live credential echoes.
+
+=== Verdict separation (mandatory) ===
+- DraftScopeVerdict: draft accuracy AND completeness only. AGREE requires accuracy >= 98 AND completeness >= 98. Score reviewer-only issues separately; do not invent product changes for them.
+- OverallVerdict: DraftScope AGREE PLUS no reviewer credential leaks in THIS run's tool echoes/receipts. If draft is clean (>=98/98) and this run has zero live credential echoes, OverallVerdict MUST be AGREE.
+Prior R01 does not force Overall DISAGREE on this re-run if hygiene holds now.
+
+=== Hostile review scope (same as prior setupprompt draft HV) ===
+Accuracy, completeness, ImagePath verify fence, encoding, PowerShell-only, PackageId, UpdateService path, fail-closed Verify, Linux blocked, F01-F09 held remediations, POST install, Configure-before-start, resolved DB identity / VERIFY_EVIDENCE_UNAVAILABLE, PowerShell.MCP mandatory, LocalSystem+PID join.
+Surfaces A-D as prior. Prefer DISAGREE when uncertain on draft claims.
+
+Must re-test LITERALLY from the draft Verify (Windows) fence:
+- Fence compiles (Parser.ParseInput 0 errors; ScriptBlock.Create succeeds)
+- Reconfirm ImagePath 28/28 behavioral cases: ACCEPT canonical quoted ImagePath; REJECT unbalanced quotes, unquoted Program Files spaces, .exe.old, 71470, exe-as-later-arg, and all other prior cases
+- ASCII-only encoding: 0 non-ASCII codepoints; throw fix preserved; strict regex unchanged
+- Candidate hash still matches 5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766 unless you make a minimal draft fix for a NEW draft FAIL
+
+If you find a NEW draft FAIL that blocks Overall AGREE: fix the draft minimally, re-hash, record before/after SHA, then continue. Do not expand scope. Do NOT commit or push. Do NOT mark MCP-SETUPPROMPT-001 done.
+
+Write response JSONL: F:\github\McpServer\docs\receipts\hv\20260928T151807Z-setupprompt-overall.response.jsonl
+Write markdown receipt: F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-overall-20260928T151807Z.md
+Write JSON twin: F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-overall-20260928T151807Z.json
+Also ensure a request JSONL sidecar exists or update: F:\github\McpServer\docs\receipts\hv\20260928T151807Z-setupprompt-overall.request.jsonl
+
+Return explicitly:
+- OverallVerdict (AGREE/DISAGREE)
+- DraftScopeVerdict (AGREE/DISAGREE)
+- accuracy and completeness with rationale
+- PASS/FAIL/UNKNOWN counts (draft vs reviewer-only separated)
+- full FAIL list with Scope=Draft|ReviewerOnly
+- ImagePath 28/28 result and encoding evidence
+- model/effort proof (gpt-6-astra / xhigh)
+- credential-hygiene self-check result for this run

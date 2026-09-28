@@ -415,7 +415,7 @@ public sealed class AgentHelpConversationServiceTests
         };
         configureOptions?.Invoke(options);
         var monitor = new AgentHelpTestOptionsMonitor<AgentHelpOptions>(options);
-        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var primaryTodo = Substitute.For<ITodoService>();
         var todoFactory = Substitute.For<ITodoServiceFactory>();
         todoFactory.CreatePrimary().Returns(primaryTodo);

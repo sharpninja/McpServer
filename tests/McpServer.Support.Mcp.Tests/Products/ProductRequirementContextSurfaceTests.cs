@@ -37,8 +37,8 @@ namespace McpServer.Support.Mcp.Tests.Products;
 /// </summary>
 public sealed class ProductRequirementContextSurfaceTests : IDisposable
 {
-    private const string Owner = @"F:\GitHub\ctx-surface-owner";
-    private const string Sibling = @"F:\GitHub\ctx-surface-sibling";
+    private const string Owner = @"Q:\__mcp_unit_test__\ctx-surface-owner";
+    private const string Sibling = @"Q:\__mcp_unit_test__\ctx-surface-sibling";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
     private readonly CallContext _ctx = new();
@@ -64,7 +64,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
         {
             Id = "sib-cs",
             WorkspaceId = Sibling,
-            SourceKey = @"F:\GitHub\ctx-surface-sibling\src\Secret.cs",
+            SourceKey = @"Q:\__mcp_unit_test__\ctx-surface-sibling\src\Secret.cs",
             SourceType = "repo",
             ContentHash = "hash-secret",
         });
@@ -248,7 +248,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
         search.SearchAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(new ContextSearchResult([], []));
         var graph = Substitute.For<IGraphRagService>();
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var workspaceContext = new WorkspaceContext { WorkspacePath = Owner };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
@@ -293,7 +293,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     private IngestionCoordinator CreateCoordinator(McpDbContext db)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var workspaceContext = new WorkspaceContext { WorkspacePath = Owner };
         var chunker = new Chunker();
         var gitHubCliService = Substitute.For<IGitHubCliService>();

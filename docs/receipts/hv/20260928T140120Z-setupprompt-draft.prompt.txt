@@ -1,0 +1,27 @@
+You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify live model/effort in the receipt.
+Work class: Project documentation draft review. Not claiming MCP-SETUPPROMPT-001 done.
+FIRST ACTION: Execute add-profile skill; read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full.
+Follow C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md surfaces A-D. Receipt-only writes under docs/receipts/hv/. Do NOT write MCP session logs. Do not mark TODO done. No Python.
+Credential hygiene: redact apiKey, X-Api-Key, and any live marker secrets from tool output and receipts. Prefer PowerShell.MCP execute_command for ALL pwsh work from the FIRST command (do not use tools.exec_command / unmanaged pwsh).
+
+PRIMARY: F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+Candidate SHA-256 (pre-check): 5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766
+Prior DISAGREE 97/99: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T134202Z.md
+Prior FAILs: W05 resolved (literal fence compiles + 28/28 behavioral). Residual W06: whole-document re-encoding / mojibake layering beyond the throw-line edit.
+
+This remediation:
+1) Restored prior bytes via reversible 1252/UTF-8 reconstruct (prior SHA 759C8DF... verified in tooling).
+2) Re-applied ONLY the parse-safe throw-message fix on line 643 (strict regex unchanged).
+3) Cleaned damaged punctuation on the previously mojibake lines to explicit ASCII (>=, --, ->, !=, PID-listener, etc.). Document is now 0 non-ASCII codepoints.
+AGREE only if accuracy AND completeness both >= 98.
+
+Must re-test LITERALLY from the draft Verify (Windows) fence:
+- Fence compiles (Parser.ParseInput 0 errors; ScriptBlock.Create succeeds)
+- ACCEPT canonical quoted ImagePath; REJECT unbalanced quotes, unquoted Program Files spaces, .exe.old, 71470, exe-as-later-arg
+Also verify encoding scope: no new mojibake layer; punctuation on former W06 lines is intentional ASCII; throw fix preserved.
+Prior held remediations must remain: F01-F09, Linux blocked, POST install, Configure-before-start, resolved DB identity / VERIFY_EVIDENCE_UNAVAILABLE, PowerShell.MCP mandatory, LocalSystem+PID join.
+Surfaces A-D as prior. Prefer DISAGREE when uncertain. Score reviewer-only issues separately; do not invent product changes for them.
+Write response JSONL: F:\github\McpServer\docs\receipts\hv\20260928T140120Z-setupprompt-draft.response.jsonl
+Write markdown receipt: F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T140120Z.md and JSON twin F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T140120Z.json.
+Return OverallVerdict, PASS/FAIL/UNKNOWN counts, full FAIL list, accuracy and completeness with rationale, model/effort proof.

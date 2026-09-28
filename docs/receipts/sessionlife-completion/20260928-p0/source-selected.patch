@@ -1,0 +1,1339 @@
+diff --git a/plugins/core/lib-ps/McpPluginShim.psm1 b/plugins/core/lib-ps/McpPluginShim.psm1
+index 7441e2cb6ad3c70cd3dd26fdfbaa07b409e6a1e5..321552b62a524e36bab0e60198c2f3fd4daf2028 100644
+--- a/plugins/core/lib-ps/McpPluginShim.psm1
++++ b/plugins/core/lib-ps/McpPluginShim.psm1
+@@ -406,7 +406,7 @@ function New-McpPluginTurnUpsertRequest {
+         [Parameter(Mandatory)][string]$SessionId,
+         [Parameter(Mandatory)][string]$RequestId,
+         [Parameter(Mandatory)][string]$Timestamp,
+-        [Parameter(Mandatory)][string]$QueryText,
++        [Parameter(Mandatory)][AllowEmptyString()][string]$QueryText,
+         [AllowEmptyString()][string]$Title = '',
+         [Parameter(Mandatory)][string]$Status,
+         [string]$ResponseText = '',
+@@ -425,12 +425,14 @@ function New-McpPluginTurnUpsertRequest {
+     $turn = [ordered]@{
+         requestId = $RequestId
+         timestamp = $Timestamp
+-        queryText = $QueryText
+         response = $ResponseText
+         status = $Status
+         model = $Model
+         tokenCount = $TokenCount
+     }
++    if (-not [string]::IsNullOrWhiteSpace($QueryText)) {
++        $turn.queryText = $QueryText
++    }
+ 
+     # TR-MCP-REPL-015: include queryTitle only when a title is actually supplied.
+     # An empty title means "omit" so the server preserves the existing title
+diff --git a/plugins/core/lib-ps/plugin-hook.ps1 b/plugins/core/lib-ps/plugin-hook.ps1
+index ec8d2468f578c33b2957aa5f9356de55b0b75b61..0370c35236a249a3dfad456133d186401f1c0b0c 100644
+--- a/plugins/core/lib-ps/plugin-hook.ps1
++++ b/plugins/core/lib-ps/plugin-hook.ps1
+@@ -900,10 +900,12 @@ function Open-PluginTurn {
+         return
+     }
+ 
++    $degradedFlag = Get-YamlScalar -Path $turnFile -Key 'degraded'
++    $openStatus = if ($degradedFlag -eq 'true') { 'turn-opened-degraded' } else { 'turn-opened' }
+     Write-PluginJson ([ordered]@{
+         hookSpecificOutput = [ordered]@{
+             hookEventName = 'UserPromptSubmit'
+-            status = 'turn-opened'
++            status = $openStatus
+             turnRequestId = $turnRequestId
+             additionalContext = if ($env:MCP_CODEX_INTERNAL_TODO -eq '1' -or $env:MCPSERVER_CODEX_INTERNAL_TODO -eq '1' -or $env:CODEX_MCP_TODO -eq '1') {
+                 "session log turn $turnRequestId is now active. MCP-backed internal TODO tracking is enabled. Continue the current task after any incidental triage submission."
+@@ -925,26 +927,47 @@ function Close-PluginTurnIfNeeded {
+     }
+ 
+     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
++    $sessionAgeStale = $false
+     if (Test-Path -LiteralPath $sessionFile) {
++        $cutoff = (Get-Date).ToUniversalTime().AddHours(-24)
+         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
+-        if (-not $timestampText) { $timestampText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated' }
++        $updatedText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated'
++        $timestampStale = $false
++        $updatedStale = $true
++        $parsedTimestamp = [datetime]::MinValue
++        if ($timestampText -and [datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
++            $timestampStale = $parsedTimestamp.ToUniversalTime() -lt $cutoff
++        }
++        $parsedUpdated = [datetime]::MinValue
++        if ($updatedText -and [datetime]::TryParse($updatedText.Trim('"'), [ref]$parsedUpdated)) {
++            $updatedStale = $parsedUpdated.ToUniversalTime() -lt $cutoff
++        }
++        # A fresh lastUpdated does not clear a stale timestamp pin.
+         if ($timestampText) {
+-            $parsedTimestamp = [datetime]::MinValue
+-            if ([datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
+-                if ($parsedTimestamp.ToUniversalTime() -lt (Get-Date).ToUniversalTime().AddHours(-24)) {
+-                    $requestId = if (Test-Path -LiteralPath $turnFile) { Get-YamlScalar -Path $turnFile -Key 'turnRequestId' } else { '' }
+-                    Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+-                    return
+-                }
+-            }
++            $sessionAgeStale = $timestampStale
++        } else {
++            $sessionAgeStale = $updatedStale
+         }
+     }
+ 
+     if (-not (Test-Path -LiteralPath $turnFile)) {
++        if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
++            Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
++        }
+         Write-PluginJson ([ordered]@{})
+         return
+     }
+ 
++    $status = Get-YamlScalar -Path $turnFile -Key 'status'
++    if ($sessionAgeStale -and $status -eq 'in_progress') {
++        $requestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
++        Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
++        return
++    }
++    if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
++        Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
++    }
++
+     $status = Get-YamlScalar -Path $turnFile -Key 'status'
+     if ($status -eq 'in_progress') {
+         if ($env:MCP_STOP_GATE_COMPLETE_TIMEOUT_SECONDS -and $env:MCP_STOP_GATE_FORCE_TIMEOUT -eq '1') {
+diff --git a/plugins/core/lib-ps/repl-invoke.ps1 b/plugins/core/lib-ps/repl-invoke.ps1
+index 988bc4d9cc4a1f9af1fd414c0b05d46cfa4201f0..a9e862c0ae48dc284789dbc1a046a2ef84b3ec85 100644
+--- a/plugins/core/lib-ps/repl-invoke.ps1
++++ b/plugins/core/lib-ps/repl-invoke.ps1
+@@ -137,13 +137,25 @@ function Complete-ReplBeginTurnAfterPersist {
+         [hashtable]$TurnState = $null
+     )
+     if (Test-ReplBeginTurnDegradedQueued -Persisted $Persisted -Degraded $Degraded) {
+-        if ($CurrentTurnFile -and $TurnState) {
+-            $lines = @(
+-                "turnRequestId: $($TurnState.turnRequestId)"
+-                "sessionId: $($TurnState.sessionId)"
+-                "status: in_progress"
+-            )
+-            Set-Content -LiteralPath $CurrentTurnFile -Value ($lines -join [Environment]::NewLine) -Encoding utf8
++        # FR-MCP-SESSIONLIFE-001: keep the turn file already written. Record degraded
++        # on that object. Do not replace queryText, planFile, todoId, or audit fields.
++        if ($CurrentTurnFile) {
++            if (Test-Path -LiteralPath $CurrentTurnFile) {
++                $text = [System.IO.File]::ReadAllText($CurrentTurnFile)
++                if ($text -notmatch '(?m)^degraded:\s*') {
++                    if (-not $text.EndsWith("`n") -and -not $text.EndsWith("`r`n")) { $text += "`n" }
++                    $text += "degraded: true`n"
++                }
++                [System.IO.File]::WriteAllText($CurrentTurnFile, $text)
++            } elseif ($TurnState) {
++                $lines = @(
++                    "turnRequestId: $($TurnState.turnRequestId)"
++                    "sessionId: $($TurnState.sessionId)"
++                    'status: in_progress'
++                    'degraded: true'
++                )
++                [System.IO.File]::WriteAllText($CurrentTurnFile, ($lines -join "`n") + "`n")
++            }
+         }
+         return @{ ok = $true; degraded = $true; failsafeRetained = (Test-Path -LiteralPath $FailsafePath) }
+     }
+@@ -174,6 +186,8 @@ function Get-ReplOpenSessionStatePath {
+ }
+ 
+ function Get-ReplCompleteTurnPersistSessionId {
++    # Do not overwrite it with the rotated active session id. A cached turn
++    # session id is the persist target. The active id is only a fallback.
+     param(
+         [string]$CurrentTurnSessionId,
+         [string]$ActiveSessionId
+@@ -694,16 +708,22 @@ function Invoke-ReplRawCore {
+         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+ 
+         $proc = [System.Diagnostics.Process]::Start($psi)
++        $budget = [System.Diagnostics.Stopwatch]::StartNew()
+         $envFile = Join-Path (Get-ReplInvokeCacheDir) "envelope-$requestId.tmp"
+         [System.IO.File]::WriteAllText($envFile, $envelope, [System.Text.Encoding]::UTF8)
+-        try {
+-            $fs = [System.IO.File]::OpenRead($envFile)
+-            $fs.CopyTo($proc.StandardInput.BaseStream)
+-            $fs.Close()
+-        } finally {
++        $copyStream = [System.IO.File]::OpenRead($envFile)
++        $copyTask = $copyStream.CopyToAsync($proc.StandardInput.BaseStream)
++        $copyBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
++        if (-not $copyTask.Wait($copyBudget)) {
++            try { $copyStream.Dispose() } catch { }
++            try { $proc.Kill($true) } catch { }
++            try { [void]$proc.WaitForExit(2000) } catch { }
+             Remove-Item $envFile -ErrorAction SilentlyContinue
++            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+         }
++        $copyStream.Dispose()
+         $proc.StandardInput.Close()
++        Remove-Item $envFile -ErrorAction SilentlyContinue
+ 
+         # Drain stdout BEFORE waiting for exit. With a redirected pipe, the
+         # child blocks on stdout writes once the pipe buffer (~4 KB on
+@@ -711,13 +731,15 @@ function Invoke-ReplRawCore {
+         # streams the buffer concurrently and resolves when the child closes
+         # stdout (which happens at process exit).
+         $readTask = $proc.StandardOutput.ReadToEndAsync()
+-        if (-not $readTask.Wait($timeout * 1000)) {
++        $readBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
++        if (-not $readTask.Wait($readBudget)) {
+             try { $proc.Kill($true) } catch { }
+             try { [void]$proc.WaitForExit(2000) } catch { }
+             return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+         }
+         $output = $readTask.Result
+-        if (-not $proc.WaitForExit($timeout * 1000)) {
++        $exitBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
++        if (-not $proc.WaitForExit($exitBudget)) {
+             try { $proc.Kill($true) } catch { }
+             try { [void]$proc.WaitForExit(2000) } catch { }
+             return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+@@ -906,7 +928,10 @@ function Test-ReplFailsafeBackendUnreachable {
+         'Unable to resolve the active workspace cache',
+         'backend_unavailable',
+         'HTTP 503',
+-        'http 503'
++        'http 503',
++        'database is locked',
++        'SQLITE_BUSY',
++        'SQLite Error 5'
+     )
+     foreach ($marker in $markers) {
+         if ($Detail -like "*$marker*") { return $true }
+@@ -945,6 +970,36 @@ function Move-ReplFailsafeToQuarantine {
+     }
+ }
+ 
++function Repair-ReplFailsafeQueuedRecord {
++    param([Parameter(Mandatory)]$Document)
++
++    $script:ReplFailsafeRepaired = $false
++    if ($Document -isnot [System.Collections.IDictionary]) { return }
++    if (-not $Document.Contains('params') -or $Document['params'] -isnot [System.Collections.IDictionary]) { return }
++    $params = $Document['params']
++    if (-not $params.Contains('turns')) { return }
++    $turns = $params['turns']
++    if ($turns -is [System.Collections.IDictionary]) {
++        $ordered = [System.Collections.Generic.List[object]]::new()
++        foreach ($key in @($turns.Keys | Sort-Object { [int]$_ })) {
++            $turn = $turns[$key]
++            if ($turn -is [System.Collections.IDictionary]) {
++                if (-not $turn.Contains('planFile') -or [string]::IsNullOrWhiteSpace([string]$turn['planFile'])) { $turn['planFile'] = 'None' }
++                if (-not $turn.Contains('todoId') -or [string]::IsNullOrWhiteSpace([string]$turn['todoId'])) { $turn['todoId'] = 'None' }
++            }
++            $ordered.Add($turn)
++        }
++        $params['turns'] = $ordered
++        $script:ReplFailsafeRepaired = $true
++    } elseif ($turns -is [System.Collections.IEnumerable] -and $turns -isnot [string]) {
++        foreach ($turn in @($turns)) {
++            if ($turn -isnot [System.Collections.IDictionary]) { continue }
++            if (-not $turn.Contains('planFile') -or [string]::IsNullOrWhiteSpace([string]$turn['planFile'])) { $turn['planFile'] = 'None'; $script:ReplFailsafeRepaired = $true }
++            if (-not $turn.Contains('todoId') -or [string]::IsNullOrWhiteSpace([string]$turn['todoId'])) { $turn['todoId'] = 'None'; $script:ReplFailsafeRepaired = $true }
++        }
++    }
++}
++
+ function Invoke-ReplFailsafeDrain {
+     <#
+     .SYNOPSIS
+@@ -1033,6 +1088,7 @@ function Invoke-ReplFailsafeDrain {
+                 if ($document -isnot [System.Collections.IDictionary]) {
+                     $parseError = 'record root is not a YAML mapping'
+                 } else {
++                    Repair-ReplFailsafeQueuedRecord -Document $document
+                     if ($document.Contains('method')) { $method = [string]$document['method'] }
+                     if ($document.Contains('params')) { $recordParams = $document['params'] }
+                     if ([string]::IsNullOrWhiteSpace($method)) {
+@@ -1051,7 +1107,9 @@ function Invoke-ReplFailsafeDrain {
+             }
+ 
+             $attempts = 0
+-            if ($document.Contains('drainAttempts')) {
++            if ($script:ReplFailsafeRepaired) {
++                $attempts = 0
++            } elseif ($document.Contains('drainAttempts')) {
+                 try { $attempts = [int]$document['drainAttempts'] } catch { $attempts = 0 }
+             }
+             if ($attempts -ge $MaxAttempts) {
+@@ -1181,7 +1239,18 @@ function Invoke-ReplTurnUpsertParams {
+     )
+ 
+     $queryText = Get-ReplCurrentTurnQueryText
+-    if (-not $queryText) { $queryText = $Title }
++    if ([string]::IsNullOrWhiteSpace($queryText)) {
++        # FR-MCP-SESSIONLIFE-001: complete/supersede recover a missing query.
++        # Update, append, and fail omit it so the server QueryText stays.
++        if ($Status -eq 'completed' -or $Status -eq 'canceled' -or $Status -eq 'cancelled') {
++            $queryText = Get-ReplCurrentTurnValue -Key 'queryTitle'
++            if ([string]::IsNullOrWhiteSpace($queryText)) {
++                $queryText = 'Recovered session-log turn'
++            }
++        } else {
++            $queryText = ''
++        }
++    }
+     $timestamp = Get-ReplCurrentTurnValue -Key 'openedAt'
+     if (-not $timestamp) { $timestamp = (Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ssZ") }
+     $model = Get-ReplSessionStateValue -Key 'model'
+@@ -1565,7 +1634,9 @@ function Assert-ReplCurrentTurnFresh {
+     # TR-MCP-PLUGIN-012 AC1: session rotation rewrites current-turn.yaml sessionId
+     # to the active session. Persist still uses Get-ReplCompleteTurnPersistSessionId
+     # on the (now rebound) turn value. Fill an empty turn sessionId from active too.
+-    if ($activeSessionId -and (($staleReasons -contains 'sessionId') -or -not $turnSessionId)) {
++    # FR-MCP-SESSIONLIFE-002: fill only an empty turn session id. Do not rebind
++    # a cached session onto a post-restart active session.
++    if ($activeSessionId -and -not $turnSessionId) {
+         $turnState['sessionId'] = $activeSessionId
+     }
+     if ($snapshot) {
+@@ -1581,6 +1652,44 @@ function New-ReplBeginTurnRequestId {
+     return ('req-{0}-turn-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff))
+ }
+ 
++function Get-ReplServerDialogCount {
++    # TEST-MCP-SESSIONLIFE-005: count processingDialog items stored for one turn.
++    # Returns -1 when the query cannot see that turn, so complete does not invent a count.
++    param([Parameter(Mandatory)][string]$RequestId)
++
++    $meta = Get-ReplSessionMeta
++    if (-not $meta) { return -1 }
++
++    try {
++        $callParams = [ordered]@{
++            agent = $meta.SourceType
++            limit = 25
++        }
++        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
++        $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
++        if (-not $result.Success) { return -1 }
++
++        $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
++        $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
++        $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
++        if ($null -eq $details) { $details = $payload }
++        $items = Get-ReplObjectValue -InputObject $details -Name 'items'
++        foreach ($session in @($items)) {
++            if ([string](Get-ReplObjectValue -InputObject $session -Name 'sessionId') -ne $meta.SessionId) { continue }
++            foreach ($turn in @((Get-ReplObjectValue -InputObject $session -Name 'turns'))) {
++                if ([string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') -ne $RequestId) { continue }
++                $dialog = Get-ReplObjectValue -InputObject $turn -Name 'processingDialog'
++                if ($null -eq $dialog) { return 0 }
++                return @($dialog).Count
++            }
++        }
++    } catch {
++        return -1
++    }
++
++    return -1
++}
++
+ function Get-ReplServerTurnTitle {
+     # TR-MCP-REPL-019: read the server-side title of one turn through the
+     # existing client passthrough (client.SessionLog.QueryAsync). Returns ''
+@@ -1693,10 +1802,15 @@ function Invoke-WorkflowBeginTurn {
+     $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
+     $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+     $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
++    $cachedPlan = Get-ReplCurrentTurnValue -Key 'planFile'
++    $cachedTodo = Get-ReplCurrentTurnValue -Key 'todoId'
++    $cachedDegraded = Get-ReplCurrentTurnValue -Key 'degraded'
+     $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
+-    if (-not $isReopen) {
+-        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
+-        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
++    $isDegradedTurn = $cachedDegraded -match '^(?i:true|1)$'
++    $isDurableReopen = $isReopen -and -not $isDegradedTurn
++    if (-not $isDurableReopen) {
++        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedPlan)) { $cachedPlan } else { 'None' }) }
++        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedTodo)) { $cachedTodo } else { 'None' }) }
+     }
+ 
+     $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+@@ -1715,7 +1829,7 @@ function Invoke-WorkflowBeginTurn {
+         auditCommits = 0
+         queryText = $queryText
+     }
+-    if (-not $isReopen) {
++    if (-not $isDurableReopen) {
+         $turnState['planFile'] = $planFile
+         $turnState['todoId'] = $todoId
+     }
+@@ -1738,8 +1852,10 @@ function Invoke-WorkflowBeginTurn {
+         if ($seedSessionTitle) {
+             Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
+         }
+-        if ($isReopen) {
++        if ($isDurableReopen) {
+             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
++        } elseif ($isReopen) {
++            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+         } else {
+             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+         }
+@@ -1792,6 +1908,12 @@ function Invoke-WorkflowAppendActions {
+     }
+ 
+     if ($ParamsYaml -and $ParamsYaml.Trim()) {
++        $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
++        $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
++        if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
++            [Console]::Error.WriteLine("workflow.sessionlog.appendActions refused requestId '$explicitRequest' because the current turn is '$cachedRequest'.")
++            return $false
++        }
+         $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
+         if ($added -gt 0) {
+             Update-ReplTurnCacheEdits -Increment $added | Out-Null
+@@ -1808,9 +1930,21 @@ function Invoke-WorkflowAppendActions {
+         # TR-MCP-REPL-015: send the turn title only when explicitly set this call;
+         # otherwise omit so a stale cache title cannot clobber the server value.
+         $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
+-        $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
++        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+             -Status 'in_progress' -ResponseText 'Actions appended.' `
+-            -ActionsYaml $actionsBlock
++            -ActionsYaml $actionsBlock)
++        if (-not $persisted) {
++            $queued = $false
++            if ($script:LastReplPersistenceDetails) {
++                $queued = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'queued')
++            }
++            if ($queued) {
++                [Console]::Error.WriteLine("workflow.sessionlog.appendActions queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
++                return $true
++            }
++            [Console]::Error.WriteLine("workflow.sessionlog.appendActions did not persist '$reqId' and no failsafe was retained.")
++            return $false
++        }
+     }
+     return $true
+ }
+@@ -1889,19 +2023,39 @@ function Invoke-WorkflowAppendDialog {
+ 
+     $combined = "$($result.Output) $($result.Error)"
+     if ($combined -match 'not_found|not found|HTTP 404|http 404') {
++        $degradedTurn = Get-ReplTurnCacheField -Field 'degraded'
++        if ($degradedTurn -eq 'true' -or $degradedTurn -eq $true) {
++            $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
++            $script:LastReplPersistenceDetails = [ordered]@{
++                persisted = $false
++                degraded = $true
++                queued = $true
++                persistenceStrategy = 'failsafe-queue'
++                method = 'client.SessionLog.AppendDialogAsync'
++                requestId = $reqId
++                failsafePath = [string]$failsafe
++                message = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
++            }
++            [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
++            return $true
++        }
+         [Console]::Error.WriteLine("workflow.sessionlog.appendDialog turn not found (retryable false); failsafe not used. $($result.Error)$($result.Output)")
+         return $false
+     }
+     if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
+-        $null = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
++        $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
+         $script:LastReplPersistenceDetails = [ordered]@{
+             persisted = $false
+             degraded = $true
+             queued = $true
+             persistenceStrategy = 'failsafe-queue'
+-            message = 'appendDialog persist timed out or returned HTTP 503; dialog failsafe retained.'
++            method = 'client.SessionLog.AppendDialogAsync'
++            requestId = $reqId
++            failsafePath = [string]$failsafe
++            message = "appendDialog persist timed out or returned HTTP 503; dialog failsafe retained requestId=$reqId"
+         }
+-        return $false
++        [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
++        return $true
+     }
+ 
+     [Console]::Error.WriteLine("workflow.sessionlog.appendDialog server call failed: $($result.Error)$($result.Output)")
+@@ -1964,13 +2118,24 @@ function Invoke-WorkflowUpdateTurn {
+     # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
+     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
+     try {
+-        return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
++        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+             -Status 'in_progress' -ResponseText $responseText `
+             -Interpretation $interpretation -TokenCount $tokenCount -Tags $tags -ContextList $contextList)
+     } catch {
+         [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
+         return $false
+     }
++    if ($persisted) { return $true }
++    $queued = $false
++    if ($script:LastReplPersistenceDetails) {
++        $queued = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'queued')
++    }
++    if ($queued) {
++        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
++        return $true
++    }
++    [Console]::Error.WriteLine("workflow.sessionlog.updateTurn did not persist '$reqId' and no failsafe was retained.")
++    return $false
+ }
+ 
+ function Invoke-WorkflowCompleteTurn {
+@@ -2019,6 +2184,11 @@ function Invoke-WorkflowCompleteTurn {
+         return $false
+     }
+ 
++    $serverDialogCount = Get-ReplServerDialogCount -RequestId $reqId
++    if ($serverDialogCount -ge 0) {
++        Set-ReplTurnCacheField -Field 'auditDialog' -Value ([string]$serverDialogCount) | Out-Null
++    }
++
+     Update-ReplTurnCacheStatus -NewStatus 'completed' | Out-Null
+ 
+     if ($script:LastReplPersistenceDetails) {
+@@ -2106,7 +2276,9 @@ function Invoke-WorkflowFailsafeDrain {
+     }
+ 
+     $summary = Invoke-ReplFailsafeDrain -MaxRecords $maxRecords -MaxAttempts $maxAttempts
+-    $script:ReplFailsafeDrainCompleted = $true
++    if (-not $summary.aborted) {
++        $script:ReplFailsafeDrainCompleted = $true
++    }
+     return [pscustomobject]@{
+         Success = (-not $summary.aborted)
+         Output = (ConvertTo-Yaml -Data $summary -Options WithIndentedSequences)
+diff --git a/plugins/core/lib-ps/resolve-cache-dir.ps1 b/plugins/core/lib-ps/resolve-cache-dir.ps1
+index 8228dbbccbc0fe1cc865fd0a2706e1c549189e39..75546d1bd905bae0ce5afa99f63560c67bb13b0d 100644
+--- a/plugins/core/lib-ps/resolve-cache-dir.ps1
++++ b/plugins/core/lib-ps/resolve-cache-dir.ps1
+@@ -94,14 +94,20 @@ function Resolve-McpCacheDir {
+         }
+     }
+ 
++    $explicitWorkspace = @(
++        $env:MCP_WORKSPACE_PATH,
++        $env:MCPSERVER_WORKSPACE_PATH,
++        $env:CLAUDE_PROJECT_DIR
++    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) -and (Test-Path -LiteralPath $_ -PathType Container) } | Select-Object -First 1
++
++    if ([string]::IsNullOrWhiteSpace($StartPath) -and $explicitWorkspace) {
++        return (Join-McpWorkspaceCachePath -WorkspacePath ((Resolve-Path -LiteralPath $explicitWorkspace).ProviderPath))
++    }
++
+     $startCandidates = if (-not [string]::IsNullOrWhiteSpace($StartPath)) {
+         @($StartPath)
+     } else {
+         @(
+-            $env:MCP_WORKSPACE_START_DIR,
+-            $env:MCP_WORKSPACE_PATH,
+-            $env:MCPSERVER_WORKSPACE_PATH,
+-            $env:CLAUDE_PROJECT_DIR,
+             $env:CODEX_CWD,
+             (Get-Location).Path
+         ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+@@ -158,12 +164,17 @@ function Get-McpFailsafeAgentSegment {
+     [CmdletBinding()]
+     param()
+ 
+-    $agent = @(
+-        $env:PLUGIN_AGENT_NAME,
+-        $env:MCP_AGENT_NAME,
+-        $env:PLUGIN_AGENT_DEFAULT,
+-        $env:MCP_PLUGIN_HOST
+-    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
++    $inheritedAgent = @($env:PLUGIN_AGENT_NAME, $env:MCP_AGENT_NAME) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
++    if ($env:MCP_PLUGIN_HOST -match '^(?i:codex)$' -and $inheritedAgent -match 'grok') {
++        $agent = 'Codex'
++    } else {
++        $agent = @(
++            $env:PLUGIN_AGENT_NAME,
++            $env:MCP_AGENT_NAME,
++            $env:PLUGIN_AGENT_DEFAULT,
++            $env:MCP_PLUGIN_HOST
++        ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
++    }
+ 
+     if (-not $agent) {
+         return (Get-McpCacheAgentKey)
+diff --git a/plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1 b/plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1
+index e802298919a605a63671acda1938cda71b9cb144..e71c2cf82b331a03e85b53f6b1752aee9ff9c011 100644
+--- a/plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1
++++ b/plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1
+@@ -12,7 +12,18 @@ Describe 'TEST-HANDOFF-006 plugin handoff skill-file invoke' {
+     BeforeAll {
+         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
+         $script:CoreSkill = Join-Path $script:RepoRoot 'plugins\core\skills\handoff\SKILL.md'
+-        $script:GrokSkill = Join-Path (Split-Path -Parent $script:RepoRoot) 'mcpserver-grok-plugin\skills\handoff\SKILL.md'
++        $primary = $script:RepoRoot
++        $gitFile = Join-Path $script:RepoRoot '.git'
++        if (Test-Path -LiteralPath $gitFile -PathType Leaf) {
++            $gitDirLine = @(Get-Content -LiteralPath $gitFile) | Where-Object { $_ -like 'gitdir:*' } | Select-Object -First 1
++            if ($gitDirLine) {
++                $gitDir = $gitDirLine.Substring(7).Trim()
++                if (-not [System.IO.Path]::IsPathRooted($gitDir)) { $gitDir = Join-Path $script:RepoRoot $gitDir }
++                $main = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $gitDir))
++                if (Test-Path -LiteralPath (Join-Path $main 'McpServer.sln')) { $primary = $main }
++            }
++        }
++        $script:GrokSkill = Join-Path (Split-Path -Parent $primary) 'mcpserver-grok-plugin\skills\handoff\SKILL.md'
+         $script:RequiredMethods = @(
+             'workflow.handoff.ingest',
+             'workflow.handoff.get',
+diff --git a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
+index d24605014a68029cd2b90f63642f59dc0d8fec84..9fb7758cca810dcb2f8861028c75f29e18147792 100644
+--- a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
++++ b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1
+@@ -5100,12 +5100,19 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
+     It 'Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds' {
+         . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+         $script:ReplFailsafeDraining = $true
++        $priorDrain = $env:REPL_FAILSAFE_DRAIN_TIMEOUT
++        $priorTimeout = $env:REPL_TIMEOUT
+         try {
++            Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue
++            Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue
+             $seconds = Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync'
+-            $seconds | Should -BeGreaterThan 2
+-            $seconds | Should -BeGreaterOrEqual 120
++            $seconds | Should -Be 120
++            $env:REPL_TIMEOUT = '180'
++            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Be 180
+         } finally {
+             $script:ReplFailsafeDraining = $false
++            if ($null -eq $priorDrain) { Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_FAILSAFE_DRAIN_TIMEOUT = $priorDrain }
++            if ($null -eq $priorTimeout) { Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_TIMEOUT = $priorTimeout }
+         }
+     }
+ 
+diff --git a/src/McpServer.Services/Services/SessionLogService.cs b/src/McpServer.Services/Services/SessionLogService.cs
+index 39b1044444f4441858c41617416932154581af43..d1d2ddaaea32a5efcf4e29c98b5a0b3c445910ce 100644
+--- a/src/McpServer.Services/Services/SessionLogService.cs
++++ b/src/McpServer.Services/Services/SessionLogService.cs
+@@ -633,7 +633,40 @@ public sealed class SessionLogService : ISessionLogService
+ 
+         RefreshSessionSummaryFromTurns(session);
+ 
+-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
++        try
++        {
++            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
++        }
++        catch (DbUpdateException ex) when (IsSessionLogTurnUniqueRace(ex))
++        {
++            // TEST-MCP-SESSIONLIFE-005: two first inserts of the same request id.
++            // Retry once as an update of the row that won the race.
++            _logger.LogWarning(
++                "UNIQUE constraint race for turn {SourceType}/{SessionId}/{RequestId}, retrying as update",
++                sourceType,
++                sessionId,
++                turn.RequestId);
++            _db.ChangeTracker.Clear();
++
++            session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
++                ?? throw new InvalidOperationException($"Session not found after turn unique race: {sourceType}/{sessionId}");
++            var raced = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId)
++                ?? throw new InvalidOperationException(
++                    $"Turn {turn.RequestId} disappeared after UNIQUE constraint failure.",
++                    ex);
++
++            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);
++            if (turn.PlanFile is not null)
++                turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);
++            if (turn.TodoId is not null)
++                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);
++            UpdateEntryFromDto(raced, turn, mergeOmittedFields: true);
++            ValidateTerminalTurnCompliance(MapTurnEntityToDto(raced), session.SourceType);
++            StampTurnChildren(raced, session.WorkspaceId);
++            RefreshSessionSummaryFromTurns(session);
++            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
++            persistedTurn = raced;
++        }
+ 
+         await PublishChangeSafeAsync(
+             ChangeEventActions.Updated,
+@@ -644,6 +677,17 @@ public sealed class SessionLogService : ISessionLogService
+         return persistedTurn.Id;
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-SESSIONLIFE-005: true when SQLite rejected a new SessionLogTurns row
++    /// because the session and request id were already stored.
++    /// </summary>
++    private static bool IsSessionLogTurnUniqueRace(DbUpdateException ex)
++    {
++        var message = ex.InnerException?.Message ?? string.Empty;
++        return message.Contains("UNIQUE", StringComparison.OrdinalIgnoreCase)
++            && message.Contains("SessionLogTurns", StringComparison.OrdinalIgnoreCase);
++    }
++
+     /// <summary>
+     /// BUG-SESSIONLOG-WS-002: stamp a turn and all of its loaded child rows with
+     /// the parent session's WorkspaceId so a session never holds mixed stamps.
+diff --git a/src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs b/src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs
+index 72e3f76fc0e3913e9bd30b4154c6858f3c12cec9..ed54a7ce0c1c622ef5f7e58d64ff2f6b59e4ff45 100644
+--- a/src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs
++++ b/src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs
+@@ -53,7 +53,11 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
+     {
+         ArgumentNullException.ThrowIfNull(request);
+         if (request.Persist)
++        {
+             TranscriptRunArtifactWriter.ValidatePersistenceRequest(request);
++            await ReplayPendingImportRecoveryAsync(request, cancellationToken).ConfigureAwait(false);
++        }
++
+         var inputPath = TranscriptPathSecurity.ValidateReadablePath(request);
+ 
+         var diagnostics = new List<TranscriptDiagnostic>();
+@@ -73,7 +77,7 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
+ 
+             try
+             {
+-                var session = await adapter.NormalizeAsync(bundle, cancellationToken).ConfigureAwait(false);
++                var session = await adapter.NormalizeAsync(bundle, cancellationToken).ConfigureAwait(false);
+                 sessions.Add(ProjectCompatibility(session, request.CompatibilityProfile));
+             }
+             catch (Exception ex) when (ex is not OperationCanceledException)
+@@ -102,67 +106,125 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
+         return new TranscriptIngestionResult(sessions, diagnostics);
+     }
+ 
+-    private async Task<TranscriptIngestionResult> PersistPendingAsync(
+-        TranscriptIngestionRequest request,
+-        TranscriptIngestionResult pending,
+-        CancellationToken cancellationToken)
+-    {
+-        var diagnostics = pending.Diagnostics.ToList();
+-        var receipts = new List<TranscriptSessionReceipt>();
+-        var retainedRecoveryPaths = new List<string>();
+-        var allPersisted = true;
+-
+-        for (var i = 0; i < pending.Receipts.Count; i++)
+-        {
+-            cancellationToken.ThrowIfCancellationRequested();
+-            var receipt = pending.Receipts[i];
+-            var session = pending.Sessions[i];
+-            try
+-            {
+-                var persistenceReceipt = await _persister!.PersistAsync(request, session, receipt, cancellationToken).ConfigureAwait(false);
+-                DeleteRecoveryFile(receipt.ImportRecoveryPath);
+-                receipts.Add(CloneReceipt(receipt, "persisted", persistenceReceipt));
+-            }
+-            catch (Exception ex) when (ex is not OperationCanceledException)
+-            {
+-                allPersisted = false;
+-                retainedRecoveryPaths.Add(receipt.ImportRecoveryPath);
+-                diagnostics.Add(new TranscriptDiagnostic("persistence_failed", ex.Message, "error", receipt.YamlArtifactPath));
+-                receipts.Add(receipt);
+-            }
+-        }
+-
+-        return new TranscriptIngestionResult(
+-            pending.Sessions,
+-            diagnostics,
+-            pending.RunId,
+-            pending.ArtifactRootPath,
+-            retainedRecoveryPaths,
+-            persisted: allPersisted,
+-            degraded: !allPersisted,
+-            receipts);
+-    }
+-
+-    private static TranscriptSessionReceipt CloneReceipt(TranscriptSessionReceipt receipt, string status, string? persistenceReceipt)
+-    {
+-        return new TranscriptSessionReceipt(
+-            receipt.SourceKind,
+-            receipt.RootId,
+-            receipt.SessionId,
+-            receipt.SourceHash,
+-            status,
+-            receipt.YamlArtifactPath,
+-            receipt.ImportRecoveryPath,
+-            receipt.CompatibilityArtifactPath,
+-            receipt.Diagnostics,
+-            persistenceReceipt);
+-    }
+-
+-    private static void DeleteRecoveryFile(string path)
+-    {
+-        if (File.Exists(path))
+-            File.Delete(path);
+-    }
++    private async Task ReplayPendingImportRecoveryAsync(TranscriptIngestionRequest request, CancellationToken cancellationToken)
++    {
++        if (_persister is null || string.IsNullOrWhiteSpace(request.WorkspacePath) || string.IsNullOrWhiteSpace(request.Agent))
++            return;
++
++        var pending = TranscriptRunArtifactWriter.GetPendingRecoveryDirectory(request.WorkspacePath, request.Agent);
++        await ImportRecoveryReplayer.ReplayDirectoryAsync(
++            pending,
++            (path, yaml, token) => PersistRecoveredEnvelopeAsync(request, path, yaml, token),
++            cancellationToken).ConfigureAwait(false);
++    }
++
++    private async Task<bool> PersistRecoveredEnvelopeAsync(
++        TranscriptIngestionRequest request,
++        string envelopePath,
++        string yaml,
++        CancellationToken cancellationToken)
++    {
++        if (_persister is null)
++            return false;
++
++        var body = ImportRecoveryReplayer.ReadBody(yaml);
++        if (body is null || body.SourceFiles is null || body.SourceFiles.Count == 0)
++            return false;
++        if (!Enum.TryParse<TranscriptSourceKind>(body.SourceKind, ignoreCase: true, out var sourceKind) || sourceKind == TranscriptSourceKind.Auto)
++            return false;
++        if (!_adapters.TryGetValue(sourceKind, out var adapter))
++            return false;
++
++        var replayed = false;
++        foreach (var sourceFile in body.SourceFiles)
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            if (string.IsNullOrWhiteSpace(sourceFile) || !File.Exists(sourceFile))
++                return false;
++            if (string.Equals(Path.GetFullPath(sourceFile), Path.GetFullPath(envelopePath), StringComparison.OrdinalIgnoreCase))
++                return false;
++
++            var bundle = new TranscriptBundle(sourceFile, sourceKind, [sourceFile]);
++            var session = await adapter.NormalizeAsync(bundle, cancellationToken).ConfigureAwait(false);
++            if (session.CanonicalYaml.Contains("importRecovery:", StringComparison.Ordinal))
++                return false;
++
++            var receipt = new TranscriptSessionReceipt(
++                sourceKind,
++                string.IsNullOrWhiteSpace(body.RootId) ? "recovery" : body.RootId,
++                string.IsNullOrWhiteSpace(session.SessionId) ? body.SessionId ?? "recovery" : session.SessionId,
++                string.IsNullOrWhiteSpace(body.SourceHash) ? "recovery" : body.SourceHash,
++                "pending",
++                body.YamlArtifactPath ?? string.Empty,
++                envelopePath);
++            await _persister.PersistAsync(request, session, receipt, cancellationToken).ConfigureAwait(false);
++            replayed = true;
++        }
++
++        return replayed;
++    }
++
++    private async Task<TranscriptIngestionResult> PersistPendingAsync(
++        TranscriptIngestionRequest request,
++        TranscriptIngestionResult pending,
++        CancellationToken cancellationToken)
++    {
++        var diagnostics = pending.Diagnostics.ToList();
++        var receipts = new List<TranscriptSessionReceipt>();
++        var retainedRecoveryPaths = new List<string>();
++        var allPersisted = true;
++
++        for (var i = 0; i < pending.Receipts.Count; i++)
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            var receipt = pending.Receipts[i];
++            var session = pending.Sessions[i];
++            try
++            {
++                var persistenceReceipt = await _persister!.PersistAsync(request, session, receipt, cancellationToken).ConfigureAwait(false);
++                DeleteRecoveryFile(receipt.ImportRecoveryPath);
++                receipts.Add(CloneReceipt(receipt, "persisted", persistenceReceipt));
++            }
++            catch (Exception ex) when (ex is not OperationCanceledException)
++            {
++                allPersisted = false;
++                retainedRecoveryPaths.Add(receipt.ImportRecoveryPath);
++                diagnostics.Add(new TranscriptDiagnostic("persistence_failed", ex.Message, "error", receipt.YamlArtifactPath));
++                receipts.Add(receipt);
++            }
++        }
++
++        return new TranscriptIngestionResult(
++            pending.Sessions,
++            diagnostics,
++            pending.RunId,
++            pending.ArtifactRootPath,
++            retainedRecoveryPaths,
++            persisted: allPersisted,
++            degraded: !allPersisted,
++            receipts);
++    }
++
++    private static TranscriptSessionReceipt CloneReceipt(TranscriptSessionReceipt receipt, string status, string? persistenceReceipt)
++    {
++        return new TranscriptSessionReceipt(
++            receipt.SourceKind,
++            receipt.RootId,
++            receipt.SessionId,
++            receipt.SourceHash,
++            status,
++            receipt.YamlArtifactPath,
++            receipt.ImportRecoveryPath,
++            receipt.CompatibilityArtifactPath,
++            receipt.Diagnostics,
++            persistenceReceipt);
++    }
++
++    private static void DeleteRecoveryFile(string path)
++    {
++        if (File.Exists(path))
++            File.Delete(path);
++    }
+     private TranscriptSession ProjectCompatibility(TranscriptSession session, TranscriptCompatibilityProfile profile)
+     {
+         if (profile == TranscriptCompatibilityProfile.None)
+diff --git a/src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs b/src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs
+index 78aa837f7acf7654338befbd4a459c87438ec1c4..eaab5cfd430b82360cf165353c108c62f0435740 100644
+--- a/src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs
++++ b/src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs
+@@ -10,6 +10,15 @@ internal static class TranscriptRunArtifactWriter
+         .WithNamingConvention(CamelCaseNamingConvention.Instance)
+         .Build();
+ 
++    /// <summary>Pending import-recovery directory for one workspace agent.</summary>
++    /// <param name="workspacePath">Workspace root.</param>
++    /// <param name="agent">Agent folder name.</param>
++    /// <returns>The failsafe pending directory.</returns>
++    internal static string GetPendingRecoveryDirectory(string workspacePath, string agent)
++    {
++        return Path.Combine(Path.GetFullPath(workspacePath), ".mcpServer", SanitizePathSegment(agent), "failsafe", "pending");
++    }
++
+     internal static void ValidatePersistenceRequest(TranscriptIngestionRequest request)
+     {
+         ValidateArtifactRequest(request, "persistence");
+@@ -54,8 +63,8 @@ internal static class TranscriptRunArtifactWriter
+         IReadOnlyList<TranscriptDiagnostic> diagnostics,
+         CancellationToken cancellationToken)
+     {
+-        var (runId, artifactRoot, agentRoot) = PrepareArtifactRoot(request, sessions, "persistence");
+-        var recoveryRoot = Path.Combine(agentRoot, "failsafe", "pending");
++        var (runId, artifactRoot, _) = PrepareArtifactRoot(request, sessions, "persistence");
++        var recoveryRoot = GetPendingRecoveryDirectory(request.WorkspacePath!, request.Agent!);
+         Directory.CreateDirectory(recoveryRoot);
+ 
+         var receipts = new List<TranscriptSessionReceipt>();
+diff --git a/src/McpServer.Support.Mcp/Controllers/SessionLogController.cs b/src/McpServer.Support.Mcp/Controllers/SessionLogController.cs
+index da9528122fb4242ace7eed0eaf8f22da0c936359..60e41e824ccff1d0e62f6bb6561a1b8c4ed79e36 100644
+--- a/src/McpServer.Support.Mcp/Controllers/SessionLogController.cs
++++ b/src/McpServer.Support.Mcp/Controllers/SessionLogController.cs
+@@ -251,6 +251,11 @@ public sealed class SessionLogController : ControllerBase
+             _logger.LogError("{ExceptionDetail}", ex.ToString());
+             return ClassifiedError(ex);
+         }
++        catch (DbUpdateException ex)
++        {
++            _logger.LogError("{ExceptionDetail}", ex.ToString());
++            return ClassifiedError(ex);
++        }
+     }
+ 
+     /// <summary>
+diff --git a/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs b/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
+index e331d40041b341eb71760f43946b571a7b7f695a..a7a064c1184b0bb833edf7b32558db20334641db 100644
+--- a/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
++++ b/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
+@@ -73,6 +73,7 @@ public sealed class PluginHostProcessAdapter
+         }
+ 
+         environment["PLUGIN_AGENT_NAME"] = scenario.AgentSourceType;
++        environment["MCP_PLUGIN_ROOT"] = pluginRoot;
+ 
+         var arguments = new List<string>();
+         string executable;
+@@ -186,8 +187,7 @@ public sealed class PluginHostProcessAdapter
+     private static string ResolvePluginRoot(string repositoryName)
+     {
+         var repoRoot = FindRepositoryRoot();
+-        var parent = Directory.GetParent(repoRoot)?.FullName
+-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
+         if (!Directory.Exists(pluginRoot))
+         {
+diff --git a/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs b/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs
+index 3b9d0355dea261cf08eca7c4f9355129cd71e859..f5431d96c056f10bf8412c17fd1ef64b21e24a21 100644
+--- a/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs
++++ b/tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs
+@@ -30,8 +30,7 @@ public sealed class PluginHostProcessAdapterTests
+         var repoRoot = FindRepositoryRoot();
+         var scenario = PluginSessionLogCatalog.LoadAndValidate(repoRoot)
+             .Single(row => row.HostKind == hostKind);
+-        var parent = Directory.GetParent(repoRoot)?.FullName
+-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
+         var entrypointPath = Path.Combine(pluginRoot, scenario.Entrypoint.Replace('/', Path.DirectorySeparatorChar));
+         var stdin = "{\"hostKind\":\"" + hostKind + "\",\"method\":\"workflow.sessionlog.beginTurn\"}";
+@@ -77,6 +76,7 @@ public sealed class PluginHostProcessAdapterTests
+         Assert.Equal(scenario.AgentSourceType, fake.LastRequest.Environment["PLUGIN_AGENT_NAME"]);
+         var rootVariable = scenario.RequiredEnvironmentVariables.First(name => name.EndsWith("_PLUGIN_ROOT", StringComparison.Ordinal));
+         Assert.Equal(pluginRoot, fake.LastRequest.Environment[rootVariable], StringComparer.OrdinalIgnoreCase);
++        Assert.Equal(pluginRoot, fake.LastRequest.Environment["MCP_PLUGIN_ROOT"], StringComparer.OrdinalIgnoreCase);
+     }
+ 
+     /// <summary>
+@@ -152,8 +152,7 @@ public sealed class PluginHostProcessAdapterTests
+         var repoRoot = FindRepositoryRoot();
+         var scenario = PluginSessionLogCatalog.LoadAndValidate(repoRoot)
+             .Single(row => row.HostKind == hostKind);
+-        var parent = Directory.GetParent(repoRoot)?.FullName
+-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
+         var envelope = stdin ?? "{\"hostKind\":\"" + hostKind + "\",\"method\":\"workflow.sessionlog.beginTurn\"}";
+         var fake = new FakePluginProcessRunner
+diff --git a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+index 672f3baba0de3ba58301dfd9b07c8f9c69c7c5c9..1c58a5a270f1df249eea1112e2611f00ae2c9674 100644
+--- a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
++++ b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs
+@@ -15,6 +15,35 @@ public static class PluginSessionLogCatalog
+         AllowTrailingCommas = false,
+     };
+ 
++    /// <summary>
++    /// Parent directory that holds sibling plugin repositories, even when
++    /// <paramref name="repositoryRoot"/> is a git worktree.
++    /// </summary>
++    /// <param name="repositoryRoot">McpServer checkout, including a worktree.</param>
++    /// <returns>The directory that contains mcpserver-*-plugin repositories.</returns>
++    public static string SiblingPluginParent(string repositoryRoot)
++    {
++        var primary = repositoryRoot;
++        var gitFile = Path.Combine(repositoryRoot, ".git");
++        if (File.Exists(gitFile))
++        {
++            var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line =>
++                line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
++            if (gitDirLine is not null)
++            {
++                var gitDir = gitDirLine["gitdir:".Length..].Trim();
++                if (!Path.IsPathRooted(gitDir))
++                    gitDir = Path.GetFullPath(Path.Combine(repositoryRoot, gitDir));
++                var main = Directory.GetParent(gitDir)?.Parent?.Parent;
++                if (main is not null && File.Exists(Path.Combine(main.FullName, "McpServer.sln")))
++                    primary = main.FullName;
++            }
++        }
++
++        return Directory.GetParent(primary)?.FullName
++            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++    }
++
+     /// <summary>
+     /// Loads plugin-sessionlog-scenarios.json and validates TR-MCP-PLUGININT-001 AC1 fields.
+     /// </summary>
+@@ -36,8 +65,7 @@ public static class PluginSessionLogCatalog
+             throw new InvalidOperationException("Catalog scenarios array is missing or empty.");
+         }
+ 
+-        var parent = Directory.GetParent(repositoryRoot)?.FullName
+-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++        var parent = SiblingPluginParent(repositoryRoot);
+ 
+         var enabled = new List<PluginSessionLogScenario>();
+         foreach (var row in document.Scenarios)
+diff --git a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+index 15b4c62e5d1ea9de952bb565cdff1143f2d2f29f..49a58433fd6592e8a2c02df66c0b04d7e3d93ebc 100644
+--- a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
++++ b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs
+@@ -28,7 +28,7 @@ public sealed class PluginSessionLogCatalogTests
+     public void Catalog_RepositoryRootsExist()
+     {
+         var repoRoot = FindRepositoryRoot();
+-        var parent = Directory.GetParent(repoRoot)?.FullName;
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         Assert.False(string.IsNullOrWhiteSpace(parent));
+         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
+         {
+@@ -49,7 +49,7 @@ public sealed class PluginSessionLogCatalogTests
+     public void Catalog_RequiredEntrypointFilesExist()
+     {
+         var repoRoot = FindRepositoryRoot();
+-        var parent = Directory.GetParent(repoRoot)!.FullName;
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
+         {
+             Assert.False(string.IsNullOrWhiteSpace(row.Entrypoint));
+@@ -68,7 +68,7 @@ public sealed class PluginSessionLogCatalogTests
+     public void Catalog_VersionMetadataPresent()
+     {
+         var repoRoot = FindRepositoryRoot();
+-        var parent = Directory.GetParent(repoRoot)!.FullName;
++        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
+         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
+         {
+             var pluginRoot = Path.Combine(parent, row.RepositoryName);
+diff --git a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
+index 3c15c3297fa549d612d64f199afb0012a972429c..d5da3075f7a28997ba8d4b37f00c289fe18a0c83 100644
+--- a/tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
++++ b/tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
+@@ -599,8 +599,7 @@ public sealed partial class PluginSessionLogWorkflowAdapter
+         {
+             if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+             {
+-                var parent = Directory.GetParent(directory.FullName)?.FullName
+-                    ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
++                var parent = PluginSessionLogCatalog.SiblingPluginParent(directory.FullName);
+                 var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
+                 if (!Directory.Exists(pluginRoot))
+                 {
+diff --git a/tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs b/tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs
+index aeef38acc4d6363c09b17352a339cfd22a6960a0..af77f1562fcd9b2de5a98f6a85a20ce53c4a0f65 100644
+--- a/tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs
++++ b/tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs
+@@ -48,6 +48,44 @@ public sealed class SessionLogControllerErrorTests
+         Assert.DoesNotContain("See the inner exception", json, StringComparison.Ordinal);
+     }
+ 
++    /// <summary>TEST-MCP-SESSIONLIFE-004: dialog DbUpdateException is classified, not a bare 500.</summary>
++    [Fact]
++    public async Task AppendDialogAsync_DbUpdateException_ReturnsClassifiedEnvelope()
++    {
++        var service = Substitute.For<ISessionLogService>();
++        var inner = new SqliteException("UNIQUE constraint failed: SessionLogTurns.RequestId", 19);
++        service.AppendProcessingDialogAsync(
++                Arg.Any<string>(),
++                Arg.Any<string>(),
++                Arg.Any<string>(),
++                Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(),
++                Arg.Any<CancellationToken>())
++            .Throws(new DbUpdateException(
++                "An error occurred while saving the entity changes. See the inner exception for details.",
++                inner));
++
++        var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
++        var items = new List<ProcessingDialogItemDto>
++        {
++            new() { Role = "model", Content = "classified dialog" },
++        };
++
++        var result = await controller.AppendDialogAsync(
++            "GrokCode",
++            "GrokCode-20260923T205606Z-life",
++            "req-20260923T205606Z-001-life",
++            items,
++            TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++        var objectResult = Assert.IsType<ObjectResult>(result);
++        Assert.Equal(409, objectResult.StatusCode);
++        var json = JsonSerializer.Serialize(objectResult.Value);
++        using var document = JsonDocument.Parse(json);
++        Assert.Equal("conflict", document.RootElement.GetProperty("code").GetString());
++        Assert.Equal(inner.Message, document.RootElement.GetProperty("details").GetProperty("inner").GetString());
++        Assert.DoesNotContain("See the inner exception", json, StringComparison.Ordinal);
++    }
++
+     /// <summary>REST validation returns the four-field envelope, not ProblemDetails-only.</summary>
+     [Fact]
+     public async Task SubmitAsync_MissingSourceType_ReturnsValidationEnvelope()
+diff --git a/tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs b/tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
+index b33d532d3deaebcd4f3b3318e8a7d4f7542df5ae..444d750fb395f8ac7447879a820d11459e7deccc 100644
+--- a/tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
++++ b/tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs
+@@ -113,8 +113,9 @@ public sealed class HandoffMcpToolTests : IDisposable
+     public void PluginSync_HandoffSkill_MatchesCoreArtifact()
+     {
+         var root = FindRepoRoot();
++        var primary = FindPrimaryRepoRoot(root);
+         var core = Path.Combine(root, "plugins", "core", "skills", "handoff", "SKILL.md");
+-        var grok = Path.Combine(root, "..", "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
++        var grok = Path.Combine(Directory.GetParent(primary)!.FullName, "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
+         Assert.True(File.Exists(core), core);
+         Assert.True(File.Exists(grok), grok);
+         Assert.Equal(
+@@ -217,4 +218,25 @@ public sealed class HandoffMcpToolTests : IDisposable
+ 
+         throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+     }
++
++    private static string FindPrimaryRepoRoot(string repoRoot)
++    {
++        var gitFile = Path.Combine(repoRoot, ".git");
++        if (!File.Exists(gitFile))
++            return repoRoot;
++
++        var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line => line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
++        if (gitDirLine is null)
++            return repoRoot;
++
++        var gitDir = gitDirLine["gitdir:".Length..].Trim();
++        if (!Path.IsPathRooted(gitDir))
++            gitDir = Path.GetFullPath(Path.Combine(repoRoot, gitDir));
++
++        var main = Directory.GetParent(gitDir)?.Parent?.Parent;
++        if (main is not null && File.Exists(Path.Combine(main.FullName, "McpServer.sln")))
++            return main.FullName;
++
++        return repoRoot;
++    }
+ }
+diff --git a/tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs b/tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs
+index d6cc56c84c5ef16bad3808a066552985bb5b8c3e..9b81bcf9cdfcab7728d90dd1440421e02c241c0f 100644
+--- a/tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs
++++ b/tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs
+@@ -5,7 +5,9 @@ using McpServer.Support.Mcp.Services;
+ using McpServer.Support.Mcp.Storage;
+ using Microsoft.Data.Sqlite;
+ using Microsoft.EntityFrameworkCore;
++using Microsoft.EntityFrameworkCore.Diagnostics;
+ using Microsoft.Extensions.Logging.Abstractions;
++using McpServer.Support.Mcp.Storage.Entities;
+ using NSubstitute;
+ using Xunit;
+ 
+@@ -1830,14 +1832,145 @@ public sealed class SessionLogServiceTests : IDisposable
+         bool useServiceWorkspaceContext)
+         => BuildSqliteSut(connection, WorkspacePath, useServiceWorkspaceContext);
+ 
++    /// <summary>
++    /// TEST-MCP-SESSIONLIFE-005: a unique SessionLogTurns race on the first insert
++    /// retries once and updates the row that won, leaving a single request id.
++    /// </summary>
++    [Fact]
++    public async Task UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates()
++    {
++        var databasePath = Path.Combine(Path.GetTempPath(), "sessionlog-unique-" + Guid.NewGuid().ToString("N") + ".db");
++        var connectionString = new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString();
++        var sessionId = BuildSessionId("GrokCode", "unique-race");
++        try
++        {
++            using (var seedConnection = new SqliteConnection(connectionString))
++            {
++                seedConnection.Open();
++                var (seed, seedDb) = BuildSqliteSut(seedConnection);
++                using (seedDb)
++                {
++                    await seed.SubmitAsync(
++                        CreateTestDto("GrokCode", sessionId),
++                        cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++                }
++            }
++
++            var interceptor = new RivalTurnInsertInterceptor();
++            using var connection = new SqliteConnection(connectionString);
++            connection.Open();
++            var (sut, db) = BuildSqliteSut(connection, WorkspacePath, interceptor: interceptor);
++            using (db)
++            {
++                var turn = new UnifiedRequestEntryDto
++                {
++                    RequestId = "req-20260923T205606Z-001-race",
++                    Timestamp = "2026-09-23T20:56:06Z",
++                    QueryText = "winner text",
++                    Status = "in_progress",
++                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
++                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
++                };
++
++                var turnId = await sut.UpsertTurnAsync(
++                    "GrokCode",
++                    sessionId,
++                    turn,
++                    TestContext.Current.CancellationToken).ConfigureAwait(true);
++
++                Assert.True(turnId > 0);
++                Assert.Equal(1, interceptor.Inserts);
++                var rows = await db.SessionLogTurns
++                    .IgnoreQueryFilters()
++                    .Where(item => item.RequestId == turn.RequestId)
++                    .ToListAsync(TestContext.Current.CancellationToken)
++                    .ConfigureAwait(true);
++                var stored = Assert.Single(rows);
++                Assert.Equal("winner text", stored.QueryText);
++            }
++        }
++        finally
++        {
++            TryDelete(databasePath);
++        }
++    }
++
++    private static void TryDelete(string path)
++    {
++        try
++        {
++            if (File.Exists(path))
++                File.Delete(path);
++        }
++        catch (IOException)
++        {
++        }
++    }
++
++    /// <summary>Inserts the racing turn on a second connection before the first save.</summary>
++    private sealed class RivalTurnInsertInterceptor : SaveChangesInterceptor
++    {
++        /// <summary>How many rival rows this interceptor inserted.</summary>
++        public int Inserts { get; private set; }
++
++        /// <inheritdoc />
++        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
++        {
++            InsertRival(eventData);
++            return result;
++        }
++
++        /// <inheritdoc />
++        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
++            DbContextEventData eventData,
++            InterceptionResult<int> result,
++            CancellationToken cancellationToken = default)
++        {
++            InsertRival(eventData);
++            return base.SavingChangesAsync(eventData, result, cancellationToken);
++        }
++
++        private void InsertRival(DbContextEventData eventData)
++        {
++            if (Inserts > 0 || eventData.Context is null)
++                return;
++
++            var added = eventData.Context.ChangeTracker
++                .Entries<SessionLogTurnEntity>()
++                .FirstOrDefault(entry => entry.State == EntityState.Added);
++            if (added is null)
++                return;
++
++            var connectionString = eventData.Context.Database.GetConnectionString();
++            if (string.IsNullOrWhiteSpace(connectionString))
++                return;
++
++            using var connection = new SqliteConnection(connectionString);
++            connection.Open();
++            using var command = connection.CreateCommand();
++            command.CommandText = """
++                INSERT INTO SessionLogTurns (WorkspaceId, SessionLogId, RequestId, PlanFile, TodoId, QueryText)
++                VALUES ($ws, $sid, $rid, 'None', 'None', 'rival')
++                """;
++            command.Parameters.AddWithValue("$ws", added.Entity.WorkspaceId ?? string.Empty);
++            command.Parameters.AddWithValue("$sid", added.Entity.SessionLogId);
++            command.Parameters.AddWithValue("$rid", added.Entity.RequestId ?? string.Empty);
++            command.ExecuteNonQuery();
++            Inserts++;
++        }
++    }
++
+     private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
+         SqliteConnection connection,
+         string workspacePath,
+-        bool useServiceWorkspaceContext = true)
+-    {
+-        var options = new DbContextOptionsBuilder<McpDbContext>()
+-            .UseSqlite(connection)
+-            .Options;
++        bool useServiceWorkspaceContext = true,
++        SaveChangesInterceptor? interceptor = null)
++    {
++        var builder = new DbContextOptionsBuilder<McpDbContext>()
++            .UseSqlite(connection);
++        if (interceptor is not null)
++            builder.AddInterceptors(interceptor);
++        var options = builder.Options;
+         var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath };
+         var db = new McpDbContext(options, workspaceContext);
+         db.Database.EnsureCreated();

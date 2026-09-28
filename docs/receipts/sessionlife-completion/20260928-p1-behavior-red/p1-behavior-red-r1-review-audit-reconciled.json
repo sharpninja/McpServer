@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-28T08:51:30.9395528+00:00",
+  "gate": "P1 behavior Red r1",
+  "accepted": false,
+  "OverallVerdict": "DISAGREE",
+  "counts": {
+    "PASS": 27,
+    "FAIL": 6,
+    "UNKNOWN": 0
+  },
+  "accuracy": 97,
+  "completeness": 92,
+  "reviewResponsePath": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T081146Z-sessionlife-p1-behavior-red-r1.response.jsonl",
+  "reviewResponseSha256": "3F7D90424AAC480C31E0C89D75E38717F1CCA10364BDCBBE29B19976050C5CBF",
+  "fullTerminalProof": {
+    "recordType": "parent_explicit_identity_audit_reconciliation",
+    "timestampUtc": "2026-09-28T08:50:28.6333141+00:00",
+    "reviewGate": "P1 behavior Red r1",
+    "reviewOverallVerdict": "DISAGREE",
+    "implementationAccepted": false,
+    "sessionId": "Codex-20260928T082122Z-sessionlife-p1-behavior-red-review-feynman",
+    "requestId": "req-20260928T082142Z-sessionlife-p1-behavior-red-review",
+    "guardQuery": "req-20260928T084705Z-35dd",
+    "initialWrapperAttempt": {
+      "error": "Windows process launch failed: filename or extension too long",
+      "beforeChildStart": true,
+      "paramsObjectCharacters": 79131,
+      "noBackendMutation": true
+    },
+    "successfulMethod": "client.SessionLog.CompleteTurnAsync",
+    "supportedEntry": "Dot-source installed lib/repl-invoke.ps1 and Invoke-ReplMethod, documented helper entry, request serialized to REPL stdin",
+    "writeReceipt": "req-20260928T084912Z-1036",
+    "writeSeconds": 1.1080475,
+    "readbackReceipt": "req-20260928T084945Z-2fa6",
+    "terminalStatus": "completed",
+    "fullBodyCharacters": 79131,
+    "fullBodySha256": "CC7CBBB02D6B789FA8A8C6972C5EF48EB100FBAEA2761F5348E3832E30DBEE13",
+    "fullBodyExact": true,
+    "changedTurnFields": [
+      "timestamp",
+      "status",
+      "response"
+    ],
+    "preservedActions": 4,
+    "preservedDecisionStrings": 4,
+    "preservedDialogs": 5,
+    "ownRepairWalCleared": true,
+    "originalSubmitWalRetained": true,
+    "originalSubmitWalMeaning": "The earlier whole-session SubmitAsync envelope is not blindly replayed or deleted by this response-only exact-identity completion",
+    "automaticDrainDisabledForCall": true,
+    "notes": "Late parent audit repair, not original wrapper compliance. Completion updates turn timestamp/status/response; original action/decision/dialog sections preserved. DISAGREE and6findings unchanged."
+  },
+  "completedNative": {
+    "recordType": "parent_completed_native_stream_pointer",
+    "timestampUtc": "2026-09-28T08:51:30.9100951+00:00",
+    "nativeAgentSessionId": "01a0e5ca-ae6d-7290-ac38-8d22df00947b",
+    "nativeTurnId": "01a0e713-c421-7451-b6e2-1b52ae656f39",
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\sessions\\01a0e5ca-ae6d-7290-ac38-8d22df00947b\\20260928T081146Z-sessionlife-p1-behavior-red-r1.completed.native.response.jsonl",
+    "bytes": 22306037,
+    "sha256": "EC53DE56EC5AC9A78B919E72A9E748855BB33D04FC0C188142BB58D9C43A00BA",
+    "validJsonlRecords": 3978,
+    "invalidJsonlRecords": 0,
+    "exactTaskCompleteRecords": 1,
+    "taskCompletedAtUtc": "2026-09-28T08:47:50.417Z",
+    "gitIgnored": true,
+    "scope": "Byte-complete private native stream after reviewer final return; private profile content is not copied to public evidence"
+  },
+  "sourceHistoryManifest": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/history-r1/history-manifest.json",
+  "sourceHistoryManifestSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+  "nextBoundary": "Corrective tests/XMLDocs-only R2 already released, then new Red run and independent review; no production behavior Green or phase completion."
+}

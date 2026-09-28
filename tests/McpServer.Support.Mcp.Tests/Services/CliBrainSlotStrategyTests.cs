@@ -75,7 +75,7 @@ public sealed class CliBrainSlotStrategyTests
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
         var args = GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt",
             model: "grok-4.6",
             sessionId: sessionId,
@@ -104,7 +104,7 @@ public sealed class CliBrainSlotStrategyTests
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
         var args = GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt",
             model: "grok-4.6",
             sessionId: sessionId,
@@ -127,7 +127,7 @@ public sealed class CliBrainSlotStrategyTests
                 new CliBrainSlotSessionStore(),
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
-                    CliWorkingDirectory = @"F:\GitHub\McpServer",
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
                 }),
                 NullLogger.Instance);
 
@@ -137,7 +137,7 @@ public sealed class CliBrainSlotStrategyTests
             var cwd = spawner.StartInfos[0].WorkingDirectory;
             Assert.False(string.IsNullOrWhiteSpace(cwd));
             Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
-            Assert.DoesNotContain(@"F:\GitHub\McpServer", cwd, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain(@"Q:\__mcp_unit_test__\McpServer", cwd, StringComparison.OrdinalIgnoreCase);
             Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
             Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
             Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
@@ -239,7 +239,7 @@ public sealed class CliBrainSlotStrategyTests
     public void BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             outputPath: @"C:\temp\codex-out.txt",
             model: "gpt-5.6-sol",
             sessionId: null);
@@ -257,7 +257,7 @@ public sealed class CliBrainSlotStrategyTests
     public void BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             outputPath: @"C:\temp\codex-out.txt",
             model: "gpt-5.6-sol",
             sessionId: "thread-123");
@@ -323,7 +323,7 @@ public sealed class CliBrainSlotStrategyTests
                 new CliBrainSlotSessionStore(),
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
-                    CliWorkingDirectory = @"F:\GitHub\McpServer",
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
                     CliRunAs = "kingd",
                 }),
                 NullLogger.Instance);
@@ -355,7 +355,7 @@ public sealed class CliBrainSlotStrategyTests
                 new CliBrainSlotSessionStore(),
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
-                    CliWorkingDirectory = @"F:\GitHub\McpServer",
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
                 }),
                 NullLogger.Instance);
 
@@ -406,7 +406,7 @@ public sealed class CliBrainSlotStrategyTests
                 new CliBrainSlotSessionStore(),
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
-                    CliWorkingDirectory = @"F:\GitHub\McpServer",
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
                     CliRunAs = "kingd",
                 }),
                 NullLogger.Instance);
@@ -440,7 +440,7 @@ public sealed class CliBrainSlotStrategyTests
                 new CliBrainSlotSessionStore(),
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
-                    CliWorkingDirectory = @"F:\GitHub\McpServer",
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
                     CliRunAs = "kingd",
                 }),
                 NullLogger.Instance);
@@ -469,7 +469,7 @@ public sealed class CliBrainSlotStrategyTests
             store,
             new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
             {
-                CliWorkingDirectory = @"F:\GitHub\McpServer",
+                CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
             }),
             NullLogger.Instance);
 
@@ -500,7 +500,7 @@ public sealed class CliBrainSlotStrategyTests
             new CliBrainSlotSessionStore(),
             new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
             {
-                CliWorkingDirectory = @"F:\GitHub\McpServer",
+                CliWorkingDirectory = @"Q:\__mcp_unit_test__\McpServer",
             }),
             NullLogger.Instance);
 

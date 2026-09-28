@@ -28,7 +28,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
     private readonly IContextSearchService _searchService = Substitute.For<IContextSearchService>();
     private readonly IGraphRagService _graphRagService = Substitute.For<IGraphRagService>();
     private readonly IWebsiteIngestor _websiteIngestor = Substitute.For<IWebsiteIngestor>();
-    private readonly WorkspaceContext _workspaceContext = new() { WorkspacePath = @"F:\GitHub\McpServer" };
+    private readonly WorkspaceContext _workspaceContext = new() { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
 
     /// <summary>Initializes the in-memory context database used by these controller tests.</summary>
     public ContextControllerTransactionGateTests()
@@ -129,7 +129,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
         ITurnTransactionCoordinator coordinator,
         TurnTransactionOptions? transactionOptions = null)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var chunker = new Chunker();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var sessionLogService = Substitute.For<ISessionLogService>();

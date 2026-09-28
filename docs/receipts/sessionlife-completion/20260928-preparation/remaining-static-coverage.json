@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T05:34:38.8767264Z",
+  "classification": "read-only preparation; no executed tests or acceptance",
+  "sourceAgentId": "01a0e5bb-35fe-7d23-9cf5-d408365880ac",
+  "model": "gpt-5.6-sol",
+  "effort": "high",
+  "candidateHead": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "originalSelected27Aggregate": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+  "verbatimReport": "**Read-Only Inventory \u2014 2026-09-28T05:32:50Z**\n\nNo files, tests, requirements, TODOs, session records, or failsafes were changed. No tests were executed and no acceptance claim is made.\n\n**Terminal State**\n\nParent\u2019s query proves only that `Codex-20260928T020045Z-p0-sessionlife` / `req-20260928T020045Z-p0-reconcile` is now `completed`.\n\nLocal evidence remains unreconciled:\n\n- [current-turn.yaml](.mcpServer/codex/sessions/Codex-20260928T020045Z-p0-sessionlife/current-turn.yaml) still says `in_progress`; SHA-256 `E7E7440A1F3CFDBF8A545AAD41A7BE093416A07F02B442A94D13770713691ADF`.\n- Earlier P0 failsafe remains pending; SHA-256 `C846A4A9696C89C1BF1732C72A44E7D16BC200637B073E4C542D6C3836851A10`.\n- R3 action failsafe remains pending; SHA-256 `6910244F20A0382E9A0FA7B01E87CF02CF0A563E889258913EA7081045843ED1`.\n- Hooke\u2019s old turn remains independently `in_progress`.\n\nThe mechanism that changed the server status is not proven. It may have been a later recovery or terminal update, but the local files do not establish that.\n\nIndependent exact-session readback should verify:\n\n- Expected full response from the last complete local snapshot: 346 characters, UTF-8 SHA-256 `A3AF7E2B609066D841A3E3EACDBFC238065E7F091ABF5E54101D1118E580A0C7`.\n- Expected four R3 actions from `20260928T043531Z-session_submit-e129.yaml`; canonical action JSON SHA-256 `19C57BCF9C8014602AEE1C4716F9D33F7AF654687E823490126424FA721E986B`.\n- That queued envelope contains only `Actions appended.` as its response, SHA-256 `5EB2967A30D46142ECF529D0C5D5E6C18DACBE660DE250DD48B1FFC43321390D`.\n\nIf exact server readback returns only `Actions appended.`, completion occurred without preserving the expected full terminal body. Neither pending file should be deleted until body and actions are independently matched.\n\n**Coverage Findings**\n\n- **P1 report plumbing:** No executed proof. The Reds still need fresh-run inventory, missing/duplicate/stale results, zero discovery, skips, failed Pester blocks, and candidate-source drift. The intended provider is `build/Build.TestDependencies.cs:62-82`, with `tests/Build.Tests/Build.Tests.csproj`.\n- **FR-SESSIONLIFE-004 deadlines:** One stopwatch exists in `repl-invoke.ps1`, but stderr is not redirected there, cancellation is absent, and post-kill waits can exceed the deadline. `plugin-hook.ps1` has a separate unbounded `WaitForExit()`. Existing tests only cover a mocked never-exit case.\n- **Identity isolation:** Ambient agent variables outrank host identity, and workspace setup does not scrub inherited agent/cache variables. No real inherited Grok-to-Codex child-process test exists.\n- **Repair and contention:** Repair tests are mocked and do not reject invented/conflicting identity. SQLite lock contention is currently classified as storage outage rather than a distinct retryable condition.\n- **FR-SESSIONLIFE-005 Stop order:** Stale handling and local auto-close occur before build/audit checks. Existing tests do not prove build/audit precedence or exact authoritative completed-turn identity.\n- **Provider race handling:** Current retry logic is SQLite-message-based and clears the entire tracker. No SQL Server `2601/2627`, PostgreSQL `23505` exact-constraint/savepoint, unrelated-entity preservation, or cancellation proof exists.\n- **Recovery safety:** Import recovery reads and deletes files without a shared lease, ownership hash, canonical-first loader, bundle reconstruction, or containment/reparse enforcement. Existing tests use mocked persistence.\n- **FR-MCP-170:** Append-dialog dispatch and degraded-404 queuing have mocked proof. Missing are a never-degraded 404/no-failsafe assertion and a real append followed by exact server readback.\n- **FR-MCP-REPL-011:** Both drains, nested deferral, and the 120-second selection contract have proof-only Pester cases, not executed here. Deletion currently follows generic process success rather than an identity-bearing persistence receipt.\n- **Receipt semantics:** `SessionLogTurnSubmitResult` carries agent/session/request identity, but the PowerShell wrapper reduces the result to success/output/exit code. Unit Reds should reject empty, ambiguous, and mismatched successful receipts without adding a server roundtrip.\n- **P3 dependency:** Exact durable proof depends on the planned typed client `GetAsync`; the authoritative exact server endpoint/service already exists. P2 should validate explicit positive receipts, while P3/P6 perform exact durable readback. Paginated `QueryAsync` must not become a second proof route.\n- **FR-MCP-173 subset:** Session-log operations bypass the coordinator by operation name. Current tests cover GrokCode only and conflict with older QBAgent expectations. Multi-agent persistence and repeated-completion proofs remain absent. Broader FR-173 obligations remain outside this batch.\n\n**Pinned Baseline**\n\nCandidate HEAD is `6a565d8762072ed040469047791a57c80dbf1e88`; 27-file aggregate SHA-256 is `5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45`.\n\nKey runtime pins:\n\n- `repl-invoke.ps1`: `D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7`\n- `plugin-hook.ps1`: `261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3`\n- `SessionLogService.cs`: `89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC`\n- `TranscriptIngestionService.cs`: `3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55`\n- `ImportRecoveryReplayer.cs`: `0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6`\n\nThe earlier `systemError` was a host/thread interruption after commentary. The preceding PowerShell.Mcp read had completed successfully; no repository or runtime command failure was observed.",
+  "parentLatestTerminalObservation": {
+    "queryReceipt": "req-20260928T052703Z-02b0",
+    "sessionId": "Codex-20260928T020045Z-p0-sessionlife",
+    "requestId": "req-20260928T020045Z-p0-reconcile",
+    "status": "completed",
+    "responseCharacters": 357,
+    "responseSha256": "95D8C143C5B836B4A274848089000BCBBD4CDEBEA61E60A8834DF2BC7E7CCDCE",
+    "reportedExpectedCharacters": 346,
+    "reportedExpectedSha256": "A3AF7E2B609066D841A3E3EACDBFC238065E7F091ABF5E54101D1118E580A0C7",
+    "matchesReportedExpected": false,
+    "actionOrders": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "allQueuedRecordsReconciled": false
+  },
+  "noWritesByInvestigator": true,
+  "noTestsExecuted": true,
+  "noProductAcceptance": true,
+  "reportPathNormalization": "Repository-root prefix removed from local Markdown link targets; private original retained byte-exact as decoded text.",
+  "privateOriginal": {
+    "path": ".mcpServer/codex/preparation/20260928-remaining-static-coverage.original.json",
+    "sha256": "47EE37E5D39DF7E93705693A57E7A0FE78D8AEB0A8C6ADB040F55E7D95C71E26"
+  }
+}

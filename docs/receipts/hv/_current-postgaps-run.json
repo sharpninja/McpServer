@@ -1,0 +1,20 @@
+﻿{
+    "runnerPid":  37024,
+    "doneFlag":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.DONE",
+    "wrapperLog":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.wrapper.log",
+    "promptPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.prompt.txt",
+    "reqPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.request.jsonl",
+    "logPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.codex-exec-v155.log",
+    "respPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.response.jsonl",
+    "sha":  "7DDF8C82F468E677C1026235D696A26BC6F4F254CADFE4C3061671D8BF65468B",
+    "startedUtc":  "2026-09-28T16:09:20.0833287Z",
+    "fullStamp":  "20260928T160920Z-setupprompt-postgaps",
+    "round":  1,
+    "mdPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-postgaps-20260928T160920Z.md",
+    "lastMsg":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.last-message.txt",
+    "runnerPs1":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T160920Z-setupprompt-postgaps.runner.ps1",
+    "stamp":  "20260928T160920Z",
+    "jsonPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-postgaps-20260928T160920Z.json",
+    "launchPid":  58576,
+    "launchedUtc":  "2026-09-28T16:09:58.4677850Z"
+}

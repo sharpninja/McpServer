@@ -1,0 +1,37 @@
+﻿You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify the live turn actually uses that model/effort and record it in the receipt.
+
+Work class: Project documentation draft review (setup prompt for frontier agents). Not a claim that MCP-SETUPPROMPT-001 is done. Not ops-only.
+
+FIRST ACTION (mandatory): Execute the add-profile skill. Read C:\Users\kingd\.codex\skills\add-profile\SKILL.md (or C:\Users\kingd\.claude\skills\add-profile\SKILL.md) and follow it literally: read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full. Record profile file count in the receipt.
+
+Also follow the adversarial contract in C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md (surfaces A-D), adapted for documentation: review only; write durable HV receipt only; do not implement product features; do not mark TODO done.
+
+PRIMARY ARTIFACT TO ATTACK:
+F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+
+RELATED TODO (context only, not done):
+MCP-SETUPPROMPT-001 — frontier-agent setup prompt: obtain/install/configure/verify with interactive intake (agents, BDPv4 vs custom process, storage MSSQL|PostgreSQL|SQLite, service WindowsService|systemd|other), scenario playbooks, no session log during setup (write setup-choices.manifest + setup-implementation.plan instead), Windows and Linux examples.
+
+Implementer claims to attack (surface A):
+1. Draft exists and is suitable as the copy-paste frontier-agent setup prompt for MCP-SETUPPROMPT-001.
+2. Intake is mandatory before obtain/install and covers agents, process, storage, service target.
+3. Scenario playbooks give concrete handling for each axis (not questions only).
+4. Session log is correctly excluded; post-intake artifacts are setup-choices.manifest and setup-implementation.plan with usable schemas.
+5. Windows and Linux examples are at comparable depth and actionable.
+6. Conflicts/unsupported combinations have refuse/redirect guidance.
+7. Verify criteria and stop conditions are clear and honest (no overclaim of product install commands that do not match the repo).
+8. Draft does not invent unsupported storage/service paths or hard-code BDPv4 into plugin code incorrectly.
+
+Surfaces B/C/D:
+B. Workspace rules: honesty, receipts, PowerShell-only guidance in the prompt, no secrets in manifests, MCP plugin invoke not raw REST.
+C. Requirements: discover whether FR/TR exist for MCP-SETUPPROMPT-001; if none, score whether claiming a production-ready prompt would be premature (draft status is OK if labeled DRAFT).
+D. Plan/TODO holistic: draft advances MCP-SETUPPROMPT-001 but dry-run and inventory tasks remain open — DISAGREE any implication the TODO is complete.
+
+Rules:
+- Prefer DISAGREE when uncertain. AGREE only if accuracy and completeness are both >= 98 with evidence.
+- Write public response JSONL to: F:\github\McpServer\docs\receipts\hv\20260928T113325Z-setupprompt-draft.response.jsonl
+- Also write a markdown receipt under docs/receipts/hv/ named hostile-validator-setupprompt-draft-20260928T113325Z.md (and optional .json twin).
+- Return OverallVerdict AGREE or DISAGREE, PASS/FAIL/UNKNOWN counts, full FAIL list, accuracy and completeness scores with rationale, model/effort proof.
+- Read-only on product code except creating HV receipts under docs/receipts/hv/.
+- No Python. No marking MCP TODO done.

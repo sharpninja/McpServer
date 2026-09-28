@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Include="scenarios\plugin-sessionlog-scenarios.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\templates\prompt-templates.yaml" Link="templates\prompt-templates.yaml" CopyToOutputDirectory="PreserveNewest" />
     <None Include="invoke-node-plugin-export.mjs" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\McpServer.Review.Tests\aiunit-grok-json.cmd" Link="aiunit-grok-json.cmd" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\McpServer.Review.Tests\aiunit-grok-json.ps1" Link="aiunit-grok-json.ps1" CopyToOutputDirectory="PreserveNewest" />

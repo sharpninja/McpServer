@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194717_RepairTriageCreatedTodoWorkspace";
-    private const string WorkspacePath = "F:\\GitHub\\McpServer";
+    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
 

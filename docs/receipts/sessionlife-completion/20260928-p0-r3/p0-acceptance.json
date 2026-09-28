@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "timestampUtc": "2026-09-28T05:19:02.6625594Z",
+  "planId": "PLAN-SESSIONLIFE-001",
+  "planRevision": 4,
+  "phase": "P0",
+  "acceptedScope": "Requirements, mappings, per-ID acceptance inputs, bounded original-source preservation and isolated candidate selection only",
+  "status": "accepted",
+  "frozenIndex": "docs/receipts/sessionlife-completion/20260928-p0-r3/p0-r3-frozen-index.json",
+  "frozenIndexSha256": "993BCEB5F2F6226909E616EE420A7CF9ED76F313ED3759C1DAA37BC43BE530CD",
+  "reviewRequest": "docs/receipts/hv/20260928T044718Z-sessionlife-p0-r3.request.jsonl",
+  "reviewResponse": "docs/receipts/hv/20260928T044718Z-sessionlife-p0-r3.response.jsonl",
+  "reviewResponseSha256": "C4884BD39CB6EADC063D6DDE69A27CDD1F9DD4C33E126EABB14799F5A305B80F",
+  "OverallVerdict": "AGREE",
+  "counts": {
+    "PASS": 32,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "accuracy": 99,
+  "completeness": 99,
+  "parentTerminalProof": {
+    "recordType": "parent-exact-terminal-full-body-readback",
+    "timestampUtc": "2026-09-28T05:17:25.3033632Z",
+    "queryReceipt": "req-20260928T051649Z-ea04",
+    "sessionId": "Codex-20260928T022012Z-sessionlife-p0-review-feynman",
+    "requestId": "req-20260928T045405Z-sessionlife-p0-r3-review",
+    "sessionCount": 1,
+    "turnCount": 1,
+    "status": "completed",
+    "responseCharacters": 26640,
+    "expectedBodySha256": "8F0CCE7178AB93490C28392FAFF30C983EA4C19BF3BB10FEB45FCE237E2A95F6",
+    "actualBodySha256": "8F0CCE7178AB93490C28392FAFF30C983EA4C19BF3BB10FEB45FCE237E2A95F6",
+    "exactFullBodyMatch": true,
+    "queryExitCode": 0
+  },
+  "privateCompletedArchive": {
+    "recordType": "parent-completed-native-stream-archive",
+    "timestampUtc": "2026-09-28T05:18:06.3538005Z",
+    "source": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\27\\rollout-2026-09-27T21-14-20-01a0e5ca-ae6d-7290-ac38-8d22df00947b.jsonl",
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\sessions\\01a0e5ca-ae6d-7290-ac38-8d22df00947b\\20260928T044718Z-sessionlife-p0-r3.completed.native.response.jsonl",
+    "sha256": "1A30E6F3FF4A9BF9AE3D2162C2D4FC97B8D1D46BF0F950843BCED496D4A26AE2",
+    "bytes": 11181878,
+    "validJsonlRecords": 2334,
+    "invalidJsonlRecords": 0,
+    "sourceStable": true,
+    "gitIgnored": true,
+    "nativeTurnId": "01a0e656-ce86-7cd0-b9f9-110267872ecf",
+    "terminalEvent": {
+      "type": "task_complete",
+      "turn_id": "01a0e656-ce86-7cd0-b9f9-110267872ecf",
+      "last_agent_message": "2026-09-28 05:09 UTC\n\n**AGREE: R3 P0 inputs only.** Accuracy **99%**, completeness **99%**. **32 PASS, 0 FAIL, 0 UNKNOWN.**\n\nBoth R2 defects are corrected. Verified 109 AC rows, 35 open TODOs, 47 mapping edges, 53 anchors, all 27 candidate files, and all 247 original files. No P1-P7 implementation or tests are accepted.\n\n[Full verdict and terminal proof](F:/GitHub/McpServer/docs/receipts/hv/20260928T044718Z-sessionlife-p0-r3.response.jsonl)\n\n**Audit**\n- Session: `Codex-20260928T022012Z-sessionlife-p0-review-feynman`\n- R3 request: `req-20260928T045405Z-sessionlife-p0-r3-review`\n- Exact readback: `req-20260928T050835Z-bb48`\n- Confirmed **completed**, one matching turn, all **26,640 characters byte-exact**.\n- Private native snapshot retained with public pointer/hash. Parent can archive the completed stream after this return.\n\n**SHA-256 Receipts**\n```text\nIndex:\n993BCEB5F2F6226909E616EE420A7CF9ED76F313ED3759C1DAA37BC43BE530CD\nAcceptance:\n3CC7DCD6876D2141FA0C0ACC87C985CA7A3985C3F4F104749EA2502C8075CD60\nPath inventory:\n332A5397A90F4EA8041650210DEAD6EECB7E8BAC430F61E56FB165E9158D8E84\nReconciliation:\n9B1C9E8DBBE76E2EEEE9531E10028AD32DE3C34320D5305CA80B8069BADBB599\nCandidate aggregate:\n5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45\nFull MCP verdict body:\n8F0CCE7178AB93490C28392FAFF30C983EA4C19BF3BB10FEB45FCE237E2A95F6\nResponse JSONL:\nFBB9FE50078947721AB8FAAEE0AE6F655B46734420BD4AE1A84D86D854A1AB22\n```\n\nHooke/Poincare terminal failures and Poincare’s queued R3 failsafe remain **unresolved and unwaived**. R1/R2 remain immutable. No TODOs were closed or phases advanced.\n\n",
+      "started_at": 1790570843,
+      "completed_at": 1790572231,
+      "duration_ms": 1387212,
+      "time_to_first_token_ms": 10094
+    }
+  },
+  "unresolvedObligations": [
+    {
+      "owner": "Hooke/Poincare",
+      "state": "unresolved",
+      "detail": "Prior terminal audit failures remain disclosed and in_progress; no completion or primary-persistence claim supplied by this review."
+    },
+    {
+      "owner": "Poincare R3",
+      "sessionId": "Codex-20260928T020045Z-p0-sessionlife",
+      "requestId": "req-20260928T020045Z-p0-reconcile",
+      "state": "queued-failsafe-not-primary-proven",
+      "failsafePath": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\default\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260928T043531Z-session_submit-e129.yaml",
+      "serverPersistenceProven": false
+    },
+    {
+      "owner": "Parent",
+      "state": "diagnosis-and-plan-amendment-unresolved",
+      "detail": "Session graph cancellation observed previously; Cartesian expansion remains a hypothesis. No service change, timeout escalation, deployment, audit deletion or process waiver is authorized or performed by this review."
+    }
+  ],
+  "noImplementationAccepted": true,
+  "bugTodoCount": 35,
+  "bugTodoDoneCount": 0,
+  "nextGate": "P1 contract Red only; independent Red review before any production scaffold"
+}

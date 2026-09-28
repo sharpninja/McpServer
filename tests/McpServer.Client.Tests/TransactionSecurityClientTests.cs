@@ -20,7 +20,7 @@ public sealed class TransactionSecurityClientTests
     {
         BaseUrl = new Uri("http://localhost:7147"),
         ApiKey = "test-key",
-        WorkspacePath = @"F:\GitHub\McpServer"
+        WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
     };
 
     /// <summary>Registering a party posts the expected route and serializes the key metadata.</summary>
@@ -256,7 +256,7 @@ public sealed class TransactionSecurityClientTests
         var client = new McpServerClient(http, new McpServerClientOptions
         {
             BaseUrl = new Uri("http://localhost:7147"),
-            WorkspacePath = @"F:\GitHub\McpServer"
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
         });
 
         client.ApiKey = "rotated-key";

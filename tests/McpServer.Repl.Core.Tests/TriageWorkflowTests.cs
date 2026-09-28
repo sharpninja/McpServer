@@ -18,15 +18,15 @@ public sealed class TriageWorkflowTests
             ["title"] = "Incidental MCP bug",
             ["summary"] = "The wrapper hid a server error.",
             ["component"] = "mcpserver-codex-plugin",
-            ["affectedPaths"] = new[] { "F:\\GitHub\\mcpserver-codex-plugin\\lib\\repl-invoke.sh" },
+            ["affectedPaths"] = new[] { "Q:\\__mcp_unit_test__\\mcpserver-codex-plugin\\lib\\repl-invoke.sh" },
         }];
         yield return [TriageCommandShapes.GetReportMethod, new Dictionary<string, object?> { ["reportId"] = "triage-report-001" }];
         yield return [TriageCommandShapes.QueryGroupsMethod, new Dictionary<string, object?> { ["status"] = "failed" }];
-        yield return [TriageCommandShapes.GetDashboardMethod, new Dictionary<string, object?> { ["workspacePath"] = "F:\\GitHub\\McpServer" }];
+        yield return [TriageCommandShapes.GetDashboardMethod, new Dictionary<string, object?> { ["workspacePath"] = "Q:\\__mcp_unit_test__\\McpServer" }];
         yield return [TriageCommandShapes.GetGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001" }];
         yield return [TriageCommandShapes.QueryRunsMethod, new Dictionary<string, object?> { ["status"] = "failed", ["groupId"] = "triage-group-001" }];
         yield return [TriageCommandShapes.GetRunMethod, new Dictionary<string, object?> { ["runId"] = "triage-run-001" }];
-        yield return [TriageCommandShapes.QueryCreatedTodosMethod, new Dictionary<string, object?> { ["workspacePath"] = "F:\\GitHub\\McpServer" }];
+        yield return [TriageCommandShapes.QueryCreatedTodosMethod, new Dictionary<string, object?> { ["workspacePath"] = "Q:\\__mcp_unit_test__\\McpServer" }];
         yield return [TriageCommandShapes.FlushGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001" }];
         yield return [TriageCommandShapes.RetryGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001", ["force"] = true }];
         yield return [TriageCommandShapes.DeleteGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001", ["reason"] = "fixed upstream" }];
@@ -221,7 +221,7 @@ public sealed class TriageWorkflowTests
                 await workflow.Received(1).QueryGroupsAsync("failed", null, Arg.Any<CancellationToken>());
                 break;
             case TriageCommandShapes.GetDashboardMethod:
-                await workflow.Received(1).GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>());
                 break;
             case TriageCommandShapes.GetGroupMethod:
                 await workflow.Received(1).GetGroupAsync("triage-group-001", Arg.Any<CancellationToken>());
@@ -233,7 +233,7 @@ public sealed class TriageWorkflowTests
                 await workflow.Received(1).GetRunAsync("triage-run-001", Arg.Any<CancellationToken>());
                 break;
             case TriageCommandShapes.QueryCreatedTodosMethod:
-                await workflow.Received(1).QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+                await workflow.Received(1).QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>());
                 break;
             case TriageCommandShapes.FlushGroupMethod:
                 await workflow.Received(1).FlushGroupAsync("triage-group-001", Arg.Any<CancellationToken>());

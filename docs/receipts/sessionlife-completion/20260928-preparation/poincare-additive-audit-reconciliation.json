@@ -1,0 +1,260 @@
+{
+  "timestampUtc": "2026-09-28T05:48:48.7980991Z",
+  "queryReceipt": "req-20260928T054844Z-dc1c",
+  "sessionId": "Codex-20260928T020045Z-p0-sessionlife",
+  "requestId": "req-20260928T020045Z-p0-reconcile",
+  "submitExit": 0,
+  "queryExit": 0,
+  "sessionCount": 1,
+  "turnCount": 1,
+  "status": "completed",
+  "responseCharacters": 357,
+  "responseSha256": "95D8C143C5B836B4A274848089000BCBBD4CDEBEA61E60A8834DF2BC7E7CCDCE",
+  "originalActions": [
+    {
+      "order": 1,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 2,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 3,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 4,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 5,
+      "count": 1,
+      "exact": true
+    }
+  ],
+  "addedActions": [
+    {
+      "order": 6,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 7,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 8,
+      "count": 1,
+      "exact": true
+    },
+    {
+      "order": 9,
+      "count": 1,
+      "exact": true
+    }
+  ],
+  "unchangedOtherFields": [
+    {
+      "field": "tags",
+      "exact": true
+    },
+    {
+      "field": "planFile",
+      "exact": true
+    },
+    {
+      "field": "requirementsDiscovered",
+      "exact": true
+    },
+    {
+      "field": "model",
+      "exact": true
+    },
+    {
+      "field": "queryTitle",
+      "exact": true
+    },
+    {
+      "field": "processingDialog",
+      "exact": true
+    },
+    {
+      "field": "timestamp",
+      "exact": true
+    },
+    {
+      "field": "queryText",
+      "exact": true
+    },
+    {
+      "field": "tokenCount",
+      "exact": true
+    },
+    {
+      "field": "requestId",
+      "exact": true
+    },
+    {
+      "field": "todoId",
+      "exact": true
+    },
+    {
+      "field": "blockers",
+      "exact": true
+    },
+    {
+      "field": "status",
+      "exact": true
+    },
+    {
+      "field": "interpretation",
+      "exact": true
+    },
+    {
+      "field": "response",
+      "exact": true
+    }
+  ],
+  "strings": [
+    {
+      "field": "contextList",
+      "value": "docs/plans/sessionlife-batch-completion-20260927.md",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/approval.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-baseline.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-infrastructure-baseline.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/existing-candidate-pester-inventory.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-reconciliation.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/parent-freeze-verification.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/requirements-path-inventory.json",
+      "count": 1
+    },
+    {
+      "field": "contextList",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/requirements-reconciliation.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0/requirements-reconciliation.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/requirements-path-inventory.json",
+      "count": 1
+    },
+    {
+      "field": "filesModified",
+      "value": "docs/receipts/sessionlife-completion/20260928-p0-r3/requirements-reconciliation.json",
+      "count": 1
+    },
+    {
+      "field": "designDecisions",
+      "value": "Use exact requirement and acceptance-criterion identity for coverage assignment; never numeric suffix grouping.",
+      "count": 1
+    },
+    {
+      "field": "designDecisions",
+      "value": "Treat existing candidate Pester AST inventory as presence-only, not accepted proof.",
+      "count": 1
+    },
+    {
+      "field": "designDecisions",
+      "value": "Preserve broad FR-MCP-SESSIONLOGCTX-001 path/query/backfill/federation obligations outside this batch.",
+      "count": 1
+    },
+    {
+      "field": "designDecisions",
+      "value": "Treat P0 artifacts as captured inputs awaiting independent review, not accepted completion evidence.",
+      "count": 1
+    },
+    {
+      "field": "designDecisions",
+      "value": "Count raw beginTurn occurrences only inside supported fenced request-example bodies; exclude prose inventory mentions such as REPL user-guide line 173, while failing parse errors and missed multi-document YAML.",
+      "count": 1
+    }
+  ],
+  "originalEnvelopesDeleted": false,
+  "ownWriteAheadCleared": true,
+  "originalRetainedEnvelopes": [
+    {
+      "path": ".mcpServer/failsafe/codex/workspaces/RjpcR2l0SHViXE1jcFNlcnZlcg/pending/20260928T032545Z-session_submit-31d2.yaml",
+      "sha256": "C846A4A9696C89C1BF1732C72A44E7D16BC200637B073E4C542D6C3836851A10"
+    },
+    {
+      "path": ".mcpServer/failsafe/default/workspaces/RjpcR2l0SHViXE1jcFNlcnZlcg/pending/20260928T043531Z-session_submit-e129.yaml",
+      "sha256": "6910244F20A0382E9A0FA7B01E87CF02CF0A563E889258913EA7081045843ED1"
+    }
+  ],
+  "operation": "One supported typed additive PatchTurnAsync, model-authored reconciliation by parentCodex of Poincare original R3 actions; statuses/response omitted to preserve completedturn. No whole-envelope replay, cache rebind or old-record deletion.",
+  "pendingDisposition": "Original envelopes remain untouched because their whole payloads are stale. Only the new additive write-ahead was cleared after exact readback."
+}

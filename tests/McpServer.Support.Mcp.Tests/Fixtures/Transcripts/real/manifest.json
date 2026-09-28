@@ -27,7 +27,7 @@
     {
       "agent": "Cline",
       "sourceKind": "Cline",
-      "source": "F:/GitHub/McpServer/.tmp/agent-log-generation/cline-data/sessions/*",
+      "source": "redacted-local-capture/cline-data/sessions/*",
       "capture": "fresh-smoke-session-provider-rejected",
       "path": "cline/session.json"
     },

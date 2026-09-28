@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Tests.Controllers;
 /// </summary>
 public sealed class ProductsControllerTests
 {
-    private const string Workspace = @"F:\GitHub\McpServer";
+    private const string Workspace = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>POST create dispatches CreateProductCommand and returns 201.</summary>
     [Fact]

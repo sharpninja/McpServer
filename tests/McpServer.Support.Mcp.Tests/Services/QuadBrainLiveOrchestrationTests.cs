@@ -22,7 +22,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class QuadBrainLiveOrchestrationTests
 {
-    private const string WorkspacePath = @"F:\GitHub\McpServer";
+    private const string WorkspacePath = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, and Arbiter in order.</summary>
     [Fact]

@@ -19,7 +19,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
               "id":"FR-MCP-901",
               "title":"FR",
               "body":"Body",
-              "workspaceId":"F:\\GitHub\\McpServer",
+              "workspaceId":"Q:\\__mcp_unit_test__\\McpServer",
               "priority":"medium",
               "status":"pending",
               "acceptanceCriteria":[
@@ -37,7 +37,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer"
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
         });
         var passthrough = new GenericClientPassthrough(client);
         var dispatcher = new ReplCommandDispatcher(passthrough);
@@ -91,7 +91,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer"
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
         });
         var passthrough = new GenericClientPassthrough(client);
         var dispatcher = new ReplCommandDispatcher(passthrough);
@@ -180,7 +180,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer"
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
         });
         var passthrough = new GenericClientPassthrough(client);
         var dispatcher = new ReplCommandDispatcher(passthrough);
@@ -195,7 +195,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
                 @params = new
                 {
                     groupId = "triage-group-stdout",
-                    workspacePath = @"F:\GitHub\McpServer",
+                    workspacePath = @"Q:\__mcp_unit_test__\McpServer",
                 },
             },
         });

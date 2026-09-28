@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T03:03:00.2255952Z",
+  "agent": "Codex",
+  "pluginVersion": "1.107.0",
+  "cacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\child-sessions\\sessionlife-p0-20260928",
+  "sessionId": "Codex-20260928T021035Z-plugin-session",
+  "requestId": "req-20260928T021102Z-prompt-0b56",
+  "patchTurn": {
+    "requestId": "req-20260928T024031Z-56bc",
+    "exitCode": 0,
+    "turnId": 86514,
+    "persistedActions": 24,
+    "persistedDesignDecisions": 6,
+    "persistedResponse": true
+  },
+  "lastExactReadback": {
+    "queryRequestId": "req-20260928T025947Z-be73",
+    "exactSessionCount": 1,
+    "exactTurnCount": 1,
+    "sessionStatus": "in_progress",
+    "turnStatus": "in_progress",
+    "actions": 24,
+    "designDecisions": 6,
+    "processingDialog": 7,
+    "lastUpdated": "2026-09-27T21:31:17-05:00"
+  },
+  "conclusion": "Model-authored audit content persisted through exact PatchTurnAsync, but terminal finalization remains blocked. Two CompleteTurnAsync calls, one explicit PatchTurnAsync status=completed call, and two diagnostic content-only PatchTurnAsync calls each timed out at 120 seconds. The final exact readback remains in_progress with 24 actions, 6 design decisions, and 7 processing-dialog entries. No timeout increase, shared-root binding, raw REST, production/configuration repair, data deletion, or false completion claim was used.",
+  "receiptHashes": {
+    "summary": "DBFEFB8ED4F453B31EE146947EDFE633F276EA6EAFDE0FC1E89621978B87FF24",
+    "classification": "6D695DAD7C930F328F52EE19829F4DD8892BA697044CB5224698F5DED27A0C83",
+    "decisionRegister": "C2E7E98021BB11B917EE9A2D140E6B226F389174F8BC72FEF8ADDEB043C3F049",
+    "candidateManifest": "EAFA54BEA79AA1CA4B755817E568CD92E10BF2EDB7CDA7C8DE266038362B2142",
+    "sourceBefore": "3DD9F2063BF2421F38623DFFFD34795EB4BE88457BB0B85D0C2E57E95FBAE18E",
+    "sourceAfter": "5A96A2D10D2E7F46983087EDCAF05ABB1F7B0A14647FB7CF1F6D1690A9224DA6",
+    "parentVerification": "DE4DBF5FCAD1E50847DC8E5CDC603896F25B5673E1DB2B9DF00FC71569CCE4A3",
+    "parentVerificationPath": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification-v2.json",
+    "correctiveApplyPatchReceipt": "EE499792698DF2946B7B6305ED929A0D002A7D6D936C847E18A4B272C0585D57"
+  },
+  "completeTurnAsyncAttempts": [
+    {
+      "requestId": "req-20260928T024054Z-5008",
+      "result": "command_timeout",
+      "budgetSeconds": 120
+    },
+    {
+      "requestId": "req-20260928T024310Z-2bca",
+      "result": "command_timeout",
+      "budgetSeconds": 120
+    }
+  ],
+  "explicitCompletedStatusPatchAttempt": {
+    "method": "client.SessionLog.PatchTurnAsync",
+    "requestId": "req-20260928T024547Z-0fa9",
+    "requestedStatus": "completed",
+    "result": "command_timeout",
+    "budgetSeconds": 120,
+    "persisted": false
+  },
+  "contentPatchAttempts": [
+    {
+      "method": "client.SessionLog.PatchTurnAsync",
+      "requestId": "req-20260928T024833Z-854b",
+      "requestedStatus": null,
+      "purpose": "Persist terminal timeout diagnostics under exact turn",
+      "result": "command_timeout",
+      "budgetSeconds": 120,
+      "persisted": false
+    },
+    {
+      "method": "client.SessionLog.PatchTurnAsync",
+      "requestId": "req-20260928T025446Z-c186",
+      "requestedStatus": null,
+      "purpose": "Final bounded retry to persist terminal timeout diagnostics under exact turn",
+      "result": "command_timeout",
+      "budgetSeconds": 120,
+      "persisted": false
+    }
+  ],
+  "terminalStateConclusion": "The complete path is not clean or fixed. Two CompleteTurnAsync calls timed out; the distinct explicit PatchTurnAsync status=completed attempt timed out and did not persist; two content-only diagnostic PatchTurnAsync attempts also timed out and did not persist. Final exact readback remains in_progress. Parent evidence identifies an open initial graph-read blocker before terminal-specific logic.",
+  "failureDiagnosis": {
+    "status": "open_audit_blocker",
+    "observed": [
+      "C:\\ProgramData\\McpServer\\logs\\mcp-20260927.log lines 357311-357317 and 358419-358425 show cancellation in EF SingleQueryingEnumerable during SessionLogService.UpsertTurnAsync line 603 calling FindExistingSessionAsync lines 243-259, before terminal-specific logic.",
+      "FindExistingSessionAsync includes seven sibling collections without AsSplitQuery; the exact-get path uses AsSplitQuery.",
+      "Coordinator bypass at line 285 was already active."
+    ],
+    "hypothesis": "Cartesian graph growth in the initial session graph read, not terminal-specific logic or the key server.",
+    "authorizationBoundary": "No production, configuration, provisioning, or deployment change is authorized before the plan gates.",
+    "nextAction": "Parent is capturing bounded prerequisite evidence. Do not retry 120-second write loops or delete audit data."
+  },
+  "failsafeHandling": {
+    "deletedOrImportedByThisSlice": false,
+    "diagnosticFilesDeleted": false,
+    "sharedRootCacheUsed": false,
+    "productionRuntimeCacheRepaired": false
+  },
+  "preservedEvidence": {
+    "exactFailedRequestIds": [
+      "req-20260928T024054Z-5008",
+      "req-20260928T024310Z-2bca",
+      "req-20260928T024547Z-0fa9",
+      "req-20260928T024833Z-854b",
+      "req-20260928T025446Z-c186"
+    ],
+    "currentTurnPath": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\child-sessions\\sessionlife-p0-20260928\\current-turn.yaml",
+    "currentTurnLastWriteUtc": "2026-09-28T02:31:17Z",
+    "unrelatedPendingFailsafe": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\codex\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260928T025858Z-session_submit-60fb.yaml",
+    "unrelatedPendingFailsafeDisposition": "Observed read-only and left untouched; it belongs to the disjoint P0 requirements reconciliation session."
+  }
+}

@@ -19,7 +19,6 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
     private readonly object _logLock = new();
     private Process? _process;
     private string _rootPath = string.Empty;
-    private string _repoRoot = string.Empty;
     private bool _started;
 
     /// <summary>Loopback port selected for this isolated host.</summary>
@@ -75,9 +74,7 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
         await File.WriteAllTextAsync(Path.Combine(WorkspacePath, "docs", "Project", "Requirements-Matrix.md"), "# Requirements Matrix\n\n", cancellationToken).ConfigureAwait(false);
         await File.WriteAllTextAsync(Path.Combine(WorkspacePath, "docs", "unified-model-schema.json"), "{}\n", cancellationToken).ConfigureAwait(false);
 
-        var repoRoot = FindRepositoryRoot();
-        _repoRoot = repoRoot;
-        var templateSource = Path.Combine(repoRoot, "templates", "prompt-templates.yaml");
+        var templateSource = Path.Combine(AppContext.BaseDirectory, "templates", "prompt-templates.yaml");
         if (File.Exists(templateSource))
         {
             File.Copy(templateSource, Path.Combine(WorkspacePath, "templates", "prompt-templates.yaml"), overwrite: true);
@@ -89,7 +86,7 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
             cancellationToken).ConfigureAwait(false);
 
         cancellationToken.ThrowIfCancellationRequested();
-        StartProcess(repoRoot);
+        StartProcess();
         try
         {
             ApiKey = await WaitForMarkerApiKeyAsync(cancellationToken).ConfigureAwait(false);
@@ -121,14 +118,14 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
     public async Task RestartHostAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        if (string.IsNullOrWhiteSpace(_repoRoot) || string.IsNullOrWhiteSpace(_rootPath))
+        if (string.IsNullOrWhiteSpace(_rootPath))
         {
             throw new InvalidOperationException("PluginIntegrationServerFixture.StartAsync has not completed.");
         }
 
         await TryStopProcessAsync().ConfigureAwait(false);
         await Task.Delay(300, cancellationToken).ConfigureAwait(false);
-        StartProcess(_repoRoot);
+        StartProcess();
         ApiKey = await WaitForMarkerApiKeyAsync(cancellationToken).ConfigureAwait(false);
         await WaitForHealthAsync(cancellationToken).ConfigureAwait(false);
         _started = true;
@@ -181,9 +178,9 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void StartProcess(string repoRoot)
+    private void StartProcess()
     {
-        var assemblyPath = ResolveSupportAssemblyPath(repoRoot);
+        var assemblyPath = ResolveSupportAssemblyPath();
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
@@ -463,41 +460,14 @@ public sealed class PluginIntegrationServerFixture : IAsyncDisposable
         throw new InvalidOperationException("Could not allocate a free loopback port other than 7147.");
     }
 
-    private static string ResolveSupportAssemblyPath(string repoRoot)
+    private static string ResolveSupportAssemblyPath()
     {
         var copied = Path.Combine(AppContext.BaseDirectory, "McpServer.Support.Mcp.dll");
         if (File.Exists(copied))
-        {
             return copied;
-        }
-
-        var outputDirectory = new DirectoryInfo(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-        var targetFramework = outputDirectory.Name;
-        var configuration = outputDirectory.Parent?.Name ?? "Debug";
-        var candidate = Path.Combine(repoRoot, "src", "McpServer.Support.Mcp", "bin", configuration, targetFramework, "McpServer.Support.Mcp.dll");
-        if (File.Exists(candidate))
-        {
-            return candidate;
-        }
 
         throw new FileNotFoundException(
             "Compiled McpServer.Support.Mcp.dll was not found. Build the PluginIntegration test project first.",
-            candidate);
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("McpServer.sln not found.");
+            copied);
     }
 }

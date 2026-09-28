@@ -502,7 +502,7 @@ public sealed class RequirementsClientTests
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
             """
-            {"success":true,"format":"wiki","docType":"all","generatedAtUtc":"2026-05-08T12:00:00Z","outputRoot":"F:\\GitHub\\McpServer\\docs\\Project\\wiki","files":[{"relativePath":"azure/Home.md","fullPath":"F:\\GitHub\\McpServer\\docs\\Project\\wiki\\azure\\Home.md","contentType":"text/markdown","lastModifiedUtc":"2026-05-08T12:00:00Z"}]}
+            {"success":true,"format":"wiki","docType":"all","generatedAtUtc":"2026-05-08T12:00:00Z","outputRoot":"Q:\\__mcp_unit_test__\\McpServer\\docs\\Project\\wiki","files":[{"relativePath":"azure/Home.md","fullPath":"Q:\\__mcp_unit_test__\\McpServer\\docs\\Project\\wiki\\azure\\Home.md","contentType":"text/markdown","lastModifiedUtc":"2026-05-08T12:00:00Z"}]}
             """);
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);

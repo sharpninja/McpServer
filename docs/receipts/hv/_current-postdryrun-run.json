@@ -1,0 +1,18 @@
+{
+    "priorAborted":  "20260928T160920Z-setupprompt-postgaps",
+    "doneFlag":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.DONE",
+    "wrapperLog":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.wrapper.log",
+    "promptPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.prompt.txt",
+    "reqPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.request.jsonl",
+    "logPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.codex-exec-v155.log",
+    "respPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.response.jsonl",
+    "sha":  "9933BAB3B92198E90BA23588CE9F459E191684D0BAB3140F1C0A8C10448910C0",
+    "startedUtc":  "2026-09-28T16:12:08.7998639Z",
+    "fullStamp":  "20260928T161208Z-setupprompt-postdryrun",
+    "round":  1,
+    "mdPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-postdryrun-20260928T161208Z.md",
+    "lastMsg":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.last-message.txt",
+    "runnerPs1":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T161208Z-setupprompt-postdryrun.runner.ps1",
+    "stamp":  "20260928T161208Z",
+    "jsonPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-postdryrun-20260928T161208Z.json"
+}

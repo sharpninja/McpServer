@@ -15,7 +15,7 @@ public sealed class AgentHelpPromptBuilderTests
     {
         var context = new AgentHelpPromptContext
         {
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             Topic = "MCP TODO workflow",
             CallerAgent = "GrokCode",
             CallerSessionId = "GrokCode-20260708T165206Z-mcpserver-session",
@@ -43,7 +43,7 @@ public sealed class AgentHelpPromptBuilderTests
     {
         var context = new AgentHelpPromptContext
         {
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             Topic = "general",
             ContextPackText = "Marker guidance.",
         };
@@ -65,7 +65,7 @@ public sealed class AgentHelpPromptBuilderTests
     {
         var context = new AgentHelpPromptContext
         {
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             Topic = "MCP TODO workflow",
             ContextPackText = "### docs/context/todo-schema.md\nMark complete with workflow.todo.update and doneSummary.",
             SourceKeys = ["docs/context/todo-schema.md"],

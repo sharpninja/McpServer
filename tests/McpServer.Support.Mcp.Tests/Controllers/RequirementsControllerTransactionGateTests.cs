@@ -128,7 +128,7 @@ public sealed class RequirementsControllerTransactionGateTests
         => new(
             requirements,
             MsOptions.Options.Create(new RequirementsOptions()),
-            new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" },
+            new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" },
             Substitute.For<ITodoExecutionService>(),
             NullLogger<RequirementsController>.Instance,
             coordinator,

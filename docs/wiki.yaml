@@ -310,6 +310,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: setup-frontier-agent-prompt
+    title: Frontier Agent Setup Prompt (Draft)
+    source: docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+    target: Setup/Frontier-Agent-Setup-Prompt-Draft.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -336,6 +343,7 @@ navigation:
       - document: handoff-ingestion
       - document: project-readme
       - document: docs-index
+      - document: setup-frontier-agent-prompt
       - document: claude-hook-validation-skill
   - title: Architecture
     path: Architecture
