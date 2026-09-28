@@ -1,0 +1,10 @@
+importRecovery:
+  sourceKind: Codex
+  rootId: root-1
+  sessionId: Codex-20260923T205606Z-life
+  sourceHash: hash-1
+  persisted: false
+  degraded: true
+  yamlArtifactPath: "{{ARTIFACT}}"
+  sourceFiles:
+    - "{{SOURCE}}"

@@ -12,7 +12,18 @@ Describe 'TEST-HANDOFF-006 plugin handoff skill-file invoke' {
     BeforeAll {
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         $script:CoreSkill = Join-Path $script:RepoRoot 'plugins\core\skills\handoff\SKILL.md'
-        $script:GrokSkill = Join-Path (Split-Path -Parent $script:RepoRoot) 'mcpserver-grok-plugin\skills\handoff\SKILL.md'
+        $primary = $script:RepoRoot
+        $gitFile = Join-Path $script:RepoRoot '.git'
+        if (Test-Path -LiteralPath $gitFile -PathType Leaf) {
+            $gitDirLine = @(Get-Content -LiteralPath $gitFile) | Where-Object { $_ -like 'gitdir:*' } | Select-Object -First 1
+            if ($gitDirLine) {
+                $gitDir = $gitDirLine.Substring(7).Trim()
+                if (-not [System.IO.Path]::IsPathRooted($gitDir)) { $gitDir = Join-Path $script:RepoRoot $gitDir }
+                $main = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $gitDir))
+                if (Test-Path -LiteralPath (Join-Path $main 'McpServer.sln')) { $primary = $main }
+            }
+        }
+        $script:GrokSkill = Join-Path (Split-Path -Parent $primary) 'mcpserver-grok-plugin\skills\handoff\SKILL.md'
         $script:RequiredMethods = @(
             'workflow.handoff.ingest',
             'workflow.handoff.get',

@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142340Z-8118
+  result:
+    id: BUG-TRIAGE-239
+    title: Session log persist omits planFile after recovered-session rebind
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - "Plugin 1.107.0 session-start recovery mints a new sessionId and rebinds leftover current-turn.yaml onto that session. workflow.sessionlog.appendActions and updateTurn then persist via client.SessionLog.SubmitAsync without PlanFile/TodoId. New-McpPluginTurnUpsertRequest drops empty values, so the turn payload omits planFile. Submit treats the rebound requestId as a new turn and SessionLogTurnContextValidator.ValidateForNewEntry returns HTTP 400 'planFile is omitted'. current-turn.yaml already had planFile: None, and an explicit updateTurn planFile/todoId is ignored because updateTurn never reads those params. Two session_submit failsafe files are the expected side effect of those failed persists."
+    - 'Triage group: triage-group-d6001c20566c7d2f'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - "- After session-start recovery or sessionId rotation that rebinds current-turn.yaml, workflow.sessionlog.appendActions on that rebound turn returns success and does not return HTTP 400 'Invalid session turn planFile/todoId: planFile is omitted'."
+    - '- workflow.sessionlog.updateTurn with planFile and todoId in params includes those exact values on the SubmitAsync turn payload and does not omit planFile.'
+    - '- When current-turn.yaml has planFile: None and todoId: None, incremental persist sends the sentinel string None (not a missing property) so a rebound turn is accepted as a new entry.'
+    - '- A failed appendActions/updateTurn caused by omitted planFile does not leave a pending session_submit failsafe YAML for that call.'
+    - 'Implementation notes:'
+    - '- Defect is in plugins/core/lib-ps/repl-invoke.ps1: Invoke-WorkflowAppendActions and Invoke-WorkflowUpdateTurn call Invoke-ReplPersistTurn without -PlanFile/-TodoId. Only beginTurn passes those fields.'
+    - '- Assert-ReplCurrentTurnFresh (TR-MCP-PLUGIN-012) rewrites current-turn.yaml sessionId onto the recovered session, then SubmitAsync applies ValidateForNewEntry because that requestId is not on the new session.'
+    - '- Invoke-WorkflowUpdateTurn currently copies only response, interpretation, tokenCount, tags, and contextList from params. It must also accept planFile/todoId, write them to current-turn.yaml, and pass them through persist.'
+    - '- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 only serializes planFile/todoId when non-empty. Incremental persist must supply the cache values or the None sentinel rather than relying on omitted-field merge.'
+    - '- Do not weaken ValidateForNewEntry. First persist of a rebound turn on a recovered session is a new entry and must keep required planFile/todoId.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

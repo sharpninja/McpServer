@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142120Z-5cdb
+  result:
+    id: TR-MCP-SESSIONLIFE-004
+    title: Quarantine repair, import recovery, and contention drain
+    description: Repair the three named quarantine files. Transcript ingestion scans importRecovery yaml and deletes only the envelope after durable success. McpErrorClassifier and both drain entry points keep contention retryable and unlatched.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SESSIONLIFE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:21.0496163+00:00
+    updatedAt: 2026-09-24T14:21:21.0497074+00:00
+  deprecated: true
+
+---
+

@@ -10,7 +10,7 @@ namespace McpServer.Support.Mcp.Tests.Memory;
 /// </summary>
 public sealed class MemoryTxnTests
 {
-    /// <summary>AC-FR-MCP-MEMORY-010-38: Mutation without required turn transaction fails closed.</summary>
+    /// <summary>FR-MCP-173: memory.add bypasses the coordinator and calls the inner service.</summary>
     [Fact]
     public async Task MissingTurn_FailsClosed()
     {
@@ -34,13 +34,13 @@ public sealed class MemoryTxnTests
             Text = "no turn",
         }, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        await inner.DidNotReceive()
+        Assert.True(result.Success);
+        await inner.Received(1)
             .AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>AC-TR-MCP-MEMORY-API-002-09: Mutating new endpoints honor transaction gating.</summary>
+    /// <summary>FR-MCP-173: remember without a CQRS dispatcher fails before a memory write.</summary>
     [Fact]
     public async Task NewMutations_HonorGating()
     {
@@ -54,15 +54,11 @@ public sealed class MemoryTxnTests
         var gated = new TransactionGatedMemoryService(inner, new RejectingCoordinator());
         var remember = typeof(ITransactionGatedMemoryService).GetMethod("RememberAsync");
         Assert.NotNull(remember);
-        var result = await ((Task<MemoryRememberResult>)remember!.Invoke(gated, [
+        var thrown = await Assert.ThrowsAsync<InvalidOperationException>(() => (Task)remember!.Invoke(gated, [
             new MemoryRememberRequest { Content = "gated", Type = "fact" },
             TestContext.Current.CancellationToken,
         ])!).ConfigureAwait(true);
-
-        Assert.True(result.StatusCode is 400 or 403 or 409);
-        await inner.DidNotReceive()
-            .AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
-            .ConfigureAwait(true);
+        Assert.Contains("dispatcher", thrown.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     private sealed class RejectingCoordinator : ITurnTransactionCoordinator

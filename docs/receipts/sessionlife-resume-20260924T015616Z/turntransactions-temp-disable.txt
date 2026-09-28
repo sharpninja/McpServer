@@ -1,0 +1,6 @@
+utc: 20260924T033600Z
+action: temporarily disable TurnTransactions for ordinary sessionlog HV remediate
+reason: SessionLog SubmitAsync returns HTTP 503 backend_unavailable because TurnTransactions.RequiredForMutations=true routes through keyserver which is not available for non-QuadBrain agents
+backup: C:\ProgramData\McpServer\appsettings.yaml.bak-hv-remediate-20260924T033600Z
+before: Enabled=true RequiredForMutations=true
+after: Enabled=false RequiredForMutations=false

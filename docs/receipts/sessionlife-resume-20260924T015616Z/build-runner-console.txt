@@ -1,0 +1,15 @@
+ExitCode=0
+ElapsedSec=1878.6
+CaptureLen=67878
+NonZeroFailedLines=0
+NonZeroSkippedLines=0
+rg=C:\Users\kingd\scoop\shims\rg.exe
+mcpserver-repl=C:\Users\kingd\.dotnet\tools\mcpserver-repl.exe
+RESULT: 21:45:47 [DBG] Passed!  - Failed:     0, Passed:  2818, Skipped:     0, Total:  2818, Duration: 6 m 4 s - McpServer.Support.Mcp.Tests.dll (net10.0)
+RESULT: 21:45:51 [DBG] Passed!  - Failed:     0, Passed:   298, Skipped:     0, Total:   298, Duration: 783 ms - McpServer.Client.Tests.dll (net10.0)
+RESULT: 21:45:54 [DBG] Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 224 ms - McpServer.Cqrs.Tests.dll (net10.0)
+RESULT: 21:45:56 [DBG] Passed!  - Failed:     0, Passed:    20, Skipped:     0, Total:    20, Duration: 93 ms - McpServer.Launcher.Tests.dll (net10.0)
+RESULT: 21:46:01 [DBG] Passed!  - Failed:     0, Passed:    63, Skipped:     0, Total:    63, Duration: 2 s - McpServer.McpAgent.Tests.dll (net10.0)
+RESULT: 21:46:05 [DBG] Passed!  - Failed:     0, Passed:   852, Skipped:     0, Total:   852, Duration: 759 ms - McpServer.Repl.Core.Tests.dll (net10.0)
+RESULT: 21:46:08 [DBG] Passed!  - Failed:     0, Passed:    90, Skipped:     0, Total:    90, Duration: 232 ms - McpServer.QBAgent.Tests.dll (net10.0)
+RESULT: 22:09:33 [DBG] Passed!  - Failed:     0, Passed:    94, Skipped:     0, Total:    94, Duration: 23 m 22 s - McpServer.PluginIntegration.Tests.dll (net10.0)

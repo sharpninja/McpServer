@@ -1,0 +1,22 @@
+﻿pwsh.exe : workflow.sessionlog.beginTurn failed for 'req-20260924T142658Z-hv2c-001': Session log persistence failed 
+for request 'req-20260924T142658Z-hv2c-001'. FailsafePath='F:\GitHub\McpServer\.mcpServer\failsafe\GrokCode\workspaces\
+RjpcR2l0SHViXE1jcFNlcnZlcg\pending\20260924T142702Z-session_submit-0f98.yaml'. Output=type: error
+At C:\Users\kingd\agent-tools\hv-sessionlog-direct.ps1:20 char:10
++   $out = & $pwsh -NoProfile -File "$plugin\lib\repl-invoke.ps1" -Meth ...
++          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (workflow.sessio...put=type: error:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+payload:
+  requestId: req-20260924T142702Z-db34
+  code: method_invocation_error
+  message: internal_server_error
+  retryable: false
+  details:
+    clientName: SessionLog
+    methodName: SubmitAsync
+    exceptionType: McpServer.Client.McpServerException
+
+---
+ Error=
+

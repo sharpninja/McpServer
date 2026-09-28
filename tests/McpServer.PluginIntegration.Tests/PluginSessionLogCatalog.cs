@@ -15,6 +15,47 @@ public static class PluginSessionLogCatalog
         AllowTrailingCommas = false,
     };
 
+    /// <summary>Primary clone root when <paramref name="repositoryRoot"/> is a worktree.</summary>
+    /// <param name="repositoryRoot">McpServer checkout, including a worktree.</param>
+    /// <returns>The main repository directory.</returns>
+    public static string PrimaryRepositoryRoot(string repositoryRoot)
+    {
+        var parent = SiblingPluginParent(repositoryRoot);
+        var primary = Path.Combine(parent, "McpServer");
+        return Directory.Exists(primary) && File.Exists(Path.Combine(primary, "McpServer.sln"))
+            ? primary
+            : repositoryRoot;
+    }
+
+    /// <summary>
+    /// Parent directory that holds sibling plugin repositories, even when
+    /// <paramref name="repositoryRoot"/> is a git worktree.
+    /// </summary>
+    /// <param name="repositoryRoot">McpServer checkout, including a worktree.</param>
+    /// <returns>The directory that contains mcpserver-*-plugin repositories.</returns>
+    public static string SiblingPluginParent(string repositoryRoot)
+    {
+        var primary = repositoryRoot;
+        var gitFile = Path.Combine(repositoryRoot, ".git");
+        if (File.Exists(gitFile))
+        {
+            var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line =>
+                line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
+            if (gitDirLine is not null)
+            {
+                var gitDir = gitDirLine["gitdir:".Length..].Trim();
+                if (!Path.IsPathRooted(gitDir))
+                    gitDir = Path.GetFullPath(Path.Combine(repositoryRoot, gitDir));
+                var main = Directory.GetParent(gitDir)?.Parent?.Parent;
+                if (main is not null && File.Exists(Path.Combine(main.FullName, "McpServer.sln")))
+                    primary = main.FullName;
+            }
+        }
+
+        return Directory.GetParent(primary)?.FullName
+            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+    }
+
     /// <summary>
     /// Loads plugin-sessionlog-scenarios.json and validates TR-MCP-PLUGININT-001 AC1 fields.
     /// </summary>
@@ -36,8 +77,7 @@ public static class PluginSessionLogCatalog
             throw new InvalidOperationException("Catalog scenarios array is missing or empty.");
         }
 
-        var parent = Directory.GetParent(repositoryRoot)?.FullName
-            ?? throw new InvalidOperationException("Cannot resolve sibling plugin parent directory.");
+        var parent = SiblingPluginParent(repositoryRoot);
 
         var enabled = new List<PluginSessionLogScenario>();
         foreach (var row in document.Scenarios)

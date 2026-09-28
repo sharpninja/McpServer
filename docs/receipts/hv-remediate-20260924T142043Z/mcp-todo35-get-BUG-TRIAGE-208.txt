@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142322Z-f418
+  result:
+    id: BUG-TRIAGE-208
+    title: Do not expose a locally active turn after degraded beginTurn the server cannot update
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Codex user-prompt-submit maps a degraded workflow.sessionlog.beginTurn to status turn-opened. Invoke-WorkflowBeginTurn writes current-turn.yaml as in_progress before SubmitAsync, then returns success when persist times out or returns HTTP 503 with a retained session_submit failsafe. Open-PluginTurn treats that as a durable open because the REPL exit code is 0 and current-turn.yaml matches the requestId. The next workflow.sessionlog.appendDialog calls AppendDialogAsync, SessionLogService throws Entry not found for that sessionId/requestId, and the plugin classifies HTTP 404 as non-retryable with failsafe not used. Model dialog is dropped unless the caller manually enriches the original session_submit failsafe.
+    - 'Triage group: triage-group-9de0112de79b75ef'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When workflow.sessionlog.beginTurn persist is queued or degraded, user-prompt-submit must not return status turn-opened for a requestId the server does not own.'
+    - '- current-turn.yaml must not remain status in_progress for a requestId that later appendDialog or appendActions will reject with HTTP 404 Entry not found.'
+    - '- appendDialog after a degraded beginTurn must retain the submitted dialog items locally (failsafe or merge into the existing session_submit payload) instead of failing retryable false with failsafe not used.'
+    - '- A later session-log update for that requestId must either succeed against a durable server turn or stay queued until the beginTurn session_submit failsafe drains; it must not present a false active-turn state.'
+    - 'Implementation notes:'
+    - '- Root seam is plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowBeginTurn: Write-ReplCurrentTurnState happens before persist; Complete-ReplBeginTurnAfterPersist then returns ok=true degraded=true and beginTurn returns true with stderr queued/degraded.'
+    - '- plugins/core/lib-ps/plugin-hook.ps1 Open-PluginTurn only checks LastPluginReplExitCode and current-turn.yaml requestId, so it emits turn-opened without reading degraded or failsafe state.'
+    - '- Invoke-WorkflowAppendDialog uses client.SessionLog.AppendDialogAsync; SessionLogService.AppendProcessingDialogAsync throws Entry not found when the turn was never submitted. The 404 branch currently refuses failsafe by design; timeout/503 is the only appendDialog path that queues session_dialog.'
+    - '- Preferred fix: do not advertise turn-opened until SubmitAsync confirms the turn, or keep a local degraded turn and route later appends through SubmitAsync failsafe merge instead of AppendDialogAsync. TEST-MCP-TRIAGEPLUGIN-001 BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued currently encodes keeping current-turn.yaml and will need to change with the contract.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

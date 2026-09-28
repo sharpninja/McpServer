@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142335Z-f304
+  result:
+    id: BUG-TRIAGE-232
+    title: sessionlog_begin_turn rolls back when subscriber commit fails
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+    description:
+    - "sessionlog_begin_turn maps to TransactionGatedSessionLogService.UpsertTurnAsync (operation sessionlog.upsert_turn). The turn mutation is applied, then TurnTransactionCoordinator.CommitDiffgramAsync must return committed or duplicate. Any other subscriber status triggers compensation with a generic Subscriber commit failed message and, when rollback succeeds, the exception Turn transaction coordinator did not commit sessionlog.upsert_turn '{txn}': Subscriber commit failed. Rollback completed. That matches txn-462e9f7d4be2483c9177565b406cbbd4 for req-20260916T184316Z-vice-sharp-readme on NeuralNetworks. The in-progress Codex turn is not persisted. The same post-mutation commit failure was reported on the preceding commit-sync turn, so this is a repeated subscriber-commit reject, not a one-off rollback bug. ToTransactionException currently prefers that generic Message and omits commit.Reason (CommitTimeout, SubscriberUnavailable, StaleSequence, ReplayNonce, hash/decrypt mismatch, DuplicateConflict)."
+    - 'Triage group: triage-group-a83bd7ae192db96b'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- sessionlog_begin_turn for a new Codex requestId persists an in_progress turn in the target workspace session log and returns success when subscriber commit confirms.'
+    - '- When subscriber commit does not confirm, begin_turn fails, the in_progress turn is not left persisted, and the exception includes transaction id plus the structured commit.Reason rather than only Subscriber commit failed. Rollback completed.'
+    - '- Consecutive mutating session-log operations (commit-sync then begin_turn) either both persist or both fail with that structured reason.'
+    - 'Implementation notes:'
+    - '- Keep the named path: FwhMcpTools sessionlog_begin_turn -> ISessionLogService.UpsertTurnAsync -> TransactionGatedSessionLogService ExecuteMutationAsync("sessionlog.upsert_turn") -> TurnTransactionCoordinator.ExecuteAsync.'
+    - '- Do not treat successful rollback as the defect; rollback is intended compensation after a non-committed/non-duplicate DiffgramCommitResponse. The defect is that begin_turn cannot persist because subscriber commit does not confirm.'
+    - '- Surface commit.Reason in ToTransactionException (TransactionGatedSessionLogService) instead of replacing it with the generic Subscriber commit failed message.'
+    - '- Inspect subscriber commit for the failing txn: timeout (CommitTimeoutSeconds), HTTP/direct pub-sub SubscriberUnavailable, and InMemorySubscriberCommitService rejects. Sequence is per gated-service instance (unix milliseconds) while lastSequence is global per publisher/subscriber pair with Sequence <= lastSequence as StaleSequence.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

@@ -1,0 +1,6 @@
+﻿Verdict=UNPROVEN
+Reason=workflow.requirements.listFr/getFr returned method_invocation_error backend_unavailable
+HealthStorage=unreachable
+SqlHost=PAYTON-DESKTOP unreachable
+AttemptedMethods=listFr SESSIONLIFE, listFr MCP, listTr, listTest, getFr FR-MCP-SESSIONLIFE-001..005
+ReceiptsDir=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\hv-remediate-20260924T035119Z

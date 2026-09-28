@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142215Z-f143
+  result:
+    id: BUG-TRIAGE-166
+    title: Plugin getTest/listTest fail for existing TEST rows
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - 'Native mcpserver__requirements_list type=test already returns TEST-MCP-SESSIONLOG-006 with 15 acceptance criteria, so the row exists. Invoke-McpPlugin workflow.requirements.getTest hits the REPL client GET /mcpserver/requirements/test/{id} path (RequirementsController.GetTestByIdAsync). That action has no catch, so any throw becomes GlobalExceptionHandler internal_server_error; the REPL wraps it as method_invocation_error with exceptionType McpServerException. workflow.requirements.listTest area=MCP uses GET /mcpserver/requirements/test?area=MCP (QueryTestAsync over every TEST-MCP-* row plus criteria) and the plugin wrapper reported False; Invoke-McpPlugin defaults to a 90s timeout and large YAML results can fail even when in-process GetAllTestAsync succeeds. Budget exhaustion is unconfirmed (Invoke-McpPlugin has no budget field). Related gap: plugins/core/lib-node/src/tools/requirements.ts workflowMethodMap maps req_get_fr but omits req_get_test and req_get_tr.'
+    - 'Triage group: triage-group-c295520c2b5c6adb'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Invoke-McpPlugin workflow.requirements.getTest with id TEST-MCP-SESSIONLOG-006 returns a result envelope for that TEST, not method_invocation_error / internal_server_error (McpServerException).'
+    - '- Invoke-McpPlugin workflow.requirements.listTest with area MCP returns TEST items that include TEST-MCP-SESSIONLOG-006, not False or an error envelope.'
+    - '- Native requirements_list type=test continues to return TEST-MCP-SESSIONLOG-006 with its acceptance criteria.'
+    - 'Implementation notes:'
+    - '- Plugin path: Invoke-McpPlugin -> repl-invoke.ps1 -> workflow.requirements.getTest -> RequirementsWorkflow.GetTestAsync -> RequirementsClient GET mcpserver/requirements/test/{id} -> RequirementsController.GetTestByIdAsync. Do not treat this as a missing TEST row.'
+    - '- GetTestByIdAsync has no try/catch; unhandled exceptions become opaque internal_server_error. Mirror the classified-error pattern used by RepairFrPlaceholdersAsync and capture the server exception type/message in the REPL details.'
+    - '- listTest area=MCP is QueryTestAsync with prefix TEST-MCP-; it can be a large payload through the YAML REPL. Check plugin timeout (default 90s) and result size separately from get-by-id.'
+    - '- Add req_get_test and req_get_tr to workflowMethodMap (and typedMethodMap) in plugins/core/lib-node/src/tools/requirements.ts; typedParams already handles req_get_test.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

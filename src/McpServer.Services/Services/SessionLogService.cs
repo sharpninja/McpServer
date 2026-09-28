@@ -633,7 +633,40 @@ public sealed class SessionLogService : ISessionLogService
 
         RefreshSessionSummaryFromTurns(session);
 
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (DbUpdateException ex) when (IsSessionLogTurnUniqueRace(ex))
+        {
+            // TEST-MCP-SESSIONLIFE-005: two first inserts of the same request id.
+            // Retry once as an update of the row that won the race.
+            _logger.LogWarning(
+                "UNIQUE constraint race for turn {SourceType}/{SessionId}/{RequestId}, retrying as update",
+                sourceType,
+                sessionId,
+                turn.RequestId);
+            _db.ChangeTracker.Clear();
+
+            session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
+                ?? throw new InvalidOperationException($"Session not found after turn unique race: {sourceType}/{sessionId}");
+            var raced = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId)
+                ?? throw new InvalidOperationException(
+                    $"Turn {turn.RequestId} disappeared after UNIQUE constraint failure.",
+                    ex);
+
+            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);
+            if (turn.PlanFile is not null)
+                turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);
+            if (turn.TodoId is not null)
+                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);
+            UpdateEntryFromDto(raced, turn, mergeOmittedFields: true);
+            ValidateTerminalTurnCompliance(MapTurnEntityToDto(raced), session.SourceType);
+            StampTurnChildren(raced, session.WorkspaceId);
+            RefreshSessionSummaryFromTurns(session);
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            persistedTurn = raced;
+        }
 
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
@@ -642,6 +675,17 @@ public sealed class SessionLogService : ISessionLogService
             cancellationToken).ConfigureAwait(false);
 
         return persistedTurn.Id;
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLIFE-005: true when SQLite rejected a new SessionLogTurns row
+    /// because the session and request id were already stored.
+    /// </summary>
+    private static bool IsSessionLogTurnUniqueRace(DbUpdateException ex)
+    {
+        var message = ex.InnerException?.Message ?? string.Empty;
+        return message.Contains("UNIQUE", StringComparison.OrdinalIgnoreCase)
+            && message.Contains("SessionLogTurns", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

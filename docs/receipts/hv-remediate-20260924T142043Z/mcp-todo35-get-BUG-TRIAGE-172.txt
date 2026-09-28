@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142254Z-6798
+  result:
+    id: BUG-TRIAGE-172
+    title: Repair three unpostable Codex failsafe SessionLog.SubmitAsync quarantine records
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - After 167 successful Codex failsafe SessionLog.SubmitAsync replays, three files remain in F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine and still reject. 20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml stores turns as a string-keyed map ("0") instead of a sequence, so SubmitAsync cannot deserialize sessionLog.turns to List<UnifiedRequestEntryDto>. 20260817T123057Z-session_submit-d5f9.yaml and 20260817T123219Z-session_submit-9ad7.yaml have list-shaped turns but omit planFile and todoId; SessionLogTurnContextValidator.ValidateForNewEntry rejects omitted planFile. DrainAttempts already exceeded; later replay still fails. Files were not deleted.
+    - 'Triage group: triage-group-6538ff0abc1a3aff'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Replaying 20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml through client.SessionLog.SubmitAsync succeeds (map-shaped turns are converted to a list before deserialize, or submit accepts the repaired payload).'
+    - '- Replaying 20260817T123057Z-session_submit-d5f9.yaml and 20260817T123219Z-session_submit-9ad7.yaml succeeds without HTTP 400 validation_error Invalid session turn planFile/todoId: planFile is omitted.'
+    - '- After successful replay, those three files are no longer left in F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine.'
+    - '- A failsafe drain of remaining Codex session_submit quarantine files does not leave these three records stuck after DrainAttempts with the same deserialize or omitted-planFile rejection.'
+    - 'Implementation notes:'
+    - '- 3358 payload: params.sessionLog.turns is YAML mapping key "0" with only requestId; UnifiedSessionLogDto.Turns is List/ICollection of UnifiedRequestEntryDto, which requires a JSON array. Repair on drain by converting object-keyed turns to an ordered list; do not loosen the live DTO contract unless a compatibility converter is explicitly chosen.'
+    - '- d5f9 and 9ad7 payloads: turns is a one-item array with requestId req-20260817T104212Z-prompt-6212 but no planFile or todoId. Validator in src/McpServer.Services/Services/SessionLogTurnContextValidator.cs requires both on new persist; allowed sentinel is exact value None. Prefer drain-time injection of None for historical failsafe records over weakening live submit validation.'
+    - '- Do not delete the three quarantine files until they post successfully or are moved to an explicit terminal archive state.'
+    - '- August files currently show lastDrainError internal_server_error after later replay; the on-disk payloads still omit planFile/todoId, which remains a hard validation failure for new-entry submit.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

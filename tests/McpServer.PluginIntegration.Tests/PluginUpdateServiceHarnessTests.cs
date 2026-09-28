@@ -17,7 +17,7 @@ public sealed class PluginUpdateServiceHarnessTests
     public void PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero()
     {
         var repoRoot = FindRepositoryRoot();
-        var receipt = PluginUpdateServiceHarnessReceipt.LoadLatest(repoRoot);
+        var receipt = PluginUpdateServiceHarnessReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(repoRoot));
         Assert.Equal("Development", receipt.Environment, StringComparer.OrdinalIgnoreCase);
         Assert.Equal("UpdateService", receipt.DeployTarget, StringComparer.OrdinalIgnoreCase);
         Assert.True(receipt.SanitizedFixtures);

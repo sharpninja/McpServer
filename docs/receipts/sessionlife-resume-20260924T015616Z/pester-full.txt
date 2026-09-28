@@ -1,0 +1,214 @@
+PSVersion=7.6.5
+ElapsedSec=93.8
+Result=Passed
+TotalCount=180
+PassedCount=180
+FailedCount=0
+SkippedCount=0
+FailedBlocksCount=0
+FailedContainersCount=0
+
+=== Failed tests ===
+(none)
+
+Transcript: F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\sessionlife-resume-20260924T015616Z\pester-full.transcript.txt
+  [+] TEST-MCP-REPL-040 populates agent runtime headers from session-state when env vars are absent
+ 590ms (590ms|0ms)
+  [+] TEST-MCP-REPL-040 persists an incidental appendActions with the turn title omitted
+ 573ms (573ms|1ms)
+  [+] TEST-MCP-REPL-040 completes a turn without queryTitle instead of reporting a failed persist
+ 543ms (542ms|0ms)
+  [+] TEST-MCP-REPL-040 supersede keeps a locally refined title without a server round trip
+ 495ms (495ms|0ms)
+  [+] TEST-MCP-REPL-040 supersede prefers the refined server title over a raw prompt-derived local title
+ 554ms (552ms|2ms)
+  [+] TEST-MCP-REPL-040 supersede omits the title when the local default is raw and the server has none
+ 535ms (535ms|1ms)
+  [+] TEST-MCP-REPL-040 handles failTurn locally against cache-only state instead of falling through to the REPL
+ 530ms (529ms|1ms)
+  [+] TEST-MCP-REPL-040 rejects a failTurn without errorMessage locally and keeps the turn cache
+ 124ms (123ms|0ms)
+  [+] TEST-MCP-XAGENT-001 CompleteTurn refuses a GrokCode current-turn on a Codex session and still completes same-agent rotation
+ 574ms (574ms|0ms)
+  [+] TEST-MCP-XAGENT-001 CompleteTurn never closes a different requestId and empty title omits queryTitle
+ 541ms (540ms|1ms)
+
+Describing TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count
+  [+] workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout
+ 4.16s (4.16s|2ms)
+
+Describing TEST-MCP-SESSIONEND-001 SessionEnd unresolved cache is a silent no-op
+  [+] session-end without a resolvable workspace exits 0 and writes {}
+ 1.36s (1.36s|2ms)
+  [+] session-end flushes pending YAML identified by CLAUDE_PROJECT_DIR
+ 1.34s (1.34s|0ms)
+  [+] session-end identified-workspace flush failure is not a silent {} success
+ 1.34s (1.34s|1ms)
+
+Describing TEST-MCP-VERIFYWRAP-001 code-verify disk-full and wrapper timeout
+  [+] wrapper template documents a hard timeout for code-verify
+ 9ms (7ms|2ms)
+
+Describing TEST-MCP-TRIAGEPLUGIN-004 beginTurn wrapper timeout is classified
+  [+] Invoke-McpPlugin sessionlog timeout emits classified retryable command_timeout instead of unclassified throw
+ 6ms (4ms|2ms)
+
+Describing TEST-MCP-195 session-log incremental persist and failsafe drain
+  [+] TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists
+ 162ms (160ms|2ms)
+  [+] TEST-MCP-195 PersistTurn HTTP 503 backend_unavailable degrades without throw and keeps failsafe
+ 640ms (639ms|1ms)
+PS>TerminatingError(Invoke-ReplRaw): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: mcpserver-repl invocation failed for method client.SessionLog.SubmitAsync: timed out"
+>> TerminatingError(Invoke-ReplRaw): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: mcpserver-repl invocation failed for method client.SessionLog.SubmitAsync: timed out"
+  [+] TEST-MCP-195 drain Write-Error under Stop aborts without drain failed latch and later replays
+ 168ms (167ms|1ms)
+  [+] TEST-MCP-195 getFr returns before a 30s SubmitAsync drain timeout when queued session_submit 503s
+ 157ms (156ms|1ms)
+  [+] Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds
+ 118ms (117ms|1ms)
+  [+] Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout
+ 140ms (139ms|1ms)
+  [+] Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml
+ 153ms (152ms|1ms)
+  [+] Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun
+ 122ms (121ms|1ms)
+
+Describing TEST-MCP-REPL-010 V4 failsafe path unification
+  [+] Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending
+ 32ms (31ms|2ms)
+  [+] Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource
+ 60ms (59ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\PluginTempVolume.Tests.ps1'
+Describing TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment
+  [+] defines Set-McpPluginSameVolumeTemp after sourcing resolve-cache-dir.ps1
+ 7ms (5ms|1ms)
+  [+] leaves TEMP and TMP unchanged when they already share the target volume
+ 16ms (15ms|1ms)
+  [+] sets TEMP and TMP to a writable directory on the workspace volume when they differ
+ 71ms (71ms|1ms)
+PS>TerminatingError(Join-Path): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Cannot find drive. A drive with the name 'Z' does not exist."
+>> TerminatingError(Join-Path): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Cannot find drive. A drive with the name 'Z' does not exist."
+  [+] does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error
+ 16ms (15ms|0ms)
+  [+] treats a failed replacement move as a visible error and leaves the destination unchanged
+ 17ms (16ms|1ms)
+  [+] session-start and wrapper entrypoints call Set-McpPluginSameVolumeTemp
+ 5ms (4ms|1ms)
+  [+] keeps prompt-template same-volume TEMP and verify-after-edit guidance
+ 11ms (11ms|1ms)
+  [+] does not patch PSGallery PowerShell.MCP internals
+ 9ms (9ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\SessionLogAuditReconcile.Tests.ps1'
+Describing FR-MCP-SESSIONLIFE-005 audit dialog reconcile
+  [+] classified dialog failure does not increment and complete reconciles to the server count
+ 108ms (107ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\SessionLogLifecycle.Tests.ps1'
+Describing FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache
+  [+] does not replace queryText queryTitle planFile todoId openedAt or audit counters
+ 29ms (27ms|2ms)
+  [+] complete recovery uses cached queryText then queryTitle then the placeholder
+ 43ms (42ms|1ms)
+  [+] update omits an empty queryText so the server value can stay
+ 19ms (19ms|1ms)
+  [+] degraded 404 queues a session_dialog failsafe and does not say failsafe not used
+ 73ms (73ms|1ms)
+  [+] same-request degraded beginTurn sends cached planFile and todoId
+ 67ms (66ms|1ms)
+  [+] a child that does not exit is killed inside the REPL timeout
+ 2.25s (2.25s|1ms)
+  [+] drain repairs a numeric-keyed turns map and deletes the record after success
+ 31ms (31ms|1ms)
+  [+] drain fills missing metadata with None and keeps the file when submit fails
+ 38ms (38ms|1ms)
+  [+] a locked database leaves the failsafe, the attempt count, and the drain latch
+ 39ms (38ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\SessionLogLifecycleMetadata.Tests.ps1'
+Describing FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop hook
+  [+] appendActions refuses a request id that does not match the cached turn
+ 38ms (37ms|1ms)
+  [+] appendActions returns false when persist fails and nothing is queued
+ 132ms (131ms|1ms)
+  [+] appendActions wrapper treats a retained failsafe as success and does not claim primary persistence
+ 54ms (53ms|1ms)
+  [+] updateTurn sends response interpretation tags and contextList and treats a retained failsafe as success
+ 51ms (50ms|1ms)
+  [+] stop gate blocks an in-progress turn when timestamp is stale even if lastUpdated is fresh
+ 400ms (399ms|1ms)
+  [+] stop gate does not block a completed turn only because both timestamps are stale
+ 181ms (181ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\SessionLogQuarantineRepair.Tests.ps1'
+Describing FR-MCP-SESSIONLIFE-004 quarantine repair
+  [+] repairs an exhausted numeric-keyed record and deletes it only after durable success
+ 23ms (21ms|2ms)
+  [+] fills missing list metadata with None and keeps the file when submit fails
+ 29ms (29ms|1ms)
+  [+] a locked 9ad7 record stays retryable and a later drain deletes it
+ 34ms (33ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\SessionLogTurnContextBeginTurn.Tests.ps1'
+Describing MCP-SESSIONLOG-002 workflow.sessionlog.beginTurn planFile/todoId
+  [+] Invoke-WorkflowBeginTurn_MissingFields_FailsValidation
+ 36ms (35ms|2ms)
+  [+] Invoke-WorkflowBeginTurn_FirstTurn_SendsNoneWhenNoPlanMap
+ 2.38s (2.38s|1ms)
+  [+] Invoke-WorkflowBeginTurn_FirstTurn_SendsMappedPlanAndTodo
+ 2.31s (2.31s|1ms)
+  [+] Invoke-WorkflowBeginTurn_Reopen_OmitsFieldsAndDoesNotOverwrite
+ 85ms (84ms|1ms)
+
+Running tests from 'F:\GitHub\McpServer\.worktrees\session-lifecycle\plugins\core\test-fixtures\pester\TriagePluginIdentity.Tests.ps1'
+Describing TRIAGEPLUGIN identity and timeouts
+  [+] Resolve-McpCacheDir uses hook workspace path when cwd is the user profile and env is empty
+ 120ms (118ms|1ms)
+  [+] Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout
+ 10ms (9ms|1ms)
+  [+] Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default
+ 6ms (5ms|1ms)
+  [+] CacheScope.BackgroundOpenSession_DoesNotRebindRootActiveSession
+ 38ms (38ms|1ms)
+PS>TerminatingError(): "MCP plugin version-drift: configured plugin root 'F:\GitHub\McpServer\.mcpServer\tmp\9256a1dc-dfde-4488-8169-3c67932be8ae\missing' is missing and no replacement cache was found."
+>> TerminatingError(): "MCP plugin version-drift: configured plugin root 'F:\GitHub\McpServer\.mcpServer\tmp\9256a1dc-dfde-4488-8169-3c67932be8ae\missing' is missing and no replacement cache was found."
+  [+] PluginCache.ReplaceWhileTurnOpen_ResolvesOrNamedDrift
+ 13ms (13ms|1ms)
+  [+] BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued
+ 27ms (26ms|1ms)
+  [+] CompleteTurn.SessionIdRebind_PersistsAndClearsFailsafe
+ 18ms (18ms|1ms)
+  [+] plugin hook re-asserts workspace identity from hook payload
+ 12ms (12ms|1ms)
+  [+] plugin shim preserves classified retryable instead of collapsing to internal_server_error
+ 7ms (7ms|1ms)
+  [+] UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn
+ 26ms (26ms|1ms)
+  [+] UserPromptSubmit.LaterPrompt_DoesNotCancelCompletedRootTurn
+ 1.7s (1.7s|0ms)
+  [+] UserPromptSubmit.BackgroundPrompt_DoesNotCancelInProgressRootWorkTurn
+ 1.62s (1.62s|1ms)
+  [+] TEST-MCP-STRICTCOUNT-001 New-McpPluginTurnUpsertRequest accepts omitted empty null and scalar tags under StrictMode
+ 24ms (24ms|1ms)
+  [+] TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn omitted empty and scalar tags stay silent under StrictMode
+ 82ms (82ms|1ms)
+  [+] TEST-MCP-FAILSAFE-001 Test-ReplFailsafeBackendUnreachable treats backend_unavailable and HTTP 503 as down
+ 9ms (9ms|1ms)
+  [+] TEST-MCP-XAGENT-001 different sourceType prefixes are incompatible and same-agent prefixes rebind
+ 13ms (13ms|1ms)
+  [+] TEST-MCP-VERIFYWRAP-001 disk-full IOException is typed and bounded process honors timeout
+ 1.08s (1.08s|0ms)
+  [+] TEST-MCP-TRIAGEPLUGIN-004 PersistTurn.SubmitAsyncChildTimeout_ReturnsDegradedQueued
+ 1.59s (1.58s|4ms)
+Tests completed in 93.04s
+Tests Passed: 180,
+Failed: 0,
+Skipped: 0,
+Inconclusive: 0,
+
+NotRun: 0
+**********************
+PowerShell transcript end
+End time: 20260923210013
+**********************

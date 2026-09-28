@@ -113,8 +113,9 @@ public sealed class HandoffMcpToolTests : IDisposable
     public void PluginSync_HandoffSkill_MatchesCoreArtifact()
     {
         var root = FindRepoRoot();
+        var primary = FindPrimaryRepoRoot(root);
         var core = Path.Combine(root, "plugins", "core", "skills", "handoff", "SKILL.md");
-        var grok = Path.Combine(root, "..", "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
+        var grok = Path.Combine(Directory.GetParent(primary)!.FullName, "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
         Assert.True(File.Exists(core), core);
         Assert.True(File.Exists(grok), grok);
         Assert.Equal(
@@ -216,5 +217,26 @@ public sealed class HandoffMcpToolTests : IDisposable
         }
 
         throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+    }
+
+    private static string FindPrimaryRepoRoot(string repoRoot)
+    {
+        var gitFile = Path.Combine(repoRoot, ".git");
+        if (!File.Exists(gitFile))
+            return repoRoot;
+
+        var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line => line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
+        if (gitDirLine is null)
+            return repoRoot;
+
+        var gitDir = gitDirLine["gitdir:".Length..].Trim();
+        if (!Path.IsPathRooted(gitDir))
+            gitDir = Path.GetFullPath(Path.Combine(repoRoot, gitDir));
+
+        var main = Directory.GetParent(gitDir)?.Parent?.Parent;
+        if (main is not null && File.Exists(Path.Combine(main.FullName, "McpServer.sln")))
+            return main.FullName;
+
+        return repoRoot;
     }
 }

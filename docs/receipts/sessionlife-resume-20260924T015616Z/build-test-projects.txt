@@ -1,0 +1,23 @@
+21:38:57 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.worktrees\session-lifecycle\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.39 --property:Version=1.4.39 --property:InformationalVersion=1.4.39
+21:39:00 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.worktrees\session-lifecycle\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+21:39:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.39 --property:Version=1.4.39 --property:InformationalVersion=1.4.39
+21:39:14 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.worktrees\session-lifecycle\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+21:39:16 [DBG]   McpServer.PluginIntegration.Tests -> F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll
+21:39:26 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.39 --property:Version=1.4.39 --property:InformationalVersion=1.4.39
+21:39:29 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.worktrees\session-lifecycle\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+21:39:29 [DBG]   McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
+21:39:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.39 --property:Version=1.4.39 --property:InformationalVersion=1.4.39
+21:39:32 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.worktrees\session-lifecycle\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+21:39:32 [DBG]   McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+21:39:38 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\.worktrees\session-lifecycle\TestResults
+21:39:39 [DBG] Test run for F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+21:45:47 [DBG] Passed!  - Failed:     0, Passed:  2818, Skipped:     0, Total:  2818, Duration: 6 m 4 s - McpServer.Support.Mcp.Tests.dll (net10.0)
+21:45:51 [DBG] Passed!  - Failed:     0, Passed:   298, Skipped:     0, Total:   298, Duration: 783 ms - McpServer.Client.Tests.dll (net10.0)
+21:45:54 [DBG] Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 224 ms - McpServer.Cqrs.Tests.dll (net10.0)
+21:45:56 [DBG] Passed!  - Failed:     0, Passed:    20, Skipped:     0, Total:    20, Duration: 93 ms - McpServer.Launcher.Tests.dll (net10.0)
+21:46:01 [DBG] Passed!  - Failed:     0, Passed:    63, Skipped:     0, Total:    63, Duration: 2 s - McpServer.McpAgent.Tests.dll (net10.0)
+21:46:05 [DBG] Passed!  - Failed:     0, Passed:   852, Skipped:     0, Total:   852, Duration: 759 ms - McpServer.Repl.Core.Tests.dll (net10.0)
+21:46:08 [DBG] Passed!  - Failed:     0, Passed:    90, Skipped:     0, Total:    90, Duration: 232 ms - McpServer.QBAgent.Tests.dll (net10.0)
+21:46:08 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\McpServer.PluginIntegration.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\GitHub\McpServer\.worktrees\session-lifecycle\TestResults
+21:46:08 [DBG] Test run for F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll (.NETCoreApp,Version=v10.0)
+22:09:33 [DBG] Passed!  - Failed:     0, Passed:    94, Skipped:     0, Total:    94, Duration: 23 m 22 s - McpServer.PluginIntegration.Tests.dll (net10.0)

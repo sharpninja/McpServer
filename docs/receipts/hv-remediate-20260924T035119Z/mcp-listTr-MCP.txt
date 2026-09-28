@@ -1,0 +1,12 @@
+﻿type: error
+payload:
+  requestId: req-20260924T035211Z-4fe5
+  code: method_invocation_error
+  message: backend_unavailable
+  retryable: false
+  details:
+    methodName: workflow.requirements.listTr
+    exceptionType: McpServer.Client.McpServerException
+
+---
+

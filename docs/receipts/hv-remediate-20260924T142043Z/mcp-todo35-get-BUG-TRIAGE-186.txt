@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142309Z-dc10
+  result:
+    id: BUG-TRIAGE-186
+    title: appendActions submits cached turn and omits required planFile
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - workflow.sessionlog.appendActions in plugins/core/lib-ps/repl-invoke.ps1 always persists Get-ReplTurnCacheField turnRequestId and never reads an explicit params requestId. completeTurn already refuses a mismatch; appendActions does not. UserPromptSubmit Open-PluginTurn mints req-{utc}-prompt-{hex} and replaces current-turn.yaml when the in-progress cache is older than two minutes or the prompt differs, which is how req-20260909T120830Z-prompt-836a replaced the authorized req-20260909T120226Z-prompt-a628 turn. The append persist calls Invoke-ReplPersistTurn without -PlanFile/-TodoId. New-McpPluginTurnUpsertRequest drops blank planFile/todoId. SessionLogService still runs ValidateForNewEntry on SubmitAsync first persist and PUT replace (only canceled superseded persists stamp None), so HTTP 400 validation_error 'planFile is omitted' is thrown at repl-invoke.ps1:1337. After persist, appendActions returns true without checking the persisted flag.
+    - 'Triage group: triage-group-0514ef163b1662ca'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When current-turn.yaml holds an auto-opened req-*-prompt-* id and appendActions is invoked with an explicit alternate requestId, the plugin either persists that explicit requestId or refuses the call; it must not submit the cached id.'
+    - "- An additive appendActions persist for an in_progress turn includes the same planFile and todoId already stored on that turn (cache and/or params), so SessionLog.SubmitAsync does not return HTTP 400 'planFile is omitted'."
+    - '- appendActions returns success only after durable persistence is confirmed; a 400, throw, or non-persisted/degraded result must be a failed invoke with the failsafe retained.'
+    - 'Implementation notes:'
+    - '- Mirror completeTurn requestId handling in Invoke-WorkflowAppendActions: read params requestId and refuse when it differs from current-turn.yaml turnRequestId, unless an explicit retarget path is added.'
+    - '- Pass cached (or params) planFile and todoId through Invoke-ReplPersistTurn on additive in_progress submits. Empty-string omission is valid for queryTitle (TR-MCP-REPL-015) but not for planFile/todoId.'
+    - "- Check Invoke-ReplPersistTurn's persisted result before returning true; do not treat a swallowed false/degraded persist as success."
+    - '- Do not weaken SessionLogTurnContextValidator.ValidateForNewEntry; the server rejection is correct. Fix the plugin payload and target selection.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

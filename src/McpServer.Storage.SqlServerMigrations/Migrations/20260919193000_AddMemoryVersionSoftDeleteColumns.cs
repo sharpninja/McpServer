@@ -28,7 +28,18 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            throw new NotSupportedException("Memory version soft-delete columns are forward-only.");
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+            DropSoftDeleteColumns(migrationBuilder, "MemoryIndexes");
+            DropSoftDeleteColumns(migrationBuilder, "MemoryEdges");
+            DropSoftDeleteColumns(migrationBuilder, "MemoryVersions");
+        }
+
+        private static void DropSoftDeleteColumns(MigrationBuilder migrationBuilder, string table)
+        {
+            migrationBuilder.DropColumn(name: "DeleteReason", table: table);
+            migrationBuilder.DropColumn(name: "DeletedBy", table: table);
+            migrationBuilder.DropColumn(name: "DeletedAtUtc", table: table);
+            migrationBuilder.DropColumn(name: "IsDeleted", table: table);
         }
 
         private static void AddSoftDeleteColumns(MigrationBuilder migrationBuilder, string table)

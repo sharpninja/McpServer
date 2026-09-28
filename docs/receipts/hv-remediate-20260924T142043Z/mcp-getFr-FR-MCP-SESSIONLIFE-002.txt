@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142107Z-94b9
+  result:
+    id: FR-MCP-SESSIONLIFE-002
+    title: Durability before verb mode for plan and todo metadata
+    description: Resolve durability first. A matching requestId is omit-unbound only when the turn is already durable. Otherwise beginTurn, update, append, and complete use explicit values, then cached values, then exact None. Ordinary raw first persist rejects an omitted pair. canceled and cancelled supersede first persists may omit either field and receive exact None. Durable reopen omits unbound fields. Assert-ReplCurrentTurnFresh does not rewrite a cached session id. Wrong-workspace marker paths and marker drift are rejected. Get-ReplCompleteTurnPersistSessionId stays unchanged.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Governs BUG-TRIAGE-182, 185, 198, 239, 246. Narrows FR-MCP-SESSIONLOGCTX-001 only for canceled and cancelled supersede first persists. Durable reopen omission does not violate ordinary first-persist rejection.
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:07.8179021+00:00
+    updatedAt: 2026-09-24T14:21:07.8179981+00:00
+  deprecated: true
+
+---
+
