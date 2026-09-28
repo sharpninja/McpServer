@@ -14,7 +14,8 @@ Primary change: the mocks-first check from BDPv4 is restated as **Test Validatio
 
 - For each increment, tests are shown to pass against a controlled stand-in that exhibits the required behavior, then shown to fail against the current real implementation for the intended reason. Only after both of those results are demonstrated does work turn to the real behavior, until those same tests pass.
 - The stand-in is a test double (a fake, stub, or mock), not a mocks-only rule. The sequence is not named mock-green, real-red, real-green.
-- The v4 notes below still say "mocks-first validation." That name is retired in this draft. The full-suite regression gate, and the rest of BDPv4, are unchanged.
+- The v4 notes below still say "mocks-first validation." That name is retired in this draft. The full-suite regression gate is unchanged.
+- Product-pitch sentences that advertise the MCP Server, its Todo list, Session Log, and Context tools are removed from this draft. They are outside the scope of the development process. The trust handshake and the other process rules remain.
 
 ### v4 (2026-04)
 - Refined the description of Test-Driven Development in the Implementation and Validation sections to more closely align with Martin Fowler's canonical definition (Red → Green → Refactor cycle, incremental "next small piece of behavior").
@@ -37,11 +38,9 @@ AI, properly guided, supplements the Human development process by taking on rese
 
 ## Tooling
 
-The [MCP Server](https://github.com/sharpninja/mcpserver) is at the heart of the partnership of Human and AI software development.  The MCP Server provides tools for planning, research, auditing and managing the entire software development lifecycle in a format that is equally accessible by both the Human (through a [variety of user interfaces](https://github.com/sharpninja/mcpservermanager)) and the AI.  The facilities provided by the MCP Server are used to enhance the ability of both Human and AI to collaborate and coordinate software projects both large and small.
-
 ### Establishing Trust with the MCP Server
 
-Trust is the cornerstone of productive Human-AI collaboration. Without it, even the most sophisticated tools become unreliable. The MCP Server addresses this head-on by incorporating a lightweight, verifiable trust bootstrap mechanism that lets every AI agent quickly confirm it is working with a legitimate, secure, and consistent context layer.
+Trust is the cornerstone of productive Human-AI collaboration. Without it, even the most sophisticated tools become unreliable.
 
 When an agent enters a new workspace, the first step is a simple, guided handshake:
 
@@ -51,7 +50,7 @@ When an agent enters a new workspace, the first step is a simple, guided handsha
 
 Only after these quick, deterministic checks pass does the agent proceed to load or create a session log and begin using the full suite of persistent context tools. If any part of the handshake fails, the agent is explicitly instructed to log “MCP_UNTRUSTED” and gracefully fall back to its internal memory — no probing, no risk, no wasted cycles.
 
-This approach gives every model a clear, repeatable way to validate the integrity of the environment before committing resources. It transforms the MCP Server from an external dependency into a trusted partner that the agent can confidently rely on session after session. Once trust is established, the exponential productivity gains you’ve already observed become the norm rather than the exception.
+This approach gives every model a clear, repeatable way to validate the integrity of the environment before committing resources.
 
 > The handshake is not extra ceremony — it is the foundation that turns a collection of stateless models into a reliable, persistent development team.
 
@@ -105,11 +104,9 @@ Call this gate Test Validation, or Validate, Expose, Satisfy. The label mock-gre
 
 > Not validated: weak assertions, catch-all exception success, missing failure paths, or a claim (for example freshness) that nothing in the test observes.
 
-AI agents such as OpenAI Codex, Cursor AI, and GitHub Copilot are effective at interfacing with the MCP Server to get tasks from the MCP Todo system, create audit logs in the MCP Session Log, explore research endpoints through the MCP Context, manage access to local and remote resources, and most importantly, delegate work to AI models and aggregate the results.
-
 > Some agents, such as Codex, are bound to models from their creator.  Others, like CoPilot can coordinate a family of models through a single point of contact that manages sub-agents within its family of models.  Others such as Cursor, provide models that are designed to coordinate across different model families, picking the most effective model for a particular task.
 
-Human interaction during this phase is not passive observance, but experienced coordinator.  Although you could trust the AI agents to completely coordinate the work of implementation, it is inefficient and costly when a model gets stuck going down the wrong path and burns valuable resources on dead-ends that an experienced developer can quickly spot.  The Agent will likely figure out the correct path, but usually only after a significant resource burn.  An experienced Human steering the AI in real-time can greatly reduce resource burn and schedule creep.  There are also times when the context built up in the MCP Server's logs are able to steer the Agents towards known solutions to previous problems.  One of the strengths of AI models is that they thrive on repeatable successes, each of which reinforces confidence and speed.
+Human interaction during this phase is not passive observance, but experienced coordinator.  Although you could trust the AI agents to completely coordinate the work of implementation, it is inefficient and costly when a model gets stuck going down the wrong path and burns valuable resources on dead-ends that an experienced developer can quickly spot.  The Agent will likely figure out the correct path, but usually only after a significant resource burn.  An experienced Human steering the AI in real-time can greatly reduce resource burn and schedule creep.  One of the strengths of AI models is that they thrive on repeatable successes, each of which reinforces confidence and speed.
 
 > Working with AI agents is akin to leading a team of talented, but inexperienced junior developers.  Agents that have strong successes early are more trusting of the requirements and processes defined within the project, and their effectiveness increases over time, a distinct departure from the declining performance of models in environments that do not reinforce process, discovery and accountability.
 
