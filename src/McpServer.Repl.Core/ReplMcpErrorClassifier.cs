@@ -16,6 +16,7 @@ public static class ReplMcpErrorClassifier
 
         if (IsNamed(exception, "StorageCommandBudgetExceededException")
             || exception.Message.Contains("5 second intake budget", StringComparison.OrdinalIgnoreCase)
+            || exception.Message.Contains("storage command budget", StringComparison.OrdinalIgnoreCase)
             || exception.Message.Contains("backend is currently unreachable", StringComparison.OrdinalIgnoreCase))
         {
             return new ReplClassifiedError(

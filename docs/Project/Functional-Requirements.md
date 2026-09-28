@@ -2242,10 +2242,10 @@ Scope: layer-1+
 
 ## FR-MCP-TRIAGESTORE-002 Storage-only outages fail fast without flipping health liveness
 
-Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+Triage intake and session-log replace/section SaveChanges fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. Session-log Submit SaveChanges uses Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30, valid 1 through 300) and classifies budget expiry the same way. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+- [ ] Triage intake and session-log replace/section SaveChanges fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. Session-log Submit SaveChanges uses Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30, valid 1 through 300) and classifies budget expiry the same way. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
 
 ## FR-MCP-TRIAGETODO-001 EXEC dual-store rehydrate and retry-clean plan create
 

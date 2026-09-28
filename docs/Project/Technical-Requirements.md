@@ -3136,12 +3136,12 @@ Scope: layer-1+
 
 ## TR-MCP-TRIAGESTORE-002
 
-**Five second intake and submit storage budget** — TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+**Five second intake budget and configurable session-log Submit budget** — TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync passes SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. Timeouts map to backend_unavailable. No partial triage rows.
 **Covered by:** FR: FR-MCP-TRIAGESTORE-002; TEST: TEST-MCP-TRIAGESTORE-007
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+- [ ] TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync passes SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. Timeouts map to backend_unavailable. No partial triage rows.
 
 ## TR-MCP-TRIAGETODO-001
 

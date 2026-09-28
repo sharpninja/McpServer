@@ -320,6 +320,8 @@ Mcp:
         UtcTicks: 639194092078331080
         TimeOfDay: 23:26:47.8331080
         Year: 2026
+  SessionLog:
+    SubmitCommandBudgetSeconds: 30
   SessionLogSanitization:
     Enabled: true
     MaxRuleCount: 64

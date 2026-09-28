@@ -178,6 +178,9 @@ builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(
 builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+builder.Services.AddOptions<SessionLogSubmitOptions>()
+    .Bind(builder.Configuration.GetSection(SessionLogSubmitOptions.SectionName))
+    .ValidateOnStart();
 builder.Services.AddOptions<SessionLogSanitizationOptions>()
     .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
     .ValidateOnStart();
@@ -187,6 +190,7 @@ builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(Triag
 builder.Services.AddInProcessTransactionSecurity(builder.Configuration);
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
+builder.Services.AddSingleton<IValidateOptions<SessionLogSubmitOptions>, SessionLogSubmitOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
 builder.Services.AddSingleton<AppSettingsFileService>();
 var requiredRepoAllowlistPatterns = new[]
