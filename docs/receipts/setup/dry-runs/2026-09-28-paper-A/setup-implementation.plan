@@ -1,0 +1,70 @@
+﻿# setup-implementation.plan (paper dry-run A)
+
+## Summary
+- host.os: windows (PAYTON-LEGION2); endpoint.port: 7147; baseUrl: http://localhost:7147
+- workspacePath: F:\github\McpServer
+- agents: [agent-grok / GrokCode]; pluginRoot: F:\github\mcpserver-grok-plugin; skillMirror: C:\Users\kingd\.grok\skills
+- playbooks.agentCombo: agent-single
+- process: process-deferred (bind BDPv4 after first successful smoke if API available)
+- storage: storage-mssql (provider sqlserver); connectionRef: env:Mcp__Database__SqlServer__ConnectionString (omit empty yaml ConnectionString)
+- service: service-windowsService — name McpServer, installPath C:\ProgramData\McpServer, port 7147, runAs LocalSystem, executable McpServer.Support.Mcp.exe
+- PAPER ONLY: no UpdateService / sc.exe / service lifecycle / ProgramData writes / InstallReplTool mutation
+
+## Contradiction walk (draft steps vs intake A)
+- Intake maps cleanly to agent-grok + storage-mssql + service-windowsService + process-deferred.
+- Conflict table: no refuse codes triggered.
+- Config-before-start is required before Install (Phase 3 content precedes Phase 2 execution on Windows) — checklist and playbook agree; Phase numbers alone are easy to misread (clarity note below).
+- REPL pinned to InstallReplTool primary; plugin ensure-repl excluded — aligned with draft Phase 1.
+- Secret via primary env overlay name only — aligned with storage-mssql secret binding.
+- No draft contradiction that blocks paper-A interpretation.
+
+## Obtain (paper — proposed only)
+- [ ] pending — Confirm pwsh + PowerShell.MCP >= 1.14.0 (assert/install/fail-closed POWERSHELL_MCP_UNAVAILABLE)
+- [ ] pending — Pull workspace F:\github\McpServer + plugin F:\github\mcpserver-grok-plugin; evidence: git rev-parse HEAD
+- [ ] pending — PATH prepend %USERPROFILE%\.dotnet\tools
+- [ ] pending — PRIMARY: ./build.ps1 InstallReplTool ; evidence: mcpserver-repl --version (DO NOT RUN in this paper dry-run)
+- [ ] pending — Optional skills mirror: plugin skills\ -> skillMirror; evidence: mirrored skill names (no private add-profile publish)
+- Stop: POWERSHELL_MCP_UNAVAILABLE / MISSING_PLUGIN_ROOT
+
+## Configure-before-start (paper — required BEFORE UpdateService; no live writes)
+- [ ] pending — Stage/rewrite installed or publish-staging appsettings.yaml:
+  - Mcp:Database:Provider: sqlserver
+  - OMIT empty Mcp:Database:SqlServer:ConnectionString
+  - Mcp:RepoRoot + primary Workspaces[] = F:\github\McpServer (disable foreign drive-letter lab defaults)
+- [ ] pending — Bind secret into service identity env as name Mcp__Database__SqlServer__ConnectionString (validate name present; never print value)
+- [ ] pending — Operator/plugin session env: MCP_PLUGIN_ROOT / GROK_PLUGIN_ROOT / MCP_AGENT_NAME=GrokCode / PLUGIN_AGENT_NAME=GrokCode / MCP_WORKSPACE_PATH
+- Stop: SECRET_IN_MANIFEST if password leaked into manifest
+
+## Install (paper — DO NOT EXECUTE)
+- [ ] pending — Elevated: ./build.ps1 UpdateService --service-name McpServer --install-path C:\ProgramData\McpServer --port 7147
+- [ ] pending — Evidence expected: .mcpservice-deployment.json generatedBy build/Build.UpdateService.cs or scripts\Update-McpService.ps1; exe present; StartName LocalSystem; ImagePath strict quoted form
+- Stop: do not use raw sc.exe / New-Service / Manage-McpService Install
+
+## Verify (fail-closed — paper simulation against read-only live state)
+Expected checks (draft Phase 4):
+1. Trust/nonce against endpoint.baseUrl /health
+2. Endpoint port 7147
+3. Service Running; ImagePath regex fully quoted UpdateService form; StartName LocalSystem; PID-listener join; deployment manifest; appsettings.yaml; no appsettings.json
+4. Provider effective identity sqlserver with provenance (yaml alone insufficient); connectionRef name only
+5. Workspace RepoRoot/primary Workspaces match workspacePath
+6. Grok smoke: Invoke-ReplMethod workflow.todo.query -> type: result; memory list/get when applicable
+
+### Paper simulate (read-only, 2026-09-28 CT) — NOT a live AGREE
+- Get-Service Status=Running; StartName=LocalSystem — PASS (sim)
+- exe / .mcpservice-deployment.json (generatedBy=build/Build.UpdateService.cs) / appsettings.yaml present; appsettings.json absent — PASS (sim)
+- Listener on 7147 owned by service PID — PASS (sim)
+- ImagePath live: C:\ProgramData\McpServer\McpServer.Support.Mcp.exe --urls http://+:7147 (UNQUOTED)
+  Draft strict regex expects: \"<exe>\" --urls \"http://+:7147\"
+  regexSuccess=False — FAIL vs draft Phase 4 (live drift; UpdateService source GetServiceImagePath returns quoted form; paper notes re-UpdateService would be required to heal — NOT run)
+- Provider in yaml includes sqlserver — partial; resolved provenance + secret env name not observed in Process/User/Machine scopes (service-account binding not probed) — VERIFY_EVIDENCE_UNAVAILABLE for full provider identity on paper
+- Plugin/REPL paths exist; mcpserver-repl --version readable — obtain surface present (no InstallReplTool mutation)
+- Trust/nonce + Grok smoke — NOT executed (paper)
+
+## Rollback notes
+- gsudo .\scripts\Update-McpService.ps1 -Restore (not run)
+- Bounded remediation then re-verify once
+
+## Paper-A result
+- Intake/playbook walk: PASS (no draft contradictions for this choice set)
+- Live verify simulation: FAIL on ImagePath quoting vs draft strict form; provider provenance incomplete on paper
+- Overall paper-A (intake dry-run): PASS with live-sim notes (does not claim live setup AGREE)

@@ -1,0 +1,23 @@
+You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify live model/effort in the receipt.
+Work class: Project documentation draft review. Not claiming MCP-SETUPPROMPT-001 done.
+FIRST ACTION: Execute add-profile skill; read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full.
+Follow C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md surfaces A-D. Receipt-only writes under docs/receipts/hv/. Do NOT write MCP session logs. Do not mark TODO done. No Python.
+Credential hygiene: redact apiKey, X-Api-Key, and any live marker secrets from tool output and receipts. Prefer PowerShell.MCP execute_command for all pwsh work from the first command.
+
+PRIMARY: F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+Prior DISAGREE 96/96: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T131457Z.md (residual W01 ImagePath quoting).
+This remediation makes ImagePath verification STRICT: both exe and --urls value fully quoted and balanced; rejects the five unbalanced/unquoted-space counterexamples plus prior regressions. AGREE only if accuracy AND completeness both >= 98.
+
+W01 expected fix evidence (must re-test literally from the draft verify block):
+- ACCEPT: "C:\ProgramData\McpServer\McpServer.Support.Mcp.exe" --urls "http://+:7147"
+- REJECT: unbalanced opening/closing quotes on exe or urls (the four malformed quote cases from prior receipt)
+- REJECT: unquoted C:\Program Files\...\exe --urls http://+:7147
+- REJECT: .exe.old, http://+:71470, exe-as-later-arg
+Regex in draft must REQUIRE quotes (not optional). Phase 4 text must match.
+
+Prior held remediations must remain: F01-F09, Linux blocked, POST install, Configure-before-start, resolved DB identity / VERIFY_EVIDENCE_UNAVAILABLE, PowerShell.MCP mandatory, LocalSystem+PID join.
+Surfaces A-D as prior. Prefer DISAGREE when uncertain.
+Write response JSONL: F:\github\McpServer\docs\receipts\hv\20260928T132642Z-setupprompt-draft.response.jsonl
+Write markdown receipt: hostile-validator-setupprompt-draft-20260928T132642Z.md and optional JSON twin F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T132642Z.json.
+Return OverallVerdict, PASS/FAIL/UNKNOWN counts, full FAIL list, accuracy and completeness with rationale, model/effort proof.

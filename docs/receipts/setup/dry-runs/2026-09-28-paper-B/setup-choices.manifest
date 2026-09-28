@@ -1,0 +1,65 @@
+﻿schemaVersion: 1
+createdAt: 2026-09-28T11:10:29
+dryRun: paper-B
+paperOnly: true
+host:
+  os: windows
+  notes: PAYTON-LEGION2 paper intake multi-agent; no live mutation
+  hostname: PAYTON-LEGION2
+endpoint:
+  scheme: http
+  host: localhost
+  port: 7147
+  baseUrl: http://localhost:7147
+product:
+  version: null
+agents:
+  - family: grok
+    identity: GrokCode
+    pluginRoot: F:\github\mcpserver-grok-plugin
+    skillMirror: C:\Users\kingd\.grok\skills
+    playbookId: agent-grok
+    status: pending
+  - family: claude-code
+    identity: Claude
+    pluginRoot: F:\github\mcpserver-claude-code-plugin
+    skillMirror: null
+    playbookId: agent-claude-code
+    status: pending
+process:
+  kind: deferred
+  name: null
+  version: null
+  source: null
+storage:
+  kind: sqlite
+  provider: sqlite
+  connectionRef: null
+  details:
+    dataSource: C:\ProgramData\McpServer\mcp.db
+workspacePath: F:\github\McpServer
+service:
+  kind: windowsService
+  name: McpServer
+  installPath: C:\ProgramData\McpServer
+  port: 7147
+  runAs: LocalSystem
+  executable: McpServer.Support.Mcp.exe
+  runtimeDir: null
+  details: {}
+playbooks:
+  agents:
+    - agent-grok
+    - agent-claude-code
+  agentCombo: agent-multi
+  process: process-deferred
+  storage: storage-sqlite
+  service: service-windowsService
+unsupportedFlags:
+  - code: SQLITE_MULTI_AGENT
+    note: Operator acknowledges SQLite single-writer risk with concurrent GrokCode+Claude agents on one server; prefer sqlserver/postgresql for multi-writer topology; continue for paper dry-run only.
+evidence: []
+notes:
+  - PAPER ONLY. No UpdateService / sc.exe / service lifecycle / ProgramData writes / InstallReplTool mutation / Claude hook install mutation.
+  - Dual smoke required for every selected agent.
+  - Claude hook install: document expected evidence only (do not run install-claude-mcp-hooks.ps1).
