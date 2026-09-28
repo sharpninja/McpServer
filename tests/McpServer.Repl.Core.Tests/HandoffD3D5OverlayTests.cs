@@ -53,7 +53,7 @@ public sealed class HandoffD3D5OverlayTests
         var result = await workflow.GenerateDocumentAsync(
             "wiki",
             "all",
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
@@ -63,7 +63,7 @@ public sealed class HandoffD3D5OverlayTests
         var query = handler.LastRequest.RequestUri.Query;
         Assert.Contains("doc=all", query, StringComparison.Ordinal);
         Assert.Contains("format=wiki", query, StringComparison.Ordinal);
-        Assert.Equal(@"F:\GitHub\McpServer", Assert.Single(handler.LastRequest.Headers.GetValues("X-Workspace-Path")));
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", Assert.Single(handler.LastRequest.Headers.GetValues("X-Workspace-Path")));
     }
 
     private static RequirementsWorkflow BuildWorkflow(HttpMessageHandler handler)
@@ -72,7 +72,7 @@ public sealed class HandoffD3D5OverlayTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
         });
         return new RequirementsWorkflow(client);
     }

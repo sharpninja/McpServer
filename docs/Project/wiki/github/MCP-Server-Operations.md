@@ -387,3 +387,7 @@ Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, 
 - User documentation: `USER-GUIDE.md`
 - Documentation index: `README.md`
 - FAQ: `FAQ.md`
+
+## Frontier agent setup prompt (draft)
+
+See [docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) for the MCP-SETUPPROMPT-001 operator draft (HV overall AGREE 2026-09-28 CT on draft scope).

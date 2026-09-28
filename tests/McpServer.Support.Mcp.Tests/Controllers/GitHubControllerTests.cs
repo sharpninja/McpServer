@@ -78,14 +78,14 @@ public sealed class GitHubControllerTests
         var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
         tokenStore.UpsertAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
             .Returns<Task>(_ => throw new InvalidOperationException("txn gate rejected"));
-        var controller = CreateController(gitHubCliService, tokenStore, @"F:\GitHub\McpServer");
+        var controller = CreateController(gitHubCliService, tokenStore, @"Q:\__mcp_unit_test__\McpServer");
 
         var result = await controller.SetAuthTokenAsync(new GitHubAuthTokenUpsertRequest { AccessToken = "token" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         Assert.IsType<ConflictObjectResult>(result.Result);
         await tokenStore.Received(1)
-            .UpsertAsync(@"F:\GitHub\McpServer", "token", null, Arg.Any<CancellationToken>())
+            .UpsertAsync(@"Q:\__mcp_unit_test__\McpServer", "token", null, Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -100,13 +100,13 @@ public sealed class GitHubControllerTests
         var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
         tokenStore.DeleteAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns<Task<bool>>(_ => throw new InvalidOperationException("txn gate rejected"));
-        var controller = CreateController(gitHubCliService, tokenStore, @"F:\GitHub\McpServer");
+        var controller = CreateController(gitHubCliService, tokenStore, @"Q:\__mcp_unit_test__\McpServer");
 
         var result = await controller.DeleteAuthTokenAsync(CancellationToken.None).ConfigureAwait(true);
 
         Assert.IsType<ConflictObjectResult>(result.Result);
         await tokenStore.Received(1)
-            .DeleteAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .DeleteAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 

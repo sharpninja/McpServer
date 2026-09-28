@@ -1,7 +1,7 @@
 {
   "id": "cline-fixture-001",
   "createdAt": "2026-07-01T13:00:00Z",
-  "workspacePath": "F:/GitHub/Sample",
+  "workspacePath": "Q:/__mcp_unit_test__/Sample",
   "provider": "cline",
   "model": "cline-placeholder"
 }

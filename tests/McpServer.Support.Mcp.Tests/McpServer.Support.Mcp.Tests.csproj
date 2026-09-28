@@ -34,6 +34,12 @@
     <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
     <None Update="Fixtures\AgentHelp\**\*"
           CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures\Transcripts\**\*"
+          CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Fixtures\TransactionGatedStdioRouting\route.md"
+                      LogicalName="TransactionGatedStdioRouting.route.md" />
+    <EmbeddedResource Include="..\..\templates\prompt-templates.yaml"
+                      LogicalName="TriagePromptTemplate.prompt-templates.yaml" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <Compile Remove="Storage\BugTriage139FifteenthLinuxNativeTests.cs" />

@@ -448,3 +448,7 @@ The Director TUI reuses the same base URL for all workspaces and changes only th
 ### How is workspace data isolated?
 
 All workspace data is stored in a single shared SQLite database. Each entity table has a `WorkspaceId` column, and EF Core global query filters automatically scope all queries to the active workspace. Admin operations can use `IgnoreQueryFilters()` for cross-workspace queries.
+
+## Is there a frontier-agent setup prompt?
+
+Yes. A draft copy-paste prompt lives at [docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) (MCP-SETUPPROMPT-001). Hostile-validator overall **AGREE** (Accuracy 99 / Completeness 99) on 2026-09-28 CT covered the draft only; live Legion install dry-runs remain separate.

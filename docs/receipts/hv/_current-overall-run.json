@@ -1,0 +1,15 @@
+{
+    "runnerPid":  84988,
+    "sha":  "5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766",
+    "wrapperLog":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.wrapper.log",
+    "promptPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.prompt.txt",
+    "logPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.codex-exec-v155.log",
+    "respPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.response.jsonl",
+    "mdPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-overall-20260928T153330Z.md",
+    "startedUtc":  "2026-09-28T15:33:30.5737461Z",
+    "jsonPath":  "F:\\github\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-overall-20260928T153330Z.json",
+    "lastMsg":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.last-message.txt",
+    "runnerPs1":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.runner.ps1",
+    "stamp":  "20260928T153330Z",
+    "doneFlag":  "F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T153330Z-setupprompt-overall.DONE"
+}

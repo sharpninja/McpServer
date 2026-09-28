@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-28T08:43:07.2347872+00:00",
+  "gate": "P1 behavior Red r1",
+  "accepted": false,
+  "phaseComplete": false,
+  "OverallVerdict": "DISAGREE",
+  "counts": {
+    "PASS": 27,
+    "FAIL": 6,
+    "UNKNOWN": 0
+  },
+  "accuracy": {
+    "score": 97,
+    "rationale": "Build/discovery/failure counts, hashes, source preservation and minimal-scaffold claims are independently accurate. The submitted fixture descriptions overstate independently classified rejection, per-command coverage and present-report identity coverage; the source attribution rule is also missed. These defects prevent a98accuracy acceptance."
+  },
+  "completeness": {
+    "score": 92,
+    "rationale": "Substantial two-lane physical matrix exists, but independent command failures, required artifact freshness/run binding and the real nested-root exclusion regression are not adequately covered. The broad negative oracle cannot prove the intended rejection. This is incomplete for the requested combined validator/delegation Green boundary, not a penalty for explicitly deferred producers or P2-P7."
+  },
+  "reviewResponse": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T081146Z-sessionlife-p1-behavior-red-r1.response.jsonl",
+  "reviewResponseSha256AsObserved": "CC7CBBB02D6B789FA8A8C6972C5EF48EB100FBAEA2761F5348E3832E30DBEE13",
+  "findings": [
+    {
+      "id": "P1BR-F01",
+      "severity": "high",
+      "status": "FAIL",
+      "title": "Negative oracle accepts unrelated implementation failures",
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "line": 160,
+      "relatedLines": [
+        161,
+        162,
+        163
+      ],
+      "requirements": [
+        "FR-MCP-107-AC004",
+        "TEST-MCP-143-AC002",
+        "TEST-MCP-143-AC003"
+      ],
+      "observation": "AssertImplementedRejection records the production call, then asserts only non-null and not exact NotImplementedException. A NullReferenceException, KeyNotFoundException, unrelated IOException, or a different implementation bug satisfies every negative case. The current TRX correctly fails at line163, but that does not make the future rejection oracle discriminating.",
+      "impact": "A broken Green implementation can pass the negative matrix without rejecting the named defect or identifying its affected project/artifact. This conflicts with the accepted P0 criterion-specific precise-diagnostic assertions.",
+      "remediation": "For every negative case, require an expected classified rejection plus stable reason and affected artifact/project. Existing InvalidDataException with stable diagnostics is sufficient; no new public exception or dependency is required. Keep positive valid controls, and ensure setup failures cannot count as expected validation rejection."
+    },
+    {
+      "id": "P1BR-F02",
+      "severity": "high",
+      "status": "FAIL",
+      "title": "Command-exit cases test only the first command",
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "line": 411,
+      "relatedLines": [
+        412,
+        415,
+        582,
+        583,
+        584
+      ],
+      "requirements": [
+        "FR-MCP-107-AC003",
+        "TR-MCP-PLAN-001-AC004",
+        "TEST-MCP-143-AC006"
+      ],
+      "observation": "MissingRequiredCommand removes commands[0] and NonZeroCommandExit changes commands[0]. For Unit, the order is pester,nuke-test,build-tests. Thus only Pester is independently challenged in Unit; Provider challenges nuke-provider. No case demonstrates that a missing/nonzero Nuke Test or Build.Tests result independently blocks Unit, or that an absent/unparseable exitCode cannot default to success.",
+      "impact": "A validator that checks only the first Unit command passes the current command tests while accepting failed or unrecorded later mandatory commands. TEST-MCP-143-AC006 explicitly names Pester, Nuke Test and Build.Tests independently.",
+      "remediation": "Parameterize required-command rejection by lane and command name. Cover each missing command and each nonzero exit, preserving zero exits for unaffected commands; cover missing/malformed exitCode separately. Keep later-success masking visible for earlier commands. These are validator-fixture corrections, not authorization to implement orchestration."
+    },
+    {
+      "id": "P1BR-F03",
+      "severity": "high",
+      "status": "FAIL",
+      "title": "Freshness and run-binding matrix does not cover all required artifact classes",
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "line": 323,
+      "relatedLines": [
+        324,
+        330,
+        331,
+        334,
+        335,
+        499,
+        503,
+        553,
+        565,
+        596,
+        599
+      ],
+      "requirements": [
+        "FR-MCP-107-AC001",
+        "FR-MCP-107-AC004",
+        "TR-MCP-PLAN-001-AC003",
+        "TEST-MCP-143-AC003"
+      ],
+      "observation": "WrongRunId mutates only selected-projects.json; stale cases mutate inventory and the first selected-project TRX. There is no stale explicit Build.Tests TRX, stale Pester XML/native-result pair, wrong-run source manifest, or wrong-run command-results case. The Pester fixtures contain counters only and do not exercise an exact-run freshness proof. Positive controls show potential acceptance but cannot prove these invalid inputs are rejected.",
+      "impact": "Minimal code that validates freshness/runId only where current fixtures mutate it could accept unrelated or historical mandatory artifacts. Those classes are part of this proposed report-validator boundary, not merely future producer behavior.",
+      "remediation": "Add independent physical-artifact mutations for stale Build.Tests and Pester evidence and mismatched source-manifest/command-results run identity, with valid companion artifacts and precise rejection reasons. Define and test Pester freshness binding using supported artifact/provenance fields or another explicit verified contract; do not invent an XSD requirement. Keep producer emission and orchestration outside this corrective checkpoint."
+    },
+    {
+      "id": "P1BR-F04",
+      "severity": "medium",
+      "status": "FAIL",
+      "title": "Project/report mismatch is confounded with a missing file",
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "line": 338,
+      "relatedLines": [
+        339,
+        340,
+        537,
+        538
+      ],
+      "requirements": [
+        "FR-MCP-107-AC002",
+        "TEST-MCP-143-AC001",
+        "TEST-MCP-143-AC002"
+      ],
+      "observation": "ProjectReportMismatch changes reportPath to unit-or-provider/Wrong.Tests/Wrong.Tests.trx but never creates that file. A validator checking only File.Exists therefore satisfies this purported identity rejection. It does not establish that a present valid report bound to the wrong project/path is rejected.",
+      "impact": "The matrix can falsely claim project/report identity validation while only proving missing-artifact rejection, already covered by MissingProjectReport.",
+      "remediation": "Create a well-formed, existing but incorrectly bound report without introducing missing/duplicate-report confounders, and assert the exact project/path identity rejection. For example move the affected report and update its inventory path while preserving report count and content. Keep independent missing and duplicate cases."
+    },
+    {
+      "id": "P1BR-F05",
+      "severity": "medium",
+      "status": "FAIL",
+      "title": "Source-exclusion fixtures do not exercise the actual nested candidate root",
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "line": 222,
+      "relatedLines": [
+        226,
+        228,
+        417,
+        421,
+        504,
+        508,
+        510
+      ],
+      "requirements": [
+        "FR-MCP-107-AC004",
+        "TR-MCP-PLAN-001-AC004",
+        "TEST-MCP-143-AC003"
+      ],
+      "observation": "Every synthetic repository is <temp>/McpServer-SessionLifeUnitGate/<guid>/repository. None has .mcpServer in an ancestor. The actual candidate is under F:/GitHub/McpServer/.mcpServer/worktrees. Current source drift and report-only controls therefore do not distinguish repository-relative exclusions from an absolute-path .mcpServer substring exclusion.",
+      "impact": "A source enumerator can pass these fixtures but exclude the entire real candidate or reject otherwise valid candidate evidence. This is a missing regression before source-enumeration Green, not a claim that the current throwing shell already implements the defect.",
+      "remediation": "Add a GUID-owned fixture whose repository lives under an ancestor named .mcpServer. Prove valid acceptance, edited/added/deleted included-source rejection, and report-only non-drift within that same root. Continue resolving exclusions against repository-relative paths and keep cleanup confined to the owned parent."
+    },
+    {
+      "id": "P1BR-F06",
+      "severity": "low",
+      "status": "FAIL",
+      "title": "Production scaffold omits required source-level requirement attribution",
+      "path": "build/SessionLifeUnitGate.cs",
+      "line": 1,
+      "relatedLines": [
+        17,
+        48,
+        60,
+        87
+      ],
+      "requirements": [
+        "FR-MCP-107",
+        "TR-MCP-PLAN-001",
+        "TEST-MCP-143"
+      ],
+      "observation": "The new production file has XML documentation for its types and members, but no FR/TR requirement identifier anywhere. The test files carry the governing IDs. .github/copilot-instructions.md79-81 requires source files to reference their FR/TR IDs in documentation comments.",
+      "impact": "The production side of this new contract is not traceable by the required source-comment convention even though the external plan and tests are linked.",
+      "remediation": "In the corrective input, add the governing FR-MCP-107/TR-MCP-PLAN-001 attribution to the production contract XMLDocs. This is a documentation-only correction, not validator/delegation implementation. Do not rewrite the frozen r1 source."
+    }
+  ],
+  "parentReverifiedPins": 47,
+  "pinErrors": [],
+  "sourceArchive": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/history-r1/history-manifest.json",
+  "sourceArchiveSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+  "terminalPersistenceAsObserved": {
+    "query": "req-20260928T084145Z-e891",
+    "status": "in_progress",
+    "responseCharacters": 13,
+    "fullBodyVerified": false,
+    "pendingReviewerCompletion": true
+  },
+  "nextBoundary": "Corrective tests and XMLDoc attribution only, separate R2 test plan first, fresh Red and independent review afterward. No validator/delegation/producer/orchestrator implementation and no acceptance or TODO closure.",
+  "structuredSerialization": "Native PowerShell objects serialized with ConvertTo-Json"
+}

@@ -917,7 +917,7 @@ public class GenericClientPassthroughTests
                     new Dictionary<string, object?>
                     {
                         ["workspaceName"] = "McpServer",
-                        ["workspacePath"] = @"F:\GitHub\McpServer",
+                        ["workspacePath"] = @"Q:\__mcp_unit_test__\McpServer",
                     },
                 },
             },

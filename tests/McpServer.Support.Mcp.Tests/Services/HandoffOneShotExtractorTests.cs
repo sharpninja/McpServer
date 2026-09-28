@@ -27,7 +27,7 @@ public sealed class HandoffOneShotExtractorTests
         var sut = new HandoffOneShotExtractor(pool);
 
         var result = await sut.ExtractAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "handoff text",
             agentName: "plan-agent",
             promptTemplateId: HandoffPromptDefaults.TemplateId,
@@ -66,7 +66,7 @@ public sealed class HandoffOneShotExtractorTests
         var sut = new HandoffOneShotExtractor(pool);
 
         var result = await sut.ExtractAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "handoff text",
             agentName: "plan-agent",
             promptTemplateId: null,

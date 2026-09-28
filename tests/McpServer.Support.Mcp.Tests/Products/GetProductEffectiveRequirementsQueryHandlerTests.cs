@@ -16,9 +16,9 @@ namespace McpServer.Support.Mcp.Tests.Products;
 /// </summary>
 public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposable
 {
-    private const string Owner = @"F:\GitHub\product-owner";
-    private const string Sibling = @"F:\GitHub\product-sibling";
-    private const string Outsider = @"F:\GitHub\product-outsider";
+    private const string Owner = @"Q:\__mcp_unit_test__\product-owner";
+    private const string Sibling = @"Q:\__mcp_unit_test__\product-sibling";
+    private const string Outsider = @"Q:\__mcp_unit_test__\product-outsider";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
     private readonly CallContext _ctx = new();

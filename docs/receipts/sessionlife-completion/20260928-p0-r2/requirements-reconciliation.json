@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 2,
+  "revision": "20260928-p0-r2",
+  "recordedAtUtc": "2026-09-28T03:49:03.2346671Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "phase": "P0 final-review bounded documentation-identity correction",
+  "status": "corrected-artifacts-prepared-not-accepted",
+  "frozenArtifactPolicy": {
+    "oldFolder": "docs/receipts/sessionlife-completion/20260928-p0",
+    "oldFilesModified": false,
+    "newFolder": "docs/receipts/sessionlife-completion/20260928-p0-r2",
+    "oldIndexModified": false,
+    "productionModified": false,
+    "testsModified": false,
+    "documentationImplementationModified": false
+  },
+  "approvedPlanReceipt": {
+    "path": "docs/plans/sessionlife-batch-completion-20260927.md",
+    "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+    "governingLine": 258,
+    "exactIdentitySet": [
+      "docs/context/module-bootstrap.md",
+      "docs/REPL-USER-GUIDE.md",
+      "docs/context/repl-yaml-message.schema.json"
+    ]
+  },
+  "correction": {
+    "reason": "Astra identified that the R1 metadata group substituted session-log-schema.md and REPL-MIGRATION-GUIDE.md for the approved REPL user guide and REPL YAML message schema.",
+    "oldDocumentationSurfaces": [
+      "docs/context/session-log-schema.md",
+      "docs/context/module-bootstrap.md",
+      "docs/REPL-MIGRATION-GUIDE.md"
+    ],
+    "newDocumentationSurfaces": [
+      "docs/context/module-bootstrap.md",
+      "docs/REPL-USER-GUIDE.md",
+      "docs/context/repl-yaml-message.schema.json"
+    ],
+    "requirementRowsCorrected": [
+      "FR-MCP-SESSIONLIFE-002-AC001",
+      "FR-MCP-SESSIONLIFE-002-AC002",
+      "FR-MCP-SESSIONLIFE-002-AC003",
+      "FR-MCP-SESSIONLIFE-002-AC004",
+      "FR-MCP-SESSIONLIFE-002-AC005",
+      "TR-MCP-SESSIONLIFE-002-AC001",
+      "TR-MCP-SESSIONLIFE-002-AC002",
+      "TR-MCP-SESSIONLIFE-002-AC003",
+      "TEST-MCP-SESSIONLIFE-002-AC001",
+      "TEST-MCP-SESSIONLIFE-002-AC002",
+      "TEST-MCP-SESSIONLIFE-002-AC003",
+      "TEST-MCP-SESSIONLIFE-002-AC004"
+    ],
+    "todoRowsCorrected": [
+      "BUG-TRIAGE-182",
+      "BUG-TRIAGE-185",
+      "BUG-TRIAGE-198",
+      "BUG-TRIAGE-239",
+      "BUG-TRIAGE-246"
+    ],
+    "requirementRowCount": 12,
+    "todoRowCount": 5,
+    "assertionRowsCorrected": [
+      "FR-MCP-SESSIONLIFE-002-AC005",
+      "TR-MCP-SESSIONLIFE-002-AC003",
+      "TEST-MCP-SESSIONLIFE-002-AC001",
+      "BUG-TRIAGE-246"
+    ]
+  },
+  "liveStoreInspection": {
+    "functionalRequirementRequestId": "req-20260928T034447Z-dd97",
+    "todoRequestId": "req-20260928T034448Z-0c86",
+    "functionalRequirementAcceptanceText": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+    "todoDocumentationAcceptanceText": "- The beginTurn examples in docs/context/module-bootstrap.md and docs/REPL-USER-GUIDE.md, and the required params in docs/context/repl-yaml-message.schema.json, state that first persist requires planFile and todoId and that None is the sentinel when there is no plan or TODO.",
+    "requirementTextIncorrectlySubstitutedDocumentIdentities": false,
+    "todoTextIncorrectlySubstitutedDocumentIdentities": false,
+    "mutationRequired": false,
+    "mutationReceipts": [],
+    "rationale": "The FR acceptance criterion uses the generic approved phrase three governing contract documents and does not name an incorrect file. BUG-TRIAGE-246 already names module-bootstrap.md, REPL-USER-GUIDE.md, and repl-yaml-message.schema.json exactly. The defect existed only in the R1 acceptance artifact documentationSurfaces and planned assertions."
+  },
+  "historicalTextPreservation": [
+    {
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC005",
+      "oldText": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+      "newText": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+      "textChanged": false,
+      "oldDocumentationSurfaces": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "newDocumentationSurfaces": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "oldAssertion": "Parse the three governing documents and assert all required precedence, rejection, supersession, and reopen clauses are present without contradiction.",
+      "newAssertion": "Parse only docs/context/module-bootstrap.md, docs/REPL-USER-GUIDE.md, and docs/context/repl-yaml-message.schema.json. Assert the module-bootstrap beginTurn example supplies exact planFile=None and todoId=None and its prose states explicit then verified-cache then None precedence plus the ordinary first-persist pair requirement. Assert all three REPL user-guide beginTurn examples supply both fields and its prose names exact None, both canceled and cancelled supersession spellings, and same-request durable-reopen omission. Assert the JSON schema keeps requestId/queryTitle/queryText globally required, defines planFile/todoId as nonempty strings without globally requiring them, and documents the state-dependent ordinary-first-persist, None, supersession, and durable-reopen rules without adding a wire discriminator."
+    },
+    {
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC003",
+      "oldText": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+      "newText": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+      "textChanged": false,
+      "oldDocumentationSurfaces": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "newDocumentationSurfaces": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "oldAssertion": "Assert ordinary first persist, supersession spellings, durable reopen, and the three documents implement one resolver contract.",
+      "newAssertion": "Assert the runtime resolver rejects ordinary first-persist omission, accepts canceled and cancelled supersession with exact None, preserves omission only for the exact durable reopen, and separately parse the three approved documents with the module-bootstrap, three-guide-example, and nonbreaking state-aware JSON-schema assertions defined by FR-MCP-SESSIONLIFE-002-AC005."
+    },
+    {
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "oldText": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+      "newText": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+      "textChanged": false,
+      "oldDocumentationSurfaces": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "newDocumentationSurfaces": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "oldAssertion": "Assert each metadata/identity/document rule through a separately named test and real resolver/validator path.",
+      "newAssertion": "Assert metadata precedence, immutable identity, ordinary first-persist rejection, both canceled and cancelled supersession spellings, and exact durable reopen through separately named real resolver/validator tests. Assert module-bootstrap, all three REPL user-guide beginTurn examples, and the JSON schema through three separate parsers; the schema parser must prove planFile/todoId are modeled as nonempty strings and state-dependent rather than globally required."
+    },
+    {
+      "recordId": "BUG-TRIAGE-246",
+      "oldBehavior": "Explicit, verified-cache, and None precedence agrees with raw API validation and all three contract documents.",
+      "newBehavior": "A degraded never-persisted beginTurn retry preserves or supplies planFile/todoId and cannot be mistaken for a durable reopen; an already durable same-request reopen may omit the pair. The module bootstrap, REPL user guide, and REPL message schema document the same exact None, first-persist, canceled/cancelled supersession, and durable-reopen rules.",
+      "oldDocumentationSurfaces": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "newDocumentationSurfaces": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "oldAssertion": "Serialized payload and cache retain exact metadata and immutable workspace/agent/session/request identity.",
+      "newAssertion": "Assert a degraded never-persisted retry sends the cached pair or exact None and does not receive metadata validation_error; assert an exact durable reopen omits the pair without overwriting it. Parse module-bootstrap, all three REPL user-guide beginTurn examples, and the JSON schema using the three state-aware document assertions, including both canceled and cancelled."
+    }
+  ],
+  "schemaSourceVerification": {
+    "inspectedSchema": "docs/context/repl-yaml-message.schema.json",
+    "inspectedSchemaSha256": "524F4D2DA14776AC5841D6B92BCEE1155638C28C0BB76A320579458B0EBE9FBA",
+    "currentBeginTurnBranchLines": "243-263",
+    "currentRequired": [
+      "requestId",
+      "queryTitle",
+      "queryText"
+    ],
+    "currentPlanFilePropertyPresent": false,
+    "currentTodoIdPropertyPresent": false,
+    "currentAdditionalProperties": true,
+    "runtimeContractSources": [
+      {
+        "path": "src/McpServer.Repl.Core/SessionLogCommandShapes.cs",
+        "sha256": "BAEA8CAE216F1C589F02848BCA8519211BA9AEF0A37D7A9E8DC4877BF9A90FCB",
+        "lines": "417-457",
+        "observation": "The public command shape documents planFile and todoId as strings with exact None sentinel."
+      },
+      {
+        "path": "src/McpServer.Repl.Core/SessionLogWorkflow.cs",
+        "sha256": "865BA93E846F1291E2340116DA7F70CB1CD2CCCB900EF571D4C464082E853488",
+        "lines": "137-151,834-853,970-982",
+        "observation": "The C# call accepts nullable inputs and normalizes blank values to exact None in new TurnState; supersession is stateful."
+      },
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "sha256": "D31F13DA66E64FBD2EEE8FDAB8602DD2FC51D271D719FB7C1AAC909544084211",
+        "lines": "1678-1745",
+        "observation": "The wrapper stamps None only for non-reopen and omits bound metadata on exact same-request reopen."
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "sha256": "D844B4A24F1599F7DABDC99CAF29ADEE44AB19FCDD8ECEEF7F792C4A15487E5D",
+        "lines": "855-864,1353-1370",
+        "observation": "The hook always supplies resolved planFile/todoId, using exact None when no association exists."
+      }
+    ],
+    "plannedNonbreakingAssertion": "The schema must add planFile/todoId properties and document the state-dependent contract, but must not globally require them or add a discriminator because exact durable reopen and canceled/cancelled supersession are approved omission cases."
+  },
+  "currentDocumentObservations": [
+    {
+      "path": "docs/context/module-bootstrap.md",
+      "sha256": "D30A09BB6D87D09662A4A6F024C64A28EA98676E1EA8027DB8F9E6BCBD160187",
+      "lines": "54-66",
+      "observation": "The single beginTurn example already supplies planFile=None and todoId=None; surrounding prose does not yet state the full precedence/rejection/reopen rules."
+    },
+    {
+      "path": "docs/REPL-USER-GUIDE.md",
+      "sha256": "95A4B153BB06D65D6442475086D5E179CB1FE000B93D86ABF8FA478A2924E50D",
+      "lines": "112-123,466-476,816-824",
+      "observation": "All three beginTurn examples currently omit planFile and todoId."
+    },
+    {
+      "path": "docs/context/repl-yaml-message.schema.json",
+      "sha256": "524F4D2DA14776AC5841D6B92BCEE1155638C28C0BB76A320579458B0EBE9FBA",
+      "lines": "243-263",
+      "observation": "The beginTurn schema globally requires only requestId/queryTitle/queryText, has no planFile/todoId properties, and permits additional properties."
+    }
+  ],
+  "plannedDocumentTests": [
+    "SessionLogLifecycleMetadata.ModuleBootstrap_BeginTurnContract_UsesExplicitNoneAndExplainsStatefulOmission",
+    "SessionLogLifecycleMetadata.ReplUserGuide_AllThreeBeginTurnExamples_UseExplicitMetadataAndExplainStatefulOmission",
+    "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
+  ],
+  "invariantVerification": {
+    "acceptanceRows": 109,
+    "todoRows": 35,
+    "mappingsLive": 47,
+    "mappingExactFrozenSetMatch": true,
+    "batchTodosFound": 35,
+    "batchTodosOpen": 35,
+    "batchTodosDone": 0,
+    "acceptanceStatesNotAccepted": {
+      "r1": 109,
+      "r2": 109
+    },
+    "storeSatisfiedTrue": {
+      "r1": 7,
+      "r2": 7,
+      "unchanged": true
+    }
+  },
+  "baselineReferences": {
+    "postState": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "sha256": "FE7F7E970D003B8576CD0173C89C5C781220286FEE39A14F2C90E7B1B383C775"
+    },
+    "acceptanceManifest": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "sha256": "D662F206B2471DDC12EE7B2AEEFD1B15C12339E0896DE8FEC5E81612012A1CB8"
+    },
+    "pathInventory": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "sha256": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364"
+    },
+    "reconciliation": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-reconciliation.json",
+      "sha256": "21DFA3A977AAA19D785E60F5653982D9245F49A34CD7C4CE8F69E29447ACEF2E"
+    },
+    "reusePolicy": "Unchanged R1 full snapshots and source-hash inputs are incorporated by path and SHA-256 reference; R2 records only targeted live readback and the artifact-only correction."
+  },
+  "boundaries": [
+    "No production edits.",
+    "No test edits.",
+    "No documentation implementation edits.",
+    "No requirement mutation.",
+    "No TODO mutation.",
+    "No mapping mutation.",
+    "No deployment.",
+    "No frozen R1 file or P0 index rewrite."
+  ]
+}

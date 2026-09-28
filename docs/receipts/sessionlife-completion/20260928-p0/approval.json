@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-28T02:08:25.7468232Z",
+  "todoId": "PLAN-SESSIONLIFE-001",
+  "operatorInstruction": "Implement the proposed plan.",
+  "approvalScope": "All listed revision4 actions; no repeated approvals; no main/staging/production or unrelated work",
+  "planPath": "docs/plans/sessionlife-batch-completion-20260927.md",
+  "planSha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+  "descriptionMatchesFile": true,
+  "todoDone": false,
+  "sessionId": "Codex-20260927T191745Z-plugin-session",
+  "requestId": "req-20260928T020045Z-sessionlife-r4-execution",
+  "phase": "P0",
+  "accepted": false,
+  "writeCommand": "installed plugin lib/repl-invoke.ps1 workflow.todo.update",
+  "readCommand": "installed plugin workflow.todo.get"
+}

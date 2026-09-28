@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>Tests for full Quad-Brain orchestration, AoT reconciliation, and weight updates. TEST-MCP-181 through TEST-MCP-183.</summary>
 public sealed class QuadBrainOrchestrationServiceTests
 {
-    private const string Workspace = @"F:\GitHub\McpServer";
+    private const string Workspace = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, then Arbiter and returns the committed final output.</summary>
     [Fact]

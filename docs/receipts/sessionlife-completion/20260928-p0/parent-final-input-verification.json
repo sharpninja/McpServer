@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T03:30:53.8258921Z",
+  "phase": "P0 final review-input verification",
+  "accepted": false,
+  "candidateContentSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+  "candidateFilesVerified": 27,
+  "original247PreservationProof": "parent-freeze-verification.json",
+  "todoRecordsCompared": 35,
+  "todoHistoricalFieldsCompared": [
+    "id",
+    "title",
+    "description",
+    "technicalDetails",
+    "done",
+    "priority",
+    "section"
+  ],
+  "priorFunctionalAndTechnicalLinksPreserved": true,
+  "acceptanceRows": 109,
+  "mappingEdges": 47,
+  "anchorCount": 51,
+  "anchorFailures": 0,
+  "anchorPolicy": "Files or directory anchors allowed; production/test must exist in candidate or explicitly proposed; explicitly classified root-only docs/receipts allowed.",
+  "supersedesEarlierMappingCount": 46,
+  "workerArtifactHashes": {
+    "acceptance-manifest.json": "D662F206B2471DDC12EE7B2AEEFD1B15C12339E0896DE8FEC5E81612012A1CB8",
+    "requirements-post-state.json": "FE7F7E970D003B8576CD0173C89C5C781220286FEE39A14F2C90E7B1B383C775",
+    "requirements-path-inventory.json": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364",
+    "requirements-reconciliation.json": "21DFA3A977AAA19D785E60F5653982D9245F49A34CD7C4CE8F69E29447ACEF2E"
+  },
+  "failures": [],
+  "pesterStaticInventory": {
+    "files": 11,
+    "itAstNodes": 180,
+    "parseErrors": 0,
+    "skipPendingParameterNodes": 0,
+    "runtimeDiscoveredOrPassingCount": null,
+    "testExecution": false
+  },
+  "audit": {
+    "sessionId": "Codex-20260927T191745Z-plugin-session",
+    "requestId": "req-20260928T020045Z-sessionlife-r4-execution",
+    "latestAction": 12,
+    "exactReadbackCount": 1,
+    "failsafeDeletedAfterPositiveReadback": true
+  },
+  "notPerformed": [
+    "production implementation",
+    "test execution",
+    "build",
+    "sync",
+    "deployment",
+    "commit",
+    "merge",
+    "TODO closure"
+  ]
+}

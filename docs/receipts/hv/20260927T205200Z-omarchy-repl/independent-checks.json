@@ -1,0 +1,117 @@
+{
+  "timestampUtc": "2026-09-27T21:06:45.6033122Z",
+  "reviewer": "Codex",
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "reviewThreadId": "01a0e4a6-920b-7052-9182-7198d54612a7",
+  "isolatedAgentId": "sa-2ef833c6",
+  "profileFiles": [
+    "C:\\Users\\kingd\\.claude\\profile\\accuracy-first-verify-sources.md",
+    "C:\\Users\\kingd\\.claude\\profile\\adversarial-review-global.md",
+    "C:\\Users\\kingd\\.claude\\profile\\approve-before-execute.md",
+    "C:\\Users\\kingd\\.claude\\profile\\bring-the-receipts.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-on-goal-state.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-ops-vs-requirements.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hostile-phase-gates.md",
+    "C:\\Users\\kingd\\.claude\\profile\\hv-jsonl-and-session-log.md",
+    "C:\\Users\\kingd\\.claude\\profile\\lab-authorization.md",
+    "C:\\Users\\kingd\\.claude\\profile\\log-decisions-as-conclusions.md",
+    "C:\\Users\\kingd\\.claude\\profile\\never-skip-explicit-actions.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-attitude-honesty-tell.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-python-lab.md",
+    "C:\\Users\\kingd\\.claude\\profile\\no-shortcuts-precision-over-convenience.md",
+    "C:\\Users\\kingd\\.claude\\profile\\philosophical-dialogue-mode.md",
+    "C:\\Users\\kingd\\.claude\\profile\\PROFILE.md",
+    "C:\\Users\\kingd\\.claude\\profile\\requirement-change-plan-first.md",
+    "C:\\Users\\kingd\\.claude\\profile\\session-turn-title-summary.md",
+    "C:\\Users\\kingd\\.claude\\profile\\user-payton-byrd.md"
+  ],
+  "linkedProfileFiles": [
+    "C:\\Users\\kingd\\.claude\\projects\\C--Users-kingd-Downloads-think-coach\\memory\\mcp-session-log-rest-write-path.md",
+    "C:\\Users\\kingd\\.claude\\projects\\C--Users-kingd-Downloads-think-coach\\memory\\mcpserver-live-log-not-persisting.md",
+    "C:\\Users\\kingd\\.claude\\projects\\C--Users-kingd-Downloads-think-coach\\memory\\quadbrain-four-function-vision.md"
+  ],
+  "remoteTarget": {
+    "credentialMetadataHost": "PAYTON-DESKTOP",
+    "port": 22,
+    "user": "sharpninja",
+    "address": "192.168.0.149"
+  },
+  "sshTrust": "Posh-SSH New-SSHSession -ErrorOnUntrusted; existing trust; no Force/AcceptKey",
+  "remoteInspectionCommand": "$ErrorActionPreference = 'Stop'\n$hostname = (& hostname).Trim()\n$userName = (& whoami).Trim()\n$tools = @(& dotnet tool list --global 2>&1 | ForEach-Object { $_.ToString() })\n$toolsExit = $LASTEXITCODE\n$cmd = Get-Command mcpserver-repl -ErrorAction Stop\n$link = Get-Item -LiteralPath $cmd.Source -Force\n$result = [ordered]@{ timestampUtc=(Get-Date).ToUniversalTime().ToString('o'); hostname=$hostname; user=$userName; globalTools=$tools; toolListExit=$toolsExit; commandSource=$cmd.Source; linkType=$link.LinkType; linkTarget=$link.Target; resolvedTarget=$link.ResolveLinkTarget($true).FullName }\n'HV_OMARCHY_SA2EF833C6:' + ($result | ConvertTo-Json -Depth 8 -Compress)",
+  "remoteInspection": {
+    "timestampUtc": "2026-09-27T21:02:20.6150248Z",
+    "hostname": "PAYTON-OMARCHY",
+    "user": "sharpninja",
+    "globalTools": [
+      "Package Id                     Version      Commands      ",
+      "----------------------------------------------------------",
+      "sharpninja.mcpserver.repl      1.4.39       mcpserver-repl"
+    ],
+    "toolListExit": 0,
+    "commandSource": "/home/sharpninja/.local/bin/mcpserver-repl",
+    "linkType": "SymbolicLink",
+    "linkTarget": "/home/sharpninja/.dotnet/tools/mcpserver-repl",
+    "resolvedTarget": "/home/sharpninja/.dotnet/tools/mcpserver-repl"
+  },
+  "remoteInspectionSshExit": 0,
+  "freshRemoteSmokeCommand": "$ErrorActionPreference = 'Stop'\n$version = @(& mcpserver-repl --version 2>&1 | ForEach-Object { $_.ToString() })\n$versionExit = $LASTEXITCODE\n$help = @(& mcpserver-repl --help 2>&1 | ForEach-Object { $_.ToString() })\n$helpExit = $LASTEXITCODE\n$result = [ordered]@{timestampUtc=(Get-Date).ToUniversalTime().ToString('o');version=$version;versionExit=$versionExit;help=$help;helpExit=$helpExit}\n'HV_OMARCHY_SA2EF833C6:' + ($result | ConvertTo-Json -Depth 8 -Compress)",
+  "freshRemoteSmoke": {
+    "timestampUtc": "2026-09-27T21:02:46.6543572Z",
+    "version": [
+      "1.4.39+6a565d8762072ed040469047791a57c80dbf1e88"
+    ],
+    "versionExit": 0,
+    "help": [
+      "Description:",
+      "  MCP Server REPL Host",
+      "",
+      "Usage:",
+      "  McpServer.Repl.Host [command] [options]",
+      "",
+      "Options:",
+      "  --version       Show version information",
+      "  -?, -h, --help  Show help and usage information",
+      "",
+      "Commands:",
+      "  --agent-stdio  Run in agent STDIO mode for MCP protocol communication",
+      "  --interactive  Run in interactive REPL mode",
+      ""
+    ],
+    "helpExit": 0
+  },
+  "remoteSmokeSshExit": 0,
+  "ownSshClosed": true,
+  "memoryGuidance": {
+    "updatedBy": "Codex",
+    "scope": "Global",
+    "id": "MEMORY-GUIDANCE-001",
+    "text": "Durable memories must be stored in MCP Server through the active agent plugin. Search MCP memories first for operational facts and prior decisions; local MEMORY.md and other agent-local stores are caches or pointers, not the authoritative memory store. An empty local search is not evidence that MCP has no relevant memory. Never store credentials in memory.",
+    "version": 1
+  },
+  "memoryFact": {
+    "scope": "Global",
+    "id": "MEMORY-FACT-005",
+    "text": "PAYTON-OMARCHY or simply OMARCHY means PAYTON-DESKTOP.",
+    "version": 1
+  },
+  "localUpdateNote": {
+    "sha256": "2EE939646B1784A0DB0435129E9BB14455927644EBD28B9B09C07A67F7569379",
+    "text": "# Update MEMORY.md: MCP Is the Authoritative Memory Store\n\nExplicit user request on 2026-09-27: \"Add note to MEMORY.md that memories should be stored in MCP.\"\n\nStore durable memories in MCP Server through the active agent's supported plugin memory operations. Search MCP memories first for operational facts and prior decisions. Local MEMORY.md and other agent-local memory files are caches or pointers, not the authoritative store. Do not treat an empty local search as evidence that MCP has no relevant memory.\n\nThis correction followed a missed host lookup: live global MCP memory MEMORY-FACT-005 says PAYTON-OMARCHY or OMARCHY means PAYTON-DESKTOP. Local MEMORY.md did not contain that mapping. Never copy credentials into memory.\n",
+    "path": "C:\\Users\\kingd\\.codex\\memories\\extensions\\ad_hoc\\notes\\2026-09-27T205100Z-mcp-authoritative-memory.md"
+  },
+  "transcriptSnapshot": {
+    "tailOwner": "Parent appends remaining observable records and final response after reviewer finishes.",
+    "parseFailures": 0,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260927T205200Z-omarchy-repl\\response.jsonl",
+    "recordCount": 65
+  },
+  "audit": {
+    "wrapper": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.107.0\\Invoke-CodexMcpPlugin.ps1",
+    "cache": "F:\\GitHub\\McpServer\\.mcpServer\\codex",
+    "turnId": 85730,
+    "workspace": "F:\\GitHub\\McpServer",
+    "sessionId": "Codex-20260927T191745Z-plugin-session",
+    "requestId": "req-20260927T205916Z-hv-omarchy"
+  }
+}

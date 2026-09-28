@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class TransactionGatedTodoExecutionServiceTests
 {
-    private const string WorkspacePath = @"F:\GitHub\McpServer";
+    private const string WorkspacePath = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>File-state TODO execution mutations execute inside the coordinator and return after commit.</summary>
     [Fact]

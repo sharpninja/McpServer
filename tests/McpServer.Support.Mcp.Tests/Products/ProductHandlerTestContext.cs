@@ -16,16 +16,16 @@ namespace McpServer.Support.Mcp.Tests.Products;
 internal sealed class ProductHandlerTestContext : IDisposable
 {
     /// <summary>Owner workspace used by most cases.</summary>
-    public const string Owner = @"F:\GitHub\McpServer";
+    public const string Owner = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>Registered member workspace.</summary>
-    public const string Member = @"F:\GitHub\mcpserver-grok-plugin";
+    public const string Member = @"Q:\__mcp_unit_test__\mcpserver-grok-plugin";
 
     /// <summary>Registered non-owner used for 403 cases.</summary>
-    public const string Other = @"F:\GitHub\other-workspace";
+    public const string Other = @"Q:\__mcp_unit_test__\other-workspace";
 
     /// <summary>Registered outsider used for 404 isolation.</summary>
-    public const string Outsider = @"F:\GitHub\outsider";
+    public const string Outsider = @"Q:\__mcp_unit_test__\outsider";
 
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;

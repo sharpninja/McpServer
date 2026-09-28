@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-28T03:28:15.0537380Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "phase": "P0",
+  "status": "captured-awaiting-independent-review",
+  "plan": {
+    "todoId": "PLAN-SESSIONLIFE-001",
+    "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+    "approvalReceipt": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/approval.json",
+      "sha256": "04511D74DA0DCF9F8DFC147DB6D4DD6207EEA4FBD7BC5C897F337D611B8AC365"
+    }
+  },
+  "isolatedTurn": {
+    "agent": "Codex",
+    "sessionId": "Codex-20260928T020045Z-p0-sessionlife",
+    "requestId": "req-20260928T020045Z-p0-reconcile",
+    "cacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\sessions\\Codex-20260928T020045Z-p0-sessionlife"
+  },
+  "preMutation": {
+    "baseline": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-baseline.json",
+      "sha256": "78AE53DEB349CF909E48CF6344DD8A33F96B3CA76A63A1C9FE92F55F8544390D",
+      "counts": {
+        "todos": 35,
+        "functional": 12,
+        "technical": 17,
+        "testing": 22,
+        "mappings": 40
+      }
+    },
+    "infrastructureBaseline": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-infrastructure-baseline.json",
+      "sha256": "179655E2D976F3AFD13AE958029C202C1C191A755DADE45F1BA27996A1C8EE19",
+      "governingFr": "FR-MCP-107",
+      "technical": "TR-MCP-PLAN-001",
+      "testing": "TEST-MCP-143"
+    }
+  },
+  "mutations": {
+    "requirementBatches": [
+      {
+        "method": "workflow.requirements.updateFrBatch",
+        "success": true,
+        "count": 9,
+        "ids": [
+          "FR-MCP-SESSIONLIFE-001",
+          "FR-MCP-SESSIONLIFE-002",
+          "FR-MCP-SESSIONLIFE-003",
+          "FR-MCP-SESSIONLIFE-004",
+          "FR-MCP-SESSIONLIFE-005",
+          "FR-MCP-170",
+          "FR-MCP-REPL-011",
+          "FR-MCP-SESSIONLOGCTX-001",
+          "FR-MCP-REPL-009"
+        ]
+      },
+      {
+        "method": "workflow.requirements.updateTrBatch",
+        "success": true,
+        "count": 6,
+        "ids": [
+          "TR-MCP-SESSIONLIFE-001",
+          "TR-MCP-SESSIONLIFE-002",
+          "TR-MCP-SESSIONLIFE-003",
+          "TR-MCP-SESSIONLIFE-004",
+          "TR-MCP-SESSIONLIFE-005",
+          "TR-MCP-PLAN-001"
+        ]
+      },
+      {
+        "method": "workflow.requirements.updateTestBatch",
+        "success": true,
+        "count": 6,
+        "ids": [
+          "TEST-MCP-SESSIONLIFE-001",
+          "TEST-MCP-SESSIONLIFE-002",
+          "TEST-MCP-SESSIONLIFE-003",
+          "TEST-MCP-SESSIONLIFE-004",
+          "TEST-MCP-SESSIONLIFE-005",
+          "TEST-MCP-143"
+        ]
+      },
+      {
+        "method": "workflow.requirements reviewer delta",
+        "success": true,
+        "count": 5,
+        "ids": [
+          "FR-MCP-SESSIONLIFE-004",
+          "FR-MCP-REPL-011",
+          "TR-MCP-SESSIONLIFE-004",
+          "TEST-MCP-SESSIONLIFE-004",
+          "TEST-MCP-SESSIONLIFE-005"
+        ]
+      },
+      {
+        "method": "client.Requirements.UpdateFrBatchAsync",
+        "success": true,
+        "count": 1,
+        "ids": [
+          "FR-MCP-107"
+        ],
+        "scope": "Additive structured P1 validation/report-governance acceptance criteria; body, title, priority, and pending status preserved."
+      },
+      {
+        "method": "workflow.requirements.updateFr final approved qualifier",
+        "success": true,
+        "count": 1,
+        "ids": [
+          "FR-MCP-170"
+        ],
+        "requestId": "req-20260928T031617Z-615b",
+        "scope": "Normative no-failsafe behavior restricted to never-degraded missing-turn 404; degraded recovery obligation preserved."
+      }
+    ],
+    "mappingCreates": [
+      {
+        "frId": "FR-MCP-170",
+        "trId": null,
+        "testId": "TEST-MCP-SESSIONLIFE-002",
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "testId": "TEST-MCP-SESSIONLIFE-002",
+            "createdAt": "2026-09-28T02:29:12.4709722+00:00",
+            "frId": "FR-MCP-170"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-170",
+        "trId": null,
+        "testId": "TEST-MCP-SESSIONLIFE-004",
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "testId": "TEST-MCP-SESSIONLIFE-004",
+            "createdAt": "2026-09-28T02:29:12.4710193+00:00",
+            "frId": "FR-MCP-170"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-173",
+        "trId": null,
+        "testId": "TEST-MCP-SESSIONLIFE-003",
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "testId": "TEST-MCP-SESSIONLIFE-003",
+            "createdAt": "2026-09-28T02:29:12.4713343+00:00",
+            "frId": "FR-MCP-173"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-REPL-011",
+        "trId": null,
+        "testId": "TEST-MCP-SESSIONLIFE-005",
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "testId": "TEST-MCP-SESSIONLIFE-005",
+            "createdAt": "2026-09-28T02:29:12.4824986+00:00",
+            "frId": "FR-MCP-REPL-011"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-107",
+        "trId": "TR-MCP-PLAN-001",
+        "testId": null,
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "trId": "TR-MCP-PLAN-001",
+            "createdAt": "2026-09-28T02:29:12.4643408+00:00",
+            "frId": "FR-MCP-107"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-107",
+        "trId": null,
+        "testId": "TEST-MCP-143",
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "testId": "TEST-MCP-143",
+            "createdAt": "2026-09-28T02:29:12.4643839+00:00",
+            "frId": "FR-MCP-107"
+          }
+        ]
+      },
+      {
+        "frId": "FR-MCP-REPL-011",
+        "trId": "TR-MCP-REPL-012",
+        "testId": null,
+        "found": true,
+        "matchCount": 1,
+        "records": [
+          {
+            "trId": "TR-MCP-REPL-012",
+            "createdAt": "2026-09-28T03:20:02.7520088+00:00",
+            "frId": "FR-MCP-REPL-011"
+          }
+        ],
+        "requestId": "req-20260928T031648Z-18da",
+        "notes": "Approved missing governing edge for BUG-TRIAGE-170; final relevant mapping count 47."
+      }
+    ],
+    "todoUpdates": {
+      "method": "workflow.todo.update",
+      "count": 35,
+      "successCount": 35,
+      "openCount": 35,
+      "implementationTaskCount": 146,
+      "allTasksDoneFalse": true,
+      "supersessionTaskTodoIds": [
+        "BUG-TRIAGE-186",
+        "BUG-TRIAGE-204",
+        "BUG-TRIAGE-243",
+        "BUG-TRIAGE-239",
+        "BUG-TRIAGE-170",
+        "BUG-TRIAGE-171"
+      ]
+    }
+  },
+  "structuredAcceptance": {
+    "manifestAcRows": 109,
+    "sessionLifeAcSatisfiedCount": 0,
+    "legacySatisfiedValuesPreserved": true,
+    "supersessionRows": [
+      {
+        "todoId": "BUG-TRIAGE-186",
+        "oldCriterion": "appendActions returns success only after durable persistence is confirmed; a non-persisted/degraded result must be a failed invoke with the failsafe retained.",
+        "replacementCriterion": "Exact-request primary failure plus confirmed write-ahead retention returns classified queued/degraded success; mismatch, unconfirmed recovery, or total loss returns nonzero.",
+        "replacementAcIds": [
+          "FR-MCP-SESSIONLIFE-003-AC001",
+          "FR-MCP-SESSIONLIFE-003-AC003",
+          "FR-MCP-SESSIONLIFE-003-AC006"
+        ],
+        "retainedObligations": [
+          "Matching request identity",
+          "Failsafe retained",
+          "No false primary claim",
+          "Nonzero on total loss"
+        ],
+        "rationale": "Confirmed queued persistence is an approved successful degraded outcome."
+      },
+      {
+        "todoId": "BUG-TRIAGE-204",
+        "oldCriterion": "appendActions must not report success when Invoke-ReplPersistTurn returns false or leaves a failsafe record.",
+        "replacementCriterion": "A confirmed queued result is successful degraded workflow completion with persisted=false; only total loss is failure.",
+        "replacementAcIds": [
+          "FR-MCP-SESSIONLIFE-003-AC001",
+          "FR-MCP-SESSIONLIFE-003-AC002",
+          "FR-MCP-SESSIONLIFE-003-AC006"
+        ],
+        "retainedObligations": [
+          "No local-cache-as-durable claim",
+          "Method and failsafe diagnostics",
+          "Primary remains false"
+        ],
+        "rationale": "The three-outcome contract separates queued success from primary persistence and loss."
+      },
+      {
+        "todoId": "BUG-TRIAGE-243",
+        "oldCriterion": "When updateTurn title persistence times out or returns HTTP 503, the wrapper exits non-zero if the title was not persisted.",
+        "replacementCriterion": "When the title is not primarily persisted but a prewritten failsafe is confirmed, return queued/degraded success; nonzero is required only when neither primary persistence nor confirmed recovery exists.",
+        "replacementAcIds": [
+          "FR-MCP-SESSIONLIFE-003-AC001",
+          "FR-MCP-SESSIONLIFE-003-AC002",
+          "FR-MCP-SESSIONLIFE-003-AC006"
+        ],
+        "retainedObligations": [
+          "Previous server title remains until replay",
+          "Non-empty diagnostic and failsafe path",
+          "No false primary claim",
+          "Later retry persists once"
+        ],
+        "rationale": "Approved write-ahead semantics treat confirmed queue retention as successful degraded persistence."
+      },
+      {
+        "todoId": "BUG-TRIAGE-239",
+        "oldCriterion": "A validation failure caused by omitted planFile leaves no pending session_submit failsafe.",
+        "replacementCriterion": "Write-ahead recovery created before submission remains pending after validation or backend rejection until durable resolution; invalid metadata inserts no server row.",
+        "replacementAcIds": [
+          "FR-MCP-SESSIONLIFE-002-AC001",
+          "FR-MCP-SESSIONLIFE-002-AC002",
+          "FR-MCP-SESSIONLIFE-003-AC006"
+        ],
+        "retainedObligations": [
+          "No invalid server row",
+          "Exact diagnostics",
+          "Duplicate-free replay"
+        ],
+        "rationale": "Deleting write-ahead evidence on validation failure conflicts with the approved retention contract."
+      },
+      {
+        "todoId": "BUG-TRIAGE-239",
+        "oldCriterion": "Recovery or session rotation rebinds current-turn.yaml to the recovered session and incremental persistence succeeds on that rebound identity.",
+        "replacementCriterion": "An already-bound workspace, agent, session, and request identity is immutable; drift is rejected without rebinding. Metadata recovery occurs only within the exact bound identity.",
+        "replacementAcIds": [
+          "FR-MCP-SESSIONLIFE-002-AC003",
+          "FR-MCP-SESSIONLIFE-002-AC004"
+        ],
+        "retainedObligations": [
+          "Explicit metadata passes through",
+          "None sentinel for truly absent values",
+          "Server validation remains strict"
+        ],
+        "rationale": "The approved identity contract prohibits marker-driven or recovery-driven rebinding."
+      }
+    ],
+    "retainedClarifications": [
+      {
+        "todoId": "BUG-TRIAGE-170",
+        "acIds": [
+          "FR-MCP-REPL-011-AC005",
+          "TEST-MCP-SESSIONLIFE-005-AC001"
+        ],
+        "obligations": [
+          "Automatic nested drain defers while a REPL call is active",
+          "Timeout abort leaves drainAttempts unchanged",
+          "Completion latch remains unset",
+          "120-second default and larger REPL_TIMEOUT precedence"
+        ]
+      },
+      {
+        "todoId": "BUG-TRIAGE-171",
+        "acIds": [
+          "FR-MCP-SESSIONLIFE-004-AC004",
+          "TR-MCP-SESSIONLIFE-004-AC002",
+          "TEST-MCP-SESSIONLIFE-004-AC001"
+        ],
+        "obligations": [
+          "Actual storage outage reports health.storage=unreachable",
+          "Contention remains retryable and distinct",
+          "Recovery YAML remains retained until later replay"
+        ]
+      }
+    ],
+    "criterionSpecificPlannedCoverageCount": 109,
+    "outsideBatchPreservedAcCount": 4,
+    "semanticAssignment": "Exact requirement and acceptance-criterion identity; numeric suffix grouping prohibited."
+  },
+  "verification": {
+    "methods": [
+      "workflow.requirements.listFr",
+      "workflow.requirements.listTr",
+      "workflow.requirements.listTest",
+      "workflow.requirements.listMappings",
+      "workflow.todo.get"
+    ],
+    "requirementCounts": {
+      "functional": 13,
+      "technical": 18,
+      "testing": 23,
+      "relevantMappings": 47
+    },
+    "todoCounts": {
+      "total": 35,
+      "open": 35,
+      "closed": 0,
+      "implementationTasks": 146.0
+    },
+    "invariants": {
+      "todosAllOpen": true,
+      "todoHistoryPreserved": true,
+      "todoTaskShapeValid": true,
+      "mappingsExact": true,
+      "sessionLifeAcUnsatisfied": true,
+      "manifestValid": true,
+      "semanticCoverageMapValid": true,
+      "baseline40PlusSixEdgesPreserved": true,
+      "baseline40PlusSevenEdgesPreserved": true,
+      "anchorInventoryValid": true,
+      "fr170NeverDegradedQualifierReadBack": true,
+      "fr173TxnKeyBroadClosureExcluded": true
+    },
+    "manifestValidation": {
+      "todoRowCount": 35,
+      "uniqueTodoCount": 35,
+      "missingTodos": [],
+      "duplicateTodos": [],
+      "allNotAccepted": true,
+      "acRowCount": 109,
+      "duplicateAcRows": [],
+      "p1RedCaseCount": 9,
+      "p1ProposedTestCount": 13,
+      "candidateDriftCovered": true,
+      "supersessionCount": 5,
+      "missingSchemaDecisionCount": 0,
+      "emptyAcIds": [],
+      "criteriaWithoutPlannedTests": [],
+      "criteriaWithoutAssertions": [],
+      "semanticCheckCount": 18,
+      "failedSemanticChecks": [],
+      "pathAnchorCount": 51,
+      "pathUnresolvedCount": 0,
+      "pathClassifications": {
+        "existing-candidate-only": 8,
+        "existing-root-and-candidate": 37,
+        "existing-root-only-documentation-or-receipt": 1,
+        "proposed": 5
+      },
+      "fr173TxnKeyActiveContradictions": 0
+    },
+    "todoInvariantFailures": [],
+    "mappingFreeze": {
+      "baseline": 40,
+      "supplementalExisting": 2,
+      "new": 5,
+      "frozen": 47,
+      "missing": [],
+      "duplicates": 0,
+      "frMcpRepl009Edges": 8,
+      "frMcpRepl011Edges": 13,
+      "frMcpSessionLogCtx001Edges": 2
+    },
+    "frMcp107Readback": {
+      "status": "pending",
+      "acceptanceCriteriaCount": 5,
+      "satisfiedCount": 0,
+      "bodyPreserved": true
+    }
+  },
+  "artifacts": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "sha256": "D662F206B2471DDC12EE7B2AEEFD1B15C12339E0896DE8FEC5E81612012A1CB8",
+      "bytes": 426511,
+      "role": "109-row criterion-specific planned acceptance matrix with final semantic/path corrections"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/existing-candidate-pester-inventory.json",
+      "sha256": "0C631013E2C31BA14E3D574862A846B5433B6E57CD1E2B12CA8A33A10F95694A",
+      "bytes": 32357,
+      "role": "presence-only exact AST inventory; not acceptance evidence"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-freeze-verification.json",
+      "sha256": "56DBD721C9AD3B25EEFAAB666B84BAE32B8257D2C52E08E153DE8941DDDEC50E",
+      "bytes": 6619,
+      "role": "parent proof of 27 candidate files, 247 original files, and 35 TODO invariants; its mapping count predates the approved 47th edge"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-baseline.json",
+      "sha256": "78AE53DEB349CF909E48CF6344DD8A33F96B3CA76A63A1C9FE92F55F8544390D",
+      "bytes": 221740,
+      "role": "pre-mutation 35-TODO and 40-edge baseline"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-infrastructure-baseline.json",
+      "sha256": "179655E2D976F3AFD13AE958029C202C1C191A755DADE45F1BA27996A1C8EE19",
+      "bytes": 3093,
+      "role": "pre-mutation P1 governing requirement and two-edge baseline"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "sha256": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364",
+      "bytes": 111129,
+      "role": "full root/candidate/proposed anchor inventory and exact replacement receipt"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "sha256": "FE7F7E970D003B8576CD0173C89C5C781220286FEE39A14F2C90E7B1B383C775",
+      "bytes": 313340,
+      "role": "exact post-state and frozen 47 relevant mappings"
+    }
+  ],
+  "boundaries": {
+    "productionCodeEdited": false,
+    "testCodeEdited": false,
+    "testsExecuted": false,
+    "todoOrRequirementClosed": false,
+    "candidateEvidenceAccepted": false,
+    "requirementsReview": "pending",
+    "finalGate": "pending",
+    "missingSchemaOrRequirementDecisions": []
+  },
+  "sessionLogging": {
+    "agent": "Codex",
+    "sessionId": "Codex-20260928T020045Z-p0-sessionlife",
+    "requestId": "req-20260928T020045Z-p0-reconcile",
+    "patch": {
+      "method": "client.SessionLog.PatchTurnAsync",
+      "success": true,
+      "turnId": 86513,
+      "receiptSessionId": "Codex-20260928T020045Z-p0-sessionlife",
+      "receiptRequestId": "req-20260928T020045Z-p0-reconcile"
+    },
+    "completion": {
+      "method": "workflow.sessionlog.completeTurn",
+      "success": false,
+      "attemptCount": 1,
+      "durationSeconds": 31.08,
+      "error": "workflow.sessionlog.completeTurn failed locally or during persistence.",
+      "localStatus": "in_progress",
+      "retryPerformed": false,
+      "identityRebound": false
+    },
+    "note": "Rich model-authored evidence is durably patched. The one bounded completion attempt failed; no retry, identity rebind, audit deletion, or false closure was performed.",
+    "finalNeedsLog": {
+      "method": "workflow.sessionlog.updateTurn",
+      "attemptedAtUtc": "2026-09-28T03:25:45.1987659Z",
+      "success": false,
+      "error": "workflow.sessionlog.updateTurn failed locally or during persistence.",
+      "retryPerformed": false,
+      "terminalRetryPerformed": false,
+      "oldTurnHistoryRewritten": false,
+      "failsafe": {
+        "path": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\codex\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260928T032545Z-session_submit-31d2.yaml",
+        "sha256": "C846A4A9696C89C1BF1732C72A44E7D16BC200637B073E4C542D6C3836851A10",
+        "bytes": 2017,
+        "retained": true
+      },
+      "note": "One normal nonterminal final-needs update was attempted. Persistence failed and the plugin retained the normal session_submit failsafe. No retry or terminal action followed."
+    }
+  },
+  "hashing": {
+    "method": "Get-FileHash -Algorithm SHA256 over exact on-disk bytes",
+    "objectHashes": "Get-P0ObjectHash uses compressed UTF-8 JSON only for record snapshots, not artifact file hashes."
+  },
+  "finalCorrectionBatch": {
+    "scope": "Bounded Astra P0 corrections only; no production code, tests, execution, merge, deploy, requirement closure, or TODO closure.",
+    "requirementStore": [
+      {
+        "requirementId": "FR-MCP-170",
+        "field": "description",
+        "oldText": "Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.\n\nAcceptance Criteria:\n- After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.\n- Server turn GET then contains the appended dialog items.\n- Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.\n- Missing turn is classified not-found, retryable false; failsafe is not used for that 404.",
+        "newText": "Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.\n\nAcceptance Criteria:\n- After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.\n- Server turn GET then contains the appended dialog items.\n- Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.\n- A missing turn on a never-degraded appendDialog path is classified not-found, retryable false; no failsafe is created for that 404. This does not override degraded MCP/service recovery and failsafe retention governed by FR-MCP-SESSIONLIFE-001-AC004.",
+        "rationale": "Resolve normative 404 contradiction: no-failsafe applies only to never-degraded missing-turn 404; degraded recovery remains governed by FR-MCP-SESSIONLIFE-001-AC004.",
+        "method": "workflow.requirements.updateFr",
+        "requestId": "req-20260928T031617Z-615b",
+        "readBackVerified": true
+      },
+      {
+        "requirementId": "FR-MCP-170",
+        "field": "acceptanceCriteria.FR-MCP-170-AC003.text",
+        "oldText": "A missing turn is classified not_found with retryable false, does not create a failsafe for that 404, and does not increment the local auditDialog count.",
+        "newText": "On a never-degraded appendDialog path, a missing turn is classified not_found with retryable false, does not create a failsafe for that 404, and does not increment the local auditDialog count; this criterion does not override degraded MCP/service recovery and failsafe retention governed by FR-MCP-SESSIONLIFE-001-AC004.",
+        "rationale": "Make the approved never-degraded qualifier normative in the MCP requirement while preserving degraded recovery behavior.",
+        "method": "workflow.requirements.updateFr",
+        "requestId": "req-20260928T031617Z-615b",
+        "readBackVerified": true
+      },
+      {
+        "requirementId": "FR-MCP-REPL-011",
+        "field": "mapping.TR-MCP-REPL-012",
+        "oldText": "No FR-MCP-REPL-011 -> TR-MCP-REPL-012 edge in the 46-edge frozen readback.",
+        "newText": "FR-MCP-REPL-011 -> TR-MCP-REPL-012 present; frozen relevant mapping count is 47.",
+        "rationale": "Restore the real governing technical edge for BUG-TRIAGE-170 while preserving all prior mappings.",
+        "method": "workflow.requirements.createMapping",
+        "requestId": "req-20260928T031648Z-18da",
+        "readBackVerified": true
+      }
+    ],
+    "anchorCorrections": {
+      "receipt": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "uniqueAnchors": 51,
+      "exactReferenceReplacements": 66,
+      "classifications": {
+        "existing-candidate-only": 8,
+        "existing-root-and-candidate": 37,
+        "existing-root-only-documentation-or-receipt": 1,
+        "proposed": 5
+      },
+      "unresolved": 0,
+      "rule": "Production/test anchors must exist in the isolated candidate unless explicitly proposed; root-only documentation/receipts are allowed and separately classified."
+    },
+    "providerRace": {
+      "criterion": "TEST-MCP-SESSIONLIFE-004-AC003",
+      "providers": [
+        "SQLite",
+        "SQL Server",
+        "PostgreSQL"
+      ],
+      "postgresqlClassifier": "SQLSTATE 23505 plus exact IX_SessionLogTurns_SessionLogId_RequestId constraint",
+      "transactionRecovery": "Create savepoint before first write; rollback before winner reread; one retry; propagate unsafe savepoint/rollback or second failure."
+    },
+    "fr173TxnKey": {
+      "classification": "session-log-subset-regression-only",
+      "correctedCriteria": [
+        "ac-fr173-001",
+        "ac-fr173-002",
+        "ac-fr173-003",
+        "ac-fr173-004",
+        "ac-fr173-005",
+        "ac-trtxnkey-001",
+        "ac-trtxnkey-002",
+        "ac-trtxnkey-003"
+      ],
+      "broaderPlannedCoverage": "Preserved outside batch on each row; requirement text/state and broad obligations unchanged.",
+      "closureInference": false
+    }
+  }
+}

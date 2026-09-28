@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 2,
+  "capturedAtUtc": "2026-09-28T02:44:46.3037452Z",
+  "supersedes": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification.json",
+  "reason": "Final source selection excludes unused PrimaryRepositoryRoot helper hunk",
+  "candidateContentManifestSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+  "declaredContentManifestSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+  "contentHashMatches": true,
+  "selectedFilesChecked": 27,
+  "selectedFileMismatches": 0,
+  "originalFilesChecked": 247,
+  "originalFilesPreserved": true,
+  "diffCheckExitCode": 0,
+  "partialSourceFile": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+  "candidateManifestFileSha256": "FB3FFA531516E952AF606D9425C3AE2D5CA8E9D2934BEB31152003D0A92895CC",
+  "checks": [
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "length": 23985,
+      "sha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "expected": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "length": 60122,
+      "sha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "expected": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "length": 110129,
+      "sha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "expected": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "length": 18380,
+      "sha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "expected": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "length": 5642,
+      "sha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "expected": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "length": 285959,
+      "sha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "expected": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "length": 3524,
+      "sha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "expected": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "length": 17546,
+      "sha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "expected": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "length": 12471,
+      "sha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "expected": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "length": 7144,
+      "sha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "expected": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "length": 94673,
+      "sha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "expected": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "length": 4019,
+      "sha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "expected": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "length": 12750,
+      "sha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "expected": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "length": 9671,
+      "sha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "expected": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "length": 34122,
+      "sha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "expected": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "length": 8768,
+      "sha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "expected": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "length": 10619,
+      "sha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "expected": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "length": 6771,
+      "sha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "expected": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "length": 4487,
+      "sha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "expected": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "length": 35801,
+      "sha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "expected": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "length": 12633,
+      "sha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "expected": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "length": 220,
+      "sha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "expected": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "length": 6063,
+      "sha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "expected": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "length": 5561,
+      "sha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "expected": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "length": 1934,
+      "sha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "expected": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "length": 11378,
+      "sha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "expected": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "length": 103517,
+      "sha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "expected": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "matches": true
+    }
+  ],
+  "reviewAccepted": false
+}

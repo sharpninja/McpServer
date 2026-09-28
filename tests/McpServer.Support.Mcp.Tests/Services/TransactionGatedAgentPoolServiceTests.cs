@@ -19,15 +19,15 @@ public sealed class TransactionGatedAgentPoolServiceTests
     public async Task StartAgentAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
-        inner.StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        inner.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentPoolMutationResult { Success = true }));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await sut.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await inner.Received(1)
-            .StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -53,15 +53,15 @@ public sealed class TransactionGatedAgentPoolServiceTests
     public async Task ConnectInteractiveAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
-        inner.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        inner.ConnectInteractiveAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentPoolConnectResult { Success = true }));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await sut.ConnectInteractiveAsync("planner", @"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await inner.Received(1)
-            .ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .ConnectInteractiveAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -70,15 +70,15 @@ public sealed class TransactionGatedAgentPoolServiceTests
     public async Task GetAgentsAsync_WhenTransactionsRequired_Delegates()
     {
         var inner = Substitute.For<IAgentPoolService>();
-        inner.GetAgentsAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        inner.GetAgentsAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<IReadOnlyList<AgentPoolAgentStatusDto>>([CreateAgentStatus()]));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.GetAgentsAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await sut.GetAgentsAsync(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result);
         await inner.Received(1)
-            .GetAgentsAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .GetAgentsAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -89,10 +89,10 @@ public sealed class TransactionGatedAgentPoolServiceTests
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        await sut.SeedWorkspaceAgentsAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.SeedWorkspaceAgentsAsync(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await inner.Received(1)
-            .SeedWorkspaceAgentsAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .SeedWorkspaceAgentsAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -101,18 +101,18 @@ public sealed class TransactionGatedAgentPoolServiceTests
     public async Task StartAgentAsync_WhenTransactionsNotRequired_Delegates()
     {
         var inner = Substitute.For<IAgentPoolService>();
-        inner.StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        inner.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentPoolMutationResult { Success = true }));
         var sut = CreateSut(
             inner,
             new CapturingCoordinator(enabled: true),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await sut.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await inner.Received(1)
-            .StartAgentAsync("planner", @"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+            .StartAgentAsync("planner", @"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -129,7 +129,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
         => new()
         {
             AgentName = "planner",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             Lifecycle = "stopped",
         };
 

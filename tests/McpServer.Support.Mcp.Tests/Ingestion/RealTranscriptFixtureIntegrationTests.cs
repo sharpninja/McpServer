@@ -97,21 +97,7 @@ public sealed class RealTranscriptFixtureIntegrationTests
     }
 
     private static string ResolveRealFixtureRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(directory.FullName, "tests", "McpServer.Support.Mcp.Tests", "Fixtures", "Transcripts", "real");
-            if (Directory.Exists(candidate))
-            {
-                return candidate;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Unable to locate real transcript fixture root from test output directory.");
-    }
+        => Path.Combine(AppContext.BaseDirectory, "Fixtures", "Transcripts", "real");
 
     private static JsonElement[] ReadJsonl(string path)
     {

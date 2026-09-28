@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-28T02:11:18.9648178Z",
+  "expectedPluginCount": 8,
+  "pluginRepositories": [
+    {
+      "name": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "present": true,
+      "head": "7d5706636ed3a294937eb8e67f07d6eaea3c460e",
+      "dirtyPaths": "?? testResults.xml"
+    },
+    {
+      "name": "mcpserver-claude-cowork-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+      "present": true,
+      "head": "3d7154b6ae9aa0d3a05108fc26e02eeb17316b60",
+      "dirtyPaths": "?? testResults.xml"
+    },
+    {
+      "name": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin",
+      "present": true,
+      "head": "4ded634073f9108f8a0c442801f21d9d4532a3eb",
+      "dirtyPaths": null
+    },
+    {
+      "name": "mcpserver-cline-v2-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+      "present": true,
+      "head": "4d9fb83fadb17314657532593161b00e04a7da78",
+      "dirtyPaths": null
+    },
+    {
+      "name": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin",
+      "present": true,
+      "head": "b776df525fc721894ca76e2604a51764d49e1a4d",
+      "dirtyPaths": "?? testResults.xml"
+    },
+    {
+      "name": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "present": true,
+      "head": "f70c6b2a01185e127fbed3582927ba4a902bed76",
+      "dirtyPaths": "?? testResults.xml"
+    },
+    {
+      "name": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin",
+      "present": true,
+      "head": "a527ffc080e41198952848130b9675327e338f88",
+      "dirtyPaths": [
+        "?? cache/",
+        "?? testResults.xml"
+      ]
+    },
+    {
+      "name": "mcpserver-opencode-plugin",
+      "path": "F:\\GitHub\\mcpserver-opencode-plugin",
+      "present": true,
+      "head": "0e85124e7739b9a8d6d81be9954048767a541065",
+      "dirtyPaths": null
+    }
+  ],
+  "postgresCandidates": [
+    {
+      "path": "C:\\Program Files\\PostgreSQL\\17\\bin\\pg_ctl.exe",
+      "exists": true
+    },
+    {
+      "path": "C:\\Users\\kingd\\AppData\\Local\\McpServer\\test-tools\\pgsql\\bin\\pg_ctl.exe",
+      "exists": false
+    }
+  ],
+  "syncExecuted": false,
+  "providerServersStarted": false
+}

@@ -177,7 +177,7 @@ public sealed class BrainSlotRegistryServiceTests
 
         public static RegistryFixture Create()
         {
-            var workspace = new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" };
+            var workspace = new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
             var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
                 .UseInMemoryDatabase("brain-slot-registry-" + Guid.NewGuid().ToString("N"))
                 .Options;

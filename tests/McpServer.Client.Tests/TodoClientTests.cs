@@ -358,7 +358,7 @@ public sealed class TodoClientTests
             """
             {
               "todoId":"TODO-201",
-              "workspacePath":"F:\\GitHub\\McpServer",
+              "workspacePath":"Q:\\__mcp_unit_test__\\McpServer",
               "title":"Execution todo",
               "goal":"Implement bounded execution",
               "summary":"Hydrate the active TODO context.",

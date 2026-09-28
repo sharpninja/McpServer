@@ -4,6 +4,10 @@ This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
 
 ## 1) Installation and prerequisites
 
+### Frontier agent setup prompt (draft)
+
+For a frontier coding agent doing interactive intake + install/configure/verify, use the draft prompt at [docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) (MCP-SETUPPROMPT-001). Hostile-validator overall verdict **AGREE** on 2026-09-28 CT; treat as draft until a live install dry-run closes the remaining open surfaces noted in docs/receipts/hv/hostile-validator-setupprompt-overall-20260928T153330Z.md.
+
 ### Supported host environment
 
 - Windows 10/11 or Windows Server

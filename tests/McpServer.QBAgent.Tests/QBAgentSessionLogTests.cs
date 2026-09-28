@@ -11,7 +11,7 @@ public sealed class QBAgentSessionLogTests
     {
         var root = NewRoot();
         var clock = new FixedUtcTimeProvider(new DateTimeOffset(2026, 9, 11, 15, 4, 5, 123, TimeSpan.Zero));
-        var log = QBAgentSessionLog.CreateNew(root, clock, workspace: @"F:\GitHub\McpServerManager");
+        var log = QBAgentSessionLog.CreateNew(root, clock, workspace: @"Q:\__mcp_unit_test__\McpServerManager");
 
         Assert.Equal("qbagent-20260911T150405123Z", log.SessionId);
         Assert.Equal(Path.Combine(root, "qbagent-20260911T150405123Z.jsonl"), log.FilePath);

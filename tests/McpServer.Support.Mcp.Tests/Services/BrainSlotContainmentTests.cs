@@ -19,7 +19,7 @@ public sealed class BrainSlotContainmentTests
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase("brain-slot-admission-" + Guid.NewGuid().ToString("N"))
             .Options;
-        using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" });
+        using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" });
         var service = new BrainSlotContextAdmissionService(
             db,
             new Chunker(),

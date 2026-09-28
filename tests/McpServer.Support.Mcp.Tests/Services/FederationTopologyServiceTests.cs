@@ -10,8 +10,24 @@ using Microsoft.Extensions.DependencyInjection;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for hub-and-spoke federation topology persistence.</summary>
-public sealed class FederationTopologyServiceTests
+public sealed class FederationTopologyServiceTests : IDisposable
 {
+    private readonly string _workspacePath = Path.Combine(
+        Path.GetTempPath(), "McpServer.Tests", nameof(FederationTopologyServiceTests),
+        Guid.NewGuid().ToString("N"));
+
+    /// <summary>Creates an isolated workspace for identity resolution.</summary>
+    public FederationTopologyServiceTests()
+    {
+        Directory.CreateDirectory(_workspacePath);
+    }
+
+    /// <summary>Removes the isolated workspace after each test.</summary>
+    public void Dispose()
+    {
+        if (Directory.Exists(_workspacePath))
+            Directory.Delete(_workspacePath, recursive: true);
+    }
     /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
     [Fact]
     public async Task EnrollAsync_PersistsProxyAndWorkspaceInventory()
@@ -29,7 +45,7 @@ public sealed class FederationTopologyServiceTests
                 new FederationWorkspaceRegistrationRequest
                 {
                     WorkspaceName = "McpServer",
-                    WorkspacePath = @"F:\GitHub\McpServer",
+                    WorkspacePath = _workspacePath,
                 },
             ],
         }, CancellationToken.None).ConfigureAwait(true);
@@ -45,7 +61,8 @@ public sealed class FederationTopologyServiceTests
 
         var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
         var workspace = Assert.Single(workspaces);
-        Assert.Equal(@"F:\GitHub\McpServer", workspace.WorkspacePath);
+        Assert.True(string.Equals(_workspacePath, workspace.WorkspacePath,
+            OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
         Assert.NotEmpty(workspace.GlobalWorkspaceId);
     }
 

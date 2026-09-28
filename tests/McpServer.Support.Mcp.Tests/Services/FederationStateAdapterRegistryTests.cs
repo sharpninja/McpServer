@@ -14,7 +14,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>Tests for federation state adapter registration and snapshots.</summary>
 public sealed class FederationStateAdapterRegistryTests
 {
-    private const string WorkspacePath = @"F:\GitHub\McpServer";
+    private const string WorkspacePath = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>All required domains are covered and explicit exemptions are local-only.</summary>
     [Fact]

@@ -20,7 +20,7 @@ public sealed class ApiKeyRedactionTests
         {
             $"X-Api-Key={SampleKey}",
             $"X-Api-Key: {SampleKey}",
-            $"Headers: Host=payton-legion2:7147; X-Api-Key={SampleKey}; X-Workspace-Path=F:\\GitHub\\McpServer",
+            $"Headers: Host=payton-legion2:7147; X-Api-Key={SampleKey}; X-Workspace-Path=Q:\\__mcp_unit_test__\\McpServer",
             $"api_key={SampleKey}",
             $"apiKey: {SampleKey}",
             $"{{\"apiKey\":\"{SampleKey}\"}}",

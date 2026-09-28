@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T02:37:52.9615206Z",
+  "planId": "PLAN-SESSIONLIFE-001",
+  "planRevision": 4,
+  "audit": {
+    "agent": "Codex",
+    "sessionId": "Codex-20260928T021035Z-plugin-session",
+    "requestId": "req-20260928T021102Z-prompt-0b56",
+    "pluginVersion": "1.107.0",
+    "cacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\child-sessions\\sessionlife-p0-20260928"
+  },
+  "decisions": [
+    {
+      "decisionId": "P0-SCOPE-001",
+      "topic": "scope",
+      "choice": "Select 18 tracked files and 9 untracked code/test files; exclude 19 tracked collateral or provenance-unsafe files and 201 historical receipt files.",
+      "rationale": "Only direct session-lifecycle behavior and bounded worktree test-harness prerequisites enter the candidate. MemoryTxnTests.cs has no demonstrated session-log dependency. PluginNativeSuiteReceiptTests.cs and PluginUpdateServiceHarnessTests.cs are excluded because they only redirect receipt lookup to PrimaryRepositoryRoot without run/source binding. PluginSessionLogCatalog.cs is a partial-hunk selection: retain SiblingPluginParent and its consumer, exclude the now-unused PrimaryRepositoryRoot helper. Historical evidence remains preserved in the original Grok worktree.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/receipts/sessionlife-completion/20260928-p0/source-scope-classification.json",
+        "docs/receipts/sessionlife-completion/20260928-p0/source-selected-hunk-exclusions.patch",
+        "docs/receipts/sessionlife-completion/20260928-p0/source-candidate-manifest.json"
+      ],
+      "revisitTrigger": "A later candidate gate proves an excluded file is a necessary dependency."
+    },
+    {
+      "decisionId": "P0-PROVIDER-001",
+      "topic": "provider",
+      "choice": "Do not provision or execute provider infrastructure in P0. Record parent preflight only; retain SQLite, SQL Server, and PostgreSQL as mandatory later gates.",
+      "rationale": "This delegated P0 preparation slice excludes provisioning; approved P6 validation uses supported provisioning after gates. Presence is not a passing provider test.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/receipts/sessionlife-completion/20260928-p0/preflight-plugin-providers.json",
+        "docs/plans/sessionlife-batch-completion-20260927.md#p6-full-validation-and-independent-acceptance"
+      ],
+      "revisitTrigger": "P6 provider validation starts or preflight identity changes."
+    },
+    {
+      "decisionId": "P0-SYNC-001",
+      "topic": "sync",
+      "choice": "Do not run SyncAgentPlugins in P0; preserve the single approved synchronization for P5 after pre-activation gates.",
+      "rationale": "Running synchronization now would mutate sibling repositories and invalidate the approved sequencing.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/plans/sessionlife-batch-completion-20260927.md#p5-documentation-and-shared-plugin-synchronization"
+      ],
+      "revisitTrigger": "P5 pre-activation unit and review gates pass."
+    },
+    {
+      "decisionId": "P0-DEADLINE-001",
+      "topic": "deadline",
+      "choice": "Do not change timeout behavior in P0. REPL_TIMEOUT=120 is used only for this isolated audit console; the 30-second hook child budget and separate 120-second drain contract remain future implementation/validation scope.",
+      "rationale": "P0 is source selection, not production or test implementation. Increasing a timeout would not remediate deadline defects.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/plans/sessionlife-batch-completion-20260927.md#locked-stop-reconciliation-design",
+        "docs/plans/sessionlife-batch-completion-20260927.md#p3-complete-stop-enforcement-and-bounded-child-execution"
+      ],
+      "revisitTrigger": "P1/P3 test-first deadline work begins."
+    },
+    {
+      "decisionId": "P0-MIGRATION-001",
+      "topic": "migration",
+      "choice": "Exclude MemoryService, McpDbContext memory relationships, and all nine memory migration changes.",
+      "rationale": "Inspection found memory soft-delete/relationship/Down behavior, not a demonstrated session-lifecycle dependency. Approved migration history is not reopened because of historical infrastructure failures.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/receipts/sessionlife-completion/20260928-p0/source-scope-classification.json",
+        "docs/plans/sessionlife-batch-completion-20260927.md#p0-approve-freeze-and-repair-traceability"
+      ],
+      "revisitTrigger": "A clean candidate gate produces a reproducible failure whose minimal dependency is one of these excluded changes."
+    },
+    {
+      "decisionId": "P0-COMPAT-001",
+      "topic": "canonical compatibility",
+      "choice": "Preserve the public Task<string> persister contract and add the proposed internal verified-receipt adapter in P4. Use canonical-first handling: consume valid canonical YAML, fall back to whole-bundle source rediscovery only when canonical data is missing or unavailable, and retain invalid, unsupported, lossy, ambiguous, degraded, or unverified artifacts. Plugins do not ingest transcripts.",
+      "rationale": "This preserves existing public callers while allowing internal persistence proof and prevents invalid canonical data from being silently normalized, discarded, or deleted. Whole-bundle fallback preserves paired metadata, messages, subagents, and provenance; plugin ingestion would duplicate the shared server pipeline.",
+      "owner": "Codex",
+      "evidence": [
+        "docs/plans/sessionlife-batch-completion-20260927.md#p4-complete-replay-security-atomicity-and-server-persistence",
+        "docs/plans/sessionlife-batch-completion-20260927.md#ordered-implementation-clarifications",
+        "docs/receipts/sessionlife-completion/20260928-p0/source-scope-classification.json"
+      ],
+      "revisitTrigger": "P4 Red tests prove the public compatibility contract cannot be preserved, or a behavior/scope change requires an approved plan amendment."
+    }
+  ]
+}

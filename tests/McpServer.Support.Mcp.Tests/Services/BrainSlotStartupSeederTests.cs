@@ -19,7 +19,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class BrainSlotStartupSeederTests
 {
-    private const string SomeWorkspace = @"F:\GitHub\McpServer";
+    private const string SomeWorkspace = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>With execution enabled and four roles configured, the seeder makes the quad ready.</summary>
     [Fact]

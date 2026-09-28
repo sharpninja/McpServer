@@ -24,7 +24,7 @@ public sealed class HandoffServiceRegistrationTests
 
         var extractor = provider.GetRequiredService<IHandoffOneShotExtractor>();
         var result = await extractor.ExtractAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "handoff text",
             agentName: null,
             promptTemplateId: null,

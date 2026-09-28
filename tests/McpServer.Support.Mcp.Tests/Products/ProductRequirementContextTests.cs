@@ -16,9 +16,9 @@ namespace McpServer.Support.Mcp.Tests.Products;
 /// </summary>
 public sealed class ProductRequirementContextTests : IDisposable
 {
-    private const string Owner = @"F:\GitHub\ctx-owner";
-    private const string Sibling = @"F:\GitHub\ctx-sibling";
-    private const string Outsider = @"F:\GitHub\ctx-outsider";
+    private const string Owner = @"Q:\__mcp_unit_test__\ctx-owner";
+    private const string Sibling = @"Q:\__mcp_unit_test__\ctx-sibling";
+    private const string Outsider = @"Q:\__mcp_unit_test__\ctx-outsider";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
     private readonly CallContext _ctx = new();
@@ -46,7 +46,7 @@ public sealed class ProductRequirementContextTests : IDisposable
         {
             Id = "sib-cs",
             WorkspaceId = Sibling,
-            SourceKey = @"F:\GitHub\ctx-sibling\src\Secret.cs",
+            SourceKey = @"Q:\__mcp_unit_test__\ctx-sibling\src\Secret.cs",
             SourceType = "repo",
             ContentHash = "hash-secret",
         });

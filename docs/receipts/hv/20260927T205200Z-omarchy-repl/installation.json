@@ -1,0 +1,75 @@
+{
+  "timestampUtc": "2026-09-27T20:54:32.3518687Z",
+  "request": "ssh to omarchy and install REPL dotnet tool",
+  "sourceMemory": "MEMORY-FACT-005",
+  "host": "PAYTON-OMARCHY",
+  "address": "192.168.0.149",
+  "user": "sharpninja",
+  "port": 22,
+  "trust": "Posh-SSH existing fingerprint; ErrorOnUntrusted; no Force or AcceptKey",
+  "installationCommand": "dotnet tool install --global SharpNinja.McpServer.Repl --version 1.4.39 --source https://api.nuget.org/v3/index.json",
+  "installExit": 0,
+  "inspection": {
+    "host": "PAYTON-OMARCHY",
+    "user": "sharpninja",
+    "home": "/home/sharpninja",
+    "os": "Omarchy",
+    "arch": "X64",
+    "pwsh": "7.6.6",
+    "dotnetPath": "/usr/bin/dotnet",
+    "toolPath": null,
+    "path": "/usr/lib/powershell-7:/usr/local/sbin:/usr/local/bin:/usr/bin:/home/sharpninja/.local/share/mise/shims:/home/sharpninja/.local/bin",
+    "sdks": [
+      "10.0.111 [/usr/share/dotnet/sdk]"
+    ],
+    "runtimes": [
+      "Microsoft.NETCore.App 10.0.11 [/usr/share/dotnet/shared/Microsoft.NETCore.App]"
+    ],
+    "globalTools": [
+      "Package Id      Version      Commands",
+      "-------------------------------------"
+    ],
+    "toolListExit": 0
+  },
+  "verification": {
+    "timestampUtc": "2026-09-27T20:51:22.8745865Z",
+    "host": "PAYTON-OMARCHY",
+    "user": "sharpninja",
+    "package": "SharpNinja.McpServer.Repl",
+    "packageVersion": "1.4.39",
+    "toolPath": "/home/sharpninja/.dotnet/tools/mcpserver-repl",
+    "pathCommand": "/home/sharpninja/.local/bin/mcpserver-repl",
+    "linkTarget": "/home/sharpninja/.dotnet/tools/mcpserver-repl",
+    "version": [
+      "1.4.39+6a565d8762072ed040469047791a57c80dbf1e88"
+    ],
+    "versionExit": 0,
+    "help": [
+      "Description:",
+      "  MCP Server REPL Host",
+      "",
+      "Usage:",
+      "  McpServer.Repl.Host [command] [options]",
+      "",
+      "Options:",
+      "  --version       Show version information",
+      "  -?, -h, --help  Show help and usage information",
+      "",
+      "Commands:",
+      "  --agent-stdio  Run in agent STDIO mode for MCP protocol communication",
+      "  --interactive  Run in interactive REPL mode",
+      ""
+    ],
+    "helpExit": 0,
+    "pathVersion": [
+      "1.4.39+6a565d8762072ed040469047791a57c80dbf1e88"
+    ],
+    "pathVersionExit": 0,
+    "globalTools": [
+      "Package Id                     Version      Commands      ",
+      "----------------------------------------------------------",
+      "sharpninja.mcpserver.repl      1.4.39       mcpserver-repl"
+    ]
+  },
+  "scope": "Operator action only. No project code changes or service deployment; unrelated implementation program stays paused."
+}

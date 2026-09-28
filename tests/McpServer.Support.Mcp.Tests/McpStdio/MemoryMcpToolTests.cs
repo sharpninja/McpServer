@@ -58,7 +58,7 @@ public sealed class MemoryMcpToolTests : IDisposable
                 Arg.Any<CancellationToken>())
             .Returns(new MemoryQueryResult([CreateMemory("MEMORY-AGENT-001")], 1));
 
-        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "global", "agent", "remember", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.MemoryList(@"Q:\__mcp_unit_test__\McpServer", "global", "agent", "remember", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryQueryResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -81,7 +81,7 @@ public sealed class MemoryMcpToolTests : IDisposable
                 Arg.Any<CancellationToken>())
             .Returns(new MemoryQueryResult([], 0));
 
-        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "Effective", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.MemoryList(@"Q:\__mcp_unit_test__\McpServer", "Effective", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryQueryResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -98,7 +98,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         _memoryService.GetAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(CreateMemory("MEMORY-AGENT-001"));
 
-        var json = await _tools.MemoryGet(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.MemoryGet(@"Q:\__mcp_unit_test__\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryItem>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -116,7 +116,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             .Returns(new MemoryMutationResult(true, Memory: CreateMemory("MEMORY-AGENT-001", MemoryScope.Global)));
 
         var json = await _tools.MemoryAdd(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "agent",
             "Preserve exact PowerShell quoting.",
             "Global",
@@ -149,7 +149,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         var tools = CreateTools(_db, _memoryService, memoryMutations);
 
         var json = await tools.MemoryAdd(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "agent",
             "Preserve exact PowerShell quoting.",
             "Global",
@@ -181,7 +181,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             .Returns(new MemoryMutationResult(true, Memory: CreateMemory("MEMORY-AGENT-001", MemoryScope.Workspace)));
 
         var json = await _tools.MemoryUpdate(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "MEMORY-AGENT-001",
             "agent",
             "Use supported wrappers for MCP state.",
@@ -214,7 +214,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         var tools = CreateTools(_db, _memoryService, memoryMutations);
 
         var json = await tools.MemoryUpdate(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "MEMORY-AGENT-001",
             text: "Use supported wrappers for MCP state.", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
@@ -236,7 +236,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         _memoryService.RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(new MemoryMutationResult(true));
 
-        var json = await _tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.MemoryRemove(@"Q:\__mcp_unit_test__\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -253,7 +253,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             .Returns(new MemoryMutationResult(true));
         var tools = CreateTools(_db, _memoryService, memoryMutations);
 
-        var json = await tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await tools.MemoryRemove(@"Q:\__mcp_unit_test__\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -365,7 +365,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             Id = id,
             Category = "AGENT",
             Scope = scope,
-            WorkspacePath = scope == MemoryScope.Workspace ? @"F:\GitHub\McpServer" : null,
+            WorkspacePath = scope == MemoryScope.Workspace ? @"Q:\__mcp_unit_test__\McpServer" : null,
             Text = "Preserve exact PowerShell quoting.",
             Version = 1,
             CreatedAtUtc = DateTimeOffset.Parse("2026-06-08T07:00:00Z"),
@@ -400,7 +400,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         IDispatcher? dispatcher = null,
         string workspaceContextPath = ".")
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var workspaceContext = new WorkspaceContext { WorkspacePath = workspaceContextPath };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();

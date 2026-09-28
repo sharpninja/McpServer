@@ -240,7 +240,7 @@ public sealed class BrainSlotInvocationTransactionTests
     private static BrainSlotDefinitionEntity Slot(string role)
         => new()
         {
-            WorkspaceId = @"F:\GitHub\McpServer",
+            WorkspaceId = @"Q:\__mcp_unit_test__\McpServer",
             SlotId = "slot-1",
             Role = role,
             ProviderKind = "OpenAI",
@@ -379,7 +379,7 @@ public sealed class BrainSlotInvocationTransactionTests
             string output = "provider output",
             IBrainSlotCompletionStrategy? strategy = null)
         {
-            var workspace = new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" };
+            var workspace = new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
             var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
                 .UseInMemoryDatabase("brain-slot-invoke-" + Guid.NewGuid().ToString("N"))
                 .Options;

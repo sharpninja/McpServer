@@ -754,7 +754,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
     public async Task MoveAsync_WhenResolvedFromServiceProvider_UsesMoveCapableConstructor()
     {
         var source = new RecordingTodoService();
-        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new McpServer.Support.Mcp.Ingestion.IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new McpServer.Support.Mcp.Ingestion.IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var factory = Substitute.For<ITodoServiceFactory>();
         var resolver = new TodoServiceResolver(source, ingestionOptions, factory);
         var httpContextAccessor = Substitute.For<Microsoft.AspNetCore.Http.IHttpContextAccessor>();
@@ -801,7 +801,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
             Microsoft.Extensions.Options.Options.Create(options ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
     }
 
-    private const string TargetWorkspacePath = @"F:\GitHub\McpServer.Target";
+    private const string TargetWorkspacePath = @"Q:\__mcp_unit_test__\McpServer.Target";
 
     private static TransactionGatedTodoMutationService CreateMoveSut(
         RecordingTodoService source,
@@ -809,7 +809,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         ITurnTransactionCoordinator coordinator,
         TurnTransactionOptions? options = null)
     {
-        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new McpServer.Support.Mcp.Ingestion.IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new McpServer.Support.Mcp.Ingestion.IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var factory = Substitute.For<ITodoServiceFactory>();
         factory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(target);
         var resolver = new TodoServiceResolver(source, ingestionOptions, factory);

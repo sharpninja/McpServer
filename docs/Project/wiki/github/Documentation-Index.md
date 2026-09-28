@@ -3,6 +3,7 @@
 - [Wiki export manifest](wiki.yaml)
 - [Byrd Development Process v4](Development-Process-draft-v4.md)
 - [MCP Server User Documentation](USER-GUIDE.md)
+- [Frontier agent setup prompt (DRAFT, HV AGREE)](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) — MCP-SETUPPROMPT-001 copy-paste setup for frontier agents
 - [Installation & prerequisites](USER-GUIDE.md#1-installation-and-prerequisites)
 - [Configuration reference](USER-GUIDE.md#2-configuration-reference-appsettings--marker-file)
 - [REST API reference](USER-GUIDE.md#3-rest-api-reference-all-controllers)

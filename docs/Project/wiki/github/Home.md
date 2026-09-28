@@ -19,6 +19,7 @@
   - [Handoff Ingestion](Handoff-Ingestion)
   - [Project README](Project-Readme)
   - [Documentation Index](Documentation-Index)
+  - [Frontier Agent Setup Prompt (Draft)](Setup/Frontier-Agent-Setup-Prompt-Draft)
   - [Claude Hook Validation Skill](Claude-Hook-Validation-Skill)
 - Architecture
   - [MCP Server Operations Guide](MCP-Server-Operations)

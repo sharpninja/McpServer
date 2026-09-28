@@ -28,7 +28,7 @@ public sealed class PluginIntegrationServerFixtureTests
         Assert.True(Directory.Exists(fixture.WorkspacePath));
         Assert.True(File.Exists(fixture.DatabasePath) || Directory.Exists(Path.GetDirectoryName(fixture.DatabasePath)));
         Assert.DoesNotContain("7147", fixture.DatabasePath, StringComparison.Ordinal);
-        Assert.False(string.Equals(Path.GetFullPath(@"F:\GitHub\McpServer"), Path.GetFullPath(fixture.WorkspacePath), StringComparison.OrdinalIgnoreCase));
+        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(fixture.WorkspacePath), StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>P5: fixture start respects a startup timeout.</summary>

@@ -17,13 +17,13 @@ public sealed class QBAgentCliOptionsTests
     public void Parse_ShowIntentFlag_OverridesHideEnv()
     {
         var options = QBAgentCliOptions.Parse(
-            [QBAgentCliOptions.ShowIntentFlag, @"F:\GitHub\McpServerManager"],
+            [QBAgentCliOptions.ShowIntentFlag, @"Q:\__mcp_unit_test__\McpServerManager"],
             environment: new Dictionary<string, string?>
             {
                 [QBAgentCliOptions.HideIntentEnv] = "1",
             });
         Assert.True(options.ShowIntent);
-        Assert.Equal(@"F:\GitHub\McpServerManager", options.StartDirectory);
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServerManager", options.StartDirectory);
     }
 
     [Fact]
@@ -63,10 +63,10 @@ public sealed class QBAgentCliOptionsTests
     public void Parse_ResumeWithSessionId_AndDirectory()
     {
         var options = QBAgentCliOptions.Parse(
-            [QBAgentCliOptions.ResumeFlag, "qbagent-20260911T150405123Z", @"F:\GitHub\McpServerManager"],
+            [QBAgentCliOptions.ResumeFlag, "qbagent-20260911T150405123Z", @"Q:\__mcp_unit_test__\McpServerManager"],
             environment: new Dictionary<string, string?>());
         Assert.Equal("qbagent-20260911T150405123Z", options.ResumeSessionId);
-        Assert.Equal(@"F:\GitHub\McpServerManager", options.StartDirectory);
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServerManager", options.StartDirectory);
     }
 
     [Fact]

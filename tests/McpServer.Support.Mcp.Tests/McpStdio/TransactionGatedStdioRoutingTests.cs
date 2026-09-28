@@ -27,7 +27,9 @@ namespace McpServer.Support.Mcp.Tests.McpStdio;
 /// </summary>
 public sealed class TransactionGatedStdioRoutingTests : IDisposable
 {
-    private const string WorkspacePath = @"F:\GitHub\McpServer";
+    private const string FixtureResourceName = "TransactionGatedStdioRouting.route.md";
+    private readonly string _workspacePath;
+    private string WorkspacePath => _workspacePath;
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     private readonly McpDbContext _db;
@@ -40,6 +42,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
     /// <summary>Initializes a STDIO tool fixture with substituted decorated mutation services.</summary>
     public TransactionGatedStdioRoutingTests()
     {
+        _workspacePath = CreateResourceWorkspace();
         var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"TransactionGatedStdioRoutingTests_{Guid.NewGuid():N}")
             .Options;
@@ -52,6 +55,26 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
     public void Dispose()
     {
         _db.Dispose();
+        var allowedRoot = Path.GetFullPath(
+            Path.Combine(Path.GetTempPath(), "McpServer.Tests", nameof(TransactionGatedStdioRoutingTests)))
+            .TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        var target = Path.GetFullPath(_workspacePath);
+        if (target.StartsWith(allowedRoot, StringComparison.OrdinalIgnoreCase) && Directory.Exists(target))
+            Directory.Delete(target, recursive: true);
+    }
+
+    private static string CreateResourceWorkspace()
+    {
+        var workspace = Path.Combine(
+            Path.GetTempPath(), "McpServer.Tests", nameof(TransactionGatedStdioRoutingTests),
+            Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(workspace);
+        using var resource = typeof(TransactionGatedStdioRoutingTests).Assembly
+            .GetManifestResourceStream(FixtureResourceName)
+            ?? throw new InvalidOperationException($"Missing embedded resource {FixtureResourceName}.");
+        using var output = File.Create(Path.Combine(workspace, "route.md"));
+        resource.CopyTo(output);
+        return workspace;
     }
 
     /// <summary>todo_projection_repair delegates to the transaction-gated TODO mutation service.</summary>
@@ -443,6 +466,16 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             .ConfigureAwait(true);
     }
 
+    /// <summary>The sync route fixture is a resource-backed workspace outside the checkout.</summary>
+    [Fact]
+    public void WorkspaceFixture_UsesResourceOutsideCheckout()
+    {
+        var workspace = Path.GetFullPath(WorkspacePath);
+        var temporaryRoot = Path.GetFullPath(Path.GetTempPath());
+        Assert.StartsWith(temporaryRoot, workspace, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Routing fixture.", File.ReadAllText(Path.Combine(workspace, "route.md")).Trim());
+    }
+
     /// <summary>sync_run is not blocked by the turn-transaction gate when required transactions are active.</summary>
     [Fact]
     public async Task SyncRun_WhenTransactionsRequired_DoesNotReturnTurnTransactionGate()
@@ -472,7 +505,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             Description = "Route through decorated service.",
         };
 
-    private static RequirementsDocumentExportResult CreateExport(string format, string docType)
+    private RequirementsDocumentExportResult CreateExport(string format, string docType)
         => new()
         {
             Success = true,
@@ -492,7 +525,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             ],
         };
 
-    private static FwhMcpTools CreateTools(
+    private FwhMcpTools CreateTools(
         McpDbContext db,
         IRepoFileService repoFileService,
         ISessionLogService sessionLogService,
@@ -504,8 +537,8 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         ITurnTransactionCoordinator? transactionCoordinator = null,
         TurnTransactionOptions? transactionOptions = null)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
-        var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = WorkspacePath });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         gitHubCliService ??= Substitute.For<IGitHubCliService>();
         websiteIngestor ??= Substitute.For<IWebsiteIngestor>();

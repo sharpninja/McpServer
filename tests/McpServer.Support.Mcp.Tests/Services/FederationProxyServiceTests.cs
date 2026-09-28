@@ -51,7 +51,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -64,7 +64,7 @@ public sealed class FederationProxyServiceTests
         Assert.Equal("todo", operation.Domain);
         Assert.Equal("/mcpserver/todo", operation.Path);
         Assert.Equal(Convert.ToBase64String(body), operation.BodyBase64);
-        Assert.Equal(@"F:\GitHub\McpServer", operation.GlobalWorkspaceId);
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", operation.GlobalWorkspaceId);
     }
 
     /// <summary>Hub 5xx responses are treated as outage signals and queued when possible.</summary>
@@ -102,7 +102,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -148,7 +148,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -194,7 +194,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -241,7 +241,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -288,7 +288,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -339,7 +339,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -374,7 +374,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
@@ -385,7 +385,7 @@ public sealed class FederationProxyServiceTests
                 hopCount: 1,
                 CancellationToken.None,
                 proxyId: "PAYTON-LEGION2",
-                globalWorkspaceId: @"F:\GitHub\McpServer",
+                globalWorkspaceId: @"Q:\__mcp_unit_test__\McpServer",
                 queueOnFailure: true)
             .ConfigureAwait(true);
 
