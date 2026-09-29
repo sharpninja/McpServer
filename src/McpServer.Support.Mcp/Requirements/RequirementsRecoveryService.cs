@@ -52,7 +52,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     public async Task<RequirementsRecoveryResult> ApplyAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)
     {
         var payload = Validate(request);
-        var prior = await FindRunAsync(payload.Key, cancellationToken).ConfigureAwait(false);
+        var prior = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
         if (prior is not null)
             return ResolveExisting(prior, payload.Hash);
 
@@ -61,7 +61,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             .ConfigureAwait(false);
         try
         {
-            var raced = await FindRunAsync(payload.Key, cancellationToken).ConfigureAwait(false);
+            var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
             if (raced is not null)
             {
                 await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
@@ -94,7 +94,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         {
             await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
             _db.ChangeTracker.Clear();
-            var raced = await FindRunAsync(payload.Key, cancellationToken).ConfigureAwait(false);
+            var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
             if (raced is not null)
                 return ResolveExisting(raced, payload.Hash);
 
@@ -113,8 +113,8 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     public async Task<RequirementsRecoveryResult> GetAsync(string idempotencyKey, CancellationToken cancellationToken = default)
     {
         var key = NormalizeKey(idempotencyKey);
-        RequireWorkspace();
-        var run = await FindRunAsync(key, cancellationToken).ConfigureAwait(false);
+        var workspaceId = RequireWorkspace();
+        var run = await FindRunAsync(workspaceId, key, cancellationToken).ConfigureAwait(false);
         if (run is null)
         {
             throw new RequirementsRecoveryNotFoundException(
@@ -161,6 +161,8 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
                 Body = item.Body,
                 Priority = item.Priority,
                 Status = item.Status,
+                // FR-MCP-REQRECOVERY-001 / RequirementEntity default: recovery creates rows at the
+                // product-requirements root layer. Item request has no ScopeStartLayerKey field.
                 ScopeStartLayerKey = "layer-1",
                 CreatedAtUtc = timestamp,
                 UpdatedAtUtc = timestamp,
@@ -180,8 +182,14 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         return rows.ToDictionary(row => MapKey(row.Kind, row.Id), StringComparer.Ordinal);
     }
 
-    private Task<RequirementsRecoveryRunEntity?> FindRunAsync(string key, CancellationToken cancellationToken)
-        => _db.RequirementsRecoveryRuns.FirstOrDefaultAsync(row => row.IdempotencyKey == key, cancellationToken);
+    private Task<RequirementsRecoveryRunEntity?> FindRunAsync(string workspaceId, string key, CancellationToken cancellationToken)
+    {
+        // Explicit WorkspaceId predicate keeps the lookup correct even when global query filters
+        // are disabled in tests (IgnoreQueryFilters / InMemory). Query filter already scopes by workspace.
+        return _db.RequirementsRecoveryRuns.FirstOrDefaultAsync(
+            row => row.WorkspaceId == workspaceId && row.IdempotencyKey == key,
+            cancellationToken);
+    }
 
     private static RequirementsRecoveryResult Deserialize(RequirementsRecoveryRunEntity run)
     {

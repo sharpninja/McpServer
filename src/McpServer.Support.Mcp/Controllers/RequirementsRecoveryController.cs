@@ -30,7 +30,7 @@ public sealed class RequirementsRecoveryController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "validation_error", message = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.Classify(new ArgumentException("Request body is required."))));
 
         var mode = request.Mode?.Trim().ToLowerInvariant();
         try
@@ -43,7 +43,7 @@ public sealed class RequirementsRecoveryController : ControllerBase
             };
             if (result is null)
             {
-                return BadRequest(new { error = "validation_error", message = "mode must be dry-run or apply." });
+                return BadRequest(ClassifiedPayload(McpErrorClassifier.Classify(new ArgumentException("mode must be dry-run or apply."))));
             }
 
             return Ok(result);
@@ -52,6 +52,32 @@ public sealed class RequirementsRecoveryController : ControllerBase
         {
             return Map(ex);
         }
+    }
+
+    /// <summary>
+    /// Alias for mode=<c>dry-run</c>. Keeps the mode-body POST for backward compatibility with the REPL client.
+    /// </summary>
+    [HttpPost("dry-run")]
+    public Task<ActionResult<RequirementsRecoveryResult>> DryRunAsync(
+        [FromBody] RequirementsRecoveryRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is not null)
+            request.Mode = "dry-run";
+        return PostAsync(request, cancellationToken);
+    }
+
+    /// <summary>
+    /// Alias for mode=<c>apply</c>. Keeps the mode-body POST for backward compatibility with the REPL client.
+    /// </summary>
+    [HttpPost("apply")]
+    public Task<ActionResult<RequirementsRecoveryResult>> ApplyRouteAsync(
+        [FromBody] RequirementsRecoveryRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is not null)
+            request.Mode = "apply";
+        return PostAsync(request, cancellationToken);
     }
 
     /// <summary>Gets a stored recovery run. Dry-run does not store a run, so that key is 404.</summary>
@@ -72,23 +98,27 @@ public sealed class RequirementsRecoveryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// FR-MCP-TRIAGEERR-001: maps recovery failures to the shared machine-readable envelope
+    /// (<c>code</c>/<c>message</c>/<c>retryable</c>/<c>details</c> plus ProblemDetails extensions).
+    /// </summary>
     private ActionResult Map(Exception exception)
     {
-        if (StorageBackendUnavailability.IsBackendUnavailable(exception))
-        {
-            return StatusCode(StatusCodes.Status503ServiceUnavailable, new
-            {
-                error = McpErrorClassifier.BackendUnavailable,
-                message = McpErrorClassifier.BackendUnavailableMessage,
-            });
-        }
-
-        return exception switch
-        {
-            RequirementsRecoveryConflictException conflict => Conflict(new { error = "conflict", message = conflict.Message }),
-            RequirementsRecoveryNotFoundException missing => NotFound(new { error = "not_found", message = missing.Message }),
-            ArgumentException invalid => BadRequest(new { error = "validation_error", message = invalid.Message }),
-            _ => StatusCode(StatusCodes.Status500InternalServerError, new { error = "internal_server_error", message = exception.Message }),
-        };
+        var classified = McpErrorClassifier.Classify(exception);
+        return StatusCode(classified.StatusCode, ClassifiedPayload(classified));
     }
+
+    private static object ClassifiedPayload(McpErrorClassification classified)
+        => new
+        {
+            type = "https://httpstatuses.io/" + classified.StatusCode,
+            title = classified.Code,
+            status = classified.StatusCode,
+            detail = classified.Message,
+            code = classified.Code,
+            error = classified.Code,
+            message = classified.Message,
+            retryable = classified.Retryable,
+            details = classified.Details,
+        };
 }
