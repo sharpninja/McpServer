@@ -1,0 +1,6 @@
+FAILED: BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries
+Error: Win32Exception cannot start process 'rg' - file not found
+Support.Mcp: Failed 1 Passed 2817 Skipped 0 Total 2818
+Cause: build runner used codex-runtime pwsh without scoop/shims or WinGet Links on PATH
+rg present at: C:\Users\kingd\scoop\shims\rg.exe
+Fix: prepend scoop\shims + WinGet\Links to PATH for build re-run

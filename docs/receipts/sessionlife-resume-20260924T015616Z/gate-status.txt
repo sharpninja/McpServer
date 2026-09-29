@@ -1,0 +1,32 @@
+﻿SCRATCH=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\sessionlife-resume-20260924T015616Z
+TimestampUtc=20260924T031139Z
+Pester:
+  File=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\sessionlife-resume-20260924T015616Z\pester-full-summary.txt
+  Result=Passed
+  TotalCount=180
+  PassedCount=180
+  FailedCount=0
+  SkippedCount=0
+  FailedBlocksCount=0
+  FailedContainersCount=0
+  Runtime=pwsh 7.6.5
+build.ps1 Test attempt3:
+  File=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\sessionlife-resume-20260924T015616Z\build-test.txt
+  Summary=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\sessionlife-resume-20260924T015616Z\build-test-summary.txt
+  ExitCode=0
+  ElapsedSec=1878.6
+  NonZeroFailedLines=0
+  NonZeroSkippedLines=0
+  PATH tools: rg + mcpserver-repl required for green PluginIntegration and BugTriage139
+  Projects (all Failed 0 Skipped 0):
+    Support.Mcp 2818
+    Client 298
+    Cqrs 33
+    Launcher 20
+    McpAgent 63
+    Repl.Core 852
+    QBAgent 90
+    PluginIntegration 94
+Prior failures fixed by PATH only (no product code change this resume):
+  attempt1: BugTriage139 missing rg
+  attempt2: PluginIntegration 50 fail (mcpserver-repl ENOENT / stdout False)

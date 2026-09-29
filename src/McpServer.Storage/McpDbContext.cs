@@ -742,7 +742,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne<MemoryEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.MemoryId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<MemoryEdgeEntity>(e =>
@@ -760,7 +760,12 @@ public sealed class McpDbContext : DbContext
             e.HasOne<MemoryEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.MemoryId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<UseCaseEntity>(e =>

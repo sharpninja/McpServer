@@ -1,0 +1,12 @@
+﻿type: error
+payload:
+  requestId: req-20260924T035324Z-f414
+  code: method_invocation_error
+  message: backend_unavailable
+  retryable: false
+  details:
+    methodName: workflow.todo.query
+    exceptionType: McpServer.Client.McpServerException
+
+---
+

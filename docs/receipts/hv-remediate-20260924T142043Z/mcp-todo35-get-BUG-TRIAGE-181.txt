@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142301Z-a567
+  result:
+    id: BUG-TRIAGE-181
+    title: Codex CompleteTurn fails when current-turn.yaml lacks queryText
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Invoke-CodexMcpPlugin CompleteTurn routes through final-response.ps1 to workflow.sessionlog.completeTurn. That path omits queryTitle unless the caller supplies it (TR-MCP-REPL-015), then Invoke-ReplTurnUpsertParams fills QueryText from Get-ReplCurrentTurnQueryText and falls back only to that empty title. New-McpPluginTurnUpsertRequest still marks QueryText Mandatory without AllowEmptyString, so a leftover in_progress current-turn.yaml with no queryText is rejected at bind time instead of being closed. beginTurn always writes queryText, so this is a stale or partial cache document (for example after an independent review). The failed close leaves the in_progress turn in cache, so later work can attach to the wrong turn. The C# SessionLogWorkflow already recovers QueryText from QueryTitle or 'Recovered session-log turn'; the plugin persist path does not.
+    - 'Triage group: triage-group-465f4d2544057626'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Invoke-CodexMcpPlugin CompleteTurn (workflow.sessionlog.completeTurn) succeeds against an in_progress current-turn.yaml that has turnRequestId and session metadata but no queryText key (or an empty queryText value).'
+    - '- The completed persist payload includes a non-empty queryText recovered from cached queryTitle, or a recovered placeholder when both queryText and queryTitle are missing, and does not fail with a QueryText ParameterBindingValidationException.'
+    - '- After CompleteTurn succeeds, the cached turn is no longer in_progress, so a later beginTurn or CompleteTurn does not keep operating on the stale requestId.'
+    - '- Superseding that same queryText-less in_progress turn from beginTurn still persists the prior turn as canceled instead of dropping the persist with the same empty-QueryText bind failure.'
+    - 'Implementation notes:'
+    - '- Failure site: plugins/core/lib-ps/Invoke-McpPlugin.ps1 CompleteTurn -> plugins/core/lib-ps/final-response.ps1 -> Invoke-WorkflowCompleteTurn in plugins/core/lib-ps/repl-invoke.ps1. Upsert builder is New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 (QueryText is Mandatory, Title already has AllowEmptyString).'
+    - "- Get-ReplCurrentTurnQueryText returns '' when the key is absent and Invoke-ReplTurnUpsertParams does not fall back to cached queryTitle. Align that recovery with SessionLogWorkflow.NormalizeTurn (FirstNonEmpty(QueryText, QueryTitle) then 'Recovered session-log turn')."
+    - '- Keep TR-MCP-REPL-015 title omission on CompleteTurn. Recovered text belongs on queryText, not as a forced queryTitle rewrite.'
+    - '- Cover the missing-queryText CompleteTurn and supersede paths in PluginPowerShellRuntime tests; existing fixtures always seed queryText so this gap is untested.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

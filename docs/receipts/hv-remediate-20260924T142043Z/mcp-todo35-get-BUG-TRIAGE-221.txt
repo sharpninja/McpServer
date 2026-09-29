@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142329Z-645c
+  result:
+    id: BUG-TRIAGE-221
+    title: Codex user-prompt-submit hangs after session_submit failsafe write
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - 'Codex plugin 1.106.0 lib/user-prompt-submit.ps1 opened req-20260916T103908Z-prompt-143b, wrote a valid client.SessionLog.SubmitAsync failsafe, then did not return (observed 99s, required cancel). The YAML payload is Codex (sourceType Codex, sessionId Codex-20260911T180443Z-plugin-session, codex.exe 0.153.4) but the pending path is .mcpServer/failsafe/GrokCode/workspaces/... because Get-McpFailsafeAgentSegment prefers inherited PLUGIN_AGENT_NAME/MCP_AGENT_NAME over the Codex host/session. After Write-ReplFailsafe, Invoke-ReplPersistTurn blocks in Invoke-ReplRaw SubmitAsync; the 30s method timeout never bounded the hook (stdin CopyTo/StandardInput.Close are untimed; PowerShell.Mcp outer stderr redirect can also stall the child after repl starts). Expected: return within the short sessionlog timeout with a persisted or degraded queued receipt, and queue under the Codex failsafe namespace.'
+    - 'Triage group: triage-group-0e3df16b5ea6f1f7'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- user-prompt-submit returns within the default 30s sessionlog timeout after writing session_submit failsafe, with either a durable persist receipt or degraded queued=true and failsafePath set'
+    - '- A Codex-hosted user-prompt-submit writes pending failsafe YAML under .mcpServer/failsafe/Codex/workspaces/<workspace-key>/pending, not GrokCode, even when the parent PowerShell.Mcp process has PLUGIN_AGENT_NAME or MCP_AGENT_NAME=GrokCode'
+    - '- Failsafe params.sessionLog.sourceType and sessionId stay Codex and match the Codex runtime; inherited Grok env must not select the agent path segment'
+    - '- A hung or silent mcpserver-repl SubmitAsync (blocked stdin copy, unclosed stdout, or filled stderr) cannot keep the hook process alive past the method timeout; the session_submit file remains on disk'
+    - 'Implementation notes:'
+    - '- Open-PluginTurn -> workflow.sessionlog.beginTurn -> Invoke-ReplPersistTurn already writes the failsafe then calls SubmitAsync; the existing timeout/503 degraded path in repl-invoke.ps1 is unreachable if SubmitAsync never returns'
+    - '- Bound the entire SubmitAsync child lifetime, including Process.Start, stdin CopyTo, and StandardInput.Close, not only ReadToEndAsync.Wait; on timeout keep the in-flight failsafe and return queued'
+    - '- Get-McpFailsafeAgentSegment in resolve-cache-dir.ps1 ranks PLUGIN_AGENT_NAME ahead of MCP_AGENT_NAME; plugin-env.ps1 sets MCP_AGENT_NAME from HostName but does not clear inherited PLUGIN_AGENT_NAME. Derive the failsafe agent segment from the canonical Codex host/session source type, not leftover parent env'
+    - "- Invoke-McpPlugin.ps1 and PowerShell.Mcp invocations inherit the caller environment; do not let a Grok parent pin the Codex hook's failsafe tree"
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

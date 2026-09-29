@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142213Z-9595
+  result:
+    id: BUG-TRIAGE-165
+    title: appendDialog POST returns internal_server_error while sibling session-log writes succeed
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - workflow.sessionlog.appendDialog is intercepted by Invoke-WorkflowAppendDialog and calls client.SessionLog.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog -> SessionLogController.AppendDialogAsync -> AppendProcessingDialogAsync). That path returned method_invocation_error wrapping McpServerException with internal_server_error. The extracted error string matches GlobalExceptionHandlerMiddleware (payload.error=internal_server_error), not the controller ClassifiedError envelope, so an exception other than InvalidOperationException escaped AppendDialogAsync. appendActions, updateTurn, and completeTurn succeeded because they persist via Invoke-ReplPersistTurn (full session SubmitAsync/upsert), and queryHistory succeeded against the same cache, so the session/turn existed. Plugin still incremented current-turn.yaml auditDialog before the server call and did not roll it back; completeTurn then left local status=completed with auditDialog=3 even though the dialog POST failed.
+    - 'Triage group: triage-group-f9d6f7c128eb8e3f'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Given an existing turn that PersistTurn/upsert and queryHistory succeed against, POST .../dialog with at least one valid dialog item returns HTTP 200 and totalDialogCount increases by the posted item count.'
+    - '- A non-InvalidOperationException from AppendProcessingDialogAsync (for example DbUpdateException) is returned as a classified session-log error (not_found, persistence_error, validation_error, or backend_unavailable) rather than HTTP 500 with error=internal_server_error.'
+    - '- When appendDialog fails, current-turn.yaml auditDialog is unchanged from before the call.'
+    - '- After a failed appendDialog, a later successful completeTurn does not leave local auditDialog higher than the server-side processing dialog count for that requestId.'
+    - 'Implementation notes:'
+    - "- SessionLogController.AppendDialogAsync only catches InvalidOperationException and maps 'not found' to 404. Other exceptions fall through to GlobalExceptionHandlerMiddleware as opaque internal_server_error. Widen the catch and use ClassifiedError, matching the RequirementsController BUG-TRIAGE-073 pattern."
+    - '- AppendProcessingDialogAsync uses raw SaveChangesAsync. Submit/Replace/Upsert used by PersistTurn use SaveChangesBudgetedAsync. Keep dialog persist on the same save/classification path as those sibling mutations.'
+    - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog increments auditDialog before Invoke-ReplRaw client.SessionLog.AppendDialogAsync. Move the increment after success, or roll it back on failure. Failsafe currently queues only timeout/503, so a 500 drops the dialog items.'
+    - '- Do not treat local current-turn.yaml status=completed plus auditDialog as proof the incremental dialog POST persisted.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

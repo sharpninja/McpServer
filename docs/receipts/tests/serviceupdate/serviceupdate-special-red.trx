@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="9c21f186-c3c7-49cd-a718-13c2da1242ab" name="@PAYTON-OMARCHY 2026-09-28 19:24:19" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T19:24:19.5033635-05:00" queuing="2026-09-28T19:24:19.5033636-05:00" start="2026-09-28T19:24:17.9550946-05:00" finish="2026-09-28T19:24:19.5120437-05:00" />
+  <TestSettings name="default" id="369a2a03-49b1-43d9-8009-3a23e7c36bde">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_19_24_19" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e82cda4c-93e3-4e2f-b564-edb0ad6ab430" testId="ca48d888-dbcf-21b4-3b3f-03264c2892f1" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" computerName="PAYTON-OMARCHY" duration="00:00:00.0465888" startTime="2026-09-28T19:24:19.2387518-05:00" endTime="2026-09-28T19:24:19.3067043-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e82cda4c-93e3-4e2f-b564-edb0ad6ab430">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 379
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="ca48d888-dbcf-21b4-3b3f-03264c2892f1">
+      <Execution id="e82cda4c-93e3-4e2f-b564-edb0ad6ab430" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialStageFiles" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="ca48d888-dbcf-21b4-3b3f-03264c2892f1" executionId="e82cda4c-93e3-4e2f-b564-edb0ad6ab430" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" passed="0" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.18]   Discovering: Build.Tests
+[xUnit.net 00:00:00.53]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.74]   Starting:    Build.Tests
+[xUnit.net 00:00:00.90]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.90]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(379,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles()
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.91]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:24:19.3147376-05:00">
+        <Text>[xUnit.net 00:00:00.89]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

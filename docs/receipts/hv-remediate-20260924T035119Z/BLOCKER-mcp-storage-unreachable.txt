@@ -1,0 +1,27 @@
+﻿TimestampUtc=20260924T035813Z
+Identity=GrokCode
+Machine=PAYTON-LEGION2
+HealthUrl=http://127.0.0.1:7147/health
+HealthHttp=200
+HealthStorage=unreachable
+McpService=Running
+SqlConfiguredHost=PAYTON-DESKTOP
+SqlConfiguredDatabase=McpServer_PAYTON_LEGION2
+SqlProvider=sqlserver
+DesktopPing=False
+DesktopDns=No such host is known
+DesktopTcp1433=False
+LocalMssqlServer=Stopped Manual
+LocalMssqlStartError=Cannot open MSSQLSERVER service (IsAdmin=False)
+RequirementsMcp=backend_unavailable
+TodoMcp=backend_unavailable
+SessionlogBootstrap=ok
+SessionlogBeginTurn=queued/degraded
+SessionId=GrokCode-20260924T035126Z-hv-remediate2
+RequestId=req-20260924T035126Z-hv-remediate-001
+Scratch=F:\github\mcpserver\.worktrees\session-lifecycle\docs\receipts\hv-remediate-20260924T035119Z
+PriorWorkingTodoQuery=20260924T032249Z earlier same day when Desktop SQL reachable
+HV2=NOT_RUN blocked before independent re-HV
+TodosMarkedDone=false
+CommitPush=false
+NextAction=Power on or network-restore PAYTON-DESKTOP so SQL Server hosting McpServer_PAYTON_LEGION2 answers; then re-run MCP S0 FR/TR/TEST list + 35 TODO Done:false proofs; persist full sessionlog HV turn; re-HV targeting AGREE >=98/98.

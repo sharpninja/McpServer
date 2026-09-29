@@ -1,0 +1,35 @@
+2026-09-28T23:59:25.9198048Z - Independent Codex BDPv4 tests/red review
+OverallVerdict: AGREE. Accuracy99 percent; completeness99 percent.6 review PASS/0 review FAIL/0 review UNKNOWN.
+The executed test suite is intentionally RED:37 total,35 expected failures,2 passes,0 not-executed/skips. The separate mocks receipt is2pass0fail0skip. These expected-red failures are not a completed implementation or a passing full-suite/deployment gate.
+Classification: class1 tests-first gate for FR-MCP-SERVICEUPDATE-001/TR-MCP-SERVICEUPDATE-001/TEST-MCP-SERVICEUPDATE-001. Profile reloaded from all19 current global non-skill files; private contents excluded.
+
+PASS1: Tests precede implementation. build source remains unchanged, absent ServiceUpdatePlatform/LinuxServiceHelper contracts produce the recorded red behavior. Test source compiles sufficiently to execute all37 cases, including focused Linux integration cases. Source SHA256:6D31F08E5A6A54354E692939142CE24F357D9A93B53E5B1060D70D57CF8EB668.
+PASS2: Mock/reference baseline passes2cases. Success and copy-failure ordering are demonstrated by the reference double before production. Reflection permits compilation against missing production APIs without stub production implementation. Missing contracts are bound before rejection assertions so absent APIs do not falsely turn red cases green.
+PASS3: Red reasons now test relevant contracts. Shared preservation and manifest fixtures are decoupled from the absent Linux helper; the manifest test fails actual missing extensionless-apphost hash, preservation tests fail their own missing policy method, health tests fail their missing strict validator, and platform/lifecycle/parser cases fail absent intended production types. No unrelated unexpected failure signature found in fresh37-case TRX.
+PASS4: Requested behavior coverage is adequate to begin implementation. Tests cover Windows/Linux defaults and RIDs,unsupported hosts,root/legacy/quoted/malformed configuration,missing unit and wrong executable/working directory,overlays/environment overrides,backup overlap,invalid ELF/architecture/nonexecutable stages,optional/required environment files,systemd escaped/quoted paths,drop-in restoration,apphost byte replacement,stale file removal,explicit full effect order,archive failure,config/data failure restoration,concurrent lock,strict health including disabled-workspace counts,and extensionless manifest hashing.
+PASS5: Review-found defects repaired. Healthy2/1/0 is now valid because Checked includes disabled workspaces. Unit tests use archive snapshots and guard Unix mode calls; real GNU tar/Unix mode/symlink checks are explicitly CategoryIntegration/PlatformLinux and remain included in the focused local37-case gate, not silently skipped. Lifecycle asserts event presence as well as exact phase order. Recovery tests change both config/data and require stop immediately before final restore. Real tar test now changes environment mode,replaces a symlink with an ordinary file,and changes data bytes before verifying original mode/link/bytes after restoration; it no longer assumes unchanged metadata proves restoration.
+PASS6: Scope and subsequent gates remain honest. Prior full baseline stalled with sibling checksum failures and was stopped; it has not passed. Final entire applicable Build.Tests and repository unit scopes remain mandatory, with isolated prerequisite remediation and bounded hang diagnosis,zero failures/skips. Real ACL/UID/xattr smoke,production compilation,independent implementation review and local Nuke deployment remain future gates. Windows-native execution is not claimed by this Linux red receipt. No requirement/TODO completion is authorized; only proceeding to production implementation for the approved slice.
+
+Resolved findings: incorrect disabled-workspace expectation; analyzer attribute mistaken for runtime platform gating; missing unit-property/optional-env tests; weak event-order/byte replacement/recovery assertions; missing stage/working-directory rejection tests; pure tests hidden behind unrelated Linux type; unmodified metadata assertions. No outstanding in-scope review defect remains.
+Accuracy rationale: fresh TRX counters and individual errors,final source and unchanged production diff independently match parent claims. Completeness rationale: mandatory requested,workspace,requirements and current approved plan test surfaces are covered for this red gate; later green/runtime outcomes remain unclaimed.
+Session:Codex-20260928T232037Z-bdp-review
+Turn:req-20260928T235408Z-serviceupdate-red
+Receipts:/home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-red.request.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-red.response.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-red.verdict.txt ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-red.session-readback.json
+=== VERDICT JSON ==={
+  "skipped": 0,
+  "sessionId": "Codex-20260928T232037Z-bdp-review",
+  "testSourceSha256": "6D31F08E5A6A54354E692939142CE24F357D9A93B53E5B1060D70D57CF8EB668",
+  "fail": 0,
+  "unknowns": [],
+  "accuracy": 99,
+  "pass": 6,
+  "expectedRedFailures": 35,
+  "unknown": 0,
+  "failures": [],
+  "classification": 1,
+  "mockPasses": 2,
+  "completeness": 99,
+  "requestId": "req-20260928T235408Z-serviceupdate-red",
+  "OverallVerdict": "AGREE",
+  "scope": "BDPv4 tests and expected-red gate only"
+}

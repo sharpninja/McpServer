@@ -1,0 +1,36 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142324Z-603b
+  result:
+    id: BUG-TRIAGE-210
+    title: 'appendActions 500: sessionlog.submit subscriber rollback stale turn'
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+    description:
+    - workflow.sessionlog.appendActions persists through Invoke-ReplPersistTurn as a full-session POST to /mcpserver/sessionlog (client.SessionLog.SubmitAsync). TransactionGatedSessionLogService wraps that write as operation sessionlog.submit. When the turn-transaction subscriber rejects the post-mutation commit, the coordinator rolls back the session graph and SubmitAsync throws InvalidOperationException. SessionLogController.ClassifiedError maps that to HTTP 500. The plugin writes a failsafe payload before the call and does not treat HTTP 500 as the retryable 503/timeout queue path, so the exception is thrown and the failsafe file is retained. For an existing session, rollback restores the pre-mutation graph, so the appended actions never stay on server truth and the active turn is not current until that failsafe can replay. Local turn-cache audit counters are incremented before persist, so cache and server diverge after rollback.
+    - 'Triage group: triage-group-fd8ab42bd4053136'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- A valid workflow.sessionlog.appendActions call on an existing in-progress turn persists those actions on the server turn after a durable commit.'
+    - '- If sessionlog.submit is rejected by the transaction subscriber after the local mutation, the client-visible failure is retryable and does not leave the server turn missing the appended actions once failsafe replay succeeds.'
+    - '- GET of the same sourceType/sessionId/requestId after recovery includes the appended actions, and the failsafe payload is cleared only after that durable write.'
+    - '- Local current-turn cache must not report the turn as current when the server rolled back the append.'
+    - 'Implementation notes:'
+    - '- Confirm the failure on TransactionGatedSessionLogService.SubmitAsync (operationName sessionlog.submit) and SessionLogController.SubmitAsync catch of InvalidOperationException via ClassifiedError.'
+    - '- appendDialog already uses incremental client.SessionLog.AppendDialogAsync (sessionlog.dialog). appendActions still full-session submits a one-turn payload via Invoke-ReplPersistTurn; consider routing appends through sessionlog.upsert_turn instead of sessionlog.submit.'
+    - '- Plugin path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions updates cache then Invoke-ReplPersistTurn; HTTP 500 is not in the timeout/503 failsafe-queue branch, so the throw keeps FailsafePath.'
+    - '- Subscriber-unavailable is an existing TransactionFailureReason; tests already expect rollback plus InvalidOperationException with Rollback completed. The product defect is that a routine action append becomes a stale-turn 500 rather than a committed incremental write or a retryable queued persist.'
+    - '- Do not change fail-closed transaction policy without an equivalent retry/replay that restores turn currency.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

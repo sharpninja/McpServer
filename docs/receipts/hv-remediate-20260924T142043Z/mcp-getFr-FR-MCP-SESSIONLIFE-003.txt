@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142109Z-bbef
+  result:
+    id: FR-MCP-SESSIONLIFE-003
+    title: Three session-log persist outcomes
+    description: Primary success, or a confirmed retained failsafe as classified queued success that does not claim primary persistence, or neither destination which is a nonzero failure. appendActions refuses a request-id mismatch. A title that reached neither the server nor a failsafe exits nonzero. Primary success for response, interpretation, tags, and contextList requires a query. Repeated unchanged updateTurn does not write a second session_submit. The wrapper object carries code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and child stderr.
+    status: pending
+    priority: high
+    area: MCP
+    notes: 'Narrows FR-MCP-REPL-009 remain-successful AC: queued success must not claim primary persistence. Governs BUG-TRIAGE-186, 202, 204, 213, 240, 241, 243, 244.'
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:09.7118695+00:00
+    updatedAt: 2026-09-24T14:21:09.7119601+00:00
+  deprecated: true
+
+---
+

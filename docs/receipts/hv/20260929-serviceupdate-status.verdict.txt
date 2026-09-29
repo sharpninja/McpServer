@@ -1,0 +1,187 @@
+2026-09-29T00:32:57.2693038Z - Independent Codex final scoped partial-delivery status review
+OverallVerdict: AGREE for accuracy of the partial-delivery report only.
+Accuracy:99 percent. Completeness:99 percent. Status-report claims:7 PASS,0 FAIL,0 UNKNOWN.
+Completion approved:false. Deployment approved:false. Full implementation acceptance remains BLOCKED. This review does not waive a test failure, approve a Byrd slice exit, or authorize any done-state.
+
+Class1 implementation scope reviewed against FR-MCP-SERVICEUPDATE-001,TR-MCP-SERVICEUPDATE-001,TEST-MCP-SERVICEUPDATE-001 and the full current plan. Required profile skill and19 global files reloaded; private text/token omitted from receipts. Required PowerShell and isolated Codex MCP wrapper used. No product changes or live service mutation performed by reviewer.
+
+PASS1: User documentation and generated parameter schema accurately describe platform dispatch, Windows compatibility, existing Linux systemd unit requirements, Linux defaults, retained private archives, metadata preservation and explicit external SQL/no automatic binary-rollback limits. FAQ links the detailed Linux requirements. No docs claim successful deployment on this host.
+PASS2: Focused final TRX independently confirms66passed,0failed,0skipped. Real GNU tar fixture perturbs/restores bytes,modes,symlink,ACL and xattr. Owner/group identity is compared before/after; ownership itself is not deliberately changed, so no ownership-change restoration experiment is claimed. Targeted evidence is expressly not the full gate.
+PASS3: Final complete Build.Tests TRX independently confirms222executed,221passed,1failed,0skipped. Failure is QBAgent trim IL2026 inventory expected36 actual60, reproduced in unchangedHEAD baseline166executed,165passed,1failed,0skipped. Five final source/test hashes independently match workspace,isolated validation mirror,and validation-source.json. Canonical generated sibling prerequisites and no-node-reuse environment are disclosed.
+PASS4: Repository Nuke Test evidence accurately records Compile succeeded followed by server2850executed,2791passed,59failed,0skipped. All59distinct failed names are preserved below. Nuke stopped at that project,so later projects were not run in that invocation. These59failures are unresolved; this review does not label them all pre-existing. Incidental triage accepted:triage-report-fa28239db64d4a74a986b82f74c6c07c. Earlier Compile/Nuke evidence predates final special-file repair; current source hooks and refreshed full Build.Tests compile the final build helper,while a fresh complete repository gate is still required.
+PASS5: Special-file gap found during final inspection was remediated before this verdict. Before correction,the direct extra-FIFO stage test failed because no exception occurred. Final native stat type mask rejects nonregular staged inputs before apphost open,with shared regular-file guards for YAML/environment/unit/drop-ins. Five Linux integration cases are green and assert no stop; four adjacent cases were added after the common fix as regressions,not misrepresented as separate red-first fixes. This establishes static-input preflight,not immunity to malicious concurrent filesystem replacement.
+PASS6: Current authoritative MCP TODO IMPL-SERVICEUPDATE-001 remains done:false. FR/TR/TEST remain pending with all12criteria unsatisfied and mappings retained. Plan records failing unit gates and unrun runtime verification; it does not claim completed implementation or deployment. Historical61focused interim review remains historical; final receipt now records66.
+PASS7: Service stayed active at PID611688,NRestarts0. Reviewer independently checked current service fields and binarySHA A28BB995BF487823667E87F7AB829890C742B35D9EE4229715B309352EC58361. Parent durable service receipt records unchanged configSHA A8ECF6298B42E9BA3D437D8FA9E0097A9379BF832A8135C95E5C3B61A446A9A7. No new updater runtime success is inferred from the old running service. Full verdict stored in durable JSONL and full MCP dialog/completion,with exact readback proof.
+
+Outstanding full-gate FAIL list:
+1. Full Build.Tests QBAgent trim inventory mismatch:expected36 actual60. Baseline-proven,still a failing required gate.
+2. Repository Nuke Test server suite59failures. Full distinct names:
+McpServer.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact
+McpServer.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost
+McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform
+McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection
+McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries
+McpServer.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting
+McpServer.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags
+McpServer.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump
+McpServer.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved
+McpServer.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes
+McpServer.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport
+McpServer.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected
+McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors
+McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure
+McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly
+McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata
+McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject
+McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "C:/outside/docfx", ···]]]], expectedMessage: "outputRoot")
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot")
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly
+McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging
+McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected
+McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected
+McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected
+McpServer.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable
+McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch
+McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope
+McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace
+McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior
+McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission
+McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding
+McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly
+McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly
+McpServer.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr
+McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently
+McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently
+McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers
+
+Outstanding gate UNKNOWN/NOT RUN:
+- Later repository test projects were not run by the failed Nuke invocation.
+- New Linux updater deployment and full runtime preservation/health/BDPv4 verification have not run.
+These are explicit acceptance blockers,not status-report honesty defects. No failures are waived or converted to passes. Required next action is remediation and full green gates,then independent completion/deployment review and authorized Nuke runtime verification.
+
+Accuracy rationale: direct source/docs inspection,independent native TRX parsing,59-name/log corroboration,workspace/mirror hash comparisons,live service check and authoritative pending MCP reads substantiate the status claims. Completeness rationale: report covers requested behavior,workspace/requirements/plan obligations,all known failed/unrun gates,metadata-test limits and no premature done-state; final runtime success is expressly unclaimed.
+Session:Codex-20260928T232037Z-bdp-review
+Turn:req-20260929T002316Z-serviceupdate-status
+Receipts:/home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-status.request.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-status.response.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-status.verdict.txt ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-status.session-readback.json
+=== VERDICT JSON ==={
+  "accuracy": 99,
+  "gateFailures": [
+    "Full Build.Tests: QBAgent trim IL2026 inventory expected36 actual60, independently reproduced unchangedHEAD",
+    "Repository Nuke Test:59server failures; subsequent test projects not executed"
+  ],
+  "unknown": 0,
+  "serverFailureNames": [
+    "McpServer.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact",
+    "McpServer.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost",
+    "McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform",
+    "McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection",
+    "McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries",
+    "McpServer.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting",
+    "McpServer.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags",
+    "McpServer.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump",
+    "McpServer.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved",
+    "McpServer.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes",
+    "McpServer.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport",
+    "McpServer.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"C:/outside/docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", ···]]]], expectedMessage: \"targetRoot\")",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly",
+    "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging",
+    "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected",
+    "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected",
+    "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected",
+    "McpServer.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable",
+    "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch",
+    "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope",
+    "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+    "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior",
+    "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission",
+    "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding",
+    "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly",
+    "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly",
+    "McpServer.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr",
+    "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+    "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+    "McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers"
+  ],
+  "OverallVerdict": "AGREE",
+  "gateUnknowns": [
+    "Remaining repository projects not run by failed Nuke invocation",
+    "New updater live runtime/deployment not exercised"
+  ],
+  "fail": 0,
+  "focused": {
+    "failed": 0,
+    "passed": 66,
+    "skipped": 0
+  },
+  "requestId": "req-20260929T002316Z-serviceupdate-status",
+  "scope": "Accuracy and completeness of partial delivery status only",
+  "server": {
+    "executed": 2850,
+    "failed": 59,
+    "passed": 2791,
+    "skipped": 0
+  },
+  "sessionId": "Codex-20260928T232037Z-bdp-review",
+  "completeness": 99,
+  "completionApproved": false,
+  "deploymentApproved": false,
+  "classification": 1,
+  "pass": 7,
+  "fullBuild": {
+    "executed": 222,
+    "failed": 1,
+    "passed": 221,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "Service": "mcpserver.service",
+  "State": "active",
+  "MainPid": 720800,
+  "UnitUser": "mcpserver",
+  "Executable": "/opt/mcpserver/app/McpServer.Support.Mcp",
+  "Sha256": "EA316DCE024765C9D0FFBB5294811EE07D9556CBEA999C4307F48096DCA16CCC",
+  "AppSettingsSha256": "A8ECF6298B42E9BA3D437D8FA9E0097A9379BF832A8135C95E5C3B61A446A9A7",
+  "EnvironmentSha256": "56CCDD48EDAB3C19873B4552416838492D7C433527FD23FD9F9B6EFC88C06230",
+  "Backup": "/var/backups/mcpserver/20260929T013940283Z-4a64e3ed0d5d41d780608cbcf4a672b4/preserved-state.tar"
+}

@@ -1,0 +1,1 @@
+﻿workflow.sessionlog.updateTurn failed for 'req-20260924T035126Z-hv-remediate-001': Cannot bind argument to parameter 'QueryText' because it is an empty string.

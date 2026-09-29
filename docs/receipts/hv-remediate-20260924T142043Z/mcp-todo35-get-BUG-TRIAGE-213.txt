@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142325Z-d452
+  result:
+    id: BUG-TRIAGE-213
+    title: Do not exit 1 when updateTurn queues a session_submit failsafe
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - workflow.sessionlog.updateTurn writes current-turn.yaml first, then Invoke-ReplPersistTurn writes a unique session_submit failsafe and calls client.SessionLog.SubmitAsync. On timeout/HTTP 503/backend_unavailable, persist returns false with degraded/queued details and keeps the failsafe, but does not emit that contract. Invoke-WorkflowUpdateTurn treats the false as failure, repl-invoke.ps1 exits 1, and Invoke-McpPlugin.ps1 throws Plugin command failed with exit code 1. That unclassified throw is indistinguishable from a rejected update, so a retry writes another timestamped failsafe and risks duplicate SubmitAsync replay. This violates FR-MCP-171, which requires the same retryable degraded/queued envelope as the existing command_timeout path and forbids throwing.
+    - 'Triage group: triage-group-a7223afe0f5a0c72'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When workflow.sessionlog.updateTurn retains a session_submit failsafe after SubmitAsync timeout, HTTP 503, or backend_unavailable, the Codex/plugin wrapper does not throw Plugin command failed with exit code 1.'
+    - '- The caller receives a retryable degraded/queued envelope with persisted false, degraded true, queued true, and the failsafe path, matching the existing command_timeout contract.'
+    - '- current-turn.yaml stays in_progress with the updated turn fields and is not rolled back.'
+    - '- A second updateTurn for the same requestId while that failsafe is queued does not create another session_submit yaml for the same payload.'
+    - '- A later successful persist or failsafe drain submits the turn once and then removes the queued record.'
+    - 'Implementation notes:'
+    - '- The inner persist contract already exists in plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplPersistTurn: Write-ReplFailsafe then SubmitAsync; timeout/503 sets LastReplPersistenceDetails and returns false without throwing. The gap is the wrapper boundary: Invoke-WorkflowUpdateTurn does not surface those details, script-entry maps false to exit 1, and plugins/core/lib-ps/Invoke-McpPlugin.ps1 throws on any nonzero child exit.'
+    - '- Reuse the command_timeout envelope already emitted by Invoke-McpPlugin.ps1 (type error, code command_timeout or a persist-degraded equivalent, retryable true, details.degraded/queued true) instead of a new ad-hoc stderr string. completeTurn already prints degraded details only when persist returns true; updateTurn never prints them.'
+    - '- Write-ReplFailsafe always creates a new {stamp}-session_submit-{random}.yaml. Deduplicate by requestId (or skip a second write while an in-flight/queued record exists for that turn) so retry-after-false-failure cannot enqueue duplicate SubmitAsync payloads.'
+    - '- Cover the process boundary in Pester, not only the inner return-false path from TEST-MCP-195: invoke updateTurn through Invoke-McpPlugin.ps1/Invoke-CodexMcpPlugin.ps1 with a stubbed 503 and assert exit/envelope plus a single failsafe file.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

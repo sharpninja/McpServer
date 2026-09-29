@@ -167,11 +167,15 @@
         },
         "InstallPath": {
           "type": "string",
-          "description": "Service installation directory (default: C:\\ProgramData\\McpServer)"
+          "description": "Service installation directory (Windows: C:\\ProgramData\\McpServer; Linux: /opt/mcpserver/app)"
         },
         "Instance": {
           "type": "string",
           "description": "MCP instance name from appsettings"
+        },
+        "LinuxBackupRoot": {
+          "type": "string",
+          "description": "Linux retained configuration/data archive directory (default: /var/backups/mcpserver)"
         },
         "MemoryBenchGate": {
           "type": "boolean",
@@ -220,7 +224,7 @@
         },
         "ServiceName": {
           "type": "string",
-          "description": "Windows service name (default: McpServer)"
+          "description": "Service name (Windows: McpServer; Linux: mcpserver.service)"
         },
         "SkipBuild": {
           "type": "boolean",

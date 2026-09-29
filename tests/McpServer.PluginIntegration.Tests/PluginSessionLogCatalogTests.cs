@@ -28,7 +28,7 @@ public sealed class PluginSessionLogCatalogTests
     public void Catalog_RepositoryRootsExist()
     {
         var repoRoot = FindRepositoryRoot();
-        var parent = Directory.GetParent(repoRoot)?.FullName;
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         Assert.False(string.IsNullOrWhiteSpace(parent));
         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
         {
@@ -49,7 +49,7 @@ public sealed class PluginSessionLogCatalogTests
     public void Catalog_RequiredEntrypointFilesExist()
     {
         var repoRoot = FindRepositoryRoot();
-        var parent = Directory.GetParent(repoRoot)!.FullName;
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
         {
             Assert.False(string.IsNullOrWhiteSpace(row.Entrypoint));
@@ -68,7 +68,7 @@ public sealed class PluginSessionLogCatalogTests
     public void Catalog_VersionMetadataPresent()
     {
         var repoRoot = FindRepositoryRoot();
-        var parent = Directory.GetParent(repoRoot)!.FullName;
+        var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
         foreach (var row in PluginSessionLogCatalog.LoadAndValidate(repoRoot))
         {
             var pluginRoot = Path.Combine(parent, row.RepositoryName);

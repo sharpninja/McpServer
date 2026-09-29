@@ -1,0 +1,20 @@
+exit=0 method=workflow.sessionlog.bootstrap out=mcp-bootstrap.txt
+exit=0 method=workflow.sessionlog.openSession out=mcp-openSession.txt
+exit=0 method=workflow.sessionlog.beginTurn out=mcp-beginTurn.txt
+exit=1 method=workflow.requirements.listFr out=mcp-listFr-SESSIONLIFE.txt
+exit=1 method=workflow.requirements.listFr out=mcp-listFr-MCP.txt
+exit=1 method=workflow.requirements.listTr out=mcp-listTr-SESSIONLIFE.txt
+exit=1 method=workflow.requirements.listTr out=mcp-listTr-MCP.txt
+exit=1 method=workflow.requirements.listTest out=mcp-listTest-SESSIONLIFE.txt
+exit=1 method=workflow.requirements.listTest out=mcp-listTest-MCP.txt
+exit=1 method=workflow.requirements.getFr out=mcp-getFr-FR-MCP-SESSIONLIFE-001.txt
+exit=1 method=workflow.requirements.getFr out=mcp-getFr-FR-MCP-SESSIONLIFE-002.txt
+exit=1 method=workflow.requirements.getFr out=mcp-getFr-FR-MCP-SESSIONLIFE-003.txt
+exit=1 method=workflow.requirements.getFr out=mcp-getFr-FR-MCP-SESSIONLIFE-004.txt
+exit=1 method=workflow.requirements.getFr out=mcp-getFr-FR-MCP-SESSIONLIFE-005.txt
+exit=1 method=workflow.todo.query out=mcp-todo-SESSIONLIFE.txt
+exit=1 method=workflow.todo.query out=mcp-todo-BUG-TRIAGE-false.txt
+exit=1 method=workflow.todo.query out=mcp-todo-section-BUG-TRIAGE.txt
+updateTurn_exit=1
+completeTurn_exit=1
+queryHistory_exit=1

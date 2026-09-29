@@ -4,7 +4,7 @@ using Nuke.Common.Tools.DotNet;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-#pragma warning disable CA1416 // Platform compatibility — UpdateService target is Windows-only
+#pragma warning disable CA1416 // Windows APIs are reached only after the platform dispatch.
 
 partial class Build
 {
@@ -14,11 +14,14 @@ partial class Build
     const string MainExeName = "McpServer.Support.Mcp.exe";
     const string LauncherExeName = "McpServer.Launcher.exe";
 
-    [Parameter("Windows service name (default: McpServer)")]
-    readonly string ServiceName = DefaultServiceName;
+    [Parameter("Service name (Windows: McpServer; Linux: mcpserver.service)")]
+    readonly string ServiceName = ServiceUpdatePlatform.ParameterDefaults(OperatingSystem.IsLinux()).DefaultServiceName;
 
-    [Parameter("Service installation directory (default: C:\\ProgramData\\McpServer)")]
-    readonly string InstallPath = DefaultInstallPath;
+    [Parameter("Service installation directory (Windows: C:\\ProgramData\\McpServer; Linux: /opt/mcpserver/app)")]
+    readonly string InstallPath = ServiceUpdatePlatform.ParameterDefaults(OperatingSystem.IsLinux()).DefaultInstallPath;
+
+    [Parameter("Linux retained configuration/data archive directory (default: /var/backups/mcpserver)")]
+    readonly string LinuxBackupRoot = "/var/backups/mcpserver";
 
     [Parameter("HTTP port for the service (default: 7147)")]
     readonly int Port = DefaultPort;
@@ -33,13 +36,19 @@ partial class Build
     readonly string PublishSource = string.Empty;
 
     /// <summary>
-    /// Deploy the MCP server as a Windows service: stop, backup, publish, restore config, register, start, and health check.
+    /// FR-MCP-SERVICEUPDATE-001: update the MCP Windows or Linux service while preserving live configuration and file data.
     /// Requires elevation (Administrator). Invoke via: sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService
     /// </summary>
     public Target UpdateService => _ => _
-        .Description("Deploy MCP server as a Windows service (stop → backup → publish → restore → register → start → verify)")
+        .Description("Update the Windows or Linux service, preserving live configuration and data")
         .Executes(() =>
         {
+            var platform = ServiceUpdatePlatform.Current;
+            if (!platform.IsWindows)
+            {
+                UpdateLinuxService(platform);
+                return;
+            }
             var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmssfff");
             var backupDir = Path.Combine(Path.GetTempPath(), $"McpServer-update-backup-{timestamp}");
             var archiveDir = Path.Combine(
@@ -199,4 +208,61 @@ partial class Build
             if (backup.ArchivePath != null)
                 Log.Information("  Archive : {Path}", backup.ArchivePath);
         });
+
+    /// <summary>TR-MCP-SERVICEUPDATE-001: publishes before stopping an existing Linux unit and retains recovery state.</summary>
+    private void UpdateLinuxService(ServiceUpdatePlatform platform)
+    {
+        var identity = LinuxServiceHelper.RunCommand("id", ["-u"]);
+        if (identity.ExitCode != 0 || identity.StandardOutput.Trim() != "0")
+            throw new InvalidOperationException("Linux UpdateService requires root elevation.");
+        string stage;
+        if (SkipBuild)
+        {
+            if (string.IsNullOrWhiteSpace(PublishSource))
+                throw new InvalidOperationException("--publish-source is required with --skip-build.");
+            stage = Path.GetFullPath(PublishSource);
+        }
+        else
+        {
+            if (!SkipVersionBump)
+            {
+                var versionPath = RootDirectory / "GitVersion.yml";
+                var source = File.ReadAllText(versionPath);
+                var bump = GitVersionBumper.BumpPatch(source)
+                    ?? throw new InvalidOperationException("Could not read next-version from GitVersion.yml.");
+                var document = new YamlDotNet.Serialization.DeserializerBuilder().Build().Deserialize<Dictionary<object, object>>(source);
+                document["next-version"] = bump.NewVersion;
+                File.WriteAllText(versionPath, new YamlDotNet.Serialization.SerializerBuilder().Build().Serialize(document));
+                ProcessTasks.StartProcess("git", $"-C \"{RootDirectory}\" add GitVersion.yml").AssertZeroExitCode();
+            }
+            stage = Path.Combine(Path.GetTempPath(), "McpServer-linux-publish-" + Guid.NewGuid().ToString("N"));
+            var version = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
+            DotNetPublish(settings => settings
+                .SetProject(SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj")
+                .SetConfiguration("Release")
+                .EnableSelfContained()
+                .SetRuntime(platform.RuntimeIdentifier)
+                .SetProperty("PublishSingleFile", "true")
+                .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
+                .SetProperty("PackageVersion", version)
+                .SetProperty("Version", version)
+                .SetProperty("InformationalVersion", version)
+                .SetOutput(stage));
+        }
+
+        var helper = new LinuxServiceHelper(LinuxServiceHelper.RunCommand);
+        var receipt = helper.Update(new(ServiceName, Path.GetFullPath(InstallPath), stage,
+                Path.GetFullPath(LinuxBackupRoot), platform.RuntimeIdentifier, "/run/lock/mcpserver-update"),
+            () => CopyBrainSlotRuntimeConfig(RootDirectory, InstallPath),
+            () =>
+            {
+                var health = WindowsServiceHelper.CheckHealth(Port);
+                if (!health.Healthy) throw new InvalidOperationException("Updated service HTTP health check failed.");
+                WindowsServiceHelper.RequireHealthyWorkspaces(WindowsServiceHelper.CheckWorkspaceHealth(InstallPath, Port));
+                WindowsServiceHelper.WriteDeploymentManifest(InstallPath, ServiceName, platform.ExecutableName, Port, "update");
+            });
+        Log.Information("Linux update verified. Service: {Service}; PID: {Pid}; archive: {Archive}; SHA256: {Hash}",
+            ServiceName, receipt.MainPid, receipt.ArchivePath, receipt.ArchiveSha256);
+        if (!SkipBuild) Directory.Delete(stage, true);
+    }
 }

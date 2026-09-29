@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-09-28T23:21:50.4229129Z",
+  "sourceSHA256": "0BC2B74ED718A58E53694A1B90D252A259366C20249E0E185DAB5C8197D97A57",
+  "snapshotSHA256": "34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A",
+  "characters": 20129,
+  "normalizationCount": 5,
+  "policyExact": true,
+  "assignmentExact": true,
+  "items": [
+    {
+      "version": 1,
+      "updatedBy": null,
+      "scope": "Global",
+      "id": "MEMORY-PREFERENCE-001",
+      "workspacePath": null
+    },
+    {
+      "version": 3,
+      "updatedBy": "Codex",
+      "scope": "Workspace",
+      "id": "MEMORY-DEVPROCESS-001",
+      "workspacePath": "/home/sharpninja/github/McpServer"
+    },
+    {
+      "version": 2,
+      "updatedBy": "Codex",
+      "scope": "Workspace",
+      "id": "MEMORY-PROCESS-001",
+      "workspacePath": "/home/sharpninja/github/McpServer"
+    }
+  ],
+  "sourceDiff": null,
+  "head": "6546a59f2baad45d99e717bb8f20b56e06d5911f",
+  "service": [
+    "ActiveState=active",
+    "MainPID=611688",
+    "NRestarts=0",
+    "User=mcpserver",
+    "Group=mcpserver"
+  ],
+  "listeners": [
+    "State  Recv-Q Send-Q Local Address:Port Peer Address:Port",
+    "LISTEN 0      512        127.0.0.2:7147      0.0.0.0:*",
+    "LISTEN 0      512        127.0.0.1:7147      0.0.0.0:*",
+    "LISTEN 0      512            [::1]:7147         [::]:*"
+  ],
+  "binarySHA": "A28BB995BF487823667E87F7AB829890C742B35D9EE4229715B309352EC58361"
+}

@@ -1,0 +1,43 @@
+2026-09-29T00:16:48.0918136Z - Independent Codex interim implementation code review
+OverallVerdict: AGREE for scoped code correctness and continuation of validation only.
+Accuracy99 percent; completeness99 percent.8 code-review PASS/0 outstanding code-review FAIL/0 code-review UNKNOWN.
+COMPLETION APPROVED:false. DEPLOYMENT APPROVED:false. This is not a completed Byrd implementation slice or full validation gate.
+
+Confirmed full-gate blocker: unchanged-head isolated baseline166tests,165pass,1failed,0skips. QBAgent trim inventory records IL2026 actual60 versus expected36. The full final Build.Tests/repository/runtime gates have not passed. That failure is not waived or converted to success by this code review.
+
+Scope: class1 cross-platform UpdateService code review against approved FR-MCP-SERVICEUPDATE-001,TR-MCP-SERVICEUPDATE-001,TEST-MCP-SERVICEUPDATE-001 and plan. Profile reloaded from19 current global files. No private profile text or current token persisted here.
+
+PASS1: Target dispatch and compatibility. Windows lifecycle remains the existing stop/backup/publish/restore/register/start/health path. Linux dispatch resolves runtime inside UpdateService. New nonthrowing parameter defaults avoid breaking unrelated Nuke targets on macOS/unsupported deployment hosts. Linux x64/arm64 supported; WindowsX86/Arm rejected while Windowsx64/Arm64 retain win-x64 compatibility.
+PASS2: Shared preservation semantics match runtime. Structural YAML resolves root DataFolder and legacy Mcp:DataDirectory, including empty/null/whitespace root fallback. Legacy install-root directories/database patterns are retained. Extensionless Linux apphost participates in deployment manifest hashes. Unsupported malformed config fails closed.
+PASS3: Existing-unit preflight rejects identity/path ambiguity before stop. WorkingDirectory and direct ExecStart must match selected install; stage must be ordinary,link-free,executable ELF for requestedRID. Required unit/drop-in/environment files must exist. Unsupported overlays,environment/CLI data or instance/content-root overrides are rejected. A local installed .NET CommandLine provider reproduction established slash-prefix overrides; /DataFolder and /Mcp:DataDirectory are now rejected too.
+PASS4: Filesystem namespace and concurrent-update guarantees are explicit. RootDirectory,RootImage,bind mounts,TemporaryFileSystem,PrivateTmp and additional image/extension remapping fail closed. Lock filename derives from normalized installation hash, so alias unit names cannot bypass the same-install lock. Private archive/lock directories must be root-owned and private; symlink roots/ancestors and unsafe path overlap are rejected.
+PASS5: Replacement and archive recovery follow the requested strategy. Stopped service is archived before replacement; GNU tar retains numeric ownership,modes,ACLs,xattrs and links without dereference; archives are private,listed,hashed and retained. Cleanup/copy avoids following links and protects preserved roots. Runtime-config callback destination is checked against symlink redirection. Restore precedes restart; failed copy/health stops service and restores retained live state, without falsely claiming binary rollback or external SQL backup.
+PASS6: Post-start verification is stricter on Linux. Active service,valid PID,expected /proc executable,HTTP health and nonempty successful workspace-health verification are required. Windows compatibility behavior remains. Native command arguments are shell-free,both output streams drain,timeouts bounded,and command failures do not echo environment content.
+PASS7: Targeted regression evidence is green after tests-first repairs. Initial37green expanded to61passed/0failed/0skips. Separate red receipts cover ownership/callback hardening,configuration fallback and namespaces,defaults/architectures,alias locking,slash arguments and added namespace cases before their corrections. Real-tar focused test disturbs then restores bytes/modes/symlink; unit snapshots cover effect ordering and recovery. These61cases do not stand in for the full remaining suite or final ACL/UID/runtime verification.
+PASS8: Workspace and holistic plan boundaries respected. Source verification hooks reported success and focused execution corroborates compilation. No service deployment occurred: observed existing PID611688 active,NRestarts0. Full baseline failure and unfinished final gates remain recorded; no TODO/requirement completion or deployment acceptance is authorized. PowerShell and required Codex session wrapper used; full result stored in dialog/completion with exact typed readback.
+
+Resolved code findings: throwing platform resolution in global Build initializers; wrong blank-root data fallback; namespace-remapped file paths; unsupported Windows32-bit host; aliases bypassing locks; slash-prefixed CLI override; private-directory ownership; callback destination symlink. No further in-scope code defect identified after corrections. The remaining full-gate failure above is an explicit blocker outside this interim code verdict, not an unknown or dismissed failure.
+Accuracy rationale: direct final source inspection,local provider reproduction and independent TRX/service checks support claims. Completeness rationale: requested safety/correctness,requirements and approved plan reviewed holistically for this interim stage; broader gate/runtime success is expressly unclaimed.
+Session:Codex-20260928T232037Z-bdp-review
+Turn:req-20260929T000717Z-serviceupdate-code
+Receipts:/home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-implementation.request.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-implementation.response.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-implementation.verdict.txt ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260929-serviceupdate-implementation.session-readback.json
+=== VERDICT JSON ==={
+  "failures": [],
+  "scope": "Interim implementation code review only; continue validation",
+  "accuracy": 99,
+  "fail": 0,
+  "focusedFailed": 0,
+  "fullGateBlocker": "Unchanged-head baseline166total165pass1trim-inventoryfailure0skip; full final/repository/runtime gates not passed",
+  "requestId": "req-20260929T000717Z-serviceupdate-code",
+  "classification": 1,
+  "focusedPassed": 61,
+  "sessionId": "Codex-20260928T232037Z-bdp-review",
+  "unknowns": [],
+  "completeness": 99,
+  "deploymentApproved": false,
+  "pass": 8,
+  "completionApproved": false,
+  "OverallVerdict": "AGREE",
+  "unknown": 0,
+  "focusedSkipped": 0
+}

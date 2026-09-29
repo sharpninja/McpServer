@@ -1,0 +1,69 @@
+type: result
+payload:
+  requestId: req-20260924T032249Z-5b8a
+  result:
+    items:
+    - id: BUG-TRIAGE-088
+      title: SessionLogClient title APIs fail JSON source-gen serialization
+      section: Backlog
+      priority: high
+      done: true
+      note: "Closed 2026-07-21 by commit 00a71449 on develop under TR-MCP-CLIENT-001 (FR-MCP-143). Root cause B: SessionLogClient posted anonymous bodies through the source-generated McpClientJsonContext, which has no JsonTypeInfo for compiler-generated types, so SetTurnTitleAsync and SetSessionTitleAsync threw NotSupportedException before any HTTP call. Red receipt: 4 tests failing with \"JsonTypeInfo metadata for type '<>f__AnonymousType...' was not provided by TypeInfoResolver of type 'McpServer.Client.McpClientJsonContext'\". A whole-client audit found exactly four anonymous-body sites, all in SessionLogClient (OpenSessionAsync, BeginTurnAsync, SetSessionTitleAsync, SetTurnTitleAsync), all converted to typed records (SessionLifecycleOpenRequest, SessionLifecycleBeginRequest, SessionTitleRequest) registered with JsonSerializable; property names verified against SessionLogController's own bind records. Green: Client.Tests 263/0/0. Zero anonymous bodies remain in src/McpServer.Client."
+      description:
+      - 'Confirmed in src/McpServer.Client/SessionLogClient.cs: SetTurnTitleAsync and SetSessionTitleAsync POST bodies are built with anonymous types (`new { title }`) while McpClientBase routes all request serialization through source-generated McpClientJsonContext (TypeInfoResolver = McpClientJsonContext.Default). Anonymous types cannot be registered in JsonSerializerContext, so both methods throw System.NotSupportedException during client-side serialization before any HTTP request is sent. Server endpoints and service logic for title updates exist and are tested (SessionLogController accepts SessionTitleRequest with Title; SessionLogServiceTests cover TR-MCP-SESSIONLOG-005), but the typed client cannot reach them. Plugin workflow.sessionlog.setTurnTitle / setSessionTitle call client.SessionLog.SetTurnTitleAsync / SetSessionTitleAsync via repl-invoke.ps1 after updating local cache, so durable per-turn and per-session titling is fully non-functional through the documented API.'
+      - 'Triage group: triage-group-36281b71e6160c34'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- SessionLogClient.SetTurnTitleAsync serializes its request body without throwing NotSupportedException and completes an HTTP POST to mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/title'
+      - '- SessionLogClient.SetSessionTitleAsync serializes its request body without throwing NotSupportedException and completes an HTTP POST to mcpserver/sessionlog/{agent}/{sessionId}/title'
+      - '- Request JSON uses a concrete registered DTO with a title property compatible with server SessionTitleRequest (Title)'
+      - '- workflow.sessionlog.setTurnTitle with a populated current-turn.yaml updates server turn QueryTitle and returns success'
+      - '- workflow.sessionlog.setSessionTitle with active session metadata updates server session Title and returns success'
+      - '- A McpServer.Client.Tests unit test asserts SetTurnTitleAsync/SetSessionTitleAsync request serialization succeeds under McpClientJsonContext'
+      - 'Implementation notes:'
+      - '- Add a named client request DTO (e.g. SessionTitleRequest with string? Title and [JsonPropertyName("title")]) in src/McpServer.Client/Models and register it on McpClientJsonContext via [JsonSerializable]'
+      - '- Replace `new { title }` in SetTurnTitleAsync and SetSessionTitleAsync with the named DTO'
+      - '- Server already defines SessionTitleRequest in SessionLogController.cs; mirror or share the contract on the client side rather than using anonymous types'
+      - '- Regenerate or extend McpClientJsonContext after adding the DTO; follow existing patterns for other small POST payloads'
+      - '- Add client serialization coverage before or with the fix; server-side SessionLogServiceTests already validate persistence logic'
+      - '- Related latent risk: SessionLogClient.BeginTurnAsync also uses an anonymous POST body (`new { queryTitle, queryText, model }`); audit separately if begin-turn client calls are exercised through the same REPL path'
+      implementationTasks: &o0 []
+      dependsOn: &o1 []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-095
+      title: Register SetTurnTitle request type for source-gen JSON
+      section: Backlog
+      priority: high
+      done: true
+      note: "Closed 2026-07-21 by commit 00a71449 on develop under TR-MCP-CLIENT-001 (FR-MCP-143). This report asked for exactly what shipped: the SetTurnTitle (and SetSessionTitle) request types registered for source-generated JSON. SessionTitleRequest, SessionLifecycleOpenRequest, and SessionLifecycleBeginRequest are declared in src/McpServer.Client/Models/SessionLogRequestModels.cs with JsonPropertyName attributes and registered in McpClientJsonContext. The audit found BeginTurnAsync was a fourth affected site the original reports missed. Green: Client.Tests 263/0/0 with tests asserting the exact camelCase wire keys against the server's bind records."
+      description:
+      - SessionLogClient.SetTurnTitleAsync (and SetSessionTitleAsync) POST an anonymous body `new { title }` through McpClientBase, which serializes with McpClientJsonContext only. Anonymous types are not in the context, so GetTypeInfo fails and the dedicated retitle endpoints never run. The REPL/plugin path correctly requires non-empty queryTitle and calls client.SessionLog.SetTurnTitleAsync, so the failure surfaces as a server-side serialize error; local cache may update while durable turn titles stay empty and later beginTurn supersession can fail on empty titles. Server already models the body as SessionTitleRequest(Title).
+      - 'Triage group: triage-group-8aaf837c9591ccad'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- client.SessionLog.SetTurnTitleAsync serializes a non-empty title body without throwing Missing metadata / JsonTypeInfo errors under McpClientJsonContext'
+      - '- workflow.sessionlog.setTurnTitle with a valid active turn and non-empty queryTitle returns success and persists the turn title on the server'
+      - '- A subsequent beginTurn that supersedes or references the retitled turn no longer fails solely because the previous turn title remained empty'
+      - '- client.SessionLog.SetSessionTitleAsync also serializes and completes successfully with the same fix pattern'
+      - 'Implementation notes:'
+      - '- Bug site: src/McpServer.Client/SessionLogClient.cs SetTurnTitleAsync and SetSessionTitleAsync both pass new { title } to PostAsync'
+      - '- Serialize path: McpClientBase uses JsonSerializer.Serialize(body, s_jsonOptions.GetTypeInfo(body.GetType())) with TypeInfoResolver = McpClientJsonContext.Default'
+      - '- Replace the anonymous payload with a named client DTO (e.g. SessionTitleRequest { string? Title }) and add [JsonSerializable(typeof(...))] on McpClientJsonContext; match property casing expected by SessionLogController SessionTitleRequest'
+      - '- Controller already accepts [FromBody] SessionTitleRequest on POST .../{requestId}/title and POST .../title; no API contract change required if Title property is used'
+      - '- Cover with a unit test that serializes the title request type via McpClientJsonContext.Default and an integration/client test that SetTurnTitleAsync posts without source-gen failure'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    totalCount: 2
+  deprecated: true
+
+---
+

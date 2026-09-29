@@ -1,0 +1,36 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142352Z-2cf0
+  result:
+    id: BUG-TRIAGE-246
+    title: Degraded beginTurn recovery omits planFile and todoId and gets HTTP 400
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - workflow.sessionlog.beginTurn documents requestId, queryTitle, and queryText as the required params. On a real first persist, Invoke-WorkflowBeginTurn stamps omitted planFile and todoId to the exact sentinel None before client.SessionLog.SubmitAsync. SessionLogService.ApplyTurnContext calls ValidateForNewEntry for any turn that is not already stored, and an omitted field becomes HTTP 400 validation_error. After a timed-out or HTTP 503 beginTurn, Complete-ReplBeginTurnAfterPersist leaves current-turn.yaml active with only turnRequestId, sessionId, and status. The retry uses the same requestId, so the adapter treats it as a same-requestId reopen and submits the in_progress turn with both fields omitted. The turn was never stored, so the server treats that recovery submit as a first persist and returns HTTP 400. New-McpPluginTurnUpsertRequest also drops blank planFile and todoId from the payload. The generic examples in module-bootstrap.md and REPL-USER-GUIDE.md, and repl-yaml-message.schema.json, still show beginTurn without planFile or todoId. session-log-workflow-api.md already states the None default and the reopen-omission rule.
+    - 'Triage group: triage-group-a79f78791a361214'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After beginTurn persist times out or returns degraded, a later beginTurn for the same requestId that supplies only requestId, queryTitle, and queryText is accepted and stores planFile and todoId as None, or as the values captured before the failed persist.'
+    - '- That recovery submit does not return HTTP 400 validation_error for omitted planFile or todoId.'
+    - '- A beginTurn for a requestId that is already durably stored still omits planFile and todoId so the stored pair is left unchanged.'
+    - '- A first persist that reaches the server with both fields omitted still returns HTTP 400 validation_error, except a canceled or cancelled supersede persist, which stamps None and succeeds.'
+    - '- The beginTurn examples in docs/context/module-bootstrap.md and docs/REPL-USER-GUIDE.md, and the required params in docs/context/repl-yaml-message.schema.json, state that first persist requires planFile and todoId and that None is the sentinel when there is no plan or TODO.'
+    - 'Implementation notes:'
+    - '- Do not classify a degraded, never-persisted beginTurn as a same-requestId reopen. Stamp planFile and todoId before SubmitAsync: use the values written on the failed attempt, otherwise the exact sentinel None.'
+    - '- Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1 rewrites current-turn.yaml without planFile and todoId. Keep those fields on the degraded turn file so recovery can resubmit them.'
+    - '- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 omits blank planFile and todoId. A recovery payload must set both before that helper runs.'
+    - '- Server rule stays in SessionLogTurnContextValidator.ValidateForNewEntry and SessionLogService.ApplyTurnContext. Only IsSupersededHookPersist may stamp None when status is canceled or cancelled. Do not relax first-persist validation for in_progress turns.'
+    - '- Invoke-WorkflowBeginTurn already defaults blanks to None when current-turn.yaml does not already hold that requestId. plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1 covers that default and the durable reopen omission. Add a degraded-retry case that expects None/None on the second persist.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

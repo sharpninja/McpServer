@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142256Z-4ada
+  result:
+    id: BUG-TRIAGE-173
+    title: Codex pending importRecovery YAML has no replay path besides SessionLog.SubmitAsync
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - Codex transcript persist writes write-ahead envelopes at {workspace}/.mcpServer/{agent}/failsafe/pending/<rootId>.<sourceHash>.importRecovery.yaml with root key importRecovery (runId, agent, workspacePath, rootId, sessionId, sourceKind, sourceHash, persisted, degraded, status, yamlArtifactPath, compatibilityArtifactPath, sourceFiles, diagnostics). Plugin failsafe drain only replays client.SessionLog.SubmitAsync session_submit records from Get-McpFailsafeDir. After that drain, 019d6472-5ba7-77d0-9b90-ee0d3f99599a.3fe421946dfc1353.importRecovery.yaml and 019d6481-c77a-74b3-8bd7-103167e0e0bb.b8611bc5364bf417.importRecovery.yaml remain because they are not method/params SubmitAsync records. Envelope deletion happens only in TranscriptIngestionService.PersistPendingAsync after ITranscriptSessionPersister.PersistAsync reports success. There is no drain that reads leftover pending envelopes and re-invokes transcript persist.
+    - 'Triage group: triage-group-c1f7b55905a5f6c3'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Failsafe drain of session_submit queues does not POST *.importRecovery.yaml envelopes through client.SessionLog.SubmitAsync.'
+    - '- A dedicated import-recovery replay walks {workspace}/.mcpServer/{agent}/failsafe/pending/<rootId>.<sourceHash>.importRecovery.yaml documents whose root key is importRecovery.'
+    - '- Replay persists from yamlArtifactPath and/or sourceFiles (re-ingest Persist=true or ITranscriptSessionPersister.PersistAsync), not by treating the envelope as a UnifiedSessionLogDto.'
+    - '- On persisted=true and degraded=false the matching pending envelope is deleted; on persist failure the file stays in failsafe/pending.'
+    - '- Successful replay of the two named Codex pending files removes those files from Codex/failsafe/pending.'
+    - 'Implementation notes:'
+    - '- Writer: TranscriptRunArtifactWriter.WritePendingAsync and CreateRecoveryEnvelope in src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs.'
+    - '- Delete-on-success: TranscriptIngestionService.PersistPendingAsync in src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs; persister maps the transcript session then calls ISessionLogService.SubmitAsync on the DTO, not the envelope.'
+    - '- Plugin drain: Invoke-ReplFailsafeDrain in plugins/core/lib-ps/repl-invoke.ps1 requires method+params and only scans Get-McpFailsafeDir; it does not scan failsafe/pending.'
+    - '- Do not reuse workflow.sessionlog.importRecovery as the envelope drain unless it first loads yamlArtifactPath into a UnifiedSessionLogDto. That API currently merge-submits session logs, not importRecovery envelopes.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

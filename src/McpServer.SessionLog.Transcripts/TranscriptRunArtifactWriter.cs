@@ -10,6 +10,15 @@ internal static class TranscriptRunArtifactWriter
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .Build();
 
+    /// <summary>Pending import-recovery directory for one workspace agent.</summary>
+    /// <param name="workspacePath">Workspace root.</param>
+    /// <param name="agent">Agent folder name.</param>
+    /// <returns>The failsafe pending directory.</returns>
+    internal static string GetPendingRecoveryDirectory(string workspacePath, string agent)
+    {
+        return Path.Combine(Path.GetFullPath(workspacePath), ".mcpServer", SanitizePathSegment(agent), "failsafe", "pending");
+    }
+
     internal static void ValidatePersistenceRequest(TranscriptIngestionRequest request)
     {
         ValidateArtifactRequest(request, "persistence");
@@ -54,8 +63,8 @@ internal static class TranscriptRunArtifactWriter
         IReadOnlyList<TranscriptDiagnostic> diagnostics,
         CancellationToken cancellationToken)
     {
-        var (runId, artifactRoot, agentRoot) = PrepareArtifactRoot(request, sessions, "persistence");
-        var recoveryRoot = Path.Combine(agentRoot, "failsafe", "pending");
+        var (runId, artifactRoot, _) = PrepareArtifactRoot(request, sessions, "persistence");
+        var recoveryRoot = GetPendingRecoveryDirectory(request.WorkspacePath!, request.Agent!);
         Directory.CreateDirectory(recoveryRoot);
 
         var receipts = new List<TranscriptSessionReceipt>();

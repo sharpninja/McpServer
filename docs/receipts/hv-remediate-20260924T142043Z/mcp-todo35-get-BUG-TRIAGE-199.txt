@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142312Z-7369
+  result:
+    id: BUG-TRIAGE-199
+    title: Session-log appendActions returns HTTP 500 and rolls back after subscriber commit failure
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof, not a second bypass. Do not mark done until H-done AGREE.'
+    description:
+    - workflow.sessionlog.appendActions persists through REPL SessionLogWorkflow.SubmitCurrentStateAsync into sessionlog.submit. TransactionGatedSessionLogService gates that submit through TurnTransactionCoordinator. After the local session-log mutation, CommitDiffgramAsync rejects any non-committed/non-duplicate subscriber result as 'Subscriber commit failed.', rolls back the pre-append graph, and throws InvalidOperationException. SessionLogController.ClassifiedError maps that exception through McpErrorClassifier to HTTP 500 internal_server_error with retryable=false, so recovered in-progress turns cannot durably append actions even after MCP recovery. Rollback itself matches TEST-MCP-161 fail-closed compensation; the defect is that a known subscriber-commit rejection blocks audit logging and is misclassified as a non-retryable internal error.
+    - 'Triage group: triage-group-172deb84816be6be'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After MCP and subscriber recovery, workflow.sessionlog.appendActions on a recovered in-progress turn persists the submitted actions and returns success.'
+    - '- When subscriber commit rejects or times out, the session-log graph remains at the pre-append snapshot (rollback completed) and the caller receives the coordinator failure reason rather than a generic unclassified internal error.'
+    - '- Subscriber-unavailable and commit-timeout outcomes from session-log append/submit are classified as retryable backend/transaction failures (not HTTP 500 internal_server_error with retryable=false).'
+    - '- A later appendActions after subscriber recovery succeeds on the same recovered in-progress turn without requiring a process restart solely to clear the prior commit rejection.'
+    - 'Implementation notes:'
+    - '- Call path: workflow.sessionlog.appendActions -> src/McpServer.Repl.Core/SessionLogWorkflow.cs SubmitCurrentStateAsync -> POST sessionlog SubmitAsync -> TransactionGatedSessionLogService operation sessionlog.submit.'
+    - "- Coordinator message is produced in TurnTransactionCoordinator after CommitDiffgramAsync; ToTransactionException in TransactionGatedSessionLogService appends 'Rollback completed.'"
+    - '- McpErrorClassifier treats generic InvalidOperationException as internal_server_error/500/retryable=false; transaction rejections need structured classification (reason, retryable, status).'
+    - '- Keep existing TEST-MCP-161 rollback compensation; add coverage for recovered in-progress appendActions after subscriber recovery and for classified retryable commit-failure responses.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

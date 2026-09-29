@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142316Z-9446
+  result:
+    id: BUG-TRIAGE-202
+    title: Codex updateTurn persist fails after local cache write
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - 'The trusted Codex plugin path for workflow.sessionlog.updateTurn writes the turn into current-turn.yaml first, then Invoke-ReplPersistTurn failsafe-queues and calls client.SessionLog.SubmitAsync. That REPL child exits 1, so the plugin keeps the session_submit failsafe and does not confirm live persist. This repeats the TEST-MCP-161 subscriber-rollback class: TransactionGatedSessionLogService.SubmitAsync mutates locally, then a subscriber/keyserver reject throws after rollback. For an existing in-progress session the rollback policy restores the pre-mutation graph, so the local cache is ahead of authoritative storage while PLAN-GIGMERGE-001 work continues.'
+    - 'Triage group: triage-group-ad2aaeb3a4713b03'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Given a trusted Codex plugin session with an in-progress current-turn.yaml, workflow.sessionlog.updateTurn persists the same requestId through client.SessionLog.SubmitAsync with process exit 0 and does not leave a new session_submit failsafe as the only durable copy.'
+    - '- After that updateTurn, session-log GET/query for the same sourceType, sessionId, and requestId returns the updated response, interpretation, tags, and contextList from server storage, matching current-turn.yaml.'
+    - '- When the turn-transaction subscriber rejects after a successful local session-log upsert of an existing in-progress turn, the plugin does not report persist failure while current-turn.yaml is already updated, and the operator is not left with failsafe-only copies of a locally accepted update.'
+    - '- Repeating updateTurn for the same requestId is idempotent: live query still shows one updated turn and the failsafe queue does not grow on the success path.'
+    - 'Implementation notes:'
+    - '- Named path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowUpdateTurn writes current-turn.yaml via Write-ReplCurrentTurnState, then Invoke-ReplPersistTurn writes a client.SessionLog.SubmitAsync failsafe and calls the REPL child. Non-timeout/non-503 failure throws; updateTurn catches and returns false, which the Codex wrapper surfaces as persist failure.'
+    - '- PersistTurn always submits a one-turn UnifiedSessionLogDto (turnCount=1). Server SubmitAsync is the full-session upsert, not UpsertTurnAsync. sessionlog-remediate-001 left updateTurn on that full upsert.'
+    - '- src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs gates sessionlog.submit. RestorePostMutation applies only when no pre-image exists (create). An existing-session upsert uses RestorePreMutation, so subscriber reject rolls the server back while the plugin cache already moved forward. TEST-MCP-161 covers create-style restore; add coverage for updateTurn/upsert of an existing in-progress turn.'
+    - '- Live Mcp:TurnTransactions RequiredForMutations is already known to break some sessionlog_begin_turn calls via keyserver/subscriber; the same gate applies to SubmitAsync used by updateTurn.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

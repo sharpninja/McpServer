@@ -1309,3 +1309,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-QBPROGRESS-001 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+
+## Cross-platform service update
+
+- FR-MCP-SERVICEUPDATE-001: Cross-platform service update preserving live state. Status: pending.
+- TR-MCP-SERVICEUPDATE-001: Platform adapters and metadata-preserving Linux service lifecycle.
+- TEST-MCP-SERVICEUPDATE-001: Cross-platform service update regression and Linux smoke.
+- Mapping verified from MCP effective requirements; all acceptance criteria pending.

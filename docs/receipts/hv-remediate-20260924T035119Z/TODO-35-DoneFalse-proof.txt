@@ -1,0 +1,6 @@
+﻿Verdict=UNPROVEN
+Reason=workflow.todo.query returned method_invocation_error backend_unavailable
+HealthStorage=unreachable
+SqlHost=PAYTON-DESKTOP unreachable
+DoneFlagsUntouched=true
+CandidateIdSources=ids-from-recap.txt; ids-from-session-root-plan.txt; earlier mcp-todo-probe when storage was up
