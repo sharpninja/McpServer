@@ -1,0 +1,82 @@
+﻿{
+    "TimestampUtc":  "2026-09-29T18:26:43Z",
+    "ValidatorIdentity":  "GrokSubagentHostile",
+    "Gate":  "pr67-codex-p2-preserve-classified-recovery-errors",
+    "WorkClass":  1,
+    "addProfileExecuted":  true,
+    "addProfileFileCount":  20,
+    "OverallVerdict":  "AGREE",
+    "Accuracy":  99,
+    "Completeness":  99,
+    "PassCount":  11,
+    "FailCount":  0,
+    "UnknownCount":  0,
+    "MaterialFailCount":  0,
+    "FailList":  [
+
+                 ],
+    "MaterialFailList":  [
+
+                         ],
+    "UnknownList":  [
+
+                    ],
+    "BaseTipBeforeCommit":  "e3e9456b4e439bde8ec22e4b7a93df9d6349ac12",
+    "ClaimResults":  [
+                         {
+                             "claim":  "Working tree has classified recovery dispatcher fix",
+                             "result":  "PASS",
+                             "id":  "A1"
+                         },
+                         {
+                             "claim":  "Catch uses BuildClassifiedError with retryable",
+                             "result":  "PASS",
+                             "id":  "A2"
+                         },
+                         {
+                             "claim":  "Classifier maps conflict/not_found/503",
+                             "result":  "PASS",
+                             "id":  "A3"
+                         },
+                         {
+                             "claim":  "Fresh recovery+classifier tests green",
+                             "result":  "PASS",
+                             "id":  "A4"
+                         },
+                         {
+                             "claim":  "Dispatcher tests assert classified codes",
+                             "result":  "PASS",
+                             "id":  "A5"
+                         },
+                         {
+                             "claim":  "No Python in change set",
+                             "result":  "PASS",
+                             "id":  "B1"
+                         },
+                         {
+                             "claim":  "Independent re-verification",
+                             "result":  "PASS",
+                             "id":  "B2"
+                         },
+                         {
+                             "claim":  "Durable receipt written",
+                             "result":  "PASS",
+                             "id":  "B3"
+                         },
+                         {
+                             "claim":  "FR-MCP-REQRECOVERY-001 cited",
+                             "result":  "PASS",
+                             "id":  "C1"
+                         },
+                         {
+                             "claim":  "AC covered by tests",
+                             "result":  "PASS",
+                             "id":  "C2"
+                         },
+                         {
+                             "claim":  "Scoped to Codex P2; no merge claim",
+                             "result":  "PASS",
+                             "id":  "D1"
+                         }
+                     ]
+}
