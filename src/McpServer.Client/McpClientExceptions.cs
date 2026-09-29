@@ -18,15 +18,28 @@ public class McpClientException : Exception
     public int StatusCode { get; }
 
     /// <summary>
+    /// Machine-readable envelope <c>code</c> from the server body when present
+    /// (for example <c>persistence_error</c> or <c>backend_unavailable</c>).
+    /// </summary>
+    public string? ErrorCode { get; }
+
+    /// <summary>Envelope <c>retryable</c> from the server body when present.</summary>
+    public bool? Retryable { get; }
+
+    /// <summary>
     /// Initializes a new <see cref="McpClientException"/> with the server error
     /// <paramref name="message"/> and <paramref name="statusCode"/>.
     /// </summary>
     /// <param name="message">Error message extracted from the server response body.</param>
     /// <param name="statusCode">HTTP status code from the response.</param>
-    public McpClientException(string message, int statusCode)
+    /// <param name="errorCode">Optional envelope code from the response body.</param>
+    /// <param name="retryable">Optional envelope retryable flag from the response body.</param>
+    public McpClientException(string message, int statusCode, string? errorCode = null, bool? retryable = null)
         : base(message)
     {
         StatusCode = statusCode;
+        ErrorCode = errorCode;
+        Retryable = retryable;
     }
 
     /// <summary>
@@ -36,10 +49,14 @@ public class McpClientException : Exception
     /// <param name="message">Error message extracted from the server response body.</param>
     /// <param name="statusCode">HTTP status code from the response.</param>
     /// <param name="innerException">The underlying exception that triggered this error.</param>
-    public McpClientException(string message, int statusCode, Exception innerException)
+    /// <param name="errorCode">Optional envelope code from the response body.</param>
+    /// <param name="retryable">Optional envelope retryable flag from the response body.</param>
+    public McpClientException(string message, int statusCode, Exception innerException, string? errorCode = null, bool? retryable = null)
         : base(message, innerException)
     {
         StatusCode = statusCode;
+        ErrorCode = errorCode;
+        Retryable = retryable;
     }
 }
 
@@ -50,8 +67,8 @@ public class McpClientException : Exception
 public sealed class McpValidationException : McpClientException
 {
     /// <inheritdoc />
-    public McpValidationException(string message)
-        : base(message, 400) { }
+    public McpValidationException(string message, string? errorCode = null, bool? retryable = null)
+        : base(message, 400, errorCode, retryable) { }
 }
 
 /// <summary>
@@ -61,8 +78,8 @@ public sealed class McpValidationException : McpClientException
 public sealed class McpUnauthorizedException : McpClientException
 {
     /// <inheritdoc />
-    public McpUnauthorizedException(string message)
-        : base(message, 401) { }
+    public McpUnauthorizedException(string message, string? errorCode = null, bool? retryable = null)
+        : base(message, 401, errorCode, retryable) { }
 }
 
 /// <summary>
@@ -72,8 +89,8 @@ public sealed class McpUnauthorizedException : McpClientException
 public sealed class McpNotFoundException : McpClientException
 {
     /// <inheritdoc />
-    public McpNotFoundException(string message)
-        : base(message, 404) { }
+    public McpNotFoundException(string message, string? errorCode = null, bool? retryable = null)
+        : base(message, 404, errorCode, retryable) { }
 }
 
 /// <summary>
@@ -83,8 +100,8 @@ public sealed class McpNotFoundException : McpClientException
 public sealed class McpConflictException : McpClientException
 {
     /// <inheritdoc />
-    public McpConflictException(string message)
-        : base(message, 409) { }
+    public McpConflictException(string message, string? errorCode = null, bool? retryable = null)
+        : base(message, 409, errorCode, retryable) { }
 }
 
 /// <summary>
@@ -94,6 +111,6 @@ public sealed class McpConflictException : McpClientException
 public sealed class McpServerException : McpClientException
 {
     /// <inheritdoc />
-    public McpServerException(string message, int statusCode)
-        : base(message, statusCode) { }
+    public McpServerException(string message, int statusCode, string? errorCode = null, bool? retryable = null)
+        : base(message, statusCode, errorCode, retryable) { }
 }

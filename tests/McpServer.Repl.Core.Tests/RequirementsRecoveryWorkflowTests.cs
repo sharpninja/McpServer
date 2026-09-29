@@ -68,10 +68,20 @@ public sealed class RequirementsRecoveryWorkflowTests
         Assert.Equal("conflict", ReplMcpErrorClassifier.FromException(conflict).Code);
 
         var unavailable = await Assert.ThrowsAsync<McpServerException>(() =>
-            new RequirementsWorkflow(new RequirementsClient(new HttpClient(new StatusHandler(HttpStatusCode.ServiceUnavailable, """{"error":"backend_unavailable","message":"The storage backend is currently unreachable."}""")), Options))
+            new RequirementsWorkflow(new RequirementsClient(new HttpClient(new StatusHandler(HttpStatusCode.ServiceUnavailable, """{"error":"backend_unavailable","code":"backend_unavailable","message":"The storage backend is currently unreachable.","retryable":true}""")), Options))
                 .ApplyRecoveryAsync(Sample(), TestContext.Current.CancellationToken)).ConfigureAwait(true);
         Assert.Equal("backend_unavailable", ReplMcpErrorClassifier.FromException(unavailable).Code);
         Assert.True(ReplMcpErrorClassifier.FromException(unavailable).Retryable);
+        Assert.Equal("backend_unavailable", unavailable.ErrorCode);
+        Assert.True(unavailable.Retryable);
+
+        var pendingMigration = await Assert.ThrowsAsync<McpServerException>(() =>
+            new RequirementsWorkflow(new RequirementsClient(new HttpClient(new StatusHandler(HttpStatusCode.ServiceUnavailable, """{"error":"persistence_error","code":"persistence_error","message":"SessionLogs schema is pending migration.","retryable":false}""")), Options))
+                .ApplyRecoveryAsync(Sample(), TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Equal("persistence_error", pendingMigration.ErrorCode);
+        Assert.False(pendingMigration.Retryable);
+        Assert.Equal("persistence_error", ReplMcpErrorClassifier.FromException(pendingMigration).Code);
+        Assert.False(ReplMcpErrorClassifier.FromException(pendingMigration).Retryable);
     }
 
     private static RequirementsRecoveryRequest Sample() => new()

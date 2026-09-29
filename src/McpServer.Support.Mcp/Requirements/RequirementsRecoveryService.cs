@@ -20,7 +20,13 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     private static readonly Regex TrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+\-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex KeyPattern = new(@"^[A-Za-z0-9._:-]{1,128}$", RegexOptions.Compiled);
+    /// <summary>Matches <see cref="RequirementEntity.Title"/> <c>[StringLength(1024)]</c>.</summary>
+    private const int TitleMaxLength = 1024;
     private static readonly JsonSerializerOptions ResultJsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions HashJsonOptions = new()
+    {
+        WriteIndented = false,
+    };
 
     private readonly McpDbContext _db;
     private readonly WorkspaceContext _workspace;
@@ -279,6 +285,8 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             var body = item.Body?.Trim() ?? string.Empty;
             if (title.Length == 0 || body.Length == 0)
                 throw new ArgumentException($"Requirement '{id}' requires title and body.");
+            if (title.Length > TitleMaxLength)
+                throw new ArgumentException($"Requirement '{id}' title exceeds {TitleMaxLength} characters.");
 
             var priority = string.IsNullOrWhiteSpace(item.Priority) ? "medium" : item.Priority.Trim();
             var status = string.IsNullOrWhiteSpace(item.Status) ? "pending" : item.Status.Trim();
@@ -302,21 +310,14 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
 
     private static string Hash(IReadOnlyList<NormalizedItem> items)
     {
-        var builder = new StringBuilder();
-        foreach (var item in items
+        // Canonical JSON (ordered fields, no indent) so newline-bearing title/body cannot collide.
+        var payload = items
             .OrderBy(item => item.Kind, StringComparer.Ordinal)
-            .ThenBy(item => item.Id, StringComparer.Ordinal))
-        {
-            builder.Append(item.Kind).Append('\n')
-                .Append(item.Id).Append('\n')
-                .Append(item.Title).Append('\n')
-                .Append(item.Body).Append('\n')
-                .Append(item.Priority).Append('\n')
-                .Append(item.Status).Append('\n')
-                .Append('\u001e');
-        }
-
-        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString()))).ToLowerInvariant();
+            .ThenBy(item => item.Id, StringComparer.Ordinal)
+            .Select(item => new HashField(item.Kind, item.Id, item.Title, item.Body, item.Priority, item.Status))
+            .ToArray();
+        var json = JsonSerializer.Serialize(payload, HashJsonOptions);
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(json))).ToLowerInvariant();
     }
 
     private static bool IsUniqueViolation(Exception exception)
@@ -339,4 +340,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     private sealed record NormalizedPayload(string WorkspaceId, string Key, string Hash, IReadOnlyList<NormalizedItem> Items);
 
     private readonly record struct NormalizedItem(string Kind, string Id, string Title, string Body, string Priority, string Status);
+
+    /// <summary>Stable hash DTO; property declaration order is the JSON field order.</summary>
+    private sealed record HashField(string kind, string id, string title, string body, string priority, string status);
 }

@@ -84,6 +84,89 @@ public sealed class RequirementsRecoveryTests
         }
     }
 
+    /// <summary>Newline-swapped title/body must not share a hash; same key yields 409 Conflict, not Replay.</summary>
+    [Fact]
+    public async Task ApplyAsync_NewlineTitleBodySwap_IsConflictNotReplay()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            var first = new RequirementsRecoveryRequest
+            {
+                IdempotencyKey = "collide-001",
+                Items =
+                [
+                    new RequirementsRecoveryItemRequest
+                    {
+                        Kind = "fr",
+                        Id = "FR-MCP-REQRECOVERY-001",
+                        Title = "A\nB",
+                        Body = "C",
+                    },
+                ],
+            };
+            var applied = await sut.ApplyAsync(first, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.False(applied.Replay);
+
+            var swapped = new RequirementsRecoveryRequest
+            {
+                IdempotencyKey = "collide-001",
+                Items =
+                [
+                    new RequirementsRecoveryItemRequest
+                    {
+                        Kind = "fr",
+                        Id = "FR-MCP-REQRECOVERY-001",
+                        Title = "A",
+                        Body = "B\nC",
+                    },
+                ],
+            };
+            var conflict = await Assert.ThrowsAsync<RequirementsRecoveryConflictException>(() =>
+                sut.ApplyAsync(swapped, TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+            Assert.Equal(409, McpErrorClassifier.Classify(conflict).StatusCode);
+            Assert.Equal("A\nB", await TitleAsync(db, "fr", "FR-MCP-REQRECOVERY-001").ConfigureAwait(true));
+            Assert.Equal(1, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
+    /// <summary>Titles longer than RequirementEntity.Title (1024) are 400 before the transaction.</summary>
+    [Fact]
+    public async Task ApplyAsync_TitleExceeds1024_IsArgumentExceptionWithoutWrite()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            var longTitle = new string('x', 1025);
+            var ex = await Assert.ThrowsAsync<ArgumentException>(() => sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "long-title-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "fr",
+                            Id = "FR-MCP-REQRECOVERY-001",
+                            Title = longTitle,
+                            Body = "body",
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+            Assert.Contains("1024", ex.Message, StringComparison.Ordinal);
+            Assert.Equal(400, McpErrorClassifier.Classify(ex).StatusCode);
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements"));
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
     /// <summary>A different payload for a stored key is 409 and leaves the original rows.</summary>
     [Fact]
     public async Task ApplyAsync_DifferentPayload_IsConflictWithoutMutation()

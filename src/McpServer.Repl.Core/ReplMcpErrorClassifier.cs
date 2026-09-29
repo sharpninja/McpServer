@@ -69,6 +69,24 @@ public static class ReplMcpErrorClassifier
 
         if (exception is McpClientException clientError && clientError.StatusCode == 503)
         {
+            // Propagate the server envelope when present (e.g. SessionLogSchemaPendingMigrationException
+            // -> non-retryable persistence_error). Only default to backend_unavailable for unknown 503s.
+            if (!string.IsNullOrWhiteSpace(clientError.ErrorCode))
+            {
+                var code = clientError.ErrorCode.Trim();
+                var retryable = clientError.Retryable
+                    ?? string.Equals(code, "backend_unavailable", StringComparison.Ordinal);
+                var message = string.IsNullOrWhiteSpace(clientError.Message)
+                    || string.Equals(clientError.Message, code, StringComparison.Ordinal)
+                    ? DefaultMessageFor(code)
+                    : clientError.Message;
+                return new ReplClassifiedError(
+                    code,
+                    message,
+                    Retryable: retryable,
+                    Details: new Dictionary<string, object?>(StringComparer.Ordinal) { ["reason"] = code });
+            }
+
             return new ReplClassifiedError(
                 "backend_unavailable",
                 "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
@@ -111,6 +129,13 @@ public static class ReplMcpErrorClassifier
 
         return new ReplClassifiedError("dispatch_error", exception.Message, Retryable: false, Details: details);
     }
+
+    private static string DefaultMessageFor(string code) => code switch
+    {
+        "backend_unavailable" => "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+        "persistence_error" => "The change could not be saved.",
+        _ => code,
+    };
 
     private static bool IsNamed(Exception exception, string typeName)
     {
