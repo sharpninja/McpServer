@@ -1957,6 +1957,59 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("RequirementTraceabilityLinks");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementsRecoveryRunEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("IdempotencyKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("CreatedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("ResultJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasDefaultValue("applied");
+
+                    b.HasKey("WorkspaceId", "IdempotencyKey");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("RequirementsRecoveryRuns");
+                });
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -4616,6 +4669,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("SourceRequirement");
 
                     b.Navigation("TargetRequirement");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementsRecoveryRunEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>

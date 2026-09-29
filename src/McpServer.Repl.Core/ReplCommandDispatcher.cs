@@ -1971,6 +1971,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         GetString(args, "productScope") ?? "product",
                         cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CurrentSelectionMethod => _requirementsWorkflow.CurrentSelection(),
+                RequirementsCommandShapes.PlanRecoveryMethod =>
+                    await _requirementsWorkflow.PlanRecoveryAsync(RequireParams<RequirementsRecoveryRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.ApplyRecoveryMethod =>
+                    await _requirementsWorkflow.ApplyRecoveryAsync(RequireParams<RequirementsRecoveryRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.GetRecoveryMethod =>
+                    await _requirementsWorkflow.GetRecoveryAsync(RequireString(args, "idempotencyKey"), cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 
@@ -1998,15 +2004,10 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
         catch (Exception ex)
         {
-            return BuildError(
-                requestId: request.RequestId,
-                code: "method_invocation_error",
-                message: ex.Message,
-                details: new Dictionary<string, object?>
-                {
-                    ["methodName"] = request.Method,
-                    ["exceptionType"] = ex.GetType().FullName,
-                });
+            // FR-MCP-REQRECOVERY-001 / Codex P2: typed recovery failures (409 conflict,
+            // 404 not_found, 503 backend_unavailable) must surface classified codes with
+            // retryable, not a non-retryable method_invocation_error. Mirror AgentStdioProtocol.
+            return BuildClassifiedError(request.RequestId, request.Method, ex);
         }
     }
 
@@ -3319,7 +3320,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         string requestId,
         string code,
         string message,
-        IReadOnlyDictionary<string, object?>? details = null)
+        IReadOnlyDictionary<string, object?>? details = null,
+        bool retryable = false)
     {
         return new YamlEnvelope
         {
@@ -3329,8 +3331,41 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 RequestId = requestId,
                 Code = code,
                 Message = message,
+                Retryable = retryable,
                 Details = details,
             },
         };
+    }
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001 / FR-MCP-TRIAGEERR-001: map workflow exceptions through
+    /// <see cref="ReplMcpErrorClassifier"/> so REPL callers see conflict / not_found /
+    /// backend_unavailable (with retryable) instead of opaque method_invocation_error.
+    /// Unclassified dispatch noise keeps the legacy method_invocation_error code.
+    /// </summary>
+    private static IYamlEnvelope BuildClassifiedError(string requestId, string methodName, Exception exception)
+    {
+        var classified = ReplMcpErrorClassifier.FromException(exception);
+        var details = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            ["methodName"] = methodName,
+            ["exceptionType"] = exception.GetType().FullName,
+        };
+        if (classified.Details is not null)
+        {
+            foreach (var pair in classified.Details)
+                details[pair.Key] = pair.Value;
+        }
+
+        var code = string.Equals(classified.Code, "dispatch_error", StringComparison.Ordinal)
+            ? "method_invocation_error"
+            : classified.Code;
+
+        return BuildError(
+            requestId: requestId,
+            code: code,
+            message: classified.Message,
+            details: details,
+            retryable: classified.Retryable);
     }
 }

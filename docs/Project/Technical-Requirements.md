@@ -3136,12 +3136,12 @@ Scope: layer-1+
 
 ## TR-MCP-TRIAGESTORE-002
 
-**Five second intake and submit storage budget** — TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+**Five second intake budget and configurable session-log graph budget** — TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync SaveChanges and FindExistingSessionAsync materialization pass SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. FindExistingSessionAsync uses AsSplitQuery on the multi-include chain. SQL deadlock 1205 during that load throws StorageGraphMaterializationException (retryable backend_unavailable) and does not return a null session. Timeouts map to backend_unavailable. No partial triage rows.
 **Covered by:** FR: FR-MCP-TRIAGESTORE-002; TEST: TEST-MCP-TRIAGESTORE-007
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+- [ ] TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync SaveChanges and FindExistingSessionAsync materialization pass SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. FindExistingSessionAsync uses AsSplitQuery on the multi-include chain. SQL deadlock 1205 during that load throws StorageGraphMaterializationException (retryable backend_unavailable) and does not return a null session. Timeouts map to backend_unavailable. No partial triage rows.
 
 ## TR-MCP-TRIAGETODO-001
 
@@ -3886,3 +3886,18 @@ Acceptance criteria:
 - [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
 - [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
 - [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+
+
+
+## TR-MCP-REQRECOVERY-001 - Serializable requirements recovery storage
+
+Requirements recovery writes RequirementEntity rows and one RequirementsRecoveryRunEntity directly in a single serializable transaction and a single SaveChanges. The run is unique on (WorkspaceId, IdempotencyKey). SQLite, SQL Server, and PostgreSQL each ship migration 20260929020000_AddRequirementsRecoveryRuns. REST routes are POST /mcpserver/requirements/recovery (mode dry-run or apply) and GET /mcpserver/requirements/recovery/{idempotencyKey}. REPL methods are workflow.requirements.planRecovery, applyRecovery, and getRecovery. SaveChanges uses StorageCommandBudget so a hung write is backend_unavailable.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] The recovery run primary key is WorkspaceId plus IdempotencyKey on all three providers.
+- [ ] Apply uses IsolationLevel.Serializable and rolls back when SaveChanges fails.
+- [ ] Dry-run does not call SaveChanges.
+- [ ] Error mapping is 400 validation_error, 409 conflict, 404 not_found, and 503 backend_unavailable.

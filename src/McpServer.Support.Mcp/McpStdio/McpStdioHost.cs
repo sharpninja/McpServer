@@ -65,9 +65,13 @@ public static class McpStdioHost
         builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
         builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
+        builder.Services.AddOptions<SessionLogSubmitOptions>()
+            .Bind(builder.Configuration.GetSection(SessionLogSubmitOptions.SectionName))
+            .ValidateOnStart();
         builder.Services.AddOptions<SessionLogSanitizationOptions>()
             .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
             .ValidateOnStart();
+        builder.Services.AddSingleton<IValidateOptions<SessionLogSubmitOptions>, SessionLogSubmitOptionsValidator>();
         builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
         var requiredRepoAllowlistPatterns = new[]
         {
@@ -214,6 +218,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
+        builder.Services.AddScoped<McpServer.Support.Mcp.Requirements.IRequirementsRecoveryService, McpServer.Support.Mcp.Requirements.RequirementsRecoveryService>();
         builder.Services.AddSingleton<PromptTemplateRenderer>();
         builder.Services.AddSingleton<PromptTemplateService>();
         builder.Services.AddSingleton<IPromptTemplateService>(sp =>

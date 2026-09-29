@@ -331,6 +331,24 @@ public static class RequirementsCommandShapes
     /// Method: <c>workflow.requirements.currentSelection</c>
     /// </summary>
     public const string CurrentSelectionMethod = "workflow.requirements.currentSelection";
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001: plans a requirements recovery without writing.
+    /// Method: <c>workflow.requirements.planRecovery</c>
+    /// </summary>
+    public const string PlanRecoveryMethod = "workflow.requirements.planRecovery";
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001: applies a requirements recovery atomically.
+    /// Method: <c>workflow.requirements.applyRecovery</c>
+    /// </summary>
+    public const string ApplyRecoveryMethod = "workflow.requirements.applyRecovery";
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001: gets a stored recovery run by idempotency key.
+    /// Method: <c>workflow.requirements.getRecovery</c>
+    /// </summary>
+    public const string GetRecoveryMethod = "workflow.requirements.getRecovery";
 }
 
 /// <summary>

@@ -184,6 +184,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
     public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
 
+    /// <summary>FR-MCP-REQRECOVERY-001: idempotent requirements recovery runs, unique on (WorkspaceId, IdempotencyKey).</summary>
+    public DbSet<RequirementsRecoveryRunEntity> RequirementsRecoveryRuns => Set<RequirementsRecoveryRunEntity>();
+
     /// <summary>TR-MCP-REQAC-001: 4NF acceptance-criteria rows for requirements.</summary>
     public DbSet<RequirementAcceptanceCriterionEntity> RequirementAcceptanceCriteria => Set<RequirementAcceptanceCriterionEntity>();
 
@@ -679,6 +682,12 @@ public sealed class McpDbContext : DbContext
             e.Property(x => x.ScopeStartLayerKey).HasDefaultValue("layer-1");
         });
 
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.IdempotencyKey });
+            e.Property(x => x.Status).HasDefaultValue("applied");
+        });
+
         modelBuilder.Entity<RequirementAcceptanceCriterionEntity>(e =>
         {
             e.HasOne(x => x.Requirement)
@@ -1124,6 +1133,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementScopeLayerEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<MemoryEntity>().HasQueryFilter("Workspace", e =>
@@ -1185,6 +1195,7 @@ public sealed class McpDbContext : DbContext
         // Version) index already covers the common filter paths.
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementScopeLayerEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
