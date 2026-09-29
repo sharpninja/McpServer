@@ -85,13 +85,14 @@ internal sealed class SessionLifeUnitGateValidator : ISessionLifeUnitGateValidat
 partial class Build
 {
     /// <summary>
-    /// FR-MCP-107 / TR-MCP-PLAN-001: Invokes the session-life unit-gate validator for a run-scoped request.
+    /// FR-MCP-107 / TR-MCP-PLAN-001: Delegates the same run-scoped request to the injected validator exactly once.
     /// </summary>
     /// <param name="validator">The validator boundary consumed by the build.</param>
-    /// <param name="request">The exact request to validate.</param>
+    /// <param name="request">The exact request instance to validate.</param>
     internal static void ValidateSessionLifeUnitGate(
         ISessionLifeUnitGateValidator validator,
         SessionLifeUnitGateValidationRequest request)
     {
+        validator.Validate(request);
     }
 }
