@@ -167,6 +167,113 @@ public sealed class RequirementsRecoveryTests
         }
     }
 
+    /// <summary>Canonical TEST rows may have empty Title; recovery must accept them (body required).</summary>
+    [Fact]
+    public async Task ApplyAsync_TitlelessTest_IsAcceptedAndPersisted()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            var result = await sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "titleless-test-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "test",
+                            Id = "TEST-MCP-REQRECOVERY-001",
+                            Title = string.Empty,
+                            Body = "condition only",
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal("applied", result.Status);
+            var row = await db.Requirements.SingleAsync(
+                requirement => requirement.Kind == "test" && requirement.Id == "TEST-MCP-REQRECOVERY-001",
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal(string.Empty, row.Title);
+            Assert.Equal("condition only", row.Body);
+        }
+    }
+
+    /// <summary>IDs longer than RequirementEntity.Id (128) are 400 before the transaction.</summary>
+    [Fact]
+    public async Task ApplyAsync_IdExceeds128_IsArgumentExceptionWithoutWrite()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            // Shape-valid FR id whose total length exceeds 128.
+            var longId = "FR-" + new string('A', 122) + "-001";
+            Assert.True(longId.Length > 128);
+            var ex = await Assert.ThrowsAsync<ArgumentException>(() => sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "long-id-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "fr",
+                            Id = longId,
+                            Title = "title",
+                            Body = "body",
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+            Assert.Contains("128", ex.Message, StringComparison.Ordinal);
+            Assert.Equal(400, McpErrorClassifier.Classify(ex).StatusCode);
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements"));
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
+    /// <summary>Priority and status are lowercased like RequirementsDatabaseDocumentService.</summary>
+    [Fact]
+    public async Task ApplyAsync_PriorityAndStatus_AreNormalizedToLowercase()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            await sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "case-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "fr",
+                            Id = "FR-MCP-REQRECOVERY-001",
+                            Title = "cased",
+                            Body = "body",
+                            Priority = "HIGH",
+                            Status = "Completed",
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var row = await db.Requirements.SingleAsync(
+                requirement => requirement.Kind == "fr" && requirement.Id == "FR-MCP-REQRECOVERY-001",
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal("high", row.Priority);
+            Assert.Equal("completed", row.Status);
+        }
+    }
+
     /// <summary>A different payload for a stored key is 409 and leaves the original rows.</summary>
     [Fact]
     public async Task ApplyAsync_DifferentPayload_IsConflictWithoutMutation()

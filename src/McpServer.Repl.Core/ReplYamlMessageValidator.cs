@@ -751,7 +751,11 @@ internal static class ReplYamlMessageValidator
 
             var kind = RequireText(item, "kind", errors, $"items[{index}].kind")?.Trim().ToLowerInvariant();
             var id = RequireText(item, "id", errors, $"items[{index}].id");
-            RequireText(item, "title", errors, $"items[{index}].title");
+            // TEST titles are optional (canonical TEST rows may be titleless); FR/TR still require title.
+            if (kind is "test")
+                OptionalText(item, "title", errors, $"items[{index}].title");
+            else
+                RequireText(item, "title", errors, $"items[{index}].title");
             RequireText(item, "body", errors, $"items[{index}].body");
             if (kind is not ("fr" or "tr" or "test") && kind is not null)
                 errors.Add($"items[{index}].kind must be one of: fr, tr, test.");

@@ -22,6 +22,8 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     private static readonly Regex KeyPattern = new(@"^[A-Za-z0-9._:-]{1,128}$", RegexOptions.Compiled);
     /// <summary>Matches <see cref="RequirementEntity.Title"/> <c>[StringLength(1024)]</c>.</summary>
     private const int TitleMaxLength = 1024;
+    /// <summary>Matches <see cref="RequirementEntity.Id"/> <c>[StringLength(128)]</c>.</summary>
+    private const int IdMaxLength = 128;
     private static readonly JsonSerializerOptions ResultJsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly JsonSerializerOptions HashJsonOptions = new()
     {
@@ -280,16 +282,21 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             var id = item.Id?.Trim() ?? string.Empty;
             if (!IsValidId(kind, id))
                 throw new ArgumentException($"Requirement id '{id}' is not valid for kind '{kind}'.");
+            if (id.Length > IdMaxLength)
+                throw new ArgumentException($"Requirement id '{id}' exceeds {IdMaxLength} characters.");
 
             var title = item.Title?.Trim() ?? string.Empty;
             var body = item.Body?.Trim() ?? string.Empty;
-            if (title.Length == 0 || body.Length == 0)
-                throw new ArgumentException($"Requirement '{id}' requires title and body.");
+            // Canonical TEST rows may have empty Title (ValidateTest only requires condition/body).
+            if (body.Length == 0)
+                throw new ArgumentException($"Requirement '{id}' requires body.");
+            if (kind is not "test" && title.Length == 0)
+                throw new ArgumentException($"Requirement '{id}' requires title.");
             if (title.Length > TitleMaxLength)
                 throw new ArgumentException($"Requirement '{id}' title exceeds {TitleMaxLength} characters.");
 
-            var priority = string.IsNullOrWhiteSpace(item.Priority) ? "medium" : item.Priority.Trim();
-            var status = string.IsNullOrWhiteSpace(item.Status) ? "pending" : item.Status.Trim();
+            var priority = string.IsNullOrWhiteSpace(item.Priority) ? "medium" : item.Priority.Trim().ToLowerInvariant();
+            var status = string.IsNullOrWhiteSpace(item.Status) ? "pending" : item.Status.Trim().ToLowerInvariant();
             var mapKey = MapKey(kind, id);
             if (!seen.Add(mapKey))
                 throw new ArgumentException($"Duplicate requirement '{kind}:{id}' in the recovery payload.");
