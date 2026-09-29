@@ -135,6 +135,33 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
         Assert.DoesNotContain(SecretSentinel, canonical, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task Dump_AuditRecordsStayLocal()
+    {
+        const string sentinel = "local-audit-only-92841";
+        using (var db = CreateDb())
+        {
+            db.DataAuditLogs.Add(new DataAuditLogEntity
+            {
+                WorkspaceId = _workspace,
+                EntityKind = "test",
+                EntityKey = "audit-local",
+                Action = "create",
+                Actor = "test",
+                SourceType = "test",
+                OccurredAtUtc = DateTimeOffset.UtcNow,
+                CurrentSnapshotJson = "{\"value\":\"" + sentinel + "\"}",
+            });
+            db.SaveChanges();
+        }
+
+        var exported = await ExportAsync();
+        var json = JsonSerializer.Serialize(exported.Dump, Camel());
+        Assert.DoesNotContain(sentinel, json, StringComparison.Ordinal);
+        Assert.Equal("OMIT-LOCAL", WikiDumpTablePolicyRegistry.PolicyFor("DataAuditLogs"));
+        Assert.Equal("OMIT-LOCAL", WikiDumpTablePolicyRegistry.PolicyFor("TodoAuditHistory"));
+    }
+
     private async Task<WikiDumpExportResult> ExportAsync()
     {
         var output = Path.Combine(_workspace, "dump-" + Guid.NewGuid().ToString("N"));

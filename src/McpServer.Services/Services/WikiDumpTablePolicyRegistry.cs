@@ -25,7 +25,7 @@ public static class WikiDumpTablePolicyRegistry
         return dbSetName switch
         {
             "Workspaces" => "ROOT",
-            "DataAuditLogs" => "COPY-SANITIZE+HISTORY",
+            "DataAuditLogs" or "TodoAuditHistory" => "OMIT-LOCAL",
             "SessionLogs" or "SessionLogTurns" or "SessionLogActions" or "SessionLogTurnTags" or "SessionLogTags"
                 or "SessionLogTurnContexts" or "SessionLogProcessingDialogs" or "SessionLogCommits"
                 or "SessionLogCommitFiles" or "SessionLogTurnStringLists" => "COPY-SANITIZE+HISTORY",

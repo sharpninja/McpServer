@@ -9,6 +9,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
+- Permanent local audit ledgers with versioned compressed payloads and SQL Server runtime-role protection
 - Use case domain: `/mcpserver/usecases` (CRUD, structure, FR Realizes links, coverage, diagram-graph, approval/product) and first-party UI at `/usecases/`
 - Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
@@ -77,6 +78,7 @@ Important keys:
 - `Mcp:TodoFilePath`
 - `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
+- `Mcp:Database:AutoMigrate` (default `true`; set `false` for a SQL Server runtime principal without schema privileges after an administrator applies migrations)
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
 - `Mcp:TurnTransactions:*` (coordinator + keyserver). Repo default `Enabled: false`. Live box MCP keeps `Enabled: true` for QuadBrain. Keyserver signing is QuadBrain/brain-slot only (`TurnTransactionKeyserverScope`; FR-MCP-173). First-party adapters bypass the coordinator.
 - `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
@@ -281,6 +283,10 @@ paths that escape the upload root. Exceeded limits return 413; malformed or unsa
 ## Products
 
 Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /mcpserver/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/mcpserver/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `McpServerClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
+
+## Permanent local audit storage
+
+`DataAuditLogs` and `TodoAuditHistory` are local audit ledgers. Audit rows are excluded from federation payloads and wiki exports. New generic audit payloads use versioned GZip columns while historical JSON text remains readable. The SQL Server migration also creates an `mcp_runtime` role with audit update/delete denials. See [Permanent local audit storage](Operations/permanent-local-audit-sqlserver.md) for the migration, runtime login, and permission checks.
 
 ## Requirements Wiki Export
 

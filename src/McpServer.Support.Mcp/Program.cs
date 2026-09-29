@@ -778,7 +778,7 @@ if (!app.Environment.IsEnvironment("Test"))
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
             var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+            await McpDatabaseMigrationCoordinator.EnsureReadyAsync(db, runtimeOptions, ct).ConfigureAwait(false);
             if (!SessionLogSchemaGuard.Probe(db))
                 Log.Error("{Message}", SessionLogSchemaGuard.PendingMigrationMessage);
             await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);

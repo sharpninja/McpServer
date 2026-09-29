@@ -317,6 +317,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: ops-permanent-local-audit
+    title: Permanent Local Audit Storage
+    source: docs/Operations/permanent-local-audit-sqlserver.md
+    target: Operations/Permanent-Local-Audit-Storage.md
+    platforms:
+    - github
+    - azure
 navigation:
   - document: home
   - title: Requirements
@@ -381,5 +388,6 @@ navigation:
       - document: ops-tunnel-cloudflare
       - document: ops-tunnel-frp-railway
       - document: ops-tunnel-ngrok
+      - document: ops-permanent-local-audit
 docfx:
   workflows: []

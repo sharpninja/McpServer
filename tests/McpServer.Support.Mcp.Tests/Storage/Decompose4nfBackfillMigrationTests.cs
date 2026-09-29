@@ -229,7 +229,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     }
 
     /// <summary>
-    /// Down round-trip: after migrating to head (backfills applied), migrating back to the
+    /// Down round-trip: after migrating through the 4NF slice, migrating back to the
     /// pre-slice schema reconstructs every decomposed JSON column from the child rows.
     /// </summary>
     [Fact]
@@ -243,7 +243,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260702193911_Decompose4nfAgentModelLists");
         }
 
         using (var db = CreateContext())

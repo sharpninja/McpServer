@@ -1,4 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.IO.Compression;
+using System.Text;
+using McpServer.Common.AgentCli;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -59,15 +63,87 @@ public sealed class DataAuditLogEntity
     /// <summary>UTC timestamp when the mutation was recorded.</summary>
     public DateTimeOffset OccurredAtUtc { get; set; }
 
+    /// <summary>Null for legacy text rows; 1 for GZip-compressed UTF-8 payloads.</summary>
+    public int? PayloadEncodingVersion { get; set; } = 1;
+
+    /// <summary>Legacy text columns remain readable without rewriting historical rows.</summary>
+    public string? PreviousSnapshotJsonLegacy { get; set; }
+    /// <summary>Legacy current snapshot text.</summary>
+    public string? CurrentSnapshotJsonLegacy { get; set; }
+    /// <summary>Legacy diff text.</summary>
+    public string? DiffJsonLegacy { get; set; }
+    /// <summary>Legacy metadata text.</summary>
+    public string? MetadataJsonLegacy { get; set; }
+
+    /// <summary>Versioned binary payload columns for new audit rows.</summary>
+    public byte[]? PreviousSnapshotPayload { get; set; }
+    /// <summary>Compressed current snapshot.</summary>
+    public byte[]? CurrentSnapshotPayload { get; set; }
+    /// <summary>Compressed diff.</summary>
+    public byte[]? DiffPayload { get; set; }
+    /// <summary>Compressed metadata.</summary>
+    public byte[]? MetadataPayload { get; set; }
+
     /// <summary>Sanitized JSON snapshot before the mutation.</summary>
-    public string? PreviousSnapshotJson { get; set; }
+    [NotMapped]
+    public string? PreviousSnapshotJson
+    {
+        get => Decode(PreviousSnapshotPayload, PreviousSnapshotJsonLegacy);
+        set { PreviousSnapshotPayload = Compress(value); PreviousSnapshotJsonLegacy = null; }
+    }
 
     /// <summary>Sanitized JSON snapshot after the mutation.</summary>
-    public string? CurrentSnapshotJson { get; set; }
+    [NotMapped]
+    public string? CurrentSnapshotJson
+    {
+        get => Decode(CurrentSnapshotPayload, CurrentSnapshotJsonLegacy);
+        set { CurrentSnapshotPayload = Compress(value); CurrentSnapshotJsonLegacy = null; }
+    }
 
     /// <summary>Optional sanitized JSON diff.</summary>
-    public string? DiffJson { get; set; }
+    [NotMapped]
+    public string? DiffJson
+    {
+        get => Decode(DiffPayload, DiffJsonLegacy);
+        set { DiffPayload = Compress(value); DiffJsonLegacy = null; }
+    }
 
     /// <summary>Optional metadata JSON for domain-specific details.</summary>
-    public string? MetadataJson { get; set; }
+    [NotMapped]
+    public string? MetadataJson
+    {
+        get => Decode(MetadataPayload, MetadataJsonLegacy);
+        set { MetadataPayload = Compress(value); MetadataJsonLegacy = null; }
+    }
+
+    private string? Decode(byte[]? payload, string? legacy)
+    {
+        if (payload is null)
+            return legacy;
+        if (PayloadEncodingVersion != 1)
+            throw new InvalidDataException($"Unsupported audit payload encoding version {PayloadEncodingVersion}.");
+
+        using var input = new MemoryStream(payload, writable: false);
+        using var gzip = new GZipStream(input, CompressionMode.Decompress);
+        using var output = new MemoryStream();
+        gzip.CopyTo(output);
+        return Encoding.UTF8.GetString(output.ToArray());
+    }
+
+    private byte[]? Compress(string? value)
+    {
+        if (value is null)
+            return null;
+
+        PayloadEncodingVersion = 1;
+        using var output = new MemoryStream();
+        using (var gzip = new GZipStream(output, CompressionLevel.Optimal, leaveOpen: true))
+        {
+            var bytes = Encoding.UTF8.GetBytes(LineSanitizer.Sanitize(value));
+            gzip.Write(bytes);
+        }
+
+        return output.ToArray();
+    }
+
 }

@@ -142,7 +142,7 @@ public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<E
     }
 
     /// <summary>
-    /// Down round-trip: after migrating to head, migrating back to the pre-slice schema
+    /// Down round-trip: after migrating through the 4NF slice, migrating back to the pre-slice schema
     /// reconstructs the decomposed JSON columns from the child rows.
     /// </summary>
     [Fact]
@@ -158,7 +158,7 @@ public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<E
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260702193922_Decompose4nfAgentModelLists");
         }
 
         using (var db = CreateContext())

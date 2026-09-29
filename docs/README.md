@@ -20,6 +20,7 @@
 - [Memory benchmarks](benchmarks/README.md)
 - [Handoff Ingestion](Handoff-Ingestion.md)
 - [MCP Server Guide](MCP-SERVER.md)
+- [Permanent local audit storage](Operations/permanent-local-audit-sqlserver.md)
 - [QuadBrain User Guide](QUADBRAIN.md)
 - [QBAgent User Guide](QBAGENT.md)
 - [FAQ](FAQ.md)
