@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="93d09e85-e0c4-4de1-be2f-87f4a8d25d34" name="@PAYTON-OMARCHY 2026-09-28 20:33:50" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T20:33:50.5833505-05:00" queuing="2026-09-28T20:33:50.5833505-05:00" start="2026-09-28T20:33:48.9978868-05:00" finish="2026-09-28T20:33:50.5897611-05:00" />
+  <TestSettings name="default" id="1a27a11c-ccbf-4955-affc-0b76ee1305ef">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_20_33_50" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="24ab937e-0281-472e-ac1d-9f34c6ea8e62" testId="eab8d593-1a07-7dd7-756c-4aadc1ced3a7" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: &quot;/usr/lib/systemd/systemd&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0040034" startTime="2026-09-28T20:33:50.3923527-05:00" endTime="2026-09-28T20:33:50.3981356-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24ab937e-0281-472e-ac1d-9f34c6ea8e62">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Service update failed; recovery evidence retained at /tmp/service-update-dffc1655adda48caaf4ee693f68cd14f/backups/20260929T013350395Z-7da3fa4a2f88484f9d7137b019111f74. No binary rollback was performed.
+---- System.InvalidOperationException : Updated service is running an unexpected executable.</Message>
+          <StackTrace>   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs:line 135
+   at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 471
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 533
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(String firstExecutable) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 139
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs:line 121</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4bf570cb-cd85-4f43-8be4-93270550b8e7" testId="a2b0dd4f-c8dc-823f-ad38-0efb06180bc3" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: null)" computerName="PAYTON-OMARCHY" duration="00:00:00.0024130" startTime="2026-09-28T20:33:50.3984774-05:00" endTime="2026-09-28T20:33:50.4013613-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bf570cb-cd85-4f43-8be4-93270550b8e7">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Service update failed; recovery evidence retained at /tmp/service-update-6a2abc4b1c7f4b3f93aa5e83d7a57542/backups/20260929T013350399Z-46a520cb8c214d06bbe0c429c3e53061. No binary rollback was performed.
+---- System.InvalidOperationException : Deployment command readlink failed with exit code 1.</Message>
+          <StackTrace>   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs:line 135
+   at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 471
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 533
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(String firstExecutable) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 139
+   at InvokeStub_ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at LinuxServiceHelper.Command(String command, String[] arguments) in /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs:line 423
+   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs:line 120</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="09d366c8-9216-4e06-a93d-363009f66f24" testId="76dd6c31-7e12-0a34-ed1b-649b1644d521" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores" computerName="PAYTON-OMARCHY" duration="00:00:00.0759736" startTime="2026-09-28T20:33:50.2863890-05:00" endTime="2026-09-28T20:33:50.3836839-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09d366c8-9216-4e06-a93d-363009f66f24">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.InRange() Failure: Value not in range
+Range:  (2 - 100)
+Actual: 1</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 152
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: null)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="a2b0dd4f-c8dc-823f-ad38-0efb06180bc3">
+      <Execution id="4bf570cb-cd85-4f43-8be4-93270550b8e7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: &quot;/usr/lib/systemd/systemd&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="eab8d593-1a07-7dd7-756c-4aadc1ced3a7">
+      <Execution id="24ab937e-0281-472e-ac1d-9f34c6ea8e62" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="76dd6c31-7e12-0a34-ed1b-649b1644d521">
+      <Execution id="09d366c8-9216-4e06-a93d-363009f66f24" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_PersistentWrongProcessFailsAndRestores" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="eab8d593-1a07-7dd7-756c-4aadc1ced3a7" executionId="24ab937e-0281-472e-ac1d-9f34c6ea8e62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2b0dd4f-c8dc-823f-ad38-0efb06180bc3" executionId="4bf570cb-cd85-4f43-8be4-93270550b8e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76dd6c31-7e12-0a34-ed1b-649b1644d521" executionId="09d366c8-9216-4e06-a93d-363009f66f24" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="0" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.21]   Discovering: Build.Tests
+[xUnit.net 00:00:00.57]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.78]   Starting:    Build.Tests
+[xUnit.net 00:00:00.95]       Assert.InRange() Failure: Value not in range
+[xUnit.net 00:00:00.95]       Range:  (2 - 100)
+[xUnit.net 00:00:00.95]       Actual: 1
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(152,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores()
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.97]       System.InvalidOperationException : Service update failed; recovery evidence retained at /tmp/service-update-dffc1655adda48caaf4ee693f68cd14f/backups/20260929T013350395Z-7da3fa4a2f88484f9d7137b019111f74. No binary rollback was performed.
+[xUnit.net 00:00:00.97]       ---- System.InvalidOperationException : Updated service is running an unexpected executable.
+[xUnit.net 00:00:00.97]       Stack Trace:
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs(135,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
+[xUnit.net 00:00:00.97]            at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(471,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(533,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update()
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(139,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(String firstExecutable)
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.97]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs(121,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
+[xUnit.net 00:00:00.97]       System.InvalidOperationException : Service update failed; recovery evidence retained at /tmp/service-update-6a2abc4b1c7f4b3f93aa5e83d7a57542/backups/20260929T013350399Z-46a520cb8c214d06bbe0c429c3e53061. No binary rollback was performed.
+[xUnit.net 00:00:00.97]       ---- System.InvalidOperationException : Deployment command readlink failed with exit code 1.
+[xUnit.net 00:00:00.97]       Stack Trace:
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs(135,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
+[xUnit.net 00:00:00.97]            at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(471,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.97]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(533,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update()
+[xUnit.net 00:00:00.98]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(139,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(String firstExecutable)
+[xUnit.net 00:00:00.98]            at InvokeStub_ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(Object, Span`1)
+[xUnit.net 00:00:00.98]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.98]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.98]         /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs(423,0): at LinuxServiceHelper.Command(String command, String[] arguments)
+[xUnit.net 00:00:00.98]         /home/sharpninja/github/McpServer/build/LinuxServiceHelper.cs(120,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
+[xUnit.net 00:00:00.98]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T20:33:50.3935896-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T20:33:50.4160833-05:00">
+        <Text>[xUnit.net 00:00:00.97]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: "/usr/lib/systemd/systemd") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T20:33:50.4192523-05:00">
+        <Text>[xUnit.net 00:00:00.97]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: null) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

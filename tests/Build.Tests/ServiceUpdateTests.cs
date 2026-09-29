@@ -128,6 +128,33 @@ public sealed class ServiceUpdateTests
         Assert.Equal("old", File.ReadAllText(f.Executable));
     }
 
+    /// <summary>TEST-MCP-SERVICEUPDATE-001: systemd simple units may return before exec; transient process observations must settle before health verification.</summary>
+    [Theory]
+    [InlineData("/usr/lib/systemd/systemd")]
+    [InlineData(null)]
+    public void LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(string? firstExecutable)
+    {
+        using var f = new Fixture();
+        f.ProcessObservations.Enqueue(firstExecutable);
+        f.Update();
+        Assert.Equal(2, f.ProcessChecks);
+        Assert.Contains("health", f.Events);
+        Assert.Equal(1, f.Events.Count(value => value == "stop"));
+    }
+
+    /// <summary>TEST-MCP-SERVICEUPDATE-001: a persistent wrong executable must fail within a bounded wait, restore live state and never pass health.</summary>
+    [Fact]
+    public void LinuxUpdate_PersistentWrongProcessFailsAndRestores()
+    {
+        using var f = new Fixture();
+        f.WrongProcess = true;
+        Assert.Throws<InvalidOperationException>(() => f.Update());
+        Assert.InRange(f.ProcessChecks, 2, 100);
+        Assert.DoesNotContain("health", f.Events);
+        Assert.Equal(2, f.Events.Count(value => value == "stop"));
+        Assert.Equal(f.OriginalConfig, File.ReadAllText(f.Config));
+        Assert.Equal("original", File.ReadAllText(Path.Combine(f.Data, "state")));
+    }
     /// <summary>Real tar with fake systemd validates archive/copy/restore/start ordering and live bytes.</summary>
     [Fact]
     public void LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth()
@@ -461,6 +488,9 @@ public sealed class ServiceUpdateTests
         public bool FailArchive { get; set; }
         public bool FailCopy { get; set; }
         public bool FailHealth { get; set; }
+        public Queue<string?> ProcessObservations { get; } = new();
+        public int ProcessChecks { get; private set; }
+        public bool WrongProcess { get; set; }
         public bool RealTar { get; set; }
         public bool InspectRealFileKinds { get; set; }
         public bool OptionalEnvironment { get; set; }
@@ -525,7 +555,12 @@ public sealed class ServiceUpdateTests
             if (command == "stat") return Result(0, args.Contains("%f")
                 ? InspectRealFileKinds ? Native("stat", args.ToArray()) : Directory.Exists(args.Last()) ? "41ed" : "81a4"
                 : PrivateOwner);
-            if (command == "readlink") return Result(0, Executable);
+            if (command == "readlink")
+            {
+                ProcessChecks++;
+                var observation = ProcessObservations.Count > 0 ? ProcessObservations.Dequeue() : WrongProcess ? "/unexpected/process" : Executable;
+                return observation is null ? Result(1, "") : Result(0, observation);
+            }
             if (command == "systemctl")
             {
                 if (args[0] == "show") return Result(0, $"LoadState={LoadState}\nType=simple\nFragmentPath={Path.Combine(Root, "example.service")}\nDropInPaths={DropIns}\nEnvironmentFiles={Env} (ignore_errors={(OptionalEnvironment ? "yes" : "no")})\nEnvironment=\nWorkingDirectory={WorkingDirectory}\nExecStart={{ path={UnitExecutable} ; argv[]={UnitExecutable} {Arguments} ; ignore_errors=no ; }}\nMainPID={(started ? Environment.ProcessId : 0)}\nActiveState={(started ? "active" : "inactive")}\n{ExtraProperties}");

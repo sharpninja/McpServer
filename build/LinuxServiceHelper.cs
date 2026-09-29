@@ -114,11 +114,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             Restore(archive, hash, preserved, install);
             Command("systemctl", "daemon-reload");
             Command("systemctl", "start", options.ServiceName);
-            var state = GetUnit(options.ServiceName);
-            if (Value(state, "ActiveState") != "active" || !int.TryParse(Value(state, "MainPID"), out var pid) || pid <= 0)
-                throw new InvalidOperationException("Updated service is not active with a valid main process.");
-            if (Command("readlink", "-f", $"/proc/{pid}/exe").Trim() != Path.Combine(install, AppHost))
-                throw new InvalidOperationException("Updated service is running an unexpected executable.");
+            var pid = WaitForServiceProcess(options.ServiceName, Path.Combine(install, AppHost));
             verifyHealth();
             return new(archive, hash, pid);
         }
@@ -136,6 +132,26 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         }
     }
 
+    /// <summary>TR-MCP-SERVICEUPDATE-001: systemd simple units report start before exec; bound retries until the active main process resolves to the deployed apphost.</summary>
+    private int WaitForServiceProcess(string service, string executable)
+    {
+        const int attempts = 100;
+        for (var attempt = 0; attempt < attempts; attempt++)
+        {
+            var state = GetUnit(service);
+            var activeState = Value(state, "ActiveState");
+            if (activeState is "failed" or "inactive")
+                throw new InvalidOperationException("Updated service stopped before its application process became ready.");
+            if (activeState == "active" && int.TryParse(Value(state, "MainPID"), out var pid) && pid > 0)
+            {
+                var process = run("readlink", ["-f", $"/proc/{pid}/exe"]);
+                if (process.ExitCode == 0 && process.StandardOutput.Trim() == executable)
+                    return pid;
+            }
+            if (attempt < attempts - 1) Thread.Sleep(100);
+        }
+        throw new InvalidOperationException("Updated service did not become active with the expected executable within the startup retry limit.");
+    }
     /// <summary>Gets only required systemd properties; sensitive values remain local.</summary>
     private Dictionary<string, string> GetUnit(string name) => Command("systemctl", "show", name, "--no-pager", "--property=" + UnitProperties)
         .Split('\n').Where(line => line.Contains('='))
