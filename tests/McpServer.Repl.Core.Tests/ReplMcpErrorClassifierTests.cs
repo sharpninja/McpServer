@@ -62,6 +62,38 @@ public sealed class ReplMcpErrorClassifierTests
         Assert.True(classified.Retryable);
     }
 
+    /// <summary>TR-MCP-TRIAGESTORE-002: a longer Submit storage command budget is still backend_unavailable.</summary>
+    [Fact]
+    public void FromException_SubmitStorageCommandBudget_IsBackendUnavailable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(
+            new InvalidOperationException("The storage backend did not respond within the 30 second storage command budget."));
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
+    /// <summary>TR-MCP-TRIAGESTORE-002: a deadlocked session-graph load is retryable backend_unavailable.</summary>
+    [Fact]
+    public void FromException_GraphMaterializationDeadlock_IsBackendUnavailable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(
+            new StorageGraphMaterializationException(
+                "The storage backend deadlocked while loading the session graph (SQL 1205). The session was not treated as missing."));
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
+    /// <summary>Stand-in whose type name matches the server graph-load failure.</summary>
+    private sealed class StorageGraphMaterializationException : Exception
+    {
+        /// <summary>Initializes the stand-in.</summary>
+        /// <param name="message">Failure text.</param>
+        public StorageGraphMaterializationException(string message)
+            : base(message)
+        {
+        }
+    }
+
     /// <summary>TimeoutException is retryable timeout.</summary>
     [Fact]
     public void FromException_Timeout_IsRetryableTimeout()

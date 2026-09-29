@@ -3136,12 +3136,12 @@ Scope: layer-1+
 
 ## TR-MCP-TRIAGESTORE-002
 
-**Five second intake and submit storage budget** — TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+**Five second intake budget and configurable session-log graph budget** — TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync SaveChanges and FindExistingSessionAsync materialization pass SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. FindExistingSessionAsync uses AsSplitQuery on the multi-include chain. SQL deadlock 1205 during that load throws StorageGraphMaterializationException (retryable backend_unavailable) and does not return a null session. Timeouts map to backend_unavailable. No partial triage rows.
 **Covered by:** FR: FR-MCP-TRIAGESTORE-002; TEST: TEST-MCP-TRIAGESTORE-007
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+- [ ] TriageService.SubmitReportAsync and session-log replace/section SaveChanges use StorageCommandBudget.Default (5 seconds). SessionLogService.SubmitAsync SaveChanges and FindExistingSessionAsync materialization pass SessionLogSubmitOptions.SubmitCommandBudgetSeconds (Mcp:SessionLog:SubmitCommandBudgetSeconds, default 30, valid 1 through 300) into StorageCommandBudget.ExecuteAsync. FindExistingSessionAsync uses AsSplitQuery on the multi-include chain. SQL deadlock 1205 during that load throws StorageGraphMaterializationException (retryable backend_unavailable) and does not return a null session. Timeouts map to backend_unavailable. No partial triage rows.
 
 ## TR-MCP-TRIAGETODO-001
 

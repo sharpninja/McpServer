@@ -1288,10 +1288,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
-- TEST-MCP-TRIAGESTORE-007: Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+- TEST-MCP-TRIAGESTORE-007: Triage intake and session-log replace/section SaveChanges fail within about 5 seconds as backend_unavailable when storage is unreachable. Session-log Submit honors Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30) and still classifies expiry as backend_unavailable. A Submit save longer than 5 seconds completes under the default budget. Dense FindExistingSession materialization uses split queries, and budget expiry or SQL 1205 fails retryable without persisting or reporting the session missing.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+  - [ ] Triage intake and session-log replace/section SaveChanges fail within about 5 seconds as backend_unavailable when storage is unreachable. Session-log Submit honors Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30) and still classifies expiry as backend_unavailable. A Submit save longer than 5 seconds completes under the default budget. Dense FindExistingSession materialization uses split queries, and budget expiry or SQL 1205 fails retryable without persisting or reporting the session missing.
 - TEST-MCP-TRIAGETODO-001: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
   Scope: layer-1+
   **Acceptance Criteria:**

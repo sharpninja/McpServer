@@ -81,6 +81,7 @@ public static class StorageBackendUnavailability
         {
             case StorageUnavailableException:
             case StorageCommandBudgetExceededException:
+            case StorageGraphMaterializationException:
             case RetryLimitExceededException:
                 return true;
             case SqlException sql when sql.IsTransient

@@ -379,6 +379,8 @@ Source: `src/McpServer.Client/` - see the [package README](https://github.com/sh
 
 Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `SessionLogClient.AppendDialogAsync` (POST `.../dialog`), not a full-session `SubmitAsync` upsert. HTTP 503 `backend_unavailable` on persist uses the same degrade-queue as timeout: failsafe retained, current-turn stays `in_progress`, no throw. SQLITE_BUSY under the storage budget is retryable persist contention, not storage-down, when TODO/requirements reads still succeed.
 
+Session-log `SubmitAsync` SaveChanges and `FindExistingSessionAsync` graph loads use `Mcp:SessionLog:SubmitCommandBudgetSeconds` (default and recommended deploy value **30**). Valid range is 1 through 300. The graph load uses `AsSplitQuery()` so sibling turn collections are not cartesian-joined. Raise the budget when a full-graph mutation is known to run longer than 30 seconds. Triage intake and session-log replace/section saves stay on the 5 second `StorageCommandBudget.Default`. Budget expiry and SQL deadlock 1205 during the graph load are HTTP 503 `backend_unavailable` and retryable. A failed load does not report the session as missing and does not persist the mutation.
+
 Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 
 ## Additional Documentation
