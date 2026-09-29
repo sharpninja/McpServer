@@ -1610,3 +1610,18 @@ Acceptance criteria:
 - [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
 - [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
 - [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+
+
+
+## TEST-MCP-REQRECOVERY-001 - Atomic requirements recovery
+
+SQLite tests cover dry-run with no run row, apply of create and update, replay without rewrite, 409 on payload mismatch, 400 on an invalid second item with zero rows, rollback when SaveChanges throws, and a hung save classified as retryable 503. Controller tests map those statuses. Migration discovery covers SQLite, SQL Server, and PostgreSQL. REPL workflow tests call planRecovery, applyRecovery, and getRecovery.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] RequirementsRecoveryTests passes with zero rows after validation and save failures.
+- [ ] RequirementsRecoveryControllerTests maps 200, 400, 409, 404, and 503.
+- [ ] RequirementsRecoveryMigrationTests finds 20260929020000_AddRequirementsRecoveryRuns on three providers.
+- [ ] RequirementsRecoveryWorkflowTests posts dry-run and apply and classifies 404, 409, and 503.

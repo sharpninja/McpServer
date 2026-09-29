@@ -1310,6 +1310,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 
+| FR-MCP-REQRECOVERY-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-REQRECOVERY-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-REQRECOVERY-001 | Tracked | Testing-Requirements.md |
 ## Cross-platform service update
 
 - FR-MCP-SERVICEUPDATE-001: Cross-platform service update preserving live state. Status: pending.

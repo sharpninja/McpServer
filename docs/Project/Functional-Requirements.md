@@ -2761,3 +2761,18 @@ Acceptance criteria:
 - [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
 - [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
 - [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+
+
+
+## FR-MCP-REQRECOVERY-001 - Atomic requirements recovery
+
+The server SHALL recover a set of FR, TR, and TEST rows as one idempotent operation. Dry-run returns the create and update plan and writes nothing. Apply commits every requirement row and one recovery run row together, or it commits nothing. A repeated apply with the same idempotency key and payload returns the stored result. A different payload for that key is rejected and leaves stored rows unchanged.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] dry-run: POST mode dry-run and workflow.requirements.planRecovery return planned actions and do not insert a recovery run. GET by that key is 404.
+- [ ] apply: mode apply and workflow.requirements.applyRecovery upsert every item and one RequirementsRecoveryRunEntity inside one serializable transaction.
+- [ ] idempotency: the same key and payload replays. A different payload returns 409 and does not change requirement rows.
+- [ ] failures: validation is 400, a missing run is 404, and storage budget exhaustion is retryable 503. A failed save leaves zero new requirement rows and zero run rows.

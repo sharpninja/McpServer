@@ -390,6 +390,7 @@ builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
         sp.GetService<IOptions<TurnTransactionOptions>>());
 });
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
+builder.Services.AddScoped<McpServer.Support.Mcp.Requirements.IRequirementsRecoveryService, McpServer.Support.Mcp.Requirements.RequirementsRecoveryService>();
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddAgentHelpServices(builder.Configuration);

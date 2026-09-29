@@ -500,6 +500,30 @@ public interface IRequirementsWorkflow
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// FR-MCP-REQRECOVERY-001: plans a requirements recovery. The server writes nothing.
+    /// </summary>
+    /// <param name="request">Idempotency key and requirement items.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The dry-run plan.</returns>
+    Task<RequirementsRecoveryResult> PlanRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001: applies a requirements recovery atomically.
+    /// </summary>
+    /// <param name="request">Idempotency key and requirement items.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The applied or replayed result.</returns>
+    Task<RequirementsRecoveryResult> ApplyRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-REQRECOVERY-001: gets a stored recovery run. A dry-run key is not found.
+    /// </summary>
+    /// <param name="idempotencyKey">The key stored with the apply.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The stored result.</returns>
+    Task<RequirementsRecoveryResult> GetRecoveryAsync(string idempotencyKey, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets the current requirements selection state.
     /// Returns null if no requirements are currently selected.
     /// </summary>

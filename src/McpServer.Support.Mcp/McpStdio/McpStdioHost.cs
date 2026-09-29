@@ -218,6 +218,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
+        builder.Services.AddScoped<McpServer.Support.Mcp.Requirements.IRequirementsRecoveryService, McpServer.Support.Mcp.Requirements.RequirementsRecoveryService>();
         builder.Services.AddSingleton<PromptTemplateRenderer>();
         builder.Services.AddSingleton<PromptTemplateService>();
         builder.Services.AddSingleton<IPromptTemplateService>(sp =>

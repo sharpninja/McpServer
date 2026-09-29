@@ -555,6 +555,12 @@ internal static class ReplYamlMessageValidator
                 OptionalText(args, "layerKey", errors);
             },
             [RequirementsCommandShapes.CurrentSelectionMethod] = NoParameters,
+            [RequirementsCommandShapes.PlanRecoveryMethod] = ValidateRecoveryPayload,
+            [RequirementsCommandShapes.ApplyRecoveryMethod] = ValidateRecoveryPayload,
+            [RequirementsCommandShapes.GetRecoveryMethod] = static (args, errors) =>
+            {
+                RequireText(args, "idempotencyKey", errors);
+            },
         };
 
         return validators;
@@ -704,6 +710,63 @@ internal static class ReplYamlMessageValidator
             errors.Add($"payload.params.{key} must be a string or array.");
         }
     }
+
+    private static readonly Regex RecoveryFrIdPattern = new(@"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex RecoveryTrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex RecoveryTestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex RecoveryKeyPattern = new(@"^[A-Za-z0-9._:-]{1,128}$", RegexOptions.Compiled);
+
+    private static void ValidateRecoveryPayload(IReadOnlyDictionary<string, object?> args, List<string> errors)
+    {
+        var key = RequireText(args, "idempotencyKey", errors);
+        if (key is not null && !RecoveryKeyPattern.IsMatch(key))
+            errors.Add("payload.params.idempotencyKey must be 1-128 characters from [A-Za-z0-9._:-].");
+
+        if (!args.TryGetValue("items", out var value) || value is null)
+        {
+            errors.Add("payload.params.items is required.");
+            return;
+        }
+
+        if (!TryGetArray(value, out var items))
+        {
+            errors.Add("payload.params.items must be an array.");
+            return;
+        }
+
+        if (items.Count == 0)
+        {
+            errors.Add("payload.params.items must contain at least one item.");
+            return;
+        }
+
+        for (var index = 0; index < items.Count; index++)
+        {
+            var item = ToDictionary(items[index]);
+            if (item is null)
+            {
+                errors.Add($"items[{index}] must be an object.");
+                continue;
+            }
+
+            var kind = RequireText(item, "kind", errors, $"items[{index}].kind")?.Trim().ToLowerInvariant();
+            var id = RequireText(item, "id", errors, $"items[{index}].id");
+            RequireText(item, "title", errors, $"items[{index}].title");
+            RequireText(item, "body", errors, $"items[{index}].body");
+            if (kind is not ("fr" or "tr" or "test") && kind is not null)
+                errors.Add($"items[{index}].kind must be one of: fr, tr, test.");
+            else if (kind is not null && id is not null && !IsRecoveryId(kind, id))
+                errors.Add($"items[{index}].id '{id}' is not valid for kind '{kind}'.");
+        }
+    }
+
+    private static bool IsRecoveryId(string kind, string id) => kind switch
+    {
+        "fr" => RecoveryFrIdPattern.IsMatch(id),
+        "tr" => RecoveryTrIdPattern.IsMatch(id),
+        "test" => RecoveryTestIdPattern.IsMatch(id),
+        _ => false,
+    };
 
     private static void RequireRecords(
         IReadOnlyDictionary<string, object?> args,

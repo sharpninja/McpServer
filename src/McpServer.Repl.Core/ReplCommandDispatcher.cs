@@ -1971,6 +1971,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         GetString(args, "productScope") ?? "product",
                         cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CurrentSelectionMethod => _requirementsWorkflow.CurrentSelection(),
+                RequirementsCommandShapes.PlanRecoveryMethod =>
+                    await _requirementsWorkflow.PlanRecoveryAsync(RequireParams<RequirementsRecoveryRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.ApplyRecoveryMethod =>
+                    await _requirementsWorkflow.ApplyRecoveryAsync(RequireParams<RequirementsRecoveryRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.GetRecoveryMethod =>
+                    await _requirementsWorkflow.GetRecoveryAsync(RequireString(args, "idempotencyKey"), cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 

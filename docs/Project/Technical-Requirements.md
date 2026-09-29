@@ -3886,3 +3886,18 @@ Acceptance criteria:
 - [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
 - [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
 - [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+
+
+
+## TR-MCP-REQRECOVERY-001 - Serializable requirements recovery storage
+
+Requirements recovery writes RequirementEntity rows and one RequirementsRecoveryRunEntity directly in a single serializable transaction and a single SaveChanges. The run is unique on (WorkspaceId, IdempotencyKey). SQLite, SQL Server, and PostgreSQL each ship migration 20260929020000_AddRequirementsRecoveryRuns. REST routes are POST /mcpserver/requirements/recovery (mode dry-run or apply) and GET /mcpserver/requirements/recovery/{idempotencyKey}. REPL methods are workflow.requirements.planRecovery, applyRecovery, and getRecovery. SaveChanges uses StorageCommandBudget so a hung write is backend_unavailable.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] The recovery run primary key is WorkspaceId plus IdempotencyKey on all three providers.
+- [ ] Apply uses IsolationLevel.Serializable and rolls back when SaveChanges fails.
+- [ ] Dry-run does not call SaveChanges.
+- [ ] Error mapping is 400 validation_error, 409 conflict, 404 not_found, and 503 backend_unavailable.

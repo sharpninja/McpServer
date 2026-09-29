@@ -27,12 +27,18 @@ $requirementMethods = @(
     'workflow.requirements.createLayer'
     'workflow.requirements.updateLayer'
     'workflow.requirements.effective'
+    'workflow.requirements.planRecovery'
+    'workflow.requirements.applyRecovery'
+    'workflow.requirements.getRecovery'
 )
 $requirementClientMethods = @(
     'client.Requirements.ListRequirementLayersAsync'
     'client.Requirements.CreateRequirementLayerAsync'
     'client.Requirements.UpdateRequirementLayerAsync'
     'client.Requirements.GetEffectiveRequirementsAsync'
+    'client.Requirements.PlanRecoveryAsync'
+    'client.Requirements.ApplyRecoveryAsync'
+    'client.Requirements.GetRecoveryAsync'
 )
 
 function Test-McpStatusSessionState {

@@ -334,6 +334,40 @@ public sealed class RequirementsClient : McpClientBase
         return await PostAsync<RequirementsIngestResult>("mcpserver/requirements/ingest", request, cancellationToken);
     }
 
+    /// <summary>FR-MCP-REQRECOVERY-001: plans a recovery payload. The server writes nothing.</summary>
+    /// <param name="request">Idempotency key and items.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The dry-run plan.</returns>
+    public Task<RequirementsRecoveryResult> PlanRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        request.Mode = "dry-run";
+        return PostAsync<RequirementsRecoveryResult>("mcpserver/requirements/recovery", request, cancellationToken);
+    }
+
+    /// <summary>FR-MCP-REQRECOVERY-001: applies a recovery payload atomically.</summary>
+    /// <param name="request">Idempotency key and items.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The applied or replayed result.</returns>
+    public Task<RequirementsRecoveryResult> ApplyRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        request.Mode = "apply";
+        return PostAsync<RequirementsRecoveryResult>("mcpserver/requirements/recovery", request, cancellationToken);
+    }
+
+    /// <summary>FR-MCP-REQRECOVERY-001: gets a stored recovery run by idempotency key.</summary>
+    /// <param name="idempotencyKey">The key stored with the apply.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The stored result.</returns>
+    public Task<RequirementsRecoveryResult> GetRecoveryAsync(string idempotencyKey, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(idempotencyKey);
+        return GetAsync<RequirementsRecoveryResult>(
+            $"mcpserver/requirements/recovery/{Uri.EscapeDataString(idempotencyKey)}",
+            cancellationToken);
+    }
+
     private async Task<TRequirement> CopyAcceptanceCriteriaFromTodoAsync<TRequirement>(
         string kind,
         string id,

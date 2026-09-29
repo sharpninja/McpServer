@@ -1,3 +1,5 @@
+using McpServer.Client;
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -53,6 +55,25 @@ public static class ReplMcpErrorClassifier
                 {
                     ["inner"] = inner,
                 });
+        }
+
+        if (IsNamed(exception, "RequirementsRecoveryConflictException")
+            || IsNamed(exception, "McpConflictException"))
+        {
+            return new ReplClassifiedError(
+                "conflict",
+                exception.Message,
+                Retryable: false,
+                Details: new Dictionary<string, object?>(StringComparer.Ordinal) { ["reason"] = "conflict" });
+        }
+
+        if (exception is McpClientException clientError && clientError.StatusCode == 503)
+        {
+            return new ReplClassifiedError(
+                "backend_unavailable",
+                "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+                Retryable: true,
+                Details: new Dictionary<string, object?>(StringComparer.Ordinal) { ["reason"] = "backend_unavailable" });
         }
 
         if (exception is KeyNotFoundException
