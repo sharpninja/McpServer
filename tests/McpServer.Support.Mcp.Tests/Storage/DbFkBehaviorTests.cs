@@ -110,6 +110,67 @@ public sealed class DbFkBehaviorTests
         Assert.Contains(nameof(DataAuditLogEntity), ex.Message, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task DataAuditLog_SaveChanges_UpdateAuditRow_Throws()
+    {
+        await using var db = CreateContext();
+        var audit = NewAudit("manual-update");
+        db.DataAuditLogs.Add(audit);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        audit.Action = "rewritten";
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+            () => db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Contains(nameof(DataAuditLogEntity), ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task DataAuditLog_NewPayload_UsesVersionedGzipAndRoundTrips()
+    {
+        await using var db = CreateContext();
+        var audit = NewAudit("compressed");
+        audit.CurrentSnapshotJson = "{\"name\":\"Ångström 東京\",\"detail\":\"" + new string('x', 1000) + "\"}";
+        db.DataAuditLogs.Add(audit);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(1, audit.PayloadEncodingVersion);
+        Assert.NotNull(audit.CurrentSnapshotPayload);
+        Assert.Null(audit.CurrentSnapshotJsonLegacy);
+        Assert.Equal("{\"name\":\"Ångström 東京\",\"detail\":\"" + new string('x', 1000) + "\"}", audit.CurrentSnapshotJson);
+    }
+
+    [Fact]
+    public async Task TodoAuditHistory_SaveChanges_UpdateAuditRow_Throws()
+    {
+        await using var db = CreateContext();
+        var audit = new TodoAuditHistoryEntity
+        {
+            TodoId = "audit-history-1",
+            Version = 1,
+            Action = "create",
+            RecordedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
+            Source = "test",
+        };
+        db.TodoAuditHistory.Add(audit);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        audit.Action = "rewritten";
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+            () => db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Contains(nameof(TodoAuditHistoryEntity), ex.Message, StringComparison.Ordinal);
+    }
+
+    private static DataAuditLogEntity NewAudit(string key) => new()
+    {
+        WorkspaceId = string.Empty,
+        EntityKind = "manual",
+        EntityKey = key,
+        Action = "manual",
+        Actor = "test",
+        SourceType = "test",
+        OccurredAtUtc = DateTimeOffset.UtcNow,
+    };
+
     private static McpDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()

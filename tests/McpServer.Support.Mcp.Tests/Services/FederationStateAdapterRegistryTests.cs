@@ -153,6 +153,9 @@ public sealed class FederationStateAdapterRegistryTests
 
         Assert.Equal("3", snapshot.Version);
         Assert.Contains("Federation plan", snapshot.PayloadJson, StringComparison.Ordinal);
+        using var document = JsonDocument.Parse(snapshot.PayloadJson);
+        Assert.DoesNotContain(document.RootElement.EnumerateObject(), property =>
+            string.Equals(property.Name, "audit", StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>TODO adapter applies signed HTTP create operations through the TODO service.</summary>

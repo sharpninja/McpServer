@@ -358,6 +358,10 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<DataAuditLogEntity>(e =>
         {
             e.HasKey(x => x.AuditId);
+            e.Property(x => x.PreviousSnapshotJsonLegacy).HasColumnName("PreviousSnapshotJson");
+            e.Property(x => x.CurrentSnapshotJsonLegacy).HasColumnName("CurrentSnapshotJson");
+            e.Property(x => x.DiffJsonLegacy).HasColumnName("DiffJson");
+            e.Property(x => x.MetadataJsonLegacy).HasColumnName("MetadataJson");
             e.HasIndex(x => new { x.WorkspaceId, x.EntityKind, x.EntityKey });
             e.HasIndex(x => x.Action);
             e.HasIndex(x => x.OccurredAtUtc);
@@ -1349,6 +1353,7 @@ public sealed class McpDbContext : DbContext
         StampWorkspaceId();
         ApplySoftDeletes();
         BlockPhysicalDeletes();
+        BlockAuditRowUpdates();
         EnsureWorkspaceRows();
         AppendAuditRows();
         EnsureWorkspaceRows();
@@ -1372,6 +1377,20 @@ public sealed class McpDbContext : DbContext
         }
 
         SoftDeleteGraphRelationshipsForDeletedEntities(softDeletedEntries, now);
+    }
+
+    private void BlockAuditRowUpdates()
+    {
+        var modifiedAuditKinds = ChangeTracker.Entries()
+            .Where(entry => entry.Entity is DataAuditLogEntity or TodoAuditHistoryEntity)
+            .Where(entry => entry.State is EntityState.Modified or EntityState.Deleted)
+            .Select(entry => entry.Metadata.ClrType.Name)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        if (modifiedAuditKinds.Length > 0)
+            throw new InvalidOperationException(
+                "Audit rows are append-only and cannot be updated or deleted. Entities: "
+                + string.Join(", ", modifiedAuditKinds));
     }
 
     private void BlockPhysicalDeletes()

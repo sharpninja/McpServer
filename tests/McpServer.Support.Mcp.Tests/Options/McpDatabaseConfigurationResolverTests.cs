@@ -51,6 +51,24 @@ public sealed class McpDatabaseConfigurationResolverTests
         Assert.Equal(connectionString, options.ConnectionString);
     }
 
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData("false", false)]
+    [InlineData("true", true)]
+    public void ResolveRuntimeOptions_AutoMigrate_UsesExplicitSetting(string? raw, bool expected)
+    {
+        var values = new Dictionary<string, string?>
+        {
+            ["Mcp:Database:Provider"] = "sqlserver",
+            ["Mcp:Database:SqlServer:ConnectionString"] = "Server=(localdb)\\MSSQLLocalDB;Database=mcp_test;Trusted_Connection=True",
+        };
+        if (raw is not null)
+            values["Mcp:Database:AutoMigrate"] = raw;
+
+        var options = McpDatabaseConfigurationResolver.ResolveRuntimeOptions(BuildConfiguration(values), instanceName: null);
+        Assert.Equal(expected, options.AutoMigrate);
+    }
+
     private static IConfiguration BuildConfiguration(Dictionary<string, string?> values)
         => new ConfigurationBuilder()
             .AddInMemoryCollection(values)

@@ -334,7 +334,7 @@ public static class McpStdioHost
                 using var scope = host.Services.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
                 var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-                await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+                await McpDatabaseMigrationCoordinator.EnsureReadyAsync(db, runtimeOptions, ct).ConfigureAwait(false);
                 await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, ct).ConfigureAwait(false);
                 await SessionLogTurnContextBackfillStartup.TryRunAsync(
                     db,

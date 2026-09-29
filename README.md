@@ -2,7 +2,7 @@
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
-**Current line:** GitVersion `next-version` **1.4.39** (see `GitVersion.yml`). Live `/health` on this refresh was Healthy, storage `reachable`, version `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`. That informational version is the deployed service commit. Git HEAD is `d18ba00b` (frontier agent setup prompt draft + HV receipts on top of that deploy; MCP-SETUPPROMPT-001 draft AGREE). `/health` stays liveness-Healthy with an exact nonce echo even when storage is unreachable; the payload `storage` field is `reachable` or `unreachable`. Observed payload keys: `status`, `version`, `checks`, `nonce`, `storage`.
+**Versioning:** `GitVersion.yml` sets the next version to **1.4.39**. The deployed service version is reported by `/health`; a source checkout may be ahead of or behind that deployment. `/health` echoes a caller nonce for liveness and reports storage as `reachable` or `unreachable`.
 
 ## Key Features
 
@@ -14,7 +14,7 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Requirements traceability** - FR/TR/TEST document management with validation and Markdown/ZIP export
 - **Products** - host-local `PROD-*` workspace groups that share FR/TR/TEST/layers into effective queries and `product-requirements` context without copying rows
 - **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
-- **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
+- **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with startup migrations enabled by default; `Mcp:Database:AutoMigrate=false` requires an administrator to apply pending migrations before startup
 - **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD. All eight official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries. Default CI bench stays Grok; `./build.ps1 BenchMemory -Plugin all` is unblocked after H7a `agree:true`. Multi-turn v2 uses tokens as the primary metric (`docs/benchmarks/`).
 - **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
@@ -157,7 +157,7 @@ Environment overrides: `PORT` (runtime port), `MCP_INSTANCE` (instance selection
 
 ## Storage
 
-**Database providers** (EF Core with automatic migrations):
+**Database providers** (EF Core with configurable startup migrations):
 
 | Provider | Project |
 |---|---|
@@ -166,6 +166,8 @@ Environment overrides: `PORT` (runtime port), `MCP_INSTANCE` (instance selection
 | PostgreSQL | `McpServer.Storage.PostgreSqlMigrations` |
 
 TODO items live in the configured database (the sole source of truth); `docs/Project/TODO.yaml` is a read-only projection. The removed `yaml` provider fails fast, and `sqlite` is a deprecated alias for `database` (TR-MCP-CFG-007).
+
+Audit ledgers are permanent and local. New `DataAuditLogs` rows use versioned GZip payload columns; legacy text rows remain readable. TODO audit rows are excluded from federation and wiki exports. SQL Server deployments can use a restricted `mcp_runtime` role after an administrator applies the audit migration. See [Permanent local audit storage](docs/Operations/permanent-local-audit-sqlserver.md) for migration and runtime identity steps.
 
 Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW index for semantic search.
 
@@ -245,7 +247,7 @@ Sample host: `src/McpServer.McpAgent.SampleHost/`
 
 ## Tests
 
-21 test projects covering unit, integration, and Reqnroll validation:
+22 test projects covering unit, integration, and Reqnroll validation (plus the `McpServer.ProcessTree.TestHelper` support project):
 
 - `Build.Tests` - build system and configuration
 - `McpServer.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
@@ -258,11 +260,18 @@ Sample host: `src/McpServer.McpAgent.SampleHost/`
 - `McpServer.Acid.IntegrationTests` - ACID turn-closure matrix
 - `McpServer.TransactionSecurity.IntegrationTests` - durable transaction security storage
 - `McpServer.PlanReview.Tests` / `McpServer.Review.Tests` - plan and AI review flows
+- `McpServer.PluginIntegration.Tests` - plugin integration
 - 7 Reqnroll validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
 
 `./build.ps1 Test` runs the unit gate only: it excludes every `*.IntegrationTests` project and filters out
 `Category=Integration` and `Category=AiReview` tests. Integration suites that need provisioned dependencies run
 through `./build.ps1 MigrationIntegrationTests` or by targeting the project directly.
+
+The audit payload migration integration tests cover SQLite, SQL Server (LocalDB by default), and PostgreSQL (ephemeral cluster by default). Run the focused provider set with:
+
+```powershell
+dotnet test tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj --filter "FullyQualifiedName~AuditPayloadMigrationTests|FullyQualifiedName~SqlServerAuditPayloadMigrationTests|FullyQualifiedName~PostgreSqlAuditPayloadMigrationTests"
+```
 
 Integration tests provision what they need. The QuadBrain Ollama tests probe `http://localhost:11434` at fixture
 startup, adopt a server that is already running, or start one from a discovered `ollama` executable and stop that
@@ -288,6 +297,7 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 | [Memory benchmarks](docs/benchmarks/README.md) | Token-primary bench; v2 multi-turn is the efficiency claim; `-Plugin all` after H7a |
 | [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release verification |
 | [Azure Pipelines](docs/AZURE-PIPELINES.md) | CI/CD variables and retention |
+| [Permanent local audit storage](docs/Operations/permanent-local-audit-sqlserver.md) | Audit migration, SQL Server runtime role, and local-only export policy |
 
 ## License
 

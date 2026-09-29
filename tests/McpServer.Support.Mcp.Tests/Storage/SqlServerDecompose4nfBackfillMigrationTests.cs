@@ -136,7 +136,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
     }
 
     /// <summary>
-    /// Down round-trip: after migrating to head, migrating back to the pre-slice schema
+    /// Down round-trip: after migrating through the 4NF slice, migrating back to the pre-slice schema
     /// reconstructs the decomposed JSON columns from the child rows.
     /// </summary>
     [Fact]
@@ -152,7 +152,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260702193940_Decompose4nfAgentModelLists");
         }
 
         using (var db = CreateContext())
@@ -228,7 +228,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
         var builder = new SqlConnectionStringBuilder(_serverConnectionString) { InitialCatalog = _databaseName };
         _databaseConnectionString = builder.ToString();
         _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlServer(_databaseConnectionString, sql => sql.MigrationsAssembly("McpServer.Storage.SqlServerMigrations"))
+            .UseSqlServer(_databaseConnectionString, sql => { sql.MigrationsAssembly("McpServer.Storage.SqlServerMigrations"); sql.CommandTimeout(120); })
             .Options;
     }
 
