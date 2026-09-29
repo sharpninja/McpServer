@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Nuke.Common.Tooling;
 using Serilog;
+using YamlDotNet.RepresentationModel;
 
 #pragma warning disable CA1416 // Platform compatibility — this helper is Windows-only by design
 
@@ -456,7 +457,9 @@ static partial class WindowsServiceHelper
         var manifestPath = Path.Combine(installRoot, ".mcpservice-deployment.json");
 
         var exeHashes = new List<object>();
-        foreach (var file in Directory.EnumerateFiles(installRoot, "*.exe").OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
+        foreach (var file in Directory.EnumerateFiles(installRoot, "*.exe")
+                     .Concat(File.Exists(Path.Combine(installRoot, exeName)) ? [Path.Combine(installRoot, exeName)] : Array.Empty<string>())
+                     .Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
         {
             var hash = ComputeSha256(file);
             exeHashes.Add(new { name = Path.GetFileName(file), sha256 = hash });
@@ -536,6 +539,32 @@ static partial class WindowsServiceHelper
         }
     }
 
+    /// <summary>TR-MCP-SERVICEUPDATE-001: shared live config and data preservation policy for both platforms.</summary>
+    public static IReadOnlyList<string> GetPreservedStatePaths(string installRoot)
+    {
+        installRoot = Path.GetFullPath(installRoot);
+        var paths = PreservePatterns.Select(p => Path.Combine(installRoot, p)).Where(File.Exists).ToList();
+        var data = GetConfiguredDataFolder(installRoot);
+        var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        if (string.Equals(Path.TrimEndingDirectorySeparator(data), Path.TrimEndingDirectorySeparator(installRoot), comparison))
+        {
+            if (Directory.Exists(installRoot))
+                paths.AddRange(LegacyDataGlobs.SelectMany(pattern => Directory.EnumerateFiles(installRoot, pattern)));
+            paths.AddRange(LegacyDataDirectories.Select(p => Path.Combine(installRoot, p)).Where(Directory.Exists));
+        }
+        else if (Directory.Exists(data)) paths.Add(data);
+        else throw new DirectoryNotFoundException("The configured DataFolder does not exist.");
+        return paths.Distinct(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal).ToArray();
+    }
+
+    /// <summary>Rejects unavailable or empty workspace validation on Linux while retaining Windows compatibility.</summary>
+    public static void RequireHealthyWorkspaces(WorkspaceHealthResult result)
+    {
+        if (result.Checked <= 0 || result.Healthy <= 0 || result.Failed != 0 || result.Healthy > result.Checked)
+            throw new InvalidOperationException("Workspace health verification failed or checked no enabled workspaces.");
+    }
+
+    /// <summary>Reads root DataFolder and legacy Mcp:DataDirectory structurally, failing closed on invalid YAML.</summary>
     private static string GetConfiguredDataFolder(string installRoot)
     {
         var yamlPath = Path.Combine(installRoot, "appsettings.yaml");
@@ -543,16 +572,17 @@ static partial class WindowsServiceHelper
 
         if (File.Exists(yamlPath))
         {
-            try
+            var yaml = new YamlStream();
+            using var reader = File.OpenText(yamlPath);
+            yaml.Load(reader);
+            if (yaml.Documents.Count != 1 || yaml.Documents[0].RootNode is not YamlMappingNode root)
+                throw new InvalidDataException("appsettings.yaml must contain one configuration mapping.");
+            var node = root.Children.FirstOrDefault(p => string.Equals((p.Key as YamlScalarNode)?.Value, "DataFolder", StringComparison.OrdinalIgnoreCase)).Value;
+            configured = ReadDataPath(node);
+            if (string.IsNullOrWhiteSpace(configured) && root.Children.FirstOrDefault(p => string.Equals((p.Key as YamlScalarNode)?.Value, "Mcp", StringComparison.OrdinalIgnoreCase)).Value is YamlMappingNode mcp)
             {
-                var yamlContent = File.ReadAllText(yamlPath);
-                var match = Regex.Match(yamlContent, @"(?m)^\s*DataFolder\s*:\s*(.+?)\s*$");
-                if (match.Success)
-                    configured = match.Groups[1].Value.Trim().Trim('\'', '"');
-            }
-            catch (Exception ex)
-            {
-                Log.Warning("Failed to parse DataFolder from appsettings.yaml: {Error}", ex.Message);
+                node = mcp.Children.FirstOrDefault(p => string.Equals((p.Key as YamlScalarNode)?.Value, "DataDirectory", StringComparison.OrdinalIgnoreCase)).Value;
+                configured = ReadDataPath(node);
             }
         }
 
@@ -562,6 +592,16 @@ static partial class WindowsServiceHelper
         return Path.IsPathRooted(configured)
             ? Path.GetFullPath(configured)
             : Path.GetFullPath(Path.Combine(installRoot, configured));
+    }
+
+    /// <summary>Matches configuration-provider null semantics while keeping a quoted literal 'null' path intact.</summary>
+    private static string? ReadDataPath(YamlNode? node)
+    {
+        if (node is null) return null;
+        if (node is not YamlScalarNode scalar) throw new InvalidDataException("DataFolder must be a scalar path.");
+        if (scalar.Style == YamlDotNet.Core.ScalarStyle.Plain &&
+            (string.Equals(scalar.Value, "null", StringComparison.OrdinalIgnoreCase) || scalar.Value == "~")) return null;
+        return scalar.Value;
     }
 
     private static List<string> BackupDataFolderContents(string dataFolder, string installRoot, string destRoot)

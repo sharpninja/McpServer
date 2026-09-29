@@ -1597,3 +1597,16 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] Exceeded hourly cap fails enqueue in API test, not only UI.
   - [ ] Clearing cap allows enqueue.
+
+## TEST-MCP-SERVICEUPDATE-001 - Cross-platform service update regression and Linux smoke
+
+Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] platform: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.

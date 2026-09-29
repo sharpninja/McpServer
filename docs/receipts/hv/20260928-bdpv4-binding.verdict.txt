@@ -1,0 +1,45 @@
+2026-09-28T23:23:46.0618604Z - Codex independent hostile review
+Classification: class 2 operator setup operations. Surface C project requirements/TDD is not applicable: no product implementation was shipped in this turn. add-profile ran and all 19 global non-skill profile files were read in full. Private profile contents are excluded from durable workspace receipts.
+
+OverallVerdict: AGREE
+Accuracy: 99 percent. Independent live memory comparison, hashes, metadata, injection and service observations corroborate the requested binding exactly. Prior SQL and Cline checks are explicitly retained receipts, not falsely represented as new execution.
+Completeness: 99 percent. All currently required surfaces of the amended operator setup scope are covered; three native-agent checks were explicitly waived by the operator. Full result persistence and exact response readback are mandatory parts of this review.
+Counts: 8 PASS, 0 FAIL, 0 UNKNOWN. Surface C: N/A.
+
+PASS A1: Supported binding route. The setup prompt process-bdpv4 permits MCP memory or a process binding API when available. Source search finds ProcessPolicySnapshotReader only in its own definition, no DI/controller caller. The memory assignment is valid for this supported setup route and does not establish server-enforced transitions.
+PASS A2: Exact live policy. Workspace MEMORY-DEVPROCESS-001 version3 is 20129 characters and equals the canonical source after exactly five en/em dash substitutions to ASCII hyphens. SHA256 source 0BC2B74ED718A58E53694A1B90D252A259366C20249E0E185DAB5C8197D97A57; snapshot 34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A. Git diff confirms the canonical source is unchanged at HEAD6546a59f2baad45d99e717bb8f20b56e06d5911f. This is normalized-source equality, not byte-exact source equality.
+PASS A3: Assignment and injection. Workspace MEMORY-PROCESS-001 version2 matches its receipt exactly, names this workspace, pins policy ID/version/hash and original source hash, overrides the Windows-only marker path, preserves zero-failure/zero-skip gates and disclaims server-enforced transitions. Independent Get-McpRequiredMemoryItems fetched both full texts without a FetchOverride. Actual review user-prompt-submit output also injected both memories.
+PASS A4: Service continuity. Live service active, PID611688, User/Group mcpserver, NRestarts0. TCP listeners127.0.0.1:7147,127.0.0.2:7147,::1:7147. Binary SHA256 A28BB995BF487823667E87F7AB829890C742B35D9EE4229715B309352EC58361 matches restart receipt. Trusted plugin bootstrap, TODO query and live memory list succeeded. Token rotation and configuration hash are corroborated by the existing service receipt; this reviewer did not print any current token.
+PASS B1: Operational rules and scope. PowerShell and supported Codex wrapper used; real identity Codex and isolated reviewer cache/session. No product/source changes, direct storage edits, unrequested FR/TR work, or full-product test gate claim. Existing punctuation transport issue is explicitly normalized and triaged as triage-report-91280cae19844c4b8be7c3b1892e522f; which layer caused the original alteration is not established and is outside this assignment acceptance.
+PASS D1: Operator waivers are explicit. Claude/Grok login and Cline native-session validation are waived, not passed. No runtime behavior of those native sessions is accepted by this verdict. Codex remains verified. These waivers come directly from the user's latest instruction and supersede earlier plan criteria.
+PASS D2: Holistic amended setup evidence. Initial stale currentVerification review wording and section3/4 acceptance headings were reported and corrected by the parent during review, then reread. Prior SQL proof records expected database/login,38 migrations,66 tables, encrypted connection and non-sysadmin with the specifically approved VIEW SERVER SECURITY STATE grant. Cline retained Jest receipt records5 suites,32 passed,0 failed,0 pending; no new execution claimed. The plan and manifest now clearly distinguish current acceptance from historical failures, waived checks and non-enforced process transitions. No remaining required setup acceptance blocker was identified.
+PASS B2: Audit and receipts. Dedicated reviewer session Codex-20260928T232037Z-bdp-review and turn req-20260928T232039Z-prompt-6e7e. Durable request and response jsonl, full verdict text and exact typed-client response readback are recorded. Full result is stored in dialog and completion response, not merely summarized.
+
+Resolved findings: stale manifest currentVerification.hostileReview and obsolete plan acceptance wording were corrected before this final verdict. No outstanding FAIL or UNKNOWN remains within the operator-amended setup acceptance scope. Waived checks, process transition enforcement and punctuation-root-cause diagnosis are not silently claimed as passed.
+
+Receipt paths:
+/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-bdpv4-binding.request.jsonl
+/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-bdpv4-binding.response.jsonl
+/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-bdpv4-binding.verdict.txt
+/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-bdpv4-binding.proof.json
+/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-bdpv4-binding.session-readback.json
+
+=== VERDICT JSON ==={
+  "requestId": "req-20260928T232039Z-prompt-6e7e",
+  "fail": 0,
+  "sessionId": "Codex-20260928T232037Z-bdp-review",
+  "unknowns": [],
+  "classification": 2,
+  "serverEnforcedTransitions": false,
+  "completeness": 99,
+  "pass": 8,
+  "unknown": 0,
+  "failures": [],
+  "OverallVerdict": "AGREE",
+  "accuracy": 99,
+  "waived": [
+    "Claude native login/session",
+    "Grok native login/tool invocation",
+    "Cline native VSCode session"
+  ]
+}

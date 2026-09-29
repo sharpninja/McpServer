@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="11986ab5-2300-4cfd-beb5-a8264b75545d" name="@PAYTON-OMARCHY 2026-09-28 19:08:55" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T19:08:55.5234465-05:00" queuing="2026-09-28T19:08:55.5234466-05:00" start="2026-09-28T19:08:53.9599834-05:00" finish="2026-09-28T19:08:55.5369818-05:00" />
+  <TestSettings name="default" id="1bdfb7c1-f5d6-417f-b0ff-0c962128c590">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_19_08_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a9dbf06a-9274-4bc9-aba4-2d64d5f4c646" testId="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0020345" startTime="2026-09-28T19:08:55.3577584-05:00" endTime="2026-09-28T19:08:55.3600213-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9dbf06a-9274-4bc9-aba4-2d64d5f4c646">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Item not found in collection
+Collection: ["/tmp/service-update-d93022d9b6544d46b6cd65ab1bfea2"···]
+Not found:  "/tmp/service-update-d93022d9b6544d46b6cd65ab1bfea2"···</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 64
+   at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="77991536-f2de-4ad6-880a-3ffafec2d56f" testId="1f784c8f-fd0c-6f7a-7134-517978e56dcd" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0017117" startTime="2026-09-28T19:08:55.3466040-05:00" endTime="2026-09-28T19:08:55.3484678-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77991536-f2de-4ad6-880a-3ffafec2d56f">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="28d81777-53cc-4bf0-bfcb-8ce26857d5ce" testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0008784" startTime="2026-09-28T19:08:55.3566094-05:00" endTime="2026-09-28T19:08:55.3575181-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28d81777-53cc-4bf0-bfcb-8ce26857d5ce" />
+    <UnitTestResult executionId="4f1821e8-4a2b-4ca5-a977-9463dd24087d" testId="c6edd597-0383-8d06-32d6-02c77174d8f5" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0017987" startTime="2026-09-28T19:08:55.3422333-05:00" endTime="2026-09-28T19:08:55.3441767-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f1821e8-4a2b-4ca5-a977-9463dd24087d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3bb91eb1-043b-4e73-946b-d7dcbd356b3a" testId="9f994534-7aa8-2811-8e3a-54ac58483105" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0033115" startTime="2026-09-28T19:08:55.3382481-05:00" endTime="2026-09-28T19:08:55.3419282-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3bb91eb1-043b-4e73-946b-d7dcbd356b3a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="60e8b661-c644-45a7-9c7c-c5bcde3b2de1" testId="d9bef65a-96d0-5330-e471-d0ddcc10f2e4" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0777725" startTime="2026-09-28T19:08:55.2343124-05:00" endTime="2026-09-28T19:08:55.3333081-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60e8b661-c644-45a7-9c7c-c5bcde3b2de1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2b48a13a-338d-4132-b704-aba1c7834fc8" testId="5222036a-9a22-e329-1da9-4a40491664e4" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" computerName="PAYTON-OMARCHY" duration="00:00:00.0055131" startTime="2026-09-28T19:08:55.3503124-05:00" endTime="2026-09-28T19:08:55.3563112-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b48a13a-338d-4132-b704-aba1c7834fc8" />
+    <UnitTestResult executionId="89052848-f131-4292-bfec-6d2162753559" testId="f0995c77-d61e-8e6e-13fe-547b1e83cf26" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0017881" startTime="2026-09-28T19:08:55.3444324-05:00" endTime="2026-09-28T19:08:55.3463573-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89052848-f131-4292-bfec-6d2162753559">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1f784c8f-fd0c-6f7a-7134-517978e56dcd">
+      <Execution id="77991536-f2de-4ad6-880a-3ffafec2d56f" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5222036a-9a22-e329-1da9-4a40491664e4">
+      <Execution id="2b48a13a-338d-4132-b704-aba1c7834fc8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f0995c77-d61e-8e6e-13fe-547b1e83cf26">
+      <Execution id="89052848-f131-4292-bfec-6d2162753559" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9f994534-7aa8-2811-8e3a-54ac58483105">
+      <Execution id="3bb91eb1-043b-4e73-946b-d7dcbd356b3a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="d9bef65a-96d0-5330-e471-d0ddcc10f2e4">
+      <Execution id="60e8b661-c644-45a7-9c7c-c5bcde3b2de1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c6edd597-0383-8d06-32d6-02c77174d8f5">
+      <Execution id="4f1821e8-4a2b-4ca5-a977-9463dd24087d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0da4435d-4068-3ec1-087c-5d4f89deb7a7">
+      <Execution id="28d81777-53cc-4bf0-bfcb-8ce26857d5ce" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f">
+      <Execution id="a9dbf06a-9274-4bc9-aba4-2d64d5f4c646" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f" executionId="a9dbf06a-9274-4bc9-aba4-2d64d5f4c646" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f784c8f-fd0c-6f7a-7134-517978e56dcd" executionId="77991536-f2de-4ad6-880a-3ffafec2d56f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" executionId="28d81777-53cc-4bf0-bfcb-8ce26857d5ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6edd597-0383-8d06-32d6-02c77174d8f5" executionId="4f1821e8-4a2b-4ca5-a977-9463dd24087d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f994534-7aa8-2811-8e3a-54ac58483105" executionId="3bb91eb1-043b-4e73-946b-d7dcbd356b3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9bef65a-96d0-5330-e471-d0ddcc10f2e4" executionId="60e8b661-c644-45a7-9c7c-c5bcde3b2de1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5222036a-9a22-e329-1da9-4a40491664e4" executionId="2b48a13a-338d-4132-b704-aba1c7834fc8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f0995c77-d61e-8e6e-13fe-547b1e83cf26" executionId="89052848-f131-4292-bfec-6d2162753559" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="2" failed="6" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.19]   Discovering: Build.Tests
+[xUnit.net 00:00:00.54]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.76]   Starting:    Build.Tests
+[xUnit.net 00:00:00.94]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.96]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.96]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.96]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.96]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.Contains() Failure: Item not found in collection
+[xUnit.net 00:00:00.96]       Collection: ["/tmp/service-update-d93022d9b6544d46b6cd65ab1bfea2"···]
+[xUnit.net 00:00:00.96]       Not found:  "/tmp/service-update-d93022d9b6544d46b6cd65ab1bfea2"···
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(64,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.97]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3426511-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "TemporaryFileSystem") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3631169-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "RootDirectory") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3648230-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "BindPaths") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3657744-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "BindReadOnlyPaths") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3668520-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "RootImage") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:08:55.3712246-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

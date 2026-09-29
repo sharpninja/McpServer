@@ -338,3 +338,10 @@
 | FR-WEB-018 | TR-WEB-TODO-001 | TEST-WEB-018 |
 | FR-WEB-019 | TR-WEB-CTX-001, TR-WEB-ORCH-001 | TEST-WEB-019 |
 | FR-WEB-020 | TR-WEB-BUDGET-001, TR-WEB-ORCH-001 | TEST-WEB-020 |
+
+## Cross-platform service update
+
+- FR-MCP-SERVICEUPDATE-001: Cross-platform service update preserving live state. Status: pending.
+- TR-MCP-SERVICEUPDATE-001: Platform adapters and metadata-preserving Linux service lifecycle.
+- TEST-MCP-SERVICEUPDATE-001: Cross-platform service update regression and Linux smoke.
+- Mapping verified from MCP effective requirements; all acceptance criteria pending.

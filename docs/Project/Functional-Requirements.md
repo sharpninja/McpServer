@@ -2748,3 +2748,16 @@ Scope: layer-1+
 - [ ] When the hourly cap is exceeded, a new dispatch for that agent fails closed and the TODO stays pending or failed, not silently running.
 - [ ] Clearing caps restores unlimited dispatch for that agent.
 
+
+## FR-MCP-SERVICEUPDATE-001 - Cross-platform service update preserving live state
+
+The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] platform: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.

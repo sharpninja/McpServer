@@ -3873,3 +3873,16 @@ Scope: layer-1+
 - [ ] Dashboard components reference Primer CSS or the current mcp-web design system, not a Prompter Hawk theme clone.
 - [ ] Layout tests execute at 1280px and 390px widths.
 
+
+## TR-MCP-SERVICEUPDATE-001 - Platform adapters and metadata-preserving Linux service lifecycle
+
+Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.
+
+Status: pending
+
+Acceptance criteria:
+
+- [ ] platform: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.

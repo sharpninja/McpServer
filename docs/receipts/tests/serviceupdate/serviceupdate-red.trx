@@ -1,0 +1,979 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8e456175-9fe8-4cd5-a31b-09568c009e78" name="@PAYTON-OMARCHY 2026-09-28 18:58:08" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T18:58:08.5138854-05:00" queuing="2026-09-28T18:58:08.5138855-05:00" start="2026-09-28T18:58:07.0523528-05:00" finish="2026-09-28T18:58:08.5574928-05:00" />
+  <TestSettings name="default" id="416c7b7a-fb63-44bf-87f8-36c03a987da8">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_18_58_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="3876abfd-862c-44e6-8d78-1a471bca6ffb" testId="09a4fc69-3764-2a97-6dfb-022a851684a5" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" computerName="PAYTON-OMARCHY" duration="00:00:00.0003992" startTime="2026-09-28T18:58:08.4234061-05:00" endTime="2026-09-28T18:58:08.4239465-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3876abfd-862c-44e6-8d78-1a471bca6ffb">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 263
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8230982a-6993-487d-8e67-61f724a4c205" testId="fca1c36f-c870-24fe-bf2a-0475df2c23a5" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles" computerName="PAYTON-OMARCHY" duration="00:00:00.0007843" startTime="2026-09-28T18:58:08.4242884-05:00" endTime="2026-09-28T18:58:08.4252027-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8230982a-6993-487d-8e67-61f724a4c205">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production method: GetPreservedStatePaths</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 84
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b4c021d6-31c9-4e66-89a6-91dffd9ff994" testId="4e558f57-6457-35a9-22d4-8492e3f2deeb" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 2, failed: 0, valid: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000955" startTime="2026-09-28T18:58:08.4166928-05:00" endTime="2026-09-28T18:58:08.4169272-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4c021d6-31c9-4e66-89a6-91dffd9ff994">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 241
+   at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="dc2976cb-21a4-4451-92d9-10633a55e917" testId="660e7e89-9b34-0a4f-c121-295cefd3ce0b" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;wrong-architecture&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0005593" startTime="2026-09-28T18:58:08.4082077-05:00" endTime="2026-09-28T18:58:08.4088780-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc2976cb-21a4-4451-92d9-10633a55e917">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b2c96115-0205-4728-8159-7bfc6dd8e5df" testId="e656460a-db56-6d19-0769-349ae5b5c296" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0003309" startTime="2026-09-28T18:58:08.4074071-05:00" endTime="2026-09-28T18:58:08.4078577-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2c96115-0205-4728-8159-7bfc6dd8e5df">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 212
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6d8c28f7-9048-436f-a751-6ccf36d601ad" testId="9c64bc28-3b84-935a-e064-adf9a1aab661" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;invalid-elf&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000563" startTime="2026-09-28T18:58:08.4113550-05:00" endTime="2026-09-28T18:58:08.4114968-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d8c28f7-9048-436f-a751-6ccf36d601ad">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="77d4bf3e-8ef1-429a-a21f-29c6648ea736" testId="fa5054d7-604a-352e-e32d-2ca0f7253082" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed" computerName="PAYTON-OMARCHY" duration="00:00:00.0008529" startTime="2026-09-28T18:58:08.4211305-05:00" endTime="2026-09-28T18:58:08.4221298-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77d4bf3e-8ef1-429a-a21f-29c6648ea736">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 71
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="617a361b-0071-4a5d-bfe4-090a93d92e4a" testId="5222036a-9a22-e329-1da9-4a40491664e4" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" computerName="PAYTON-OMARCHY" duration="00:00:00.0007494" startTime="2026-09-28T18:58:08.4013395-05:00" endTime="2026-09-28T18:58:08.4022156-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="617a361b-0071-4a5d-bfe4-090a93d92e4a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production method: GetPreservedStatePaths</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 61
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e5a4314a-c4db-4c54-9403-f0e5ea2661ab" testId="fc82c26a-b8aa-88b9-0401-4536b24349fb" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: X64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-x64&quot;, executable: &quot;McpServer.Support.Mcp&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0004140" startTime="2026-09-28T18:58:08.3883595-05:00" endTime="2026-09-28T18:58:08.3890102-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5a4314a-c4db-4c54-9403-f0e5ea2661ab">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 39
+   at InvokeStub_ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9678e27a-9683-4a38-bda4-7fa219149d9d" testId="1dead477-63a0-9ae9-ed1a-34018437b300" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0003217" startTime="2026-09-28T18:58:08.4006285-05:00" endTime="2026-09-28T18:58:08.4009848-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9678e27a-9683-4a38-bda4-7fa219149d9d" />
+    <UnitTestResult executionId="0219040f-d793-420c-b09d-872fa8219ee5" testId="c67a9bd1-c28c-e6d1-087b-37cc4546d5fb" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" computerName="PAYTON-OMARCHY" duration="00:00:00.0003501" startTime="2026-09-28T18:58:08.4225858-05:00" endTime="2026-09-28T18:58:08.4230726-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0219040f-d793-420c-b09d-872fa8219ee5">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 196
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0d714de2-90de-43c4-aa47-a1c0fa947898" testId="cbf361d7-3098-4dd6-459b-b9e4c8466c43" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" computerName="PAYTON-OMARCHY" duration="00:00:00.0006482" startTime="2026-09-28T18:58:08.4054767-05:00" endTime="2026-09-28T18:58:08.4062865-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d714de2-90de-43c4-aa47-a1c0fa947898">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 168
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="618e8aa2-61b6-4373-805f-663d1a4a7e21" testId="265b38f5-fa00-4561-aeba-fdd347ef9ec3" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces" computerName="PAYTON-OMARCHY" duration="00:00:00.0004636" startTime="2026-09-28T18:58:08.4199017-05:00" endTime="2026-09-28T18:58:08.4205608-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="618e8aa2-61b6-4373-805f-663d1a4a7e21">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 289
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="10a77a3f-5d9b-4a62-82c0-73aa1b2df97a" testId="9545d610-732e-8dca-695a-6ee05f96c978" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 1, valid: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0004668" startTime="2026-09-28T18:58:08.4151069-05:00" endTime="2026-09-28T18:58:08.4157996-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10a77a3f-5d9b-4a62-82c0-73aa1b2df97a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 241
+   at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1c180aba-548b-45b0-90bb-f1f65355775e" testId="e1cc9504-57e7-f1ab-d5d7-0a51cebe5be6" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 0, valid: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0005883" startTime="2026-09-28T18:58:08.4140088-05:00" endTime="2026-09-28T18:58:08.4148234-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c180aba-548b-45b0-90bb-f1f65355775e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 241
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="14bf6784-bb66-46a7-9d5c-0c920641efa7" testId="35fae3b1-6cf4-5719-be85-2706cc62be9b" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;working-directory&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0001144" startTime="2026-09-28T18:58:08.4105873-05:00" endTime="2026-09-28T18:58:08.4108285-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14bf6784-bb66-46a7-9d5c-0c920641efa7">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ef96c6bc-5d5a-4f54-b8e2-a6943dc3b572" testId="602955b7-ba7a-240f-484e-536861185ac3" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlay&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000710" startTime="2026-09-28T18:58:08.4110288-05:00" endTime="2026-09-28T18:58:08.4111885-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef96c6bc-5d5a-4f54-b8e2-a6943dc3b572">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e6e482c1-a484-4d5e-a865-8e6e65a78ad6" testId="4d30f240-8504-de24-a5e6-ff0cd9b3e9f8" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;missing&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000592" startTime="2026-09-28T18:58:08.4099278-05:00" endTime="2026-09-28T18:58:08.4100738-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6e482c1-a484-4d5e-a865-8e6e65a78ad6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="971f1c47-01a5-43f0-8a4e-71b6a68bedf0" testId="df1f97ec-7e0c-90d7-7a2d-34a4e3381133" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0004884" startTime="2026-09-28T18:58:08.4127820-05:00" endTime="2026-09-28T18:58:08.4134509-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="971f1c47-01a5-43f0-8a4e-71b6a68bedf0">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Boolean failCopy) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 152
+   at InvokeStub_ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3f9119a0-784d-4b3f-bb0c-161798ea1856" testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0006053" startTime="2026-09-28T18:58:08.4024687-05:00" endTime="2026-09-28T18:58:08.4032152-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f9119a0-784d-4b3f-bb0c-161798ea1856">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production method: GetPreservedStatePaths</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 61
+   at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="87b234b4-007c-43ae-9c28-f041fbea9e03" testId="5abd66f5-f982-e58d-aef7-a7290015907a" testName="NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost" computerName="PAYTON-OMARCHY" duration="00:00:00.0505900" startTime="2026-09-28T18:58:08.3097054-05:00" endTime="2026-09-28T18:58:08.3803890-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87b234b4-007c-43ae-9c28-f041fbea9e03">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Filter not matched in collection
+Collection: []</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 254
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5df696f2-1235-476c-b039-da740caf8d53" testId="fcb6944d-f6fe-636d-e93a-a0d4692ea204" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0003730" startTime="2026-09-28T18:58:08.4067047-05:00" endTime="2026-09-28T18:58:08.4071908-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5df696f2-1235-476c-b039-da740caf8d53">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 212
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3a9debfd-7c19-4b02-8816-333e97e419ac" testId="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" computerName="PAYTON-OMARCHY" duration="00:00:00.0003820" startTime="2026-09-28T18:58:08.4293336-05:00" endTime="2026-09-28T18:58:08.4333932-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a9debfd-7c19-4b02-8816-333e97e419ac">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.PlatformNotSupportedException)
+Actual:   typeof(System.InvalidOperationException)
+---- System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 51
+   at InvokeStub_ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.&lt;&gt;c__DisplayClass2_0.&lt;PlatformSelection_RejectsUnsupportedHosts&gt;b__0() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 51</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1be003cb-6ed3-4a4d-b083-93acbf76301c" testId="f0fd39ff-6048-49a8-2edd-bbcd31f47d0f" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;environment&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000879" startTime="2026-09-28T18:58:08.4095892-05:00" endTime="2026-09-28T18:58:08.4097670-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1be003cb-6ed3-4a4d-b083-93acbf76301c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b50b5b97-8acb-4371-b345-aa8cc664de69" testId="3a3248f1-ef12-52ad-292b-7285b13a6ce6" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: True)" computerName="PAYTON-OMARCHY" duration="00:00:00.0007849" startTime="2026-09-28T18:58:08.4175161-05:00" endTime="2026-09-28T18:58:08.4185408-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b50b5b97-8acb-4371-b345-aa8cc664de69">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Boolean optional) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 278
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b389c6c-025b-4093-8810-b8bd319074a2" testId="71912e56-879d-c9e0-48bf-f5808fc3773a" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts" computerName="PAYTON-OMARCHY" duration="00:00:00.0004638" startTime="2026-09-28T18:58:08.4255961-05:00" endTime="2026-09-28T18:58:08.4261998-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b389c6c-025b-4093-8810-b8bd319074a2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 139
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="51145cf4-ab0c-4d07-969c-2b02010d5f1f" testId="9ce36094-1e3a-2dfc-ec24-dad2a8d8df9a" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation" computerName="PAYTON-OMARCHY" duration="00:00:00.0003870" startTime="2026-09-28T18:58:08.4340741-05:00" endTime="2026-09-28T18:58:08.4346036-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51145cf4-ab0c-4d07-969c-2b02010d5f1f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 223
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="98eb44f3-f544-4227-b5af-e069c93d6fcc" testId="bf69d0af-b4f1-d116-ee91-6659421a8eac" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0003888" startTime="2026-09-28T18:58:08.4189140-05:00" endTime="2026-09-28T18:58:08.4194849-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98eb44f3-f544-4227-b5af-e069c93d6fcc">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Boolean optional) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 278
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9d9c336d-bc11-4474-9c73-498d1f5ea90e" testId="e7a786dc-7e3d-5740-dde3-53bb164097ee" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" computerName="PAYTON-OMARCHY" duration="00:00:00.0006444" startTime="2026-09-28T18:58:08.4349143-05:00" endTime="2026-09-28T18:58:08.4357163-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d9c336d-bc11-4474-9c73-498d1f5ea90e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 121
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="68566dc1-0729-4547-9fad-ba7c940962ae" testId="4c74bb78-a2d0-358a-8453-7fc3a17f453b" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0101283" startTime="2026-09-28T18:58:08.3897675-05:00" endTime="2026-09-28T18:58:08.4003273-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68566dc1-0729-4547-9fad-ba7c940962ae" />
+    <UnitTestResult executionId="7ebbf40b-4d95-4b3d-aefb-16a0bce50f39" testId="0a0915b4-724c-154f-3c73-8774d62ca2df" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 0, healthy: 0, failed: 0, valid: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0001053" startTime="2026-09-28T18:58:08.4161620-05:00" endTime="2026-09-28T18:58:08.4164123-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ebbf40b-4d95-4b3d-aefb-16a0bce50f39">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 241
+   at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="42d197be-0bc9-4ffd-bef7-ee41fc9c7b39" testId="6806886c-3f9c-49c1-6ef8-a14a30ed6ff6" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;executable&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0002196" startTime="2026-09-28T18:58:08.4090968-05:00" endTime="2026-09-28T18:58:08.4094123-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42d197be-0bc9-4ffd-bef7-ee41fc9c7b39">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e3c7dd75-9484-4195-a52a-656507cee64d" testId="c00cde57-5509-80b4-29f6-e565aa3e806a" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: Arm64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-arm64&quot;, executable: &quot;McpServer.Support.Mcp&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0008266" startTime="2026-09-28T18:58:08.3870872-05:00" endTime="2026-09-28T18:58:08.3881222-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3c7dd75-9484-4195-a52a-656507cee64d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 39
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="33b34b9f-e489-412a-a58f-39a0d6baa0c0" testId="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" computerName="PAYTON-OMARCHY" duration="00:00:00.0018594" startTime="2026-09-28T18:58:08.4266361-05:00" endTime="2026-09-28T18:58:08.4289982-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33b34b9f-e489-412a-a58f-39a0d6baa0c0">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.PlatformNotSupportedException)
+Actual:   typeof(System.InvalidOperationException)
+---- System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 51
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.&lt;&gt;c__DisplayClass2_0.&lt;PlatformSelection_RejectsUnsupportedHosts&gt;b__0() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 51</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2bb9aeb4-c81f-475b-b485-90b08c881890" testId="96488052-fa0f-857f-98cc-24ea28aee925" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: False)" computerName="PAYTON-OMARCHY" duration="00:00:00.0005267" startTime="2026-09-28T18:58:08.4117682-05:00" endTime="2026-09-28T18:58:08.4124752-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2bb9aeb4-c81f-475b-b485-90b08c881890">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Boolean failCopy) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 152
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="663331fd-a26a-4081-8226-c4e8484a4add" testId="1f5d1d52-bab8-875e-59e1-f4f0b9a8d081" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: True, linux: False, architecture: X64, service: &quot;McpServer&quot;, rid: &quot;win-x64&quot;, executable: &quot;McpServer.Support.Mcp.exe&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000660" startTime="2026-09-28T18:58:08.3892715-05:00" endTime="2026-09-28T18:58:08.3894443-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="663331fd-a26a-4081-8226-c4e8484a4add">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 305
+   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 39
+   at InvokeStub_ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bda3c1e3-f22d-4b3b-a9a0-379f524d43f2" testId="634b7e36-6ff9-17d6-1b05-a87c50d1aa5e" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlap&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0000662" startTime="2026-09-28T18:58:08.4102390-05:00" endTime="2026-09-28T18:58:08.4103944-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bda3c1e3-f22d-4b3b-a9a0-379f524d43f2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production contract: LinuxServiceHelper</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Contract(String name) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 299
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 341
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 102
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="df1f97ec-7e0c-90d7-7a2d-34a4e3381133">
+      <Execution id="971f1c47-01a5-43f0-8a4e-71b6a68bedf0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_FailureRestoresAndRetainsArchive" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5abd66f5-f982-e58d-aef7-a7290015907a">
+      <Execution id="87b234b4-007c-43ae-9c28-f041fbea9e03" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="DeploymentManifest_HashesExtensionlessApphost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlap&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="634b7e36-6ff9-17d6-1b05-a87c50d1aa5e">
+      <Execution id="bda3c1e3-f22d-4b3b-a9a0-379f524d43f2" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;working-directory&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="35fae3b1-6cf4-5719-be85-2706cc62be9b">
+      <Execution id="14bf6784-bb66-46a7-9d5c-0c920641efa7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fcb6944d-f6fe-636d-e93a-a0d4692ea204">
+      <Execution id="5df696f2-1235-476c-b039-da740caf8d53" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;executable&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="6806886c-3f9c-49c1-6ef8-a14a30ed6ff6">
+      <Execution id="42d197be-0bc9-4ffd-bef7-ee41fc9c7b39" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 0, healthy: 0, failed: 0, valid: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0a0915b4-724c-154f-3c73-8774d62ca2df">
+      <Execution id="7ebbf40b-4d95-4b3d-aefb-16a0bce50f39" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="96488052-fa0f-857f-98cc-24ea28aee925">
+      <Execution id="2bb9aeb4-c81f-475b-b485-90b08c881890" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_FailureRestoresAndRetainsArchive" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c67a9bd1-c28c-e6d1-087b-37cc4546d5fb">
+      <Execution id="0219040f-d793-420c-b09d-872fa8219ee5" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_DoesNotFollowSymlinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fca1c36f-c870-24fe-bf2a-0475df2c23a5">
+      <Execution id="8230982a-6993-487d-8e67-61f724a4c205" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_DefaultRootPreservesLegacyFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9ce36094-1e3a-2dfc-ec24-dad2a8d8df9a">
+      <Execution id="51145cf4-ab0c-4d07-969c-2b02010d5f1f" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_ConcurrentInvocationFailsWithoutMutation" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="265b38f5-fa00-4561-aeba-fdd347ef9ec3">
+      <Execution id="618e8aa2-61b6-4373-805f-663d1a4a7e21" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUnitState_PreservesDropInWithSpaces" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;wrong-architecture&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="660e7e89-9b34-0a4f-c121-295cefd3ce0b">
+      <Execution id="dc2976cb-21a4-4451-92d9-10633a55e917" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="cbf361d7-3098-4dd6-459b-b9e4c8466c43">
+      <Execution id="0d714de2-90de-43c4-aa47-a1c0fa947898" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxArchive_UsesPrivateMetadataPreservingCommands" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;invalid-elf&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9c64bc28-3b84-935a-e064-adf9a1aab661">
+      <Execution id="6d8c28f7-9048-436f-a751-6ccf36d601ad" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="e656460a-db56-6d19-0769-349ae5b5c296">
+      <Execution id="b2c96115-0205-4728-8159-7bfc6dd8e5df" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: Arm64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-arm64&quot;, executable: &quot;McpServer.Support.Mcp&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c00cde57-5509-80b4-29f6-e565aa3e806a">
+      <Execution id="e3c7dd75-9484-4195-a52a-656507cee64d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="3a3248f1-ef12-52ad-292b-7285b13a6ce6">
+      <Execution id="b50b5b97-8acb-4371-b345-aa8cc664de69" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RespectsOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlay&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="602955b7-ba7a-240f-484e-536861185ac3">
+      <Execution id="ef96c6bc-5d5a-4f54-b8e2-a6943dc3b572" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;environment&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f0fd39ff-6048-49a8-2edd-bbcd31f47d0f">
+      <Execution id="1be003cb-6ed3-4a4d-b083-93acbf76301c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="09a4fc69-3764-2a97-6dfb-022a851684a5">
+      <Execution id="3876abfd-862c-44e6-8d78-1a471bca6ffb" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5222036a-9a22-e329-1da9-4a40491664e4">
+      <Execution id="617a361b-0071-4a5d-bfe4-090a93d92e4a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 1, valid: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9545d610-732e-8dca-695a-6ee05f96c978">
+      <Execution id="10a77a3f-5d9b-4a62-82c0-73aa1b2df97a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="bf69d0af-b4f1-d116-ee91-6659421a8eac">
+      <Execution id="98eb44f3-f544-4227-b5af-e069c93d6fcc" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RespectsOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fa5054d7-604a-352e-e32d-2ca0f7253082">
+      <Execution id="77d4bf3e-8ef1-429a-a21f-29c6648ea736" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_MalformedYamlFailsClosed" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: True, linux: False, architecture: X64, service: &quot;McpServer&quot;, rid: &quot;win-x64&quot;, executable: &quot;McpServer.Support.Mcp.exe&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1f5d1d52-bab8-875e-59e1-f4f0b9a8d081">
+      <Execution id="663331fd-a26a-4081-8226-c4e8484a4add" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 0, valid: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="e1cc9504-57e7-f1ab-d5d7-0a51cebe5be6">
+      <Execution id="1c180aba-548b-45b0-90bb-f1f65355775e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 2, failed: 0, valid: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="4e558f57-6457-35a9-22d4-8492e3f2deeb">
+      <Execution id="b4c021d6-31c9-4e66-89a6-91dffd9ff994" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0da4435d-4068-3ec1-087c-5d4f89deb7a7">
+      <Execution id="3f9119a0-784d-4b3f-bb0c-161798ea1856" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: False)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="4c74bb78-a2d0-358a-8453-7fc3a17f453b">
+      <Execution id="68566dc1-0729-4547-9fad-ba7c940962ae" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970">
+      <Execution id="3a9debfd-7c19-4b02-8816-333e97e419ac" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;missing&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="4d30f240-8504-de24-a5e6-ff0cd9b3e9f8">
+      <Execution id="e6e482c1-a484-4d5e-a865-8e6e65a78ad6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="71912e56-879d-c9e0-48bf-f5808fc3773a">
+      <Execution id="0b389c6c-025b-4093-8810-b8bd319074a2" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_BackupFailureNeverCopiesOrStarts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: X64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-x64&quot;, executable: &quot;McpServer.Support.Mcp&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fc82c26a-b8aa-88b9-0401-4536b24349fb">
+      <Execution id="e5a4314a-c4db-4c54-9403-f0e5ea2661ab" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed">
+      <Execution id="33b34b9f-e489-412a-a58f-39a0d6baa0c0" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: True)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1dead477-63a0-9ae9-ed1a-34018437b300">
+      <Execution id="9678e27a-9683-4a38-bda4-7fa219149d9d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="e7a786dc-7e3d-5740-dde3-53bb164097ee">
+      <Execution id="9d9c336d-bc11-4474-9c73-498d1f5ea90e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="09a4fc69-3764-2a97-6dfb-022a851684a5" executionId="3876abfd-862c-44e6-8d78-1a471bca6ffb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fca1c36f-c870-24fe-bf2a-0475df2c23a5" executionId="8230982a-6993-487d-8e67-61f724a4c205" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e558f57-6457-35a9-22d4-8492e3f2deeb" executionId="b4c021d6-31c9-4e66-89a6-91dffd9ff994" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="660e7e89-9b34-0a4f-c121-295cefd3ce0b" executionId="dc2976cb-21a4-4451-92d9-10633a55e917" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e656460a-db56-6d19-0769-349ae5b5c296" executionId="b2c96115-0205-4728-8159-7bfc6dd8e5df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9c64bc28-3b84-935a-e064-adf9a1aab661" executionId="6d8c28f7-9048-436f-a751-6ccf36d601ad" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa5054d7-604a-352e-e32d-2ca0f7253082" executionId="77d4bf3e-8ef1-429a-a21f-29c6648ea736" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5222036a-9a22-e329-1da9-4a40491664e4" executionId="617a361b-0071-4a5d-bfe4-090a93d92e4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc82c26a-b8aa-88b9-0401-4536b24349fb" executionId="e5a4314a-c4db-4c54-9403-f0e5ea2661ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1dead477-63a0-9ae9-ed1a-34018437b300" executionId="9678e27a-9683-4a38-bda4-7fa219149d9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c67a9bd1-c28c-e6d1-087b-37cc4546d5fb" executionId="0219040f-d793-420c-b09d-872fa8219ee5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cbf361d7-3098-4dd6-459b-b9e4c8466c43" executionId="0d714de2-90de-43c4-aa47-a1c0fa947898" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="265b38f5-fa00-4561-aeba-fdd347ef9ec3" executionId="618e8aa2-61b6-4373-805f-663d1a4a7e21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9545d610-732e-8dca-695a-6ee05f96c978" executionId="10a77a3f-5d9b-4a62-82c0-73aa1b2df97a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1cc9504-57e7-f1ab-d5d7-0a51cebe5be6" executionId="1c180aba-548b-45b0-90bb-f1f65355775e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="35fae3b1-6cf4-5719-be85-2706cc62be9b" executionId="14bf6784-bb66-46a7-9d5c-0c920641efa7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="602955b7-ba7a-240f-484e-536861185ac3" executionId="ef96c6bc-5d5a-4f54-b8e2-a6943dc3b572" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d30f240-8504-de24-a5e6-ff0cd9b3e9f8" executionId="e6e482c1-a484-4d5e-a865-8e6e65a78ad6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="df1f97ec-7e0c-90d7-7a2d-34a4e3381133" executionId="971f1c47-01a5-43f0-8a4e-71b6a68bedf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" executionId="3f9119a0-784d-4b3f-bb0c-161798ea1856" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5abd66f5-f982-e58d-aef7-a7290015907a" executionId="87b234b4-007c-43ae-9c28-f041fbea9e03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fcb6944d-f6fe-636d-e93a-a0d4692ea204" executionId="5df696f2-1235-476c-b039-da740caf8d53" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970" executionId="3a9debfd-7c19-4b02-8816-333e97e419ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f0fd39ff-6048-49a8-2edd-bbcd31f47d0f" executionId="1be003cb-6ed3-4a4d-b083-93acbf76301c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3a3248f1-ef12-52ad-292b-7285b13a6ce6" executionId="b50b5b97-8acb-4371-b345-aa8cc664de69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71912e56-879d-c9e0-48bf-f5808fc3773a" executionId="0b389c6c-025b-4093-8810-b8bd319074a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ce36094-1e3a-2dfc-ec24-dad2a8d8df9a" executionId="51145cf4-ab0c-4d07-969c-2b02010d5f1f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bf69d0af-b4f1-d116-ee91-6659421a8eac" executionId="98eb44f3-f544-4227-b5af-e069c93d6fcc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7a786dc-7e3d-5740-dde3-53bb164097ee" executionId="9d9c336d-bc11-4474-9c73-498d1f5ea90e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4c74bb78-a2d0-358a-8453-7fc3a17f453b" executionId="68566dc1-0729-4547-9fad-ba7c940962ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a0915b4-724c-154f-3c73-8774d62ca2df" executionId="7ebbf40b-4d95-4b3d-aefb-16a0bce50f39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6806886c-3f9c-49c1-6ef8-a14a30ed6ff6" executionId="42d197be-0bc9-4ffd-bef7-ee41fc9c7b39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c00cde57-5509-80b4-29f6-e565aa3e806a" executionId="e3c7dd75-9484-4195-a52a-656507cee64d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed" executionId="33b34b9f-e489-412a-a58f-39a0d6baa0c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="96488052-fa0f-857f-98cc-24ea28aee925" executionId="2bb9aeb4-c81f-475b-b485-90b08c881890" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f5d1d52-bab8-875e-59e1-f4f0b9a8d081" executionId="663331fd-a26a-4081-8226-c4e8484a4add" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="634b7e36-6ff9-17d6-1b05-a87c50d1aa5e" executionId="bda3c1e3-f22d-4b3b-a9a0-379f524d43f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="37" executed="37" passed="2" failed="35" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.18]   Discovering: Build.Tests
+[xUnit.net 00:00:00.52]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.74]   Starting:    Build.Tests
+[xUnit.net 00:00:00.88]       Assert.Contains() Failure: Filter not matched in collection
+[xUnit.net 00:00:00.88]       Collection: []
+[xUnit.net 00:00:00.88]       Stack Trace:
+[xUnit.net 00:00:00.88]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(254,0): at NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost()
+[xUnit.net 00:00:00.88]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.88]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(39,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(39,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable)
+[xUnit.net 00:00:00.90]            at InvokeStub_ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Object, Span`1)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(39,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Boolean windows, Boolean linux, Architecture architecture, String service, String rid, String executable)
+[xUnit.net 00:00:00.90]            at InvokeStub_ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(Object, Span`1)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production method: GetPreservedStatePaths
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(61,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production method: GetPreservedStatePaths
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(61,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:00.90]            at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.90]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.90]       Stack Trace:
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.90]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(168,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands()
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.90]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.94]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(212,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(212,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(102,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(String defect)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(152,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Boolean failCopy)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.95]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(152,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Boolean failCopy)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.95]       Assert.NotNull() Failure: Value is null
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(241,0): at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.95]       Assert.NotNull() Failure: Value is null
+[xUnit.net 00:00:00.95]       Stack Trace:
+[xUnit.net 00:00:00.95]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(241,0): at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid)
+[xUnit.net 00:00:00.95]            at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+[xUnit.net 00:00:00.95]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.NotNull() Failure: Value is null
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(241,0): at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       Assert.NotNull() Failure: Value is null
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(241,0): at NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Int32 count, Int32 healthy, Int32 failed, Boolean valid)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(278,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Boolean optional)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(278,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Boolean optional)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(289,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       Assert.NotNull() Failure: Value is null
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(71,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(196,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(263,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production method: GetPreservedStatePaths
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(84,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(139,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       Assert.Throws() Failure: Exception type was not an exact match
+[xUnit.net 00:00:00.96]       Expected: typeof(System.PlatformNotSupportedException)
+[xUnit.net 00:00:00.96]       Actual:   typeof(System.InvalidOperationException)
+[xUnit.net 00:00:00.96]       ---- System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(51,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(51,0): at NukeBuild.Tests.ServiceUpdateTests.&lt;&gt;c__DisplayClass2_0.&lt;PlatformSelection_RejectsUnsupportedHosts&gt;b__0()
+[xUnit.net 00:00:00.96]       Assert.Throws() Failure: Exception type was not an exact match
+[xUnit.net 00:00:00.96]       Expected: typeof(System.PlatformNotSupportedException)
+[xUnit.net 00:00:00.96]       Actual:   typeof(System.InvalidOperationException)
+[xUnit.net 00:00:00.96]       ---- System.InvalidOperationException : Missing production contract: ServiceUpdatePlatform
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(51,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture)
+[xUnit.net 00:00:00.96]            at InvokeStub_ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Object, Span`1)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.96]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(305,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(51,0): at NukeBuild.Tests.ServiceUpdateTests.&lt;&gt;c__DisplayClass2_0.&lt;PlatformSelection_RejectsUnsupportedHosts&gt;b__0()
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(223,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.96]       System.InvalidOperationException : Missing production contract: LinuxServiceHelper
+[xUnit.net 00:00:00.96]       Stack Trace:
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(299,0): at NukeBuild.Tests.ServiceUpdateTests.Contract(String name)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(341,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture..ctor(Boolean requireLinux)
+[xUnit.net 00:00:00.96]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(121,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth()
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.97]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.3906899-05:00">
+        <Text>[xUnit.net 00:00:00.88]     NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4104812-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: Arm64, service: "mcpserver.service", rid: "linux-arm64", executable: "McpServer.Support.Mcp") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4121167-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: X64, service: "mcpserver.service", rid: "linux-x64", executable: "McpServer.Support.Mcp") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4129605-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: True, linux: False, architecture: X64, service: "McpServer", rid: "win-x64", executable: "McpServer.Support.Mcp.exe") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4160617-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "DataFolder: '../data'\nMcp:\n  DataDirectory: igno"···) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4207826-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "Mcp:\n  DataDirectory: '../data'\n") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.4212256-05:00">
+        <Text>[xUnit.net 00:00:00.90]     NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5249713-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5250286-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5250836-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "wrong-architecture") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5251372-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "executable") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5252206-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "environment") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5252708-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "missing") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5253214-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "overlap") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5253697-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "working-directory") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5254302-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "overlay") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5283084-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: "invalid-elf") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5283621-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5284020-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5284642-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 0, valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5284969-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 1, valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5285282-05:00">
+        <Text>[xUnit.net 00:00:00.95]     NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 0, healthy: 0, failed: 0, valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5285596-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 2, failed: 0, valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5285975-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5286410-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5298426-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5298843-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5299149-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5299766-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5300169-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5300551-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5300936-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5301612-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5302237-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T18:58:08.5314805-05:00">
+        <Text>[xUnit.net 00:00:00.96]     NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

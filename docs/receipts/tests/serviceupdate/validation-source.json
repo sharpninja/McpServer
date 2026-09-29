@@ -1,0 +1,33 @@
+{
+  "mirror": "/tmp/mcpserver-serviceupdate-validation/McpServer",
+  "utc": "2026-09-29T00:31:23.7606903Z",
+  "files": [
+    {
+      "path": "build/Build.UpdateService.cs",
+      "sha256": "4069929328539DBC1B65A576CD7FE1FC7D93BC0557E30853B51175D0534E114B"
+    },
+    {
+      "path": "build/WindowsServiceHelper.cs",
+      "sha256": "333FC7DF8E6C89C971D44BC3B87C2B5D4E1DD74DD9FE87EEE3590CA9AD36CDA7"
+    },
+    {
+      "path": "build/ServiceUpdatePlatform.cs",
+      "sha256": "DAAF67FA8C3DF71CD3237B243F3408413458B315A43A9F02259CE893A50137C0"
+    },
+    {
+      "path": "build/LinuxServiceHelper.cs",
+      "sha256": "D79D478FEE20FEF03D4C1931F309B5977D6A66DC5A4CACFACB61C065D3290E2A"
+    },
+    {
+      "path": "tests/Build.Tests/ServiceUpdateTests.cs",
+      "sha256": "41E4E5D2D80B00CAD3A6556DBBD7F29B3277024972F371D6A9C48C6D9AFDC5F5"
+    }
+  ],
+  "prerequisites": "git worktree add --detach at HEAD; canonical plugins/core/sync/sync-plugin-core.ps1 into five isolated sibling directories; dotnet restore McpServer.sln -p:EnableWindowsTargeting=true",
+  "head": "62e612cf1b6dacc392ea406b5e37716ef094212f",
+  "environment": {
+    "MSBUILDDISABLENODEREUSE": "1",
+    "DOTNET_CLI_USE_MSBUILD_SERVER": "0",
+    "UseSharedCompilation": "false"
+  }
+}

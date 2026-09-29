@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7621c62d-3ae8-498b-9d67-1d1a11c676b5" name="@PAYTON-OMARCHY 2026-09-28 19:10:24" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T19:10:24.4267627-05:00" queuing="2026-09-28T19:10:24.4267628-05:00" start="2026-09-28T19:10:22.8121171-05:00" finish="2026-09-28T19:10:24.4873310-05:00" />
+  <TestSettings name="default" id="d9054095-c9d2-4310-bb3a-fe42d895b86f">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_19_10_24" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9dd580b6-05fd-43f5-82ea-ec3ecc9b140a" testId="6567e7a1-4e15-9d29-e486-55574456a6cc" testName="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: True, service: &quot;mcpserver.service&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0005437" startTime="2026-09-28T19:10:24.3156327-05:00" endTime="2026-09-28T19:10:24.3165773-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9dd580b6-05fd-43f5-82ea-ec3ecc9b140a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production method: ParameterDefaults</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 359
+   at NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Boolean linux, String service) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 61
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="347e5e7b-94c8-4007-b912-b48d3ca4dc86" testId="de80df1e-3958-c3c6-721f-6c0998027ba9" testName="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: False, service: &quot;McpServer&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0005955" startTime="2026-09-28T19:10:24.3171010-05:00" endTime="2026-09-28T19:10:24.3179795-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="347e5e7b-94c8-4007-b912-b48d3ca4dc86">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Missing production method: ParameterDefaults</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 359
+   at NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Boolean linux, String service) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 61
+   at InvokeStub_ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5da701c6-94c2-4826-8dd2-a310d45662a4" testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0011512" startTime="2026-09-28T19:10:24.2700122-05:00" endTime="2026-09-28T19:10:24.2712480-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5da701c6-94c2-4826-8dd2-a310d45662a4" />
+    <UnitTestResult executionId="4f4d6423-729e-4f58-af5a-80a0f99d38a7" testId="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" computerName="PAYTON-OMARCHY" duration="00:00:00.0001770" startTime="2026-09-28T19:10:24.3136435-05:00" endTime="2026-09-28T19:10:24.3139397-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f4d6423-729e-4f58-af5a-80a0f99d38a7" />
+    <UnitTestResult executionId="26936fe2-8aad-4a3a-9fb4-b28cd8b201ce" testId="a2f31a5f-9f2d-a292-6029-0b1b8b9516a2" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: Arm)" computerName="PAYTON-OMARCHY" duration="00:00:00.0027946" startTime="2026-09-28T19:10:24.3079187-05:00" endTime="2026-09-28T19:10:24.3111657-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26936fe2-8aad-4a3a-9fb4-b28cd8b201ce">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.PlatformNotSupportedException)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 53
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ca122878-0d91-4072-8ce8-b86040cb96d7" testId="5222036a-9a22-e329-1da9-4a40491664e4" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" computerName="PAYTON-OMARCHY" duration="00:00:00.0690661" startTime="2026-09-28T19:10:24.1827666-05:00" endTime="2026-09-28T19:10:24.2624656-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca122878-0d91-4072-8ce8-b86040cb96d7" />
+    <UnitTestResult executionId="ca1b9230-a484-406f-8449-ad8b4997b9bd" testId="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0044909" startTime="2026-09-28T19:10:24.2715315-05:00" endTime="2026-09-28T19:10:24.2983706-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca1b9230-a484-406f-8449-ad8b4997b9bd">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Item not found in collection
+Collection: ["/tmp/service-update-acd1e534ba004331b321f76be51417"···]
+Not found:  "/tmp/service-update-acd1e534ba004331b321f76be51417"···</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 77
+   at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bcbcbb4a-7d8c-4f43-ba17-e1c96e1495a3" testId="b09cc968-4e27-1c5d-482f-45e2eb952680" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: X86)" computerName="PAYTON-OMARCHY" duration="00:00:00.0009412" startTime="2026-09-28T19:10:24.3118007-05:00" endTime="2026-09-28T19:10:24.3130559-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bcbcbb4a-7d8c-4f43-ba17-e1c96e1495a3">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.PlatformNotSupportedException)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 53
+   at InvokeStub_ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c47b04e2-a8d0-452b-af00-e06086cec427" testId="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" computerName="PAYTON-OMARCHY" duration="00:00:00.0002012" startTime="2026-09-28T19:10:24.3145372-05:00" endTime="2026-09-28T19:10:24.3148026-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c47b04e2-a8d0-452b-af00-e06086cec427" />
+    <UnitTestResult executionId="6807d47d-a25c-4936-9937-3868829e60bf" testId="a21b4331-9185-cb9d-b28b-73d35c0f9498" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: null\nMcp:\n  DataDirectory: '../data'&quot;···)" computerName="PAYTON-OMARCHY" duration="00:00:00.0009888" startTime="2026-09-28T19:10:24.2997657-05:00" endTime="2026-09-28T19:10:24.3024224-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6807d47d-a25c-4936-9937-3868829e60bf">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : The configured DataFolder does not exist.</Message>
+          <StackTrace>   at WindowsServiceHelper.GetPreservedStatePaths(String installRoot) in /home/sharpninja/github/McpServer/build/WindowsServiceHelper.cs:line 556
+   at InvokeStub_WindowsServiceHelper.GetPreservedStatePaths(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 361
+   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 75
+   at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="593cda82-6e9c-48ad-9501-54b9d3e8a3c3" testId="48c3363b-8c54-c031-a2f5-f37688bcf480" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '  '\nMcp:\n  DataDirectory: '../data'&quot;···)" computerName="PAYTON-OMARCHY" duration="00:00:00.0011204" startTime="2026-09-28T19:10:24.3030614-05:00" endTime="2026-09-28T19:10:24.3044620-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="593cda82-6e9c-48ad-9501-54b9d3e8a3c3">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Item not found in collection
+Collection: ["/tmp/service-update-e7ceff9984b749caa8072768a49010"···]
+Not found:  "/tmp/service-update-e7ceff9984b749caa8072768a49010"···</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 77
+   at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: False, service: &quot;McpServer&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="de80df1e-3958-c3c6-721f-6c0998027ba9">
+      <Execution id="347e5e7b-94c8-4007-b912-b48d3ca4dc86" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="ParameterDefaults_DoNotRequireSupportedDeploymentHost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: null\nMcp:\n  DataDirectory: '../data'&quot;···)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="a21b4331-9185-cb9d-b28b-73d35c0f9498">
+      <Execution id="6807d47d-a25c-4936-9937-3868829e60bf" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970">
+      <Execution id="c47b04e2-a8d0-452b-af00-e06086cec427" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5222036a-9a22-e329-1da9-4a40491664e4">
+      <Execution id="ca122878-0d91-4072-8ce8-b86040cb96d7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: True, service: &quot;mcpserver.service&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="6567e7a1-4e15-9d29-e486-55574456a6cc">
+      <Execution id="9dd580b6-05fd-43f5-82ea-ec3ecc9b140a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="ParameterDefaults_DoNotRequireSupportedDeploymentHost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: X86)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="b09cc968-4e27-1c5d-482f-45e2eb952680">
+      <Execution id="bcbcbb4a-7d8c-4f43-ba17-e1c96e1495a3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: Arm)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="a2f31a5f-9f2d-a292-6029-0b1b8b9516a2">
+      <Execution id="26936fe2-8aad-4a3a-9fb4-b28cd8b201ce" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="0da4435d-4068-3ec1-087c-5d4f89deb7a7">
+      <Execution id="5da701c6-94c2-4826-8dd2-a310d45662a4" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '  '\nMcp:\n  DataDirectory: '../data'&quot;···)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="48c3363b-8c54-c031-a2f5-f37688bcf480">
+      <Execution id="593cda82-6e9c-48ad-9501-54b9d3e8a3c3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed">
+      <Execution id="4f4d6423-729e-4f58-af5a-80a0f99d38a7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f">
+      <Execution id="ca1b9230-a484-406f-8449-ad8b4997b9bd" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6567e7a1-4e15-9d29-e486-55574456a6cc" executionId="9dd580b6-05fd-43f5-82ea-ec3ecc9b140a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de80df1e-3958-c3c6-721f-6c0998027ba9" executionId="347e5e7b-94c8-4007-b912-b48d3ca4dc86" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0da4435d-4068-3ec1-087c-5d4f89deb7a7" executionId="5da701c6-94c2-4826-8dd2-a310d45662a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5aa56a2b-b14c-1c5d-c92e-9d454ec431ed" executionId="4f4d6423-729e-4f58-af5a-80a0f99d38a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2f31a5f-9f2d-a292-6029-0b1b8b9516a2" executionId="26936fe2-8aad-4a3a-9fb4-b28cd8b201ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5222036a-9a22-e329-1da9-4a40491664e4" executionId="ca122878-0d91-4072-8ce8-b86040cb96d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95dd563e-fa27-f1a3-e3f4-0bf94c20ba5f" executionId="ca1b9230-a484-406f-8449-ad8b4997b9bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b09cc968-4e27-1c5d-482f-45e2eb952680" executionId="bcbcbb4a-7d8c-4f43-ba17-e1c96e1495a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7e76ea4-ffd9-ef9b-e490-e4ebbcd43970" executionId="c47b04e2-a8d0-452b-af00-e06086cec427" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a21b4331-9185-cb9d-b28b-73d35c0f9498" executionId="6807d47d-a25c-4936-9937-3868829e60bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48c3363b-8c54-c031-a2f5-f37688bcf480" executionId="593cda82-6e9c-48ad-9501-54b9d3e8a3c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="11" executed="11" passed="4" failed="7" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.20]   Discovering: Build.Tests
+[xUnit.net 00:00:00.56]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.81]   Starting:    Build.Tests
+[xUnit.net 00:00:01.03]       Assert.Contains() Failure: Item not found in collection
+[xUnit.net 00:00:01.03]       Collection: ["/tmp/service-update-acd1e534ba004331b321f76be51417"···]
+[xUnit.net 00:00:01.03]       Not found:  "/tmp/service-update-acd1e534ba004331b321f76be51417"···
+[xUnit.net 00:00:01.04]       Stack Trace:
+[xUnit.net 00:00:01.04]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(77,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:01.04]            at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+[xUnit.net 00:00:01.04]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.04]       System.IO.DirectoryNotFoundException : The configured DataFolder does not exist.
+[xUnit.net 00:00:01.04]       Stack Trace:
+[xUnit.net 00:00:01.04]         /home/sharpninja/github/McpServer/build/WindowsServiceHelper.cs(556,0): at WindowsServiceHelper.GetPreservedStatePaths(String installRoot)
+[xUnit.net 00:00:01.04]            at InvokeStub_WindowsServiceHelper.GetPreservedStatePaths(Object, Span`1)
+[xUnit.net 00:00:01.04]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.04]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.04]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(361,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:01.04]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(75,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:01.04]            at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+[xUnit.net 00:00:01.04]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.04]       Assert.Contains() Failure: Item not found in collection
+[xUnit.net 00:00:01.04]       Collection: ["/tmp/service-update-e7ceff9984b749caa8072768a49010"···]
+[xUnit.net 00:00:01.04]       Not found:  "/tmp/service-update-e7ceff9984b749caa8072768a49010"···
+[xUnit.net 00:00:01.04]       Stack Trace:
+[xUnit.net 00:00:01.04]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(77,0): at NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(String yaml)
+[xUnit.net 00:00:01.04]            at InvokeStub_ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(Object, Span`1)
+[xUnit.net 00:00:01.04]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.05]       Assert.Throws() Failure: No exception was thrown
+[xUnit.net 00:00:01.05]       Expected: typeof(System.PlatformNotSupportedException)
+[xUnit.net 00:00:01.05]       Stack Trace:
+[xUnit.net 00:00:01.05]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(53,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture)
+[xUnit.net 00:00:01.05]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:01.05]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.05]       Assert.Throws() Failure: No exception was thrown
+[xUnit.net 00:00:01.05]       Expected: typeof(System.PlatformNotSupportedException)
+[xUnit.net 00:00:01.05]       Stack Trace:
+[xUnit.net 00:00:01.05]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(53,0): at NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Boolean windows, Boolean linux, Architecture architecture)
+[xUnit.net 00:00:01.05]            at InvokeStub_ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(Object, Span`1)
+[xUnit.net 00:00:01.05]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.10]       System.InvalidOperationException : Missing production method: ParameterDefaults
+[xUnit.net 00:00:01.10]       Stack Trace:
+[xUnit.net 00:00:01.10]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(359,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:01.10]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(61,0): at NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Boolean linux, String service)
+[xUnit.net 00:00:01.10]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:01.10]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.10]       System.InvalidOperationException : Missing production method: ParameterDefaults
+[xUnit.net 00:00:01.10]       Stack Trace:
+[xUnit.net 00:00:01.10]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(359,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)
+[xUnit.net 00:00:01.10]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(61,0): at NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Boolean linux, String service)
+[xUnit.net 00:00:01.10]            at InvokeStub_ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(Object, Span`1)
+[xUnit.net 00:00:01.10]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.3078787-05:00">
+        <Text>[xUnit.net 00:00:01.03]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.3159916-05:00">
+        <Text>[xUnit.net 00:00:01.04]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "DataFolder: null\nMcp:\n  DataDirectory: '../data'"···) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.3180167-05:00">
+        <Text>[xUnit.net 00:00:01.04]     NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: "DataFolder: '  '\nMcp:\n  DataDirectory: '../data'"···) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.3209112-05:00">
+        <Text>[xUnit.net 00:00:01.04]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: Arm) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.3221742-05:00">
+        <Text>[xUnit.net 00:00:01.05]     NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: X86) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.4411543-05:00">
+        <Text>[xUnit.net 00:00:01.10]     NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: True, service: "mcpserver.service") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:10:24.4412074-05:00">
+        <Text>[xUnit.net 00:00:01.10]     NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: False, service: "McpServer") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
