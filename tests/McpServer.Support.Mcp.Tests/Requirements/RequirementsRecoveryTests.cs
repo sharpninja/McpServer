@@ -274,6 +274,146 @@ public sealed class RequirementsRecoveryTests
         }
     }
 
+    /// <summary>Soft-deleted rows are revived (IgnoreQueryFilters + clear deletion metadata), not 409.</summary>
+    [Fact]
+    public async Task ApplyAsync_SoftDeletedRequirement_IsRevived()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+            await SeedAsync(db, "FR-MCP-REQRECOVERY-001", "original").ConfigureAwait(true);
+            Execute(connection, @"
+UPDATE Requirements
+SET IsDeleted = 1,
+    DeletedAtUtc = '2026-09-29T10:00:00+00:00',
+    DeletedBy = 'test',
+    DeleteReason = 'soft_delete'
+WHERE Id = 'FR-MCP-REQRECOVERY-001'");
+            // Seed left the row tracked with IsDeleted=false; drop stale shadow state.
+            db.ChangeTracker.Clear();
+
+            // Soft-deleted row is hidden by the SoftDelete filter.
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001' AND IsDeleted = 0"));
+
+            var applied = await sut.ApplyAsync(
+                Request("revive-001", Item("fr", "FR-MCP-REQRECOVERY-001", "restored")),
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal("applied", applied.Status);
+            Assert.Contains(applied.Items, item => item.Id == "FR-MCP-REQRECOVERY-001" && item.Action == "update");
+            Assert.Equal(1, Count(connection, "SELECT COUNT(*) FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001' AND IsDeleted = 0"));
+            Assert.Equal("restored", Scalar(connection, "SELECT Title FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001'"));
+            Assert.Equal(string.Empty, Scalar(connection, "SELECT COALESCE(DeletedBy, '') FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001'"));
+            Assert.Equal(1, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
+    /// <summary>Priority >32 or status >64 is 400 before the transaction (column bounds).</summary>
+    [Fact]
+    public async Task ApplyAsync_PriorityOrStatusExceedsColumn_IsArgumentExceptionWithoutWrite()
+    {
+        await using var connection = OpenConnection();
+        var (sut, db) = Build(connection);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+
+            var longPriority = await Assert.ThrowsAsync<ArgumentException>(() => sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "prio-len-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "fr",
+                            Id = "FR-MCP-REQRECOVERY-001",
+                            Title = "title",
+                            Body = "body",
+                            Priority = new string('p', 33),
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken)).ConfigureAwait(true);
+            Assert.Contains("32", longPriority.Message, StringComparison.Ordinal);
+            Assert.Equal(400, McpErrorClassifier.Classify(longPriority).StatusCode);
+
+            var longStatus = await Assert.ThrowsAsync<ArgumentException>(() => sut.ApplyAsync(
+                new RequirementsRecoveryRequest
+                {
+                    IdempotencyKey = "status-len-001",
+                    Items =
+                    [
+                        new RequirementsRecoveryItemRequest
+                        {
+                            Kind = "fr",
+                            Id = "FR-MCP-REQRECOVERY-001",
+                            Title = "title",
+                            Body = "body",
+                            Status = new string('s', 65),
+                        },
+                    ],
+                },
+                TestContext.Current.CancellationToken)).ConfigureAwait(true);
+            Assert.Contains("64", longStatus.Message, StringComparison.Ordinal);
+            Assert.Equal(400, McpErrorClassifier.Classify(longStatus).StatusCode);
+
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements"));
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
+    /// <summary>
+    /// Requirement-key unique race (no recovery-run row): retry SaveChanges instead of fabricating
+    /// an idempotency-key payload conflict. Soft-delete revive covers the reload-as-upsert path.
+    /// </summary>
+    [Fact]
+    public async Task ApplyAsync_UniqueWithoutRun_RetriesThenSucceeds()
+    {
+        await using var connection = OpenConnection();
+        var race = new ThrowUniqueOnceInterceptor();
+        var (sut, db) = Build(connection, race);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+
+            var applied = await sut.ApplyAsync(
+                Request("race-001", Item("fr", "FR-MCP-REQRECOVERY-001", "from-recovery")),
+                TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal(2, race.SaveAttempts);
+            Assert.Equal("applied", applied.Status);
+            Assert.False(applied.Replay);
+            Assert.Equal(1, Count(connection, "SELECT COUNT(*) FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001'"));
+            Assert.Equal("from-recovery", Scalar(connection, "SELECT Title FROM Requirements WHERE Id = 'FR-MCP-REQRECOVERY-001'"));
+            Assert.Equal(1, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
+    /// <summary>Exhausted unique retries rethrow DbUpdateException (not a fake idempotency conflict).</summary>
+    [Fact]
+    public async Task ApplyAsync_UniqueWithoutRun_ExhaustedRetries_PreserveDbUpdateException()
+    {
+        await using var connection = OpenConnection();
+        var race = new ThrowUniqueAlwaysInterceptor();
+        var (sut, db) = Build(connection, race);
+        using (db)
+        {
+            db.Database.EnsureCreated();
+
+            var ex = await Assert.ThrowsAsync<DbUpdateException>(() =>
+                sut.ApplyAsync(
+                    Request("race-always-001", Item("fr", "FR-MCP-REQRECOVERY-001", "from-recovery")),
+                    TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+            Assert.Contains("UNIQUE", ex.Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements"));
+            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
+        }
+    }
+
     /// <summary>A different payload for a stored key is 409 and leaves the original rows.</summary>
     [Fact]
     public async Task ApplyAsync_DifferentPayload_IsConflictWithoutMutation()
@@ -442,6 +582,44 @@ public sealed class RequirementsRecoveryTests
         using var command = connection.CreateCommand();
         command.CommandText = sql;
         return (string)(command.ExecuteScalar() ?? string.Empty);
+    }
+
+    /// <summary>Throws a UNIQUE DbUpdateException on the first SaveChanges only.</summary>
+    private sealed class ThrowUniqueOnceInterceptor : SaveChangesInterceptor
+    {
+        public int SaveAttempts { get; private set; }
+
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        {
+            SaveAttempts++;
+            if (SaveAttempts == 1)
+                throw new DbUpdateException("UNIQUE constraint failed: Requirements", (Exception?)null);
+            return base.SavingChanges(eventData, result);
+        }
+
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            SaveAttempts++;
+            if (SaveAttempts == 1)
+                throw new DbUpdateException("UNIQUE constraint failed: Requirements", (Exception?)null);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
+    }
+
+    /// <summary>Throws a UNIQUE DbUpdateException on every SaveChanges.</summary>
+    private sealed class ThrowUniqueAlwaysInterceptor : SaveChangesInterceptor
+    {
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+            => throw new DbUpdateException("UNIQUE constraint failed: Requirements", (Exception?)null);
+
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+            => throw new DbUpdateException("UNIQUE constraint failed: Requirements", (Exception?)null);
     }
 
     /// <summary>Records the isolation level of the active transaction during SaveChanges.</summary>

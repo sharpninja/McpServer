@@ -24,6 +24,14 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     private const int TitleMaxLength = 1024;
     /// <summary>Matches <see cref="RequirementEntity.Id"/> <c>[StringLength(128)]</c>.</summary>
     private const int IdMaxLength = 128;
+    /// <summary>Matches <see cref="RequirementEntity.Priority"/> <c>[StringLength(32)]</c>.</summary>
+    private const int PriorityMaxLength = 32;
+    /// <summary>Matches <see cref="RequirementEntity.Status"/> <c>[StringLength(64)]</c>.</summary>
+    private const int StatusMaxLength = 64;
+    /// <summary>Named soft-delete query filter on durable entities (see McpDbContext).</summary>
+    private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
+    /// <summary>Retries after requirement-key unique races (recovery is upsert).</summary>
+    private const int UniqueRaceMaxAttempts = 3;
     private static readonly JsonSerializerOptions ResultJsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly JsonSerializerOptions HashJsonOptions = new()
     {
@@ -64,57 +72,70 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         if (prior is not null)
             return ResolveExisting(prior, payload.Hash);
 
-        await using var transaction = await _db.Database
-            .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken)
-            .ConfigureAwait(false);
-        try
+        // Recovery is upsert. Unique races on the requirement PK (concurrent applies with
+        // different idempotency keys) reload and retry instead of fabricating an
+        // idempotency-key payload conflict. Unique races on the recovery-run key still
+        // resolve to Replay / Conflict via FindRunAsync.
+        for (var attempt = 1; attempt <= UniqueRaceMaxAttempts; attempt++)
         {
-            var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
-            if (raced is not null)
+            await using var transaction = await _db.Database
+                .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken)
+                .ConfigureAwait(false);
+            try
             {
-                await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
-                _db.ChangeTracker.Clear();
-                return ResolveExisting(raced, payload.Hash);
+                var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
+                if (raced is not null)
+                {
+                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
+                    _db.ChangeTracker.Clear();
+                    return ResolveExisting(raced, payload.Hash);
+                }
+
+                var existing = await LoadExistingAsync(payload.Items, cancellationToken).ConfigureAwait(false);
+                var createdAt = DateTimeOffset.UtcNow.ToString("o");
+                var result = BuildResult(payload, existing, applied: true, replay: false, createdAtUtc: createdAt);
+                ApplyItems(payload, existing, createdAt);
+                _db.RequirementsRecoveryRuns.Add(new RequirementsRecoveryRunEntity
+                {
+                    WorkspaceId = payload.WorkspaceId,
+                    IdempotencyKey = payload.Key,
+                    PayloadHash = payload.Hash,
+                    Status = "applied",
+                    ResultJson = JsonSerializer.Serialize(result, ResultJsonOptions),
+                    CreatedAtUtc = createdAt,
+                });
+
+                await StorageCommandBudget.ExecuteAsync(
+                    ct => _db.SaveChangesAsync(ct),
+                    cancellationToken,
+                    _commandBudget).ConfigureAwait(false);
+                await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+                return result;
             }
-
-            var existing = await LoadExistingAsync(payload.Items, cancellationToken).ConfigureAwait(false);
-            var createdAt = DateTimeOffset.UtcNow.ToString("o");
-            var result = BuildResult(payload, existing, applied: true, replay: false, createdAtUtc: createdAt);
-            ApplyItems(payload, existing, createdAt);
-            _db.RequirementsRecoveryRuns.Add(new RequirementsRecoveryRunEntity
+            catch (DbUpdateException ex) when (IsUniqueViolation(ex))
             {
-                WorkspaceId = payload.WorkspaceId,
-                IdempotencyKey = payload.Key,
-                PayloadHash = payload.Hash,
-                Status = "applied",
-                ResultJson = JsonSerializer.Serialize(result, ResultJsonOptions),
-                CreatedAtUtc = createdAt,
-            });
+                if (_db.Database.CurrentTransaction is not null)
+                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
+                _db.ChangeTracker.Clear();
+                var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
+                if (raced is not null)
+                    return ResolveExisting(raced, payload.Hash);
 
-            await StorageCommandBudget.ExecuteAsync(
-                ct => _db.SaveChangesAsync(ct),
-                cancellationToken,
-                _commandBudget).ConfigureAwait(false);
-            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
-            return result;
-        }
-        catch (DbUpdateException ex) when (IsUniqueViolation(ex))
-        {
-            await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
-            _db.ChangeTracker.Clear();
-            var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);
-            if (raced is not null)
-                return ResolveExisting(raced, payload.Hash);
+                if (attempt < UniqueRaceMaxAttempts)
+                    continue;
 
-            throw new RequirementsRecoveryConflictException(
-                $"Requirements recovery idempotency key '{payload.Key}' conflicts with a stored payload.");
+                // Preserve the actual unique failure rather than fabricating a same-key payload conflict.
+                throw;
+            }
+            catch
+            {
+                if (_db.Database.CurrentTransaction is not null)
+                    await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
+                throw;
+            }
         }
-        catch
-        {
-            if (_db.Database.CurrentTransaction is not null)
-                await transaction.RollbackAsync(CancellationToken.None).ConfigureAwait(false);
-            throw;
-        }
+
+        throw new InvalidOperationException("Requirements recovery apply exhausted unique-race retries.");
     }
 
     /// <inheritdoc />
@@ -152,11 +173,18 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             var mapKey = MapKey(item.Kind, item.Id);
             if (existing.TryGetValue(mapKey, out var row))
             {
+                var wasDeleted = IsSoftDeleted(row);
                 row.Title = item.Title;
                 row.Body = item.Body;
                 row.Priority = item.Priority;
                 row.Status = item.Status;
                 row.UpdatedAtUtc = timestamp;
+                // Ordinary create path revives soft-deleted rows by clearing deletion metadata.
+                // Always clear: tracked stale shadow values must not leave IsDeleted=1 in the store.
+                if (wasDeleted)
+                    row.CreatedAtUtc = timestamp;
+                ClearSoftDelete(row);
+
                 continue;
             }
 
@@ -183,7 +211,10 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         CancellationToken cancellationToken)
     {
         var ids = items.Select(item => item.Id).Distinct(StringComparer.Ordinal).ToArray();
+        // SoftDelete filter would hide deleted rows and cause ApplyItems to insert ? PK 409.
+        // Match RequirementsDatabaseDocumentService.AddRequirementAsync revive path.
         var rows = await _db.Requirements
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
             .Where(row => ids.Contains(row.Id))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -297,6 +328,10 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
 
             var priority = string.IsNullOrWhiteSpace(item.Priority) ? "medium" : item.Priority.Trim().ToLowerInvariant();
             var status = string.IsNullOrWhiteSpace(item.Status) ? "pending" : item.Status.Trim().ToLowerInvariant();
+            if (priority.Length > PriorityMaxLength)
+                throw new ArgumentException($"Requirement '{id}' priority exceeds {PriorityMaxLength} characters.");
+            if (status.Length > StatusMaxLength)
+                throw new ArgumentException($"Requirement '{id}' status exceeds {StatusMaxLength} characters.");
             var mapKey = MapKey(kind, id);
             if (!seen.Add(mapKey))
                 throw new ArgumentException($"Duplicate requirement '{kind}:{id}' in the recovery payload.");
@@ -325,6 +360,25 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             .ToArray();
         var json = JsonSerializer.Serialize(payload, HashJsonOptions);
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(json))).ToLowerInvariant();
+    }
+
+    private bool IsSoftDeleted(RequirementEntity entity)
+    {
+        var entry = _db.Entry(entity);
+        return entry.Metadata.FindProperty("IsDeleted") is not null
+               && entry.Property("IsDeleted").CurrentValue is true;
+    }
+
+    private void ClearSoftDelete(RequirementEntity entity)
+    {
+        var entry = _db.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.Property("IsDeleted").CurrentValue = false;
+        entry.Property("DeletedAtUtc").CurrentValue = null;
+        entry.Property("DeletedBy").CurrentValue = null;
+        entry.Property("DeleteReason").CurrentValue = null;
     }
 
     private static bool IsUniqueViolation(Exception exception)
