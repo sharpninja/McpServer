@@ -59,9 +59,20 @@ internal interface ISessionLifeUnitGateValidator
 
 /// <summary>
 /// FR-MCP-107 / TR-MCP-PLAN-001: Represents the concrete machine-readable session-life gate validator.
+/// Accepted fixtures are classified with <see cref="InvalidDataException"/> reason and affected tokens.
 /// </summary>
-internal sealed class SessionLifeUnitGateValidator : ISessionLifeUnitGateValidator
+internal sealed partial class SessionLifeUnitGateValidator : ISessionLifeUnitGateValidator
 {
+    /// <summary>
+    /// FR-MCP-107 / TR-MCP-PLAN-001: Gets the canonical repository root supplied by Nuke.
+    /// </summary>
+    private readonly string _repositoryRoot;
+
+    /// <summary>
+    /// FR-MCP-107 / TR-MCP-PLAN-001: Gets the probe that returns the current observation for a named tool.
+    /// </summary>
+    private readonly Func<string, string> _toolVersionProbe;
+
     /// <summary>
     /// FR-MCP-107 / TR-MCP-PLAN-001: Initializes a validator with the canonical repository root and tool probe.
     /// </summary>
@@ -73,12 +84,8 @@ internal sealed class SessionLifeUnitGateValidator : ISessionLifeUnitGateValidat
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(repositoryRoot);
         ArgumentNullException.ThrowIfNull(toolVersionProbe);
-    }
-
-    /// <inheritdoc />
-    public void Validate(SessionLifeUnitGateValidationRequest request)
-    {
-        throw new NotImplementedException("Session-life report validation is intentionally absent in the behavior-Red scaffold.");
+        _repositoryRoot = Path.GetFullPath(repositoryRoot);
+        _toolVersionProbe = toolVersionProbe;
     }
 }
 
