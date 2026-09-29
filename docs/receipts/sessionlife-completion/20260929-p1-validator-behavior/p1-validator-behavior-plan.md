@@ -40,3 +40,7 @@ dotnet test tests/Build.Tests/Build.Tests.csproj -c Debug --filter "FullyQualifi
 ```
 
 Discovery must succeed with zero skips. The consumer delegation facts must stay Green. The behavior matrix is the oracle for this checkpoint.
+
+## Result
+
+The focused run is recorded in `p1-validator-behavior-focused-run.md`. SDK `10.0.401` reported 95 passed, 0 failed, and 0 skipped.
