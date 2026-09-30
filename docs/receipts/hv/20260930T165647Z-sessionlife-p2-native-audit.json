@@ -1,0 +1,804 @@
+{
+  "TimestampUtc": "2026-09-30T17:09:54.0395806+00:00",
+  "RunId": "p2-unit-legion-20260930T1619Z",
+  "Shell": "7.6.5",
+  "Reports": [
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\build-tests\\Build.Tests.trx",
+      "sha256": "E7A25B9676240A514A91E21EAEC9C3B482AC457851EE9CC7EDE79CE13934ECC6",
+      "outcome": "Completed",
+      "total": 321,
+      "executed": 321,
+      "passed": 321,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 321,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:59.0578831-05:00",
+      "finish": "2026-09-30T11:31:30.1194198-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+      "sha256": "9EB9192E742AE429BC421587A9D024F7CF84A58DB283E84A3277FA5DBF254FA5",
+      "outcome": "Completed",
+      "total": 301,
+      "executed": 301,
+      "passed": 301,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 301,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:27.8132363-05:00",
+      "finish": "2026-09-30T11:28:30.4013149-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+      "sha256": "DEAEBE7D99D44330C6704F7A0E3685576FF8501814F5138387079A7739F02A09",
+      "outcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 33,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:31.5558286-05:00",
+      "finish": "2026-09-30T11:28:33.3926400-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+      "sha256": "20B2E827FB3C0BBE250DB043A3E746FA95FAD1B408D3DDFC07A990F74D78EF4F",
+      "outcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 20,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:34.4493735-05:00",
+      "finish": "2026-09-30T11:28:35.9600799-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+      "sha256": "871E39F2B5DFAB24C02F0263C4250B8CF8F0565F2FA631E148DAFA7DDFBECA7A",
+      "outcome": "Completed",
+      "total": 63,
+      "executed": 63,
+      "passed": 63,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 63,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:37.0066624-05:00",
+      "finish": "2026-09-30T11:28:46.4069899-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+      "sha256": "5F1DBDA23A39A5637B33C94120F333D3AC0E5FA7545D8F3A3A8DEFBB6950F37D",
+      "outcome": "Completed",
+      "total": 90,
+      "executed": 90,
+      "passed": 90,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 90,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:52.2467180-05:00",
+      "finish": "2026-09-30T11:28:54.4591638-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+      "sha256": "64A42EDEFF29403F3858ADF84AF20F0E61178B320FE1C564110EEFAC5FF865CA",
+      "outcome": "Completed",
+      "total": 866,
+      "executed": 866,
+      "passed": 866,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 866,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:28:47.6216146-05:00",
+      "finish": "2026-09-30T11:28:50.7852536-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+      "sha256": "DC20A54EAA6F0D3B2F6D428ED4079945B968EEAB2C76A6A872BA3DF10AC9E636",
+      "outcome": "Completed",
+      "total": 2877,
+      "executed": 2877,
+      "passed": 2877,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 2877,
+      "actualNonPassed": 0,
+      "start": "2026-09-30T11:26:05.0115624-05:00",
+      "finish": "2026-09-30T11:28:25.8680178-05:00"
+    }
+  ],
+  "ManifestSources": 2198,
+  "P1Results": [
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateReportFile)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ProjectReportMismatch)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StaleBuildTestsReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MalformedTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MalformedTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalAdverseTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: Missing)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: FailedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunId)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: AddedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ZeroDiscoveredTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MissingExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: IncompleteTrxOutcome)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunSourceManifest)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ProjectReportMismatch)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NegativeTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleProjectReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MalformedExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: DeletedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NegativeTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterNativeResult)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_AcceptsValidUnitArtifacts",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NotExecutedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: Missing)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateProject)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: Missing)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MalformedExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalSkippedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingProjectReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ReportWrittenAfterManifest_DoesNotCauseSourceDrift",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: Missing)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: EditedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolVersionDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunCommandResults)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InvalidTrxTimes)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunCommandResults)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleInventory)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidUnitArtifacts_DoNotRequireProviderLane",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DeletedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MissingExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ScopeMismatch)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterNativeCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NotRunPesterTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateProject)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NonPassingBuildTestsReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolByteHashDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: EditedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalSkippedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterContainers)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InconsistentTrxCounters)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunSourceManifest)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: AddedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: EditedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolPathDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InvalidTrxTimes)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingInventory)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolByteHashDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InconsistentTrxCounters)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingTrxCounter)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleProjectReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MissingExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MalformedExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MissingExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidProviderArtifacts_DoNotRequireUnitLane",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterBlocks)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: NonZero)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolVersionDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalAdverseTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleInventory)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingInventory)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: AddedIncludedSource)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunId)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolPathDrift)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: InconclusivePesterTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MalformedExitCode)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: IncompleteTrxOutcome)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ScopeMismatch)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateReportFile)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NotExecutedTrxTests)",
+      "outcome": "Passed"
+    },
+    {
+      "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DeletedIncludedSource)",
+      "outcome": "Passed"
+    }
+  ],
+  "Pester": {
+    "total": 193,
+    "actualCases": 193,
+    "nonSuccess": 0,
+    "date": "2026-09-30",
+    "time": "16:19:24",
+    "native": {
+      "RunId": "p2-unit-legion-20260930T1619Z",
+      "ExecutedAt": "2026-09-30T11:19:22.690116-05:00",
+      "Total": 193,
+      "Passed": 193,
+      "Failed": 0,
+      "Skipped": 0,
+      "Inconclusive": 0,
+      "NotRun": 0,
+      "FailedBlocks": 0,
+      "FailedContainers": 0
+    },
+    "sha256": "5466DB9EF8838027AD8F634AD0141DEA955CFC12C354F2B3DCD94E117BB5374A",
+    "P2Cases": [
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects an absent current-turn cache without a server write",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refreshes same-path marker drift without rewriting the bound session",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+        "result": "Success"
+      },
+      {
+        "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "result": "Success"
+      }
+    ]
+  },
+  "CommandResults": {
+    "schemaVersion": 1,
+    "runId": "p2-unit-legion-20260930T1619Z",
+    "scope": "unit",
+    "commands": [
+      {
+        "name": "pester",
+        "exitCode": 0,
+        "startedAtUtc": "2026-09-30T11:19:22.690116-05:00",
+        "finishedAtUtc": "2026-09-30T11:23:15.4377692-05:00"
+      },
+      {
+        "name": "nuke-test",
+        "exitCode": 0,
+        "startedAtUtc": "2026-09-30T11:23:15.4427769-05:00",
+        "finishedAtUtc": "2026-09-30T11:28:55.785827-05:00"
+      },
+      {
+        "name": "build-tests",
+        "exitCode": 0,
+        "startedAtUtc": "2026-09-30T11:28:55.7970656-05:00",
+        "finishedAtUtc": "2026-09-30T11:31:30.2358743-05:00"
+      }
+    ]
+  },
+  "SourceMismatches": [],
+  "OmittedCriticalInputs": [
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "inManifest": false,
+      "currentSha256": "165ADFC1C4310769679F1C684F476D8546BE853AADA32C966023F00012A05A50"
+    },
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "inManifest": false,
+      "currentSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375"
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "inManifest": false,
+      "currentSha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3"
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "inManifest": false,
+      "currentSha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405"
+    },
+    {
+      "path": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+      "inManifest": false,
+      "currentSha256": "B26FD1BD1E8BBC2573F44665610F74C460006B7D5D05FAAB9808CA40F29B1CB8"
+    },
+    {
+      "path": "docs/context/module-bootstrap.md",
+      "inManifest": false,
+      "currentSha256": "E14D9ADADB616F37BA0C45605786646DDA9C89CACFF299ECA14AB5AFAE0534F6"
+    },
+    {
+      "path": "docs/REPL-USER-GUIDE.md",
+      "inManifest": false,
+      "currentSha256": "D80D6074FF21BBDC1AFD57AC90D642E4C36F4A4E8C4A5707556DFC34D3AD24B9"
+    },
+    {
+      "path": "docs/context/repl-yaml-message.schema.json",
+      "inManifest": false,
+      "currentSha256": "FABCF8D539D1CCE2D3EE1CCE0D1573E654E6642D628A3ECFF1E46CF12F57A031"
+    }
+  ],
+  "ArtifactHashes": [
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\command-results.json",
+      "length": 669,
+      "sha256": "03FE506C5A68AC28673E2CD2E4B22BB67B3D12F75700DEC7A94E7701829735C8"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\source-manifest.json",
+      "length": 575955,
+      "sha256": "8CC1A37F9FFC6EB22EAA866A2A1DEC7D686636F9932EE9D309D38F0991E2AAB3"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\build-tests\\Build.Tests.trx",
+      "length": 455434,
+      "sha256": "E7A25B9676240A514A91E21EAEC9C3B482AC457851EE9CC7EDE79CE13934ECC6"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\build-tests.log",
+      "length": 792,
+      "sha256": "80871523E4D0BF6DD81A91A3B2DBEAB6D6122359C3771636EC32E9AE01B06BEF"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\capture-manifest.log",
+      "length": 3703,
+      "sha256": "C464C9AC0F2585D91848C7E0F52065D65F20F7E50F9C58825E171F1D57A0B830"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\nuke-test.log",
+      "length": 719411,
+      "sha256": "81750E1E7263F942BD7499C2CAA35EBD3B2EC0D940F9D15E399005B198B4C3A8"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\validate.log",
+      "length": 5559,
+      "sha256": "F896CBCE87B64EB80D002547DEDB0EE6BF6930400AC3908955C1077A8808F070"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\pester\\native-run.json",
+      "length": 258,
+      "sha256": "24615AC1A6441143EAF8F95246D71EB5259EA2308598BA64535EE858DD686CF1"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\pester\\results.xml",
+      "length": 79995,
+      "sha256": "5466DB9EF8838027AD8F634AD0141DEA955CFC12C354F2B3DCD94E117BB5374A"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\selected-projects.json",
+      "length": 1759,
+      "sha256": "12888342F0866D8F27CF36A45B1003F4AC1655469E475D99DA6FCF977DED9E93"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+      "length": 425697,
+      "sha256": "9EB9192E742AE429BC421587A9D024F7CF84A58DB283E84A3277FA5DBF254FA5"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+      "length": 46202,
+      "sha256": "DEAEBE7D99D44330C6704F7A0E3685576FF8501814F5138387079A7739F02A09"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+      "length": 30732,
+      "sha256": "20B2E827FB3C0BBE250DB043A3E746FA95FAD1B408D3DDFC07A990F74D78EF4F"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+      "length": 96112,
+      "sha256": "871E39F2B5DFAB24C02F0263C4250B8CF8F0565F2FA631E148DAFA7DDFBECA7A"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+      "length": 130319,
+      "sha256": "5F1DBDA23A39A5637B33C94120F333D3AC0E5FA7545D8F3A3A8DEFBB6950F37D"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+      "length": 1297942,
+      "sha256": "64A42EDEFF29403F3858ADF84AF20F0E61178B320FE1C564110EEFAC5FF865CA"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+      "length": 4422940,
+      "sha256": "DC20A54EAA6F0D3B2F6D428ED4079945B968EEAB2C76A6A872BA3DF10AC9E636"
+    }
+  ],
+  "HistoryManifestSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+  "HistoryFiles": [
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+      "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+      "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+      "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+      "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+      "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "match": true
+    }
+  ],
+  "ValidatorAssemblySha256": "99E2E232F1B7E63174AB9CB40A9969DF325BC2943675FE0FE03ADBC429D0C1A5",
+  "IndependentValidatorResult": {
+    "status": "ACCEPTED",
+    "method": "SessionLifeUnitGateValidator.Validate",
+    "artifactMutation": false,
+    "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+  },
+  "ModelProof": {
+    "events": [
+      {
+        "line": 1,
+        "type": "session_meta",
+        "id": "01a0f335-f03c-7d21-93b4-6e9f78e1a6d6",
+        "originator": "codex_exec",
+        "cli_version": "0.158.0-alpha.2.1",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 8,
+        "type": "turn_context",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "reasoning_effort": null,
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 164,
+        "type": "turn_context",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "reasoning_effort": null,
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      }
+    ],
+    "path": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T11-46-33-01a0f335-f03c-7d21-93b4-6e9f78e1a6d6.jsonl"
+  }
+}
