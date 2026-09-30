@@ -37,8 +37,10 @@ Proofs go through the real `repl-invoke.ps1` builder and shim, and through child
 - Closing any of the 35 batch TODOs.
 - Rewriting `history-r1`.
 - Claiming P2 HV AGREE.
-- Implementing Nuke `--test-run-id` inventory producers or `tools/validation/Invoke-SessionLifeUnitGate.ps1`. Those remain a blocking prerequisite for P2 exit. This slice does not silently treat the focused Pester run as that gate.
+- Treating the focused Pester run as the cumulative unit gate. The follow-up on this branch added the producers and ran the gate. That run is red. P2 exit and HV AGREE stay unclaimed.
 
 ## Result
 
-Focused evidence is in `p2-contracts-focused-run.md`. Items 1-5 are green on the SessionLog suites. Item 7 is not met.
+Focused evidence for items 1-5 is in `p2-contracts-focused-run.md`. Those items stay green on the SessionLog suites.
+
+Item 7 was executed as run `p2-unit-20260930T010500Z`. The validator rejected it: `reason=incomplete-trx-outcome` on `McpServer.Support.Mcp.Tests`. Zero skips. The exact failures are in `p2-unit-gate-run.md` and `p2-unit-gate-failures.json`. HV AGREE is not claimed.

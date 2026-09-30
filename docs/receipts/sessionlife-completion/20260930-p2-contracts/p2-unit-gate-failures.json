@@ -1,0 +1,1038 @@
+{
+  "schemaVersion": 1,
+  "runId": "p2-unit-20260930T010500Z",
+  "scope": "unit",
+  "gateAccepted": false,
+  "hvAgreeClaimed": false,
+  "validator": {
+    "target": "CheckSessionLifeUnitGate",
+    "exception": "System.IO.InvalidDataException",
+    "reason": "incomplete-trx-outcome",
+    "affected": "McpServer.Support.Mcp.Tests|unit/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.trx"
+  },
+  "commands": [
+    {
+      "name": "pester",
+      "exitCode": 1,
+      "startedAtUtc": "2026-09-30T01:01:22.3590467+00:00",
+      "finishedAtUtc": "2026-09-30T01:02:33.9008345+00:00"
+    },
+    {
+      "name": "nuke-test",
+      "exitCode": 255,
+      "startedAtUtc": "2026-09-30T01:02:33.9047945+00:00",
+      "finishedAtUtc": "2026-09-30T01:05:36.1489632+00:00"
+    },
+    {
+      "name": "build-tests",
+      "exitCode": 1,
+      "startedAtUtc": "2026-09-30T01:05:36.1504616+00:00",
+      "finishedAtUtc": "2026-09-30T01:09:03.0384672+00:00"
+    }
+  ],
+  "pesterNative": {
+    "RunId": "p2-unit-20260930T010500Z",
+    "ExecutedAt": "2026-09-30T01:01:22.3590467+00:00",
+    "Total": 193,
+    "Passed": 179,
+    "Failed": 14,
+    "Skipped": 0,
+    "Inconclusive": 0,
+    "NotRun": 0,
+    "FailedBlocks": 1,
+    "FailedContainers": 0
+  },
+  "pesterXml": {
+    "sha256": "f0651641b68820a4263b383d4f988224f6022456531bd523dcc860dede3b7b81",
+    "total": 193,
+    "failures": 14,
+    "errors": 0,
+    "notRun": 0,
+    "inconclusive": 0,
+    "ignored": 0,
+    "skipped": 0,
+    "invalid": 0,
+    "date": "2026-09-30",
+    "time": "01:01:22"
+  },
+  "pesterFailedCases": [
+    {
+      "name": "TEST-HANDOFF-006 plugin handoff skill-file invoke.PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods",
+      "result": "Failure",
+      "message": "This test should run but it did not. Most likely a setup in some parent block failed."
+    },
+    {
+      "name": "PowerShell-only plugin migration requirements.TEST-MCP-PLUGIN-PSONLY-002 rejects forbidden Bash and Node runtime files from shipped plugin packages",
+      "result": "Failure",
+      "message": "ParameterBindingValidationException: Cannot bind argument to parameter 'Path' because it is an empty string."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-001 FR-MCP-PLUGIN-PSONLY-003 fails closed before MCP work when the runtime is refused",
+      "result": "Failure",
+      "message": "Expected 0, but got 64."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-002 generated wrappers invoke PowerShell hook entrypoint",
+      "result": "Failure",
+      "message": "Expected 0, but got 64."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-002 status entrypoint returns JSON status without mutation",
+      "result": "Failure",
+      "message": "Expected 0, but got 64."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-BUGTRIAGE-051 marker refresh writes sessionId before reporting verified",
+      "result": "Failure",
+      "message": "RuntimeException: No marker file (AGENTS-README-FIRST.yaml) found walking up from /workspace"
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-TRANSCRIPT-010 does not expose transcript ingestion endpoints through plugins",
+      "result": "Failure",
+      "message": "DirectoryNotFoundException: Could not find a part of the path '/workspace/plugins/core/.staged-plugin/skills/session/SKILL.md'."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation",
+      "result": "Failure",
+      "message": "ItemNotFoundException: Cannot find path '/workspace/plugins/core/.staged-plugin/skills' because it does not exist."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-BUGTRIAGE-050 triage skill documents schema-valid REPL status methods",
+      "result": "Failure",
+      "message": "DirectoryNotFoundException: Could not find a part of the path '/workspace/plugins/core/.staged-plugin/skills/triage/SKILL.md'."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-PLUGIN-PSONLY-002 synced manifest contains PowerShell runtime files only",
+      "result": "Failure",
+      "message": "Expected $true, but got $false."
+    },
+    {
+      "name": "TEST-MCP-PLUGIN-PSONLY-001 PowerShell runtime behavior.TEST-MCP-BUGTRIAGE-027 core integrity checker exits 0 on success",
+      "result": "Failure",
+      "message": "Expected 0, but got 1."
+    },
+    {
+      "name": "TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.sets TEMP and TMP to a writable directory on the workspace volume when they differ",
+      "result": "Failure",
+      "message": "CommandNotFoundException: The term 'subst' is not recognized as a name of a cmdlet, function, script file, or executable program."
+    },
+    {
+      "name": "TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment.does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error",
+      "result": "Failure",
+      "message": "Expected $false, but got $true."
+    },
+    {
+      "name": "TRIAGEPLUGIN identity and timeouts.TEST-MCP-TRIAGEPLUGIN-004 PersistTurn.SubmitAsyncChildTimeout_ReturnsDegradedQueued",
+      "result": "Failure",
+      "message": "Expected $false, but got $true."
+    }
+  ],
+  "artifactSha256": {
+    "source-manifest.json": "530ac10141ebdff71ff638bb957b0b5f5e292681830817ce2f624d4f94b13bad",
+    "unit/selected-projects.json": "708a0d09b93707e45cc2c01ef99dc375a3d46fbc50299250b55bbf0d23b4ee3e",
+    "pester/results.xml": "f0651641b68820a4263b383d4f988224f6022456531bd523dcc860dede3b7b81",
+    "pester/native-run.json": "25c0080feedb9c7b0619b378e5a1e2a2efb588eb97e1aa80159a798a83beab54",
+    "command-results.json": "e45b1c689c722610c83856382947407ff3bf453451bd63dc3129bd208f99e998"
+  },
+  "reports": [
+    {
+      "path": "build-tests/Build.Tests.trx",
+      "sha256": "c5d69ec5b5eddd5a63bcc9badf619542d7116fa33df0b5159713cea26b97616c",
+      "bytes": 422234,
+      "outcome": "Failed",
+      "counters": {
+        "total": 314,
+        "executed": 314,
+        "passed": 310,
+        "failed": 4,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:05:37.6343124+00:00",
+      "finishedAt": "2026-09-30T01:09:02.2009186+00:00",
+      "failedTests": [
+        {
+          "name": "NukeBuild.Tests.HandoffD3D5OverlayTests.D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+          "message": "C3 FR gaps: mapping=[FR-MCP-SERVICEUPDATE-001] matrix=[FR-MCP-SERVICEUPDATE-001]"
+        },
+        {
+          "name": "NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+          "message": "mcpserver-codex-plugin: plugin root missing; mcpserver-claude-code-plugin: plugin root missing; mcpserver-copilot-plugin: plugin root missing; mcpserver-cline-plugin: plugin root missing; mcpserver-grok-plugin: plugin root missing"
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+          "message": "C3 FR gaps: mapping=[FR-MCP-SERVICEUPDATE-001] matrix=[FR-MCP-SERVICEUPDATE-001]"
+        },
+        {
+          "name": "NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+          "message": "mcpserver-codex-plugin: plugin root missing; mcpserver-claude-code-plugin: plugin root missing; mcpserver-copilot-plugin: plugin root missing; mcpserver-cline-plugin: plugin root missing; mcpserver-grok-plugin: plugin root missing"
+        }
+      ]
+    },
+    {
+      "path": "unit/McpServer.Client.Tests/McpServer.Client.Tests.trx",
+      "sha256": "995e54d2eb5022f66cd47bc7f5afce383bd8471148f08112c1d1dd1c34bbffa2",
+      "bytes": 391279,
+      "outcome": "Completed",
+      "counters": {
+        "total": 301,
+        "executed": 301,
+        "passed": 301,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:04:53.4969858+00:00",
+      "finishedAt": "2026-09-30T01:04:55.0640036+00:00",
+      "failedTests": []
+    },
+    {
+      "path": "unit/McpServer.Cqrs.Tests/McpServer.Cqrs.Tests.trx",
+      "sha256": "a4189cd2687d0ea7cdcdd71a2c3bc8a55f308e66526e7f548ec08133d40f9c47",
+      "bytes": 42336,
+      "outcome": "Completed",
+      "counters": {
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:04:55.6194873+00:00",
+      "finishedAt": "2026-09-30T01:04:56.5702216+00:00",
+      "failedTests": []
+    },
+    {
+      "path": "unit/McpServer.Launcher.Tests/McpServer.Launcher.Tests.trx",
+      "sha256": "5a5d042bfdc201e9f900691a4bb42d542fc7582707125c904ee50eff55b7c948",
+      "bytes": 28348,
+      "outcome": "Completed",
+      "counters": {
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:04:57.0671771+00:00",
+      "finishedAt": "2026-09-30T01:04:57.9072539+00:00",
+      "failedTests": []
+    },
+    {
+      "path": "unit/McpServer.McpAgent.Tests/McpServer.McpAgent.Tests.trx",
+      "sha256": "cebfc1a914633dc7cdd6fd4079816be79bf0ed8b052a61aebe28a7f0274055b8",
+      "bytes": 150752,
+      "outcome": "Failed",
+      "counters": {
+        "total": 63,
+        "executed": 63,
+        "passed": 56,
+        "failed": 7,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:04:58.4053443+00:00",
+      "finishedAt": "2026-09-30T01:05:00.0299742+00:00",
+      "failedTests": [
+        {
+          "name": "McpServer.McpAgent.Tests.McpSessionIdentifierFactoryTests.AddMcpServerMcpAgent_RegistersIdentifierFactory",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_RegistersHostedAgentFactory",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_UsesPreconfiguredOptions",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_AllowsBearerTokenAuthentication",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_RegistersAcidTightlyCoupledProfile",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_AllowsMissingAuthenticationWhenDisabled",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        },
+        {
+          "name": "McpServer.McpAgent.Tests.ServiceCollectionExtensionsTests.AddMcpServerMcpAgent_RegistersScaffoldedHostedAgent",
+          "message": "Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided."
+        }
+      ]
+    },
+    {
+      "path": "unit/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.trx",
+      "sha256": "a33975d30b1279e62440fe6ed37bdb2f72bc3935da6a14ad318163a815dc34ae",
+      "bytes": 293807,
+      "outcome": "Failed",
+      "counters": {
+        "total": 94,
+        "executed": 94,
+        "passed": 13,
+        "failed": 81,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:05:04.6793453+00:00",
+      "finishedAt": "2026-09-30T01:05:35.9141882+00:00",
+      "failedTests": [
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+          "message": "P20 harness log is missing: harness.log"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: OpenCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Grok)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCode)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        },
+        {
+          "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+          "message": "System.InvalidOperationException : Plugin repository root is missing: mcpserver-codex-plugin"
+        }
+      ]
+    },
+    {
+      "path": "unit/McpServer.QBAgent.Tests/McpServer.QBAgent.Tests.trx",
+      "sha256": "fab04b45e83aff71ff0486527c6ec0ef91cfffb3891f9075d284479053ade774",
+      "bytes": 119955,
+      "outcome": "Completed",
+      "counters": {
+        "total": 90,
+        "executed": 90,
+        "passed": 90,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:05:03.0696942+00:00",
+      "finishedAt": "2026-09-30T01:05:04.1739593+00:00",
+      "failedTests": []
+    },
+    {
+      "path": "unit/McpServer.Repl.Core.Tests/McpServer.Repl.Core.Tests.trx",
+      "sha256": "1b3409dd5ccc8523f73ad8d17bf715c24ef787510cc772734a28eb4e8659fa97",
+      "bytes": 1202442,
+      "outcome": "Completed",
+      "counters": {
+        "total": 866,
+        "executed": 866,
+        "passed": 866,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:05:00.5521809+00:00",
+      "finishedAt": "2026-09-30T01:05:02.4395426+00:00",
+      "failedTests": []
+    },
+    {
+      "path": "unit/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.trx",
+      "sha256": "f1f05c743af7a13ddb221626ac40697a1fc2a8883d18fa064ecb84168f4bd1e4",
+      "bytes": 4318746,
+      "outcome": "Failed",
+      "counters": {
+        "total": 2893,
+        "executed": 2893,
+        "passed": 2823,
+        "failed": 70,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "startedAt": "2026-09-30T01:04:00.6769098+00:00",
+      "finishedAt": "2026-09-30T01:04:52.6386201+00:00",
+      "failedTests": [
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests.WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak",
+          "message": "The Linux native gate requires non-root FUSE support and fusermount3."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected",
+          "message": "Assert.Throws() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch",
+          "message": "Assert.Equal() Failure: Values differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags",
+          "message": "Assert.NotNull() Failure: Value is null"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/e3f0cbcfc6fc491f906c730b6bf195f1/out-a'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun",
+          "message": "Assert.Single() Failure: The collection was empty"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-g3-handoff-d3-2dc959c432df4b42b44499add3ee4e2b/markdown'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected",
+          "message": "Assert.Null() Failure: Value is not null"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries",
+          "message": "Missing command ledger: /workspace/docs/receipts/artifacts/BUG-TRIAGE-139/sixteenth-remediation/superseded-command-ledger.tsv"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-8c4ac6ef8f054428be40a322a308b4c1/legacy-bold/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata",
+          "message": "System.IO.DirectoryNotFoundException : /tmp/mcp-reqdocs-tests-25606481/docs/Project/wiki/github"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-8ccc8be5086842c083a348e7c941f46a/stale-link/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-7703ec85/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline",
+          "message": "System.InvalidOperationException : Sequence contains no elements."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags",
+          "message": "Assert.Contains() Failure: Sub-string not found"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-83379dae/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes",
+          "message": "Assert.ThrowsAny() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.WorkspaceIdentity_SeparateApprovedLocalMount_IsAccepted",
+          "message": "System.NotSupportedException : Linux physical identity resolution rejected an approved-mount replacement while pinning '/dev/shm'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup",
+          "message": "System.IO.DirectoryNotFoundException : /tmp/mcp-wiki-orchestrator-tests-b9e4a8b14075423aa1f9fe5073b51c95/wiki-output/azure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject",
+          "message": "Unexpected alias-race failure: System.IO.DirectoryNotFoundException: /tmp/mcp-twelfth-root-7a2fec3a850e441497a3af6ec6bef5e8/wiki/document.md"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups",
+          "message": "Assert.Equal() Failure: Values differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost",
+          "message": "Assert.Equal() Failure: Collections differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers",
+          "message": "System.NotSupportedException : Linux physical identity resolution rejected a mount transition, including FUSE and network aliases, under the anchored RESOLVE_NO_XDEV policy."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate",
+          "message": "Assert.Equal() Failure: Values differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-26995f334b0640a0868e7985f57282c5/wiki-output'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/acfe35e0a36c431787f625bf3cc2926f/wiki-dump'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact",
+          "message": "/mcpserver-grok-plugin/skills/handoff/SKILL.md"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-014458bdee3c4b64a1250e2c1bd287d4/a/docs/Project/export'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics",
+          "message": "Assert.Single() Failure: The collection was empty"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests.SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks",
+          "message": "The Linux native gate requires non-root FUSE support and fusermount3."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting",
+          "message": "Assert.ThrowsAny() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-5852c701/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/g8-wiki-e2f1d06c3438439c8e0cf5e6ee4f3d35/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-367d7b3c882b4186b53bf03d91f15eff/wiki-output'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject",
+          "message": "Unexpected alias-race failure: System.IO.IOException: Unable to open contained Linux traversal entry '/tmp/mcp-twelfth-root-c973b720f7c448a3845283e52156adf5/wiki/document.md'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected",
+          "message": "Assert.Throws() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+          "message": "System.ComponentModel.Win32Exception : An error occurred trying to start process 'sqllocaldb' with working directory '/workspace/tests/McpServer.Support.Mcp.Tests/bin/Debug/net10.0'. No such file or directory"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact",
+          "message": "System.IO.DirectoryNotFoundException : Could not find a part of the path '/workspace/docs/receipts/artifacts/BUG-TRIAGE-139/reviews/eighteenth-input-independent-review-3ce5a814.txt'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-3ae60e0d/docs/Project/wiki'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-563f3e0f/export/canonical-readonly'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.SqliteOpen_SeparateApprovedLocalMount_IsAccepted",
+          "message": "System.NotSupportedException : Atomic Linux data-file opening rejected an approved-mount replacement while pinning '/dev/shm'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"C:/outside/docfx\", \u00b7\u00b7\u00b7]]]], expectedMessage: \"outputRoot\")",
+          "message": "Assert.Throws() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-86de5ece149445c783c1527f2ebfc928/wiki-output'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection",
+          "message": "System.IO.DirectoryNotFoundException : Could not find a part of the path '/workspace/docs/receipts/artifacts/BUG-TRIAGE-139/reviews/sixteenth-independent-review.txt'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly",
+          "message": "System.NotSupportedException : Linux requirements export cleanup rejects nested stale paths before mutation because the kernel lacks a contained atomic delete: 'azure/Old.md'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/10bf57a0bbb845319a2bc4b3bc9ccd62/wiki-di'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected",
+          "message": "Assert.Throws() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently",
+          "message": "System.InvalidOperationException : PostgreSQL binaries not found (Program Files\\PostgreSQL\\*\\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr",
+          "message": "PostgreSQL binaries not found. Run InstallTestDependencies or install PostgreSQL locally. Do not skip."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver",
+          "message": "Assert.True() Failure"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"docs/docfx/_site\", \u00b7\u00b7\u00b7]]]], expectedMessage: \"targetRoot\")",
+          "message": "Assert.Throws() Failure: No exception was thrown"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-e0623038/export/canonical-with-matrix'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform",
+          "message": "Assert.NotNull() Failure: Value is null"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved",
+          "message": "Assert.Equal() Failure: Strings differ"
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace",
+          "message": "System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-d709cfde/export/canonical'."
+        },
+        {
+          "name": "McpServer.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly",
+          "message": "Assert.True() Failure"
+        }
+      ]
+    }
+  ],
+  "rawResults": "TestResults/p2-unit-20260930T010500Z",
+  "rawResultsGitignoredBy": "[Tt]est[Rr]esult*/",
+  "hangDumpsRetained": false,
+  "structuredSerialization": "Python json module serializing native objects"
+}

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "recordedAtUtc": "2026-09-30T00:32:26Z",
+  "recordedAtUtc": "2026-09-30T01:20:00Z",
   "gate": "P2 cache identity metadata and outcome contracts",
   "accepted": false,
   "phaseComplete": false,
   "hvAgreeClaimed": false,
   "items1to5": "green",
   "item6": "shared helpers applied; Complete-ReplBeginTurnAfterPersist was not rewritten",
-  "item7CumulativeUnitGate": "blocked",
+  "item7CumulativeUnitGate": "executed-red",
   "mcp": "MCP_UNTRUSTED",
   "base": "f80e9af6f57029af57b6a3db388002cbdafedb4e",
   "pester": {
@@ -30,11 +30,12 @@
     "trxSha256": "dae13c97343ca9e6c987f969a81f34a3cd79b709eee4e684b5993c5b9b8942ec"
   },
   "blockers": [
-    "tools/validation/Invoke-SessionLifeUnitGate.ps1 is absent",
-    "Nuke --test-run-id inventory producers are absent",
-    "cumulative unit inventory was not executed",
+    "cumulative unit gate run p2-unit-20260930T010500Z is red: validator reason=incomplete-trx-outcome",
+    "Pester 14 failed and 1 failed block; zero skipped",
+    "Nuke Test failed McpServer.Support.Mcp.Tests (70), McpServer.McpAgent.Tests (7), McpServer.PluginIntegration.Tests (81); zero skipped",
+    "Build.Tests Category!=Integration failed 4; zero skipped",
     "durable server query is not claimed",
-    "nine PluginPowerShellRuntime facts need a staged plugin or a repo-root marker"
+    "HV AGREE is not claimed"
   ],
   "outOfScope": [
     "P3",
@@ -49,5 +50,33 @@
     "agent": "Grok",
     "model": "Grok 4.7"
   },
-  "structuredSerialization": "Python json module serializing native objects"
+  "structuredSerialization": "Python json module serializing native objects",
+  "cumulativeUnitGate": {
+    "runId": "p2-unit-20260930T010500Z",
+    "script": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+    "accepted": false,
+    "hvAgreeClaimed": false,
+    "validatorReason": "incomplete-trx-outcome",
+    "validatorAffected": "McpServer.Support.Mcp.Tests|unit/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.trx",
+    "skips": 0,
+    "pester": {
+      "total": 193,
+      "passed": 179,
+      "failed": 14,
+      "skipped": 0,
+      "failedBlocks": 1
+    },
+    "nukeUnitFailed": 158,
+    "nukeUnitPassed": 4202,
+    "nukeUnitExecuted": 4360,
+    "buildTests": {
+      "total": 314,
+      "passed": 310,
+      "failed": 4,
+      "skipped": 0,
+      "notExecuted": 0
+    },
+    "failureIndex": "p2-unit-gate-failures.json",
+    "narrative": "p2-unit-gate-run.md"
+  }
 }

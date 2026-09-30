@@ -59,6 +59,8 @@ The recorded run used `/tmp/p2-sessionlife-unit-gate` and was copied into `test-
 - TRX counters: total 95, executed 95, passed 95, failed 0, skipped 0, notExecuted 0.
 - TRX SHA-256 `dae13c97343ca9e6c987f969a81f34a3cd79b709eee4e684b5993c5b9b8942ec`.
 
-## Gate blocker for P2 exit
+## Gate blocker recorded at this focused run
 
-`tools/validation/Invoke-SessionLifeUnitGate.ps1` is not in the tree. Nuke `Test` does not emit a `--test-run-id` selected-project inventory. P1 left those producers out of scope. This slice does not invent a competing project list and does not treat the focused Pester total as the machine-readable cumulative unit gate. P2 item 7 stays open until that orchestration exists and a fresh run reports zero failures and zero skips.
+At `2026-09-30T00:32:26Z`, `tools/validation/Invoke-SessionLifeUnitGate.ps1` was not in the tree and Nuke `Test` did not emit a `--test-run-id` inventory. This focused Pester total was not the machine-readable cumulative unit gate.
+
+The follow-up on the same branch added those producers and executed run `p2-unit-20260930T010500Z`. That run is red. See `p2-unit-gate-run.md`. HV AGREE is not claimed.
