@@ -17,7 +17,7 @@ public sealed class SyncAgentPluginsChecksumTests
         var canonicalDir = Path.Combine(repoRoot, "plugins", "core", "lib-ps");
         Assert.True(Directory.Exists(canonicalDir), "canonical plugins/core/lib-ps is missing");
 
-        var githubRoot = Directory.GetParent(repoRoot)?.FullName;
+        var githubRoot = Build.ResolveOfficialPluginSiblingParent(repoRoot);
         Assert.False(string.IsNullOrWhiteSpace(githubRoot));
         var officialPlugins = new[]
         {

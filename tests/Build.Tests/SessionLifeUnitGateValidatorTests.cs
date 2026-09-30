@@ -406,10 +406,7 @@ public sealed class SessionLifeUnitGateValidatorTests
         private SessionLifeGateFixture(SessionLifeUnitGateScope scope, bool nestRepositoryUnderMcpServerAncestor)
         {
             Scope = scope;
-            OwnedRoot = Path.Combine(
-                Path.GetTempPath(),
-                "McpServer-SessionLifeUnitGate",
-                Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+            OwnedRoot = Path.Combine(ResolveCleanFixtureTempRoot(), "McpServer-SessionLifeUnitGate", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
             RepositoryRoot = nestRepositoryUnderMcpServerAncestor
                 ? Path.Combine(OwnedRoot, ".mcpServer", "worktrees", "candidate")
                 : Path.Combine(OwnedRoot, "repository");
@@ -497,6 +494,34 @@ public sealed class SessionLifeUnitGateValidatorTests
         /// <summary>Creates a valid fixture whose repository has a <c>.mcpServer</c> ancestor.</summary>
         /// <param name="scope">The independent lane to create.</param>
         /// <returns>A disposable real-artifact fixture rooted under the owned <c>.mcpServer</c> directory.</returns>
+
+        /// <summary>
+        /// Returns a temp root that does not already contain an ambient .mcpServer path segment.
+        /// Some Legion layouts redirect TMP under the repo .mcpServer/tmp, which would otherwise
+        /// make ToolRoot fail the nested-ancestor assertions.
+        /// </summary>
+        private static string ResolveCleanFixtureTempRoot()
+        {
+            var temp = Path.GetTempPath();
+            var marker = Path.DirectorySeparatorChar + ".mcpServer" + Path.DirectorySeparatorChar;
+            var normalized = temp.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            if (normalized.IndexOf(marker, StringComparison.OrdinalIgnoreCase) >= 0
+                || normalized.TrimEnd(Path.DirectorySeparatorChar)
+                    .EndsWith(".mcpServer", StringComparison.OrdinalIgnoreCase))
+            {
+                var root = Path.GetPathRoot(normalized);
+                if (string.IsNullOrWhiteSpace(root))
+                {
+                    root = Path.GetPathRoot(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+                }
+
+                temp = Path.Combine(root!, "McpServerGateTemp");
+                Directory.CreateDirectory(temp);
+            }
+
+            return temp;
+        }
         internal static SessionLifeGateFixture CreateUnderMcpServerAncestor(SessionLifeUnitGateScope scope) =>
             new(scope, nestRepositoryUnderMcpServerAncestor: true);
 

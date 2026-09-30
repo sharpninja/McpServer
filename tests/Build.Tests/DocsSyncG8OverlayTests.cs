@@ -105,7 +105,7 @@ public sealed class DocsSyncG8OverlayTests
         var repoRoot = FindRepositoryRoot();
         var canonicalDir = Path.Combine(repoRoot, "plugins", "core", "lib-ps");
         Assert.True(Directory.Exists(canonicalDir), canonicalDir);
-        var githubRoot = Directory.GetParent(repoRoot)?.FullName;
+        var githubRoot = Build.ResolveOfficialPluginSiblingParent(repoRoot);
         Assert.False(string.IsNullOrWhiteSpace(githubRoot));
         var officialPlugins = new[]
         {

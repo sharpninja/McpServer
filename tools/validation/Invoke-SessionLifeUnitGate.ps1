@@ -23,14 +23,33 @@ if ($RunId -match '[\\/:]' -or $RunId.Contains('..')) {
 
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).ProviderPath
 $dotnetHome = Join-Path $HOME '.dotnet'
+$dotnetTools = Join-Path $dotnetHome 'tools'
 if (Test-Path -LiteralPath (Join-Path $dotnetHome 'dotnet')) {
     $env:DOTNET_ROOT = $dotnetHome
-    if (($env:PATH -split [IO.Path]::PathSeparator) -notcontains $dotnetHome) {
-        $env:PATH = "$dotnetHome$([IO.Path]::PathSeparator)$env:PATH"
+}
+foreach ($candidate in @($dotnetTools, $dotnetHome)) {
+    if ((Test-Path -LiteralPath $candidate) -and (($env:PATH -split [IO.Path]::PathSeparator) -notcontains $candidate)) {
+        $env:PATH = "$candidate$([IO.Path]::PathSeparator)$env:PATH"
     }
+}
+$cleanTemp = Join-Path $env:LOCALAPPDATA 'Temp'
+if (Test-Path -LiteralPath $cleanTemp) {
+    $env:TEMP = $cleanTemp
+    $env:TMP = $cleanTemp
 }
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
 $env:DOTNET_NOLOGO = '1'
+
+$stagedRoot = Join-Path $repoRoot 'plugins\core\.staged-plugin'
+$syncScript = Join-Path $repoRoot 'plugins\core\sync\sync-plugin-core.ps1'
+$wrapperScript = Join-Path $repoRoot 'plugins\core\hooks-templates\generate-wrappers.ps1'
+if (-not (Test-Path -LiteralPath (Join-Path $stagedRoot 'lib\plugin-hook.ps1'))) {
+    New-Item -ItemType Directory -Force -Path $stagedRoot | Out-Null
+    & pwsh -NoLogo -NoProfile -NonInteractive -File $syncScript -PluginRoot $stagedRoot
+    if ($LASTEXITCODE -ne 0) { throw "sync-plugin-core failed with exit $LASTEXITCODE" }
+    & pwsh -NoLogo -NoProfile -NonInteractive -File $wrapperScript -HostName 'claude-code' -PluginRoot $stagedRoot
+    if ($LASTEXITCODE -ne 0) { throw "generate-wrappers failed with exit $LASTEXITCODE" }
+}
 
 $started = [DateTimeOffset]::UtcNow
 $started = [DateTimeOffset]::new(

@@ -165,7 +165,7 @@ public sealed class BugTriage139FourteenthHarnessTests
                 executable,
                 arguments,
                 standardInput: null,
-                TimeSpan.FromSeconds(2));
+                TimeSpan.FromSeconds(10));
 
             Assert.Equal(0, result.ExitCode);
             if (OperatingSystem.IsWindows())

@@ -12,24 +12,48 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
         $script:ResolveScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\resolve-cache-dir.ps1'
         $script:Work = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-p2-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($script:Work)
-        $script:FakeRepl = Join-Path $script:Work 'fake-repl.sh'
-        @'
-#!/bin/bash
-stdin=$(cat)
-if [ -n "${P2_REPL_LOG:-}" ]; then
-  printf '%s\n' "$stdin" >> "$P2_REPL_LOG"
-fi
-if [ "${P2_REPL_MODE:-primary}" = "primary" ]; then
-  if [ -n "${P2_SERVER_STATE:-}" ]; then
-    printf '%s\n' "$stdin" >> "$P2_SERVER_STATE"
-  fi
-  printf 'type: result\npayload:\n  result:\n    persisted: true\n    degraded: false\n'
-  exit 0
-fi
-printf 'type: error\npayload:\n  code: backend_unavailable\n  message: HTTP 503\n  retryable: true\n'
-exit 1
-'@ | Set-Content -LiteralPath $script:FakeRepl -Encoding ascii
-        chmod +x $script:FakeRepl
+        if ($IsWindows) {
+            $script:FakeRepl = Join-Path $script:Work 'fake-repl.cmd'
+            $fakePs1 = Join-Path $script:Work 'fake-repl.ps1'
+            $fakeBody = @(
+                '$stdin = [Console]::In.ReadToEnd()'
+                'if ($env:P2_REPL_LOG) { Add-Content -LiteralPath $env:P2_REPL_LOG -Value $stdin -Encoding utf8 }'
+                '$mode = $env:P2_REPL_MODE'
+                'if ([string]::IsNullOrWhiteSpace($mode)) { $mode = ''primary'' }'
+                'if ($mode -eq ''primary'') {'
+                '    if ($env:P2_SERVER_STATE) { Add-Content -LiteralPath $env:P2_SERVER_STATE -Value $stdin -Encoding utf8 }'
+                '    @("type: result","payload:","  result:","    persisted: true","    degraded: false") -join [Environment]::NewLine | Write-Output'
+                '    exit 0'
+                '}'
+                '@("type: error","payload:","  code: backend_unavailable","  message: HTTP 503","  retryable: true") -join [Environment]::NewLine | Write-Output'
+                'exit 1'
+            ) -join [Environment]::NewLine
+            Set-Content -LiteralPath $fakePs1 -Value $fakeBody -Encoding utf8
+            $pwshExe = (Get-Command pwsh -ErrorAction Stop).Source
+            $cmdBody = '@echo off' + [Environment]::NewLine + '"' + $pwshExe + '" -NoLogo -NoProfile -NonInteractive -File "%~dp0fake-repl.ps1"' + [Environment]::NewLine + 'exit /b %ERRORLEVEL%' + [Environment]::NewLine
+            [System.IO.File]::WriteAllText($script:FakeRepl, $cmdBody)
+        }
+        else {
+            $script:FakeRepl = Join-Path $script:Work 'fake-repl.sh'
+            $bashBody = @(
+                '#!/bin/bash'
+                'stdin=$(cat)'
+                'if [ -n "${P2_REPL_LOG:-}" ]; then'
+                '  printf ''%s\n'' "$stdin" >> "$P2_REPL_LOG"'
+                'fi'
+                'if [ "${P2_REPL_MODE:-primary}" = "primary" ]; then'
+                '  if [ -n "${P2_SERVER_STATE:-}" ]; then'
+                '    printf ''%s\n'' "$stdin" >> "$P2_SERVER_STATE"'
+                '  fi'
+                '  printf ''type: result\npayload:\n  result:\n    persisted: true\n    degraded: false\n'''
+                '  exit 0'
+                'fi'
+                'printf ''type: error\npayload:\n  code: backend_unavailable\n  message: HTTP 503\n  retryable: true\n'''
+                'exit 1'
+            ) -join [Environment]::NewLine
+            Set-Content -LiteralPath $script:FakeRepl -Value $bashBody -Encoding ascii
+            & chmod +x -- $script:FakeRepl
+        }
         . $script:ReplScript
         if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
 
