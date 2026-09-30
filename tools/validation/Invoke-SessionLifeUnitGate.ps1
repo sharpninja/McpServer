@@ -21,6 +21,10 @@ if ($RunId -match '[\\/:]' -or $RunId.Contains('..')) {
     throw "RunId must be a single path segment."
 }
 
+# Session-life cumulative unit gate.
+# PluginIntegration.Tests is long-running: 8 hostKinds x multiple theories (~10-30s/host),
+# DisableParallelization=true, TRX written only at project end. Budget >= 45 minutes and
+# rely on Nuke console;verbosity=detailed progress rather than early hang-kill.
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).ProviderPath
 $dotnetHome = Join-Path $HOME '.dotnet'
 $dotnetTools = Join-Path $dotnetHome 'tools'

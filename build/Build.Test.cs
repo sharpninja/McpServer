@@ -51,13 +51,18 @@ partial class Build
                     {
                         var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "unit", project.Name);
                         Directory.CreateDirectory(directory);
+                        // console;verbosity=detailed streams per-test progress into Nuke logs.
+                        // PluginIntegration alone is multi-host + multi-theory (~30s/host) and can
+                        // exceed 30+ minutes; TRX-only logging looks like a hang to external watchdogs.
                         DotNetTest(_ => _
                             .SetProjectFile(project)
                             .SetConfiguration(Configuration)
                             .EnableNoBuild()
                             .SetFilter("Category!=AiReview&Category!=Integration")
                             .SetResultsDirectory(directory)
-                            .SetLoggers($"trx;LogFileName={project.Name}.trx"));
+                            .SetLoggers(
+                                $"trx;LogFileName={project.Name}.trx",
+                                "console;verbosity=detailed"));
                         SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, $"{project.Name}.trx");
                     }
                 }
