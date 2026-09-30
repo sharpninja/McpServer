@@ -183,13 +183,37 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
 
     It 'a child that does not exit is killed inside the REPL timeout' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-child-' + [guid]::NewGuid().ToString('N'))
-        [void][System.IO.Directory]::CreateDirectory($dir)
-        $bat = Join-Path $dir 'sleep.cmd'
-        Set-Content -LiteralPath $bat -Value "@echo off`r`nping -n 40 127.0.0.1 >nul`r`n" -Encoding ascii
+        $workspace = Join-Path $dir 'ws'
+        $cache = Join-Path $dir 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cache)
+        $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($marker, "workspacePath: $workspace`napiKey: child-timeout`n")
+        $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
+        Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'Codex-20260930T000000Z-child'
+            agent = 'Codex'
+            markerFilePath = $snapshot.markerFilePath
+            markerLastWriteUtc = $snapshot.markerLastWriteUtc
+        })
+        $sleeper = if ($IsWindows) { Join-Path $dir 'sleep.cmd' } else { Join-Path $dir 'sleep.sh' }
+        if ($IsWindows) {
+            Set-Content -LiteralPath $sleeper -Value "@echo off`r`nping -n 40 127.0.0.1 >nul`r`n" -Encoding ascii
+        } else {
+            Set-Content -LiteralPath $sleeper -Value "#!/bin/bash`nsleep 30`n" -Encoding ascii
+            chmod +x $sleeper
+        }
         $priorExe = $env:MCP_REPL_EXECUTABLE
         $priorTimeout = $env:REPL_TIMEOUT
-        $env:MCP_REPL_EXECUTABLE = $bat
+        $priorCache = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
+        $env:MCP_REPL_EXECUTABLE = $sleeper
         $env:REPL_TIMEOUT = '2'
+        $env:MCP_CACHE_DIR_OVERRIDE = $cache
+        $env:MCP_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
         $clock = [System.Diagnostics.Stopwatch]::StartNew()
         try {
             $result = Invoke-ReplRawCore -Method 'client.Health.GetAsync' -ParamsYaml ''
@@ -198,8 +222,11 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             $result.Error | Should -Match 'timed out'
             $clock.Elapsed.TotalSeconds | Should -BeLessThan 12
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $priorExe) { Remove-Item Env:MCP_REPL_EXECUTABLE -ErrorAction SilentlyContinue } else { $env:MCP_REPL_EXECUTABLE = $priorExe }
             if ($null -eq $priorTimeout) { Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_TIMEOUT = $priorTimeout }
+            if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
