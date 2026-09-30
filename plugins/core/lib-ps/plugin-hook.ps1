@@ -901,18 +901,27 @@ function Open-PluginTurn {
     }
 
     $degradedFlag = Get-YamlScalar -Path $turnFile -Key 'degraded'
+    $recoveryArtifactPath = Get-YamlScalar -Path $turnFile -Key 'failsafePath'
     $openStatus = if ($degradedFlag -eq 'true') { 'turn-opened-degraded' } else { 'turn-opened' }
+    $additionalContext = if ($env:MCP_CODEX_INTERNAL_TODO -eq '1' -or $env:MCPSERVER_CODEX_INTERNAL_TODO -eq '1' -or $env:CODEX_MCP_TODO -eq '1') {
+        "session log turn $turnRequestId is now active. MCP-backed internal TODO tracking is enabled. Continue the current task after any incidental triage submission."
+    } else {
+        "session log turn $turnRequestId is now active. Continue the current task after any incidental triage submission."
+    }
+    if ($openStatus -eq 'turn-opened-degraded' -and -not [string]::IsNullOrWhiteSpace($recoveryArtifactPath)) {
+        $additionalContext = "$additionalContext Retained recovery artifact: $recoveryArtifactPath"
+    }
+    $hookOutput = [ordered]@{
+        hookEventName = 'UserPromptSubmit'
+        status = $openStatus
+        turnRequestId = $turnRequestId
+        additionalContext = $additionalContext
+    }
+    if ($openStatus -eq 'turn-opened-degraded') {
+        $hookOutput['recoveryArtifactPath'] = [string]$recoveryArtifactPath
+    }
     Write-PluginJson ([ordered]@{
-        hookSpecificOutput = [ordered]@{
-            hookEventName = 'UserPromptSubmit'
-            status = $openStatus
-            turnRequestId = $turnRequestId
-            additionalContext = if ($env:MCP_CODEX_INTERNAL_TODO -eq '1' -or $env:MCPSERVER_CODEX_INTERNAL_TODO -eq '1' -or $env:CODEX_MCP_TODO -eq '1') {
-                "session log turn $turnRequestId is now active. MCP-backed internal TODO tracking is enabled. Continue the current task after any incidental triage submission."
-            } else {
-                "session log turn $turnRequestId is now active. Continue the current task after any incidental triage submission."
-            }
-        }
+        hookSpecificOutput = $hookOutput
     })
 }
 

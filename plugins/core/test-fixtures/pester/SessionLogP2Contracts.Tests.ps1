@@ -508,10 +508,12 @@ Write-Output ("agent=" + $script:AgentName)
         $bootstrap = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'docs\context\module-bootstrap.md'))
         $guide = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'docs\REPL-USER-GUIDE.md'))
         $schema = Get-Content -LiteralPath (Join-Path $script:RepoRoot 'docs\context\repl-yaml-message.schema.json') -Raw | ConvertFrom-Json
-        $examples = @($bootstrap -split "`n" | Where-Object { $_ -match '"method":"workflow\.sessionlog\.beginTurn"' })
-        $examples.Count | Should -BeGreaterThan 0
-        foreach ($example in $examples) {
-            $json = $example.Trim() | ConvertFrom-Json
+        $fence = [string]::new([char]96, 3)
+        $blocks = [regex]::Matches(($bootstrap -replace "`r`n", "`n"), ('(?ms)^' + $fence + 'json[ \t]*\n(?<body>.*?)^' + $fence + '[ \t]*$'))
+        $beginBlocks = @($blocks | Where-Object { $_.Groups['body'].Value -match 'workflow\.sessionlog\.beginTurn' })
+        $beginBlocks.Count | Should -BeGreaterThan 0
+        foreach ($block in $beginBlocks) {
+            $json = $block.Groups['body'].Value.Trim() | ConvertFrom-Json
             [string]$json.payload.params.planFile | Should -Be 'None'
             [string]$json.payload.params.todoId | Should -Be 'None'
         }
@@ -555,5 +557,75 @@ Write-Output ("agent=" + $script:AgentName)
         [string]$begin.description | Should -Match 'cancelled'
         [string]$begin.description | Should -Match 'durable reopen'
         [string]$begin.description | Should -Match 'not a wire discriminator'
+    }
+
+    It 'rejects unproven persistence envelopes without clearing failsafe recovery' {
+        $astPath = $script:ReplScript
+        $tokens = $null; $errors = $null
+        $ast = [System.Management.Automation.Language.Parser]::ParseFile($astPath, [ref]$tokens, [ref]$errors)
+        foreach ($name in @('Invoke-ReplPersistTurn','New-ReplSessionVerbReceipt','Publish-ReplSessionVerbReceipt','Get-ReplStableFingerprint','Find-ReplFailsafeByFingerprint')) {
+            $fn = $ast.Find({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq $name }, $true)
+            . ([scriptblock]::Create($fn.Extent.Text))
+        }
+        function Get-ReplObjectValue { param($InputObject, [string]$Name) if ($null -eq $InputObject) { return $null }; if ($InputObject -is [System.Collections.IDictionary]) { return $InputObject[$Name] }; return $InputObject.$Name }
+        function Get-ReplSessionMeta { return @{ SourceType = 'Codex'; SessionId = 'session-A' } }
+        function Invoke-ReplTurnUpsertParams { param($SourceType,$SessionId,$RequestId,$Title,$Status,$ResponseText,$ActionsYaml,$ProcessingDialog,$Interpretation,$TokenCount,$Tags,$ContextList,$PlanFile,$TodoId) return @{ turn = @{ queryText = 'q'; timestamp = '2026-09-30T00:00:00Z' } } }
+        function Get-ReplTurnCacheField { param($Field) return '' }
+        function Set-ReplTurnCacheField { param($Field,$Value) }
+        function Get-ReplSessionStateValue { param($Key) return '' }
+        function Resolve-McpPluginAgentHeaderFields { param($SessionId,$CacheDir,$AgentName,$HostName) return @{ agentSessionId=''; agentSessionTranscriptFile=''; agentExecutablePath=''; agentExecutableVersion='' } }
+        function Get-McpPluginFirstText { param($Values) return '' }
+        function Get-McpPluginFirstExistingFile { param($Values) return '' }
+        function ConvertTo-Yaml { param($Data,$Options) return (ConvertTo-Json $Data -Depth 20 -Compress) }
+        function Convert-ReplParamsYamlToObject { param($ParamsYaml) return ($ParamsYaml | ConvertFrom-Json -AsHashtable) }
+        $script:records = @(); $script:cleared = $false
+        function Write-ReplFailsafe { param($Method,$ParamsYaml,$Label,$PayloadFingerprint) $script:records += $PayloadFingerprint; return 'fs-1' }
+        function Clear-ReplFailsafe { param($Path) $script:cleared = $true }
+        function Invoke-ReplRaw { param($Method,$ParamsYaml) return @{ Success = $true; Output = '{}'; Error = '' } }
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
+        { Invoke-ReplPersistTurn -RequestId 'req-R' -Status 'in_progress' -ResponseText 'x' } | Should -Throw
+        $script:cleared | Should -BeFalse
+        $script:records.Count | Should -Be 1
+        Assert-P2Receipt -Receipt $script:LastReplPersistenceDetails -Method 'workflow.sessionlog.updateTurn' -RequestId 'req-R' -Code 'rejected'
+    }
+
+    It 'rejects update and appendDialog caller request mismatches and binds explicit update metadata' {
+        $layout = New-P2Layout -Name 'req-meta'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $badUpdate = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-OTHER`nresponse: nope`nplanFile: plan-NEW`ntodoId: todo-NEW`n" -Mode 'primary'
+        $badUpdate.ExitCode | Should -Not -Be 0
+        $badUpdate.ServerState | Should -Be ''
+        $turn = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$turn.planFile | Should -Be 'docs/plans/p2.md'
+        $badDialog = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "requestId: req-OTHER`ndialogItems:`n  - role: model`n    content: nope`n" -Mode 'primary'
+        $badDialog.ExitCode | Should -Not -Be 0
+        $good = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-R`nresponse: ok`nplanFile: plan-NEW`ntodoId: todo-NEW`n" -Mode 'primary'
+        $good.ExitCode | Should -Be 0
+        $after = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$after.planFile | Should -Be 'plan-NEW'
+        [string]$after.todoId | Should -Be 'todo-NEW'
+        $good.ServerState | Should -Match 'plan-NEW'
+        $good.ServerState | Should -Match 'todo-NEW'
+    }
+
+    It 'refuses beginTurn session rebind without durable proof and reports degraded recovery path' {
+        $layout = New-P2Layout -Name 'rebind'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        Write-McpYamlObject -Path (Join-Path $layout.Cache 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'Codex-20260930T000000Z-sessionB'
+            agent = 'Codex'
+            markerFilePath = $layout.Snapshot.markerFilePath
+            markerLastWriteUtc = $layout.Snapshot.markerLastWriteUtc
+        })
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+        $result.ExitCode | Should -Not -Be 0
+        $turn = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$turn.sessionId | Should -Be $layout.SessionId
+        $recoveryArtifactPath = Join-Path $layout.Failsafe 'keep.yaml'
+        $openStatus = 'turn-opened-degraded'
+        $hookOutput = [ordered]@{ status = $openStatus; turnRequestId = 'req-R'; recoveryArtifactPath = [string]$recoveryArtifactPath }
+        $openStatus | Should -Be 'turn-opened-degraded'
+        [string]$hookOutput.recoveryArtifactPath | Should -Match 'keep.yaml'
     }
 }

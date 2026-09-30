@@ -152,6 +152,10 @@ function Complete-ReplBeginTurnAfterPersist {
                     if (-not $text.EndsWith("`n") -and -not $text.EndsWith("`r`n")) { $text += "`n" }
                     $text += "degraded: true`n"
                 }
+                if (-not [string]::IsNullOrWhiteSpace($FailsafePath) -and $text -notmatch '(?m)^failsafePath:\s*') {
+                    if (-not $text.EndsWith("`n") -and -not $text.EndsWith("`r`n")) { $text += "`n" }
+                    $text += "failsafePath: $FailsafePath`n"
+                }
                 [System.IO.File]::WriteAllText($CurrentTurnFile, $text)
             } elseif ($TurnState) {
                 $lines = @(
@@ -160,6 +164,7 @@ function Complete-ReplBeginTurnAfterPersist {
                     'status: in_progress'
                     'degraded: true'
                 )
+                if (-not [string]::IsNullOrWhiteSpace($FailsafePath)) { $lines += "failsafePath: $FailsafePath" }
                 [System.IO.File]::WriteAllText($CurrentTurnFile, ($lines -join "`n") + "`n")
             }
         }
@@ -1463,8 +1468,13 @@ function Invoke-ReplPersistTurn {
 
     $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
 
+    $workspaceFingerprint = ''
+    try { $workspaceFingerprint = [string](Resolve-ReplWorkspaceDirectory) } catch { $workspaceFingerprint = '' }
     $logical = [ordered]@{
         method = 'client.SessionLog.SubmitAsync'
+        sourceType = [string]$meta.SourceType
+        sessionId = [string]$meta.SessionId
+        workspace = $workspaceFingerprint
         requestId = $RequestId
         status = $Status
         title = $Title
@@ -1474,6 +1484,7 @@ function Invoke-ReplPersistTurn {
         tags = @($Tags)
         contextList = @($ContextList)
         actions = [string]$ActionsYaml
+        processingDialog = @($ProcessingDialog)
         planFile = [string]$PlanFile
         todoId = [string]$TodoId
         queryText = [string](Get-ReplObjectValue -InputObject $turnObj.turn -Name 'queryText')
@@ -1559,34 +1570,35 @@ function Invoke-ReplPersistTurn {
     $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
     $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
     if (-not $details) {
-        $details = [ordered]@{
-            persisted = $true
-            degraded = $false
-            persistenceStrategy = 'mcp-service'
-            failsafePath = $null
-            message = $null
-        }
+        $unconfirmed = "Session log persistence did not confirm a durable write for request '$RequestId' because the success envelope lacked result details. FailsafePath='$failsafePath'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $verbMethod -RequestId $RequestId -FailsafePath $failsafePath -Message $unconfirmed -ChildStderr $unconfirmed))
+        throw $unconfirmed
     }
 
-    $persisted = Get-ReplObjectValue -InputObject $details -Name 'persisted'
-    if ($null -eq $persisted) {
-        $details = [ordered]@{
-            persisted = $true
-            degraded = $false
-            persistenceStrategy = 'mcp-service'
-            failsafePath = $null
-            message = $null
-        }
-        $persisted = $true
-    }
-    if ($persisted -ne $true) {
+    $persistedRaw = Get-ReplObjectValue -InputObject $details -Name 'persisted'
+    $persisted = $false
+    if ($persistedRaw -is [bool]) { $persisted = [bool]$persistedRaw }
+    elseif ($null -ne $persistedRaw) { $persisted = ([string]$persistedRaw) -match '^(?i:true|1)$' }
+    $degradedRaw = Get-ReplObjectValue -InputObject $details -Name 'degraded'
+    $responseDegraded = $false
+    if ($degradedRaw -is [bool]) { $responseDegraded = [bool]$degradedRaw }
+    elseif ($null -ne $degradedRaw) { $responseDegraded = ([string]$degradedRaw) -match '^(?i:true|1)$' }
+    $responseSession = [string](Get-ReplObjectValue -InputObject $details -Name 'sessionId')
+    $responseRequest = [string](Get-ReplObjectValue -InputObject $details -Name 'requestId')
+    $identityMismatch = $false
+    if (-not [string]::IsNullOrWhiteSpace($responseSession) -and $responseSession -ne [string]$meta.SessionId) { $identityMismatch = $true }
+    if (-not [string]::IsNullOrWhiteSpace($responseRequest) -and $responseRequest -ne $RequestId) { $identityMismatch = $true }
+    if (-not $persisted -or $responseDegraded -or $identityMismatch) {
         $unconfirmed = "Session log persistence did not confirm a durable write for request '$RequestId'. FailsafePath='$failsafePath'."
+        if ($responseDegraded) { $unconfirmed = "Session log persistence returned contradictory persisted+degraded for request '$RequestId'. FailsafePath='$failsafePath'." }
+        if ($identityMismatch) { $unconfirmed = "Session log persistence returned mismatched identity for request '$RequestId'. FailsafePath='$failsafePath'." }
         [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $verbMethod -RequestId $RequestId -FailsafePath $failsafePath -Message $unconfirmed -ChildStderr $unconfirmed))
         throw $unconfirmed
     }
 
     Clear-ReplFailsafe -Path $failsafePath
     Set-ReplTurnCacheField -Field 'lastPersistFingerprint' -Value $fingerprint | Out-Null
+    Set-ReplTurnCacheField -Field 'persisted' -Value 'true' | Out-Null
     [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method $verbMethod -RequestId $RequestId -Message "Session log persist confirmed a durable write for request '$RequestId'."))
     return $true
 }
@@ -1970,9 +1982,19 @@ function Invoke-WorkflowBeginTurn {
     $cachedPlan = Get-ReplCurrentTurnValue -Key 'planFile'
     $cachedTodo = Get-ReplCurrentTurnValue -Key 'todoId'
     $cachedDegraded = Get-ReplCurrentTurnValue -Key 'degraded'
+    $cachedPersisted = Get-ReplCurrentTurnValue -Key 'persisted'
+    $cachedSessionId = Get-ReplCurrentTurnValue -Key 'sessionId'
     $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
     $isDegradedTurn = $cachedDegraded -match '^(?i:true|1)$'
-    $isDurableReopen = $isReopen -and -not $isDegradedTurn
+    $sessionMatches = [string]::IsNullOrWhiteSpace($cachedSessionId) -or $cachedSessionId -eq $sessionId
+    $hasDurableProof = $cachedPersisted -match '^(?i:true|1)$'
+    $isDurableReopen = $isReopen -and $sessionMatches -and $hasDurableProof -and -not $isDegradedTurn
+    if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedSessionId) -and $cachedSessionId -ne $sessionId) {
+        $reject = "workflow.sessionlog.beginTurn refused to rebind session '$cachedSessionId' to '$sessionId' for requestId=$requestId"
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $requestId -Message $reject -ChildStderr $reject))
+        [Console]::Error.WriteLine($reject)
+        return $false
+    }
     if (-not $isDurableReopen -and (($planExplicit -and [string]::IsNullOrWhiteSpace($planFile)) -or ($todoExplicit -and [string]::IsNullOrWhiteSpace($todoId)))) {
         $reject = "workflow.sessionlog.beginTurn rejected whitespace metadata for ordinary or degraded first persistence requestId=$requestId"
         [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $requestId -Message $reject -ChildStderr $reject))
@@ -2197,6 +2219,15 @@ function Invoke-WorkflowAppendDialog {
         return $false
     }
 
+    $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
+    $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
+    if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
+        $reject = "workflow.sessionlog.appendDialog refused requestId '$explicitRequest' because the current turn is '$cachedRequest'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $cachedRequest -Message $reject -ChildStderr $reject))
+        [Console]::Error.WriteLine($reject)
+        return $false
+    }
+
     $null = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $meta = Get-ReplSessionMeta
@@ -2234,6 +2265,25 @@ function Invoke-WorkflowAppendDialog {
     if ($combined -match 'not_found|not found|HTTP 404|http 404') {
         $degradedTurn = Get-ReplTurnCacheField -Field 'degraded'
         if ($degradedTurn -eq 'true' -or $degradedTurn -eq $true) {
+            # FR-MCP-SESSIONLIFE-001-AC004: one recovery SubmitAsync attempt before dialog failsafe.
+            $recoveryOk = $false
+            try {
+                $script:ReplPersistVerbMethod = 'workflow.sessionlog.appendDialog'
+                $recoveryTitle = Get-ReplTurnCacheField -Field 'queryTitle'
+                $recoveryOk = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title ([string]$recoveryTitle) -Status 'in_progress' -ResponseText '(recovery before dialog append)')
+            } catch {
+                $recoveryOk = $false
+            }
+            if ($recoveryOk) {
+                $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
+                if ($result.Success) {
+                    Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
+                    Set-ReplTurnCacheField -Field 'lastDialogFingerprint' -Value $dialogFingerprint | Out-Null
+                    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message "appendDialog persisted after recovery requestId=$reqId"))
+                    return $true
+                }
+                $combined = "$($result.Output) $($result.Error)"
+            }
             $queueDialog = $true
             $queueMessage = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
         } else {
@@ -2278,6 +2328,15 @@ function Invoke-WorkflowUpdateTurn {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.updateTurn')
     }
     if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.updateTurn')) {
+        return $false
+    }
+
+    $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
+    $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
+    if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
+        $reject = "workflow.sessionlog.updateTurn refused requestId '$explicitRequest' because the current turn is '$cachedRequest'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.updateTurn' -RequestId $cachedRequest -Message $reject -ChildStderr $reject))
+        [Console]::Error.WriteLine($reject)
         return $false
     }
 
@@ -2328,9 +2387,33 @@ function Invoke-WorkflowUpdateTurn {
     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     try {
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-            -Status 'in_progress' -ResponseText $responseText `
-            -Interpretation $interpretation -TokenCount $tokenCount -Tags $tags -ContextList $contextList)
+        $planExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'planFile'
+        $todoExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'todoId'
+        $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
+        $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+        if ($planExplicit -and -not [string]::IsNullOrWhiteSpace($planFile) -and $state) { $state['planFile'] = $planFile; Write-ReplCurrentTurnState -State $state }
+        if ($todoExplicit -and -not [string]::IsNullOrWhiteSpace($todoId) -and $state) { $state['todoId'] = $todoId; Write-ReplCurrentTurnState -State $state }
+        $persistArgs = @{
+            RequestId = $reqId
+            Title = $title
+            Status = 'in_progress'
+            ResponseText = $responseText
+            Interpretation = $interpretation
+            TokenCount = $tokenCount
+            Tags = $tags
+            ContextList = $contextList
+        }
+        if ($planExplicit -and -not [string]::IsNullOrWhiteSpace($planFile)) { $persistArgs.PlanFile = $planFile }
+        elseif (-not $planExplicit) {
+            $cachedPlan = Get-ReplTurnCacheField -Field 'planFile'
+            if (-not [string]::IsNullOrWhiteSpace($cachedPlan)) { $persistArgs.PlanFile = $cachedPlan }
+        }
+        if ($todoExplicit -and -not [string]::IsNullOrWhiteSpace($todoId)) { $persistArgs.TodoId = $todoId }
+        elseif (-not $todoExplicit) {
+            $cachedTodo = Get-ReplTurnCacheField -Field 'todoId'
+            if (-not [string]::IsNullOrWhiteSpace($cachedTodo)) { $persistArgs.TodoId = $cachedTodo }
+        }
+        $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
         return $false

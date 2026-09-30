@@ -259,7 +259,7 @@
       "integrationScenario": "Begin with primary persistence failure, inspect the retained cache and recovery envelope, then query after replay.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -279,11 +279,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -307,7 +309,7 @@
       "integrationScenario": "Run prompt hook once with primary success and once with a retained failsafe.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -327,11 +329,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -403,7 +407,7 @@
       "integrationScenario": "Compare degraded and never-degraded missing-turn paths with submit and queue call counts.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -424,12 +428,15 @@
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "SessionLogLifecycle: degraded 404 queues session_dialog",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -453,7 +460,7 @@
       "integrationScenario": "Retry the exact request under both spelling variants and inspect cache plus outcome.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -473,11 +480,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -498,7 +508,7 @@
       "integrationScenario": "Run first persistence with explicit values, verified cached values, and no active plan/TODO.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -521,11 +531,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -594,7 +606,7 @@
       "integrationScenario": "Update metadata, reopen exact identity, then attempt omission under each identity drift.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -617,11 +629,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -642,7 +657,7 @@
       "integrationScenario": "Mutate one identity dimension at a time, including inherited environment and marker values.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -665,11 +680,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -690,7 +708,8 @@
       "integrationScenario": "Dynamically discover all supported fenced request-example bodies without fixed selectors. The current inventory must report module-bootstrap examples at lines 49 and 65 and REPL user-guide examples at lines 118, 471, and 819; the user-guide inventory bullet at line 173 is non-example prose and must not enter the fenced-example raw count. Require every supported fence to parse, require fenced-body raw and parsed beginTurn counts to match, evaluate every discovered example, and fail on any omitted pair lacking an explicit approved omission context. Then validate the nonbreaking state-aware JSON-schema branch.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Three planned document-contract tests are not accepted until the documents are implemented, reviewed, and executed in a fresh run-scoped gate."
+        "Three planned document-contract tests are not accepted until the documents are implemented, reviewed, and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -715,13 +734,15 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -745,7 +766,7 @@
       "integrationScenario": "Drive primary success, confirmed queued recovery, and total loss through the wrapper.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -762,11 +783,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -790,7 +814,7 @@
       "integrationScenario": "Serialize and round-trip each primary, queued, and lost outcome.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -807,11 +831,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -835,7 +861,7 @@
       "integrationScenario": "Attempt every mutation against a different active request and compare pre/post hashes.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -852,11 +878,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -925,7 +953,7 @@
       "integrationScenario": "Run duplicate update then sequential append and complete with exact readback.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -942,11 +970,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -970,7 +1000,7 @@
       "integrationScenario": "Observe queue state before, during, and after primary success, queued degradation, and rejection.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -987,11 +1017,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -2445,7 +2477,7 @@
       "integrationScenario": "Execute the accepted cumulative gate after review and verify manifest evidence paths.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
@@ -2464,11 +2496,15 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -2504,7 +2540,8 @@
       "integrationScenario": "Run the unchanged runtime contexts and three document parsers. Any extra, malformed, skipped, unparsed, or contradictory supported fenced beginTurn example fails because fenced-body raw and parsed inventories must match and every parsed example must satisfy explicit-pair-or-approved-omission. Non-example prose such as the line 173 inventory bullet is preserved and excluded. The schema case retains exact None, both supersession spellings, durable reopen, and no discriminator.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Seven separately named planned runtime/document tests remain unaccepted until implemented, reviewed, and executed in a fresh run-scoped gate."
+        "Seven separately named planned runtime/document tests remain unaccepted until implemented, reviewed, and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -2533,7 +2570,9 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding",
@@ -2543,7 +2582,7 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -2677,7 +2716,7 @@
       "integrationScenario": "Validate manifest referential completeness before any production edit.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
@@ -2699,11 +2738,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -7889,5 +7931,10 @@
       "todoRows": 35,
       "mappingEdges": 47
     }
+  },
+  "p2MappingRevision": {
+    "updatedAtUtc": "2026-09-30T18:00:00Z",
+    "note": "Filled criterionSpecificExistingTests for P2 F1-F10 remediations without accepting or closing the 35 sessionlife TODOs.",
+    "updatedCriterionCount": 16
   }
 }

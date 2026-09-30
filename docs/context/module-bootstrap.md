@@ -63,9 +63,9 @@ Methods are namespaced: `workflow.sessionlog.*` and `workflow.todo.*` are plugin
 
 ```json
 {"type":"request","payload":{"requestId":"req-20260304T113901Z-003","method":"workflow.sessionlog.beginTurn","params":{"requestId":"req-20260304T113901Z-003","queryTitle":"Implement feature X","queryText":"User requested feature X","planFile":"None","todoId":"None"}}}
+```
 
 `workflow.sessionlog.beginTurn` metadata precedence is explicit `planFile` and `todoId`, then verified cache values, then exact `None` for both fields. Ordinary first persistence requires that pair: a missing, null, empty, or whitespace field is not a valid raw first-persist payload. Supersession accepts both `canceled` and `cancelled` and stores exact `None` when either field is omitted. A same-request durable reopen omits an absent field so the stored value is preserved.
-```
 
 ```json
 {"type":"request","payload":{"requestId":"req-20260304T113901Z-003","method":"workflow.sessionlog.updateTurn","params":{"response":"Implementing feature X","interpretation":"User requested feature X"}}}
