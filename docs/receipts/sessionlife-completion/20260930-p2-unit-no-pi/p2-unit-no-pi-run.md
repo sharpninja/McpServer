@@ -73,3 +73,22 @@ Remaining Pester reds:
 2. `refreshes same-path marker drift...` — `Invoke-WorkflowAppendActions` still false
 
 **Ready for Grok HV? no**
+
+## Follow-up gate `p2-unit-legion-20260930T1528Z` (tip `fe2a80cd`)
+
+Fixes pushed for the remaining 2 Pester reds:
+
+1. FakeRepl sets `Console.InputEncoding` UTF-8 no-BOM so envelope `Encoding.UTF8` BOM becomes U+FEFF and strips before ServerState append; reopen parse uses `-replace "[\uFEFF]"`.
+2. Drift contract `Set-Location`s into layout workspace (product `Resolve-ReplWorkspaceDirectory` prefers cwd marker over env); PersistTurn mock accepts real params.
+
+| Lane | Exit | Result |
+|------|------|--------|
+| Pester | **0** | 193 total, **193** passed, **0** failed |
+| Nuke Test | **0** | 7 projects, hasPI=false |
+| Build.Tests | 1 | 316 passed, **5** failed (same pre-existing: C3 FR-MCP-SERVICEUPDATE-001 docs, sibling plugin checksum drift, QBAgent trim inventory) |
+
+`selected-projects.json`: PluginIntegration **absent**.
+
+Validate log also showed a `dotnet--NoLogo` PATH/arg glitch after Build.Tests (separate from the 5 failures).
+
+**Ready for Grok HV?** Pester + Nuke are green. Build.Tests still 5 red — operator call whether that blocks HV / validator zero-fail. **Do NOT claim HV. Do NOT merge.**
