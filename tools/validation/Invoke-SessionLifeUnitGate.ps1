@@ -217,6 +217,29 @@ try {
             FailedContainers = $(if ($pesterResult) { [int]$pesterResult.FailedContainersCount } else { 0 })
         }
         Write-GateJson -Path (Join-Path $pesterDirectory 'native-run.json') -Document $native
+        # Pester NUnit XML writes local wall-clock date/time; the validator parses them as UTC.
+        # Normalize to UTC before downstream freshness checks.
+        $pesterReportPath = Join-Path $pesterDirectory 'results.xml'
+        if (Test-Path -LiteralPath $pesterReportPath) {
+            [xml]$pesterXml = Get-Content -LiteralPath $pesterReportPath
+            $dateAttr = $pesterXml.DocumentElement.GetAttribute('date')
+            $timeAttr = $pesterXml.DocumentElement.GetAttribute('time')
+            if ($dateAttr -and $timeAttr) {
+                $localClock = [DateTime]::ParseExact(
+                    "$dateAttr $timeAttr",
+                    'yyyy-MM-dd HH:mm:ss',
+                    [System.Globalization.CultureInfo]::InvariantCulture)
+                $localClock = [DateTime]::SpecifyKind($localClock, [DateTimeKind]::Local)
+                $utcClock = $localClock.ToUniversalTime()
+                $pesterXml.DocumentElement.SetAttribute('date', $utcClock.ToString('yyyy-MM-dd', [System.Globalization.CultureInfo]::InvariantCulture))
+                $pesterXml.DocumentElement.SetAttribute('time', $utcClock.ToString('HH:mm:ss', [System.Globalization.CultureInfo]::InvariantCulture))
+                $settings = New-Object System.Xml.XmlWriterSettings
+                $settings.Encoding = New-Object System.Text.UTF8Encoding $false
+                $settings.Indent = $true
+                $writer = [System.Xml.XmlWriter]::Create($pesterReportPath, $settings)
+                try { $pesterXml.Save($writer) } finally { $writer.Dispose() }
+            }
+        }
     }
 
     $nukeExit = Invoke-GateNative -Name 'nuke-test' -Command {
