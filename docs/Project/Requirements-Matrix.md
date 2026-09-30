@@ -1313,9 +1313,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-REQRECOVERY-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-REQRECOVERY-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-REQRECOVERY-001 | Tracked | Testing-Requirements.md |
-## Cross-platform service update
-
-- FR-MCP-SERVICEUPDATE-001: Cross-platform service update preserving live state. Status: pending.
-- TR-MCP-SERVICEUPDATE-001: Platform adapters and metadata-preserving Linux service lifecycle.
-- TEST-MCP-SERVICEUPDATE-001: Cross-platform service update regression and Linux smoke.
-- Mapping verified from MCP effective requirements; all acceptance criteria pending.
+| FR-MCP-SERVICEUPDATE-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-SERVICEUPDATE-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-SERVICEUPDATE-001 | Tracked | Testing-Requirements.md |
