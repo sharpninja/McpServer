@@ -1436,14 +1436,23 @@ function Resolve-ReplPersistPlanTodo {
     $todoExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'todoId'
     $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
     $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+    # HV10: on an already-persisted turn, omitted plan/todo must stay omitted in the
+    # submit payload (empty => New-McpPluginTurnUpsertRequest leaves the property off).
+    # Materializing cached values or 'None' would replace server metadata.
+    $persistedRaw = Get-ReplTurnCacheField -Field 'persisted'
+    $isDurable = $persistedRaw -match '^(?i:true|1)$'
     if ($planExplicit) {
         if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
+    } elseif ($isDurable) {
+        $planFile = ''
     } else {
         $cachedPlan = Get-ReplTurnCacheField -Field 'planFile'
         $planFile = if (-not [string]::IsNullOrWhiteSpace($cachedPlan)) { $cachedPlan } else { 'None' }
     }
     if ($todoExplicit) {
         if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    } elseif ($isDurable) {
+        $todoId = ''
     } else {
         $cachedTodo = Get-ReplTurnCacheField -Field 'todoId'
         $todoId = if (-not [string]::IsNullOrWhiteSpace($cachedTodo)) { $cachedTodo } else { 'None' }
@@ -1453,7 +1462,90 @@ function Resolve-ReplPersistPlanTodo {
         TodoId = $todoId
         PlanExplicit = $planExplicit
         TodoExplicit = $todoExplicit
+        OmitPlan = (-not $planExplicit -and $isDurable)
+        OmitTodo = (-not $todoExplicit -and $isDurable)
     }
+}
+
+function Set-ReplPersistPlanTodoArgs {
+    # HV10/HV11: only bind PlanFile/TodoId when not omitted; write explicit values to cache.
+    param(
+        [Parameter(Mandatory)][System.Collections.IDictionary]$PersistArgs,
+        [Parameter(Mandatory)]$MetaPT,
+        [switch]$UpdateCache
+    )
+    $omitPlan = [bool](Get-ReplObjectValue -InputObject $MetaPT -Name 'OmitPlan')
+    $omitTodo = [bool](Get-ReplObjectValue -InputObject $MetaPT -Name 'OmitTodo')
+    $planExplicit = [bool](Get-ReplObjectValue -InputObject $MetaPT -Name 'PlanExplicit')
+    $todoExplicit = [bool](Get-ReplObjectValue -InputObject $MetaPT -Name 'TodoExplicit')
+    $planFile = [string](Get-ReplObjectValue -InputObject $MetaPT -Name 'PlanFile')
+    $todoId = [string](Get-ReplObjectValue -InputObject $MetaPT -Name 'TodoId')
+    if (-not $omitPlan) {
+        $PersistArgs['PlanFile'] = $planFile
+    }
+    if (-not $omitTodo) {
+        $PersistArgs['TodoId'] = $todoId
+    }
+    if ($UpdateCache) {
+        # HV11: explicit metadata must land in current-turn.yaml before later verbs.
+        $state = Read-ReplCurrentTurnState
+        if ($state) {
+            if ($planExplicit) { $state['planFile'] = $planFile }
+            if ($todoExplicit) { $state['todoId'] = $todoId }
+            if ($planExplicit -or $todoExplicit) {
+                Write-ReplCurrentTurnState -State $state
+            }
+        }
+    }
+}
+
+function Test-ReplTypedSessionMutationResult {
+    # HV14: transport Success alone is not primary. Require typed identity match
+    # (and retitled=true when the contract emits that flag).
+    param(
+        [Parameter(Mandatory)][string]$Method,
+        [Parameter(Mandatory)][string]$Output,
+        [Parameter(Mandatory)][string]$ExpectedSessionId,
+        [Parameter(Mandatory)][string]$ExpectedRequestId,
+        [switch]$RequireRetitled
+    )
+    $response = $null
+    try {
+        $response = Convert-ReplParamsYamlToObject -ParamsYaml $Output
+    } catch {
+        $response = $null
+    }
+    if (-not $response) {
+        try {
+            $response = $Output | ConvertFrom-Json -ErrorAction Stop
+        } catch {
+            $response = $null
+        }
+    }
+    if (-not $response) {
+        return [ordered]@{ Ok = $false; Message = "$Method typed result missing or unparseable." }
+    }
+    $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
+    $details = if ($payload) { Get-ReplObjectValue -InputObject $payload -Name 'result' } else { $null }
+    if (-not $details) { $details = $response }
+    $responseSession = [string](Get-ReplObjectValue -InputObject $details -Name 'sessionId')
+    $responseRequest = [string](Get-ReplObjectValue -InputObject $details -Name 'requestId')
+    if (-not [string]::IsNullOrWhiteSpace($responseSession) -and $responseSession -ne $ExpectedSessionId) {
+        return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId '$responseSession' does not match '$ExpectedSessionId'." }
+    }
+    if (-not [string]::IsNullOrWhiteSpace($responseRequest) -and $responseRequest -ne $ExpectedRequestId) {
+        return [ordered]@{ Ok = $false; Message = "$Method typed result requestId '$responseRequest' does not match '$ExpectedRequestId'." }
+    }
+    if ($RequireRetitled) {
+        $retitledRaw = Get-ReplObjectValue -InputObject $details -Name 'retitled'
+        $retitled = $false
+        if ($retitledRaw -is [bool]) { $retitled = [bool]$retitledRaw }
+        elseif ($null -ne $retitledRaw) { $retitled = ([string]$retitledRaw) -match '^(?i:true|1)$' }
+        if (-not $retitled) {
+            return [ordered]@{ Ok = $false; Message = "$Method typed result did not confirm retitled=true." }
+        }
+    }
+    return [ordered]@{ Ok = $true; Message = '' }
 }
 
 function Assert-ReplCallerRequestMatches {
@@ -1865,6 +1957,14 @@ function Assert-ReplCurrentTurnFresh {
         }
     }
 
+    # HV12: workspace identity proof is fail-closed. Missing marker fields must not
+    # be manufactured from the current snapshot (that enabled durable omission with
+    # incomplete identity and mutated mismatch-missing-marker probes).
+    if ([string]::IsNullOrWhiteSpace($turnMarkerPath) -or [string]::IsNullOrWhiteSpace($turnMarkerWriteUtc)) {
+        [Console]::Error.WriteLine("$Method rejected current-turn cache '$turnFile' because workspace identity proof is missing.")
+        return $false
+    }
+
     # TR-MCP-PLUGIN-012 AC1: session rotation rewrites current-turn.yaml sessionId
     # to the active session. Persist still uses Get-ReplCompleteTurnPersistSessionId
     # on the (now rebound) turn value. Fill an empty turn sessionId from active too.
@@ -1873,7 +1973,8 @@ function Assert-ReplCurrentTurnFresh {
     if ($activeSessionId -and -not $turnSessionId) {
         $turnState['sessionId'] = $activeSessionId
     }
-    if ($snapshot) {
+    # Refresh same-path marker timestamp only; path already validated above.
+    if ($snapshot -and $turnMarkerPath -eq $snapshot.markerFilePath) {
         $turnState['markerFilePath'] = $snapshot.markerFilePath
         $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
     }
@@ -2052,6 +2153,26 @@ function Invoke-WorkflowBeginTurn {
     # non-empty matching sessionId plus persisted proof and workspace freshness.
     $sessionMatches = (-not [string]::IsNullOrWhiteSpace($cachedSessionId)) -and ($cachedSessionId -eq $sessionId)
     $hasDurableProof = $cachedPersisted -match '^(?i:true|1)$'
+    # HV12: reopen must not migrate or manufacture workspace identity. Reject wrong
+    # markers (including degraded) and incomplete marker proof on persisted turns.
+    if ($isReopen) {
+        $reopenMarkerPath = Get-ReplCurrentTurnValue -Key 'markerFilePath'
+        $reopenMarkerWriteUtc = Get-ReplCurrentTurnValue -Key 'markerLastWriteUtc'
+        $reopenSnapshot = $null
+        try { $reopenSnapshot = Get-MarkerFileSnapshot -StartDir (Resolve-ReplWorkspaceDirectory) } catch { $reopenSnapshot = $null }
+        if ($reopenSnapshot -and -not [string]::IsNullOrWhiteSpace($reopenMarkerPath) -and $reopenMarkerPath -ne $reopenSnapshot.markerFilePath) {
+            $reject = "workflow.sessionlog.beginTurn rejected wrong-workspace marker for requestId=$requestId. turnMarker='$reopenMarkerPath' activeMarker='$($reopenSnapshot.markerFilePath)'."
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $requestId -Message $reject -ChildStderr $reject))
+            [Console]::Error.WriteLine($reject)
+            return $false
+        }
+        if ($hasDurableProof -and ([string]::IsNullOrWhiteSpace($reopenMarkerPath) -or [string]::IsNullOrWhiteSpace($reopenMarkerWriteUtc))) {
+            $reject = "workflow.sessionlog.beginTurn refused durable reopen for requestId=$requestId because workspace identity proof is missing."
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $requestId -Message $reject -ChildStderr $reject))
+            [Console]::Error.WriteLine($reject)
+            return $false
+        }
+    }
     $workspaceFresh = $true
     if ($isReopen -and $sessionMatches -and $hasDurableProof -and -not $isDegradedTurn) {
         $workspaceFresh = [bool](Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.beginTurn')
@@ -2191,6 +2312,10 @@ function Invoke-WorkflowAppendActions {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendActions')
     }
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.appendActions' -ParamsYaml $ParamsYaml)) {
+        return $false
+    }
     if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.appendActions')) {
         return $false
     }
@@ -2206,12 +2331,6 @@ function Invoke-WorkflowAppendActions {
     }
 
     if ($ParamsYaml -and $ParamsYaml.Trim()) {
-        $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
-        $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
-        if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
-            [Console]::Error.WriteLine("workflow.sessionlog.appendActions refused requestId '$explicitRequest' because the current turn is '$cachedRequest'.")
-            return $false
-        }
         $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
         if ($added -gt 0) {
             Update-ReplTurnCacheEdits -Increment $added | Out-Null
@@ -2230,9 +2349,16 @@ function Invoke-WorkflowAppendActions {
         $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.appendActions'
         $metaPT = Resolve-ReplPersistPlanTodo -ParamsYaml $ParamsYaml
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-            -Status 'in_progress' -ResponseText 'Actions appended.' `
-            -ActionsYaml $actionsBlock -PlanFile ([string]$metaPT.PlanFile) -TodoId ([string]$metaPT.TodoId))
+        # HV11: explicit append metadata must update the turn cache before later verbs.
+        $persistArgs = @{
+            RequestId = $reqId
+            Title = $title
+            Status = 'in_progress'
+            ResponseText = 'Actions appended.'
+            ActionsYaml = $actionsBlock
+        }
+        Set-ReplPersistPlanTodoArgs -PersistArgs $persistArgs -MetaPT $metaPT -UpdateCache
+        $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
         if (-not $persisted) {
             $queued = $false
             if ($script:LastReplPersistenceDetails) {
@@ -2288,6 +2414,10 @@ function Invoke-WorkflowAppendDialog {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendDialog')
     }
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.appendDialog' -ParamsYaml $ParamsYaml)) {
+        return $false
+    }
     if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.appendDialog')) {
         return $false
     }
@@ -2295,15 +2425,6 @@ function Invoke-WorkflowAppendDialog {
     $dialogItems = @(Get-ReplDialogItemsFromParams -ParamsYaml $ParamsYaml)
     if ($dialogItems.Count -eq 0) {
         [Console]::Error.WriteLine('workflow.sessionlog.appendDialog requires at least one valid dialogItems or dialog entry.')
-        return $false
-    }
-
-    $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
-    $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
-    if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
-        $reject = "workflow.sessionlog.appendDialog refused requestId '$explicitRequest' because the current turn is '$cachedRequest'."
-        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $cachedRequest -Message $reject -ChildStderr $reject))
-        [Console]::Error.WriteLine($reject)
         return $false
     }
 
@@ -2331,6 +2452,13 @@ function Invoke-WorkflowAppendDialog {
     })
     $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
     if ($result.Success) {
+        $typed = Test-ReplTypedSessionMutationResult -Method 'workflow.sessionlog.appendDialog' -Output ([string]$result.Output) -ExpectedSessionId ([string]$meta.SessionId) -ExpectedRequestId $reqId
+        if (-not [bool]$typed.Ok) {
+            $rejectTyped = [string]$typed.Message
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message $rejectTyped -ChildStderr $rejectTyped))
+            [Console]::Error.WriteLine($rejectTyped)
+            return $false
+        }
         # BUG-TRIAGE-165 / FR-MCP-PLUGINCORE-004: increment only after the server accepts the items.
         Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
         Set-ReplTurnCacheField -Field 'lastDialogFingerprint' -Value $dialogFingerprint | Out-Null
@@ -2350,13 +2478,27 @@ function Invoke-WorkflowAppendDialog {
                 $script:ReplPersistVerbMethod = 'workflow.sessionlog.appendDialog'
                 $recoveryTitle = Get-ReplTurnCacheField -Field 'queryTitle'
                 $metaPT = Resolve-ReplPersistPlanTodo -ParamsYaml $ParamsYaml
-                $recoveryOk = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title ([string]$recoveryTitle) -Status 'in_progress' -ResponseText '(recovery before dialog append)' -PlanFile ([string]$metaPT.PlanFile) -TodoId ([string]$metaPT.TodoId))
+                $recoveryArgs = @{
+                    RequestId = $reqId
+                    Title = [string]$recoveryTitle
+                    Status = 'in_progress'
+                    ResponseText = '(recovery before dialog append)'
+                }
+                Set-ReplPersistPlanTodoArgs -PersistArgs $recoveryArgs -MetaPT $metaPT
+                $recoveryOk = [bool](Invoke-ReplPersistTurn @recoveryArgs)
             } catch {
                 $recoveryOk = $false
             }
             if ($recoveryOk) {
                 $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
                 if ($result.Success) {
+                    $typed = Test-ReplTypedSessionMutationResult -Method 'workflow.sessionlog.appendDialog' -Output ([string]$result.Output) -ExpectedSessionId ([string]$meta.SessionId) -ExpectedRequestId $reqId
+                    if (-not [bool]$typed.Ok) {
+                        $rejectTyped = [string]$typed.Message
+                        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message $rejectTyped -ChildStderr $rejectTyped))
+                        [Console]::Error.WriteLine($rejectTyped)
+                        return $false
+                    }
                     Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
                     Set-ReplTurnCacheField -Field 'lastDialogFingerprint' -Value $dialogFingerprint | Out-Null
                     [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message "appendDialog persisted after recovery requestId=$reqId"))
@@ -2407,16 +2549,11 @@ function Invoke-WorkflowUpdateTurn {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.updateTurn')
     }
-    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.updateTurn')) {
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.updateTurn' -ParamsYaml $ParamsYaml)) {
         return $false
     }
-
-    $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
-    $cachedRequest = Get-ReplTurnCacheField -Field 'turnRequestId'
-    if (-not [string]::IsNullOrWhiteSpace($explicitRequest) -and $explicitRequest -ne $cachedRequest) {
-        $reject = "workflow.sessionlog.updateTurn refused requestId '$explicitRequest' because the current turn is '$cachedRequest'."
-        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.updateTurn' -RequestId $cachedRequest -Message $reject -ChildStderr $reject))
-        [Console]::Error.WriteLine($reject)
+    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.updateTurn')) {
         return $false
     }
 
@@ -2468,12 +2605,14 @@ function Invoke-WorkflowUpdateTurn {
     try {
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
         $metaPT = Resolve-ReplPersistPlanTodo -ParamsYaml $ParamsYaml
-        $planFile = [string]$metaPT.PlanFile
-        $todoId = [string]$metaPT.TodoId
+        # HV10: do not write omitted metadata into cache as None/cached replacements.
+        # HV11: explicit values update cache.
         if ($state) {
-            $state['planFile'] = $planFile
-            $state['todoId'] = $todoId
-            Write-ReplCurrentTurnState -State $state
+            if ([bool]$metaPT.PlanExplicit) { $state['planFile'] = [string]$metaPT.PlanFile }
+            if ([bool]$metaPT.TodoExplicit) { $state['todoId'] = [string]$metaPT.TodoId }
+            if ([bool]$metaPT.PlanExplicit -or [bool]$metaPT.TodoExplicit) {
+                Write-ReplCurrentTurnState -State $state
+            }
         }
         $persistArgs = @{
             RequestId = $reqId
@@ -2484,9 +2623,8 @@ function Invoke-WorkflowUpdateTurn {
             TokenCount = $tokenCount
             Tags = $tags
             ContextList = $contextList
-            PlanFile = $planFile
-            TodoId = $todoId
         }
+        Set-ReplPersistPlanTodoArgs -PersistArgs $persistArgs -MetaPT $metaPT
         $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
@@ -2511,6 +2649,10 @@ function Invoke-WorkflowCompleteTurn {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.completeTurn')
     }
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $ParamsYaml)) {
+        return $false
+    }
     if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.completeTurn')) {
         return $false
     }
@@ -2524,9 +2666,6 @@ function Invoke-WorkflowCompleteTurn {
         }
     }
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $ParamsYaml -CachedRequestId $reqId)) {
-        return $false
-    }
     $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
 
     $actionsBlock = ''
@@ -2540,10 +2679,15 @@ function Invoke-WorkflowCompleteTurn {
     $persisted = $false
     try {
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.completeTurn'
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-            -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock `
-            -PlanFile ([string]$metaPT.PlanFile) -TodoId ([string]$metaPT.TodoId)
-        )
+        $persistArgs = @{
+            RequestId = $reqId
+            Title = $title
+            Status = 'completed'
+            ResponseText = $responseText
+            ActionsYaml = $actionsBlock
+        }
+        Set-ReplPersistPlanTodoArgs -PersistArgs $persistArgs -MetaPT $metaPT -UpdateCache
+        $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.completeTurn failed for '$reqId': $_")
         return $false
@@ -2594,11 +2738,11 @@ function Invoke-WorkflowFailTurn {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.failTurn')
     }
-    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.failTurn')) {
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.failTurn' -ParamsYaml $ParamsYaml)) {
         return $false
     }
-
-    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.failTurn' -ParamsYaml $ParamsYaml)) {
+    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.failTurn')) {
         return $false
     }
 
@@ -2699,11 +2843,11 @@ function Invoke-WorkflowSetTurnTitle {
     if (-not (Test-Path $turnFile)) {
         return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.setTurnTitle')
     }
-    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.setTurnTitle')) {
+    # HV13: request guard before freshness so a mismatch cannot mutate marker fields.
+    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml $ParamsYaml)) {
         return $false
     }
-
-    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml $ParamsYaml)) {
+    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.setTurnTitle')) {
         return $false
     }
 
@@ -2761,6 +2905,13 @@ function Invoke-WorkflowSetTurnTitle {
         $rejected = "workflow.sessionlog.setTurnTitle server call failed: $($result.Error)$($result.Output)"
         [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -FailsafePath $failsafePath -Message $rejected -ChildStderr $combined))
         [Console]::Error.WriteLine($rejected)
+        return $false
+    }
+    $typed = Test-ReplTypedSessionMutationResult -Method 'workflow.sessionlog.setTurnTitle' -Output ([string]$result.Output) -ExpectedSessionId ([string]$meta.SessionId) -ExpectedRequestId $reqId -RequireRetitled
+    if (-not [bool]$typed.Ok) {
+        $rejectTyped = [string]$typed.Message
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -FailsafePath $failsafePath -Message $rejectTyped -ChildStderr $rejectTyped))
+        [Console]::Error.WriteLine($rejectTyped)
         return $false
     }
     Clear-ReplFailsafe -Path $failsafePath

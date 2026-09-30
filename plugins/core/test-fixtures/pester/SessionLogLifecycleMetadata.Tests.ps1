@@ -5,6 +5,17 @@
 
 Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop hook' {
     BeforeAll {
+    function Get-TestMarkerSnapshot {
+        param([string]$Workspace = $script:RepoRoot)
+        if ([string]::IsNullOrWhiteSpace($Workspace)) { $Workspace = (Get-Location).Path }
+        $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            [System.IO.File]::WriteAllText($marker, ("workspacePath: {0}`napiKey: test`n" -f $Workspace))
+        }
+        return Get-MarkerFileSnapshot -StartDir $Workspace
+    }
+
+
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         $script:HookScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\plugin-hook.ps1'
         $script:ReplScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1'
@@ -54,6 +65,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "requestId: req-other`nactions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
@@ -83,6 +96,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
@@ -114,6 +129,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -145,6 +162,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/McpServer.Services/Services/SessionLogService.cs`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -182,7 +201,9 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             status = 'in_progress'
             queryText = 'real work'
             auditActions = 2
-        })
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+            })
         try {
             $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
             $output | Should -Match 'stale cached session cannot be reused'
@@ -215,7 +236,9 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             queryText = 'finished'
             auditActions = 1
             codeEdits = 0
-        })
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+            })
         try {
             $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
             $output | Should -Not -Match 'stale cached session cannot be reused'

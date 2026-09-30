@@ -821,7 +821,14 @@ contextList:
             function Invoke-ReplRaw {
                 param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
                 $script:reql029Calls += [ordered]@{ Method = $Method; ParamsYaml = $ParamsYaml }
-                return [pscustomobject]@{ Success = $true; Output = ''; Error = '' }
+                return [pscustomobject]@{ Success = $true; Output = (@(
+                    'type: result'
+                    'payload:'
+                    '  result:'
+                    '    sessionId: Codex-20260712T000000Z-plugin-session'
+                    '    requestId: req-20260712T000003Z-retitle'
+                    '    retitled: true'
+                ) -join [Environment]::NewLine); Error = '' }
             }
 
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{

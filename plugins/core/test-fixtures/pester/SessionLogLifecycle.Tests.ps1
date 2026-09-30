@@ -5,6 +5,17 @@
 
 Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     BeforeAll {
+    function Get-TestMarkerSnapshot {
+        param([string]$Workspace = $script:RepoRoot)
+        if ([string]::IsNullOrWhiteSpace($Workspace)) { $Workspace = (Get-Location).Path }
+        $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            [System.IO.File]::WriteAllText($marker, ("workspacePath: {0}`napiKey: test`n" -f $Workspace))
+        }
+        return Get-MarkerFileSnapshot -StartDir $Workspace
+    }
+
+
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         $script:ReplScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1'
         . $script:ReplScript
@@ -136,6 +147,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 status = 'in_progress'
                 degraded = $true
                 queryText = 'keep me'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
             $ok | Should -BeTrue
@@ -168,6 +181,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 planFile = 'docs/plans/kept.md'
                 todoId = 'BUG-TRIAGE-245'
                 queryText = 'keep me'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowBeginTurn -ParamsYaml "requestId: req-20260923T205606Z-001-life`nqueryText: keep me`nqueryTitle: kept`n"
             $ok | Should -BeTrue

@@ -22,7 +22,18 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 'if ([string]::IsNullOrWhiteSpace($mode)) { $mode = ''primary'' }'
                 'if ($mode -eq ''primary'') {'
                 '    if ($env:P2_SERVER_STATE) { [System.IO.File]::AppendAllText($env:P2_SERVER_STATE, $stdin + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false)) }'
-                '    $out = @("type: result","payload:","  result:","    persisted: true","    degraded: false") -join [Environment]::NewLine; [Console]::Out.Write($out + [Environment]::NewLine)'
+                '    $fault = [string]$env:P2_TYPED_FAULT'
+                '    $sessionMatches = [regex]::Matches($stdin, ''"sessionId"\s*:\s*"([^"]+)"'')'
+                '    $requestMatches = [regex]::Matches($stdin, ''"requestId"\s*:\s*"([^"]+)"'')'
+                '    $sessionId = if ($sessionMatches.Count -gt 0) { $sessionMatches[$sessionMatches.Count-1].Groups[1].Value } else { ''Codex-20260930T000000Z-p2'' }'
+                '    $requestId = if ($requestMatches.Count -gt 0) { $requestMatches[$requestMatches.Count-1].Groups[1].Value } else { ''req-p2-verb'' }'
+                '    if ($fault -eq ''wrong-dialog'') { $sessionId = ''sessionB''; $requestId = ''req-OTHER'' }'
+                '    $retitled = ''true''; if ($fault -eq ''retitled-false'') { $retitled = ''false'' }'
+                '    $lines = [System.Collections.Generic.List[string]]::new(); $lines.Add(''type: result''); $lines.Add(''payload:''); $lines.Add(''  result:'')'
+                '    if ($stdin -match ''SetTurnTitleAsync'') { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)); $lines.Add((''    retitled: '' + $retitled)); $lines.Add(''    turnId: 1'') }'
+                '    elseif ($stdin -match ''AppendDialogAsync'') { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)); $lines.Add(''    totalDialogCount: 1'') }'
+                '    else { $lines.Add(''    persisted: true''); $lines.Add(''    degraded: false'') }'
+                '    $out = ($lines -join [Environment]::NewLine); [Console]::Out.Write($out + [Environment]::NewLine)'
                 '    exit 0'
                 '}'
                 '@("type: error","payload:","  code: backend_unavailable","  message: HTTP 503","  retryable: true") -join [Environment]::NewLine | Write-Output'
@@ -148,6 +159,12 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             $psi.Environment['P2_REPL_LOG'] = $log
             $psi.Environment['P2_SERVER_STATE'] = $state
             $psi.Environment['MCP_AGENT_EXECUTABLE_VERSION'] = 'codex-test-1'
+            if (-not [string]::IsNullOrWhiteSpace([string]$env:MCP_PLUGIN_PERSIST_LOG)) {
+                $psi.Environment['MCP_PLUGIN_PERSIST_LOG'] = [string]$env:MCP_PLUGIN_PERSIST_LOG
+            }
+            if (-not [string]::IsNullOrWhiteSpace([string]$env:P2_TYPED_FAULT)) {
+                $psi.Environment['P2_TYPED_FAULT'] = [string]$env:P2_TYPED_FAULT
+            }
             $proc = [System.Diagnostics.Process]::Start($psi)
             $stdout = $proc.StandardOutput.ReadToEndAsync()
             $stderr = $proc.StandardError.ReadToEndAsync()
@@ -800,5 +817,132 @@ Write-Output ("agent=" + $script:AgentName)
         $out | Should -Match 'recoveryArtifactPath'
         $out | Should -Match 'keep-'
     }
-}
 
+    It 'HV10 durable update/append/complete omit planFile and todoId when caller omits them' {
+        $layout = New-P2Layout -Name 'hv10-omit'
+        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+        $persistLog = Join-Path $layout.Cache 'persist-log.jsonl'
+        if (Test-Path $persistLog) { Remove-Item -LiteralPath $persistLog -Force }
+        $env:MCP_PLUGIN_PERSIST_LOG = $persistLog
+        try {
+            $upd = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: mid`n"
+            $upd.ExitCode | Should -Be 0
+            $app = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
+            $app.ExitCode | Should -Be 0
+            $fin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: done`n"
+            $fin.ExitCode | Should -Be 0
+        } finally {
+            Remove-Item Env:MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue
+        }
+        $lines = @(Get-Content -LiteralPath $persistLog -ErrorAction Stop)
+        $lines.Count | Should -BeGreaterThan 0
+        foreach ($line in $lines) {
+            $rec = $line | ConvertFrom-Json
+            [bool]$rec.boundPlanFile | Should -BeFalse
+            [bool]$rec.boundTodoId | Should -BeFalse
+            [string]$rec.planFile | Should -BeNullOrEmpty
+            [string]$rec.todoId | Should -BeNullOrEmpty
+        }
+        $cached = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$cached.planFile | Should -Be 'docs/plans/p2.md'
+        [string]$cached.todoId | Should -Be 'BUG-TRIAGE-246'
+    }
+
+    It 'HV11 explicit append metadata updates cache used by later complete' {
+        $layout = New-P2Layout -Name 'hv11-append-meta'
+        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+        $persistLog = Join-Path $layout.Cache 'persist-log.jsonl'
+        if (Test-Path $persistLog) { Remove-Item -LiteralPath $persistLog -Force }
+        $env:MCP_PLUGIN_PERSIST_LOG = $persistLog
+        try {
+            $app = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendActions' -ParamsYaml "planFile: docs/plans/new-plan.md`ntodoId: BUG-TRIAGE-245`nactions:`n  - type: design_decision`n    description: note`n"
+            $app.ExitCode | Should -Be 0
+            $cached = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+            [string]$cached.planFile | Should -Be 'docs/plans/new-plan.md'
+            [string]$cached.todoId | Should -Be 'BUG-TRIAGE-245'
+            $fin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: done`n"
+            $fin.ExitCode | Should -Be 0
+        } finally {
+            Remove-Item Env:MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue
+        }
+        $records = @(Get-Content -LiteralPath $persistLog | ForEach-Object { $_ | ConvertFrom-Json })
+        $appendRec = $records | Where-Object { [bool]$_.boundPlanFile -eq $true } | Select-Object -First 1
+        $appendRec | Should -Not -BeNullOrEmpty
+        [string]$appendRec.planFile | Should -Be 'docs/plans/new-plan.md'
+        [string]$appendRec.todoId | Should -Be 'BUG-TRIAGE-245'
+        $completeRec = $records | Select-Object -Last 1
+        # HV10: durable complete omits plan/todo so the server keeps the explicit append values.
+        [bool]$completeRec.boundPlanFile | Should -BeFalse
+        [bool]$completeRec.boundTodoId | Should -BeFalse
+        $cachedAfter = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$cachedAfter.planFile | Should -Be 'docs/plans/new-plan.md'
+        [string]$cachedAfter.todoId | Should -Be 'BUG-TRIAGE-245'
+    }
+
+    It 'HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen' {
+        $layout = New-P2Layout -Name 'hv12-marker'
+        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $turn = Read-McpYamlObject -Path $turnPath
+        $turn['persisted'] = 'true'
+        if ($turn.Contains('markerFilePath')) { $turn.Remove('markerFilePath') }
+        if ($turn.Contains('markerLastWriteUtc')) { $turn.Remove('markerLastWriteUtc') }
+        Write-McpYamlObject -Path $turnPath -Document $turn
+        $missing = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`n"
+        $missing.ExitCode | Should -Not -Be 0
+        $missing.Stderr | Should -Match 'workspace identity proof is missing'
+
+        $layout2 = New-P2Layout -Name 'hv12-degraded-wrong'
+        $null = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+        $turn2 = Read-McpYamlObject -Path (Join-Path $layout2.Cache 'current-turn.yaml')
+        $turn2['persisted'] = 'true'
+        $turn2['degraded'] = $true
+        $turn2['markerFilePath'] = 'F:\other-workspace\AGENTS-README-FIRST.yaml'
+        $turn2['markerLastWriteUtc'] = '2020-01-01T00:00:00Z'
+        Write-McpYamlObject -Path (Join-Path $layout2.Cache 'current-turn.yaml') -Document $turn2
+        $wrong = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`n"
+        $wrong.ExitCode | Should -Not -Be 0
+        $wrong.Stderr | Should -Match 'wrong-workspace marker'
+        $after = Read-McpYamlObject -Path (Join-Path $layout2.Cache 'current-turn.yaml')
+        [string]$after.markerFilePath | Should -Be 'F:\other-workspace\AGENTS-README-FIRST.yaml'
+    }
+
+    It 'HV13 request mismatch does not mutate current-turn when markers are missing' {
+        $layout = New-P2Layout -Name 'hv13-mismatch'
+        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $turn = Read-McpYamlObject -Path $turnPath
+        if ($turn.Contains('markerFilePath')) { $turn.Remove('markerFilePath') }
+        if ($turn.Contains('markerLastWriteUtc')) { $turn.Remove('markerLastWriteUtc') }
+        Write-McpYamlObject -Path $turnPath -Document $turn
+        $before = Get-FileHash -LiteralPath $turnPath -Algorithm SHA256
+        $rej = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-OTHER`nresponse: nope`n"
+        $rej.ExitCode | Should -Not -Be 0
+        $after = Get-FileHash -LiteralPath $turnPath -Algorithm SHA256
+        $after.Hash | Should -Be $before.Hash
+    }
+
+    It 'HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false' {
+        $layout = New-P2Layout -Name 'hv14-typed'
+        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+
+        $env:P2_TYPED_FAULT = 'wrong-dialog'
+        try {
+            $dialog = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
+            $dialog.ExitCode | Should -Not -Be 0
+            "$($dialog.Stderr)$($dialog.Stdout)" | Should -Match 'typed result'
+        } finally {
+            Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue
+        }
+
+        $env:P2_TYPED_FAULT = 'retitled-false'
+        try {
+            $title = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "queryTitle: Renamed`n"
+            $title.ExitCode | Should -Not -Be 0
+            "$($title.Stderr)$($title.Stdout)" | Should -Match 'retitled=true|typed result'
+            @(Get-ChildItem -LiteralPath $layout.Failsafe -ErrorAction SilentlyContinue).Count | Should -BeGreaterThan 0
+        } finally {
+            Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue
+        }
+    }
+}

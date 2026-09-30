@@ -6,6 +6,17 @@
 
 Describe 'FR-MCP-SESSIONLIFE-005 audit dialog reconcile' {
     BeforeAll {
+    function Get-TestMarkerSnapshot {
+        param([string]$Workspace = $script:RepoRoot)
+        if ([string]::IsNullOrWhiteSpace($Workspace)) { $Workspace = (Get-Location).Path }
+        $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            [System.IO.File]::WriteAllText($marker, ("workspacePath: {0}`napiKey: test`n" -f $Workspace))
+        }
+        return Get-MarkerFileSnapshot -StartDir $Workspace
+    }
+
+
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         . (Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1')
         if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
@@ -66,6 +77,8 @@ payload:
                 status = 'in_progress'
                 queryText = 'keep'
                 auditDialog = 5
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $failed = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: classified`n"
             $failed | Should -BeFalse
