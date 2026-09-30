@@ -31,6 +31,8 @@
         "BuildAgent",
         "BuildTrustedThirdParty",
         "BumpVersion",
+        "CaptureSessionLifeUnitGate",
+        "CheckSessionLifeUnitGate",
         "Clean",
         "Compile",
         "DeployQBAgentTool",
@@ -161,6 +163,10 @@
           "type": "string",
           "description": "First MCP instance name"
         },
+        "GateStartedAtUtc": {
+          "type": "string",
+          "description": "UTC timestamp when the session-life gate started, used to reject stale reports"
+        },
         "GraphRagQuery": {
           "type": "string",
           "description": "GraphRAG query for smoke test"
@@ -245,6 +251,10 @@
         "StrictUseCaseFrCoverage": {
           "type": "boolean",
           "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
+        },
+        "TestRunId": {
+          "type": "string",
+          "description": "Session-life gate run id. Test and MigrationIntegrationTests then write TestResults/<id> inventory and per-project TRX files"
         },
         "TimeoutSeconds": {
           "type": "integer",

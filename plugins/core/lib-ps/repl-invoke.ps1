@@ -879,6 +879,7 @@ $script:ReplFailsafeDrainCompleted = $false
 # block the successful caller (getFr/getTr) for a 30s SubmitAsync timeout.
 $script:ReplRawInFlight = $false
 $script:ReplFailsafeDrainDeferred = $false
+$script:ReplPersistVerbMethod = $null
 
 function Write-ReplFailsafe {
     # Capture the serialized request before the remote call so a crash cannot lose
