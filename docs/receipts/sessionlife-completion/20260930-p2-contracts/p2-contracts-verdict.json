@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-30T00:32:26Z",
+  "gate": "P2 cache identity metadata and outcome contracts",
+  "accepted": false,
+  "phaseComplete": false,
+  "hvAgreeClaimed": false,
+  "items1to5": "green",
+  "item6": "shared helpers applied; Complete-ReplBeginTurnAfterPersist was not rewritten",
+  "item7CumulativeUnitGate": "blocked",
+  "mcp": "MCP_UNTRUSTED",
+  "base": "f80e9af6f57029af57b6a3db388002cbdafedb4e",
+  "pester": {
+    "passed": 153,
+    "failed": 9,
+    "skipped": 0,
+    "notRun": 0,
+    "durationSeconds": 63.24,
+    "consoleSha256": "c2f1c8899c14c1d9507a99715537428cad7119ce5e9598112775b3b81b148c6b",
+    "preexistingFailureCount": 9,
+    "preexistingCause": "missing plugins/core/.staged-plugin and missing repo-root AGENTS-README-FIRST.yaml"
+  },
+  "buildTestsSessionLifeUnitGate": {
+    "sdk": "10.0.401",
+    "total": 95,
+    "passed": 95,
+    "failed": 0,
+    "skipped": 0,
+    "notExecuted": 0,
+    "trxSha256": "dae13c97343ca9e6c987f969a81f34a3cd79b709eee4e684b5993c5b9b8942ec"
+  },
+  "blockers": [
+    "tools/validation/Invoke-SessionLifeUnitGate.ps1 is absent",
+    "Nuke --test-run-id inventory producers are absent",
+    "cumulative unit inventory was not executed",
+    "durable server query is not claimed",
+    "nine PluginPowerShellRuntime facts need a staged plugin or a repo-root marker"
+  ],
+  "outOfScope": [
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "closing 35 batch TODOs",
+    "rewriting history-r1"
+  ],
+  "reviewer": {
+    "agent": "Grok",
+    "model": "Grok 4.7"
+  },
+  "structuredSerialization": "Python json module serializing native objects"
+}
