@@ -51,6 +51,23 @@ if (-not (Test-Path -LiteralPath (Join-Path $stagedRoot 'lib\plugin-hook.ps1')))
     if ($LASTEXITCODE -ne 0) { throw "generate-wrappers failed with exit $LASTEXITCODE" }
 }
 
+# Copy sibling plugin skills so Pester contracts that read
+# .staged-plugin/skills/{session,triage}/SKILL.md can resolve.
+$skillCandidates = @(
+    (Join-Path (Split-Path $repoRoot -Parent) 'mcpserver-claude-code-plugin\skills'),
+    'F:\GitHub\mcpserver-claude-code-plugin\skills',
+    'F:\github\mcpserver-claude-code-plugin\skills'
+)
+$skillSource = $skillCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if ($skillSource) {
+    $skillDest = Join-Path $stagedRoot 'skills'
+    New-Item -ItemType Directory -Force -Path $skillDest | Out-Null
+    Copy-Item -Path (Join-Path $skillSource '*') -Destination $skillDest -Recurse -Force
+    Write-Host "Copied plugin skills from $skillSource into $skillDest"
+} else {
+    Write-Warning 'No sibling plugin skills directory found for staged-plugin skill contracts.'
+}
+
 $started = [DateTimeOffset]::UtcNow
 $started = [DateTimeOffset]::new(
     $started.Year, $started.Month, $started.Day,
