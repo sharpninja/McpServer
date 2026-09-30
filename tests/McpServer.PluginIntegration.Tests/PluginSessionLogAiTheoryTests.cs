@@ -12,6 +12,7 @@ namespace McpServer.PluginIntegration.Tests;
 [Collection("PluginSessionLog")]
 [Trait("PluginInt", "AI")]
 [Trait("Category", "AiReview")]
+[Trait("Category", "Integration")]
 public sealed class PluginSessionLogAiTheoryTests
 {
     /// <summary>

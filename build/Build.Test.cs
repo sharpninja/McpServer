@@ -11,9 +11,12 @@ partial class Build
         .DependsOn(Compile)
         .Executes(() =>
         {
+            // Session-life unit inventory deliberately excludes integration projects.
+            // McpServer.PluginIntegration.Tests stays on PluginSessionLogIntegration / P6, not Nuke Test.
             var testProjects = Solution.GetAllProjects("*")
                 .Where(p => p.Name.EndsWith(".Tests") || p.Name.EndsWith(".Validation"))
                 .Where(p => !p.Name.Contains("IntegrationTests"))
+                .Where(p => !p.Name.Contains("PluginIntegration"))
                 .Where(p => !p.Name.EndsWith(".Validation"))
                 .Where(p => !p.Name.Contains("Review.Tests"))
                 // Build.Tests references the Nuke _build project and is excluded from the Compile glob,
@@ -52,8 +55,7 @@ partial class Build
                         var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "unit", project.Name);
                         Directory.CreateDirectory(directory);
                         // console;verbosity=detailed streams per-test progress into Nuke logs.
-                        // PluginIntegration alone is multi-host + multi-theory (~30s/host) and can
-                        // exceed 30+ minutes; TRX-only logging looks like a hang to external watchdogs.
+                        // PluginIntegration is excluded from unit inventory (PluginSessionLogIntegration/P6).
                         DotNetTest(_ => _
                             .SetProjectFile(project)
                             .SetConfiguration(Configuration)

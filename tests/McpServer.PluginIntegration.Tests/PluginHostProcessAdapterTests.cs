@@ -9,6 +9,7 @@ namespace McpServer.PluginIntegration.Tests;
 /// </summary>
 [Collection("PluginSessionLog")]
 [Trait("PluginInt", "Deterministic")]
+[Trait("Category", "Integration")]
 public sealed class PluginHostProcessAdapterTests
 {
     /// <summary>

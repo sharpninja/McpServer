@@ -31,6 +31,37 @@ public sealed class PluginSessionLogIntegrationTargetTests
     }
 
     /// <summary>
+    /// Session-life unit inventory must exclude PluginIntegration (and IntegrationTests).
+    /// PI remains on PluginSessionLogIntegration / P6, not Nuke Test / selected-projects.json.
+    /// </summary>
+    [Fact]
+    public void TestTarget_ExcludesPluginIntegrationFromUnitInventory()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.Test.cs"));
+        Assert.Contains("!p.Name.Contains(\"IntegrationTests\")", source, StringComparison.Ordinal);
+        Assert.Contains("!p.Name.Contains(\"PluginIntegration\")", source, StringComparison.Ordinal);
+        Assert.Contains("Category!=Integration", source, StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "McpServer.PluginIntegration.Tests",
+            ExtractTestProjectSelection(source),
+            StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Returns the Test-target project selection chain from Build.Test.cs for assertion scoping.
+    /// </summary>
+    private static string ExtractTestProjectSelection(string buildTestSource)
+    {
+        const string startMark = "var testProjects = Solution.GetAllProjects";
+        const string endMark = ".ToArray();";
+        var start = buildTestSource.IndexOf(startMark, StringComparison.Ordinal);
+        Assert.True(start >= 0, "Test project selection block not found in Build.Test.cs");
+        var end = buildTestSource.IndexOf(endMark, start, StringComparison.Ordinal);
+        Assert.True(end > start, "Test project selection ToArray() not found in Build.Test.cs");
+        return buildTestSource.Substring(start, end - start + endMark.Length);
+    }
+    /// <summary>
     /// P1 red: the solution includes tests/McpServer.PluginIntegration.Tests.
     /// </summary>
     [Fact]
