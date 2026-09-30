@@ -120,7 +120,11 @@ payload:
     requestId: req-20260304T113901Z-add-jwt-001
     queryTitle: Add JWT authentication
     queryText: Implement JWT token generation and validation
+    planFile: None
+    todoId: None
 ```
+
+`beginTurn` metadata precedence is explicit `planFile` and `todoId`, then verified cache, then exact `None` for both fields. Ordinary first persistence requires the pair. Supersession accepts both `canceled` and `cancelled` and stores exact `None` when a field is omitted. Same-request durable reopen omits an absent field so the stored value is preserved.
 
 ### Result Envelope Structure
 
@@ -473,6 +477,8 @@ payload:
        requestId: req-20260304T113901Z-add-jwt-001
        queryTitle: Add JWT authentication
        queryText: Implement JWT token generation and validation
+       planFile: None
+       todoId: None
    ```
 
 4. **Append Dialog** (as work progresses)
@@ -821,6 +827,8 @@ payload:
     requestId: req-20260304T113901Z-add-auth-001
     queryTitle: Add auth
     queryText: Add JWT
+    planFile: None
+    todoId: None
 ```
 
 ### McpTodo.psm1 → workflow.todo.*
