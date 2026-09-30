@@ -3203,7 +3203,15 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:capturedAppendMethod = $Method
                 $script:capturedAppendYaml = $ParamsYaml
-                return New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0
+                $typed = @"
+type: result
+payload:
+  result:
+    sessionId: GrokCode-20260709T211900Z-plugin-session
+    requestId: req-20260709T211900Z-dialog-green
+    totalDialogCount: 2
+"@
+                return New-McpPluginReplResult -Success $true -Output $typed -ExitCode 0
             }
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260709T211900Z-plugin-session'
@@ -4070,6 +4078,7 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
                 sessionId = 'ClaudeCode-20260721T000000Z-plugin-session'
                 agent = 'ClaudeCode'
             })
+            $script:t40RequestId = $RequestId
             Write-McpYamlObject -Path (Join-Path $CacheDir 'current-turn.yaml') -Document ([ordered]@{
                 turnRequestId = $RequestId
                 queryTitle = $QueryTitle
@@ -4126,10 +4135,13 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
 
             if ($Method -eq 'client.SessionLog.AppendDialogAsync') {
                 $script:t40Appends.Add($ParamsYaml)
+                $reqId = if (-not [string]::IsNullOrWhiteSpace([string]$script:t40RequestId)) { [string]$script:t40RequestId } else { 'req-dialog' }
                 $ok = [ordered]@{
                     type = 'result'
                     payload = [ordered]@{
                         result = [ordered]@{
+                            sessionId = [string]$script:t40SessionId
+                            requestId = $reqId
                             totalDialogCount = 1
                         }
                     }
@@ -4943,7 +4955,16 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
             function Invoke-ReplRaw {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:persistRawMethods.Add($Method)
-                return New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    persisted: true" -ExitCode 0
+                $typed = @"
+type: result
+payload:
+  result:
+    sessionId: GrokCode-20260821T000000Z-plugin-session
+    requestId: req-20260821T000000Z-001-persist
+    totalDialogCount: 1
+    persisted: true
+"@
+                return New-McpPluginReplResult -Success $true -Output $typed -ExitCode 0
             }
 
             $payload = [ordered]@{
