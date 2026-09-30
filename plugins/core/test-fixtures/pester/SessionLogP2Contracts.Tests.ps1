@@ -16,7 +16,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             $script:FakeRepl = Join-Path $script:Work 'fake-repl.cmd'
             $fakePs1 = Join-Path $script:Work 'fake-repl.ps1'
             $fakeBody = @(
-                '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd(); if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
+                '[Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false); [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd(); if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
                 'if ($env:P2_REPL_LOG) { [System.IO.File]::AppendAllText($env:P2_REPL_LOG, $stdin + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false)) }'
                 '$mode = $env:P2_REPL_MODE'
                 'if ([string]::IsNullOrWhiteSpace($mode)) { $mode = ''primary'' }'
@@ -304,7 +304,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
         $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`n" -Mode 'primary'
         $second.ExitCode | Should -Be 0
         $payloads = @($second.ServerState -split "(?<=\})\s*\n" | Where-Object { $_.Trim() })
-        $reopenJson = $payloads[-1].Trim().TrimStart([char]0xFEFF); $reopen = $reopenJson | ConvertFrom-Json
+        $reopenJson = ($payloads[-1] -replace "[\uFEFF]", '').Trim(); $reopen = $reopenJson | ConvertFrom-Json
         $turn = $reopen.payload.params.sessionLog.turns[0]
         $turn.PSObject.Properties.Name | Should -Not -Contain 'planFile'
         $turn.PSObject.Properties.Name | Should -Not -Contain 'todoId'
@@ -436,11 +436,13 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
         $priorPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
         $priorCache = $env:MCP_CACHE_DIR_OVERRIDE
         $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorLocation = Get-Location
         $env:MCP_CACHE_DIR_OVERRIDE = $layout.Cache
         $env:MCP_WORKSPACE_PATH = $layout.Workspace
+        Set-Location -LiteralPath $layout.Workspace
         try {
             function Invoke-FullBootstrap { param([string]$StartDir) return $true }
-            function Invoke-ReplPersistTurn { return $true }
+            function Invoke-ReplPersistTurn { param($RequestId,$Title,$IncludeSessionTitle,$Status,$ResponseText,$ActionsYaml,$ProcessingDialog,$Interpretation,$TokenCount,$Tags,$ContextList,$PlanFile,$TodoId) return $true }
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "actions:`n  - type: design_decision`n    description: drift`n"
             $ok | Should -BeTrue
             $turn = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
@@ -448,6 +450,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             [string]$turn.turnRequestId | Should -Be 'req-R'
             [string]$turn.markerLastWriteUtc | Should -Be $fresh.markerLastWriteUtc
         } finally {
+            Set-Location -LiteralPath $priorLocation.Path
             Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $priorPersist.ScriptBlock
             Set-Item -Path Function:\Invoke-FullBootstrap -Value $priorBootstrap.ScriptBlock
             if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
