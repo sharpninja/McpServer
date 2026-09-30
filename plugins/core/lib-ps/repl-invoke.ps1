@@ -56,6 +56,12 @@ $script:AgentName = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME }
                    elseif ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST }
                    else { 'default' }
 
+# FR-MCP-SESSIONLIFE-002: Codex keeps its audit identity when a host process
+# inherits Grok agent variables. Other hosts keep the existing precedence.
+if ($env:MCP_PLUGIN_HOST -match '^(?i:codex)$' -and $script:AgentName -match '(?i)grok') {
+    $script:AgentName = 'Codex'
+}
+
 function Get-ReplCanonicalAgentName {
     # TR-MCP-REPL-011: map the resolved agent (which can fall back to lowercase 'default' or a
     # lowercase host key like 'claude-code') to a PascalCase source type so composed session ids
@@ -813,7 +819,11 @@ function Deny-ReplMissingCurrentTurn {
     param([Parameter(Mandatory)][string]$Method)
 
     $cacheDir = Get-ReplInvokeCacheDir
-    [Console]::Error.WriteLine("$Method requires current-turn.yaml in '$cacheDir'. $(Get-ReplRecoveryGuidance) Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.")
+    $message = "$Method requires current-turn.yaml in '$cacheDir'. $(Get-ReplRecoveryGuidance) Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache."
+    if (Get-Command Publish-ReplSessionVerbReceipt -ErrorAction SilentlyContinue) {
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method $Method -Message $message -ChildStderr $message))
+    }
+    [Console]::Error.WriteLine($message)
     return $false
 }
 
@@ -876,7 +886,8 @@ function Write-ReplFailsafe {
     param(
         [Parameter(Mandatory)][string]$Method,
         [Parameter(Mandatory)][string]$ParamsYaml,
-        [Parameter(Mandatory)][string]$Label
+        [Parameter(Mandatory)][string]$Label,
+        [string]$PayloadFingerprint = ''
     )
     try {
         $dir = Get-ReplFailsafeDir
@@ -889,6 +900,9 @@ function Write-ReplFailsafe {
             label = $Label
             timestamp = $stamp
             params = $paramsObject
+        }
+        if (-not [string]::IsNullOrWhiteSpace($PayloadFingerprint)) {
+            $record.payloadFingerprint = $PayloadFingerprint
         }
         Write-McpYamlObject -Path $file -Document $record
         [void]$script:ReplFailsafeInFlight.Add($file)
@@ -1251,6 +1265,8 @@ function Invoke-ReplTurnUpsertParams {
             $queryText = ''
         }
     }
+    # FR-MCP-SESSIONLIFE-001: cancelled is accepted and stored as canceled.
+    if ($Status -eq 'cancelled') { $Status = 'canceled' }
     $timestamp = Get-ReplCurrentTurnValue -Key 'openedAt'
     if (-not $timestamp) { $timestamp = (Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ssZ") }
     $model = Get-ReplSessionStateValue -Key 'model'
@@ -1301,6 +1317,112 @@ function Invoke-ReplTurnUpsertParams {
     return $request.ToParamsObject()
 }
 
+function Get-ReplStableFingerprint {
+    # Canonical hash of one logical payload. Timestamps are excluded by the caller.
+    param($Value)
+    $json = ConvertTo-Json -InputObject $Value -Compress -Depth 20
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $bytes = $sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes([string]$json))
+        return (([System.BitConverter]::ToString($bytes)) -replace '-', '')
+    } finally {
+        $sha.Dispose()
+    }
+}
+
+function Find-ReplFailsafeByFingerprint {
+    param(
+        [Parameter(Mandatory)][string]$Method,
+        [Parameter(Mandatory)][string]$Fingerprint
+    )
+    if ([string]::IsNullOrWhiteSpace($Fingerprint)) { return '' }
+    $dir = ''
+    try { $dir = Get-ReplFailsafeDir } catch { return '' }
+    if (-not (Test-Path -LiteralPath $dir -PathType Container)) { return '' }
+    foreach ($file in @(Get-ChildItem -LiteralPath $dir -Filter '*.yaml' -File -ErrorAction SilentlyContinue)) {
+        try {
+            $doc = Read-McpYamlObject -Path $file.FullName
+        } catch {
+            continue
+        }
+        if (-not $doc) { continue }
+        $storedMethod = [string](Get-ReplObjectValue -InputObject $doc -Name 'method')
+        $storedFingerprint = [string](Get-ReplObjectValue -InputObject $doc -Name 'payloadFingerprint')
+        if ($storedMethod -eq $Method -and $storedFingerprint -eq $Fingerprint) {
+            return $file.FullName
+        }
+    }
+    return ''
+}
+
+function New-ReplSessionVerbReceipt {
+    # FR-MCP-SESSIONLIFE-003: one typed outcome for primary, confirmed queued, and lost writes.
+    param(
+        [Parameter(Mandatory)][ValidateSet('primary', 'queued', 'lost', 'unchanged', 'rejected')][string]$Disposition,
+        [Parameter(Mandatory)][string]$Method,
+        [AllowEmptyString()][string]$RequestId = '',
+        [AllowEmptyString()][string]$FailsafePath = '',
+        [AllowEmptyString()][string]$Message = '',
+        [AllowEmptyString()][string]$ChildStderr = ''
+    )
+
+    $code = switch ($Disposition) {
+        'primary' { 'persisted' }
+        'queued' { 'queued' }
+        'lost' { 'lost' }
+        'unchanged' { 'unchanged' }
+        'rejected' { 'rejected' }
+    }
+    return [ordered]@{
+        code = $code
+        retryable = ($Disposition -eq 'queued')
+        persisted = ($Disposition -eq 'primary')
+        degraded = ($Disposition -eq 'queued')
+        queued = ($Disposition -eq 'queued')
+        method = $Method
+        requestId = $RequestId
+        failsafePath = $FailsafePath
+        message = $Message
+        childStderr = $ChildStderr
+    }
+}
+
+function Publish-ReplSessionVerbReceipt {
+    param([Parameter(Mandatory)]$Receipt)
+    $script:LastReplPersistenceDetails = $Receipt
+    try {
+        $cache = Get-ReplInvokeCacheDir
+        if ($cache) {
+            Write-McpYamlObject -Path (Join-Path $cache 'session-verb-outcome.yaml') -Document $Receipt
+        }
+    } catch {
+    }
+    $code = [string](Get-ReplObjectValue -InputObject $Receipt -Name 'code')
+    $persisted = Get-ReplObjectValue -InputObject $Receipt -Name 'persisted'
+    $queued = Get-ReplObjectValue -InputObject $Receipt -Name 'queued'
+    return ($persisted -eq $true -or $queued -eq $true -or $code -eq 'unchanged')
+}
+
+function Test-ReplSessionVerbQueued {
+    if (-not $script:LastReplPersistenceDetails) { return $false }
+    $queued = Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'queued'
+    return ($queued -eq $true)
+}
+
+function Test-ReplExplicitParam {
+    param(
+        [string]$ParamsYaml,
+        [Parameter(Mandatory)][string]$Name
+    )
+    if (-not $ParamsYaml) { return $false }
+    $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+    if (-not $params) { return $false }
+    if ($params -is [System.Collections.IDictionary]) {
+        return $params.Contains($Name)
+    }
+    return $null -ne $params.PSObject.Properties[$Name]
+}
+
 function Invoke-ReplPersistTurn {
     # Build the complete session payload once, save it before the remote call, and
     # remove the local copy only after MCP confirms durable persistence.
@@ -1320,6 +1442,8 @@ function Invoke-ReplPersistTurn {
         [string]$TodoId = ''
     )
     $script:LastReplPersistenceDetails = $null
+    $verbMethod = if ([string]::IsNullOrWhiteSpace([string]$script:ReplPersistVerbMethod)) { 'client.SessionLog.SubmitAsync' } else { [string]$script:ReplPersistVerbMethod }
+    $script:ReplPersistVerbMethod = $null
     if ($env:MCP_PLUGIN_PERSIST_LOG) {
         $persistRecord = [ordered]@{
             requestId = $RequestId
@@ -1337,6 +1461,33 @@ function Invoke-ReplPersistTurn {
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
     $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
+
+    $logical = [ordered]@{
+        method = 'client.SessionLog.SubmitAsync'
+        requestId = $RequestId
+        status = $Status
+        title = $Title
+        response = $ResponseText
+        interpretation = $Interpretation
+        tokenCount = $TokenCount
+        tags = @($Tags)
+        contextList = @($ContextList)
+        actions = [string]$ActionsYaml
+        planFile = [string]$PlanFile
+        todoId = [string]$TodoId
+        queryText = [string](Get-ReplObjectValue -InputObject $turnObj.turn -Name 'queryText')
+    }
+    $fingerprint = Get-ReplStableFingerprint -Value $logical
+    $cachedFingerprint = Get-ReplTurnCacheField -Field 'lastPersistFingerprint'
+    if (-not [string]::IsNullOrWhiteSpace($cachedFingerprint) -and $cachedFingerprint -eq $fingerprint) {
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition unchanged -Method $verbMethod -RequestId $RequestId -Message "unchanged session payload did not create duplicate recovery work requestId=$RequestId"))
+        return $true
+    }
+    $duplicateFailsafe = Find-ReplFailsafeByFingerprint -Method 'client.SessionLog.SubmitAsync' -Fingerprint $fingerprint
+    if ($duplicateFailsafe) {
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method $verbMethod -RequestId $RequestId -FailsafePath $duplicateFailsafe -Message "unchanged session payload reused the retained failsafe requestId=$RequestId" -ChildStderr 'duplicate failsafe suppressed'))
+        return $false
+    }
 
     # TR-MCP-REPL-015: send the session title only when the caller explicitly seeds
     # or sets it (IncludeSessionTitle). Otherwise omit it so an incidental re-submit
@@ -1384,26 +1535,23 @@ function Invoke-ReplPersistTurn {
         sessionLog = $sessionLog
     }
     $paramsYaml = ConvertTo-Yaml -Data $payloadObject -Options WithIndentedSequences
-    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml -Label 'session_submit'
+    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml -Label 'session_submit' -PayloadFingerprint $fingerprint
     if (-not $failsafePath) {
-        throw "Session log persistence failed because the failsafe payload could not be saved for request '$RequestId'."
+        $lostMessage = "Session log persistence failed because the failsafe payload could not be saved for request '$RequestId'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method $verbMethod -RequestId $RequestId -Message $lostMessage -ChildStderr $lostMessage))
+        throw $lostMessage
     }
 
     $result = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml
     if (-not $result.Success) {
         $combined = "$($result.Output) $($result.Error)"
         if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
-            $script:LastReplPersistenceDetails = [ordered]@{
-                persisted = $false
-                degraded = $true
-                queued = $true
-                persistenceStrategy = 'failsafe-queue'
-                failsafePath = $failsafePath
-                message = 'Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.'
-            }
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method $verbMethod -RequestId $RequestId -FailsafePath $failsafePath -Message 'Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.' -ChildStderr $combined))
             return $false
         }
-        throw "Session log persistence failed for request '$RequestId'. FailsafePath='$failsafePath'. Output=$($result.Output) Error=$($result.Error)"
+        $rejectedMessage = "Session log persistence failed for request '$RequestId'. FailsafePath='$failsafePath'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $verbMethod -RequestId $RequestId -FailsafePath $failsafePath -Message $rejectedMessage -ChildStderr $combined))
+        throw "$rejectedMessage Output=$($result.Output) Error=$($result.Error)"
     }
 
     $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
@@ -1431,11 +1579,14 @@ function Invoke-ReplPersistTurn {
         $persisted = $true
     }
     if ($persisted -ne $true) {
-        throw "Session log persistence did not confirm a durable write for request '$RequestId'. FailsafePath='$failsafePath'."
+        $unconfirmed = "Session log persistence did not confirm a durable write for request '$RequestId'. FailsafePath='$failsafePath'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $verbMethod -RequestId $RequestId -FailsafePath $failsafePath -Message $unconfirmed -ChildStderr $unconfirmed))
+        throw $unconfirmed
     }
 
     Clear-ReplFailsafe -Path $failsafePath
-    $script:LastReplPersistenceDetails = $details
+    Set-ReplTurnCacheField -Field 'lastPersistFingerprint' -Value $fingerprint | Out-Null
+    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method $verbMethod -RequestId $RequestId -Message "Session log persist confirmed a durable write for request '$RequestId'."))
     return $true
 }
 function Update-ReplTurnCacheStatus {
@@ -1596,6 +1747,14 @@ function Assert-ReplCurrentTurnFresh {
     }
     if ($snapshot -and $turnMarkerWriteUtc -and $turnMarkerWriteUtc -ne $snapshot.markerLastWriteUtc) {
         $staleReasons += 'markerLastWriteUtc'
+    }
+
+    # FR-MCP-SESSIONLIFE-002: a different marker path is a wrong workspace.
+    # Reject it without rewriting the bound session id. Same-path timestamp
+    # drift still refreshes below.
+    if ($snapshot -and -not [string]::IsNullOrWhiteSpace($turnMarkerPath) -and $turnMarkerPath -ne $snapshot.markerFilePath) {
+        [Console]::Error.WriteLine("$Method rejected wrong-workspace marker '$turnFile'. turnMarker='$turnMarkerPath' activeMarker='$($snapshot.markerFilePath)' sessionId='$turnSessionId'.")
+        return $false
     }
 
     # TR-MCP-PLUGIN-012: a sessionId-only mismatch means the session rotated (Start-PluginSession
@@ -1778,7 +1937,10 @@ function Invoke-ReplSupersedeCurrentTurnIfInProgress {
         # or empty local title defers to the server-side title, and raw prompt
         # text is never re-sent (TR-MCP-REPL-015 omission is the fallback).
         $title = Resolve-ReplSupersedeTitle -State $state -RequestId $oldRequestId
-        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title $title -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed.")
+        # Omitted supersession metadata is stored as exact None. Both canceled
+        # and cancelled spellings canonicalize to canceled in the builder.
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
+        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title $title -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed." -PlanFile 'None' -TodoId 'None')
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.beginTurn could not persist superseded turn '$oldRequestId': $_")
     }
@@ -1801,6 +1963,8 @@ function Invoke-WorkflowBeginTurn {
     if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
     $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
     $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+    $planExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'planFile'
+    $todoExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'todoId'
     $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
     $cachedPlan = Get-ReplCurrentTurnValue -Key 'planFile'
     $cachedTodo = Get-ReplCurrentTurnValue -Key 'todoId'
@@ -1808,30 +1972,55 @@ function Invoke-WorkflowBeginTurn {
     $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
     $isDegradedTurn = $cachedDegraded -match '^(?i:true|1)$'
     $isDurableReopen = $isReopen -and -not $isDegradedTurn
+    if (-not $isDurableReopen -and (($planExplicit -and [string]::IsNullOrWhiteSpace($planFile)) -or ($todoExplicit -and [string]::IsNullOrWhiteSpace($todoId)))) {
+        $reject = "workflow.sessionlog.beginTurn rejected whitespace metadata for ordinary or degraded first persistence requestId=$requestId"
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $requestId -Message $reject -ChildStderr $reject))
+        [Console]::Error.WriteLine($reject)
+        return $false
+    }
     if (-not $isDurableReopen) {
         if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedPlan)) { $cachedPlan } else { 'None' }) }
         if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = $(if ($isReopen -and -not [string]::IsNullOrWhiteSpace($cachedTodo)) { $cachedTodo } else { 'None' }) }
     }
 
-    $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
-    $turnState = [ordered]@{
-        turnRequestId = $requestId
-        queryTitle = $queryTitle
-        openedAt = $openedAt
-        status = 'in_progress'
-        sessionId = $sessionId
-        codeEdits = 0
-        lastBuildStatus = 'unknown'
-        auditActions = 0
-        auditDialog = 0
-        auditDecisions = 0
-        auditFiles = 0
-        auditCommits = 0
-        queryText = $queryText
-    }
-    if (-not $isDurableReopen) {
-        $turnState['planFile'] = $planFile
-        $turnState['todoId'] = $todoId
+    $existingTurn = Read-ReplCurrentTurnState
+    $preserveDegraded = ($isReopen -and $isDegradedTurn -and $existingTurn)
+    $preserveDurable = ($isDurableReopen -and $existingTurn)
+    if ($preserveDegraded -or $preserveDurable) {
+        $turnState = $existingTurn
+        $turnState['turnRequestId'] = $requestId
+        $turnState['sessionId'] = $sessionId
+        $turnState['status'] = 'in_progress'
+        if ($preserveDurable) {
+            $turnState['queryTitle'] = $queryTitle
+            $turnState['queryText'] = $queryText
+            if ($planExplicit -and -not [string]::IsNullOrWhiteSpace($planFile)) { $turnState['planFile'] = $planFile }
+            if ($todoExplicit -and -not [string]::IsNullOrWhiteSpace($todoId)) { $turnState['todoId'] = $todoId }
+        } elseif ($planExplicit -or $todoExplicit) {
+            if ($planExplicit -and -not [string]::IsNullOrWhiteSpace($planFile)) { $turnState['planFile'] = $planFile }
+            if ($todoExplicit -and -not [string]::IsNullOrWhiteSpace($todoId)) { $turnState['todoId'] = $todoId }
+        }
+    } else {
+        $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $turnState = [ordered]@{
+            turnRequestId = $requestId
+            queryTitle = $queryTitle
+            openedAt = $openedAt
+            status = 'in_progress'
+            sessionId = $sessionId
+            codeEdits = 0
+            lastBuildStatus = 'unknown'
+            auditActions = 0
+            auditDialog = 0
+            auditDecisions = 0
+            auditFiles = 0
+            auditCommits = 0
+            queryText = $queryText
+        }
+        if (-not $isDurableReopen) {
+            $turnState['planFile'] = $planFile
+            $turnState['todoId'] = $todoId
+        }
     }
 
     try {
@@ -1853,10 +2042,18 @@ function Invoke-WorkflowBeginTurn {
             Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
         }
         if ($isDurableReopen) {
-            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
-        } elseif ($isReopen) {
-            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+            $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
+            $persistArgs = @{
+                RequestId = $requestId
+                Title = $queryTitle
+                Status = 'in_progress'
+                ResponseText = '(turn opened)'
+            }
+            if ($planExplicit -and -not [string]::IsNullOrWhiteSpace($planFile)) { $persistArgs.PlanFile = $planFile }
+            if ($todoExplicit -and -not [string]::IsNullOrWhiteSpace($todoId)) { $persistArgs.TodoId = $todoId }
+            $persisted = [bool](Invoke-ReplPersistTurn @persistArgs -IncludeSessionTitle:$seedSessionTitle)
         } else {
+            $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
         }
         if (-not $persisted) {
@@ -1930,6 +2127,7 @@ function Invoke-WorkflowAppendActions {
         # TR-MCP-REPL-015: send the turn title only when explicitly set this call;
         # otherwise omit so a stale cache title cannot clobber the server value.
         $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.appendActions'
         $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Actions appended.' `
             -ActionsYaml $actionsBlock)
@@ -2014,51 +2212,61 @@ function Invoke-WorkflowAppendDialog {
         items     = @($dialogItems)
     }
     $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $dialogFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
+        method = 'client.SessionLog.AppendDialogAsync'
+        requestId = $reqId
+        sessionId = $meta.SessionId
+        items = @($dialogItems)
+    })
     $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml
     if ($result.Success) {
         # BUG-TRIAGE-165 / FR-MCP-PLUGINCORE-004: increment only after the server accepts the items.
         Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
+        Set-ReplTurnCacheField -Field 'lastDialogFingerprint' -Value $dialogFingerprint | Out-Null
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message "appendDialog persisted requestId=$reqId"))
         return $true
     }
 
     $combined = "$($result.Output) $($result.Error)"
+    $queueDialog = $false
+    $queueMessage = ''
     if ($combined -match 'not_found|not found|HTTP 404|http 404') {
         $degradedTurn = Get-ReplTurnCacheField -Field 'degraded'
         if ($degradedTurn -eq 'true' -or $degradedTurn -eq $true) {
-            $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
-            $script:LastReplPersistenceDetails = [ordered]@{
-                persisted = $false
-                degraded = $true
-                queued = $true
-                persistenceStrategy = 'failsafe-queue'
-                method = 'client.SessionLog.AppendDialogAsync'
-                requestId = $reqId
-                failsafePath = [string]$failsafe
-                message = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
-            }
-            [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
+            $queueDialog = $true
+            $queueMessage = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
+        } else {
+            $missing = "workflow.sessionlog.appendDialog turn not found (retryable false); failsafe not used. $($result.Error)$($result.Output)"
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message $missing -ChildStderr $combined))
+            [Console]::Error.WriteLine($missing)
+            return $false
+        }
+    } elseif ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
+        $queueDialog = $true
+        $queueMessage = "appendDialog persist timed out or returned HTTP 503; dialog failsafe retained requestId=$reqId"
+    }
+    if ($queueDialog) {
+        $existingDialog = Find-ReplFailsafeByFingerprint -Method 'client.SessionLog.AppendDialogAsync' -Fingerprint $dialogFingerprint
+        if ($existingDialog) {
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -FailsafePath $existingDialog -Message "appendDialog unchanged payload reused the retained failsafe requestId=$reqId" -ChildStderr $combined))
+            [Console]::Error.WriteLine($queueMessage)
             return $true
         }
-        [Console]::Error.WriteLine("workflow.sessionlog.appendDialog turn not found (retryable false); failsafe not used. $($result.Error)$($result.Output)")
-        return $false
-    }
-    if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
-        $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog'
-        $script:LastReplPersistenceDetails = [ordered]@{
-            persisted = $false
-            degraded = $true
-            queued = $true
-            persistenceStrategy = 'failsafe-queue'
-            method = 'client.SessionLog.AppendDialogAsync'
-            requestId = $reqId
-            failsafePath = [string]$failsafe
-            message = "appendDialog persist timed out or returned HTTP 503; dialog failsafe retained requestId=$reqId"
+        $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog' -PayloadFingerprint $dialogFingerprint
+        if (-not $failsafe) {
+            $lost = "appendDialog failed because neither the server nor the failsafe received the write requestId=$reqId"
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message $lost -ChildStderr $combined))
+            [Console]::Error.WriteLine($lost)
+            return $false
         }
-        [Console]::Error.WriteLine($script:LastReplPersistenceDetails.message)
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -FailsafePath $failsafe -Message $queueMessage -ChildStderr $combined))
+        [Console]::Error.WriteLine($queueMessage)
         return $true
     }
 
-    [Console]::Error.WriteLine("workflow.sessionlog.appendDialog server call failed: $($result.Error)$($result.Output)")
+    $failed = "workflow.sessionlog.appendDialog server call failed: $($result.Error)$($result.Output)"
+    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.appendDialog' -RequestId $reqId -Message $failed -ChildStderr $combined))
+    [Console]::Error.WriteLine($failed)
     return $false
 }
 
@@ -2118,6 +2326,7 @@ function Invoke-WorkflowUpdateTurn {
     # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     try {
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
         $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText $responseText `
             -Interpretation $interpretation -TokenCount $tokenCount -Tags $tags -ContextList $contextList)
@@ -2173,6 +2382,7 @@ function Invoke-WorkflowCompleteTurn {
     $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     $persisted = $false
     try {
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.completeTurn'
         $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock
         )
@@ -2181,6 +2391,10 @@ function Invoke-WorkflowCompleteTurn {
         return $false
     }
     if (-not $persisted) {
+        if (Test-ReplSessionVerbQueued) {
+            [Console]::Error.WriteLine("workflow.sessionlog.completeTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+            return $true
+        }
         return $false
     }
 
@@ -2243,6 +2457,7 @@ function Invoke-WorkflowFailTurn {
     $persisted = $false
     try {
         # TR-MCP-REPL-015: omit the title so failing a turn never retitles it.
+        $script:ReplPersistVerbMethod = 'workflow.sessionlog.failTurn'
         $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title '' `
             -Status 'failed' -ResponseText $failureNote)
     } catch {
@@ -2250,6 +2465,10 @@ function Invoke-WorkflowFailTurn {
         return $false
     }
     if (-not $persisted) {
+        if (Test-ReplSessionVerbQueued) {
+            [Console]::Error.WriteLine("workflow.sessionlog.failTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+            return $true
+        }
         return $false
     }
 
@@ -2347,11 +2566,38 @@ function Invoke-WorkflowSetTurnTitle {
         title     = $title
     }
     $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
-    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetTurnTitleAsync' -ParamsYaml $callYaml
-    if (-not $result.Success) {
-        [Console]::Error.WriteLine("workflow.sessionlog.setTurnTitle server call failed: $($result.Error)$($result.Output)")
+    $titleFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
+        method = 'client.SessionLog.SetTurnTitleAsync'
+        requestId = $reqId
+        title = $title
+    })
+    $existingTitle = Find-ReplFailsafeByFingerprint -Method 'client.SessionLog.SetTurnTitleAsync' -Fingerprint $titleFingerprint
+    if ($existingTitle) {
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -FailsafePath $existingTitle -Message "setTurnTitle unchanged payload reused the retained failsafe requestId=$reqId"))
+        return $true
+    }
+    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SetTurnTitleAsync' -ParamsYaml $callYaml -Label 'session_setTurnTitle' -PayloadFingerprint $titleFingerprint
+    if (-not $failsafePath) {
+        $lost = "workflow.sessionlog.setTurnTitle failed because the failsafe payload could not be saved for request '$reqId'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -Message $lost -ChildStderr $lost))
+        [Console]::Error.WriteLine($lost)
         return $false
     }
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetTurnTitleAsync' -ParamsYaml $callYaml
+    if (-not $result.Success) {
+        $combined = "$($result.Output) $($result.Error)"
+        if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -FailsafePath $failsafePath -Message "setTurnTitle queued after confirmed failsafe write requestId=$reqId" -ChildStderr $combined))
+            [Console]::Error.WriteLine("workflow.sessionlog.setTurnTitle queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+            return $true
+        }
+        $rejected = "workflow.sessionlog.setTurnTitle server call failed: $($result.Error)$($result.Output)"
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -FailsafePath $failsafePath -Message $rejected -ChildStderr $combined))
+        [Console]::Error.WriteLine($rejected)
+        return $false
+    }
+    Clear-ReplFailsafe -Path $failsafePath
+    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.setTurnTitle' -RequestId $reqId -Message "setTurnTitle persisted requestId=$reqId"))
     return $true
 }
 
@@ -2382,11 +2628,38 @@ function Invoke-WorkflowSetSessionTitle {
         title     = $title
     }
     $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
-    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetSessionTitleAsync' -ParamsYaml $callYaml
-    if (-not $result.Success) {
-        [Console]::Error.WriteLine("workflow.sessionlog.setSessionTitle server call failed: $($result.Error)$($result.Output)")
+    $sessionFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
+        method = 'client.SessionLog.SetSessionTitleAsync'
+        sessionId = $meta.SessionId
+        title = $title
+    })
+    $existingSessionTitle = Find-ReplFailsafeByFingerprint -Method 'client.SessionLog.SetSessionTitleAsync' -Fingerprint $sessionFingerprint
+    if ($existingSessionTitle) {
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $existingSessionTitle -Message "setSessionTitle unchanged payload reused the retained failsafe"))
+        return $true
+    }
+    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SetSessionTitleAsync' -ParamsYaml $callYaml -Label 'session_setSessionTitle' -PayloadFingerprint $sessionFingerprint
+    if (-not $failsafePath) {
+        $lost = "workflow.sessionlog.setSessionTitle failed because the failsafe payload could not be saved."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -Message $lost -ChildStderr $lost))
+        [Console]::Error.WriteLine($lost)
         return $false
     }
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetSessionTitleAsync' -ParamsYaml $callYaml
+    if (-not $result.Success) {
+        $combined = "$($result.Output) $($result.Error)"
+        if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $failsafePath -Message 'setSessionTitle queued after confirmed failsafe write' -ChildStderr $combined))
+            [Console]::Error.WriteLine('workflow.sessionlog.setSessionTitle queued. Failsafe retained; primary persistence was not claimed.')
+            return $true
+        }
+        $rejected = "workflow.sessionlog.setSessionTitle server call failed: $($result.Error)$($result.Output)"
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $failsafePath -Message $rejected -ChildStderr $combined))
+        [Console]::Error.WriteLine($rejected)
+        return $false
+    }
+    Clear-ReplFailsafe -Path $failsafePath
+    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -Message 'setSessionTitle persisted'))
     return $true
 }
 
