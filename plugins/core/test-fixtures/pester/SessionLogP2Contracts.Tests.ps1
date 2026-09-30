@@ -622,10 +622,153 @@ Write-Output ("agent=" + $script:AgentName)
         $result.ExitCode | Should -Not -Be 0
         $turn = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
         [string]$turn.sessionId | Should -Be $layout.SessionId
-        $recoveryArtifactPath = Join-Path $layout.Failsafe 'keep.yaml'
-        $openStatus = 'turn-opened-degraded'
-        $hookOutput = [ordered]@{ status = $openStatus; turnRequestId = 'req-R'; recoveryArtifactPath = [string]$recoveryArtifactPath }
-        $openStatus | Should -Be 'turn-opened-degraded'
-        [string]$hookOutput.recoveryArtifactPath | Should -Match 'keep.yaml'
+        $degLayout = New-P2Layout -Name 'hv07-deg'
+        $deg = Invoke-P2Verb -Layout $degLayout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml ("requestId: req-DEG`nqueryTitle: deg`nqueryText: deg`nplanFile: None`ntodoId: None`n") -Mode 'queued'
+        $deg.ExitCode | Should -Be 0
+        $turnDeg = Read-McpYamlObject -Path (Join-Path $degLayout.Cache 'current-turn.yaml')
+        [string]$turnDeg.degraded | Should -Match '^(?i:true|1)$'
+        $turnDeg.Contains('failsafePath') | Should -BeTrue
+        Test-Path -LiteralPath ([string]$turnDeg.failsafePath) | Should -BeTrue
+    }
+
+    It 'binds cached planFile and todoId on appendActions completeTurn and recovery submit' {
+        $layout = New-P2Layout -Name 'hv01-meta'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $append = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n" -Mode 'primary'
+        $append.ExitCode | Should -Be 0
+        $append.ServerState | Should -Match 'docs/plans/p2.md'
+        $append.ServerState | Should -Match 'BUG-TRIAGE-246'
+        $complete = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "requestId: req-R`nresponse: done`n" -Mode 'primary'
+        $complete.ExitCode | Should -Be 0
+        $complete.ServerState | Should -Match 'docs/plans/p2.md'
+        $complete.ServerState | Should -Match 'BUG-TRIAGE-246'
+    }
+
+    It 'sends exact None on updateTurn when caller clears planFile and todoId' {
+        $layout = New-P2Layout -Name 'hv01-none'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $upd = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-R`nresponse: cleared`nplanFile: `ntodoId: `n" -Mode 'primary'
+        $upd.ExitCode | Should -Be 0
+        $upd.ServerState | Should -Match 'planFile:\s*None|planFile: None|"planFile":"None"'
+        $after = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$after.planFile | Should -Be 'None'
+        [string]$after.todoId | Should -Be 'None'
+    }
+
+    It 'refuses durable reopen without sessionId and without workspace marker proof' {
+        $layout = New-P2Layout -Name 'hv02-proof'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $turn = Read-McpYamlObject -Path $turnPath
+        $turn['persisted'] = 'true'
+        $turn.Remove('sessionId')
+        Write-McpYamlObject -Path $turnPath -Document $turn
+        $noSession = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+        $noSession.ExitCode | Should -Not -Be 0
+
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $turn = Read-McpYamlObject -Path $turnPath
+        $turn['persisted'] = 'true'
+        $turn['markerFilePath'] = 'F:\other-workspace\AGENTS-README-FIRST.yaml'
+        Write-McpYamlObject -Path $turnPath -Document $turn
+        $wrongWs = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+        $wrongWs.ExitCode | Should -Not -Be 0
+        $after = Read-McpYamlObject -Path $turnPath
+        [string]$after.sessionId | Should -Be $layout.SessionId
+    }
+
+    It 'rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation' {
+        $layout = New-P2Layout -Name 'hv03-mismatch'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $before = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+        $fail = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.failTurn' -ParamsYaml "requestId: req-OTHER`nerrorMessage: nope`n" -Mode 'primary'
+        $fail.ExitCode | Should -Not -Be 0
+        $fail.ServerState | Should -Be ''
+        $title = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "requestId: req-OTHER`nqueryTitle: hijack`n" -Mode 'primary'
+        $title.ExitCode | Should -Not -Be 0
+        $title.ServerState | Should -Be ''
+        $complete = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "requestId: req-OTHER`nresponse: nope`nqueryTitle: hijack`n" -Mode 'primary'
+        $complete.ExitCode | Should -Not -Be 0
+        $complete.ServerState | Should -Be ''
+        $after = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+        $after.Hash | Should -Be $before.Hash
+        $turn = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        [string]$turn.queryTitle | Should -Be 'kept title'
+        Test-Path -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') | Should -BeTrue
+    }
+
+    It 'round-trips hash and space failsafePath through object YAML and clears degraded after primary success' {
+        $layout = New-P2Layout -Name 'hv04-06'
+        $hashPath = Join-Path $layout.Failsafe 'dir with space#hash'
+        [void][System.IO.Directory]::CreateDirectory($hashPath)
+        $artifact = Join-Path $hashPath 'keep.yaml'
+        [System.IO.File]::WriteAllText($artifact, "method: client.SessionLog.SubmitAsync`n")
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $doc = Read-McpYamlObject -Path $turnPath
+        $doc['degraded'] = $true
+        $doc['failsafePath'] = $artifact
+        Write-McpYamlObject -Path $turnPath -Document $doc
+        $round = Read-McpYamlObject -Path $turnPath
+        [string]$round.failsafePath | Should -Be $artifact
+        Test-Path -LiteralPath ([string]$round.failsafePath) | Should -BeTrue
+        $ok = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-R`nresponse: recovered`n" -Mode 'primary'
+        $ok.ExitCode | Should -Be 0
+        $after = Read-McpYamlObject -Path $turnPath
+        $after.Contains('degraded') | Should -BeFalse
+        $after.Contains('failsafePath') | Should -BeFalse
+        [string]$after.persisted | Should -Match '^(?i:true|1)$'
+    }
+
+    It 'retries primary submit for identical degraded fingerprint instead of only reusing failsafe' {
+        $layout = New-P2Layout -Name 'hv05-retry'
+        $first = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'queued'
+        $first.ExitCode | Should -Be 0
+        $fs = @(Get-ChildItem -LiteralPath $layout.Failsafe -Filter '*.yaml' -File -ErrorAction SilentlyContinue)
+        $fs.Count | Should -BeGreaterThan 0
+        $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+        $second.ExitCode | Should -Be 0
+        $second.ServerState | Should -Match 'keep me'
+        $after = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        if ($after.Contains('degraded')) { [string]$after.degraded | Should -Not -Match '^(?i:true|1)$' }
+    }
+
+    It 'emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path' {
+        $layout = New-P2Layout -Name 'hv04-hook'
+        $hook = Join-Path $script:RepoRoot 'plugins\core\lib-ps\plugin-hook.ps1'
+        $artifact = Join-Path $layout.Failsafe 'keep-#space.yaml'
+        [System.IO.File]::WriteAllText($artifact, "method: x`n")
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $doc = Read-McpYamlObject -Path $turnPath
+        $doc['degraded'] = $true
+        $doc['failsafePath'] = $artifact
+        $doc['openedAt'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $doc['queryText'] = 'same prompt'
+        Write-McpYamlObject -Path $turnPath -Document $doc
+        $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
+        foreach ($arg in @('-NoLogo','-NoProfile','-NonInteractive','-File',$hook,'-HookEvent','user-prompt-submit')) { $psi.ArgumentList.Add($arg) }
+        $psi.WorkingDirectory = $layout.Workspace
+        $psi.UseShellExecute = $false
+        $psi.RedirectStandardInput = $true
+        $psi.RedirectStandardOutput = $true
+        $psi.RedirectStandardError = $true
+        $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $layout.Cache
+        $psi.Environment['MCP_WORKSPACE_PATH'] = $layout.Workspace
+        $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $layout.Workspace
+        $psi.Environment['MCP_PLUGIN_HOST'] = 'codex'
+        $psi.Environment['MCP_AGENT_NAME'] = 'Codex'
+        $proc = [System.Diagnostics.Process]::Start($psi)
+        $stdin = '{"prompt":"same prompt"}'
+        $proc.StandardInput.Write($stdin)
+        $proc.StandardInput.Close()
+        $stdout = $proc.StandardOutput.ReadToEndAsync()
+        $stderr = $proc.StandardError.ReadToEndAsync()
+        if (-not $proc.WaitForExit(60000)) { try { $proc.Kill($true) } catch { }; throw 'hook timed out' }
+        $out = $stdout.Result
+        $out | Should -Match 'turn-already-open'
+        $out | Should -Match 'recoveryArtifactPath'
+        $out | Should -Match 'keep-'
     }
 }

@@ -280,7 +280,9 @@
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
@@ -330,7 +332,9 @@
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
@@ -379,7 +383,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery"
       ],
@@ -430,7 +437,9 @@
       ],
       "criterionSpecificExistingTests": [
         "SessionLogLifecycle: degraded 404 queues session_dialog",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
@@ -482,7 +491,9 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
@@ -532,7 +543,8 @@
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
@@ -581,7 +593,9 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
@@ -631,7 +645,8 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
@@ -682,7 +697,8 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
@@ -735,7 +751,8 @@
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
@@ -785,7 +802,9 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
@@ -832,7 +851,9 @@
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
@@ -879,7 +900,10 @@
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
@@ -925,7 +949,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.PrimarySuccessRequiresExactServerReadbackOfTurnSectionsAndIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.PrimarySuccessRequiresExactServerReadbackOfTurnSectionsAndIdentity"
       ],
@@ -971,7 +999,10 @@
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
@@ -1018,7 +1049,10 @@
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
@@ -1072,7 +1106,11 @@
         "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
         "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
         "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
@@ -1125,7 +1163,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogProcessBoundary.CodexChild_InheritedGrokEnvironment_PreservesCodexIdentityAndWorkspaceCache"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.CodexChild_InheritedGrokEnvironment_PreservesCodexIdentityAndWorkspaceCache"
       ],
@@ -1168,7 +1210,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity"
       ],
@@ -1214,7 +1260,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
@@ -1260,7 +1310,11 @@
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
@@ -1305,7 +1359,11 @@
       "requirementLevelProposedTestInventory": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
@@ -1348,7 +1406,11 @@
       "requirementLevelProposedTestInventory": [
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
@@ -1387,7 +1449,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery"
       ],
@@ -1426,7 +1492,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
@@ -1465,7 +1535,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.TimestampMatrix_RecencyNeverSubstitutesForCompletedProof"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.TimestampMatrix_RecencyNeverSubstitutesForCompletedProof"
       ],
@@ -1504,7 +1578,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
@@ -1543,7 +1621,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
@@ -1592,7 +1674,11 @@
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
@@ -1641,7 +1727,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
@@ -1690,7 +1780,11 @@
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
@@ -1739,7 +1833,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
@@ -1787,7 +1885,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
@@ -1839,7 +1941,11 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession",
         "SessionLogLifecycleMetadata.DurableReopen_PreservesBoundedOmission",
@@ -1888,7 +1994,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
@@ -1933,7 +2042,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
@@ -1988,7 +2100,10 @@
         "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
         "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
         "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
@@ -2043,7 +2158,11 @@
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity",
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity",
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
@@ -2090,7 +2209,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
@@ -2137,7 +2260,11 @@
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
@@ -2184,7 +2311,11 @@
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
@@ -2225,7 +2356,11 @@
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery",
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery",
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
@@ -2265,7 +2400,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.CacheLock_SnapshotsIdentityAndHashes_RevalidatesAfterBoundedIo"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.CacheLock_SnapshotsIdentityAndHashes_RevalidatesAfterBoundedIo"
       ],
@@ -2304,7 +2443,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
@@ -2343,7 +2486,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
@@ -2396,7 +2543,11 @@
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe",
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.DegradedCompletePreservesFullTurn",
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath",
@@ -2449,7 +2600,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
@@ -2499,7 +2654,9 @@
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
       ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
@@ -2571,7 +2728,8 @@
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
@@ -2661,7 +2819,10 @@
         "SessionLogAuditReconcile.WriteAheadAndExactReadback_AreTruthful",
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome",
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields",
@@ -2740,7 +2901,9 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
       ],
       "criterionSpecificProposedTests": [
         "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
@@ -2803,7 +2966,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
@@ -2845,7 +3011,11 @@
       "requirementLevelProposedTestInventory": [
         "TransactionGatedSessionLogService.GeneralAgentActionDialogUpdateAndComplete_BypassCoordinator"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "TransactionGatedSessionLogService.GeneralAgentActionDialogUpdateAndComplete_BypassCoordinator"
       ],
@@ -2887,7 +3057,11 @@
       "requirementLevelProposedTestInventory": [
         "TransactionGatedSessionLogService.DurableReadbackPreservesEveryChildAndRepeatedCompleteIsDuplicateFree"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "TransactionGatedSessionLogService.DurableReadbackPreservesEveryChildAndRepeatedCompleteIsDuplicateFree"
       ],
@@ -2929,7 +3103,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeTraceability.TransactionSubsetLinksFR173WithoutSatisfyingBroadAdapterAC"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeTraceability.TransactionSubsetLinksFR173WithoutSatisfyingBroadAdapterAC"
       ],
@@ -2982,7 +3160,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogController.DialogStorageFailure_IsClassifiedAndPreservesLocalCounter"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner",
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren",
@@ -3037,7 +3219,11 @@
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure",
@@ -3095,7 +3281,11 @@
         "SessionLogProviderRace.AmbientTransaction_CreateSavepointFailureRollbackWinnerReadSingleRetry_OrderIsEnforced",
         "SessionLogProviderRace.NoSafeSavepointAndRollbackFailure_PropagateRetryableWithoutWinnerRead"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProviderRace.Sqlite_ExactConstraint_RetriesOnceAndPreservesGraph",
         "SessionLogProviderRace.SqlServer_ExactConstraint2601Or2627_RetriesOnceWithSavepointRecovery",
@@ -3145,7 +3335,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
@@ -3190,7 +3384,11 @@
         "PluginPowerShellRuntime.AutomaticNestedDrain_DefersDuringActiveReplCall",
         "PluginPowerShellRuntime.DrainTimeout_PreservesAttemptsAndCompletionLatch"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "PluginPowerShellRuntime.DrainSubmit_Uses120SecondDefault",
         "PluginPowerShellRuntime.DrainSubmit_HonorsLargerReplTimeout",
@@ -3235,7 +3433,11 @@
       "requirementLevelProposedTestInventory": [
         "PluginPowerShellRuntime.RetainedDialogRecovery_DispatchesAppendDialogWithExactImmutableIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "PluginPowerShellRuntime.RetainedDialogRecovery_DispatchesAppendDialogWithExactImmutableIdentity"
       ],
@@ -3277,7 +3479,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeProofScope.GreenExistingTimeoutCases_DoNotAuthorizeProductionRewrite"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeProofScope.GreenExistingTimeoutCases_DoNotAuthorizeProductionRewrite"
       ],
@@ -7933,8 +8139,8 @@
     }
   },
   "p2MappingRevision": {
-    "updatedAtUtc": "2026-09-30T18:00:00Z",
-    "note": "Filled criterionSpecificExistingTests for P2 F1-F10 remediations without accepting or closing the 35 sessionlife TODOs.",
-    "updatedCriterionCount": 16
+    "updatedAtUtc": "2026-09-30T20:45:00Z",
+    "note": "HV01-HV09 remediations: filled criterionSpecificExistingTests for P2 FR/TR/TEST rows without accepting the 35 sessionlife TODOs.",
+    "updatedCriterionCount": 62
   }
 }
