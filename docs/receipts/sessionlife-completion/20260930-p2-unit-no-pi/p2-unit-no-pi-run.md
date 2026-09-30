@@ -57,3 +57,19 @@ Documented rather than large rewrite per operator guidance.
 ## Ready for Grok HV?
 
 **no** — Pester + Build.Tests still red; HV not claimed.
+## Follow-up gate `p2-unit-legion-20260930T1507Z` (tip `77eca4b3`)
+
+After skill-prune + FakeRepl BOM fixes:
+
+| Lane | Exit | Result |
+|------|------|--------|
+| Pester | 1 | 193 total, **191** passed, **2** failed (YAML-mutation fixed) |
+| Nuke Test | **0** | 7 projects, hasPI=false, ~3:05 |
+| Build.Tests | 1 | 316 passed, **5** failed (same pre-existing set) |
+
+Remaining Pester reds:
+
+1. `omits metadata on durable reopen...` — still JsonReaderException `�` (BOM/payload) despite AppendAllText + TrimStart FEFF
+2. `refreshes same-path marker drift...` — `Invoke-WorkflowAppendActions` still false
+
+**Ready for Grok HV? no**
