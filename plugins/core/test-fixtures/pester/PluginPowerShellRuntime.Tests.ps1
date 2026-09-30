@@ -4698,6 +4698,20 @@ Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
 
         try {
             foreach ($case in $cases) {
+                # Each case needs a non-persisted markerless turn: PersistTurn's
+                # MCP_PLUGIN_PERSIST_LOG seam stamps persisted=true, and HV12 then
+                # rejects the next verb for missing workspace identity proof.
+                Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
+                    turnRequestId = 'req-20260819T000000Z-001-strictcount'
+                    queryTitle = 'strictcount'
+                    openedAt = '2026-08-19T00:00:01Z'
+                    status = 'in_progress'
+                    sessionId = 'GrokCode-20260819T000000Z-plugin-session'
+                })
+                if (Test-Path -LiteralPath $persistLog) {
+                    Remove-Item -LiteralPath $persistLog -Force -ErrorAction SilentlyContinue
+                }
+
                 $result = Invoke-PluginChildProcess `
                     -ScriptPath (Join-Path $script:LibRoot 'repl-invoke.ps1') `
                     -Arguments @('-Method', 'workflow.sessionlog.updateTurn', '-ParamsYaml', $case.Yaml) `

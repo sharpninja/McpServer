@@ -1957,10 +1957,12 @@ function Assert-ReplCurrentTurnFresh {
         }
     }
 
-    # HV12: workspace identity proof is fail-closed. Missing marker fields must not
-    # be manufactured from the current snapshot (that enabled durable omission with
-    # incomplete identity and mutated mismatch-missing-marker probes).
-    if ([string]::IsNullOrWhiteSpace($turnMarkerPath) -or [string]::IsNullOrWhiteSpace($turnMarkerWriteUtc)) {
+    # HV12: persisted turns require workspace identity proof and must not manufacture
+    # markers. Non-persisted / markerless-workspace probes still proceed without
+    # synthesizing proof (so mismatch-missing-marker hashes stay stable).
+    $persistedRaw = if ($turnState.Contains('persisted')) { [string]$turnState['persisted'] } else { '' }
+    $isPersistedTurn = $persistedRaw -match '^(?i:true|1)$'
+    if ($isPersistedTurn -and ([string]::IsNullOrWhiteSpace($turnMarkerPath) -or [string]::IsNullOrWhiteSpace($turnMarkerWriteUtc))) {
         [Console]::Error.WriteLine("$Method rejected current-turn cache '$turnFile' because workspace identity proof is missing.")
         return $false
     }
@@ -1973,8 +1975,9 @@ function Assert-ReplCurrentTurnFresh {
     if ($activeSessionId -and -not $turnSessionId) {
         $turnState['sessionId'] = $activeSessionId
     }
-    # Refresh same-path marker timestamp only; path already validated above.
-    if ($snapshot -and $turnMarkerPath -eq $snapshot.markerFilePath) {
+    # Refresh same-path marker timestamp only when proof already exists; never
+    # manufacture markers for markerless/non-persisted turns (HV12/HV13).
+    if ($snapshot -and -not [string]::IsNullOrWhiteSpace($turnMarkerPath) -and $turnMarkerPath -eq $snapshot.markerFilePath) {
         $turnState['markerFilePath'] = $snapshot.markerFilePath
         $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
     }
