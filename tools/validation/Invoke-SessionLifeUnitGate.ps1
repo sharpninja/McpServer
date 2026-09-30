@@ -27,7 +27,11 @@ $dotnetTools = Join-Path $dotnetHome 'tools'
 if (Test-Path -LiteralPath (Join-Path $dotnetHome 'dotnet')) {
     $env:DOTNET_ROOT = $dotnetHome
 }
-foreach ($candidate in @($dotnetTools, $dotnetHome)) {
+$extraPathRoots = @(
+    (Join-Path $HOME 'scoop\shims'),
+    (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links')
+)
+foreach ($candidate in @($dotnetTools, $dotnetHome) + $extraPathRoots) {
     if ((Test-Path -LiteralPath $candidate) -and (($env:PATH -split [IO.Path]::PathSeparator) -notcontains $candidate)) {
         $env:PATH = "$candidate$([IO.Path]::PathSeparator)$env:PATH"
     }
