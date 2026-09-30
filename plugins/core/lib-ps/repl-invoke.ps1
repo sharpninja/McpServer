@@ -1460,6 +1460,9 @@ function Invoke-ReplPersistTurn {
             boundTodoId = [bool]$PSBoundParameters.ContainsKey('TodoId')
         }
         Add-Content -LiteralPath $env:MCP_PLUGIN_PERSIST_LOG -Value ($persistRecord | ConvertTo-Json -Compress)
+        # Test seam mimics a confirmed durable write: set persisted so beginTurn
+        # durable-reopen (F3) omits planFile/todoId the same way production does.
+        Set-ReplTurnCacheField -Field 'persisted' -Value 'true' | Out-Null
         return $true
     }
 
