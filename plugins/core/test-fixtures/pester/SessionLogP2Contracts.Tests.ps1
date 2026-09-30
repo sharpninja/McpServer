@@ -17,11 +17,11 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             $fakePs1 = Join-Path $script:Work 'fake-repl.ps1'
             $fakeBody = @(
                 '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd(); if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
-                'if ($env:P2_REPL_LOG) { Add-Content -LiteralPath $env:P2_REPL_LOG -Value $stdin -Encoding utf8 }'
+                'if ($env:P2_REPL_LOG) { [System.IO.File]::AppendAllText($env:P2_REPL_LOG, $stdin + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false)) }'
                 '$mode = $env:P2_REPL_MODE'
                 'if ([string]::IsNullOrWhiteSpace($mode)) { $mode = ''primary'' }'
                 'if ($mode -eq ''primary'') {'
-                '    if ($env:P2_SERVER_STATE) { Add-Content -LiteralPath $env:P2_SERVER_STATE -Value $stdin -Encoding utf8 }'
+                '    if ($env:P2_SERVER_STATE) { [System.IO.File]::AppendAllText($env:P2_SERVER_STATE, $stdin + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false)) }'
                 '    $out = @("type: result","payload:","  result:","    persisted: true","    degraded: false") -join [Environment]::NewLine; [Console]::Out.Write($out + [Environment]::NewLine)'
                 '    exit 0'
                 '}'
@@ -304,7 +304,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
         $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`n" -Mode 'primary'
         $second.ExitCode | Should -Be 0
         $payloads = @($second.ServerState -split "(?<=\})\s*\n" | Where-Object { $_.Trim() })
-        $reopen = $payloads[-1] | ConvertFrom-Json
+        $reopenJson = $payloads[-1].Trim().TrimStart([char]0xFEFF); $reopen = $reopenJson | ConvertFrom-Json
         $turn = $reopen.payload.params.sessionLog.turns[0]
         $turn.PSObject.Properties.Name | Should -Not -Contain 'planFile'
         $turn.PSObject.Properties.Name | Should -Not -Contain 'todoId'

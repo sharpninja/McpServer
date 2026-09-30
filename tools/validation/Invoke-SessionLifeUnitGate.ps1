@@ -59,17 +59,23 @@ if (-not (Test-Path -LiteralPath (Join-Path $stagedRoot 'lib\plugin-hook.ps1')))
     if ($LASTEXITCODE -ne 0) { throw "generate-wrappers failed with exit $LASTEXITCODE" }
 }
 
-# Copy sibling plugin skills so Pester contracts that read
-# .staged-plugin/skills/{session,triage}/SKILL.md can resolve.
+# Stage only session/triage (+ handoff from core) so YAML-mutation Pester contracts
+# do not scan unrelated synced skills. Append the canonical YAML Mutation Rule when
+# sibling session/triage skills are missing it.
 $skillCandidates = @(
     (Join-Path (Split-Path $repoRoot -Parent) 'mcpserver-claude-code-plugin\skills'),
     'F:\GitHub\mcpserver-claude-code-plugin\skills',
     'F:\github\mcpserver-claude-code-plugin\skills'
 )
 $skillSource = $skillCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+$skillDest = Join-Path $stagedRoot 'skills'
+if (Test-Path -LiteralPath $skillDest) {
+    Get-ChildItem -LiteralPath $skillDest -Directory -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -notin @('session', 'triage', 'handoff') } |
+        ForEach-Object { Remove-Item -LiteralPath $_.FullName -Recurse -Force }
+}
+New-Item -ItemType Directory -Force -Path $skillDest | Out-Null
 if ($skillSource) {
-    $skillDest = Join-Path $stagedRoot 'skills'
-    New-Item -ItemType Directory -Force -Path $skillDest | Out-Null
     foreach ($name in @('session', 'triage')) {
         $from = Join-Path $skillSource $name
         if (Test-Path -LiteralPath $from) {
@@ -82,6 +88,28 @@ if ($skillSource) {
 } else {
     Write-Warning 'No sibling plugin skills directory found for staged-plugin skill contracts.'
 }
+$handoffSrc = Join-Path $repoRoot 'plugins\core\skills\handoff'
+if (Test-Path -LiteralPath $handoffSrc) {
+    $handoffDest = Join-Path $skillDest 'handoff'
+    if (Test-Path -LiteralPath $handoffDest) { Remove-Item -LiteralPath $handoffDest -Recurse -Force }
+    Copy-Item -LiteralPath $handoffSrc -Destination $handoffDest -Recurse -Force
+}
+$yamlMutationRule = @"
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use ``plugins/core/lib-ps/yaml-object-mutation.ps1`` and call ``Set-McpYamlObjectValue`` or ``Update-McpYamlObject``.
+"@
+foreach ($name in @('session', 'triage', 'handoff')) {
+    $skillMd = Join-Path $skillDest (Join-Path $name 'SKILL.md')
+    if (-not (Test-Path -LiteralPath $skillMd)) { continue }
+    $text = [System.IO.File]::ReadAllText($skillMd)
+    if ($text -notmatch 'YAML Mutation Rule') {
+        [System.IO.File]::WriteAllText($skillMd, $text.TrimEnd() + $yamlMutationRule, [System.Text.UTF8Encoding]::new($false))
+        Write-Host "Appended YAML Mutation Rule to staged skill $name"
+    }
+}
+
 
 $started = [DateTimeOffset]::UtcNow
 $started = [DateTimeOffset]::new(
