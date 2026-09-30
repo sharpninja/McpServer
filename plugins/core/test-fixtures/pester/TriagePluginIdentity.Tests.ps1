@@ -200,6 +200,7 @@ Execute the add-profile skill now.
     }
 
     It 'BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
         $testFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Test-ReplBeginTurnDegradedQueued \{.*?^\}').Value
         $completeFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Complete-ReplBeginTurnAfterPersist \{.*?^\}').Value
         $testFn | Should -Not -BeNullOrEmpty

@@ -739,26 +739,51 @@ Write-Output ("agent=" + $script:AgentName)
         $artifact = Join-Path $layout.Failsafe 'keep-#space.yaml'
         [System.IO.File]::WriteAllText($artifact, "method: x`n")
         Write-P2Turn -Layout $layout -RequestId 'req-R'
+        $marker = Join-Path $layout.Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            Set-Content -LiteralPath $marker -Value "marker: p2-hv04`n" -Encoding utf8
+        }
+        # Keep Ensure-PluginMarkerFresh from rewriting session to MCP_UNTRUSTED: seed
+        # verified session with matching marker fingerprint and Codex agent key.
+        . (Join-Path $script:RepoRoot 'plugins\core\lib-ps\marker-resolver.ps1')
+        $snap = Get-MarkerFileSnapshot -StartDir $layout.Workspace
+        $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $sessionPath = Join-Path $layout.Cache 'session-state.yaml'
+        Write-McpYamlObject -Path $sessionPath -Document ([ordered]@{
+            sessionId = 'Codex-20260930T000000Z-plugin-session'
+            status = 'verified'
+            agent = 'Codex'
+            workspacePath = $layout.Workspace
+            timestamp = $now
+            lastUpdated = $now
+            markerFilePath = [string]$snap.markerFilePath
+            markerLastWriteUtc = [string]$snap.markerLastWriteUtc
+        })
         $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
         $doc = Read-McpYamlObject -Path $turnPath
         $doc['degraded'] = $true
         $doc['failsafePath'] = $artifact
-        $doc['openedAt'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $doc['openedAt'] = $now
         $doc['queryText'] = 'same prompt'
+        $doc['status'] = 'in_progress'
+        $doc['sessionId'] = 'Codex-20260930T000000Z-plugin-session'
         Write-McpYamlObject -Path $turnPath -Document $doc
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
         $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
-        foreach ($arg in @('-NoLogo','-NoProfile','-NonInteractive','-File',$hook,'-HookEvent','user-prompt-submit')) { $psi.ArgumentList.Add($arg) }
+        foreach ($arg in @('-NoLogo','-NoProfile','-NonInteractive','-File',$hook,'-HookName','user-prompt-submit')) { $psi.ArgumentList.Add($arg) }
         $psi.WorkingDirectory = $layout.Workspace
         $psi.UseShellExecute = $false
         $psi.RedirectStandardInput = $true
         $psi.RedirectStandardOutput = $true
         $psi.RedirectStandardError = $true
+        $toRemove = @($psi.Environment.Keys | Where-Object { $_ -match 'GROK|PLUGIN_AGENT|MCP_AGENT|MCP_SESSION|MCP_CACHE|MCP_WORKSPACE|MCPSERVER' })
+        foreach ($k in $toRemove) { [void]$psi.Environment.Remove($k) }
         $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $layout.Cache
         $psi.Environment['MCP_WORKSPACE_PATH'] = $layout.Workspace
         $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $layout.Workspace
         $psi.Environment['MCP_PLUGIN_HOST'] = 'codex'
         $psi.Environment['MCP_AGENT_NAME'] = 'Codex'
+        $psi.Environment['PLUGIN_AGENT_NAME'] = 'Codex'
         $proc = [System.Diagnostics.Process]::Start($psi)
         $stdin = '{"prompt":"same prompt"}'
         $proc.StandardInput.Write($stdin)
@@ -766,9 +791,14 @@ Write-Output ("agent=" + $script:AgentName)
         $stdout = $proc.StandardOutput.ReadToEndAsync()
         $stderr = $proc.StandardError.ReadToEndAsync()
         if (-not $proc.WaitForExit(60000)) { try { $proc.Kill($true) } catch { }; throw 'hook timed out' }
-        $out = $stdout.Result
+        $out = [string]$stdout.Result
+        $err = [string]$stderr.Result
+        if ([string]::IsNullOrWhiteSpace($out) -and -not [string]::IsNullOrWhiteSpace($err)) {
+            throw "hook produced empty stdout; stderr=$err"
+        }
         $out | Should -Match 'turn-already-open'
         $out | Should -Match 'recoveryArtifactPath'
         $out | Should -Match 'keep-'
     }
 }
+
