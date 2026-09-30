@@ -6,11 +6,30 @@
 Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     BeforeAll {
     function Get-TestMarkerSnapshot {
+        # HV15: never handwrite AGENTS-README-FIRST.yaml at the repository root.
+        # RepoRoot is read-only (marker must already exist). Isolated fixture
+        # workspaces may create the marker via Write-McpYamlObject.
         param([string]$Workspace = $script:RepoRoot)
-        if ([string]::IsNullOrWhiteSpace($Workspace)) { $Workspace = (Get-Location).Path }
+        if ([string]::IsNullOrWhiteSpace($Workspace)) {
+            throw 'Get-TestMarkerSnapshot requires a Workspace path.'
+        }
+        $resolved = [System.IO.Path]::GetFullPath($Workspace)
+        $repo = [System.IO.Path]::GetFullPath([string]$script:RepoRoot)
+        $isRepoRoot = ($resolved.TrimEnd('\','/') -eq $repo.TrimEnd('\','/'))
         $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
         if (-not (Test-Path -LiteralPath $marker)) {
-            [System.IO.File]::WriteAllText($marker, ("workspacePath: {0}`napiKey: test`n" -f $Workspace))
+            if ($isRepoRoot) {
+                throw 'Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.'
+            }
+            $yamlLib = Join-Path $script:RepoRoot 'plugins\core\lib-ps\yaml-object-mutation.ps1'
+            . $yamlLib
+            if (Get-Command Import-McpYamlSerializer -ErrorAction SilentlyContinue) {
+                Import-McpYamlSerializer
+            }
+            Write-McpYamlObject -Path $marker -Document ([ordered]@{
+                workspacePath = $Workspace
+                apiKey = 'test'
+            })
         }
         return Get-MarkerFileSnapshot -StartDir $Workspace
     }

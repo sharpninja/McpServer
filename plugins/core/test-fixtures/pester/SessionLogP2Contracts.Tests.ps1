@@ -28,10 +28,14 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 '    $sessionId = if ($sessionMatches.Count -gt 0) { $sessionMatches[$sessionMatches.Count-1].Groups[1].Value } else { ''Codex-20260930T000000Z-p2'' }'
                 '    $requestId = if ($requestMatches.Count -gt 0) { $requestMatches[$requestMatches.Count-1].Groups[1].Value } else { ''req-p2-verb'' }'
                 '    if ($fault -eq ''wrong-dialog'') { $sessionId = ''sessionB''; $requestId = ''req-OTHER'' }'
+                '    elseif ($fault -eq ''blank-session'') { $sessionId = ''   '' }'
+                '    elseif ($fault -eq ''blank-request'') { $requestId = ''  '' }'
+                '    elseif ($fault -eq ''missing-ids'') { $sessionId = $null; $requestId = $null }'
                 '    $retitled = ''true''; if ($fault -eq ''retitled-false'') { $retitled = ''false'' }'
+                '    $omitIds = ($null -eq $sessionId -and $null -eq $requestId)'
                 '    $lines = [System.Collections.Generic.List[string]]::new(); $lines.Add(''type: result''); $lines.Add(''payload:''); $lines.Add(''  result:'')'
-                '    if ($stdin -match ''SetTurnTitleAsync'') { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)); $lines.Add((''    retitled: '' + $retitled)); $lines.Add(''    turnId: 1'') }'
-                '    elseif ($stdin -match ''AppendDialogAsync'') { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)); $lines.Add(''    totalDialogCount: 1'') }'
+                '    if ($stdin -match ''SetTurnTitleAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add((''    retitled: '' + $retitled)); $lines.Add(''    turnId: 1'') }'
+                '    elseif ($stdin -match ''AppendDialogAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add(''    totalDialogCount: 1'') }'
                 '    else { $lines.Add(''    persisted: true''); $lines.Add(''    degraded: false'') }'
                 '    $out = ($lines -join [Environment]::NewLine); [Console]::Out.Write($out + [Environment]::NewLine)'
                 '    exit 0'
@@ -933,6 +937,22 @@ Write-Output ("agent=" + $script:AgentName)
             "$($dialog.Stderr)$($dialog.Stdout)" | Should -Match 'typed result'
         } finally {
             Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue
+        }
+
+        foreach ($fault in @('blank-session','blank-request','missing-ids')) {
+            $env:P2_TYPED_FAULT = $fault
+            try {
+                $blankDialog = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: hello-$fault`n"
+                $blankDialog.ExitCode | Should -Not -Be 0 -Because $fault
+                "$($blankDialog.Stderr)$($blankDialog.Stdout)" | Should -Match 'typed result|missing or blank' -Because $fault
+
+                $blankTitle = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "queryTitle: Renamed-$fault`n"
+                $blankTitle.ExitCode | Should -Not -Be 0 -Because $fault
+                "$($blankTitle.Stderr)$($blankTitle.Stdout)" | Should -Match 'typed result|missing or blank|retitled=true' -Because $fault
+                @(Get-ChildItem -LiteralPath $layout.Failsafe -ErrorAction SilentlyContinue).Count | Should -BeGreaterThan 0 -Because "title recovery retained for $fault"
+            } finally {
+                Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue
+            }
         }
 
         $env:P2_TYPED_FAULT = 'retitled-false'

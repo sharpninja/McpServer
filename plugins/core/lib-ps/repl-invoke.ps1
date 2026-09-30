@@ -1530,10 +1530,17 @@ function Test-ReplTypedSessionMutationResult {
     if (-not $details) { $details = $response }
     $responseSession = [string](Get-ReplObjectValue -InputObject $details -Name 'sessionId')
     $responseRequest = [string](Get-ReplObjectValue -InputObject $details -Name 'requestId')
-    if (-not [string]::IsNullOrWhiteSpace($responseSession) -and $responseSession -ne $ExpectedSessionId) {
+    # HV14: absent/blank/whitespace typed identity is not primary - require present matching ids.
+    if ([string]::IsNullOrWhiteSpace($responseSession)) {
+        return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId is missing or blank." }
+    }
+    if ($responseSession -ne $ExpectedSessionId) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId '$responseSession' does not match '$ExpectedSessionId'." }
     }
-    if (-not [string]::IsNullOrWhiteSpace($responseRequest) -and $responseRequest -ne $ExpectedRequestId) {
+    if ([string]::IsNullOrWhiteSpace($responseRequest)) {
+        return [ordered]@{ Ok = $false; Message = "$Method typed result requestId is missing or blank." }
+    }
+    if ($responseRequest -ne $ExpectedRequestId) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result requestId '$responseRequest' does not match '$ExpectedRequestId'." }
     }
     if ($RequireRetitled) {
