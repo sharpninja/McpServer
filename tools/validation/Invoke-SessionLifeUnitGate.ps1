@@ -62,8 +62,15 @@ $skillSource = $skillCandidates | Where-Object { Test-Path -LiteralPath $_ } | S
 if ($skillSource) {
     $skillDest = Join-Path $stagedRoot 'skills'
     New-Item -ItemType Directory -Force -Path $skillDest | Out-Null
-    Copy-Item -Path (Join-Path $skillSource '*') -Destination $skillDest -Recurse -Force
-    Write-Host "Copied plugin skills from $skillSource into $skillDest"
+    foreach ($name in @('session', 'triage')) {
+        $from = Join-Path $skillSource $name
+        if (Test-Path -LiteralPath $from) {
+            $to = Join-Path $skillDest $name
+            if (Test-Path -LiteralPath $to) { Remove-Item -LiteralPath $to -Recurse -Force }
+            Copy-Item -LiteralPath $from -Destination $to -Recurse -Force
+        }
+    }
+    Write-Host "Copied session/triage skills from $skillSource into $skillDest"
 } else {
     Write-Warning 'No sibling plugin skills directory found for staged-plugin skill contracts.'
 }

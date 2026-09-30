@@ -16,7 +16,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             $script:FakeRepl = Join-Path $script:Work 'fake-repl.cmd'
             $fakePs1 = Join-Path $script:Work 'fake-repl.ps1'
             $fakeBody = @(
-                '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd()'
+                '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd(); if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
                 'if ($env:P2_REPL_LOG) { Add-Content -LiteralPath $env:P2_REPL_LOG -Value $stdin -Encoding utf8 }'
                 '$mode = $env:P2_REPL_MODE'
                 'if ([string]::IsNullOrWhiteSpace($mode)) { $mode = ''primary'' }'
