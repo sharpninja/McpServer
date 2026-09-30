@@ -501,7 +501,10 @@ acceptanceCriteria:
             $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
             function Assert-ReplCurrentTurnFresh { return $true }
-            function Invoke-ReplPersistTurn { return $false }
+            function Invoke-ReplPersistTurn {
+                param([string]$RequestId,[string]$Title,[string]$Status,[string]$ResponseText,[string]$ActionsYaml,[string]$PlanFile='',[string]$TodoId='')
+                return $false
+            }
 
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 status = 'verified'
@@ -555,7 +558,9 @@ acceptanceCriteria:
                     [Parameter(Mandatory)][string]$Status,
                     [string]$ResponseText = '',
                     [string]$ActionsYaml = '',
-                    [object[]]$ProcessingDialog = @()
+                    [object[]]$ProcessingDialog = @(),
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:appendActionsPersistArgs = [ordered]@{
                     RequestId = $RequestId
@@ -653,7 +658,9 @@ actions:
                     [string]$Interpretation = '',
                     [int]$TokenCount = 0,
                     [string[]]$Tags = @(),
-                    [string[]]$ContextList = @()
+                    [string[]]$ContextList = @(),
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:updateTurnPersistArgs = [ordered]@{
                     RequestId = $RequestId
@@ -758,7 +765,9 @@ contextList:
                     [string]$Interpretation = '',
                     [int]$TokenCount = 0,
                     [string[]]$Tags = @(),
-                    [string[]]$ContextList = @()
+                    [string[]]$ContextList = @(),
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:reql030Args = [ordered]@{ Title = $Title; IncludeSessionTitle = [bool]$IncludeSessionTitle }
                 return $true
@@ -1021,7 +1030,9 @@ contextList:
                     [string]$Title,
                     [string]$Status,
                     [string]$ResponseText,
-                    [string]$ActionsYaml
+                    [string]$ActionsYaml,
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:capturedActionsYaml = $ActionsYaml
                 return $true
@@ -1166,7 +1177,9 @@ contextList:
                     [string]$Title,
                     [string]$Status,
                     [string]$ResponseText,
-                    [string]$ActionsYaml
+                    [string]$ActionsYaml,
+                    [string]$PlanFile = '',
+                    [string]$TodoId = ''
                 )
                 $script:capturedCompleteStatus = $Status
                 return $true
@@ -3394,6 +3407,7 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
             function Assert-ReplCurrentTurnFresh { return $true }
             function Invoke-ReplPersistTurn {
+                param([string]$RequestId,[string]$Title,[switch]$IncludeSessionTitle,[string]$Status,[string]$ResponseText,[string]$ActionsYaml,[object[]]$ProcessingDialog,[string]$Interpretation,[int]$TokenCount,[string[]]$Tags,[string[]]$ContextList,[string]$PlanFile='',[string]$TodoId='')
                 $script:LastReplPersistenceDetails = [ordered]@{
                     persisted = $true
                     degraded = $true
