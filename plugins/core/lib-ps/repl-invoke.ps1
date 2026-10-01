@@ -1748,8 +1748,9 @@ function Invoke-ReplPersistTurn {
     $responseSession = [string](Get-ReplObjectValue -InputObject $details -Name 'sessionId')
     $responseRequest = [string](Get-ReplObjectValue -InputObject $details -Name 'requestId')
     $identityMismatch = $false
-    if (-not [string]::IsNullOrWhiteSpace($responseSession) -and $responseSession -ne [string]$meta.SessionId) { $identityMismatch = $true }
-    if (-not [string]::IsNullOrWhiteSpace($responseRequest) -and $responseRequest -ne $RequestId) { $identityMismatch = $true }
+    # HV19: ordinal case-sensitive identity (PowerShell -ne is case-insensitive by default).
+    if (-not [string]::IsNullOrWhiteSpace($responseSession) -and -not [string]::Equals($responseSession, [string]$meta.SessionId, [System.StringComparison]::Ordinal)) { $identityMismatch = $true }
+    if (-not [string]::IsNullOrWhiteSpace($responseRequest) -and -not [string]::Equals($responseRequest, $RequestId, [System.StringComparison]::Ordinal)) { $identityMismatch = $true }
     if (-not $persisted -or $responseDegraded -or $identityMismatch) {
         $unconfirmed = "Session log persistence did not confirm a durable write for request '$RequestId'. FailsafePath='$failsafePath'."
         if ($responseDegraded) { $unconfirmed = "Session log persistence returned contradictory persisted+degraded for request '$RequestId'. FailsafePath='$failsafePath'." }
@@ -2159,11 +2160,19 @@ function Invoke-WorkflowBeginTurn {
     $cachedDegraded = Get-ReplCurrentTurnValue -Key 'degraded'
     $cachedPersisted = Get-ReplCurrentTurnValue -Key 'persisted'
     $cachedSessionId = Get-ReplCurrentTurnValue -Key 'sessionId'
-    $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
+    # HV20: ordinal case-sensitive reopen/session match (PowerShell -eq is case-insensitive by default).
+    $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and [string]::Equals($currentTurnId, $requestId, [System.StringComparison]::Ordinal))
     $isDegradedTurn = $cachedDegraded -match '^(?i:true|1)$'
     # HV02: empty cached sessionId is NOT a match. Durable omission requires a
     # non-empty matching sessionId plus persisted proof and workspace freshness.
-    $sessionMatches = (-not [string]::IsNullOrWhiteSpace($cachedSessionId)) -and ($cachedSessionId -eq $sessionId)
+    $sessionMatches = (-not [string]::IsNullOrWhiteSpace($cachedSessionId)) -and [string]::Equals($cachedSessionId, $sessionId, [System.StringComparison]::Ordinal)
+    # HV20: case-different requestId is not a new turn and must not overwrite a bound turn.
+    if (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and -not [string]::IsNullOrWhiteSpace($requestId) -and -not $isReopen -and [string]::Equals($currentTurnId, $requestId, [System.StringComparison]::OrdinalIgnoreCase)) {
+        $reject = "workflow.sessionlog.beginTurn refused case-different requestId '$requestId' because the current turn is '$currentTurnId'."
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.beginTurn' -RequestId $currentTurnId -Message $reject -ChildStderr $reject))
+        [Console]::Error.WriteLine($reject)
+        return $false
+    }
     $hasDurableProof = $cachedPersisted -match '^(?i:true|1)$'
     # HV12: reopen must not migrate or manufacture workspace identity. Reject wrong
     # markers (including degraded) and incomplete marker proof on persisted turns.

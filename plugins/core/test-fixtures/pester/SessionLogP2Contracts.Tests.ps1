@@ -38,7 +38,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 '    $lines = [System.Collections.Generic.List[string]]::new(); $lines.Add(''type: result''); $lines.Add(''payload:''); $lines.Add(''  result:'')'
                 '    if ($stdin -match ''SetTurnTitleAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add((''    retitled: '' + $retitled)); $lines.Add(''    turnId: 1'') }'
                 '    elseif ($stdin -match ''AppendDialogAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add(''    totalDialogCount: 1'') }'
-                '    else { $lines.Add(''    persisted: true''); $lines.Add(''    degraded: false'') }'
+                '    else { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add(''    persisted: true''); $lines.Add(''    degraded: false'') }'
                 '    $out = ($lines -join [Environment]::NewLine); [Console]::Out.Write($out + [Environment]::NewLine)'
                 '    exit 0'
                 '}'
@@ -1043,33 +1043,60 @@ Write-Output ("agent=" + $script:AgentName)
         $todos = @($manifest.todoAcceptanceRows)
         $todos.Count | Should -Be 35
         @($todos | Where-Object { $_.acceptanceState -ne 'not-accepted' -or $_.done -eq $true }).Count | Should -Be 0
-    }
-    It 'HV16 case-different caller requestId is rejected without mutation' {
-        $layout = New-P2Layout -Name 'hv16-case'
-        Write-P2Turn -Layout $layout -RequestId 'req-20261001T000000Z-casea'
-        $before = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
-        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-20261001T000000Z-caseA`nresponse: should-not-write`n" -Mode 'primary'
-        $result.ExitCode | Should -Not -Be 0
-        Assert-P2Receipt -Receipt $result.Receipt -Method 'workflow.sessionlog.updateTurn' -RequestId 'req-20261001T000000Z-casea' -Code 'rejected'
-        $after = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
-        $after.Hash | Should -Be $before.Hash
-        $result.ServerState | Should -Be ''
-    }
-
-    It 'HV17 case-different typed sessionId or requestId is not primary' {
-        $layout = New-P2Layout -Name 'hv17-typed-case'
-        Write-P2Turn -Layout $layout -RequestId 'req-R'
-        foreach ($fault in @('case-session','case-request')) {
-            $env:P2_TYPED_FAULT = $fault
-            try {
-                $dlg = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: x`n" -Mode 'primary'
-                $dlg.ExitCode | Should -Not -Be 0
-                $title = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "title: new title`n" -Mode 'primary'
-                $title.ExitCode | Should -Not -Be 0
-            } finally { Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue }
-        }
-    }
-
+    }
+
+    It 'HV16 case-different caller requestId is rejected without mutation' {
+
+        $layout = New-P2Layout -Name 'hv16-case'
+
+        Write-P2Turn -Layout $layout -RequestId 'req-20261001T000000Z-casea'
+
+        $before = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-20261001T000000Z-caseA`nresponse: should-not-write`n" -Mode 'primary'
+
+        $result.ExitCode | Should -Not -Be 0
+
+        Assert-P2Receipt -Receipt $result.Receipt -Method 'workflow.sessionlog.updateTurn' -RequestId 'req-20261001T000000Z-casea' -Code 'rejected'
+
+        $after = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+
+        $after.Hash | Should -Be $before.Hash
+
+        $result.ServerState | Should -Be ''
+
+    }
+
+
+
+    It 'HV17 case-different typed sessionId or requestId is not primary' {
+
+        $layout = New-P2Layout -Name 'hv17-typed-case'
+
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+
+        foreach ($fault in @('case-session','case-request')) {
+
+            $env:P2_TYPED_FAULT = $fault
+
+            try {
+
+                $dlg = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: x`n" -Mode 'primary'
+
+                $dlg.ExitCode | Should -Not -Be 0
+
+                $title = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "title: new title`n" -Mode 'primary'
+
+                $title.ExitCode | Should -Not -Be 0
+
+            } finally { Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue }
+
+        }
+
+    }
+
+
+
     It 'rejects explicit empty and null planFile on ordinary first persistence' {
 
         $layout = New-P2Layout -Name 'raw-meta'
@@ -1082,6 +1109,81 @@ Write-Output ("agent=" + $script:AgentName)
 
         $nullish.ExitCode | Should -Not -Be 0
 
-    }
+    }
+
+
+
+    It 'HV19 case-different SubmitAsync response identity is not persisted and keeps recovery' {
+        foreach ($fault in @('case-session','case-request')) {
+            foreach ($verb in @(
+                @{ Method = 'workflow.sessionlog.updateTurn'; Yaml = "requestId: req-p2-verb`nresponse: should-not-clear`n" },
+                @{ Method = 'workflow.sessionlog.appendActions'; Yaml = "requestId: req-p2-verb`nactions:`n  - type: design_decision`n    description: note`n" },
+                @{ Method = 'workflow.sessionlog.completeTurn'; Yaml = "requestId: req-p2-verb`nresponse: done`n" },
+                @{ Method = 'workflow.sessionlog.failTurn'; Yaml = "requestId: req-p2-verb`nerrorMessage: boom`n" }
+            )) {
+                $layout = New-P2Layout -Name ("hv19-" + $fault + "-" + ($verb.Method -replace '\W',''))
+                Write-P2Turn -Layout $layout -RequestId 'req-p2-verb'
+                $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+                $turn = Read-McpYamlObject -Path $turnPath
+                $turn.persisted = 'true'
+                Write-McpYamlObject -Path $turnPath -Document $turn
+                $env:P2_TYPED_FAULT = $fault
+                try {
+                    $result = Invoke-P2Verb -Layout $layout -Method $verb.Method -ParamsYaml $verb.Yaml -Mode 'primary'
+                    $result.ExitCode | Should -Not -Be 0
+                    Assert-P2Receipt -Receipt $result.Receipt -Method $verb.Method -RequestId 'req-p2-verb' -Code 'rejected'
+                    $fails = @(Get-ChildItem -LiteralPath $layout.Failsafe -File -ErrorAction SilentlyContinue)
+                    $fails.Count | Should -BeGreaterThan 0
+                    Test-Path -LiteralPath $turnPath | Should -BeTrue
+                    $after = Read-McpYamlObject -Path $turnPath
+                    [string]$after.turnRequestId | Should -Be 'req-p2-verb'
+                } finally { Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue }
+            }
+        }
+    }
+
+
+    It 'HV20 beginTurn case-different request or session does not durable-reopen overwrite' {
+        # case-request: caller requestId differs only by case from bound turn
+        $layout = New-P2Layout -Name 'hv20-case-request'
+        Write-P2Turn -Layout $layout -RequestId 'req-20261001T000000Z-casea'
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $turn = Read-McpYamlObject -Path $turnPath
+        $turn.persisted = 'true'
+        $turn.planFile = 'docs/plans/bound.md'
+        $turn.todoId = 'TODO-BOUND'
+        Write-McpYamlObject -Path $turnPath -Document $turn
+        $before = Get-FileHash -LiteralPath $turnPath -Algorithm SHA256
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-20261001T000000Z-caseA`nqueryTitle: overwrite?`nqueryText: must not reopen`n" -Mode 'primary'
+        $result.ExitCode | Should -Not -Be 0
+        Assert-P2Receipt -Receipt $result.Receipt -Method 'workflow.sessionlog.beginTurn' -RequestId 'req-20261001T000000Z-casea' -Code 'rejected'
+        $afterHash = (Get-FileHash -LiteralPath $turnPath -Algorithm SHA256).Hash
+        $afterHash | Should -Be $before.Hash
+        $after = Read-McpYamlObject -Path $turnPath
+        [string]$after.turnRequestId | Should -Be 'req-20261001T000000Z-casea'
+        [string]$after.planFile | Should -Be 'docs/plans/bound.md'
+
+        # case-session: session-state casing differs from bound turn sessionId
+        $layout2 = New-P2Layout -Name 'hv20-case-session'
+        Write-P2Turn -Layout $layout2 -RequestId 'req-20261001T000000Z-casea'
+        $turnPath2 = Join-Path $layout2.Cache 'current-turn.yaml'
+        $turn2 = Read-McpYamlObject -Path $turnPath2
+        $turn2.persisted = 'true'
+        $turn2.sessionId = 'Codex-20260930T000000Z-sessiona'
+        $turn2.planFile = 'docs/plans/bound.md'
+        Write-McpYamlObject -Path $turnPath2 -Document $turn2
+        $sp = Join-Path $layout2.Cache 'session-state.yaml'
+        $state = Read-McpYamlObject -Path $sp
+        $state.sessionId = 'Codex-20260930T000000Z-sessionA'
+        Write-McpYamlObject -Path $sp -Document $state
+        $before2 = Get-FileHash -LiteralPath $turnPath2 -Algorithm SHA256
+        $result2 = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-20261001T000000Z-casea`nqueryTitle: overwrite?`nqueryText: must not reopen`n" -Mode 'primary'
+        $result2.ExitCode | Should -Not -Be 0
+        Assert-P2Receipt -Receipt $result2.Receipt -Method 'workflow.sessionlog.beginTurn' -RequestId 'req-20261001T000000Z-casea' -Code 'rejected'
+        (Get-FileHash -LiteralPath $turnPath2 -Algorithm SHA256).Hash | Should -Be $before2.Hash
+        $after2 = Read-McpYamlObject -Path $turnPath2
+        [string]$after2.sessionId | Should -Be 'Codex-20260930T000000Z-sessiona'
+        [string]$after2.planFile | Should -Be 'docs/plans/bound.md'
+    }
 
 }
