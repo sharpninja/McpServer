@@ -54,6 +54,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 [string]$PlanFile,
                 [string]$TodoId
             )
+            if ($null -eq $script:PersistCallCount) { $script:PersistCallCount = 0 }
+            $script:PersistCallCount++
             $script:LastPersistBoundPlan = $PSBoundParameters.ContainsKey('PlanFile')
             $script:LastPersistPlan = $PlanFile
             $script:LastPersistTodo = $TodoId
@@ -64,6 +66,9 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                     queued = $true
                     failsafePath = ''
                 }
+                return $false
+            }
+            if ($script:PersistRecoveryReturnsFalse) {
                 return $false
             }
             return $true
@@ -111,6 +116,15 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
+                queryText = 'cached query text'
+                queryTitle = 'kept title'
+                openedAt = '2026-09-23T20:00:00Z'
+            })
+            $fromQuery = Invoke-ReplTurnUpsertParams -SourceType 'GrokCode' -SessionId 's' -RequestId 'r' -Title '' -Status 'completed'
+            $fromQuery.turn.queryText | Should -Be 'cached query text'
+            $fromQuery.turn.Contains('queryTitle') | Should -BeFalse
+
+            Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
                 queryTitle = 'kept title'
                 openedAt = '2026-09-23T20:00:00Z'
             })
@@ -155,6 +169,12 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
         $env:MCP_WORKSPACE_PATH = $script:RepoRoot
         $script:DialogResult = @{ Success = $false; Output = 'HTTP 404'; Error = 'not_found' }
+        $script:PersistCallCount = 0
+        $script:PersistRecoveryReturnsFalse = $true
+        if (Get-Command Get-McpFailsafeDir -ErrorAction SilentlyContinue) {
+            $fs = Get-McpFailsafeDir
+            if (Test-Path -LiteralPath $fs) { Remove-Item -LiteralPath $fs -Recurse -Force -ErrorAction SilentlyContinue }
+        }
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260923T205606Z-life'
@@ -166,15 +186,37 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 status = 'in_progress'
                 degraded = $true
                 queryText = 'keep me'
+                queryTitle = 'kept title'
                 markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
                 markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
             $ok | Should -BeTrue
+            $script:PersistCallCount | Should -Be 1
             $script:LastReplPersistenceDetails.queued | Should -BeTrue
             $script:LastReplPersistenceDetails.message | Should -Not -Match 'failsafe not used'
-            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -BeGreaterThan 0
+            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -Be 1
+
+            Remove-Item -LiteralPath (Get-McpFailsafeDir) -Recurse -Force -ErrorAction SilentlyContinue
+            $script:PersistCallCount = 0
+            Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260923T205606Z-001-life'
+                sessionId = 'GrokCode-20260923T205606Z-life'
+                status = 'in_progress'
+                degraded = $false
+                queryText = 'keep me'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+            })
+            $never = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: never`n"
+            $never | Should -BeFalse
+            $script:PersistCallCount | Should -Be 0
+            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -Be 0
+                        $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'message')
+            if ([string]::IsNullOrWhiteSpace($msg)) { $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'Message') }
+            $msg | Should -Match 'failsafe not used'
         } finally {
+            $script:PersistRecoveryReturnsFalse = $false
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }

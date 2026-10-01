@@ -546,12 +546,64 @@ Write-Output ("agent=" + $script:AgentName)
         $bootstrap | Should -Match 'cancelled'
         $bootstrap | Should -Match 'durable reopen'
 
-        $guideExamples = [regex]::Matches($guide, '(?s)method:\s*workflow\.sessionlog\.beginTurn\s+params:\s*(?<params>.*?)(?:```|\r?\n\r?\n)')
-        $guideExamples.Count | Should -Be 3
-        foreach ($example in $guideExamples) {
-            $example.Groups['params'].Value | Should -Match 'planFile:\s*None'
-            $example.Groups['params'].Value | Should -Match 'todoId:\s*None'
+        # Exhaustive fenced-document oracle: parse every json/yaml/yml fence in
+        # module-bootstrap.md and REPL-USER-GUIDE.md; require raw beginTurn
+        # occurrence count to equal parsed beginTurn example count.
+        $fenceDoc = [string]::new([char]96, 3)
+        $docOracle = @()
+        foreach ($rel in @('docs\context\module-bootstrap.md', 'docs\REPL-USER-GUIDE.md')) {
+            $docPath = Join-Path $script:RepoRoot $rel
+            $text = ([System.IO.File]::ReadAllText($docPath) -replace "`r`n", "`n")
+            $blocks = [regex]::Matches($text, ('(?ms)^(?<indent>[ \t]{0,3})' + $fenceDoc + '(?<lang>json|yaml|yml)[ \t]*\n(?<body>.*?)^[ \t]{0,3}' + $fenceDoc + '[ \t]*$'))
+            $rawBegin = 0
+            $parsedBegin = 0
+            foreach ($block in $blocks) {
+                $body = $block.Groups['body'].Value
+                $indent = $block.Groups['indent'].Value
+                if ($indent.Length -gt 0) {
+                    $body = $body -replace ('(?m)^' + [regex]::Escape($indent)), ''
+                }
+                $rawBegin += [regex]::Matches($body, 'workflow\.sessionlog\.beginTurn').Count
+                $parsed = @()
+                if ($block.Groups['lang'].Value -eq 'json') {
+                    $parsed = @(ConvertFrom-Json -InputObject $body -AsHashtable -ErrorAction Stop)
+                } else {
+                    if (-not (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue)) {
+                        . (Join-Path $script:RepoRoot 'plugins\core\lib-ps\yaml-object-mutation.ps1')
+                        Import-McpYamlSerializer
+                    }
+                    $parsed = @(ConvertFrom-Yaml -Yaml $body -AllDocuments -ErrorAction Stop)
+                }
+                foreach ($item in $parsed) {
+                    $method = $null
+                    $params = $null
+                    if ($item -is [System.Collections.IDictionary]) {
+                        if ($item.Contains('payload')) {
+                            $payload = $item['payload']
+                            if ($payload -is [System.Collections.IDictionary]) {
+                                $method = [string]$payload['method']
+                                $params = $payload['params']
+                            } else {
+                                $method = [string]$payload.method
+                                $params = $payload.params
+                            }
+                        }
+                    } else {
+                        $method = [string]$item.payload.method
+                        $params = $item.payload.params
+                    }
+                    if ($method -eq 'workflow.sessionlog.beginTurn') {
+                        $parsedBegin++
+                        [string]$params.planFile | Should -Be 'None'
+                        [string]$params.todoId | Should -Be 'None'
+                    }
+                }
+            }
+            $rawBegin | Should -Be $parsedBegin
+            $docOracle += [pscustomobject]@{ Path = $rel; Blocks = $blocks.Count; RawBegin = $rawBegin; ParsedBegin = $parsedBegin }
         }
+        ($docOracle | Measure-Object -Property Blocks -Sum).Sum | Should -BeGreaterThan 0
+        ($docOracle | Measure-Object -Property ParsedBegin -Sum).Sum | Should -BeGreaterThan 0
         $guide | Should -Match 'exact `None`'
         $guide | Should -Match 'canceled'
         $guide | Should -Match 'cancelled'
@@ -964,5 +1016,21 @@ Write-Output ("agent=" + $script:AgentName)
         } finally {
             Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue
         }
+    }
+    It 'proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts' {
+        $buildTest = Join-Path $script:RepoRoot 'build\Build.Test.cs'
+        $buildText = [System.IO.File]::ReadAllText($buildTest)
+        $buildText | Should -Match '\!p\.Name\.Contains\("PluginIntegration"\)'
+        $buildText | Should -Match '\!p\.Name\.Contains\("IntegrationTests"\)'
+        $buildText | Should -Match 'Category!=Integration'
+        $gate = Join-Path $script:RepoRoot 'tools\validation\Invoke-SessionLifeUnitGate.ps1'
+        Test-Path -LiteralPath $gate | Should -BeTrue
+        $gateText = [System.IO.File]::ReadAllText($gate)
+        $gateText | Should -Match 'PluginIntegration'
+        $gateText | Should -Match 'deliberately excluded'
+        $manifest = Get-Content -LiteralPath (Join-Path $script:RepoRoot 'docs\receipts\sessionlife-completion\20260928-p0-r3\acceptance-manifest.json') -Raw | ConvertFrom-Json
+        $todos = @($manifest.todoAcceptanceRows)
+        $todos.Count | Should -Be 35
+        @($todos | Where-Object { $_.acceptanceState -ne 'not-accepted' -or $_.done -eq $true }).Count | Should -Be 0
     }
 }
