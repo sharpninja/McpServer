@@ -1,0 +1,49 @@
+{
+  "TimestampUtc": "2026-10-01T02:51:26.8152572Z",
+  "tipSha": "5e6b236c958505b5e202e2fb86604b7dec1eb968",
+  "branch": "cursor/sessionlife-p2-contracts-5cb2",
+  "sourceCount": 2229,
+  "sourceMismatches": [],
+  "artifactChanges": [],
+  "artifactCount": 17,
+  "historyFiles": [
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+      "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+      "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+      "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+      "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "match": true
+    },
+    {
+      "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+      "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "match": true
+    }
+  ],
+  "validator": {
+    "status": "ACCEPTED",
+    "method": "SessionLifeUnitGateValidator.Validate",
+    "artifactMutation": false,
+    "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+  },
+  "outsideReceiptStatusChanges": [],
+  "gateLogExists": false
+}
