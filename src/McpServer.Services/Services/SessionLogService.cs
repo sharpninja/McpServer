@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -10,6 +11,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -117,6 +119,13 @@ public sealed class SessionLogService : ISessionLogService
     public async Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(dto);
+        if (System.Transactions.Transaction.Current is not null
+            || _db.Database.CurrentTransaction is not null
+            || (_db.Database.IsRelational()
+                && System.Transactions.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction(_db.Database) is not null))
+        {
+            throw new InvalidOperationException("Session submission cannot acknowledge a durable write inside a caller-owned transaction.");
+        }
         SyncDbWorkspaceFromContext();
         SessionLogSchemaGuard.EnsureAgentSessionHeaderColumns(_db);
 
@@ -141,6 +150,12 @@ public sealed class SessionLogService : ISessionLogService
         }
 
         var isImport = !string.IsNullOrWhiteSpace(sourceFilePath);
+        // The terminal-state check must remain valid until the write commits, including
+        // when another request uses a different context or service process.
+        await using var transaction = _db.Database.IsRelational()
+            ? await _db.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken).ConfigureAwait(false)
+            : null;
+        await DetachUnchangedSessionGraphAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
         var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
         // Sessions are soft-delete only; resubmission is the recovery path. When the live
@@ -237,6 +252,9 @@ public sealed class SessionLogService : ISessionLogService
             wasCreated = false;
         }
 
+        if (transaction is not null)
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+
         dto.AgentDefinitionId = existing.AgentDefinitionId;
 
         await PublishChangeSafeAsync(
@@ -246,6 +264,51 @@ public sealed class SessionLogService : ISessionLogService
             cancellationToken).ConfigureAwait(false);
 
         return existing.Id;
+    }
+
+    /// <summary>Refreshes only this session's identity-map entries without losing pending edits.</summary>
+    private async Task DetachUnchangedSessionGraphAsync(string sourceType, string sessionId, CancellationToken cancellationToken)
+    {
+        var tracked = _db.ChangeTracker.Entries().ToArray();
+        if (tracked.Length == 0)
+            return;
+
+        var id = await _db.SessionLogs.IgnoreQueryFilters(["SoftDelete"])
+            .Where(s => s.SourceType == sourceType && s.SessionId == sessionId)
+            .Select(s => (long?)s.Id).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        if (id is null)
+            return;
+
+        var turnIds = (await _db.SessionLogTurns.IgnoreQueryFilters(["SoftDelete"])
+            .Where(t => t.SessionLogId == id.Value).Select(t => t.Id)
+            .ToListAsync(cancellationToken).ConfigureAwait(false)).ToHashSet();
+        turnIds.UnionWith(tracked.Select(e => e.Entity).OfType<SessionLogTurnEntity>()
+            .Where(t => t.SessionLogId == id.Value).Select(t => t.Id));
+        var commitIds = (await _db.SessionLogCommits.IgnoreQueryFilters(["SoftDelete"])
+            .Where(c => turnIds.Contains(c.SessionLogTurnId)).Select(c => c.Id)
+            .ToListAsync(cancellationToken).ConfigureAwait(false)).ToHashSet();
+        commitIds.UnionWith(tracked.Select(e => e.Entity).OfType<SessionLogCommitEntity>()
+            .Where(c => turnIds.Contains(c.SessionLogTurnId)).Select(c => c.Id));
+
+        var graph = tracked.Where(e => e.Entity switch
+        {
+            SessionLogEntity s => s.Id == id.Value,
+            SessionLogTagEntity t => t.SessionLogId == id.Value,
+            SessionLogTurnEntity t => t.SessionLogId == id.Value,
+            SessionLogActionEntity a => turnIds.Contains(a.SessionLogTurnId),
+            SessionLogTurnTagEntity t => turnIds.Contains(t.SessionLogTurnId),
+            SessionLogTurnContextEntity c => turnIds.Contains(c.SessionLogTurnId),
+            SessionLogProcessingDialogEntity d => turnIds.Contains(d.SessionLogTurnId),
+            SessionLogTurnStringListEntity s => turnIds.Contains(s.SessionLogTurnId),
+            SessionLogCommitEntity c => turnIds.Contains(c.SessionLogTurnId),
+            SessionLogCommitFileEntity f => commitIds.Contains(f.SessionLogCommitId),
+            _ => false
+        }).ToArray();
+        if (graph.Any(e => e.State != EntityState.Unchanged))
+            throw new InvalidOperationException("Persist pending session graph edits before submitting a session snapshot.");
+
+        foreach (var entry in graph)
+            entry.State = EntityState.Detached;
     }
 
     /// <summary>
@@ -1544,6 +1607,16 @@ public sealed class SessionLogService : ISessionLogService
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
+                // A late hook snapshot must not replace durable terminal history.
+                // Deliberate status corrections use the explicit single-turn API.
+                if (IsTerminalTurnStatus(existingEntry.Status)
+                    && dto.Status is not null
+                    && (IsSupersededHookPersist(dto) || !IsTerminalTurnStatus(dto.Status))
+                    && !string.Equals(existingEntry.Status, dto.Status, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 // FR-SUPPORT-015: whole-session submit merges turns additively -
                 // omitted turn fields never clobber previously persisted values.
                 UpdateEntryFromDto(existingEntry, dto, mergeOmittedFields: true);

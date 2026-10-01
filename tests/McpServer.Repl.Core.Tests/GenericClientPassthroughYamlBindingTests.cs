@@ -9,6 +9,54 @@ namespace McpServer.Repl.Core.Tests;
 /// <summary>Regression tests for YAML-to-client binding through the production REPL passthrough.</summary>
 public sealed class GenericClientPassthroughYamlBindingTests
 {
+    /// <summary>TEST-MCP-SESSIONLIFE-004: Typed receipt fields survive the plugin's REPL wire path.</summary>
+    [Theory]
+    [InlineData(true, false, false)]
+    [InlineData(false, true, true)]
+    public async Task ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(bool persisted, bool degraded, bool queued)
+    {
+        const string sessionId = "Codex-20261001T190000Z-receipt";
+        const string turnId = "req-20261001T190000Z-receipt";
+        var handler = new CapturingHttpHandler(JsonSerializer.Serialize(new
+        {
+            id = 42, sourceType = "Codex", sessionId, requestId = turnId, persisted, degraded, queued
+        }));
+        using var http = new HttpClient(handler);
+        var client = new McpServerClient(http, new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"), ApiKey = "test-key",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
+        });
+        var serializer = new YamlSerializer();
+        var protocol = new AgentStdioProtocol(serializer,
+            new ReplCommandDispatcher(new GenericClientPassthrough(client)));
+        var input = JsonSerializer.Serialize(new
+        {
+            type = "request",
+            payload = new
+            {
+                requestId = "req-repl-receipt", method = "client.SessionLog.SubmitAsync",
+                @params = new
+                {
+                    sessionLog = new { sourceType = "Codex", sessionId, turns = new[] { new { requestId = turnId } } }
+                }
+            }
+        });
+        using var reader = new StringReader(input + "\n\n");
+        using var writer = new StringWriter();
+
+        await protocol.RunAsync(reader, writer, TestContext.Current.CancellationToken);
+
+        var envelope = Assert.Single(serializer.DeserializeStream(writer.ToString()), item => item.Type == "result");
+        var payload = Assert.IsType<ResultPayload>(envelope.Payload);
+        var result = Assert.IsAssignableFrom<IDictionary<object, object?>>(payload.Result);
+        Assert.Equal(sessionId, result["sessionId"]?.ToString());
+        Assert.Equal(turnId, result["requestId"]?.ToString());
+        Assert.Equal(persisted, bool.Parse(result["persisted"]!.ToString()!));
+        Assert.Equal(degraded, bool.Parse(result["degraded"]!.ToString()!));
+        Assert.Equal(queued, bool.Parse(result["queued"]!.ToString()!));
+    }
+
     /// <summary>Nested object-keyed YAML lists must survive binding into typed client request models.</summary>
     [Fact]
     public async Task ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient()

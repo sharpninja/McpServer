@@ -406,6 +406,22 @@ public sealed class SessionLogSubmitResult
     /// <summary>Session identifier.</summary>
     [JsonPropertyName("sessionId")]
     public string? SessionId { get; set; }
+
+    /// <summary>Request identifier when exactly one turn was submitted; otherwise null.</summary>
+    [JsonPropertyName("requestId")]
+    public string? RequestId { get; set; }
+
+    /// <summary>TR-MCP-SESSIONLIFE-003: Explicit durable-write confirmation; absent legacy values remain false.</summary>
+    [JsonPropertyName("persisted")]
+    public bool Persisted { get; set; }
+
+    /// <summary>Whether persistence used a degraded recovery path instead of the primary store.</summary>
+    [JsonPropertyName("degraded")]
+    public bool Degraded { get; set; }
+
+    /// <summary>Whether the write is queued rather than durably persisted in the primary store.</summary>
+    [JsonPropertyName("queued")]
+    public bool Queued { get; set; }
 }
 
 /// <summary>Result of upserting a single session log turn.</summary>
