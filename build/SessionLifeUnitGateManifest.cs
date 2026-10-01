@@ -19,7 +19,7 @@ internal sealed partial class SessionLifeUnitGateValidator
         var policy = new JsonObject
         {
             ["mode"] = "git-tracked-plus-relevant-untracked",
-            ["roots"] = new JsonArray("build", "src", "tests", "plugins/core/test-fixtures/pester", "plugins/core/lib-ps", "tools/validation", "docs/context", "docs/REPL-USER-GUIDE.md"),
+            ["roots"] = new JsonArray("build", "src", "tests", "plugins/core/test-fixtures/pester", "plugins/core/lib-ps", "tools/validation", "docs/context", "docs/REPL-USER-GUIDE.md", "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json"),
             ["exclusions"] = new JsonArray(
                 "TestResults/**",
                 "docs/receipts/sessionlife-completion/**/test-results/**",

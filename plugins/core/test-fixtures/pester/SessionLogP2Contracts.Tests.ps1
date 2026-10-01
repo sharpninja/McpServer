@@ -30,6 +30,8 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 '    if ($fault -eq ''wrong-dialog'') { $sessionId = ''sessionB''; $requestId = ''req-OTHER'' }'
                 '    elseif ($fault -eq ''blank-session'') { $sessionId = ''   '' }'
                 '    elseif ($fault -eq ''blank-request'') { $requestId = ''  '' }'
+                '    elseif ($fault -eq ''case-session'') { if (-not [string]::IsNullOrWhiteSpace($sessionId)) { $chars = $sessionId.ToCharArray(); for ($i=0; $i -lt $chars.Length; $i++) { if ([char]::IsLetter($chars[$i])) { if ([char]::IsUpper($chars[$i])) { $chars[$i] = [char]::ToLowerInvariant($chars[$i]) } else { $chars[$i] = [char]::ToUpperInvariant($chars[$i]) }; break } }; $sessionId = [string]::new($chars) } }'
+                '    elseif ($fault -eq ''case-request'') { if (-not [string]::IsNullOrWhiteSpace($requestId)) { $chars = $requestId.ToCharArray(); for ($i=0; $i -lt $chars.Length; $i++) { if ([char]::IsLetter($chars[$i])) { if ([char]::IsUpper($chars[$i])) { $chars[$i] = [char]::ToLowerInvariant($chars[$i]) } else { $chars[$i] = [char]::ToUpperInvariant($chars[$i]) }; break } }; $requestId = [string]::new($chars) } }'
                 '    elseif ($fault -eq ''missing-ids'') { $sessionId = $null; $requestId = $null }'
                 '    $retitled = ''true''; if ($fault -eq ''retitled-false'') { $retitled = ''false'' }'
                 '    $omitIds = ($null -eq $sessionId -and $null -eq $requestId)'
@@ -1028,9 +1030,58 @@ Write-Output ("agent=" + $script:AgentName)
         $gateText = [System.IO.File]::ReadAllText($gate)
         $gateText | Should -Match 'PluginIntegration'
         $gateText | Should -Match 'deliberately excluded'
+        $validator = Join-Path $script:RepoRoot 'tests\Build.Tests\SessionLifeUnitGateValidatorTests.cs'
+        $consumer = Join-Path $script:RepoRoot 'tests\Build.Tests\SessionLifeUnitGateConsumerTests.cs'
+        Test-Path -LiteralPath $validator | Should -BeTrue
+        Test-Path -LiteralPath $consumer | Should -BeTrue
+        $vText = [System.IO.File]::ReadAllText($validator)
+        $vText | Should -Match 'Validate_SharedInvalidArtifact_IsRejectedInUnitLane'
+        $vText | Should -Match 'Validate_UnitOnlyInvalidArtifact_IsRejected'
+        $cText = [System.IO.File]::ReadAllText($consumer)
+        $cText | Should -Match 'ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce'
         $manifest = Get-Content -LiteralPath (Join-Path $script:RepoRoot 'docs\receipts\sessionlife-completion\20260928-p0-r3\acceptance-manifest.json') -Raw | ConvertFrom-Json
         $todos = @($manifest.todoAcceptanceRows)
         $todos.Count | Should -Be 35
         @($todos | Where-Object { $_.acceptanceState -ne 'not-accepted' -or $_.done -eq $true }).Count | Should -Be 0
-    }
+    }
+    It 'HV16 case-different caller requestId is rejected without mutation' {
+        $layout = New-P2Layout -Name 'hv16-case'
+        Write-P2Turn -Layout $layout -RequestId 'req-20261001T000000Z-casea'
+        $before = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "requestId: req-20261001T000000Z-caseA`nresponse: should-not-write`n" -Mode 'primary'
+        $result.ExitCode | Should -Not -Be 0
+        Assert-P2Receipt -Receipt $result.Receipt -Method 'workflow.sessionlog.updateTurn' -RequestId 'req-20261001T000000Z-casea' -Code 'rejected'
+        $after = Get-FileHash -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') -Algorithm SHA256
+        $after.Hash | Should -Be $before.Hash
+        $result.ServerState | Should -Be ''
+    }
+
+    It 'HV17 case-different typed sessionId or requestId is not primary' {
+        $layout = New-P2Layout -Name 'hv17-typed-case'
+        Write-P2Turn -Layout $layout -RequestId 'req-R'
+        foreach ($fault in @('case-session','case-request')) {
+            $env:P2_TYPED_FAULT = $fault
+            try {
+                $dlg = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: x`n" -Mode 'primary'
+                $dlg.ExitCode | Should -Not -Be 0
+                $title = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml "title: new title`n" -Mode 'primary'
+                $title.ExitCode | Should -Not -Be 0
+            } finally { Remove-Item Env:P2_TYPED_FAULT -ErrorAction SilentlyContinue }
+        }
+    }
+
+    It 'rejects explicit empty and null planFile on ordinary first persistence' {
+
+        $layout = New-P2Layout -Name 'raw-meta'
+
+        $empty = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-raw-empty`nqueryTitle: t`nqueryText: q`nplanFile: `"`"`ntodoId: None`n" -Mode 'primary'
+
+        $empty.ExitCode | Should -Not -Be 0
+
+        $nullish = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-raw-null`nqueryTitle: t`nqueryText: q`nplanFile: null`ntodoId: None`n" -Mode 'primary'
+
+        $nullish.ExitCode | Should -Not -Be 0
+
+    }
+
 }

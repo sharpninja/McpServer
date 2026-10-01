@@ -603,7 +603,8 @@
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
@@ -710,7 +711,9 @@
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
@@ -813,7 +816,8 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
@@ -861,7 +865,8 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
@@ -910,7 +915,8 @@
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
@@ -1088,7 +1094,7 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1154,7 +1160,7 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1901,7 +1907,9 @@
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
@@ -2012,7 +2020,8 @@
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
@@ -2061,7 +2070,8 @@
       ],
       "criterionSpecificExistingTests": [
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
@@ -2098,7 +2108,7 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
       ],
       "documentationSurfaces": [],
@@ -2661,7 +2671,7 @@
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2681,7 +2691,9 @@
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
       ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
@@ -2758,7 +2770,8 @@
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
         "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
@@ -2814,7 +2827,7 @@
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
@@ -2913,7 +2926,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -2983,7 +2996,7 @@
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -3127,7 +3140,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3355,7 +3368,7 @@
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3501,7 +3514,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -5027,7 +5040,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5066,7 +5079,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5103,7 +5116,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5150,7 +5163,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5189,7 +5202,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5228,7 +5241,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5267,7 +5280,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5306,7 +5319,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5345,7 +5358,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5382,7 +5395,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5419,7 +5432,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5472,7 +5485,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5511,7 +5524,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5554,7 +5567,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5593,7 +5606,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5639,7 +5652,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -8172,9 +8185,8 @@
     }
   },
   "p2MappingRevision": {
-    "updatedAtUtc": "2026-10-01T01:02:02.8097375+00:00",
-    "note": "HV07/HV09: remapped criterionSpecificExistingTests to native Pester labels (incl HV10-HV14), replaced ghost Lifecycle label, linked complete-query/404/document/gate inventory oracles; 35 TODOs remain not-accepted.",
-    "updatedCriterionCount": 35,
-    "priorBlob": "fd67e429f0fd7e44226eac4cc8e744528e7a29d2"
+    "updatedAtUtc": "2026-10-01T02:15:37.6442410+00:00",
+    "note": "HV16/HV17 ordinal identity + raw-meta + gate bind + map/path cleanup; TODOs remain not-accepted",
+    "priorDisagree": "20261001T014059Z"
   }
 }

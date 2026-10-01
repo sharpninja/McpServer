@@ -1534,13 +1534,14 @@ function Test-ReplTypedSessionMutationResult {
     if ([string]::IsNullOrWhiteSpace($responseSession)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId is missing or blank." }
     }
-    if ($responseSession -ne $ExpectedSessionId) {
+    # HV17: ordinal case-sensitive identity (PowerShell -eq/-ne is case-insensitive by default).
+    if (-not [string]::Equals($responseSession, $ExpectedSessionId, [System.StringComparison]::Ordinal)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId '$responseSession' does not match '$ExpectedSessionId'." }
     }
     if ([string]::IsNullOrWhiteSpace($responseRequest)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result requestId is missing or blank." }
     }
-    if ($responseRequest -ne $ExpectedRequestId) {
+    if (-not [string]::Equals($responseRequest, $ExpectedRequestId, [System.StringComparison]::Ordinal)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result requestId '$responseRequest' does not match '$ExpectedRequestId'." }
     }
     if ($RequireRetitled) {
@@ -1564,7 +1565,8 @@ function Assert-ReplCallerRequestMatches {
     $explicitRequest = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'requestId'
     if ([string]::IsNullOrWhiteSpace($explicitRequest)) { return $true }
     if ([string]::IsNullOrWhiteSpace($CachedRequestId)) { $CachedRequestId = Get-ReplTurnCacheField -Field 'turnRequestId' }
-    if ($explicitRequest -eq $CachedRequestId) { return $true }
+    # HV16: ordinal case-sensitive request equality (PowerShell -eq is case-insensitive by default).
+    if ([string]::Equals($explicitRequest, $CachedRequestId, [System.StringComparison]::Ordinal)) { return $true }
     $reject = "$Method refused requestId '$explicitRequest' because the current turn is '$CachedRequestId'."
     [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $Method -RequestId $CachedRequestId -Message $reject -ChildStderr $reject))
     [Console]::Error.WriteLine($reject)
