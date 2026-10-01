@@ -1,6 +1,6 @@
-# Handoff: SessionLife P2 contracts (PR #72) â€” post Astra HV 20261001T113858Z
+# Handoff: SessionLife P2 contracts (PR #72) Ã¢â‚¬â€ post Astra HV 20261001T113858Z
 
-**Active workstream handoff.** Written by GrokCode after operator override: finish this Astra HV â†’ receipts â†’ replace handoff â†’ **STOP** (no remediation, no HV round 2).
+**Active workstream handoff.** Written by GrokCode after operator override: finish this Astra HV Ã¢â€ â€™ receipts Ã¢â€ â€™ replace handoff Ã¢â€ â€™ **STOP** (no remediation, no HV round 2).
 
 Copy everything below the line into the next agent.
 
@@ -21,7 +21,7 @@ Copy everything below the line into the next agent.
 |------|-----|
 | **Product tip** (HV19/HV20 ordinal fix + tests + mapping) | `9a4d8ad9daa72e8e03b62d05bec72ff9b905ca10` |
 | **Receipts tip** (this Astra HV archive + evidence) | `106d4e358bb58bccb5ba87cd60a5bd8598b754e5` |
-| **Handoff tip** (this file) / branch HEAD | `548610d51d75ff877165bb77ddbbc8b3b1f2b9b7` |
+| **Handoff tip** (this file) / branch HEAD | `7606129bdc07494ba2246c27ba20216a30749b66` |
 
 PR #72: open, draft=true, merged=false, base=develop.
 
@@ -42,23 +42,23 @@ PR #72: open, draft=true, merged=false, base=develop.
 
 ### Explicit FAIL list (remaining)
 
-1. **A1 / HV07** â€” prior-remediation claim false: core + governing legacy AC mappings incomplete.
-2. **A6 / HV09** â€” Completeness **97** < required **98**.
-3. **C2 / HV07** â€” raw metadata / invalid-artifact tests not mapped; eight relevant legacy rows remain proposed-only.
-4. **D1** â€” holistic P2 acceptance blocked by traceability, sub-98 completeness, and B7/B8 UNKNOWN.
+1. **A1 / HV07** Ã¢â‚¬â€ prior-remediation claim false: core + governing legacy AC mappings incomplete.
+2. **A6 / HV09** Ã¢â‚¬â€ Completeness **97** < required **98**.
+3. **C2 / HV07** Ã¢â‚¬â€ raw metadata / invalid-artifact tests not mapped; eight relevant legacy rows remain proposed-only.
+4. **D1** Ã¢â‚¬â€ holistic P2 acceptance blocked by traceability, sub-98 completeness, and B7/B8 UNKNOWN.
 
 ### UNKNOWN (not FAIL)
 
-- **B7 UNKNOWN** â€” historical Python-json vs native serialization provenance unresolved.
-- **B8 UNKNOWN** â€” no established historical P2 Red-test AGREE in the plan/receipt chain.
+- **B7 UNKNOWN** Ã¢â‚¬â€ historical Python-json vs native serialization provenance unresolved.
+- **B8 UNKNOWN** Ã¢â‚¬â€ no established historical P2 Red-test AGREE in the plan/receipt chain.
 
 ### Closed / repaired this round (PASS)
 
-- **HV19 PASS** â€” `Invoke-ReplPersistTurn` Ordinal response `sessionId`/`requestId`; case-only submit rejects, recovery retained, exact controls succeed.
-- **HV20 PASS** â€” `Invoke-WorkflowBeginTurn` Ordinal + case-fold reject; case-different begin does not overwrite bound turn.
-- **HV21 PASS** â€” outer gate.log present for RunId below (file on disk; `*.gate.log` is gitignored so not in the receipts commit).
-- **HV01â€“HV06, HV08, HV10â€“HV18 PASS** on re-attack (see receipt).
-- **C3 PASS** â€” exact-identity / truthful persistence defects repaired at real function boundary.
+- **HV19 PASS** Ã¢â‚¬â€ `Invoke-ReplPersistTurn` Ordinal response `sessionId`/`requestId`; case-only submit rejects, recovery retained, exact controls succeed.
+- **HV20 PASS** Ã¢â‚¬â€ `Invoke-WorkflowBeginTurn` Ordinal + case-fold reject; case-different begin does not overwrite bound turn.
+- **HV21 PASS** Ã¢â‚¬â€ outer gate.log present for RunId below (file on disk; `*.gate.log` is gitignored so not in the receipts commit).
+- **HV01Ã¢â‚¬â€œHV06, HV08, HV10Ã¢â‚¬â€œHV18 PASS** on re-attack (see receipt).
+- **C3 PASS** Ã¢â‚¬â€ exact-identity / truthful persistence defects repaired at real function boundary.
 
 ## Unit gate (ACCEPTED; bound into HV)
 
@@ -69,9 +69,9 @@ PR #72: open, draft=true, merged=false, base=develop.
 
 ## Product changes already on tip `9a4d8ad9daa72e8e03b62d05bec72ff9b905ca10`
 
-- `plugins/core/lib-ps/repl-invoke.ps1` â€” HV19 Ordinal in `Invoke-ReplPersistTurn`; HV20 Ordinal + IgnoreCase-without-Ordinal reject in `Invoke-WorkflowBeginTurn`.
-- `plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1` â€” fake-repl echoes ids; HV19/HV20 Its.
-- `docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json` â€” surgical HV19/HV20 criterionSpecificExistingTests inserts.
+- `plugins/core/lib-ps/repl-invoke.ps1` Ã¢â‚¬â€ HV19 Ordinal in `Invoke-ReplPersistTurn`; HV20 Ordinal + IgnoreCase-without-Ordinal reject in `Invoke-WorkflowBeginTurn`.
+- `plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1` Ã¢â‚¬â€ fake-repl echoes ids; HV19/HV20 Its.
+- `docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json` Ã¢â‚¬â€ surgical HV19/HV20 criterionSpecificExistingTests inserts.
 - SyncAgentPlugins run after lib-ps edit.
 
 ## What next agent should do (when operator resumes)
@@ -81,7 +81,7 @@ Operator **stopped** after this HV; do **not** start HV round 2 or remediate unl
 1. Address **HV07/C2** mapping gaps (map existing raw SessionLogService / SessionLogTurnContextValidator / SessionLifeUnitGateValidator|Consumer tests; keep proposed-only legacy rows honest; no TODO bulk-close).
 2. Re-score toward Completeness >=98 without inflating.
 3. Leave B7/B8 UNKNOWN unless fresh authoritative provenance appears.
-4. Fresh unit gate â†’ new Astra HV only if operator asks.
+4. Fresh unit gate Ã¢â€ â€™ new Astra HV only if operator asks.
 5. Keep PR unmerged.
 
 ## Explicit non-goals / do-not
