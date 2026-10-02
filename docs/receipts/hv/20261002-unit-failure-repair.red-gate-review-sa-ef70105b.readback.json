@@ -1,0 +1,18 @@
+{
+  "Utc": "2026-10-02T00:57:01.1882600Z",
+  "SessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "RequestId": "req-20261002T005238Z-review-red-gate",
+  "SessionStatus": "completed",
+  "TurnStatus": "completed",
+  "Model": "gpt-6-astra",
+  "FullVerdictReadback": true,
+  "ExactEqualityAfterNewlineNormalization": true,
+  "ResponseCharacters": 7388,
+  "NormalizedUtf8SHA256": "8CFFAEF67CCB9E594E4175C53979387AAF75F5BA6390C652F88DBAD787FCAAC1",
+  "ExpectedNormalizedUtf8SHA256": "8CFFAEF67CCB9E594E4175C53979387AAF75F5BA6390C652F88DBAD787FCAAC1",
+  "Actions": 1,
+  "Decisions": 2,
+  "Dialogs": 1,
+  "Method": "client.SessionLog.QueryAsync",
+  "Receipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-review-sa-ef70105b.json"
+}

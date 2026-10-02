@@ -380,6 +380,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     }
 
     It 'a locked database leaves the failsafe, the attempt count, and the drain latch' {
+        $priorDrainDisabled = $env:MCP_FAILSAFE_DRAIN_DISABLED
+        $env:MCP_FAILSAFE_DRAIN_DISABLED = '0'
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-lock-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
@@ -415,6 +417,7 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             Invoke-ReplFailsafeDrainOnFirstSuccess
             Test-Path -LiteralPath $record | Should -BeFalse
         } finally {
+            [Environment]::SetEnvironmentVariable('MCP_FAILSAFE_DRAIN_DISABLED', $priorDrainDisabled, 'Process')
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
             if ($null -eq $priorFailsafe) { Remove-Item Env:MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue } else { $env:MCPSERVER_FAILSAFE_DIR = $priorFailsafe }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue

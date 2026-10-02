@@ -88,6 +88,8 @@ Describe 'FR-MCP-SESSIONLIFE-004 quarantine repair' {
     }
 
     It 'a locked 9ad7 record stays retryable and a later drain deletes it' {
+        $priorDrainDisabled = $env:MCP_FAILSAFE_DRAIN_DISABLED
+        $env:MCP_FAILSAFE_DRAIN_DISABLED = '0'
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-9ad7-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
@@ -121,6 +123,7 @@ Describe 'FR-MCP-SESSIONLIFE-004 quarantine repair' {
             Invoke-ReplFailsafeDrainOnFirstSuccess
             Test-Path -LiteralPath $record | Should -BeFalse
         } finally {
+            [Environment]::SetEnvironmentVariable('MCP_FAILSAFE_DRAIN_DISABLED', $priorDrainDisabled, 'Process')
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
             if ($null -eq $priorFailsafe) { Remove-Item Env:MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue } else { $env:MCPSERVER_FAILSAFE_DIR = $priorFailsafe }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue

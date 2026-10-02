@@ -1,10 +1,31 @@
 #Requires -Version 7.0
 
 BeforeAll {
+    # Host plugin state must not select an agent, workspace, or drain policy for a fixture.
+    $script:HostPluginEnvironment = @{}
+    Get-ChildItem Env: | Where-Object Name -Match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' | ForEach-Object {
+        $script:HostPluginEnvironment[$_.Name] = $_.Value
+        Remove-Item -LiteralPath "Env:\$($_.Name)"
+    }
     $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
     $script:LibRoot = Join-Path $script:RepoRoot 'plugins\core\lib-ps'
     $script:StagedRoot = Join-Path $script:RepoRoot 'plugins\core\.staged-plugin'
-    $script:SmokeCache = Join-Path ([System.IO.Path]::GetTempPath()) 'mcp-plugin-psonly-pester'
+    # These fixtures include markerless directories; workspace-scoped TEMP has an ancestor marker.
+    $script:SmokeCache = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Temp/mcp-plugin-psonly-pester'
+
+    function New-TypedSessionMutationOutput {
+        param([Parameter(Mandatory)][string]$ParamsYaml)
+        $request = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+        return ([ordered]@{
+            type = 'result'
+            payload = [ordered]@{ result = [ordered]@{
+                sessionId = Get-ReplObjectValue -InputObject $request -Name 'sessionId'
+                requestId = Get-ReplObjectValue -InputObject $request -Name 'requestId'
+                retitled = $true
+                totalDialogCount = 1
+            } }
+        } | ConvertTo-Yaml -Options WithIndentedSequences)
+    }
 
     function Invoke-PluginChildProcess {
         param(
@@ -32,6 +53,9 @@ BeforeAll {
         $psi.RedirectStandardInput = $RedirectStandardInput
         $psi.RedirectStandardOutput = $true
         $psi.RedirectStandardError = $true
+        foreach ($key in @($psi.Environment.Keys | Where-Object { $_ -match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' })) {
+            [void]$psi.Environment.Remove($key)
+        }
         foreach ($key in $Environment.Keys) {
             $psi.Environment[$key] = [string]$Environment[$key]
         }
@@ -52,6 +76,15 @@ BeforeAll {
             Stdout = $stdout.Result.Trim()
             Stderr = $stderr.Result.Trim()
         }
+    }
+}
+
+AfterAll {
+    Get-ChildItem Env: | Where-Object Name -Match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' | ForEach-Object {
+        Remove-Item -LiteralPath "Env:\$($_.Name)"
+    }
+    foreach ($entry in $script:HostPluginEnvironment.GetEnumerator()) {
+        [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, 'Process')
     }
 }
 
@@ -301,8 +334,15 @@ acceptanceCriteria:
                 response = 'Done'
             } | ConvertTo-Json -Depth 10 -Compress
 
-            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml $actionsPayload | Should -BeFalse
-            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $completePayload | Should -BeFalse
+            foreach ($invocation in @(
+                @{ Method = 'workflow.sessionlog.appendActions'; Params = $actionsPayload },
+                @{ Method = 'workflow.sessionlog.completeTurn'; Params = $completePayload }
+            )) {
+                $receipt = (Invoke-ReplMethod -Method $invocation.Method -ParamsYaml $invocation.Params | ConvertFrom-Yaml).payload.result
+                $receipt.code | Should -Be 'lost'
+                $receipt.persisted | Should -BeFalse
+                $script:LastInvokeReplMethodSuccess | Should -BeFalse
+            }
         } finally {
             if ($null -ne $previousPluginRoot) {
                 $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
@@ -821,14 +861,7 @@ contextList:
             function Invoke-ReplRaw {
                 param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
                 $script:reql029Calls += [ordered]@{ Method = $Method; ParamsYaml = $ParamsYaml }
-                return [pscustomobject]@{ Success = $true; Output = (@(
-                    'type: result'
-                    'payload:'
-                    '  result:'
-                    '    sessionId: Codex-20260712T000000Z-plugin-session'
-                    '    requestId: req-20260712T000003Z-retitle'
-                    '    retitled: true'
-                ) -join [Environment]::NewLine); Error = '' }
+                return [pscustomobject]@{ Success = $true; Output = (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml); Error = '' }
             }
 
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
@@ -889,7 +922,8 @@ contextList:
             } | ConvertTo-Json -Depth 10 -Compress
 
             { $script:appendDialogResult = Invoke-ReplMethod -Method 'workflow.sessionlog.appendDialog' -ParamsYaml $dialogPayload } | Should -Not -Throw
-            $script:appendDialogResult | Should -BeFalse
+            ($script:appendDialogResult | ConvertFrom-Yaml).payload.result.code | Should -Be 'lost'
+            $script:LastInvokeReplMethodSuccess | Should -BeFalse
         } finally {
             if ($previousRaw) {
                 Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
@@ -3203,15 +3237,7 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:capturedAppendMethod = $Method
                 $script:capturedAppendYaml = $ParamsYaml
-                $typed = @"
-type: result
-payload:
-  result:
-    sessionId: GrokCode-20260709T211900Z-plugin-session
-    requestId: req-20260709T211900Z-dialog-green
-    totalDialogCount: 2
-"@
-                return New-McpPluginReplResult -Success $true -Output $typed -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260709T211900Z-plugin-session'
@@ -4135,18 +4161,7 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
 
             if ($Method -eq 'client.SessionLog.AppendDialogAsync') {
                 $script:t40Appends.Add($ParamsYaml)
-                $reqId = if (-not [string]::IsNullOrWhiteSpace([string]$script:t40RequestId)) { [string]$script:t40RequestId } else { 'req-dialog' }
-                $ok = [ordered]@{
-                    type = 'result'
-                    payload = [ordered]@{
-                        result = [ordered]@{
-                            sessionId = [string]$script:t40SessionId
-                            requestId = $reqId
-                            totalDialogCount = 1
-                        }
-                    }
-                }
-                return New-McpPluginReplResult -Success $true -Output (ConvertTo-Yaml -Data $ok -Options WithIndentedSequences) -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
 
             if ($Method -eq 'client.SessionLog.QueryAsync') {
@@ -4682,13 +4697,15 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
 }
 
 Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
-    It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout' {
+    It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with one typed receipt' {
         $root = Join-Path $script:SmokeCache ('strictcount-' + [guid]::NewGuid().ToString('N'))
         $cache = Join-Path $root 'cache'
         $persistLog = Join-Path $root 'persist.jsonl'
         [void][System.IO.Directory]::CreateDirectory($cache)
         . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
         Import-McpYamlSerializer
+        . (Join-Path $script:LibRoot 'marker-resolver.ps1')
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $script:RepoRoot
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
             status = 'verified'
             sessionId = 'GrokCode-20260819T000000Z-plugin-session'
@@ -4696,6 +4713,8 @@ Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
         })
         Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
             turnRequestId = 'req-20260819T000000Z-001-strictcount'
+            markerFilePath = $markerSnapshot.markerFilePath
+            markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             queryTitle = 'strictcount'
             openedAt = '2026-08-19T00:00:01Z'
             status = 'in_progress'
@@ -4737,8 +4756,12 @@ Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
                         MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
                     }
 
-                $result.ExitCode | Should -Be 0 -Because $case.Name
-                $result.Stdout | Should -Be '' -Because $case.Name
+                $result.ExitCode | Should -Be 0 -Because "$($case.Name): $($result.Stderr)"
+                $documents = @(ConvertFrom-Yaml -Yaml $result.Stdout -AllDocuments)
+                $documents.Count | Should -Be 1 -Because $case.Name
+                $documents[0].type | Should -Be 'result'
+                $documents[0].payload.result.method | Should -Be 'workflow.sessionlog.updateTurn'
+                $documents[0].payload.result.persisted | Should -BeTrue
                 $result.Stderr | Should -Not -Match 'Count cannot be found' -Because $case.Name
             }
         } finally {
@@ -4955,16 +4978,7 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
             function Invoke-ReplRaw {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:persistRawMethods.Add($Method)
-                $typed = @"
-type: result
-payload:
-  result:
-    sessionId: GrokCode-20260821T000000Z-plugin-session
-    requestId: req-20260821T000000Z-001-persist
-    totalDialogCount: 1
-    persisted: true
-"@
-                return New-McpPluginReplResult -Success $true -Output $typed -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
 
             $payload = [ordered]@{

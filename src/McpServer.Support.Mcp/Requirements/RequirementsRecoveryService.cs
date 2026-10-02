@@ -61,6 +61,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
     {
         var payload = Validate(request);
         var existing = await LoadExistingAsync(payload.Items, cancellationToken).ConfigureAwait(false);
+        RejectAcceptanceCriteriaRemoval(payload.Items, existing);
         return BuildResult(payload, existing, applied: false, replay: false, createdAtUtc: string.Empty);
     }
 
@@ -92,6 +93,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
                 }
 
                 var existing = await LoadExistingAsync(payload.Items, cancellationToken).ConfigureAwait(false);
+                RejectAcceptanceCriteriaRemoval(payload.Items, existing);
                 var createdAt = DateTimeOffset.UtcNow.ToString("o");
                 var result = BuildResult(payload, existing, applied: true, replay: false, createdAtUtc: createdAt);
                 ApplyItems(payload, existing, createdAt);
@@ -321,6 +323,8 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
             // Canonical TEST rows may have empty Title (ValidateTest only requires condition/body).
             if (body.Length == 0)
                 throw new ArgumentException($"Requirement '{id}' requires body.");
+            if (body.StartsWith("Placeholder requirement backfilled for TODO link", StringComparison.Ordinal))
+                throw new ArgumentException($"Requirement '{id}' body is a placeholder.");
             if (kind is not "test" && title.Length == 0)
                 throw new ArgumentException($"Requirement '{id}' requires title.");
             if (title.Length > TitleMaxLength)
@@ -340,6 +344,23 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         }
 
         return normalized;
+    }
+
+    private static void RejectAcceptanceCriteriaRemoval(
+        IReadOnlyList<NormalizedItem> items,
+        IReadOnlyDictionary<string, RequirementEntity> existing)
+    {
+        foreach (var item in items)
+        {
+            if (!existing.TryGetValue(MapKey(item.Kind, item.Id), out var row))
+                continue;
+            var prior = row.Body ?? string.Empty;
+            if (prior.Contains("## Acceptance Criteria", StringComparison.Ordinal)
+                && !item.Body.Contains("## Acceptance Criteria", StringComparison.Ordinal))
+            {
+                throw new ArgumentException($"Requirement '{item.Id}' removes acceptance criteria.");
+            }
+        }
     }
 
     private static bool IsValidId(string kind, string id) => kind switch

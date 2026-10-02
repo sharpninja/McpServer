@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-02T01:58:19.9822538Z",
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.response.jsonl",
+  "events": 388,
+  "sha256": "74C298C56E12EA91432B2164EEFA90C662330FF35C16740F08103E85B034AF0F",
+  "privateReasoningEvents": 0,
+  "keyMatches": 0,
+  "finalAssistantMessages": 0,
+  "completedEventsWithFinalText": 11
+}

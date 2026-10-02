@@ -1,0 +1,420 @@
+{
+  "utc": "2026-10-02T00:28:04.7535958Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "branch": "develop",
+  "head": "35822cd9f028d60762a9822b272cf2f7becfa7ce",
+  "todo": "BUG-UNITFAIL-001",
+  "filter": "Category!=AiReview&Category!=Integration",
+  "integrationTestsRun": false,
+  "aiReviewTestsRun": false,
+  "unitAttempts": [
+    {
+      "Project": "Build.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 236.2,
+      "Total": 225,
+      "Passed": 225,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Client.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 84.9,
+      "Total": 304,
+      "Passed": 304,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Cqrs.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 40.6,
+      "Total": 33,
+      "Passed": 33,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Launcher.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 34.1,
+      "Total": 20,
+      "Passed": 20,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.McpAgent.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 16.2,
+      "Total": 63,
+      "Passed": 63,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.QBAgent.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 36.1,
+      "Total": 96,
+      "Passed": 96,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Repl.Core.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 59.9,
+      "Total": 868,
+      "Passed": 868,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Support.Mcp.Tests",
+      "ExitCode": 1,
+      "ElapsedSeconds": 367.1,
+      "Total": 2914,
+      "Passed": 2913,
+      "Failed": 1,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests\\stderr.log",
+      "FailedTests": [
+        {
+          "Name": "McpServer.Support.Mcp.Tests.Documentation.BugTriage139SixteenthWindowsProcessTests.ProcessRunner_WindowsLaunchContract_UsesSuspendedCreation",
+          "Outcome": "Failed",
+          "Message": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\ProcessRunner.Windows.cs"
+        }
+      ]
+    },
+    {
+      "Project": "McpServer.Support.Mcp.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 497.2,
+      "Total": 2914,
+      "Passed": 2914,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stderr.log",
+      "FailedTests": []
+    }
+  ],
+  "runnerHashProof": [
+    {
+      "File": "IProcessRunner.cs",
+      "Original": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+      "Current": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC"
+    },
+    {
+      "File": "ProcessRunner.cs",
+      "Original": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+      "Current": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6"
+    },
+    {
+      "File": "ProcessRunner.Windows.cs",
+      "Original": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+      "Current": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4"
+    }
+  ],
+  "requirementsMapping": {
+    "testIds": [
+      "TEST-MCP-AIUNIT-002",
+      "TEST-MCP-TRIM-001"
+    ],
+    "workspaceId": "F:\\GitHub\\McpServer",
+    "frId": "FR-MCP-139",
+    "trIds": [
+      "TR-MCP-QUALITY-001"
+    ]
+  },
+  "trimBefore": {
+    "IL2070": 3,
+    "IL2104": 5,
+    "IL2026": 60,
+    "IL2067": 3,
+    "IL2075": 13
+  },
+  "trimAfter": {
+    "IL2026": 12,
+    "IL2104": 5
+  },
+  "reviewer": {
+    "effort": "xhigh",
+    "id": "01a0f9f4-d605-7301-9b42-d8955d664e56",
+    "status": "running",
+    "model": "gpt-6-astra"
+  },
+  "evidenceRoot": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z",
+  "pester": {
+    "summary": {
+      "Total": 180,
+      "Passed": 180,
+      "Failed": 0,
+      "Skipped": 0,
+      "NotRun": 0
+    },
+    "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\pester-core-retry4",
+    "exitCode": 0
+  },
+  "files": [
+    {
+      "Path": "docs/Project/Functional-Requirements.md",
+      "Sha256": "648401B8D517848634BCCE1F8D45D802C5F859A126631094F83B5BE722F0766A"
+    },
+    {
+      "Path": "docs/Project/Requirements-Matrix.md",
+      "Sha256": "CC4083246685EF688328BBB476A0151CF2DD69AD284F549FCAD8FB11AD193AB0"
+    },
+    {
+      "Path": "docs/Project/Technical-Requirements.md",
+      "Sha256": "87001864113272AF08E265E969FEF3BFFFB964E2AF2118485B1152109875EA28"
+    },
+    {
+      "Path": "docs/Project/Testing-Requirements.md",
+      "Sha256": "8E3738732B1C21329CBC8B411F39C8A40A25DA6B85B43DF44EAEC4C8A1F944FB"
+    },
+    {
+      "Path": "docs/Project/TR-per-FR-Mapping.md",
+      "Sha256": "BEA6D028D48309DC58CF1577988CA5A3819E7F27629AAEB3CCA9FFDCBAF829E4"
+    },
+    {
+      "Path": "docs/QBAGENT.md",
+      "Sha256": "D1F6546CE7BAD76D8D03E1C4D8F9254B26DE3744018C948241507679C074DE24"
+    },
+    {
+      "Path": "plugins/core/lib-ps/plugin-env.ps1",
+      "Sha256": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B"
+    },
+    {
+      "Path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Sha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B"
+    },
+    {
+      "Path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "Sha256": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747"
+    },
+    {
+      "Path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "Sha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405"
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "Sha256": "DADE18BAF7B8A2479B04CFC0C422C2960FCAF9D3DABBA6FE009531F2EC90ED7C"
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "Sha256": "4F321F50481CEC943EC25757AC28B7CFBAA40C701668AA9769E65E452130C048"
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "Sha256": "E1C5EDAAD2DAA9D4325C7A2012E3C71CBA191DB55402B781BCC2ECA11C4F4B98"
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "Sha256": "6D7ADE4FFC9CDB2D8E242A58F952EB68B8940B9D85B0F00B6F0EC4743EC3FF4E"
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+      "Sha256": "B5016E11C6061A7F6DEFC289FAD5182FABDBD1B6237574D4A0627989DCC8F3A9"
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/IProcessRunner.cs",
+      "Sha256": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC"
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.cs",
+      "Sha256": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6"
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.Windows.cs",
+      "Sha256": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4"
+    },
+    {
+      "Path": "src/McpServer.QBAgent.Tools/McpServer.QBAgent.Tools.csproj",
+      "Sha256": "89B13116D977A285623939AED4AF270A867C8F056C9D58148710C148A75E4A86"
+    },
+    {
+      "Path": "src/McpServer.Services/Properties/ProcessRunnerTypeForwards.cs",
+      "Sha256": "8C13FFE70760F330421002D6F9D15058371E41EE46360ACC2741EEECC9087A95"
+    },
+    {
+      "Path": "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+      "Sha256": "C16EEA049C124FD8ED5D4A76EC5EC2BE9A9A4957B62F6C88E93583A0E8CD3C8E"
+    },
+    {
+      "Path": "tests/McpServer.QBAgent.Tests/ProcessRunnerDependencyTests.cs",
+      "Sha256": "664F4FC675D00216BA754E796CF718E74A4742B5BC8D1585B5F0D74FECAB9D88"
+    },
+    {
+      "Path": "tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+      "Sha256": "B8DFC422424CB6D8A65DB6EE09ACF2BF72CC822A94FB0E0505D29B49245ABDF1"
+    },
+    {
+      "Path": "tests/McpServer.Support.Mcp.Tests/Services/ProcessRunnerTypeForwardingTests.cs",
+      "Sha256": "5E7BF17E29A85D7719DD5E6E1F2F3373A75DCCF0FD3962EFB98C7F699FC780C2"
+    }
+  ],
+  "finalUnitResults": [
+    {
+      "Project": "Build.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 236.2,
+      "Total": 225,
+      "Passed": 225,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Client.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 84.9,
+      "Total": 304,
+      "Passed": 304,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Cqrs.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 40.6,
+      "Total": 33,
+      "Passed": 33,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Launcher.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 34.1,
+      "Total": 20,
+      "Passed": 20,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.McpAgent.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 16.2,
+      "Total": 63,
+      "Passed": 63,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.QBAgent.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 36.1,
+      "Total": 96,
+      "Passed": 96,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Repl.Core.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 59.9,
+      "Total": 868,
+      "Passed": 868,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stderr.log",
+      "FailedTests": []
+    },
+    {
+      "Project": "McpServer.Support.Mcp.Tests",
+      "ExitCode": 0,
+      "ElapsedSeconds": 497.2,
+      "Total": 2914,
+      "Passed": 2914,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\results.trx",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stderr.log",
+      "FailedTests": []
+    }
+  ],
+  "unitTotals": {
+    "projects": 8,
+    "total": 4523.0,
+    "passed": 4523.0,
+    "failed": 0.0,
+    "skipped": 0.0
+  }
+}

@@ -40,3 +40,25 @@ session-log logic lives here and is distributed by sync.
    hook payload field names), never in forked copies of shared logic.
 4. New shared logic lands here first, with a bats/jest test in
    `test-fixtures/`, then fans out via sync.
+
+## Session Mutation Receipts
+
+`Invoke-ReplMethod`, the shared `Invoke-McpPlugin.ps1` wrapper, and the
+host wrapper emit one YAML `type: result` envelope for each local
+`workflow.sessionlog.*` mutation. `payload.result` contains `code`, `agent`,
+`sessionId`, `requestId`, `method`, `persisted`, `degraded`, `queued`,
+`retryable`, `failsafePath`, `message`, and `childStderr`. Session-only title
+changes leave `requestId` empty. Diagnostic stderr is separate from stdout;
+hook entrypoints capture the receipt and continue emitting their own hook JSON.
+
+- `persisted`: typed remote confirmation, exit 0.
+- `queued`: confirmed recovery file retained, exit 0; not primary persistence.
+- `unchanged`: no remote write performed, exit 0; not a persistence claim.
+- `rejected` or `lost`: operation not confirmed, nonzero exit.
+
+Each invocation resets the previous outcome. Empty or identity-mismatched
+title responses are rejected and cannot delete the recovery file. Both title
+methods require `retitled: true`; the typed client preserves that field.
+Supersession uses the same durability-first plan/TODO resolver as other verbs:
+durable turns omit unbound links, while first persistence uses cached links
+before falling back to exact `None`.

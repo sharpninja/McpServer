@@ -360,8 +360,8 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
         var path = Path.Combine(
             SourceRepositoryRoot(),
             "src",
-            "McpServer.Services",
-            "Services",
+            "McpServer.Common.AgentCli",
+            "Processes",
             "ProcessRunner.Windows.cs");
         Assert.True(File.Exists(path), path);
         return path;

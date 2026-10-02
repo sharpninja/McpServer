@@ -16,6 +16,32 @@ succeed. Workspace-stamp repair remains fail-closed.
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
 
+## Submit acknowledgement (FR-MCP-SESSIONLIFE-003)
+
+`POST /mcpserver/sessionlog` returns a durable-write receipt only after the storage service
+has completed its awaited save. The receipt retains `id`, `sourceType`, and `sessionId`,
+and adds `persisted: true`, `degraded: false`, and `queued: false`. It includes `requestId`
+for a single-turn submission; zero-turn and multi-turn submissions return a null request ID.
+Failed or canceled persistence never produces this successful receipt.
+
+`SessionLogSubmitResult` preserves these fields through the typed client and REPL YAML
+transport. A legacy response that omits `persisted` is not durable-write confirmation.
+Update both the service and the installed REPL when deploying this contract. Failsafes
+must remain until the plugin receives the required persistence acknowledgement.
+
+Whole-session snapshots cannot reopen a terminal turn with a supplied nonterminal status
+or replace it with a different cancellation status. This prevents a late hook or failsafe
+replay from overwriting completed history after an acknowledgement failure. Same-status
+and omitted-status enrichment, cancellation of active turns, and recovery from canceled
+to completed remain supported. Deliberate corrections and reopening use the explicit
+single-turn update API. Relational submissions protect the read/check/save sequence with
+serializable isolation and acknowledge after the owned transaction commits. A conflicting
+write that cannot serialize fails rather than acknowledging overwritten terminal history;
+its failsafe remains available for retry. Caller-owned, ambient, and enlisted transactions
+are rejected before mutation because submission cannot acknowledge their uncommitted writes.
+Reused contexts refresh the target session graph inside the transaction; pending edits to
+that graph are rejected without discarding them, and unrelated tracked changes are retained.
+
 ## Outbound sanitization (FR-MCP-SESSIONLOGSAN-001)
 
 Query, GET, MCP, and stdio reads clone the DTO and apply `Mcp:SessionLogSanitization` rules before the payload leaves the process. Raw storage is unchanged. Replacement tokens include the rule Id (for example `[REDACTED:example-internal-token]`). A secret in a stored turn still participates in text filtering and does not change paging metadata. Invalid or duplicate rule Ids fail options validation. Regex timeout redacts fail-closed and does not log the input.

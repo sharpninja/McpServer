@@ -1380,6 +1380,15 @@ function New-ReplSessionVerbReceipt {
         'unchanged' { 'unchanged' }
         'rejected' { 'rejected' }
     }
+    $sessionId = ''
+    $agent = ''
+    try {
+        $meta = Get-ReplSessionMeta
+        if ($meta) {
+            $sessionId = [string]$meta.SessionId
+            $agent = [string]$meta.SourceType
+        }
+    } catch { }
     return [ordered]@{
         code = $code
         retryable = ($Disposition -eq 'queued')
@@ -1387,6 +1396,8 @@ function New-ReplSessionVerbReceipt {
         degraded = ($Disposition -eq 'queued')
         queued = ($Disposition -eq 'queued')
         method = $Method
+        agent = $agent
+        sessionId = $sessionId
         requestId = $RequestId
         failsafePath = $FailsafePath
         message = $Message
@@ -1502,11 +1513,13 @@ function Set-ReplPersistPlanTodoArgs {
 function Test-ReplTypedSessionMutationResult {
     # HV14: transport Success alone is not primary. Require typed identity match
     # (and retitled=true when the contract emits that flag).
+    [CmdletBinding(DefaultParameterSetName = 'Turn')]
     param(
         [Parameter(Mandatory)][string]$Method,
-        [Parameter(Mandatory)][string]$Output,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Output,
         [Parameter(Mandatory)][string]$ExpectedSessionId,
-        [Parameter(Mandatory)][string]$ExpectedRequestId,
+        [Parameter(Mandatory, ParameterSetName = 'Turn')][string]$ExpectedRequestId,
+        [Parameter(Mandatory, ParameterSetName = 'Session')][switch]$SessionOnly,
         [switch]$RequireRetitled
     )
     $response = $null
@@ -1538,10 +1551,10 @@ function Test-ReplTypedSessionMutationResult {
     if (-not [string]::Equals($responseSession, $ExpectedSessionId, [System.StringComparison]::Ordinal)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result sessionId '$responseSession' does not match '$ExpectedSessionId'." }
     }
-    if ([string]::IsNullOrWhiteSpace($responseRequest)) {
+    if (-not $SessionOnly -and [string]::IsNullOrWhiteSpace($responseRequest)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result requestId is missing or blank." }
     }
-    if (-not [string]::Equals($responseRequest, $ExpectedRequestId, [System.StringComparison]::Ordinal)) {
+    if (-not $SessionOnly -and -not [string]::Equals($responseRequest, $ExpectedRequestId, [System.StringComparison]::Ordinal)) {
         return [ordered]@{ Ok = $false; Message = "$Method typed result requestId '$responseRequest' does not match '$ExpectedRequestId'." }
     }
     if ($RequireRetitled) {
@@ -1618,6 +1631,7 @@ function Invoke-ReplPersistTurn {
         # durable-reopen (F3) omits planFile/todoId the same way production does.
         Set-ReplTurnCacheField -Field 'persisted' -Value 'true' | Out-Null
         Clear-ReplTurnDegradedMarkers | Out-Null
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method $verbMethod -RequestId $RequestId -Message 'Test transport confirmed persistence.'))
         return $true
     }
 
@@ -2126,10 +2140,16 @@ function Invoke-ReplSupersedeCurrentTurnIfInProgress {
         # or empty local title defers to the server-side title, and raw prompt
         # text is never re-sent (TR-MCP-REPL-015 omission is the fallback).
         $title = Resolve-ReplSupersedeTitle -State $state -RequestId $oldRequestId
-        # Omitted supersession metadata is stored as exact None. Both canceled
-        # and cancelled spellings canonicalize to canceled in the builder.
+        # Durable turns omit unbound links; first writes preserve cached links before None.
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
-        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title $title -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed." -PlanFile 'None' -TodoId 'None')
+        $persistArgs = @{
+            RequestId = $oldRequestId
+            Title = $title
+            Status = 'canceled'
+            ResponseText = "Superseded by $NextRequestId before it was completed."
+        }
+        Set-ReplPersistPlanTodoArgs -PersistArgs $persistArgs -MetaPT (Resolve-ReplPersistPlanTodo)
+        [void](Invoke-ReplPersistTurn @persistArgs)
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.beginTurn could not persist superseded turn '$oldRequestId': $_")
     }
@@ -2974,13 +2994,13 @@ function Invoke-WorkflowSetSessionTitle {
     })
     $existingSessionTitle = Find-ReplFailsafeByFingerprint -Method 'client.SessionLog.SetSessionTitleAsync' -Fingerprint $sessionFingerprint
     if ($existingSessionTitle) {
-        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $existingSessionTitle -Message "setSessionTitle unchanged payload reused the retained failsafe"))
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -FailsafePath $existingSessionTitle -Message "setSessionTitle unchanged payload reused the retained failsafe"))
         return $true
     }
     $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SetSessionTitleAsync' -ParamsYaml $callYaml -Label 'session_setSessionTitle' -PayloadFingerprint $sessionFingerprint
     if (-not $failsafePath) {
         $lost = "workflow.sessionlog.setSessionTitle failed because the failsafe payload could not be saved."
-        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -Message $lost -ChildStderr $lost))
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition lost -Method 'workflow.sessionlog.setSessionTitle' -Message $lost -ChildStderr $lost))
         [Console]::Error.WriteLine($lost)
         return $false
     }
@@ -2988,21 +3008,28 @@ function Invoke-WorkflowSetSessionTitle {
     if (-not $result.Success) {
         $combined = "$($result.Output) $($result.Error)"
         if ($combined -match 'timeout|timed out|command_timeout|backend_unavailable|HTTP 503|http 503') {
-            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $failsafePath -Message 'setSessionTitle queued after confirmed failsafe write' -ChildStderr $combined))
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition queued -Method 'workflow.sessionlog.setSessionTitle' -FailsafePath $failsafePath -Message 'setSessionTitle queued after confirmed failsafe write' -ChildStderr $combined))
             [Console]::Error.WriteLine('workflow.sessionlog.setSessionTitle queued. Failsafe retained; primary persistence was not claimed.')
             return $true
         }
         $rejected = "workflow.sessionlog.setSessionTitle server call failed: $($result.Error)$($result.Output)"
-        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -FailsafePath $failsafePath -Message $rejected -ChildStderr $combined))
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setSessionTitle' -FailsafePath $failsafePath -Message $rejected -ChildStderr $combined))
         [Console]::Error.WriteLine($rejected)
         return $false
     }
+    $typed = Test-ReplTypedSessionMutationResult -Method 'workflow.sessionlog.setSessionTitle' -Output ([string]$result.Output) -ExpectedSessionId ([string]$meta.SessionId) -SessionOnly -RequireRetitled
+    if (-not [bool]$typed.Ok) {
+        $rejectTyped = [string]$typed.Message
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method 'workflow.sessionlog.setSessionTitle' -FailsafePath $failsafePath -Message $rejectTyped -ChildStderr $rejectTyped))
+        [Console]::Error.WriteLine($rejectTyped)
+        return $false
+    }
     Clear-ReplFailsafe -Path $failsafePath
-    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.setSessionTitle' -RequestId $meta.SessionId -Message 'setSessionTitle persisted'))
+    [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition primary -Method 'workflow.sessionlog.setSessionTitle' -Message 'setSessionTitle persisted'))
     return $true
 }
 
-function Invoke-ReplMethod {
+function Invoke-ReplMethodCore {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$Method,
@@ -3048,6 +3075,59 @@ function Invoke-ReplMethod {
 
     $script:LastInvokeReplMethodSuccess = [bool]$r.Success
     return [bool]$r.Success
+}
+
+function Invoke-ReplMethod {
+    <#
+    .SYNOPSIS
+    Dispatches a method and emits one typed envelope for local session mutations.
+    .DESCRIPTION
+    Keeps boolean control flow internal. Diagnostics remain on stderr, while stdout
+    carries the same persisted/queued/rejected/lost/unchanged receipt as the cache.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Method,
+        [string]$ParamsYaml = ''
+    )
+    $localMethods = @(
+        'workflow.sessionlog.beginTurn', 'workflow.sessionlog.openSession',
+        'workflow.sessionlog.updateTurn', 'workflow.sessionlog.appendActions',
+        'workflow.sessionlog.appendDialog', 'workflow.sessionlog.completeTurn',
+        'workflow.sessionlog.failTurn', 'workflow.sessionlog.setTurnTitle',
+        'workflow.sessionlog.setSessionTitle'
+    )
+    if ($Method -notin $localMethods) {
+        Invoke-ReplMethodCore -Method $Method -ParamsYaml $ParamsYaml
+        return
+    }
+
+    $script:LastReplPersistenceDetails = $null
+    $script:LastInvokeReplMethodSuccess = $false
+    try {
+        Invoke-ReplMethodCore -Method $Method -ParamsYaml $ParamsYaml | Out-Null
+    } catch {
+        $script:LastInvokeReplMethodSuccess = $false
+        $message = "$Method failed: $_"
+        if (-not $script:LastReplPersistenceDetails -or $script:LastReplPersistenceDetails.code -notin @('rejected', 'lost')) {
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $Method -Message $message -ChildStderr $message))
+        }
+        [Console]::Error.WriteLine($message)
+    }
+    if (-not $script:LastReplPersistenceDetails) {
+        $disposition = if ($script:LastInvokeReplMethodSuccess) { 'unchanged' } else { 'rejected' }
+        $requestId = if ($Method -in @('workflow.sessionlog.openSession', 'workflow.sessionlog.setSessionTitle')) { '' } else { Get-ReplTurnCacheField -Field 'turnRequestId' }
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition $disposition -Method $Method -RequestId $requestId -Message "$Method completed without a remote persistence receipt."))
+    }
+    if (-not $script:LastInvokeReplMethodSuccess -and $script:LastReplPersistenceDetails.code -in @('persisted', 'queued', 'unchanged')) {
+        $prior = $script:LastReplPersistenceDetails
+        [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition rejected -Method $Method -RequestId ([string]$prior.requestId) -FailsafePath ([string]$prior.failsafePath) -Message "$Method failed after an earlier substep; the overall operation was not confirmed."))
+    }
+    $receipt = $script:LastReplPersistenceDetails
+    $receipt['method'] = $Method
+    $script:LastInvokeReplMethodSuccess = ($receipt.code -in @('persisted', 'queued', 'unchanged'))
+    $envelope = [ordered]@{ type = 'result'; payload = [ordered]@{ result = $receipt } }
+    ConvertTo-Yaml -Data $envelope -Options WithIndentedSequences
 }
 
 # Script-entry: only when invoked directly with -Method (not when dot-sourced).

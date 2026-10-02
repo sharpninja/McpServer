@@ -60,10 +60,7 @@ public sealed partial class TrimAnalysisWarningInventoryTests
             Path.Combine("src", "McpServer.QBAgent", "McpServer.QBAgent.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
-                ["IL2026"] = 60,
-                ["IL2075"] = 13,
-                ["IL2070"] = 3,
-                ["IL2067"] = 3,
+                ["IL2026"] = 12,
                 ["IL2104"] = 5,
             }),
         new(

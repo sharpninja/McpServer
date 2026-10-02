@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using McpServer.Client.Models;
 using Xunit;
 
@@ -97,7 +98,7 @@ public sealed class SessionLogClientRequestBodyTests
 
     /// <summary>
     /// TR-MCP-CLIENT-001: <see cref="SessionLogClient.SetSessionTitleAsync"/> must serialize its
-    /// title body through the source-generated context instead of an anonymous type.
+    /// title body through the source-generated context and preserve the typed retitle receipt.
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 retitle result.
     /// </summary>
     [Fact]
@@ -115,11 +116,12 @@ public sealed class SessionLogClientRequestBodyTests
         Assert.Equal("/mcpserver/sessionlog/ClaudeCode/s1/title", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("\"title\":\"Agent-refined session title\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Equal(3, result.TurnId);
+        Assert.True(JsonSerializer.SerializeToElement(result).GetProperty("retitled").GetBoolean());
     }
 
     /// <summary>
     /// TR-MCP-CLIENT-001: <see cref="SessionLogClient.SetTurnTitleAsync"/> must serialize its
-    /// title body through the source-generated context instead of an anonymous type.
+    /// title body through the source-generated context and preserve the typed retitle receipt.
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 retitle result.
     /// </summary>
     [Fact]
@@ -137,5 +139,6 @@ public sealed class SessionLogClientRequestBodyTests
         Assert.Equal("/mcpserver/sessionlog/ClaudeCode/s1/r1/title", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("\"title\":\"Agent-refined turn title\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Equal(4, result.TurnId);
+        Assert.True(JsonSerializer.SerializeToElement(result).GetProperty("retitled").GetBoolean());
     }
 }

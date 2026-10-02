@@ -1,0 +1,498 @@
+{
+  "utc": "2026-10-02T01:58:20.0380960Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "branch": "develop",
+  "head": "35822cd9f028d60762a9822b272cf2f7becfa7ce",
+  "status": "accepted",
+  "unitScope": "Eight unit projects; Category!=AiReview&Category!=Integration",
+  "completedUnitResults": [
+    {
+      "Project": "McpServer.Client.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 304,
+      "Passed": 304,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Client.Tests\\results.trx",
+      "TrxSha256": "FF40D2AB4083899EDC2A006D2F6D8FC899B251260EEA76628E64AC65C3D4AB2E",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Client.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Client.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.Cqrs.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 33,
+      "Passed": 33,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Cqrs.Tests\\results.trx",
+      "TrxSha256": "4CC9D1D9ACCFF85807314ABA3CB287D7933A8E438A690E203EB4B63C67AC181A",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Cqrs.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Cqrs.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.Launcher.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 20,
+      "Passed": 20,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Launcher.Tests\\results.trx",
+      "TrxSha256": "0C86B27829FD6F23B6F2B73F6A021439F311F4CAF00524B130D897F9ABC511F0",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Launcher.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Launcher.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.McpAgent.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 63,
+      "Passed": 63,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.McpAgent.Tests\\results.trx",
+      "TrxSha256": "7C27FC6AD805AB5D0FD9B2BC2E135F3C765BDA7452DAC685F80F3F1C8F06878F",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.McpAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.McpAgent.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.QBAgent.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 96,
+      "Passed": 96,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.QBAgent.Tests\\results.trx",
+      "TrxSha256": "8124BCA4F5B3BE032736ACD88687A2861C4EF6E1C0107379D761C0564CB7BD82",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.QBAgent.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.QBAgent.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.Repl.Core.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 868,
+      "Passed": 868,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Repl.Core.Tests\\results.trx",
+      "TrxSha256": "49DC2C76918D1A7B94FE28B6A2CDE704028EEB4C76ECCBBCAD27FC15B16F680B",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Repl.Core.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Repl.Core.Tests\\stderr.log"
+    },
+    {
+      "Project": "McpServer.Support.Mcp.Tests",
+      "ExitCode": null,
+      "ExitCodeNote": "Handle lost during console recovery; TRX Completed and Test Run Successful stdout verified.",
+      "Total": 2914,
+      "Passed": 2914,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Support.Mcp.Tests\\results.trx",
+      "TrxSha256": "8F76EA690DD391A0C130F3111DEF62FA434F4205CB4C2343679CD8EDCD2958EB",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Support.Mcp.Tests\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Support.Mcp.Tests\\stderr.log"
+    },
+    {
+      "Project": "Build.Tests",
+      "ExitCode": 0,
+      "ExitCodeNote": null,
+      "Total": 225,
+      "Passed": 225,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests-retry\\results.trx",
+      "TrxSha256": "2AA806816989E301EA41DF187C79DD9FAD18B87D8A21DF7996B3E7CAA9B7A0F9",
+      "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests-retry\\stdout.log",
+      "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests-retry\\stderr.log"
+    }
+  ],
+  "pester": {
+    "exitCode": 0,
+    "total": 208,
+    "failed": 0,
+    "skipped": 0,
+    "passed": 208,
+    "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\pester-synced-final\\pester-results.xml",
+    "notRun": 0
+  },
+  "focusedPester": {
+    "total": 28,
+    "failed": 0,
+    "skipped": 0,
+    "passed": 28,
+    "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\final-green-results.xml",
+    "notRun": 0
+  },
+  "pluginIntegrity": [
+    {
+      "root": "F:\\GitHub\\mcpserver-codex-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-grok-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-opencode-plugin",
+      "entries": 16,
+      "mismatches": [],
+      "runtimeHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    }
+  ],
+  "pluginChanges": [
+    {
+      "root": "F:\\GitHub\\mcpserver-codex-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "D9D13E9EFFBD6801AD72D94778F1F488063C82BEE33A1C7E65BC885671458F97",
+      "after": "2A6746AAA369BC8986492FB5A1603B0EC36EEDCFA48172D07482C4A5E434D7EA"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-codex-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "A9E4D4BF8108C6DC3B637129EC561F4933BF7D190523E4C7E7CA9DBB9F94B7F7",
+      "after": "2A6746AAA369BC8986492FB5A1603B0EC36EEDCFA48172D07482C4A5E434D7EA"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "144DF98A3A666C1A56A7A9199097B6A703A8D769238A8C1E7282B94516530854",
+      "after": "2A6746AAA369BC8986492FB5A1603B0EC36EEDCFA48172D07482C4A5E434D7EA"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-claude-cowork-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "BB0D5A1FAF7726BD80AB1F61B9A4162856C8E1F6F79FD510B881AFFDA1D01039",
+      "after": "2A6746AAA369BC8986492FB5A1603B0EC36EEDCFA48172D07482C4A5E434D7EA"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "AA10CDA2B128273D7B5C90A62789271C67FAE0DC61E534D0682B4E14F2DA8B8E",
+      "after": "C618255E5D0707F22FDAEB6944CF40259B01B8A628B3CEC313C9A7F1DAC891BC"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "60A2DA7437A299B70D9172F1AA008C601A9323063A84EA894454383F8479AC90",
+      "after": "C618255E5D0707F22FDAEB6944CF40259B01B8A628B3CEC313C9A7F1DAC891BC"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-cline-v2-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-grok-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "DCF1E1A504F0B6DB95CB25FDFA919BC13D692D70B60DE01C9B81063418262ECE",
+      "after": "C618255E5D0707F22FDAEB6944CF40259B01B8A628B3CEC313C9A7F1DAC891BC"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-grok-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-opencode-plugin",
+      "relative": "CORE-MANIFEST.yaml",
+      "before": "C697B3276618299E548870A81A89E8D48A9BD2A77E262BCAE4FD35432AD42394",
+      "after": "C618255E5D0707F22FDAEB6944CF40259B01B8A628B3CEC313C9A7F1DAC891BC"
+    },
+    {
+      "root": "F:\\GitHub\\mcpserver-opencode-plugin",
+      "relative": "lib/repl-invoke.ps1",
+      "before": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+      "after": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B"
+    }
+  ],
+  "unrelatedPluginFileChanges": 0,
+  "publicReviewResponse": "docs/receipts/hv/20261002-unit-failure-repair.response.jsonl",
+  "formattingWarnings": [
+    "Generated Functional-Requirements.md blank EOF",
+    "Generated Technical-Requirements.md blank EOF"
+  ],
+  "files": [
+    {
+      "path": "docs/Project/Functional-Requirements.md",
+      "sha256": "648401B8D517848634BCCE1F8D45D802C5F859A126631094F83B5BE722F0766A",
+      "deleted": false
+    },
+    {
+      "path": "docs/Project/Requirements-Matrix.md",
+      "sha256": "CC4083246685EF688328BBB476A0151CF2DD69AD284F549FCAD8FB11AD193AB0",
+      "deleted": false
+    },
+    {
+      "path": "docs/Project/Technical-Requirements.md",
+      "sha256": "87001864113272AF08E265E969FEF3BFFFB964E2AF2118485B1152109875EA28",
+      "deleted": false
+    },
+    {
+      "path": "docs/Project/Testing-Requirements.md",
+      "sha256": "8E3738732B1C21329CBC8B411F39C8A40A25DA6B85B43DF44EAEC4C8A1F944FB",
+      "deleted": false
+    },
+    {
+      "path": "docs/Project/TR-per-FR-Mapping.md",
+      "sha256": "BEA6D028D48309DC58CF1577988CA5A3819E7F27629AAEB3CCA9FFDCBAF829E4",
+      "deleted": false
+    },
+    {
+      "path": "docs/QBAGENT.md",
+      "sha256": "D1F6546CE7BAD76D8D03E1C4D8F9254B26DE3744018C948241507679C074DE24",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-env.ps1",
+      "sha256": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "sha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "sha256": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "sha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/README.md",
+      "sha256": "423983D29E68C587795EC8A1261556530D42DD13C8B353469AFC2D5BE56FD053",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "sha256": "B6E3DCF03F0D1498ABC9F82E5A2D1D54E7CD0923650801ACB1DD655CD2916D62",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "sha256": "4F321F50481CEC943EC25757AC28B7CFBAA40C701668AA9769E65E452130C048",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "sha256": "E1C5EDAAD2DAA9D4325C7A2012E3C71CBA191DB55402B781BCC2ECA11C4F4B98",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "sha256": "2D9548429B438DFCC3506CE9A9ED6864D07C70C26037AA83912102491666D7AF",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "sha256": "6D7ADE4FFC9CDB2D8E242A58F952EB68B8940B9D85B0F00B6F0EC4743EC3FF4E",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogReviewRegression.Tests.ps1",
+      "sha256": "310D7B67D661C37368680904BFCEE1F81B91A96EB62F080BB02F366C5A5C1E7D",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+      "sha256": "92FD2AB8307DF4C35E66DCFDCCC8015580B92F106078281136D41956F34483CC",
+      "deleted": false
+    },
+    {
+      "path": "plugins/core/test-fixtures/SessionLogWrapperHarness.ps1",
+      "sha256": "DD5D1B1EF9B4F33DFA64CD778153D126FAF7B217E36BB174FD10B55F17390264",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Client/Models/SessionLogModels.cs",
+      "sha256": "B9CA5338E1CF1C9C42B915C5F4CC3B7994CBA6E89C803D2DF6370B65FD156703",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Common.AgentCli/Processes/IProcessRunner.cs",
+      "sha256": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.cs",
+      "sha256": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.Windows.cs",
+      "sha256": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.QBAgent.Tools/McpServer.QBAgent.Tools.csproj",
+      "sha256": "89B13116D977A285623939AED4AF270A867C8F056C9D58148710C148A75E4A86",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Services/Properties/ProcessRunnerTypeForwards.cs",
+      "sha256": "8C13FFE70760F330421002D6F9D15058371E41EE46360ACC2741EEECC9087A95",
+      "deleted": false
+    },
+    {
+      "path": "src/McpServer.Services/Services/IProcessRunner.cs",
+      "sha256": null,
+      "deleted": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/ProcessRunner.cs",
+      "sha256": null,
+      "deleted": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/ProcessRunner.Windows.cs",
+      "sha256": null,
+      "deleted": true
+    },
+    {
+      "path": "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+      "sha256": "C16EEA049C124FD8ED5D4A76EC5EC2BE9A9A4957B62F6C88E93583A0E8CD3C8E",
+      "deleted": false
+    },
+    {
+      "path": "tests/McpServer.Client.Tests/SessionLogClientRequestBodyTests.cs",
+      "sha256": "F6813FE19D19E587FFF872E5B7A583DFB62FB4A5A6EF24D1ADC808769B7C9CA6",
+      "deleted": false
+    },
+    {
+      "path": "tests/McpServer.QBAgent.Tests/ProcessRunnerDependencyTests.cs",
+      "sha256": "664F4FC675D00216BA754E796CF718E74A4742B5BC8D1585B5F0D74FECAB9D88",
+      "deleted": false
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+      "sha256": "B8DFC422424CB6D8A65DB6EE09ACF2BF72CC822A94FB0E0505D29B49245ABDF1",
+      "deleted": false
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/ProcessRunnerTypeForwardingTests.cs",
+      "sha256": "5E7BF17E29A85D7719DD5E6E1F2F3373A75DCCF0FD3962EFB98C7F699FC780C2",
+      "deleted": false
+    }
+  ],
+  "abortedAttempts": [
+    {
+      "project": "Build.Tests",
+      "exitCode": 1,
+      "passedBeforeAbort": 19,
+      "assertionFailures": 0,
+      "reason": "Blame collector 3 minute inactivity timeout; run aborted, not an accepted gate",
+      "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests"
+    }
+  ],
+  "extraRedReceipt": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\multi-step-red.tool.jsonl",
+  "unitTotals": {
+    "total": 4523.0,
+    "passed": 4523.0,
+    "failed": 0,
+    "skipped": 0,
+    "other": 0
+  },
+  "buildRetryEnvironment": {
+    "MSBUILDDISABLENODEREUSE": "1",
+    "TEMP": "F:\\GitHub\\McpServer\\.mcpServer\\tmp",
+    "TMP": "F:\\GitHub\\McpServer\\.mcpServer\\tmp",
+    "watchdog": "3m",
+    "codeChangedForRetry": false
+  },
+  "finalReview": {
+    "receipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.final-review-sa-ef70105b.json",
+    "verdict": "AGREE",
+    "accuracy": 99,
+    "completeness": 99,
+    "claims": {
+      "PASS": 15,
+      "UNKNOWN": 0,
+      "FAIL": 0
+    },
+    "parentFullBodyReadback": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.parent-review-readback.json",
+    "publicStreamAudit": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.public-stream-audit.json"
+  }
+}

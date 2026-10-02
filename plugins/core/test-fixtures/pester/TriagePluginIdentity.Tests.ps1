@@ -483,7 +483,7 @@ Execute the add-profile skill now.
         $omittedMap.Contains('contextList') | Should -BeFalse
     }
 
-    It 'TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn omitted empty and scalar tags stay silent under StrictMode' {
+    It 'TEST-MCP-STRICTCOUNT-001 Invoke-WorkflowUpdateTurn collections retain typed output under StrictMode' {
         $cache = Join-Path $TestDrive 'strictcount-cache'
         New-Item -ItemType Directory -Path $cache | Out-Null
         $persistLog = Join-Path $TestDrive 'strictcount-persist.jsonl'
@@ -515,7 +515,10 @@ Execute the add-profile skill now.
             { Invoke-WorkflowUpdateTurn -ParamsYaml "response: ok`ntags: one-tag`ncontextList: one-context`n" } | Should -Not -Throw
 
             $stdout = Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: ok`ntags: one-tag`ncontextList: one-context`n" | Out-String
-            $stdout.Trim() | Should -Be ''
+            $documents = @(ConvertFrom-Yaml -Yaml $stdout -AllDocuments)
+            $documents.Count | Should -Be 1
+            $documents[0].type | Should -Be 'result'
+            $documents[0].payload.result.code | Should -Be 'persisted'
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
         } finally {
             if ($null -ne $savedCache) { $env:MCP_CACHE_DIR_OVERRIDE = $savedCache } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
