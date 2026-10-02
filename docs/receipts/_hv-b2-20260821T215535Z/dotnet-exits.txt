@@ -1,0 +1,1 @@
+coordExit=1 greenExit=0 checkExit=1 elapsedSec=21

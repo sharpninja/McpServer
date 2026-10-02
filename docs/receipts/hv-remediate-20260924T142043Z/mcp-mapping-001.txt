@@ -1,0 +1,13 @@
+﻿type: error
+payload:
+  requestId: req-20260924T142138Z-34af
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getMapping
+    errors:
+    - No YAML schema is registered for method 'workflow.requirements.getMapping'.
+
+---
+

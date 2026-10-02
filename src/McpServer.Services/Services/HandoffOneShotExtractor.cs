@@ -49,14 +49,16 @@ public sealed class HandoffOneShotExtractor : IHandoffOneShotExtractor
         };
 
         var enqueue = await _agentPoolService.EnqueueOneShotAsync(request, cancellationToken).ConfigureAwait(false);
+        var promptVersion = FirstNonEmpty(enqueue.PromptVersion, HandoffPromptDefaults.PromptVersion);
+        var templateVersion = FirstNonEmpty(enqueue.PromptTemplateId, promptTemplateId, HandoffPromptDefaults.TemplateId);
         if (!enqueue.Success || string.IsNullOrWhiteSpace(enqueue.JobId))
         {
             return new HandoffExtractionResult
             {
                 Success = false,
                 AgentName = enqueue.AgentName,
-                PromptVersion = HandoffPromptDefaults.PromptVersion,
-                TemplateVersion = promptTemplateId ?? HandoffPromptDefaults.TemplateId,
+                PromptVersion = promptVersion,
+                TemplateVersion = templateVersion,
                 Error = enqueue.Error ?? "The one-shot extractor could not be queued.",
             };
         }
@@ -72,8 +74,8 @@ public sealed class HandoffOneShotExtractor : IHandoffOneShotExtractor
                     ResponseText = evt.Text,
                     AgentName = enqueue.AgentName,
                     Model = enqueue.Model ?? evt.Model,
-                    PromptVersion = HandoffPromptDefaults.PromptVersion,
-                    TemplateVersion = promptTemplateId ?? HandoffPromptDefaults.TemplateId,
+                    PromptVersion = promptVersion,
+                    TemplateVersion = templateVersion,
                 };
             }
 
@@ -86,8 +88,8 @@ public sealed class HandoffOneShotExtractor : IHandoffOneShotExtractor
                 {
                     Success = false,
                     AgentName = enqueue.AgentName,
-                    PromptVersion = HandoffPromptDefaults.PromptVersion,
-                    TemplateVersion = promptTemplateId ?? HandoffPromptDefaults.TemplateId,
+                    PromptVersion = promptVersion,
+                    TemplateVersion = templateVersion,
                     Error = string.IsNullOrWhiteSpace(evt.Error) ? "The one-shot extractor failed." : evt.Error,
                 };
             }
@@ -97,10 +99,21 @@ public sealed class HandoffOneShotExtractor : IHandoffOneShotExtractor
         {
             Success = false,
             AgentName = enqueue.AgentName,
-            PromptVersion = HandoffPromptDefaults.PromptVersion,
-            TemplateVersion = promptTemplateId ?? HandoffPromptDefaults.TemplateId,
+            PromptVersion = promptVersion,
+            TemplateVersion = templateVersion,
             Error = "The one-shot extractor ended without a terminal result.",
         };
+    }
+
+    private static string FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+                return value.Trim();
+        }
+
+        return HandoffPromptDefaults.PromptVersion;
     }
 }
 

@@ -184,6 +184,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
     public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
 
+    /// <summary>FR-MCP-REQRECOVERY-001: idempotent requirements recovery runs, unique on (WorkspaceId, IdempotencyKey).</summary>
+    public DbSet<RequirementsRecoveryRunEntity> RequirementsRecoveryRuns => Set<RequirementsRecoveryRunEntity>();
+
     /// <summary>TR-MCP-REQAC-001: 4NF acceptance-criteria rows for requirements.</summary>
     public DbSet<RequirementAcceptanceCriterionEntity> RequirementAcceptanceCriteria => Set<RequirementAcceptanceCriterionEntity>();
 
@@ -195,6 +198,15 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
     public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
+
+    /// <summary>FR-MCP-MEMORY-014 / TR-MCP-MEMORY-MODEL-002: Append-only memory version snapshots.</summary>
+    public DbSet<MemoryVersionEntity> MemoryVersions => Set<MemoryVersionEntity>();
+
+    /// <summary>TR-MCP-MEMORY-MODEL-002: Directed memory edges unique on (From, To, EdgeType).</summary>
+    public DbSet<MemoryEdgeEntity> MemoryEdges => Set<MemoryEdgeEntity>();
+
+    /// <summary>TR-MCP-MEMORY-SEARCH-002: Dedicated memory ANN/FTS side table.</summary>
+    public DbSet<MemoryIndexEntity> MemoryIndexes => Set<MemoryIndexEntity>();
 
     /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case headers.</summary>
     public DbSet<UseCaseEntity> UseCases => Set<UseCaseEntity>();
@@ -265,6 +277,21 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-PRODUCT-MODEL-001: Host-global product memberships. No workspace query filter.</summary>
     public DbSet<ProductWorkspaceMembershipEntity> ProductWorkspaceMemberships => Set<ProductWorkspaceMembershipEntity>();
 
+    /// <summary>TR-MCP-HOSTILEREVIEW-001: Hostile-review requests.</summary>
+    public DbSet<HostileReviewRequestEntity> HostileReviewRequests => Set<HostileReviewRequestEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Hostile-review artifact identities.</summary>
+    public DbSet<HostileReviewArtifactLinkEntity> HostileReviewArtifactLinks => Set<HostileReviewArtifactLinkEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-003: Hostile-review executions.</summary>
+    public DbSet<HostileReviewExecutionEntity> HostileReviewExecutions => Set<HostileReviewExecutionEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-004: Hostile-review findings.</summary>
+    public DbSet<HostileReviewFindingEntity> HostileReviewFindings => Set<HostileReviewFindingEntity>();
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Hostile-review diagnostics.</summary>
+    public DbSet<HostileReviewDiagnosticEntity> HostileReviewDiagnostics => Set<HostileReviewDiagnosticEntity>();
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -331,6 +358,10 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<DataAuditLogEntity>(e =>
         {
             e.HasKey(x => x.AuditId);
+            e.Property(x => x.PreviousSnapshotJsonLegacy).HasColumnName("PreviousSnapshotJson");
+            e.Property(x => x.CurrentSnapshotJsonLegacy).HasColumnName("CurrentSnapshotJson");
+            e.Property(x => x.DiffJsonLegacy).HasColumnName("DiffJson");
+            e.Property(x => x.MetadataJsonLegacy).HasColumnName("MetadataJson");
             e.HasIndex(x => new { x.WorkspaceId, x.EntityKind, x.EntityKey });
             e.HasIndex(x => x.Action);
             e.HasIndex(x => x.OccurredAtUtc);
@@ -655,6 +686,12 @@ public sealed class McpDbContext : DbContext
             e.Property(x => x.ScopeStartLayerKey).HasDefaultValue("layer-1");
         });
 
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.IdempotencyKey });
+            e.Property(x => x.Status).HasDefaultValue("applied");
+        });
+
         modelBuilder.Entity<RequirementAcceptanceCriterionEntity>(e =>
         {
             e.HasOne(x => x.Requirement)
@@ -692,10 +729,51 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Category);
             e.HasIndex(x => new { x.Scope, x.WorkspaceId, x.Category });
             e.HasIndex(x => x.UpdatedAtUtc);
+            e.HasIndex(x => new { x.WorkspaceId, x.Scope });
+            e.HasIndex(x => x.EmbeddingStatus);
+            e.Property(x => x.Title).HasMaxLength(256);
+            e.Property(x => x.Type).HasMaxLength(64);
+            e.Property(x => x.SourceKind).HasMaxLength(64);
+            e.Property(x => x.SourceRef).HasMaxLength(1024);
+            e.Property(x => x.CreatedBy).HasMaxLength(256);
+            e.Property(x => x.EmbeddingStatus).HasMaxLength(32);
             e.HasOne<WorkspaceEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.WorkspaceId)
                 .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MemoryVersionEntity>(e =>
+        {
+            e.HasKey(x => x.VersionRowId);
+            e.HasIndex(x => new { x.MemoryId, x.VersionNumber }).IsUnique();
+            e.HasOne<MemoryEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.MemoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MemoryEdgeEntity>(e =>
+        {
+            e.HasKey(x => x.EdgeRowId);
+            e.HasIndex(x => new { x.FromMemoryId, x.ToMemoryId, x.EdgeType }).IsUnique();
+        });
+
+        modelBuilder.Entity<MemoryIndexEntity>(e =>
+        {
+            e.HasKey(x => x.MemoryId);
+            e.HasIndex(x => x.WorkspaceId);
+            e.HasIndex(x => x.ContentHash);
+            e.Property(x => x.ContentHash).HasMaxLength(64);
+            e.HasOne<MemoryEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.MemoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
@@ -965,6 +1043,52 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => new { x.RunId, x.Ordinal });
         });
 
+        modelBuilder.Entity<HostileReviewRequestEntity>(e =>
+        {
+            e.HasKey(x => x.RequestId);
+            e.HasIndex(x => new { x.WorkspaceId, x.CreatedUtc });
+            e.HasMany(x => x.Links)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Executions)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Findings)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(x => x.Diagnostics)
+                .WithOne(x => x.Request)
+                .HasForeignKey(x => x.RequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<HostileReviewArtifactLinkEntity>(e =>
+        {
+            e.HasKey(x => x.LinkId);
+            e.HasIndex(x => new { x.RequestId, x.ArtifactType, x.ArtifactId });
+        });
+
+        modelBuilder.Entity<HostileReviewExecutionEntity>(e =>
+        {
+            e.HasKey(x => x.ExecutionId);
+            e.HasIndex(x => new { x.RequestId, x.Model, x.Effort });
+        });
+
+        modelBuilder.Entity<HostileReviewFindingEntity>(e =>
+        {
+            e.HasKey(x => x.FindingId);
+            e.HasIndex(x => new { x.RequestId, x.Category, x.Severity });
+        });
+
+        modelBuilder.Entity<HostileReviewDiagnosticEntity>(e =>
+        {
+            e.HasKey(x => x.DiagnosticId);
+            e.HasIndex(x => x.RequestId);
+        });
+
         modelBuilder.Entity<ProductEntity>(e =>
         {
             e.HasKey(x => x.ProductId);
@@ -1013,6 +1137,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementScopeLayerEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<MemoryEntity>().HasQueryFilter("Workspace", e =>
@@ -1020,6 +1145,9 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<MemoryIndexEntity>().HasQueryFilter("Workspace", e =>
+            e.WorkspaceId == null
+            || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<UseCaseEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<UseCaseActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
@@ -1033,6 +1161,11 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TriageResearchRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<HandoffIngestionRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<HandoffDiagnosticEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewRequestEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewArtifactLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewExecutionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewFindingEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<HostileReviewDiagnosticEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
         // Brain-slot definitions and their invocation audit rows are stored under the global workspace
         // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the
@@ -1066,6 +1199,7 @@ public sealed class McpDbContext : DbContext
         // Version) index already covers the common filter paths.
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<RequirementsRecoveryRunEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementScopeLayerEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
@@ -1078,17 +1212,26 @@ public sealed class McpDbContext : DbContext
     }
 
     /// <inheritdoc />
+    public override int SaveChanges() => SaveChanges(acceptAllChangesOnSuccess: true);
+
+    /// <inheritdoc />
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        PrepareDbFkChanges();
+        PrepareDbFkChangesAsync(CancellationToken.None).GetAwaiter().GetResult();
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     /// <inheritdoc />
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
+        SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken);
+
+    /// <inheritdoc />
+    public override async Task<int> SaveChangesAsync(
+        bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = default)
     {
-        PrepareDbFkChanges();
-        return base.SaveChangesAsync(cancellationToken);
+        await PrepareDbFkChangesAsync(cancellationToken).ConfigureAwait(false);
+        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
     }
 
     private static void ApplyDbFkConventions(ModelBuilder modelBuilder)
@@ -1134,7 +1277,8 @@ public sealed class McpDbContext : DbContext
             if (entityType.ClrType == workspaceClrType)
                 continue;
 
-            if (entityType.ClrType == typeof(MemoryEntity))
+            if (entityType.ClrType == typeof(MemoryEntity)
+                || entityType.ClrType == typeof(MemoryIndexEntity))
                 continue;
 
             // WorkspaceBannedItemEntity's WorkspaceId IS its parent foreign key; it is configured
@@ -1194,11 +1338,22 @@ public sealed class McpDbContext : DbContext
             .Where(e => e.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal));
     }
 
+    /// <summary>
+    /// Prepares tracked changes and honors caller cancellation before SaveChanges work begins.
+    /// </summary>
+    private Task PrepareDbFkChangesAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        PrepareDbFkChanges();
+        return Task.CompletedTask;
+    }
+
     private void PrepareDbFkChanges()
     {
         StampWorkspaceId();
         ApplySoftDeletes();
         BlockPhysicalDeletes();
+        BlockAuditRowUpdates();
         EnsureWorkspaceRows();
         AppendAuditRows();
         EnsureWorkspaceRows();
@@ -1222,6 +1377,20 @@ public sealed class McpDbContext : DbContext
         }
 
         SoftDeleteGraphRelationshipsForDeletedEntities(softDeletedEntries, now);
+    }
+
+    private void BlockAuditRowUpdates()
+    {
+        var modifiedAuditKinds = ChangeTracker.Entries()
+            .Where(entry => entry.Entity is DataAuditLogEntity or TodoAuditHistoryEntity)
+            .Where(entry => entry.State is EntityState.Modified or EntityState.Deleted)
+            .Select(entry => entry.Metadata.ClrType.Name)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        if (modifiedAuditKinds.Length > 0)
+            throw new InvalidOperationException(
+                "Audit rows are append-only and cannot be updated or deleted. Entities: "
+                + string.Join(", ", modifiedAuditKinds));
     }
 
     private void BlockPhysicalDeletes()

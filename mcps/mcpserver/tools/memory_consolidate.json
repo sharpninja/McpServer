@@ -1,0 +1,37 @@
+{
+  "name": "memory_consolidate",
+  "description": "Consolidate near-duplicate memories when an operator asks for sleep/merge maintenance. Default is dry-run; only write when explicitly requested.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "dryRun": {
+        "description": "When false, apply writes. Default is dry-run.",
+        "type": ["boolean", "null"],
+        "default": null
+      },
+      "similarityThreshold": {
+        "description": "Optional similarity threshold in [0,1]",
+        "type": ["number", "null"],
+        "default": null
+      },
+      "allowHardDelete": {
+        "description": "When true, merged-away rows may be hard-deleted",
+        "type": ["boolean", "null"],
+        "default": null
+      },
+      "runId": {
+        "description": "Optional client run id",
+        "type": ["string", "null"],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

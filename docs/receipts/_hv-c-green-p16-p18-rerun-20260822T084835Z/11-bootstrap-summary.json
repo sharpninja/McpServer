@@ -1,0 +1,11 @@
+{
+  "SessionId": "GrokSubagentHostile-20260822T084835Z-c-green-p16-p18-rerun",
+  "RequestId": "req-20260822T084835Z-001-hostile-c-green-p16-p18-rerun",
+  "Collector": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z",
+  "PluginVersion": "1.100.0",
+  "DotVersion": "1.100.0",
+  "ExactToolNamePresent": true,
+  "TestMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "NonceMatch": true
+}

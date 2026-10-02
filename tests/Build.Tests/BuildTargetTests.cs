@@ -296,6 +296,28 @@ public sealed class BuildTargetTests
         Assert.Equal("SharpNinja.McpServer.QBAgent", properties["PackageId"]);
     }
 
+    /// <summary>
+    /// PackQBAgentTool must pack McpServer.QBAgent.csproj only. Depending on solution Compile
+    /// builds every test project and fails when testhosts lock those outputs.
+    /// </summary>
+    [Fact]
+    public void PackQBAgentTool_DoesNotDependOnSolutionCompile()
+    {
+        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.PackQBAgentTool.cs"));
+        Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
+        Assert.Contains("McpServer.QBAgent.csproj", source, StringComparison.Ordinal);
+        Assert.DoesNotContain("TestsDirectory", source, StringComparison.Ordinal);
+    }
+
+    /// <summary>DeployQBAgentTool installs the packed tool; it must not pull solution Compile.</summary>
+    [Fact]
+    public void DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile()
+    {
+        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.DeployQBAgentTool.cs"));
+        Assert.Contains("DependsOn(PackQBAgentTool)", source, StringComparison.Ordinal);
+        Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
+    }
+
     [Fact]
     public void PublishNuGet_UsesNUGET_API_KEYEnvironmentVariable()
     {
@@ -691,7 +713,7 @@ public sealed class BuildTargetTests
                 Path.Combine("config", Build.BrainSlotConfigDirectoryName, Build.BrainSlotConfigFileName),
                 copied,
                 StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("slotId: brain-slot-arbiter-of-truth-grok-build", File.ReadAllText(copied), StringComparison.Ordinal);
+            Assert.Contains("slotId: brain-slot-arbiter-of-truth-grok-build", File.ReadAllText(copied), StringComparison.OrdinalIgnoreCase);
         }
         finally
         {

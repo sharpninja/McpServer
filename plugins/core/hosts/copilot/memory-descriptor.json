@@ -1,0 +1,24 @@
+{
+  "host": "copilot",
+  "slice": "S7b",
+  "injection": {
+    "requiredMemoriesPrefix": "REQUIRED MEMORIES -",
+    "emptyFallback": "REQUIRED MEMORIES - None."
+  },
+  "fallback": {
+    "localFailsafe": true,
+    "replayAfterAck": true
+  },
+  "tools": [
+    "memory_remember",
+    "memory_recall",
+    "memory_explore",
+    "memory_consolidate",
+    "memory_promote",
+    "memory_revert",
+    "memory_add",
+    "memory_list",
+    "memory_update",
+    "memory_remove"
+  ]
+}

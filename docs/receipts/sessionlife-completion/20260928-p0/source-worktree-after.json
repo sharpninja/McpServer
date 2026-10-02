@@ -1,0 +1,1615 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T02:29:27.0151988Z",
+  "sourceRoot": "F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle",
+  "branch": "grok/session-lifecycle",
+  "head": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "expectedBase": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "trackedCount": 37,
+  "untrackedCount": 210,
+  "statusPorcelain": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.md",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md",
+    " M plugins/core/lib-ps/McpPluginShim.psm1",
+    " M plugins/core/lib-ps/plugin-hook.ps1",
+    " M plugins/core/lib-ps/repl-invoke.ps1",
+    " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+    " M plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+    " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+    " M src/McpServer.Services/Services/MemoryService.cs",
+    " M src/McpServer.Services/Services/SessionLogService.cs",
+    " M src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+    " M src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+    " M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+    " M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+    " M src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+    " M src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+    " M src/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+    " M src/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+    " M src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+    " M src/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+    " M src/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+    " M src/McpServer.Storage/McpDbContext.cs",
+    " M src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+    " M templates/prompt-templates.yaml",
+    " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+    " M tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+    " M tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+    " M tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+    " M tests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+    " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+    "?? docs/receipts/_hv-remediate-latest.txt",
+    "?? docs/receipts/_sessionlife-resume-latest.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/BLOCKER-mcp-storage-unreachable.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/S0-SESSIONLIFE-proof.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/TODO-35-DoneFalse-proof.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/health.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/id-counts.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/ids-from-recap.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-plan.md-extract.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-root-plan.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-beginTurn.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-bootstrap.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-completeTurn.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-invoke-log.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-MCP.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-MCP.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-MCP.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-queryHistory.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-request-id.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-session-id.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-BUG-TRIAGE-false.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-section-BUG-TRIAGE.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/mcp-updateTurn.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/plan-checkbox-update.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/scratch-path.txt",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/state-dump-depth6.json",
+    "?? docs/receipts/hv-remediate-20260924T035119Z/state-keys.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/01-health-sql-final.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/01-health-sql.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/S0-SESSIONLIFE-proof.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/SESSIONLOG-HV-turn.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/TODO-35-DoneFalse-proof.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/cache-clear.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/diag-boot.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/diag-qh.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-begin.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-boot.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-complete.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-open.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-qh.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/direct-update.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/hv-turn-body.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap2.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-completeTurn3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-002.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-003.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-004.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-005.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSION-LIFE-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-002.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-003.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-004.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-005.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-invoke-log.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-MCP.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-listMappings.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-listTest-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-listTr-SESSIONLIFE.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-mapping-001.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-openSession3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory-durable.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id-durable.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id-durable.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-BUG-TRIAGE-false.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-SESSIONLIFE-false.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-072.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-082.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-085.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-086.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-097.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-121.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-122.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-139.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-160.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-163.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-164.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-165.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-166.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-session-log-false.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-sessionlog-false.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-165.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-170.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-171.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-172.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-173.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-175.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-180.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-181.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-182.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-184.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-185.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-186.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-198.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-199.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-200.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-202.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-204.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-205.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-208.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-210.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-213.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-214.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-221.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-226.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-229.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-232.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-234.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-236.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-239.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-240.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-241.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-243.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-244.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-245.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-246.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/mcp-updateTurn3.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/plan-doc-candidates.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/scoped-35-count.txt",
+    "?? docs/receipts/hv-remediate-20260924T142043Z/scoped-35-ids.txt",
+    "?? docs/receipts/hv/20260924T031139Z-sessionlife-resume.request.jsonl",
+    "?? docs/receipts/hv/20260924T031139Z-sessionlife-resume.response.jsonl",
+    "?? docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.request.jsonl",
+    "?? docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.response.jsonl",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/_TurnTransactionsClient.cs",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/_beginTurn-excerpt.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-candidate.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-from-recap.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-parent-plan.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-path-rg.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-path-tools.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-pid.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-poll-final.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-poll.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-console.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-stderr.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt1-rg-fail.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt2-pluginint-50fail.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test-fail1-rg-missing.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test-projects.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test-summary.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/build-test.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/dirty-tree-summary.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-ff8f.yaml",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-quarantine-note.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/gate-status.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/goal-plan-copy.md",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-beginTurn.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap2.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-FR-MCP-SESSIONLIFE.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-SESSIONLIFE.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-session-lifecycle.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-sessionlog-lifecycle.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-request-id.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-session-id.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/mcp-todo-probe.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-console.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-summary.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.transcript.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-pid.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll-final.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll2.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-console.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-stderr.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-fail-extract.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-console.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-hits.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-pid.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-stderr.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-used.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.err.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/scratch-path.txt",
+    "?? docs/receipts/sessionlife-resume-20260924T015616Z/turntransactions-temp-disable.txt",
+    "?? plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+    "?? plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+    "?? plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+    "?? plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+    "?? src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+    "?? tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+    "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+    "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs"
+  ],
+  "tracked": [
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "status": "M\tdocs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "exists": true,
+      "length": 122657,
+      "sha256": "6E81A960593453011E687D05B3DBC4D865AF1BFFF56A6BF03955D647FDFC9262",
+      "baseBlobId": "c92896c4b6ca668d6eaa4e632486953644cef8e0"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.md",
+      "status": "M\tdocs/benchmarks/results/memory-bench-20260919T091800Z.md",
+      "exists": true,
+      "length": 1476,
+      "sha256": "CDF7436EA2213F2BC669D52C3C46DC12E22421F47FA506EFDCEAFD1A361D59E4",
+      "baseBlobId": "17960c46845675d175f175cc61643a5978a6d719"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      "status": "M\tdocs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      "exists": true,
+      "length": 352668,
+      "sha256": "1D3E56E7750F62F6248A98AFB1F12EE529AE36F42720315C7065D7C4D65F0DC8",
+      "baseBlobId": "1f37a68437c31fbefbd272c3ebd3d09ed3696cf5"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md",
+      "status": "M\tdocs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md",
+      "exists": true,
+      "length": 29753,
+      "sha256": "89932787FAA6C2408B4CCFC22B17B5AFECB8004B1EEB40965DBE32C325EFC249",
+      "baseBlobId": "e42a35e57bf8ff77bbdcead490745cf87c87d5e2"
+    },
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "status": "M\tplugins/core/lib-ps/McpPluginShim.psm1",
+      "exists": true,
+      "length": 23985,
+      "sha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "baseBlobId": "7441e2cb6ad3c70cd3dd26fdfbaa07b409e6a1e5"
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "status": "M\tplugins/core/lib-ps/plugin-hook.ps1",
+      "exists": true,
+      "length": 60122,
+      "sha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "baseBlobId": "ec8d2468f578c33b2957aa5f9356de55b0b75b61"
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "status": "M\tplugins/core/lib-ps/repl-invoke.ps1",
+      "exists": true,
+      "length": 110129,
+      "sha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "baseBlobId": "988bc4d9cc4a1f9af1fd414c0b05d46cfa4201f0"
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "status": "M\tplugins/core/lib-ps/resolve-cache-dir.ps1",
+      "exists": true,
+      "length": 18380,
+      "sha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "baseBlobId": "8228dbbccbc0fe1cc865fd0a2706e1c549189e39"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "status": "M\tplugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "exists": true,
+      "length": 5642,
+      "sha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "baseBlobId": "e802298919a605a63671acda1938cda71b9cb144"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "status": "M\tplugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "exists": true,
+      "length": 285959,
+      "sha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "baseBlobId": "d24605014a68029cd2b90f63642f59dc0d8fec84"
+    },
+    {
+      "path": "src/McpServer.Services/Services/MemoryService.cs",
+      "status": "M\tsrc/McpServer.Services/Services/MemoryService.cs",
+      "exists": true,
+      "length": 16456,
+      "sha256": "EBC7918853C0C2A11ECB0E282A340C628D8623CA7EACDB73E4B67A49D29BD8BD",
+      "baseBlobId": "9d5a2a8de55bdbd1278f3bb313968623f635e1a1"
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "status": "M\tsrc/McpServer.Services/Services/SessionLogService.cs",
+      "exists": true,
+      "length": 94673,
+      "sha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "baseBlobId": "39b1044444f4441858c41617416932154581af43"
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "status": "M\tsrc/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "exists": true,
+      "length": 12750,
+      "sha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "baseBlobId": "72e3f76fc0e3913e9bd30b4154c6858f3c12cec9"
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "status": "M\tsrc/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "exists": true,
+      "length": 9671,
+      "sha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "baseBlobId": "78aa837f7acf7654338befbd4a459c87438ec1c4"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "exists": true,
+      "length": 5435,
+      "sha256": "28B3C79416EA137D0C28F3D32EAAC014F0EEA52685289D52E300A6EA0BCC14A3",
+      "baseBlobId": "ceb63260a566d3104060d8d15cbd9f4cf6428bdc"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "exists": true,
+      "length": 2359,
+      "sha256": "7180BC297DDAFD0606A724E99BD88F87A2F61F71B29B12DFF834A2F27D905D2B",
+      "baseBlobId": "b80144c051b69be4ce8b17733c368fd24a5714fa"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "exists": true,
+      "length": 2938,
+      "sha256": "95848A1B1DD07624B2AEEF4862BC7CA6C1124D7AF1BDCBAD273A906866399472",
+      "baseBlobId": "3c0d8442240c61cda619ecb27922a5238c9c149b"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "exists": true,
+      "length": 5162,
+      "sha256": "C8850779B6A0D5C0DDCAC1510E197280F8715AB9A6A9C459F9449ADAA31A86DB",
+      "baseBlobId": "8e838b26910bcb22ca238d29d1bf90ebd6b5bf38"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "exists": true,
+      "length": 2330,
+      "sha256": "E8FCB4CC048A82FB25B937F26F672CBB1D3CA1E017BFBF292C7FA0ADDBD610B2",
+      "baseBlobId": "33d77ec08289fcc7efd47a752c104e3ce1407619"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "exists": true,
+      "length": 2905,
+      "sha256": "0D0C09EE7D85C16CB24708B559074815F3812F20A6E27526982FA6720FC6E58F",
+      "baseBlobId": "aacc30b58bfd9425279647e64f852368d01519ed"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "exists": true,
+      "length": 5330,
+      "sha256": "A11245E07540E15E58673E7A20C97CB40C408E723D2919266AF0262B51D1AE7F",
+      "baseBlobId": "2cf4b84e3bf4ce7e2a16a9e4a2d8847f301924f5"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "exists": true,
+      "length": 2281,
+      "sha256": "611885114023FF8DDE3CE7E33DE9F88389A85D65344674434A0C872E3FE70DC2",
+      "baseBlobId": "ab1f654329bf176a130eae09fccd5119197c71db"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "exists": true,
+      "length": 2407,
+      "sha256": "D9AEB3A1ECFF53F616936047EAC96E6FC172EB82AFBFE388B0AA12AD0C759416",
+      "baseBlobId": "eea07d1b4ba03f78acdf5279536d1ac0491709f2"
+    },
+    {
+      "path": "src/McpServer.Storage/McpDbContext.cs",
+      "status": "M\tsrc/McpServer.Storage/McpDbContext.cs",
+      "exists": true,
+      "length": 81053,
+      "sha256": "6D4E2246B464367A1D7D51583B21663C43FDEDF7866B1691D9E18D5E2FD8076C",
+      "baseBlobId": "b4b23a2cb7640c25f4f0e6f9d5d3f4bbf8b031ad"
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "status": "M\tsrc/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "exists": true,
+      "length": 34122,
+      "sha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "baseBlobId": "da9528122fb4242ace7eed0eaf8f22da0c936359"
+    },
+    {
+      "path": "templates/prompt-templates.yaml",
+      "status": "M\ttemplates/prompt-templates.yaml",
+      "exists": true,
+      "length": 47500,
+      "sha256": "863548BA42D2FD6C4032AF44976AB2D0CEB286523BBE93C07DD9863FB835F95B",
+      "baseBlobId": "2cd560f179af31e3e1b7d649f5190a6fac2a27c1"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "exists": true,
+      "length": 8768,
+      "sha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "baseBlobId": "e331d40041b341eb71760f43946b571a7b7f695a"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "exists": true,
+      "length": 10619,
+      "sha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "baseBlobId": "3b9d0355dea261cf08eca7c4f9355129cd71e859"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+      "exists": true,
+      "length": 6764,
+      "sha256": "C8B239F6131B8E029430FB657167D256557E373B908C735AC4D450182569EEBB",
+      "baseBlobId": "67b8772b801fd913ca0d6fca1dec5d3e08502866"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "exists": true,
+      "length": 7362,
+      "sha256": "D84B28127BBAED2E5B550F8C6B54791F074CA4FE7A1084286567DA4C9DAD5525",
+      "baseBlobId": "672f3baba0de3ba58301dfd9b07c8f9c69c7c5c9"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "exists": true,
+      "length": 4487,
+      "sha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "baseBlobId": "15b4c62e5d1ea9de952bb565cdff1143f2d2f29f"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "exists": true,
+      "length": 35801,
+      "sha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "baseBlobId": "3c15c3297fa549d612d64f199afb0012a972429c"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+      "exists": true,
+      "length": 4942,
+      "sha256": "A524F008DFADD6D7DBF1D6F2BF5743F841F0714281D0F7280C742EE57EA6E1A7",
+      "baseBlobId": "6a4d25c5dad4926cd21f4790773486ef49ece809"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "status": "M\ttests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "exists": true,
+      "length": 12633,
+      "sha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "baseBlobId": "aeef38acc4d6363c09b17352a339cfd22a6960a0"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "status": "M\ttests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "exists": true,
+      "length": 11378,
+      "sha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "baseBlobId": "b33d532d3deaebcd4f3b3318e8a7d4f7542df5ae"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "status": "M\ttests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "exists": true,
+      "length": 3634,
+      "sha256": "C0589AE10CA8AC280CC0BAF3CEEF52745117AB488F3A6154DF984CA66D6CDE99",
+      "baseBlobId": "843d5c7733e19121530aa6471d262fcac7dfea27"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "status": "M\ttests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "exists": true,
+      "length": 103517,
+      "sha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "baseBlobId": "d6cc56c84c5ef16bad3808a066552985bb5b8c3e"
+    }
+  ],
+  "untracked": [
+    {
+      "path": "docs/receipts/_hv-remediate-latest.txt",
+      "length": 97,
+      "sha256": "5B3F9C541FA9E4F5B3D219966767393C3F915CB4FE8FDC9D125B5E944E928BE3"
+    },
+    {
+      "path": "docs/receipts/_sessionlife-resume-latest.txt",
+      "length": 98,
+      "sha256": "C709700916926974A9A1C22CAF97C478C53E15A3177F47F28E90FE6D3B421C38"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/BLOCKER-mcp-storage-unreachable.txt",
+      "length": 1176,
+      "sha256": "AF7557C52D5A6615C7F440842DB2BB270BE940E78A58972C34ECB3FB0428CACD"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/S0-SESSIONLIFE-proof.txt",
+      "length": 383,
+      "sha256": "EB049FF420E6F8FBECB580B6B169AB22DC86698EABB69736066B6B170320A5B3"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/TODO-35-DoneFalse-proof.txt",
+      "length": 300,
+      "sha256": "FD2DCD14FFA9F7EA0A34E6868AF7AA32CFA20F35E86AE25538FF84EBD6A019CE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/health.txt",
+      "length": 305,
+      "sha256": "8D82BBC7489DC89C0496DD362BE9C62954B162B8361ED58D8F83AECB2B58D715"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/id-counts.txt",
+      "length": 34,
+      "sha256": "B3E737DEA31BFB6335435E05D4FEA0DCE9F3C83D9533EFA9B1A5281EF681C3F7"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-recap.txt",
+      "length": 1360,
+      "sha256": "D71EF5C095A07772C5C8FAAD3308BCDB1D4DE508AFB8E65F880BC29AFD4BF179"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-plan.md-extract.txt",
+      "length": 48,
+      "sha256": "268FA9DF6C58C39405615CB1900E3B3BEC2FEA4191D05D57F56F609B2AC11409"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-root-plan.txt",
+      "length": 48,
+      "sha256": "268FA9DF6C58C39405615CB1900E3B3BEC2FEA4191D05D57F56F609B2AC11409"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-beginTurn.txt",
+      "length": 319,
+      "sha256": "204BE3A132C1D426B64F70DAB8C6835DB477A2AA9A53D4DBD260254DA8FB4F96"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-bootstrap.txt",
+      "length": 130,
+      "sha256": "9263D220B3D6A5EA80889DD21A1F5F4511A7D5FD792257E85A296D6CEE6703DE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-completeTurn.txt",
+      "length": 166,
+      "sha256": "EEE798224119CB253397BAA28389EE3B2A3D2EE6FFE5AA640E1CC795B353D83F"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+      "length": 273,
+      "sha256": "1CBAE80AC1FAFB5FABB4809BC733DFF5D22E0CD0E0A7AC85E31EF2ACAB066DCC"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+      "length": 273,
+      "sha256": "1B240A1864D2BC9C523C2AED08DC6A05D9D40501865B6BD0232142F441ABDE14"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+      "length": 273,
+      "sha256": "C8500E068A87563E0E6CBA0F1FFAA9DEF3F7141CDFDB0AC436A3D1BC242CFE1A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+      "length": 273,
+      "sha256": "C709617B5BF24627F5B73BB1B4AD4F59D7250334EF5CF13E7427463AD622A3CA"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+      "length": 273,
+      "sha256": "C3CBBDAD17E3AA8A862477DE1721653E1DC16FB8DC9DA49B57FD0B2C188DAC70"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-invoke-log.txt",
+      "length": 1324,
+      "sha256": "583AD2E7C102C7A38EED2474BAB9F738D55EE65D4A513BC8D52CB887AE4D6EF6"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-MCP.txt",
+      "length": 274,
+      "sha256": "CB8BAEC9EFE2FB70655B5D9F73711FF0422193E2BFC434083E47E82F7A733749"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-SESSIONLIFE.txt",
+      "length": 274,
+      "sha256": "77FE1F6952CBF44EA064C02798E036F6ABC4DF324ED96E626171BC38B808DBEF"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-MCP.txt",
+      "length": 276,
+      "sha256": "D0F86D80780A6C2A35470BF726E133E8705A722CC5F2B6DB0E93CF52319E4D43"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-SESSIONLIFE.txt",
+      "length": 276,
+      "sha256": "7CBEF06444F4D2F2936293C48F48D5D6177171C4FAC008CD67C4774C5D476845"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-MCP.txt",
+      "length": 274,
+      "sha256": "094DD82988968A0FC5F1D29D701A315FB07FB9B31A3751792DCFFDCF92505549"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-SESSIONLIFE.txt",
+      "length": 274,
+      "sha256": "693E27CC67647B320E728B445704F6A13A21DCF7A6A765236772C5C50119A179"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-queryHistory.txt",
+      "length": 278,
+      "sha256": "2EA348B23DAE2B868053D79EA04C3EFE4B28758A35B2C0FC60B9F85F09859434"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-request-id.txt",
+      "length": 39,
+      "sha256": "404EB29898831128F79B69F67EC3E9BC052AE66D0CD1F8B0E982EA5E9E54FD93"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-session-id.txt",
+      "length": 41,
+      "sha256": "BE8599D16CA82B8D3859EC5ECEC6AD0EA592196625C2CE2055B2B9BCDE4AD424"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-BUG-TRIAGE-false.txt",
+      "length": 265,
+      "sha256": "100F950AEB9A6D3CC4F451BA86004D5E2D560C83F8AE833DC10E07A5D6BE7DDE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-SESSIONLIFE.txt",
+      "length": 265,
+      "sha256": "45E69180C013EB5AE430BEA3D922F3A98B3BFB87F2827694B785E774E0A2142D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-section-BUG-TRIAGE.txt",
+      "length": 265,
+      "sha256": "1E19D0F117B2D2A0A737BBB289855067563E9303DBCDF96262CE5160D060D2CD"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-updateTurn.txt",
+      "length": 164,
+      "sha256": "5C189443B4ABB853262AED0C5D847BB17681300770320C86520D4E6461B2B63A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/plan-checkbox-update.txt",
+      "length": 179,
+      "sha256": "F329038CC3721B047020C335DC11FDA84DB1F8FCC925515EDCC978554F338714"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/scratch-path.txt",
+      "length": 102,
+      "sha256": "B3704CC8F3F94F73F89CCEB618370C4541E7E75B5E4AC1C22767AD37645358CA"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/state-dump-depth6.json",
+      "length": 47098,
+      "sha256": "8E2C8B2C1DEA642DA23A3F2420972565E05D29DF74E86C52C885E173FB043C0D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/state-keys.txt",
+      "length": 511,
+      "sha256": "FDE3011642470372AC8D815001C39D083B22191470EBD70D0B01B6784CDF0329"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/01-health-sql-final.txt",
+      "length": 125,
+      "sha256": "F3B4CE4D15F5336293B84A05755686355FE3D1915236903D0BEC50C6A0451EF6"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/01-health-sql.txt",
+      "length": 405,
+      "sha256": "024C612529A460534FB7A70065175931BDDB7CFBF8F5741FFFED1361E61B3359"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/S0-SESSIONLIFE-proof.txt",
+      "length": 1579,
+      "sha256": "AF51D189DD632102A3E5E1E0E7E42D18B0C68AF43BD434EB01848D5C47F71534"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/SESSIONLOG-HV-turn.txt",
+      "length": 753,
+      "sha256": "12C38537D4F003A90FE1BF49383E2391B9AC393CF4D3BD79F4BF535D5ACDC947"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/TODO-35-DoneFalse-proof.txt",
+      "length": 1227,
+      "sha256": "BFB8461BE710BAA5D8011B5F11EF4EFFFCCE054E879C114AF1CF55CE12A0B8A5"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/cache-clear.txt",
+      "length": 65,
+      "sha256": "D002E2E08C56040BEF9AC792041DE95DB5745EBF24B99021B13B0BE96D88571D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/diag-boot.txt",
+      "length": 130,
+      "sha256": "DCB7BA53FF2DF97FF3EB1723BEAF1E3F1032B7BF97C0454EB9A94B33811A28BD"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/diag-qh.txt",
+      "length": 15141,
+      "sha256": "DA09C25B97FE99F6F59DCBB6C535C88FB81E51D2CE916C0027C4FD336761F44D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-begin.txt",
+      "length": 999,
+      "sha256": "13DE08E54E132BC7DE194C0F2C7B01A6AE6DAC87B12C09BBE780AD2A67E4BDDE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-boot.txt",
+      "length": 132,
+      "sha256": "455A93512B94E31B66A2C7835E95F0C5D2EEBFE904CDCDFD61DFCAE036A74791"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-complete.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-open.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-qh.txt",
+      "length": 280,
+      "sha256": "2534EF8D0191909F81E8423A8D2D6FDF18F5018B3B7A40ECC918E39E2323CF32"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-update.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/hv-turn-body.txt",
+      "length": 448,
+      "sha256": "E7B9D846027155E908D6736DADB9A8A71D68B3A473AC1E6E291F18434B2DC4C7"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn.txt",
+      "length": 355,
+      "sha256": "51BF79E150FE33899B3EC826457E446F82254643CBABF5A8F4C18CAF620B0ECA"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn3.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap.txt",
+      "length": 130,
+      "sha256": "7864F4467F83E6751759AD89686D4326206D1F07FFE88C855578FAD0DD010EC4"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap2.txt",
+      "length": 130,
+      "sha256": "307EE2C6E92545E5E2BD42A8C5CE31C8708DEBA6317D6693C56F3C9B41762BC6"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap3.txt",
+      "length": 132,
+      "sha256": "7E53F767667AC61AD6632BF6C2A310E78FBC104E25675FED7BF79941B4D3FB16"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-completeTurn3.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+      "length": 1168,
+      "sha256": "81D801AB4BCFE034949DED18CF5D1113BFF4BAAB44DD2E9345248F5FE726817A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+      "length": 1236,
+      "sha256": "151A87C5F6DCF24C9106E8060F38C81FA80865A0BE8EC2A5CBAB3532F60030DA"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+      "length": 1166,
+      "sha256": "A082CE9953BF32E7B36D3DDBD7001CC0685B38D0A012E1709253451EB06D34A0"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+      "length": 1207,
+      "sha256": "9E5BA7F74EE6AE8B4F817D571773BB2671DB453F8C1E193BA675D5CC18A2BB6C"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+      "length": 989,
+      "sha256": "9FADEB65868C7BC0EA1BFF7C59D447002ABD8F62792247545CD396116EBB4C35"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-001.txt",
+      "length": 597,
+      "sha256": "A73C7167804BA65F3B4748CE8E9E6472DDC06AB0EC38A1143A2C093502C0BAF3"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-002.txt",
+      "length": 574,
+      "sha256": "C9145DC8C0A71570EA0EDF6A3B0C8E34EA6D75E068E0E97B5E3D35517B4EB44E"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-003.txt",
+      "length": 591,
+      "sha256": "A4A543949365A6D7051342A7E1C728B5C4C015C2F367B8D14C8B3C97CB3F139D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-004.txt",
+      "length": 621,
+      "sha256": "48DF2ED8AFF0D58FDCD67617DB7EEF977251491B24CE0FCA36F0A30A3D46128B"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-005.txt",
+      "length": 597,
+      "sha256": "36018420AF22F7B5A598F034E9392309F58F9A7394DC39955D53F9A61DEC9471"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSION-LIFE-001.txt",
+      "length": 295,
+      "sha256": "E9429B6BE60E988902DDB8D983F0CB7383D1130DC8049A6E14A82E744D531241"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-001.txt",
+      "length": 672,
+      "sha256": "85DB3CAF60FE005D93B6AE08226B5898A437C3EB2D11D87C5E79790EE3DC2C0E"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-002.txt",
+      "length": 728,
+      "sha256": "D231AD9DE9007C980E10DB0F8C653830877A1AB4EE9F69B971A60166F296536C"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-003.txt",
+      "length": 644,
+      "sha256": "DA87E19F1C635A08DCD29FA12BC8A67CC33C6DEC4836D1B6CA95D1A41DBE4535"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-004.txt",
+      "length": 698,
+      "sha256": "87EDB0AEF37B6E322AF945F3AAE20C0ADBF8ECD85F67AD3F6AE54FCC7E465164"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-005.txt",
+      "length": 742,
+      "sha256": "CEE777FC123BEBC910AFC06A62CCFBB7DEFF011D58FB119C5C6674CD03DE1046"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-invoke-log.txt",
+      "length": 6075,
+      "sha256": "5008C1246C050B1840299628741CDC119FB8C8E8DB10B381EBEBBB4A561A8548"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-MCP.txt",
+      "length": 333753,
+      "sha256": "E2F0F5CE9D057CAF5637449DE9B6F986AB4605C32E922433A3A6340CBB9117A9"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-SESSIONLIFE.txt",
+      "length": 141,
+      "sha256": "4CE369CB413FA4458CAE94F255435FCDC2394B56AFB703664E0C2DB4B2D657AC"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listMappings.txt",
+      "length": 109276,
+      "sha256": "989BEF5A0089E5C4B3B20A463C1164DA5525D83A7F1A38158BBB281D1A49FCE1"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listTest-SESSIONLIFE.txt",
+      "length": 141,
+      "sha256": "B5DA2F64077F2EE2852E63537111DE4156DCA5DCE599B05DC75E4BC358E64A01"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listTr-SESSIONLIFE.txt",
+      "length": 141,
+      "sha256": "B6B61637B6FB9003153AD38F96984BDD018EBD70198274AC95F6DB4AA6434DDE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-mapping-001.txt",
+      "length": 338,
+      "sha256": "C1D0CF4353B43406A8F471C96E91193C137F15E9DDBB2D9C45679DABA43C6CFF"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-openSession3.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory-durable.txt",
+      "length": 15140,
+      "sha256": "414AFCB9CD6D71A58FFDDA76F7A4A08C96CEF29E8ED7CF1458848A211C73CC7F"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory3.txt",
+      "length": 27832,
+      "sha256": "3E69372B172DB46CD009C13FFE9C260E4E348252F36F74B302B67404E49A6553"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id-durable.txt",
+      "length": 31,
+      "sha256": "B02AB00123B2A8295E364799741351F21D8F16EFBE78BDCECF01D39F7849CD35"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id.txt",
+      "length": 35,
+      "sha256": "E8A992A1F4C45A781982E948AFDDB947B18EF90B3BDE94E768BB87F3E95863E0"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id-durable.txt",
+      "length": 32,
+      "sha256": "EDF861C437788E3D23A70DEF20606F443C2598470ED2040749FB363866A43225"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id.txt",
+      "length": 41,
+      "sha256": "3AE52FFC5BAED0E88026614673224D46F5FAC6249D90291DEFD6121729E9D81B"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-BUG-TRIAGE-false.txt",
+      "length": 234494,
+      "sha256": "682FDC9F48943658053ECB818E36DB0BA8B4CAAE5CB7541EFFFC88F32D5B9079"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-SESSIONLIFE-false.txt",
+      "length": 141,
+      "sha256": "C35100E3223F8139ECCD327044E709F7C0A9D1592E53EB6CF3D732E355A6DA47"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-072.txt",
+      "length": 3148,
+      "sha256": "EA7AAD50FDD93B5B14EF1B756DBE690424FFAB8DA09D9B3BF5148D3C9D8E8E92"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-082.txt",
+      "length": 3120,
+      "sha256": "C79754BD3E634512F05C54FC7F57D90A7CCA77358D1C1C0E94368771390AC69F"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-085.txt",
+      "length": 3984,
+      "sha256": "B0FCC53C990677BDC17A439E5CD846BB819B8EC1DC88315A7FEFA9B5E9068538"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-086.txt",
+      "length": 4133,
+      "sha256": "BC62CA80D701C6B1177DF9414780D1EEECF9F4D209A1D3396E88164B946C10F9"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-097.txt",
+      "length": 5633,
+      "sha256": "82A120C63CD0B311D697F3C64062BA7612490F9563D64CD6039CE4086B694E82"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-121.txt",
+      "length": 1876,
+      "sha256": "07BA2505565E31589FEF7691717774F2111615E80E2BCE6084DE2A709559F3B5"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-122.txt",
+      "length": 4717,
+      "sha256": "0FE19614D2DBDA66B461BB2AB451558461AA579BB5C910AB68D217580497B2A2"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-139.txt",
+      "length": 173932,
+      "sha256": "DAF72F51265F0F257F24542EDF1ACA63EA2E3F48D03C1642338F8A3F955C8966"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-160.txt",
+      "length": 3585,
+      "sha256": "87A43C8DE3D316675CA326D49D39078B25F42B7401B110E4CABA060F3A3B3674"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-163.txt",
+      "length": 2471,
+      "sha256": "6C5E8F5D6EC4350DE6DCA7CBB992142AEA0CC95189963C9BA6E2A4C4CD0BC028"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-164.txt",
+      "length": 4136,
+      "sha256": "88CE3AABB9DC4FCFF81CC1A9D9C19FEF100E381773E238560BDB977B5F60B89F"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-165.txt",
+      "length": 3395,
+      "sha256": "1DB0BB5188F9FCD2865332E91FF9E930A2CD406397A65B6B7668918495A49947"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-166.txt",
+      "length": 2950,
+      "sha256": "8AA87F5408169D29DD87E4303ED98AF1227836BF3C8653A91E6331F66D813BC9"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-session-log-false.txt",
+      "length": 88057,
+      "sha256": "83E25FA4EC6E3BE7885CC746194521384207A3DC22A0999BB037A3729653F80A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-sessionlog-false.txt",
+      "length": 173085,
+      "sha256": "FF248128564D9F1444B1AA274E8404B76576B313AFA4257846D20724BB489BF7"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-165.txt",
+      "length": 3395,
+      "sha256": "B66563D96D3073BF32BE375F371F46C5CC43451BF07C4998D5CBADDDBA9E1AE0"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-170.txt",
+      "length": 3640,
+      "sha256": "2178D8BE50698C81DD5C2CBDDF842C032B5E349734A4A6C54DE1F7E96B52D4F0"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-171.txt",
+      "length": 3813,
+      "sha256": "EE9AC64234FEFE17DE5232A2D22B68FBBD504B8916E5DFD9FCE76F8758B1C278"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-172.txt",
+      "length": 3187,
+      "sha256": "2C56419040A039F99B9B7981805C9D287BEBBAE655E3F35A8B06452A12A55050"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-173.txt",
+      "length": 3163,
+      "sha256": "7BC0BE25175E7E2A0D02552C3CB8DF22A46BC9B21C95D9EA77B0C4F728D6D838"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-175.txt",
+      "length": 2952,
+      "sha256": "99997BDDFB2EF7FD0D6E5E563613CD298174480A8122FBD397C2DA71AB184900"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-180.txt",
+      "length": 3093,
+      "sha256": "B10465A8A7EEC4268F1673FA562C4721FC1DD46F28330BFF0EE3218DF841424B"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-181.txt",
+      "length": 3245,
+      "sha256": "09D3E4B7DFEC72BA991AA79A40378EAFED8592A2AA5B494F558E383195444D1A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-182.txt",
+      "length": 2964,
+      "sha256": "BFFEDCE128688C5900D8886474510C366B8851BDB1E777CF2F7F2AA91AB6A913"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-184.txt",
+      "length": 2880,
+      "sha256": "5741ABBDAB0AF8E3F26478653CFFD6F55A9113BA8DD88817D5E59D7A44D2491A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-185.txt",
+      "length": 3350,
+      "sha256": "32F37127788EF12E71931D61315D57D4563E9D1643248ECDE378DEF95FCF21FB"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-186.txt",
+      "length": 2943,
+      "sha256": "C3A87579FC546356C932AEF76B5A0871451C17C42FA2A325AE13AAD66BDE7684"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-198.txt",
+      "length": 2984,
+      "sha256": "DBFEC613F0EE84CEACF43DD9DCD052FAABE069EA0A9C28D5BB002A259BB8A5C2"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-199.txt",
+      "length": 3294,
+      "sha256": "869B5046E1CFD8E5CA16661AD57F80FB8458BC0AC753FCA9A523C315358F679B"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-200.txt",
+      "length": 4627,
+      "sha256": "713F39CCEAF1C62E244504BEDF0019F088EBC616BC8211E803793306D5C9F443"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-202.txt",
+      "length": 3448,
+      "sha256": "1098DD6ED7427B1E86C51A2AF7F6AF8C58232C6CCA4CDC120121E198E8C7418D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-204.txt",
+      "length": 3856,
+      "sha256": "C9A306CEFE3D05ABB1ADDE708D4F5D66DADEF596607D533442C315FA3A87D48A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-205.txt",
+      "length": 3130,
+      "sha256": "16B6A4DC290193689476FF42295D4A90A41BAEF856F16EF1C7C6B139ECDDF40F"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-208.txt",
+      "length": 3272,
+      "sha256": "B253457D4DCEACD6063F110F67072EB9F4762720436950F6B9FA17B4AB5C6BAE"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-210.txt",
+      "length": 3546,
+      "sha256": "C3E8FE57E937E2CFFF74CCB68E49855E1C72A698AF7037FA62667B0A0F9B19F2"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-213.txt",
+      "length": 3456,
+      "sha256": "D337E022D74611102C6BB29B9C05AE2399982E6B7C5D946965CA3329DAB54425"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-214.txt",
+      "length": 2689,
+      "sha256": "1F10C947C2DA9D2C6795927A099AFD3F05B191A19B2FB77397CB02FA6737003D"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-221.txt",
+      "length": 3251,
+      "sha256": "E57CC63B22FA63BA058EF633D02D4913891BBE785BB6C22E8C0B773B6743B15A"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-226.txt",
+      "length": 4529,
+      "sha256": "2FCA0FA8D3457B0A4582194C581166BE65220822C290E7D4293B7BA4B61482B0"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-229.txt",
+      "length": 3710,
+      "sha256": "F6904FFCEC84F6A459A86E0B2EE33D710D141E2A54105292D23A69157CE47B29"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-232.txt",
+      "length": 3362,
+      "sha256": "C1CAE7AA7A5C2579AFE269888EE6D85DA7469C9C9ACA8C49358BE6142AB87007"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-234.txt",
+      "length": 3027,
+      "sha256": "70690318E311B20F260A498577161832EF05970EE127B42F0B462B009B9798A8"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-236.txt",
+      "length": 3572,
+      "sha256": "51E5ECAB3CF66A86133B1AF2262C7B25911F2D4B7FA270296AC2DADE06007BBD"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-239.txt",
+      "length": 3131,
+      "sha256": "6936DBAAEE8E493D7553844EB1C202D7DCCDF8C9660277DAB9192059C5ED19DA"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-240.txt",
+      "length": 4162,
+      "sha256": "BEADBC928A8BC1DC513C5D009CADECDD89DBDBEB8F3E91DF19DDE8530F7E0047"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-241.txt",
+      "length": 2811,
+      "sha256": "D4906738638C495E206B9758D8AB23155F7AEB25BF57CFA002E2D7597C250D90"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-243.txt",
+      "length": 2678,
+      "sha256": "D1DFC36241474F4280183B3F23E4406D35F31411B6CEF2C29588A517AECD15A6"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-244.txt",
+      "length": 2520,
+      "sha256": "F353612B4547E3A3FE27D4BDB35FE91408DAD65345E81164B2FC6727F7219EF9"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-245.txt",
+      "length": 3234,
+      "sha256": "9A16D23FBAE5424069EB696CC5D3AB79682F7FC0B29400F917D9DB9240857712"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-246.txt",
+      "length": 3966,
+      "sha256": "CDB9CDAF23700C020A3938764E1B8492E07319CAC4FC8027D2B70294CE39AE3E"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-updateTurn3.txt",
+      "length": 5,
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/plan-doc-candidates.txt",
+      "length": 3406,
+      "sha256": "95D9C24B6F96ADFF01C293FA5D652B990858BD4697637AADE9A72027712B9297"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/scoped-35-count.txt",
+      "length": 16,
+      "sha256": "2CB861334C811BF9EA557431B8A7FAE4D543AE0E65700D26C55F71A093469785"
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/scoped-35-ids.txt",
+      "length": 560,
+      "sha256": "1E5338C66F8989B10B3D44639FAEEBB4FDBF02D66DD01E5BBC560F97EF192BF4"
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031139Z-sessionlife-resume.request.jsonl",
+      "length": 1405,
+      "sha256": "EECF747996987D8F181308417BEAF2F1345C14A272C11873280F291C198ED253"
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031139Z-sessionlife-resume.response.jsonl",
+      "length": 521,
+      "sha256": "B10A8A776462F78D3CBA09E7F42DD0AAC633A2616DBD54BB8AA9B142866CD1AC"
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.request.jsonl",
+      "length": 1102,
+      "sha256": "A6E9D3B6C1391435545CA23359BEE8CAA14D02F9F3AB957D9F097A8EFEA89D55"
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.response.jsonl",
+      "length": 7844,
+      "sha256": "BB77FEF64658A8BF3B65B2C427CFD38BAA8DDB731C2A9CA88F007C19C573F88F"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/_TurnTransactionsClient.cs",
+      "length": 3781,
+      "sha256": "7774074DDCF840D86CBD66D6247FD960248309567AD50E03E55C0A9906C13017"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/_beginTurn-excerpt.txt",
+      "length": 6651,
+      "sha256": "B2592EAF0F3363CDF3203B108E85D6354473CE5AFEDD5C8A6DFF5F94F75139EF"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-candidate.txt",
+      "length": 1392,
+      "sha256": "9BE43A7604E108D600F26453F496646DC112E93617F37733B63D877D85637FCB"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-from-recap.txt",
+      "length": 1360,
+      "sha256": "D71EF5C095A07772C5C8FAAD3308BCDB1D4DE508AFB8E65F880BC29AFD4BF179"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-parent-plan.txt",
+      "length": 48,
+      "sha256": "268FA9DF6C58C39405615CB1900E3B3BEC2FEA4191D05D57F56F609B2AC11409"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-path-rg.txt",
+      "length": 52,
+      "sha256": "BB96ECE78A06763EC2B3D3AF9AD3D6C43F104A192D19D8D8D3174FE64E1B4315"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-path-tools.txt",
+      "length": 102,
+      "sha256": "46772BCFA916F7467564154FE4D2B294261E728A9ED2093561CE03199798625B"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-pid.txt",
+      "length": 17,
+      "sha256": "20D55472CB0F29A1A2962B316651FE9D6F5ECF0A5E8686237A588B8570ACCD39"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-poll-final.txt",
+      "length": 94,
+      "sha256": "E56C7C3D5F928424654677F524D9233BDA08AC930624EB72476E330167734184"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-poll.txt",
+      "length": 20683,
+      "sha256": "0E82FDC18EA174F1066E113E801F04B9179967F91EFAA81FF4179FCD679DC906"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-console.txt",
+      "length": 1426,
+      "sha256": "865ECF3E9CA32E152A1E5B16B1A89258ADB67F635CED6AA7614D92DEB7CC29F2"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-stderr.txt",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt1-rg-fail.txt",
+      "length": 66669,
+      "sha256": "5AC5D845B1B866B94EDCE3283D0F21A31C28926BEF12A6E09D10494ED79C9D6C"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt2-pluginint-50fail.txt",
+      "length": 215025,
+      "sha256": "C13454E6D8DAB1AF9CC1DDC884690633D54A8A3527992B6D6DA2505261FC64E1"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-fail1-rg-missing.txt",
+      "length": 431,
+      "sha256": "C263AAF50614EF805812B25562DFA0DC0164A869DB09AD8033FDAAD47C22D7E3"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-projects.txt",
+      "length": 4767,
+      "sha256": "8FC6A8AE8E567BC856AE335B1680327A4338B536BCAF32CB5FFFE2270881BA6C"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-summary.txt",
+      "length": 196,
+      "sha256": "1502580B280049DA056E42895A8012DC2D046861F28B0099C556CCE32C88DF06"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test.txt",
+      "length": 67878,
+      "sha256": "3279CE4DBDAA94C745B2AF85D2C399AA0BBE2E4AD897EB7BFC13E4184DF21B77"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/dirty-tree-summary.txt",
+      "length": 3691,
+      "sha256": "481F57E1520CA2DECA05B19C4C4824036332A9D633E122D0E8382640800038C3"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-ff8f.yaml",
+      "length": 992,
+      "sha256": "E3AA5E8F6FAF3A074E537B5ECB7046842C807CD8B6BA0B97E6185D3E3D31E2B2"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-quarantine-note.txt",
+      "length": 408,
+      "sha256": "8096EA8DFC34B34589A03BDF08013052FCE076056C2E5A4763AEAEA5A9BE4B2A"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/gate-status.txt",
+      "length": 1238,
+      "sha256": "9A8E650A41418A3129D8F3043A95FB330D308F6FAC9BE48A08A934BC21DA0736"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/goal-plan-copy.md",
+      "length": 5149,
+      "sha256": "9E4417512D29565A5CEFB755697B32423CD4064B61285556D706AAAE589F6F46"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-beginTurn.txt",
+      "length": 133,
+      "sha256": "9815D16D09CEA9424A37D4EBEE12D458F5106E263DA1DAB0D20DB6632F689713"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap.txt",
+      "length": 256,
+      "sha256": "A24C73FD142F28FE0B066EA418AAF93D99A5B01D9D2687FA3C654E63A2B703FF"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap2.txt",
+      "length": 127,
+      "sha256": "422F4033554C66C2ABD4DE2251D9BFCE6D1CCBCA662F0A50A7C352B7544121DB"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-FR-MCP-SESSIONLIFE.txt",
+      "length": 325,
+      "sha256": "C1BCC91ED00491E7701FF0BFC7CA38BB6E85A3B7B0371F17C53FC7B7C4519914"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-SESSIONLIFE.txt",
+      "length": 325,
+      "sha256": "A8231E1746D15BCB69C1421D4E785C64FEAB70A11F32E6334183AE1130590F29"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-session-lifecycle.txt",
+      "length": 325,
+      "sha256": "62AB23345267F0C92E69D7E2F437D0F85AEBCB5EFAD28256253F5A50F35DF98B"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-sessionlog-lifecycle.txt",
+      "length": 325,
+      "sha256": "C1296DE723BC66455164FA8917255DF20A3EA4E666A2B3179A226EC1FEA60A03"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-request-id.txt",
+      "length": 32,
+      "sha256": "D779F35C0F5E15A677C888C5FB51B88F8ABC8F280FF1BA1E616FE1B3FA2F744A"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-session-id.txt",
+      "length": 40,
+      "sha256": "B8F2CF59C08BE40DF0F4195F60BD9469322DDF54C1DE3DEB26B95CC934993DB7"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-todo-probe.txt",
+      "length": 7942,
+      "sha256": "583FED0E57910DA208BB096669B3FC92FFAC88149A5F2CDAEF0D92212F26D804"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-console.txt",
+      "length": 22841,
+      "sha256": "66C97EA16B90348644786BE344844AE78D37398BE218B952B4809D59BFC47FD5"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-summary.txt",
+      "length": 159,
+      "sha256": "D8D4F8B20AE0F427148DD7201A9EF197E1A00D4B60A2A50082BC6AE04554D82C"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.transcript.txt",
+      "length": 27136,
+      "sha256": "588138CE219717B6C0316C986262B3A963A59BDC1604784AD0854F0286D276F3"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.txt",
+      "length": 11734,
+      "sha256": "03EF49E454983E9981529C1E0E3C68F96568AFF510FF290F0C88E09B5CCAC027"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-pid.txt",
+      "length": 7,
+      "sha256": "CFED826F43276082AA6BE942ADDC43DE633F91D79F2FB3FC0528223C5B8B24D5"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll-final.txt",
+      "length": 159,
+      "sha256": "D8D4F8B20AE0F427148DD7201A9EF197E1A00D4B60A2A50082BC6AE04554D82C"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll.txt",
+      "length": 1635,
+      "sha256": "3BA034C3EC423977DC0AA0AAE910F13CCB643E7EFBB5D3EB350ABD540E7AD2AF"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll2.txt",
+      "length": 621,
+      "sha256": "2E97CCD1C790387C6F19FC0F93E449C0C7408D56007EDD1B609405BB8EBA665B"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-console.txt",
+      "length": 22841,
+      "sha256": "66C97EA16B90348644786BE344844AE78D37398BE218B952B4809D59BFC47FD5"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-stderr.txt",
+      "length": 3774,
+      "sha256": "D31D8D93C6615550F504BFEDB0497360C4052029372BFA3B32C3E11B6E6ABD4A"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-fail-extract.txt",
+      "length": 10141,
+      "sha256": "CD417BD821D57A3DD77DDA1E7EA93D7D35CB244517FC03B29514003DCD0B737A"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-console.txt",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-hits.txt",
+      "length": 12,
+      "sha256": "5F2BB1B52B93ECDA505BBE52C3470FB3BA89A943D156701D1D69F04B248CFDA0"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-pid.txt",
+      "length": 18,
+      "sha256": "0776BB6ECAED38E449A91FE086E9F427BAE8B4CD8E1CFA0DA896E9E81865A386"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-stderr.txt",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe.txt",
+      "length": 2103,
+      "sha256": "B88F1605EDD4693E97A63C5A3FA54F734F082C77A23CCC88A969BBF2DE766094"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-used.txt",
+      "length": 113,
+      "sha256": "14CE52CA720493E00F9D5E03183CAE8C92B51458A69B70594DDA2556065CF48A"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.err.txt",
+      "length": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.txt",
+      "length": 7,
+      "sha256": "A83005914600536C41EC1D734BF13D783D5894206B4CA092F94E760E84390941"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/scratch-path.txt",
+      "length": 100,
+      "sha256": "5E2C6D252579276A381E29E81973A7C55DC4109254F25AFEE37A879E2674F02B"
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/turntransactions-temp-disable.txt",
+      "length": 476,
+      "sha256": "6F4853AB183D6E65DD131CC95AC772E090FDEE36C8348907B832BC3FD1DED87F"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "length": 3524,
+      "sha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "length": 17546,
+      "sha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "length": 12471,
+      "sha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A"
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "length": 7144,
+      "sha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7"
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "length": 4019,
+      "sha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "length": 220,
+      "sha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "length": 6063,
+      "sha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "length": 5561,
+      "sha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "length": 1934,
+      "sha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6"
+    }
+  ],
+  "preservation": {
+    "beforeManifest": "source-worktree-before.json",
+    "pathAndContentMatch": true,
+    "mismatchCount": 0,
+    "mismatches": []
+  }
+}

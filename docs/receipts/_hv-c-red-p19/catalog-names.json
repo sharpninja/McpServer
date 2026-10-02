@@ -1,0 +1,24 @@
+{
+  "TimestampUtc": "2026-08-22T09:02:59.6407804Z",
+  "EnabledCount": 8,
+  "RepositoryNames": [
+    "mcpserver-codex-plugin",
+    "mcpserver-claude-code-plugin",
+    "mcpserver-claude-cowork-plugin",
+    "mcpserver-copilot-plugin",
+    "mcpserver-grok-plugin",
+    "mcpserver-cline-plugin",
+    "mcpserver-cline-v2-plugin",
+    "mcpserver-opencode-plugin"
+  ],
+  "ExpectedEight": [
+    "mcpserver-codex-plugin",
+    "mcpserver-claude-code-plugin",
+    "mcpserver-claude-cowork-plugin",
+    "mcpserver-copilot-plugin",
+    "mcpserver-grok-plugin",
+    "mcpserver-cline-plugin",
+    "mcpserver-cline-v2-plugin",
+    "mcpserver-opencode-plugin"
+  ]
+}

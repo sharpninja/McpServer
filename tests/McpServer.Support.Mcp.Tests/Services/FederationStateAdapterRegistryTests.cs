@@ -14,7 +14,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>Tests for federation state adapter registration and snapshots.</summary>
 public sealed class FederationStateAdapterRegistryTests
 {
-    private const string WorkspacePath = @"F:\GitHub\McpServer";
+    private const string WorkspacePath = @"Q:\__mcp_unit_test__\McpServer";
 
     /// <summary>All required domains are covered and explicit exemptions are local-only.</summary>
     [Fact]
@@ -153,6 +153,9 @@ public sealed class FederationStateAdapterRegistryTests
 
         Assert.Equal("3", snapshot.Version);
         Assert.Contains("Federation plan", snapshot.PayloadJson, StringComparison.Ordinal);
+        using var document = JsonDocument.Parse(snapshot.PayloadJson);
+        Assert.DoesNotContain(document.RootElement.EnumerateObject(), property =>
+            string.Equals(property.Name, "audit", StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>TODO adapter applies signed HTTP create operations through the TODO service.</summary>

@@ -1,0 +1,21 @@
+{
+  "Exists": true,
+  "Length": 16345,
+  "LastWriteTimeUtc": "2026-08-22T02:09:17.2911026Z",
+  "OverallVerdictLineMatch": true,
+  "MentionsCGreenP7P10": true,
+  "MentionsTheoryEachScenario": true,
+  "MentionsAbsent": true,
+  "MentionsNoMatchLiteral": false,
+  "MentionsP11MatchCountZero": true,
+  "MentionsP11NamedTestsPresentFalse": false,
+  "MentionsDoNotRequireP11": true,
+  "MentionsGrepTestsSrc": true,
+  "EmDash": false,
+  "EnDash": false,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPassCount": 21,
+  "JsonP11NamedTestsPresent": false,
+  "JsonPhase": "C-green-P7-P10"
+}

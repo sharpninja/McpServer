@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142252Z-ce11
+  result:
+    id: BUG-TRIAGE-171
+    title: SessionLog SubmitAsync 503 burst after large failsafe replay; 2s drain cannot recover
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Out-of-band replay of Grok session_submit failsafe YAML (drain hardcodes a 2s SubmitAsync timeout in Get-ReplMethodTimeoutSeconds while ReplFailsafeDraining) posted 41 records, many taking 73-88s, then 11 consecutive client.SessionLog.SubmitAsync calls failed with method_invocation_error HTTP 503 code backend_unavailable starting 2026-08-21T14:56:02Z. /health later echoed a nonce and stayed Healthy (TR-MCP-HEALTH-003 liveness; storage-only faults do not flip overall status). Remaining YAML stayed on disk until a later 120s-timeout replay succeeded (first leftover 76s for GrokCode-20260818T182741Z-plugin-session, then 1s). This is a live write-path burst, not the SQL error 19 classifier gap. SubmitAsync still full-graph upserts (FindExistingSessionAsync loads turns/actions/tags/dialog/commits unbounded; only SaveChangesAsync is under StorageCommandBudget 5s). Budget expiry and RetryLimitExceededException map to retryable backend_unavailable, so slow or contended saves look like storage-down while liveness stays Healthy. Drain cannot self-heal these payloads.
+    - 'Triage group: triage-group-d7d0df4bfbee15f1'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Sequential client.SessionLog.SubmitAsync of real failsafe session_submit payloads does not return HTTP 503 backend_unavailable while the process is up and /health remains Healthy with storage reachable.'
+    - '- When SaveChanges hits lock, busy, or the 5s StorageCommandBudget without a connection-class outage, the response is not backend_unavailable (busy/retryable persist, not storage-down).'
+    - '- workflow.failsafe.drain replays a session_submit that takes longer than 2s (observed 73-88s, leftover 76s) without aborting as backend-down and without leaving the YAML stranded after storage answers.'
+    - '- A 503 backend_unavailable burst leaves failsafe YAML on disk and a later in-process drain with storage answering replays it (no drainAttempts increment, no completed latch, no quarantine for this abort).'
+    - '- /health nonce echo and overall Healthy stay as liveness-only; if writes are 503 because storage is actually down, the health payload storage field is unreachable.'
+    - 'Implementation notes:'
+    - '- Do not treat this as BUG-TRIAGE-167 / SQL error 19 classification. Observed code is backend_unavailable (StorageCommandBudgetExceededException, RetryLimitExceededException, or connection-class SqlException), returned by SessionLogController.ClassifiedError or GlobalExceptionHandlerMiddleware.'
+    - '- Root overlap with sessionlog-remediate-001 RC1/RC4: plugin still POSTs a full UnifiedSessionLogDto; SessionLogService.FindExistingSessionAsync is unbounded; only SaveChangesBudgetedAsync is 5s. Prefer incremental persist (AppendDialogAsync) and/or busy-timeout/retry over raising the 5s budget blindly.'
+    - '- Get-ReplMethodTimeoutSeconds returns 2 when $script:ReplFailsafeDraining and Method is client.SessionLog.SubmitAsync (TR-MCP-PERSIST-003: do not block getFr/getTr). Large records must drain on a long-timeout background path, not the 2s in-request walk.'
+    - '- FR-MCP-FAILSAFE-001 / FR-MCP-SESSIONPERSIST-002 already require 503 degrade-queue and drain retry after storage answers; this incident is the live proof that 2s drain plus full-session upsert cannot meet that.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

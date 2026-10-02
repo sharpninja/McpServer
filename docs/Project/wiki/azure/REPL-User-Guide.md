@@ -4,6 +4,8 @@
 
 The MCP REPL (Read-Eval-Print Loop) is a command-line tool for interacting with the Model Context Protocol server. It provides both interactive mode for human users and agent STDIO mode for programmatic integration with AI agents.
 
+REPL TODO, session-log, requirements, and memory mutations persist without keyserver signing on `develop` and on the live Linux box MCP (FR-MCP-173). Keep live `Mcp:TurnTransactions:Enabled=true` for QuadBrain. Keyserver remains QuadBrain/brain-slot only.
+
 ## Installation
 
 ### Install as .NET Global Tool
@@ -262,6 +264,73 @@ payload:
       functionalRequirements: [FR-AUTH-001]
       technicalRequirements: [TR-AUTH-001]
 ```
+
+### workflow.memory.*
+
+Durable agent memories for the active workspace. Prefer these methods over raw `/mcpserver/memory` when the plugin or REPL is available. See `docs/context/memory.md`.
+
+**Common Methods:**
+- `workflow.memory.list` — Effective / Global / Workspace list
+- `workflow.memory.get` — Get one visible memory by id
+- `workflow.memory.add` — Compat create
+- `workflow.memory.update` — Compat update
+- `workflow.memory.remove` — Compat remove
+- `workflow.memory.remember` — Persist a multi-layer memory
+- `workflow.memory.recall` — Ranked recall by meaning or keyword
+- `workflow.memory.explore` — Neighborhood from a seed id or query
+- `workflow.memory.consolidate` — Dry-run (default) or apply sleep/merge
+- `workflow.memory.promote` — Promote a session-log or context source
+- `workflow.memory.revert` — Restore snapshot N
+
+### Example: Remember then recall
+
+```yaml
+type: request
+payload:
+  requestId: req-20260919T090000Z-memory-remember-001
+  method: workflow.memory.remember
+  params:
+    content: Prefer tokens_total as the memory bench primary metric.
+    type: decision
+    scope: Workspace
+    updatedBy: CursorGrok
+```
+
+```yaml
+type: request
+payload:
+  requestId: req-20260919T090000Z-memory-recall-001
+  method: workflow.memory.recall
+  params:
+    query: memory bench primary metric
+    topN: 5
+```
+
+All eight official plugins inject Effective memories as a `REQUIRED MEMORIES` block (raw content only; empty set is `- None`) at the host-supported request boundary. Each plugin ships `skills/memory` plus `memory-descriptor.json`.
+
+### workflow.handoff.*
+
+Handoff ingestion, run inspection, and approval. Every method delegates to `IHandoffIngestionService`. See `docs/Handoff-Ingestion.md` and `docs/handoffs/example.md`.
+
+**Common Methods:**
+- `workflow.handoff.ingest` — Ingest a Path, Content, or Artifact source
+- `workflow.handoff.get` — Inspect a persisted run by `runId`
+- `workflow.handoff.approve` — Revalidate the stored draft, then create or reject
+
+### Example: Ingest a Path source
+
+```yaml
+type: request
+payload:
+  requestId: req-20260822T042008Z-handoff-ingest-001
+  method: workflow.handoff.ingest
+  params:
+    sourceKind: Path
+    path: docs/handoffs/example.md
+    mode: DraftOnly
+```
+
+DraftOnly never mutates TODO state. Custom `promptTemplateId` values are rejected. Replay uses the effective prompt identity (`handoff-todo-draft/v1` by default) unless `force=true`.
 
 ### workflow.requirements.*
 
@@ -801,6 +870,7 @@ payload:
 - **API Documentation**: `docs/context/api-capabilities.md`
 - **Session Log Schema**: `docs/context/session-log-schema.md`
 - **TODO Schema**: `docs/context/todo-schema.md`
+- **Handoff Ingestion**: `docs/Handoff-Ingestion.md`
 - **Module Bootstrap**: `docs/context/module-bootstrap.md`
 - **Agent Guide**: `docs/REPL-AGENT-GUIDE.md`
 - **Agent Plugin Availability**: `docs/AGENT-PLUGIN-AVAILABILITY.md`

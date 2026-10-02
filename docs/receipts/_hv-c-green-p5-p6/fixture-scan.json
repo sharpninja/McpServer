@@ -1,0 +1,92 @@
+{
+  "StartAsyncThrowsNotImplemented": false,
+  "DisposeAsyncThrowsNotImplemented": false,
+  "StartAsyncHasWebApplication": false,
+  "StartAsyncHasWebApplicationFactory": false,
+  "StartAsyncHasKestrel": false,
+  "StartAsyncHasCreateBuilder": false,
+  "FileNameDotnet": true,
+  "ArgumentListAddsSupportDll": true,
+  "ProcessStartCall": true,
+  "AllocateFreePortNever7147": true,
+  "FixtureHardcodes7147PortAssignment": true,
+  "IsolatedTempPrefix": true,
+  "WorkspaceNotRepoRootAssignment": true,
+  "DatabaseUnderDataPath": true,
+  "MarkerWaitRequiresSignatureAndApiKey": true,
+  "HealthNonceEchoWait": true,
+  "KillEntireProcessTree": true,
+  "DeletesRootPathRecursive": true,
+  "CreateTrustedClientFactory": true,
+  "TestsAssertNotEqual7147": true,
+  "TestsAssertDbPathNot7147": true,
+  "TestsAssertWorkspaceNotRepo": true,
+  "TestsStartupTimeoutOneSecond": true,
+  "TestsHealthReadyQueryAsync": true,
+  "SkipLiteralInTests": false,
+  "HealthReadyTestPresent": true,
+  "AdapterCapturesExecutableInAnyCs": false,
+  "AdapterCapturesExecutableFiles": [],
+  "CsprojReferencesSupportMcp": true,
+  "CsprojReferencesClient": true,
+  "NamedMethods": [
+    {
+      "Name": "ServerFixture_SelectsFreePort",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_StartupTimeout",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_CreatesMarker",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_SignatureAndNonceTrust",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_DeterministicCleanup",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": false
+    },
+    {
+      "Name": "ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+      "Present": true,
+      "FactNearby": true,
+      "SkipNearby": false,
+      "TraitSkip": false,
+      "QueryAsyncNearby": true
+    }
+  ],
+  "NamedPresentCount": 7,
+  "CsFileCount": 8
+}

@@ -1,12 +1,13 @@
 {
   "name": "memory_add",
-  "description": "Add a memory item. Defaults to Workspace scope.",
+  "description": "Add a memory item. Defaults to Workspace scope. Global scope accepts an empty, omitted, or configured default workspace path and stores Scope=Global with no workspace owner. Workspace scope requires a real workspace path.",
   "inputSchema": {
     "type": "object",
     "properties": {
       "workspacePath": {
-        "description": "Workspace path (required)",
-        "type": "string"
+        "description": "Workspace path. Optional for Global scope: empty, omitted, or the configured default workspace stores a Global memory with no workspace owner. Required for Workspace scope.",
+        "type": ["string", "null"],
+        "default": null
       },
       "category": {
         "description": "Memory category",
@@ -42,7 +43,6 @@
       }
     },
     "required": [
-      "workspacePath",
       "category",
       "text"
     ]

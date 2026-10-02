@@ -1,0 +1,13 @@
+Mcp:
+  Instances:
+    default:
+      RepoRoot: Q:\__mcp_unit_test__\McpServer
+      Port: 7147
+      TodoStorage:
+        Provider: database
+    alt-local:
+      RepoRoot: Q:\__mcp_unit_test__\McpServer
+      Port: 7148
+      TodoStorage:
+        Provider: sqlite
+        SqliteDataSource: todo.db

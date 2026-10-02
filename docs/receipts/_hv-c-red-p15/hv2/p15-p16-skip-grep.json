@@ -1,0 +1,12 @@
+{
+  "P15HitCount": 3,
+  "P15Hits": [
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:203:public async Task Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind)",
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:234:public async Task Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind)",
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:263:public async Task Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind)"
+  ],
+  "P16HitCount": 0,
+  "P16Hits": [],
+  "SkipHitCount": 0,
+  "SkipHits": []
+}

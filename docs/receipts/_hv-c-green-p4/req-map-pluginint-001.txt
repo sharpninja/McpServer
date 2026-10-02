@@ -1,0 +1,15 @@
+type: result
+payload:
+  requestId: req-20260822T003239Z-23ad
+  result:
+    items:
+    - frId: FR-MCP-PLUGININT-001
+      trId: TR-MCP-PLUGININT-001
+      createdAt: 2026-08-22T00:32:41.5716842+00:00
+    - frId: FR-MCP-PLUGININT-001
+      testId: TEST-MCP-PLUGININT-001
+      createdAt: 2026-08-22T00:32:41.5724400+00:00
+    totalCount: 2
+  deprecated: true
+
+---

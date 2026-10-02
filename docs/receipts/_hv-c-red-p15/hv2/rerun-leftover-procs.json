@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-08-22T05:46:53.2468218Z",
+  "Count": 2,
+  "Items": [
+    {
+      "ProcessId": 10924,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    },
+    {
+      "ProcessId": 46812,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    }
+  ]
+}

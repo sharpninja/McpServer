@@ -1,0 +1,9 @@
+{
+  "environment": "Development",
+  "deployTarget": "UpdateService",
+  "serviceName": "McpServer",
+  "sanitizedFixtures": true,
+  "failed": 0,
+  "skipped": 0,
+  "logFile": "harness.log"
+}

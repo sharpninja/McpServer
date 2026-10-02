@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "timestampUtc": "2026-09-28T07:15:26.6256389Z",
+  "sessionId": "Codex-20260927T191745Z-plugin-session",
+  "requestId": "req-20260928T020045Z-sessionlife-r4-execution",
+  "guardQuery": "req-20260928T071155Z-fb4b",
+  "readbackQuery": "req-20260928T071417Z-5db0",
+  "status": "in_progress",
+  "existingActionsPreserved": 31,
+  "existingDecisionStringsPreserved": 33,
+  "addedDecisionActions": 33,
+  "addedDecisionDialogs": 33,
+  "actionChecks": [
+    {
+      "order": 32,
+      "matches": 1
+    },
+    {
+      "order": 33,
+      "matches": 1
+    },
+    {
+      "order": 34,
+      "matches": 1
+    },
+    {
+      "order": 35,
+      "matches": 1
+    },
+    {
+      "order": 36,
+      "matches": 1
+    },
+    {
+      "order": 37,
+      "matches": 1
+    },
+    {
+      "order": 38,
+      "matches": 1
+    },
+    {
+      "order": 39,
+      "matches": 1
+    },
+    {
+      "order": 40,
+      "matches": 1
+    },
+    {
+      "order": 41,
+      "matches": 1
+    },
+    {
+      "order": 42,
+      "matches": 1
+    },
+    {
+      "order": 43,
+      "matches": 1
+    },
+    {
+      "order": 44,
+      "matches": 1
+    },
+    {
+      "order": 45,
+      "matches": 1
+    },
+    {
+      "order": 46,
+      "matches": 1
+    },
+    {
+      "order": 47,
+      "matches": 1
+    },
+    {
+      "order": 48,
+      "matches": 1
+    },
+    {
+      "order": 49,
+      "matches": 1
+    },
+    {
+      "order": 50,
+      "matches": 1
+    },
+    {
+      "order": 51,
+      "matches": 1
+    },
+    {
+      "order": 52,
+      "matches": 1
+    },
+    {
+      "order": 53,
+      "matches": 1
+    },
+    {
+      "order": 54,
+      "matches": 1
+    },
+    {
+      "order": 55,
+      "matches": 1
+    },
+    {
+      "order": 56,
+      "matches": 1
+    },
+    {
+      "order": 57,
+      "matches": 1
+    },
+    {
+      "order": 58,
+      "matches": 1
+    },
+    {
+      "order": 59,
+      "matches": 1
+    },
+    {
+      "order": 60,
+      "matches": 1
+    },
+    {
+      "order": 61,
+      "matches": 1
+    },
+    {
+      "order": 62,
+      "matches": 1
+    },
+    {
+      "order": 63,
+      "matches": 1
+    },
+    {
+      "order": 64,
+      "matches": 1
+    }
+  ],
+  "dialogChecks": [
+    {
+      "contentSha256": "4D39D6B7EA30CA30C459DA1EDE52CE574419FFA1DFC92B3C91BBD59C8E804E69",
+      "matches": 1
+    },
+    {
+      "contentSha256": "893658797DCBF17A0B54DCE5C05E2A43000969C184149F10FF38C58CB43818A4",
+      "matches": 1
+    },
+    {
+      "contentSha256": "63401BE93820C952FA50077F311F8CB4F0594F7B28CA43BEA627D2BBB2360071",
+      "matches": 1
+    },
+    {
+      "contentSha256": "B35307C62BC52C9B8740C02055038DF77852CDDCFADCA6EC6985B559ED109BAE",
+      "matches": 1
+    },
+    {
+      "contentSha256": "FFE897B24F2C4AA63EB78FB6BCA811D05B343AAF4FE502D89EDE2D634EAD2AF7",
+      "matches": 1
+    },
+    {
+      "contentSha256": "E951A899F67D6C156415411D2C3A175C0D489B13B2EB54C7FEB02392E60A52E2",
+      "matches": 1
+    },
+    {
+      "contentSha256": "B8AD3EE9A46CEE2BBB8BEC83A47D85395E74C88BA3C61CFD190E1A68B3561631",
+      "matches": 1
+    },
+    {
+      "contentSha256": "549BCB10CECCE6170D4D66CE0A00831FB7AB935DC446825C701AE6FA7F4260EF",
+      "matches": 1
+    },
+    {
+      "contentSha256": "59C5C8BC2795C76A5C4D5E62A9C5D969F34A843928FA51E16B5A8BBE61EC896B",
+      "matches": 1
+    },
+    {
+      "contentSha256": "0DD417F3237A5EFB5E80BE796D91D610952144DE23C97BE567934435F8DFE238",
+      "matches": 1
+    },
+    {
+      "contentSha256": "7EB7EED2E49F7A8F9D2942F47041065A01D69C5DACB968F8ECFA92B57C90EDCE",
+      "matches": 1
+    },
+    {
+      "contentSha256": "87546CAA35D73BF2DC8A3AE16B60427B718C0E5D87B94E12A11999FD6DF31722",
+      "matches": 1
+    },
+    {
+      "contentSha256": "1D443079CF5FE6892859DA866D4C47F7EBD3F89667FE977F4C6A5843C528AC50",
+      "matches": 1
+    },
+    {
+      "contentSha256": "0B498D3DB43828AE1F6D4EA7D4E3F9AF3B3C5D5437CC79577CC579D80EB28235",
+      "matches": 1
+    },
+    {
+      "contentSha256": "BC587EF587AAD450F349C760A5D2619D0B6921BD77520875618A360A91D15FEF",
+      "matches": 1
+    },
+    {
+      "contentSha256": "1ED29062E15B3B972DBDAF99F3944430FCB9CC2E1DD88DD2187D54D5349E45BB",
+      "matches": 1
+    },
+    {
+      "contentSha256": "88F27EDBC1EB74FF4E3E0F13F66B047BB2B332F93B6B92F2AAE7BA3280A6EEEB",
+      "matches": 1
+    },
+    {
+      "contentSha256": "30E3EA580145CFA1C7F402698125444D6B4223E5AAE97866EF439CC15F912817",
+      "matches": 1
+    },
+    {
+      "contentSha256": "366BBC4999DD9F00B8F1574344029D132111A487AE5C234A93D2B3643E878463",
+      "matches": 1
+    },
+    {
+      "contentSha256": "43F177C752F6052D71CB159F32D7634611AA825E1EEC8F9CAED0A945DB449358",
+      "matches": 1
+    },
+    {
+      "contentSha256": "FC699433A99694B253C963E78A245DCA28D13ECAE88FE99D292C5F16D811ECF2",
+      "matches": 1
+    },
+    {
+      "contentSha256": "28E7FC8E109C97D0FA3DA6D0E337C1E17FCB0F6F3B5363481CD113CE4B4910D2",
+      "matches": 1
+    },
+    {
+      "contentSha256": "2CFC2CD806DF0D4A17FC299790248C490C5056BF4848CA9A97D3FAD6E415CA4F",
+      "matches": 1
+    },
+    {
+      "contentSha256": "075241D114F035C9F230532A1FAF48CA92D72DD9FDE12ED8A4898B9EB5C87C53",
+      "matches": 1
+    },
+    {
+      "contentSha256": "E302501E2B11B480377CADF2C54334F63BC4577A893EB17EFB2F29DAF3E7280B",
+      "matches": 1
+    },
+    {
+      "contentSha256": "2DDF26A016906C9E327802A16B56CC31EB96B9270000119EF710F9E60D4AC8F1",
+      "matches": 1
+    },
+    {
+      "contentSha256": "B2B1A112AB1192320214D74CB3070C9F55861B053E90CD6137B92250F26EEF69",
+      "matches": 1
+    },
+    {
+      "contentSha256": "8EF73BF9585A31E3BC14F4C6C16A7E7BCF156EDDFA6301D8250C7284005B02E1",
+      "matches": 1
+    },
+    {
+      "contentSha256": "5FE4504F5AD3009639FDA07B191CBC606462C417E45EEA045968FE07052D248C",
+      "matches": 1
+    },
+    {
+      "contentSha256": "C368E4E885BE27574FA4DFF18ED9AF3CC642AED137B29EDC63441F0F7E6F3F8D",
+      "matches": 1
+    },
+    {
+      "contentSha256": "4268749546D669C5082BB524D5B31EEFF2149A21D2B3878C60F2212D411FA4C9",
+      "matches": 1
+    },
+    {
+      "contentSha256": "503087F0406AB672AFEB56A46FB8C2534D2E90D3A899D45D602666FD40BB2B80",
+      "matches": 1
+    },
+    {
+      "contentSha256": "BD52C340E98F0028425871C47E7D5C3A4EDEAF9200F9839DBEC803AADC2812DB",
+      "matches": 1
+    }
+  ],
+  "oldActionChecks": [
+    {
+      "order": 1,
+      "exact": true
+    },
+    {
+      "order": 2,
+      "exact": true
+    },
+    {
+      "order": 3,
+      "exact": true
+    },
+    {
+      "order": 4,
+      "exact": true
+    },
+    {
+      "order": 5,
+      "exact": true
+    },
+    {
+      "order": 6,
+      "exact": true
+    },
+    {
+      "order": 7,
+      "exact": true
+    },
+    {
+      "order": 8,
+      "exact": true
+    },
+    {
+      "order": 9,
+      "exact": true
+    },
+    {
+      "order": 10,
+      "exact": true
+    },
+    {
+      "order": 11,
+      "exact": true
+    },
+    {
+      "order": 12,
+      "exact": true
+    },
+    {
+      "order": 13,
+      "exact": true
+    },
+    {
+      "order": 14,
+      "exact": true
+    },
+    {
+      "order": 15,
+      "exact": true
+    },
+    {
+      "order": 16,
+      "exact": true
+    },
+    {
+      "order": 17,
+      "exact": true
+    },
+    {
+      "order": 18,
+      "exact": true
+    },
+    {
+      "order": 19,
+      "exact": true
+    },
+    {
+      "order": 20,
+      "exact": true
+    },
+    {
+      "order": 21,
+      "exact": true
+    },
+    {
+      "order": 22,
+      "exact": true
+    },
+    {
+      "order": 23,
+      "exact": true
+    },
+    {
+      "order": 24,
+      "exact": true
+    },
+    {
+      "order": 25,
+      "exact": true
+    },
+    {
+      "order": 26,
+      "exact": true
+    },
+    {
+      "order": 27,
+      "exact": true
+    },
+    {
+      "order": 28,
+      "exact": true
+    },
+    {
+      "order": 29,
+      "exact": true
+    },
+    {
+      "order": 30,
+      "exact": true
+    },
+    {
+      "order": 31,
+      "exact": true
+    }
+  ],
+  "otherSemanticFieldChanges": [],
+  "timestampInstantPreserved": true,
+  "serializationNote": "ConvertFrom-Json normalized the guard timestamp to local DateTime while fresh YAML returned an ISO string; UTC tick comparison confirms identical timestamp, not a server mutation.",
+  "failsafeCleared": true,
+  "deviation": "Earlier decisions were saved in designDecisions but not separately as required decision dialog items and corresponding design_decision actions. This late additive reconciliation repairs current audit completeness; it does not claim immediate original compliance.",
+  "preflight": "First guard halted before any mutation because inherited LASTEXITCODE=1 from an rg no-match was mistaken for wrapper status; subsequent call explicitly initialized and checked wrapper success plus result envelope. Nullable absent dialog collection correctly counted as zero.",
+  "noCodeChanges": true
+}

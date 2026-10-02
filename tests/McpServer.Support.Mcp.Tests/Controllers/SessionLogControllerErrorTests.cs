@@ -48,6 +48,44 @@ public sealed class SessionLogControllerErrorTests
         Assert.DoesNotContain("See the inner exception", json, StringComparison.Ordinal);
     }
 
+    /// <summary>TEST-MCP-SESSIONLIFE-004: dialog DbUpdateException is classified, not a bare 500.</summary>
+    [Fact]
+    public async Task AppendDialogAsync_DbUpdateException_ReturnsClassifiedEnvelope()
+    {
+        var service = Substitute.For<ISessionLogService>();
+        var inner = new SqliteException("UNIQUE constraint failed: SessionLogTurns.RequestId", 19);
+        service.AppendProcessingDialogAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(),
+                Arg.Any<CancellationToken>())
+            .Throws(new DbUpdateException(
+                "An error occurred while saving the entity changes. See the inner exception for details.",
+                inner));
+
+        var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
+        var items = new List<ProcessingDialogItemDto>
+        {
+            new() { Role = "model", Content = "classified dialog" },
+        };
+
+        var result = await controller.AppendDialogAsync(
+            "GrokCode",
+            "GrokCode-20260923T205606Z-life",
+            "req-20260923T205606Z-001-life",
+            items,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(409, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("conflict", document.RootElement.GetProperty("code").GetString());
+        Assert.Equal(inner.Message, document.RootElement.GetProperty("details").GetProperty("inner").GetString());
+        Assert.DoesNotContain("See the inner exception", json, StringComparison.Ordinal);
+    }
+
     /// <summary>REST validation returns the four-field envelope, not ProblemDetails-only.</summary>
     [Fact]
     public async Task SubmitAsync_MissingSourceType_ReturnsValidationEnvelope()

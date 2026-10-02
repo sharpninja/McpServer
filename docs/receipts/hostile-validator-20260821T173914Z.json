@@ -1,0 +1,84 @@
+{
+  "TimestampUtc": "2026-08-21T17:39:14Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-A completeness",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T161800Z.md",
+    "docs/receipts/hostile-validator-20260821T171357Z.md",
+    "docs/receipts/hostile-validator-20260821T172735Z.md"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 93,
+  "Completeness": 91,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T173330Z-p0a-plan",
+    "requestId": "req-20260821T173330Z-001-hostile-p0a-plan-completeness",
+    "turnId": 42680,
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T17:30:00Z totalCount=1 turn status=completed actions=6 designDecisions=4 dialog=3"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 10,
+    "FAIL": 5,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [
+    "A4: 172735Z FAIL list not closed; TEST-HANDOFF AC map / D0 remaining-gap inventory still incomplete; GetAndApprove_DelegateToSharedService still zero plan hits",
+    "A-expand: TEST-HANDOFF-004 AC1 omits Validate_InvalidFields_ProduceFieldDiagnostics and invents eight D1 new reds; TEST-HANDOFF-006 AC1 omits API ingest/get/approve, PublicSurfaces, and REPL dispatcher covering tests",
+    "B1: D0 remaining-gap classification still incomplete; 30s-while-drain B1 omission is closed",
+    "C: TEST-HANDOFF-004 AC1 and TEST-HANDOFF-006 AC1 not mapped to on-disk covering methods",
+    "D: P0-A DoD named-tests-for-remaining-AC not met"
+  ],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "Every TEST-HANDOFF-001..007 AC bullet has at least one method name; SupportedFormats, ForceTrue, AmbiguousHandoff, TodoServiceFailure are mapped." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "D0 lists all 21 HandoffIngestionServiceTests facts." },
+    { "id": "A3", "group": "A Requested", "verdict": "PASS", "summary": "B1 includes Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout." },
+    { "id": "A4", "group": "A Requested", "verdict": "FAIL", "summary": "172735Z FAIL class not closed: remaining unmapped covering tests for TEST-HANDOFF-004 AC1 and TEST-HANDOFF-006 AC1." },
+    { "id": "A4b", "group": "A Requested", "verdict": "PASS", "summary": "Dual P0-A/create/P0-B remain; PLAN-PLUGINHANDOFF-001 not found." },
+    { "id": "A4c", "group": "A Requested", "verdict": "PASS", "summary": "No skipped-test placeholders." },
+    { "id": "A4d", "group": "A Requested", "verdict": "PASS", "summary": "Hostile-after-red-before-implement remains for C groups and E/F/G." },
+    { "id": "A5", "group": "A Requested", "verdict": "PASS", "summary": "Listed greens not relabeled as new reds. Omission of other greens scored under A-expand/C/D." },
+    { "id": "A-expand", "group": "A Requested", "verdict": "FAIL", "summary": "Validate_InvalidFields and TEST-HANDOFF-006 API/REPL/get-approve covering tests have zero plan hits." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "FAIL", "summary": "D0 remaining-gap inventory incomplete; 30s B1 omission closed." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "Section 3 matched live todo_get and on-disk grep." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "MCP-only storage instruction present." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh-only / no Python named and followed in this review." },
+    { "id": "C", "group": "C Requirements", "verdict": "FAIL", "summary": "TEST-HANDOFF-004 AC1 and TEST-HANDOFF-006 AC1 not mapped to existing covering methods." },
+    { "id": "D", "group": "D Plan", "verdict": "FAIL", "summary": "P0-A DoD named-tests-for-remaining-AC not met." }
+  ],
+  "EvidenceAnchors": {
+    "pluginintLiveP0Done": true,
+    "pluginintLiveP1toP20Open": true,
+    "planPluginHandoffTodoExists": false,
+    "dbSetCount": 62,
+    "planDbSetCount": 62,
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "handoffIngestionServiceTestsFactCount": 21,
+    "supportedFormatsInPlan": true,
+    "forceTrueInPlan": true,
+    "ambiguousHandoffInPlan": true,
+    "todoServiceFailureInPlan": true,
+    "thirtySecondsWhileDrainInB1": true,
+    "validateInvalidFieldsInPlan": false,
+    "getAndApproveInPlan": false,
+    "publicSurfacesInPlan": false,
+    "replDispatcherRoutesInPlan": false,
+    "validateInvalidFieldsPath": "tests/McpServer.Support.Mcp.Tests/Services/HandoffTodoDraftValidatorTests.cs:13-42",
+    "getAndApprovePath": "tests/McpServer.Support.Mcp.Tests/Controllers/HandoffControllerTests.cs:34-53",
+    "publicSurfacesPath": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:79-109",
+    "replDispatcherPath": "tests/McpServer.Repl.Core.Tests/HandoffWorkflowTests.cs:15-48",
+    "testingRequirementsAc": "docs/Project/Testing-Requirements.md:19-52",
+    "planAcMap": "plan.md:476-490",
+    "planD0Facts": "plan.md:440",
+    "planB1ThirtySeconds": "plan.md:305"
+  }
+}

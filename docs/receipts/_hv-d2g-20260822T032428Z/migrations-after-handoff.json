@@ -1,0 +1,62 @@
+[
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260818142008_AddProductsStorage.cs",
+    "name": "20260818142008_AddProductsStorage.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:08.2305624Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260818142008_AddProductsStorage.Designer.cs",
+    "name": "20260818142008_AddProductsStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:08.2325711Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "name": "20260818205751_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "lastWriteTimeUtc": "2026-08-19T22:00:40.9541286Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\Migrations\\20260818205751_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "name": "20260818205751_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T20:57:51.3891289Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260818142028_AddProductsStorage.cs",
+    "name": "20260818142028_AddProductsStorage.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:28.6595692Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260818142028_AddProductsStorage.Designer.cs",
+    "name": "20260818142028_AddProductsStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:28.6595692Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260818205807_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "name": "20260818205807_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "lastWriteTimeUtc": "2026-08-19T22:00:40.9531312Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\Migrations\\20260818205807_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "name": "20260818205807_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T20:58:07.6710679Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260818142039_AddProductsStorage.cs",
+    "name": "20260818142039_AddProductsStorage.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:40.0138866Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260818142039_AddProductsStorage.Designer.cs",
+    "name": "20260818142039_AddProductsStorage.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T14:20:40.0138866Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260818205822_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "name": "20260818205822_AddSessionLogTagsAndAgentSessionHeaders.cs",
+    "lastWriteTimeUtc": "2026-08-19T22:00:40.9521300Z"
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\Migrations\\20260818205822_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "name": "20260818205822_AddSessionLogTagsAndAgentSessionHeaders.Designer.cs",
+    "lastWriteTimeUtc": "2026-08-18T20:58:22.8474953Z"
+  }
+]

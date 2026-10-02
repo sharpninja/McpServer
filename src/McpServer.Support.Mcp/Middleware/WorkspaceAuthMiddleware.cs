@@ -138,7 +138,13 @@ public sealed class WorkspaceAuthMiddleware
         }
 
         // ── API key path (agents only) ────────────────────────────────────────
-        var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
+        // FR-MCP-MEMORY-001: a cleared or unresolved workspace context is the server default workspace.
+        // Null and empty paths both authenticate with the configured default (Mcp:RepoRoot) full key.
+        // Default (anonymous) keys stay read-only; this does not grant them write access.
+        var workspacePath = workspaceContext.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            workspacePath = configuration["Mcp:RepoRoot"];
+        workspacePath ??= string.Empty;
         var expected = string.IsNullOrWhiteSpace(workspacePath) ? null : tokenService.GetToken(workspacePath);
 
         if (expected is not null)
@@ -154,7 +160,7 @@ public sealed class WorkspaceAuthMiddleware
             if (tokenService.ValidateDefaultToken(workspacePath, provided))
             {
                 context.Items[IsDefaultKeyItem] = true;
-                if (s_readOnlyMethods.Contains(context.Request.Method))
+                if (IsReadOnlyRequest(context))
                 {
                     await _next(context).ConfigureAwait(false);
                     return;
@@ -237,6 +243,19 @@ public sealed class WorkspaceAuthMiddleware
             return false;
 
         return !s_readOnlyMethods.Contains(method);
+    }
+
+    /// <summary>
+    /// FR-MCP-MEMORY-011-26: Default keys may recall. POST /mcpserver/memory/recall is a read.
+    /// </summary>
+    private static bool IsReadOnlyRequest(HttpContext context)
+    {
+        if (s_readOnlyMethods.Contains(context.Request.Method))
+            return true;
+
+        var path = context.Request.Path.Value ?? string.Empty;
+        return HttpMethods.IsPost(context.Request.Method)
+            && path.Equals("/mcpserver/memory/recall", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

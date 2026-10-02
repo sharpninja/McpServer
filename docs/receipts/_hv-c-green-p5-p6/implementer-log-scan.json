@@ -1,0 +1,10 @@
+{
+  "Exists": true,
+  "Length": 2533,
+  "LastWriteTimeUtc": "2026-08-22T01:09:29.3016082Z",
+  "AfterCRedP5Agree": true,
+  "MentionsPassed7": true,
+  "MentionsFailed0": true,
+  "MentionsSkipped0": true,
+  "Tail": "  McpServer.GraphRag -> F:\\GitHub\\McpServer\\src\\McpServer.GraphRag\\bin\\Debug\\net10.0\\McpServer.GraphRag.dll\r\n  McpServer.Support.Mcp -> F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll\r\n  McpServer.PluginIntegration.Tests -> F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll\r\nTest run for F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll (.NETCoreApp,Version=v10.0)\r\nA total of 1 test files matched the specified pattern.\r\n\r\nPassed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 1 m 31 s - McpServer.PluginIntegration.Tests.dll (net10.0)\r\n"
+}

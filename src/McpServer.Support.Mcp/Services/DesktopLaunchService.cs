@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Services;
 /// FR-MCP-047/TR-MCP-DESKTOP-001: Shared desktop-launch service used by both the HTTP
 /// controller and the STDIO MCP tool surface.
 /// </summary>
-public sealed class DesktopLaunchService
+public sealed class DesktopLaunchService : IDesktopLaunchService
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
     {

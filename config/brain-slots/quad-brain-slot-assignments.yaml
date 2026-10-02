@@ -1,135 +1,139 @@
 version: 1
-generatedAtUtc: 2026-06-16T04:32:30.1994290Z
+generatedAtUtc: 2026-09-10T17:49:10.1638737Z
 workspacePath: F:\GitHub\McpServer
 runtimeCompatibility:
-  acceptedProviderKind: OpenAICompatible
-  reason: The current brain-slot runtime accepts OpenAI/OpenAICompatible providers; CLI assignments must be exposed through OpenAI-compatible local adapters.
+  acceptedProviderKind: Cli
+  reason: QuadBrain Cli slots use persistent Grok Build CLI and Codex CLI strategies (resume/session id), not HTTP OpenAI-compatible adapters.
   requiresExecutionGate: Mcp:BrainSlots:ExecutionEnabled=true
-  requiresLoopbackGate: Mcp:BrainSlots:AllowLoopbackEndpoints=true
+  requiresTurnTransactions: Mcp:TurnTransactions:Enabled=true
 appSettingsPatch:
   Mcp:
     BrainSlots:
       ExecutionEnabled: true
-      AllowLoopbackEndpoints: true
-      AllowedEndpointHosts:
-      - 127.0.0.1
-      - localhost
+      AllowLoopbackEndpoints: false
       DefaultTimeoutSeconds: 180
       MaxTimeoutSeconds: 300
-environment:
-  MCP_BRAIN_AOT_ENDPOINT: http://127.0.0.1:8311/v1
-  MCP_BRAIN_CLAUDE_CODE_ENDPOINT: http://127.0.0.1:8312/v1
-  MCP_BRAIN_CODEX_ENDPOINT: http://127.0.0.1:8313/v1
-  MCP_BRAIN_AOT_API_KEY: set outside source control
-  MCP_BRAIN_CLAUDE_CODE_API_KEY: set outside source control
-  MCP_BRAIN_CODEX_API_KEY: set outside source control
+      CliRunAs: kingd
+      CliWorkingDirectory: F:\GitHub\McpServer
+      Slots:
+        - SlotId: brain-slot-arbiter-of-truth-grok-build
+          Role: ArbiterOfTruth
+          DisplayName: Arbiter of Truth - Grok Build CLI grok-4.6 xhigh
+          ProviderKind: Cli
+          ModelId: grok-4.6
+          Endpoint: cli://grok-cli
+          CredentialReference: cli:interactive
+          PartyId: brain-slot:arbiter-of-truth
+          Enabled: true
+          TimeoutSeconds: 180
+          MaxOutputTokens: 4096
+          SystemPrompt: You are the ArbiterOfTruth brain slot. Reconcile committed role evidence, identify contradictions, require traceable support, and return the smallest defensible decision.
+          OrchestrationWeight: 1
+          ReplaceExisting: true
+        - SlotId: brain-slot-creativity-grok-build
+          Role: Creativity
+          DisplayName: Creativity - Grok Build CLI grok-4.6 xhigh
+          ProviderKind: Cli
+          ModelId: grok-4.6
+          Endpoint: cli://grok-cli
+          CredentialReference: cli:interactive
+          PartyId: brain-slot:creativity
+          Enabled: true
+          TimeoutSeconds: 180
+          MaxOutputTokens: 4096
+          SystemPrompt: You are the Creativity brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.
+          OrchestrationWeight: 1
+          ReplaceExisting: true
+        - SlotId: brain-slot-curiosity-engine-codex-cli
+          Role: CuriosityEngine
+          DisplayName: Researcher - Codex CLI gpt-5.6-sol xhigh
+          ProviderKind: Cli
+          ModelId: gpt-5.6-sol
+          Endpoint: cli://codex-cli
+          CredentialReference: cli:interactive
+          PartyId: brain-slot:curiosity-engine
+          Enabled: true
+          TimeoutSeconds: 180
+          MaxOutputTokens: 4096
+          SystemPrompt: You are the CuriosityEngine researcher brain slot. Find missing evidence, challenge assumptions, surface unknowns, and label which findings are ready for GraphRAG admission after transaction commit.
+          OrchestrationWeight: 1
+          ReplaceExisting: true
+        - SlotId: brain-slot-logic-codex-cli
+          Role: Logic
+          DisplayName: Logic - Codex CLI gpt-5.6-sol xhigh
+          ProviderKind: Cli
+          ModelId: gpt-5.6-sol
+          Endpoint: cli://codex-cli
+          CredentialReference: cli:interactive
+          PartyId: brain-slot:logic
+          Enabled: true
+          TimeoutSeconds: 180
+          MaxOutputTokens: 4096
+          SystemPrompt: You are the Logic brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.
+          OrchestrationWeight: 1
+          ReplaceExisting: true
+    TurnTransactions:
+      Enabled: true
+      RequiredForMutations: true
 slots:
-- slotId: brain-slot-arbiter-of-truth-grok-build
-  role: ArbiterOfTruth
-  roleAlias: AoT
-  assignedRuntime: Grok Build
-  modelId: grok-build
-  providerKind: OpenAICompatible
-  endpoint: http://127.0.0.1:8311/v1
-  endpointEnvironmentVariable: MCP_BRAIN_AOT_ENDPOINT
-  credentialReference: env:MCP_BRAIN_AOT_API_KEY
-  partyId: brain-slot:arbiter-of-truth
-  enabled: true
-  replaceExisting: true
-  upsertRequest:
-    role: ArbiterOfTruth
-    displayName: Arbiter of Truth - Grok Build
-    providerKind: OpenAICompatible
-    modelId: grok-build
-    endpoint: http://127.0.0.1:8311/v1
-    credentialReference: env:MCP_BRAIN_AOT_API_KEY
-    partyId: brain-slot:arbiter-of-truth
-    enabled: true
-    timeoutSeconds: 180
-    maxOutputTokens: 4096
-    systemPrompt: You are the ArbiterOfTruth brain slot. Reconcile committed role evidence, identify contradictions, require traceable support, and return the smallest defensible decision.
-    orchestrationWeight: 1
-    replaceExisting: true
-- slotId: brain-slot-curiosity-engine-claude-code-opus-4-8
-  role: CuriosityEngine
-  roleAlias: Researcher
-  assignedRuntime: Claude Code CLI
-  modelId: claude-code-cli-opus-4.8
-  providerKind: OpenAICompatible
-  endpoint: http://127.0.0.1:8312/v1
-  endpointEnvironmentVariable: MCP_BRAIN_CLAUDE_CODE_ENDPOINT
-  credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-  partyId: brain-slot:curiosity-engine
-  enabled: true
-  replaceExisting: true
-  upsertRequest:
-    role: CuriosityEngine
-    displayName: Researcher - Claude Code CLI Opus 4.8
-    providerKind: OpenAICompatible
-    modelId: claude-code-cli-opus-4.8
-    endpoint: http://127.0.0.1:8312/v1
-    credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-    partyId: brain-slot:curiosity-engine
-    enabled: true
-    timeoutSeconds: 180
-    maxOutputTokens: 4096
-    systemPrompt: You are the CuriosityEngine researcher brain slot. Find missing evidence, challenge assumptions, surface unknowns, and label which findings are ready for GraphRAG admission after transaction commit.
-    orchestrationWeight: 1
-    replaceExisting: true
-- slotId: brain-slot-creativity-claude-code-opus-4-8
-  role: Creativity
-  roleAlias: Creative
-  assignedRuntime: Claude Code CLI
-  modelId: claude-code-cli-opus-4.8
-  providerKind: OpenAICompatible
-  endpoint: http://127.0.0.1:8312/v1
-  endpointEnvironmentVariable: MCP_BRAIN_CLAUDE_CODE_ENDPOINT
-  credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-  partyId: brain-slot:creativity
-  enabled: true
-  replaceExisting: true
-  upsertRequest:
-    role: Creativity
-    displayName: Creativity - Claude Code CLI Opus 4.8
-    providerKind: OpenAICompatible
-    modelId: claude-code-cli-opus-4.8
-    endpoint: http://127.0.0.1:8312/v1
-    credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-    partyId: brain-slot:creativity
-    enabled: true
-    timeoutSeconds: 180
-    maxOutputTokens: 4096
-    systemPrompt: You are the Creativity brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.
-    orchestrationWeight: 1
-    replaceExisting: true
-- slotId: brain-slot-logic-codex-cli-gpt-5-5
-  role: Logic
-  roleAlias: Reasoner
-  assignedRuntime: Codex CLI
-  modelId: codex-cli-gpt-5.5
-  providerKind: OpenAICompatible
-  endpoint: http://127.0.0.1:8313/v1
-  endpointEnvironmentVariable: MCP_BRAIN_CODEX_ENDPOINT
-  credentialReference: env:MCP_BRAIN_CODEX_API_KEY
-  partyId: brain-slot:logic
-  enabled: true
-  replaceExisting: true
-  upsertRequest:
-    role: Logic
-    displayName: Logic - Codex CLI GPT-5.5
-    providerKind: OpenAICompatible
-    modelId: codex-cli-gpt-5.5
-    endpoint: http://127.0.0.1:8313/v1
-    credentialReference: env:MCP_BRAIN_CODEX_API_KEY
-    partyId: brain-slot:logic
-    enabled: true
-    timeoutSeconds: 180
-    maxOutputTokens: 4096
-    systemPrompt: You are the Logic brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.
-    orchestrationWeight: 1
-    replaceExisting: true
+  - SlotId: brain-slot-arbiter-of-truth-grok-build
+    Role: ArbiterOfTruth
+    DisplayName: Arbiter of Truth - Grok Build CLI grok-4.6 xhigh
+    ProviderKind: Cli
+    ModelId: grok-4.6
+    Endpoint: cli://grok-cli
+    CredentialReference: cli:interactive
+    PartyId: brain-slot:arbiter-of-truth
+    Enabled: true
+    TimeoutSeconds: 180
+    MaxOutputTokens: 4096
+    SystemPrompt: You are the ArbiterOfTruth brain slot. Reconcile committed role evidence, identify contradictions, require traceable support, and return the smallest defensible decision.
+    OrchestrationWeight: 1
+    ReplaceExisting: true
+  - SlotId: brain-slot-creativity-grok-build
+    Role: Creativity
+    DisplayName: Creativity - Grok Build CLI grok-4.6 xhigh
+    ProviderKind: Cli
+    ModelId: grok-4.6
+    Endpoint: cli://grok-cli
+    CredentialReference: cli:interactive
+    PartyId: brain-slot:creativity
+    Enabled: true
+    TimeoutSeconds: 180
+    MaxOutputTokens: 4096
+    SystemPrompt: You are the Creativity brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.
+    OrchestrationWeight: 1
+    ReplaceExisting: true
+  - SlotId: brain-slot-curiosity-engine-codex-cli
+    Role: CuriosityEngine
+    DisplayName: Researcher - Codex CLI gpt-5.6-sol xhigh
+    ProviderKind: Cli
+    ModelId: gpt-5.6-sol
+    Endpoint: cli://codex-cli
+    CredentialReference: cli:interactive
+    PartyId: brain-slot:curiosity-engine
+    Enabled: true
+    TimeoutSeconds: 180
+    MaxOutputTokens: 4096
+    SystemPrompt: You are the CuriosityEngine researcher brain slot. Find missing evidence, challenge assumptions, surface unknowns, and label which findings are ready for GraphRAG admission after transaction commit.
+    OrchestrationWeight: 1
+    ReplaceExisting: true
+  - SlotId: brain-slot-logic-codex-cli
+    Role: Logic
+    DisplayName: Logic - Codex CLI gpt-5.6-sol xhigh
+    ProviderKind: Cli
+    ModelId: gpt-5.6-sol
+    Endpoint: cli://codex-cli
+    CredentialReference: cli:interactive
+    PartyId: brain-slot:logic
+    Enabled: true
+    TimeoutSeconds: 180
+    MaxOutputTokens: 4096
+    SystemPrompt: You are the Logic brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.
+    OrchestrationWeight: 1
+    ReplaceExisting: true
 applyOrder:
-- brain-slot-arbiter-of-truth-grok-build
-- brain-slot-curiosity-engine-claude-code-opus-4-8
-- brain-slot-creativity-claude-code-opus-4-8
-- brain-slot-logic-codex-cli-gpt-5-5
+  - brain-slot-arbiter-of-truth-grok-build
+  - brain-slot-creativity-grok-build
+  - brain-slot-curiosity-engine-codex-cli
+  - brain-slot-logic-codex-cli

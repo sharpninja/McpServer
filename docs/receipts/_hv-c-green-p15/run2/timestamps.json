@@ -1,0 +1,56 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T053539Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:36:55.8921213Z",
+    "Length": 14977
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T053539Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:37:25.2468753Z",
+    "Length": 4421
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T060633Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T06:14:05.6080824Z",
+    "Length": 15669
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T060633Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T06:14:05.7743292Z",
+    "Length": 7653
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:40:18.7559535Z",
+    "Length": 13386
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:40:18.7559535Z",
+    "Length": 15466
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowResult.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 1549
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "Length": 68486
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixture.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+    "Length": 20101
+  }
+]

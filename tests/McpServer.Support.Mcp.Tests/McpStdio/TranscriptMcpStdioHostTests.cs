@@ -14,12 +14,9 @@ public sealed class TranscriptMcpStdioHostTests
     [Fact]
     public async Task SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts()
     {
-        var repositoryRoot = FindRepositoryRoot();
-        var executablePath = FindStdioExecutable(repositoryRoot);
+        var executablePath = FindStdioExecutable();
         var fixturePath = Path.Combine(
-            repositoryRoot,
-            "tests",
-            "McpServer.Support.Mcp.Tests",
+            AppContext.BaseDirectory,
             "Fixtures",
             "Transcripts",
             "real",
@@ -209,7 +206,7 @@ public sealed class TranscriptMcpStdioHostTests
         return JsonSerializer.Serialize(message);
     }
 
-    private static string FindStdioExecutable(string repositoryRoot)
+    private static string FindStdioExecutable()
     {
         var fileName = OperatingSystem.IsWindows()
             ? "McpServer.Support.Mcp.exe"
@@ -220,35 +217,7 @@ public sealed class TranscriptMcpStdioHostTests
         if (File.Exists(copiedExecutable))
             return copiedExecutable;
 
-        var sourceExecutable = Path.Combine(
-            repositoryRoot,
-            "src",
-            "McpServer.Support.Mcp",
-            "bin",
-            "Debug",
-            "net10.0",
-            fileName);
-        if (File.Exists(sourceExecutable))
-            return sourceExecutable;
-
         throw new FileNotFoundException("Could not locate the stdio host executable.", copiedExecutable);
     }
 
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln"))
-                && Directory.Exists(Path.Combine(directory.FullName, "src"))
-                && Directory.Exists(Path.Combine(directory.FullName, "tests")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not locate McpServer repository root.");
-    }
 }

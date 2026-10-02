@@ -1,0 +1,22 @@
+{
+  "Exists": true,
+  "Length": 16669,
+  "LastWriteTimeUtc": "2026-08-22T03:53:31.1975026Z",
+  "OverallVerdictLineMatchAgree": true,
+  "OverallVerdictLineMatchDisagree": false,
+  "MentionsCGreenP11P13": true,
+  "MentionsPassed54": true,
+  "MentionsFailed0": true,
+  "MentionsSkipped0": true,
+  "MentionsP14Absent": true,
+  "EmDash": false,
+  "EnDash": false,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPhase": "C-green-P11-P13",
+  "JsonAllPassed": 54,
+  "JsonAllFailed": 0,
+  "JsonAllTotal": 54,
+  "JsonP14Present": false,
+  "JsonAllSkippedConsole": 0
+}

@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194717_RepairTriageCreatedTodoWorkspace";
-    private const string WorkspacePath = "F:\\GitHub\\McpServer";
+    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
 
@@ -229,7 +229,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     }
 
     /// <summary>
-    /// Down round-trip: after migrating to head (backfills applied), migrating back to the
+    /// Down round-trip: after migrating through the 4NF slice, migrating back to the
     /// pre-slice schema reconstructs every decomposed JSON column from the child rows.
     /// </summary>
     [Fact]
@@ -243,7 +243,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260702193911_Decompose4nfAgentModelLists");
         }
 
         using (var db = CreateContext())

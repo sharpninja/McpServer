@@ -1,0 +1,2 @@
+?? docs/plans/PLAN-PLUGINHANDOFF-001.md
+?? tests/McpServer.PluginIntegration.Tests/

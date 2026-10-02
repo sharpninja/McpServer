@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142114Z-5bce
+  result:
+    id: TR-MCP-SESSIONLIFE-001
+    title: Plugin keeps degraded turn cache and honest hook status
+    description: Complete-ReplBeginTurnAfterPersist must not replace the turn file. Open-PluginTurn emits turn-opened-degraded while degraded. appendDialog 404 on a degraded local turn resubmits or queues session_dialog.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SESSIONLIFE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:15.4457771+00:00
+    updatedAt: 2026-09-24T14:21:15.4458685+00:00
+  deprecated: true
+
+---
+

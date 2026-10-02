@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142337Z-b277
+  result:
+    id: BUG-TRIAGE-234
+    title: Stop gate blocks completed turns on a stale session-state timestamp
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Close-PluginTurnIfNeeded (plugin-hook.ps1, invoked as stop-gate) hard-blocks when session-state.yaml timestamp or lastUpdated is older than 24 hours, before it inspects current-turn.yaml status. After sessionlog_complete_turn successfully completed req-20260917T120934Z-diagnose-full-suite-hang (turn 45181) in Codex-20260915T201211Z-r0-parity, stop-gate still emitted decision=block with 'stale cached session cannot be reused for req-20260916T103908Z-prompt-143b'. That requestId is read from the local current-turn.yaml pin and is unrelated to the completed server turn. Open-PluginTurn already refreshes lastUpdated on the same 24h condition and continues; stop-gate does not. There is no Pester coverage of this 24h short-circuit.
+    - 'Triage group: triage-group-a009b840bb53ffaf'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - "- After the active session-log turn is already completed (workflow.sessionlog.completeTurn or sessionlog_complete_turn succeeded), stop-gate must not emit decision=block with reason 'stale cached session cannot be reused for <requestId>'."
+    - '- A session-state.yaml timestamp or lastUpdated older than 24 hours must not by itself block stop when current-turn.yaml is missing, status=completed, or its turnRequestId is not the in-progress turn.'
+    - '- The block reason must not cite a stale pinned current-turn.yaml requestId that is unrelated to the turn that was just completed.'
+    - '- Pester seeds session-state.yaml with timestamp/lastUpdated older than 24 hours and current-turn.yaml status=completed (plus a variant whose pinned turnRequestId differs from the completed server request) and asserts stop-gate returns allow/empty JSON with no stale-cache block.'
+    - 'Implementation notes:'
+    - "- The defect is the 24h short-circuit in Close-PluginTurnIfNeeded in plugins/core/lib-ps/plugin-hook.ps1 (the 'stale cached session cannot be reused' Write-PluginJson). stop-gate.ps1 is only the generated wrapper; change the shared hook function."
+    - '- Move or drop that check so completed/absent current turns fall through to the existing allow path. Align with Open-PluginTurn, which refreshes lastUpdated on the same age condition instead of blocking.'
+    - '- Prefer lastUpdated for recency. Do not treat a static session-start timestamp as proof the live session cannot be reused.'
+    - '- If MCP-tool completeTurn can close the server turn without rewriting plugin current-turn.yaml, stop-gate must still allow when the local pin is stale rather than blocking on that pin.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

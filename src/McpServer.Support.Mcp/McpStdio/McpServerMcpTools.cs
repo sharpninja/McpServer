@@ -11,6 +11,7 @@ using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -67,6 +68,8 @@ public sealed partial class FwhMcpTools
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ITriageService? _triageService;
     private readonly IHandoffIngestionService? _handoffIngestionService;
+    private readonly IHostileReviewService? _hostileReviewService;
+    private readonly IWorkspaceValidationService? _workspaceValidationService;
     private readonly IAgentHelpConversationService _agentHelpService;
     private readonly ITranscriptIngestionService? _transcriptIngestionService;
     private readonly IDispatcher? _dispatcher;
@@ -105,7 +108,9 @@ public sealed partial class FwhMcpTools
         IAgentHelpConversationService? agentHelpService = null,
         ITranscriptIngestionService? transcriptIngestionService = null,
         IDispatcher? dispatcher = null,
-        IHandoffIngestionService? handoffIngestionService = null)
+        IHandoffIngestionService? handoffIngestionService = null,
+        IHostileReviewService? hostileReviewService = null,
+        IWorkspaceValidationService? workspaceValidationService = null)
     {
         _logger = logger;
         _db = db;
@@ -136,6 +141,8 @@ public sealed partial class FwhMcpTools
         _transactionOptions = transactionOptions;
         _triageService = triageService;
         _handoffIngestionService = handoffIngestionService;
+        _hostileReviewService = hostileReviewService;
+        _workspaceValidationService = workspaceValidationService;
         _agentHelpService = agentHelpService
             ?? throw new ArgumentNullException(nameof(agentHelpService));
         _transcriptIngestionService = transcriptIngestionService;
@@ -204,10 +211,10 @@ public sealed partial class FwhMcpTools
     private bool ShouldDeferContextMutation(out string error)
     {
         error = string.Empty;
-        if (_transactionCoordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_transactionCoordinator, "context.mutate"))
             return false;
 
-        var status = _transactionCoordinator.GetStatus();
+        var status = _transactionCoordinator!.GetStatus();
         if (status.Degraded)
         {
             error = string.IsNullOrWhiteSpace(status.Message)
@@ -457,9 +464,10 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>TR-MCP-MEMORY-006: Add a memory item in Global or Workspace scope.</summary>
-    [McpServerTool(Name = "memory_add"), Description("Add a memory item. Defaults to Workspace scope.")]
+    [McpServerTool(Name = "memory_add"), Description(MemorySurfaceCatalog.AddDescription)]
     public async Task<string> MemoryAdd(
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description(MemorySurfaceCatalog.CreateWorkspacePathDescription)]
+        [DefaultValue(null)] string? workspacePath,
         [Description("Memory category")] string category,
         [Description("Memory text")] string text,
         [Description("Memory scope: Global or Workspace (default Workspace)")] string? scope = null,
@@ -467,7 +475,6 @@ public sealed partial class FwhMcpTools
         [Description("Optional updater identity")] string? updatedBy = null,
         CancellationToken cancellationToken = default)
     {
-        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseMemoryScope(scope, MemoryScope.Workspace, out var parsedScope, out var error))
@@ -475,18 +482,29 @@ public sealed partial class FwhMcpTools
                 return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
             }
 
-            var request = new MemoryAddRequest
+            if (!TryOpenMemoryCreateWorkspace(workspacePath, parsedScope, out var workspaceScope, out var workspaceError))
             {
-                Id = id,
-                Category = category,
-                Scope = parsedScope,
-                Text = text,
-                UpdatedBy = updatedBy,
-            };
-            var result = _memoryMutations is null
-                ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
-                : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
-            return SerializeJson(result);
+                return SerializeJson(new MemoryMutationResult(
+                    false,
+                    workspaceError,
+                    FailureKind: MemoryMutationFailureKind.Validation));
+            }
+
+            using (workspaceScope)
+            {
+                var request = new MemoryAddRequest
+                {
+                    Id = id,
+                    Category = category,
+                    Scope = parsedScope,
+                    Text = text,
+                    UpdatedBy = updatedBy,
+                };
+                var result = _memoryMutations is null
+                    ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
+                    : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
+                return SerializeJson(result);
+            }
         }
         catch (Exception ex)
         {

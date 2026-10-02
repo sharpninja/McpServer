@@ -46,11 +46,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
             Assert.Equal("codex.cmd", spawner.StartInfo.FileName);
         }
 
-        Assert.Equal("F:\\GitHub\\McpServer", spawner.StartInfo.WorkingDirectory);
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", spawner.StartInfo.WorkingDirectory);
         var serializedArguments = string.Join(" ", spawner.StartInfo.ArgumentList);
         Assert.Contains("exec", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("-C", serializedArguments, StringComparison.Ordinal);
-        Assert.Contains("F:\\GitHub\\McpServer", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("Q:\\__mcp_unit_test__\\McpServer", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("-o", serializedArguments, StringComparison.Ordinal);
         Assert.True(spawner.HasArgument("-"), "Codex must receive '-' so the prompt is read from stdin.");
         Assert.DoesNotContain("--output-schema", serializedArguments, StringComparison.Ordinal);
@@ -257,14 +257,14 @@ public sealed class CodexCliAgentExecutionStrategyTests
         Func<string, string, Task>? outputReceivedAsync = null) =>
         new(
             "rendered prompt",
-            "F:\\GitHub\\McpServer",
+            "Q:\\__mcp_unit_test__\\McpServer",
             "triage",
             "codex-cli",
             new AgentCliClientOptions
             {
                 AgentPath = agentPath,
                 Model = "model-triage",
-                WorkingDirectory = "F:\\GitHub\\McpServer",
+                WorkingDirectory = "Q:\\__mcp_unit_test__\\McpServer",
                 Timeout = TimeSpan.FromSeconds(30),
                 AgentOutputReceivedAsync = outputReceivedAsync,
             });

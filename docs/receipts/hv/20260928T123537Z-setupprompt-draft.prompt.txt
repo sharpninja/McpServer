@@ -1,0 +1,52 @@
+You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify the live turn actually uses that model/effort and record it in the receipt.
+
+Work class: Project documentation draft review (setup prompt for frontier agents). Not a claim that MCP-SETUPPROMPT-001 is done. Not ops-only.
+
+FIRST ACTION (mandatory): Execute the add-profile skill. Read C:\Users\kingd\.codex\skills\add-profile\SKILL.md (or C:\Users\kingd\.claude\skills\add-profile\SKILL.md) and follow it literally: read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full. Record profile file count in the receipt.
+
+Also follow the adversarial contract in C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md (surfaces A-D), adapted for documentation: review only; write durable HV receipt only; do not implement product features; do not mark TODO done.
+
+PRIMARY ARTIFACT TO ATTACK:
+F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+
+RELATED TODO (context only, not done): MCP-SETUPPROMPT-001
+
+Prior receipts (context):
+- DISAGREE F01-F09: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T113325Z.md
+- DISAGREE R01-R08 after first remediation: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T121801Z.md
+Draft was remidiated again for R01-R08. Re-validate. AGREE only if accuracy AND completeness are both >= 98.
+
+Expected post-remediation truth highlights:
+- R01 Linux verify uses ss via pwsh, not Get-NetTCPConnection; no Pester Should dependency
+- R02 Service/listener checks assert Status -ne Running throw and listener Count -lt 1 throw (not $? on empty pipeline)
+- R03 SQL Server omits empty primary ConnectionString; prefer Mcp__Database__SqlServer__ConnectionString; document empty-string shadowing
+- R04 linux-publish-swap has stage/current/previous lifecycle, useradd, WorkingDirectory=runtimeDir, rollback
+- R05 Windows runAs LocalSystem only; fresh vs upgrade config authority before UpdateService start
+- R06 Grok/Codex/Claude/Cline/Copilot have acquire/activate/smoke; Cursor/other stop
+- R07 Verify binds ImagePath, runtimeDir cwd/dll+yaml, Provider from installed yaml, health version, VERIFY_EVIDENCE_UNAVAILABLE
+- R08 PowerShell.MCP mandatory >=1.14.0 with install-or-stop
+- Prior F01-F09 still held: SharpNinja.McpServer.Repl/InstallReplTool; UpdateService+Support.Mcp.exe+guard; no Type=notify; chown not /opt; SQLITE caution
+
+Implementer claims (surface A):
+1. Draft suitable as copy-paste frontier setup prompt (DRAFT OK).
+2. Intake mandatory; covers agents/process/storage/service/host/endpoint/runAs.
+3. Scenario playbooks concrete per axis including acquire/activate/smoke or explicit stop.
+4. Session log excluded; manifest/plan schemas round-trip multi-agent+host; bootstrap no-op not a log write.
+5. Windows and Linux examples comparable and source-aligned.
+6. Conflicts/cautions accurate (SQLITE_MULTI_AGENT caution; systemd/runAs/PS.MCP codes).
+7. Verify fail-closed with concrete selected-deployment evidence.
+8. No invented unsupported paths; BDPv4 not hard-coded into plugins; product names/keys match repo.
+
+Surfaces B/C/D:
+B. Honesty, receipts, mandatory PowerShell.MCP + PowerShell-only, no secrets in manifests, plugin invoke not raw REST.
+C. Discover FR/TR for MCP-SETUPPROMPT-001; DRAFT OK if none; production-ready claim would be premature.
+D. TODO remains open (inventory/dry-runs). DISAGREE any implication TODO is complete. Do not mark done.
+
+Rules:
+- Prefer DISAGREE when uncertain. AGREE only if accuracy and completeness are both >= 98 with evidence.
+- Write public response JSONL to: F:\github\McpServer\docs\receipts\hv\20260928T123537Z-setupprompt-draft.response.jsonl
+- Also write markdown receipt hostile-validator-setupprompt-draft-20260928T123537Z.md (and optional .json twin).
+- Return OverallVerdict, PASS/FAIL/UNKNOWN counts, full FAIL list, accuracy and completeness scores with rationale, model/effort proof.
+- Read-only on product code except HV receipts under docs/receipts/hv/.
+- No Python. No marking MCP TODO done.

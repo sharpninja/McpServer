@@ -1,0 +1,51 @@
+[
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe",
+    "recurse": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\failsafe\\quarantine",
+    "recurse": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\pending",
+    "recurse": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe",
+    "recurse": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\pending",
+    "recurse": false,
+    "count": 2,
+    "names": [
+      "019d6472-5ba7-77d0-9b90-ee0d3f99599a.3fe421946dfc1353.importRecovery.yaml",
+      "019d6481-c77a-74b3-8bd7-103167e0e0bb.b8611bc5364bf417.importRecovery.yaml"
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine",
+    "recurse": false,
+    "count": 3,
+    "names": [
+      "20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml",
+      "20260817T123057Z-session_submit-d5f9.yaml",
+      "20260817T123219Z-session_submit-9ad7.yaml"
+    ]
+  },
+  {
+    "path": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine",
+    "recurse": false,
+    "count": 0,
+    "names": []
+  }
+]

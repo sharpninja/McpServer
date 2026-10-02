@@ -1,0 +1,11 @@
+{
+  "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests --filter FullyQualifiedName~PluginUpdateServiceHarnessTests -m:1",
+  "exitCode": 0,
+  "durationMs": 7518,
+  "listedTests": [
+    "PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+    "PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag"
+  ],
+  "listedCount": 2,
+  "usedNoBuild": false
+}

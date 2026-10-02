@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260821T233401Z-e089
+  result:
+    agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260821T232638Z-c-red-p1
+    requestId: req-20260821T232638Z-001-hostile-validate-c-red-p1
+    totalDialogCount: 5
+
+---

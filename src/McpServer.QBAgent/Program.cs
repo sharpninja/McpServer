@@ -12,7 +12,8 @@ using System.Reflection;
 // FR-MCP-QBAGENT-001 / FR-MCP-QBOPENAI-001: QBAgent starts in a folder, reads the AGENTS-README-FIRST.yaml
 // marker there, binds to QuadBrain (as an OpenAI-compatible model), and runs the Microsoft Agent Framework
 // tool loop - executing the tool calls QuadBrain emits. With no marker present it exits gracefully.
-if (args.Length == 1 && string.Equals(args[0], "--version", StringComparison.OrdinalIgnoreCase))
+var cli = QBAgentCliOptions.Parse(args);
+if (cli.ShowVersion)
 {
     var version = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
                   ?? typeof(Program).Assembly.GetName().Version?.ToString()
@@ -21,8 +22,8 @@ if (args.Length == 1 && string.Equals(args[0], "--version", StringComparison.Ord
     return 0;
 }
 
-var startDirectory = args.Length > 0 && !string.IsNullOrWhiteSpace(args[0])
-    ? args[0]
+var startDirectory = !string.IsNullOrWhiteSpace(cli.StartDirectory)
+    ? cli.StartDirectory
     : Directory.GetCurrentDirectory();
 
 var result = QBAgentBootstrapper.Bootstrap(startDirectory);
@@ -41,6 +42,25 @@ if (result.Status == QBAgentBootstrapStatus.InvalidMarker)
 
 Console.WriteLine(result.Message);
 var bound = result.Options!;
+
+QBAgentSessionLog sessionLog;
+try
+{
+    var logRoot = QBAgentSessionLog.DefaultRoot();
+    sessionLog = cli.ResumeSessionId is null
+        ? QBAgentSessionLog.CreateNew(logRoot, workspace: bound.WorkspacePath)
+        : string.Equals(cli.ResumeSessionId, QBAgentCliOptions.ResumeLatest, StringComparison.OrdinalIgnoreCase)
+            ? QBAgentSessionLog.OpenLatest(logRoot)
+            : QBAgentSessionLog.Open(cli.ResumeSessionId, logRoot);
+}
+catch (FileNotFoundException ex)
+{
+    Console.Error.WriteLine(ex.Message);
+    return 2;
+}
+
+var resumedMessages = sessionLog.ToChatMessages();
+var resuming = resumedMessages.Count > 0;
 
 try
 {
@@ -82,7 +102,18 @@ try
         : $"Available skills (call load_skill with the name to load full instructions before acting):{Environment.NewLine}{discovery}";
 
     // QuadBrain as the OpenAI model behind the Agent Framework loop; QBAgent executes the emitted tool calls.
-    using var chatClient = QBAgentChatClientFactory.Create(bound);
+    Action<string> progress = message =>
+    {
+        var stamp = QBAgentRunLoop.FormatLocalTimestamp(TimeProvider.System);
+        Console.Out.WriteLine($"[{stamp}] {message}");
+        Console.Out.Flush();
+    };
+    var sessionLogBox = new QBAgentSessionLogBox(sessionLog);
+    using var chatClient = new QBAgentProgressChatClient(
+        new QBAgentSessionLoggingChatClient(
+            QBAgentChatClientFactory.Create(bound, httpClient: null, progress, cli.ShowIntent),
+            sessionLogBox),
+        progress);
     var chatAgent = agent.CreateChatClientAgent(chatClient);
     var runOptions = agent.CreateRunOptions(new ChatClientAgentRunOptions
     {
@@ -91,13 +122,27 @@ try
     var session = await chatAgent.CreateSessionAsync().ConfigureAwait(false);
 
     var firstTurn = true;
+    var loopOptions = new QBAgentRunLoopOptions
+    {
+        ShowIntent = cli.ShowIntent,
+        SessionLog = sessionLog,
+        ListOpenTodos = async cancellationToken =>
+        {
+            var todoResult = await agent.Todo.QueryAsync(done: false, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+            return QBAgentOpenTodoList.Format(todoResult, bound.WorkspacePath);
+        },
+    };
     await QBAgentRunLoop.RunAsync(
         async (prompt, cancellationToken) =>
         {
             var messages = new List<ChatMessage>();
-            if (firstTurn && skillPreamble is not null)
+            if (firstTurn)
             {
-                messages.Add(new ChatMessage(ChatRole.System, skillPreamble));
+                if (resuming)
+                    messages.AddRange(resumedMessages);
+                else if (skillPreamble is not null)
+                    messages.Add(new ChatMessage(ChatRole.System, skillPreamble));
                 firstTurn = false;
             }
 
@@ -119,7 +164,19 @@ try
                     .Where(static text => !string.IsNullOrWhiteSpace(text)));
         },
         Console.In,
-        Console.Out).ConfigureAwait(false);
+        Console.Out,
+        resetSession: async cancellationToken =>
+        {
+            session = await chatAgent.CreateSessionAsync(cancellationToken).ConfigureAwait(false);
+            firstTurn = true;
+            resuming = false;
+            resumedMessages = [];
+            sessionLog = QBAgentSessionLog.CreateNew(QBAgentSessionLog.DefaultRoot(), workspace: bound.WorkspacePath);
+            sessionLogBox.Current = sessionLog;
+            loopOptions.SessionLog = sessionLog;
+            return $"Started a new session.{Environment.NewLine}Session {sessionLog.SessionId}";
+        },
+        options: loopOptions).ConfigureAwait(false);
 
     return 0;
 }

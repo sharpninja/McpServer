@@ -61,7 +61,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
     }
 
     /// <summary>
-    /// FR-MCP-129 and FR-MCP-134: seeds renamed Creativity/Logic brain-slot rows at head, migrates
+    /// FR-MCP-129 and FR-MCP-134: seeds renamed Creativity/Logic brain-slot rows at the rename migration, migrates
     /// back down to the preceding migration, and asserts the legacy LeftHemisphere/RightHemisphere
     /// role values, party ids, and slot ids are reconstructed while CuriosityEngine/ArbiterOfTruth
     /// are unchanged and no Creativity/Logic row survives.
@@ -74,7 +74,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260720170000_RenameQuadBrainRolesToCreativityLogic");
             SeedSlot(db, "brain-slot-creativity-claude-code-opus-4-8", "Creativity", "brain-slot:creativity", now);
             SeedSlot(db, "brain-slot-logic-codex-cli-gpt-5-5", "Logic", "brain-slot:logic", now);
             SeedSlot(db, "brain-slot-curiosity-engine-claude-code-opus-4-8", "CuriosityEngine", "brain-slot:curiosity-engine", now);
@@ -133,7 +133,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         var builder = new SqlConnectionStringBuilder(_serverConnectionString) { InitialCatalog = _databaseName };
         _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlServer(builder.ToString(), sql => sql.MigrationsAssembly("McpServer.Storage.SqlServerMigrations"))
+            .UseSqlServer(builder.ToString(), sql => { sql.MigrationsAssembly("McpServer.Storage.SqlServerMigrations"); sql.CommandTimeout(120); })
             .Options;
     }
 

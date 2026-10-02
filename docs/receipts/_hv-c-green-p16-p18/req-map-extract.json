@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "kind": "MAP",
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18\\req-map.txt",
+  "length": 377,
+  "id": null,
+  "title": null,
+  "status": null,
+  "isSatisfied": null,
+  "acCount": 0,
+  "acs": null,
+  "snippet": "type: result\r\npayload:\r\n  requestId: req-20260822T075130Z-fa53\r\n  result:\r\n    items:\r\n    - frId: FR-MCP-PLUGININT-001\r\n      trId: TR-MCP-PLUGININT-001\r\n      createdAt: 2026-08-22T07:51:31.7369888+00:00\r\n    - frId: FR-MCP-PLUGININT-001\r\n      testId: TEST-MCP-PLUGININT-001\r\n      createdAt: 2026-08-22T07:51:31.7374127+00:00\r\n    totalCount: 2\r\n  deprecated: true\r\n\r\n---\r\n",
+  "hasError": false
+}

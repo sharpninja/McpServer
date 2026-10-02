@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T08:11:38.5744849+00:00",
+  "gate": "P1 typed consumer and physical report behavior Red r1",
+  "roots": {
+    "primary": "F:\\GitHub\\McpServer",
+    "candidate": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+    "original": "F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle"
+  },
+  "candidateHead": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "candidateBranch": "codex/sessionlife-acceptance-20260928",
+  "candidateSourceManifest": [
+    {
+      "path": "build/SessionLifeUnitGate.cs",
+      "sha256": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "length": 3198
+    },
+    {
+      "path": "build/_build.csproj",
+      "sha256": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "length": 1405
+    },
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "sha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "length": 23985
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "sha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "length": 60122
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "sha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "length": 110129
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "sha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "length": 18380
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "sha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "length": 5642
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "sha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "length": 285959
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "sha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "length": 3524
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "sha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "length": 17546
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "sha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "length": 12471
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "sha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "length": 7144
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "sha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "length": 94673
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "sha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "length": 4019
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "sha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "length": 12750
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "sha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "length": 9671
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "sha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "length": 34122
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateConsumerTests.cs",
+      "sha256": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "length": 1216
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateContractTests.cs",
+      "sha256": "0F0D14853AAB587502289C80B8F6BF6CDDB4DFCAC4704DCBBF7E627F26772B08",
+      "length": 6386
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "sha256": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "length": 39292
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "sha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "length": 8768
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "sha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "length": 10619
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "sha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "length": 6771
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "sha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "length": 4487
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "sha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "length": 35801
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "sha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "length": 12633
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "sha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "length": 220
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "sha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "length": 6063
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "sha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "length": 5561
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "sha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "length": 1934
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "sha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "length": 11378
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "sha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "length": 103517
+    }
+  ],
+  "candidateSourceAggregate": "9C2F098ECFD717C75A4215898D7544D19F596547145A8DC29675A1AE3588A36B",
+  "candidateArtifacts": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-r1-candidate-delta.json",
+      "sha256": "9E783B4A76148B6DE118ACDA779ED30973C33A85008201121ED13881EC80D7CC",
+      "length": 1926
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-r1-pretest-snapshot.json",
+      "sha256": "C3727C9B4DD2E4C4F8E5B715B2B2E8D5162470A0FCCB9FB32BC98724301D0CF3",
+      "length": 15449
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-r1-result.json",
+      "sha256": "8FB052A09F093BFEB36AEF757E0FB96C794EB7A55B035B7C9DBD4719EF24A760",
+      "length": 110122
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-r1.raw.log",
+      "sha256": "03860F180C4E48D33E7FAA1DD8D0D3C934A0D346D3C0D52E48DF395967396365",
+      "length": 98635
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-test-plan.md",
+      "sha256": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "length": 9080
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/test-results/p1-behavior-red-r1.trx",
+      "sha256": "A39A84B41C82F76D485A4C9A22C4F77F0B785FC23B9BC06710823F10894BDBDC",
+      "length": 311758
+    }
+  ],
+  "primaryArtifacts": [
+    {
+      "path": "docs/plans/sessionlife-batch-completion-20260927.md",
+      "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+      "length": 63367
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r3/p0-acceptance.json",
+      "sha256": "49D2F809089B7A4778F3CF5EF0EE1D5FD700E4337692E45093DDA6F8C06863B1",
+      "length": 5518
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json",
+      "sha256": "3CC7DCD6876D2141FA0C0ACC87C985CA7A3985C3F4F104749EA2502C8075CD60",
+      "length": 440335
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-before.json",
+      "sha256": "3DD9F2063BF2421F38623DFFFD34795EB4BE88457BB0B85D0C2E57E95FBAE18E",
+      "length": 79755
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-contract-red-r4/p1-contract-red-r4-frozen-index.json",
+      "sha256": "07E07C9994B71715E0DF13AD00A706DB22A91E6449B775615E0F0A9DC38FBAC7",
+      "length": 18286
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-contract-red-r4/p1-contract-red-r4-acceptance.json",
+      "sha256": "E3D20EB91B6DF4F1041EBD75F2B63DE3AB311E85D2D3988C908C359DE509084A",
+      "length": 4335
+    },
+    {
+      "path": "docs/receipts/hv/20260928T065454Z-sessionlife-p1-contract-red-r4.request.jsonl",
+      "sha256": "AC09A2097B8BA7363EF81213569C4C98FA58DFE1866CFCF16DDD48E7298525FA",
+      "length": 9742
+    },
+    {
+      "path": "docs/receipts/hv/20260928T065454Z-sessionlife-p1-contract-red-r4.response.jsonl",
+      "sha256": "FF332A64054BBDB9C5D69C9C5BDF4746882D5A2AD3137E7C9591FA62517C688A",
+      "length": 53802
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-preparation/hooke-p1-behavior-decision-audit-readback.json",
+      "sha256": "BAEC2200272AFD45413BBC81627FA1BC7B51B8E78E4B58D2A4788C4C2B1BE5C4",
+      "length": 1022
+    }
+  ],
+  "expectedAndObserved": {
+    "total": 73,
+    "executed": 73,
+    "passed": 3,
+    "failed": 70,
+    "skipped": 0,
+    "notExecuted": 0,
+    "contractPassed": 3,
+    "consumerMissingDelegation": 1,
+    "physicalMissingImplementation": 69,
+    "unitSharedNegatives": 28,
+    "providerSharedNegatives": 28,
+    "unitOnlyNegatives": 10,
+    "positiveValidatorCases": 3,
+    "exitCode": 1,
+    "durationSeconds": 9.2848443
+  },
+  "nextBoundaryUnderReview": "Only minimal delegation and report-validator Green for the reviewed behaviors after independent Red acceptance. Nuke producer/orchestration, full cumulative unit gate, and all later phases remain separate unfinished obligations; no producer behavior without its applicable Red tests/review.",
+  "nonClaims": [
+    "No unit Green or phase completion.",
+    "No provider infrastructure test run.",
+    "No new NuGet dependency.",
+    "No behavior implementation beyond approved nondelegating/throwing scaffolds.",
+    "No TODO or AC closure, sync, merge or deploy."
+  ],
+  "audit": {
+    "workerLateDecisionRepairProof": "docs/receipts/sessionlife-completion/20260928-preparation/hooke-p1-behavior-decision-audit-readback.json",
+    "workerExactQuery": "req-20260928T080930Z-f77b",
+    "parentSession": "Codex-20260927T191745Z-plugin-session",
+    "parentTurn": "req-20260928T020045Z-sessionlife-r4-execution",
+    "parentStructuredWrites65Through69Pending": true,
+    "parentNarrowDiagnosticDialogQuery": "req-20260928T075317Z-650d",
+    "privateDiagnosticIndex": ".mcpServer/codex/diagnostics/20260928-parent-action67-sql-read-timeout.json",
+    "priorAuditObligationsRemain": true
+  },
+  "historicalIntegrity": "Prior28 source files and all247 original Grok files unchanged. R4 history remains preserved and authoritative. New test plan uses explicitly primary-checkout predecessor references.",
+  "structuredSerialization": "Native PowerShell objects serialized by ConvertTo-Json"
+}

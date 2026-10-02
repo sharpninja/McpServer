@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "revision": 2,
+  "frozenAtUtc": "2026-09-28T03:57:13.9569553Z",
+  "planId": "PLAN-SESSIONLIFE-001",
+  "planRevision": 4,
+  "state": "frozen-for-replacement-review-not-accepted",
+  "supersedesForAcceptance": {
+    "path": "docs/receipts/sessionlife-completion/20260928-p0/p0-frozen-index.json",
+    "sha256": "6CC3C50136EE4FAEBC814420C3694EF1A6FCF2EE14BFAF502ACD6E1501E96C0D",
+    "disposition": "R1 remains immutable DISAGREE23PASS1FAIL0UNKNOWN accuracy97 completeness96. Unchanged R1 source, scope, requirements baseline and approval evidence remain referenced inputs; its four requirement/manifest artifacts are superseded only for current acceptance."
+  },
+  "planPath": "docs/plans/sessionlife-batch-completion-20260927.md",
+  "planSha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+  "candidate": {
+    "root": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+    "branch": "codex/sessionlife-acceptance-20260928",
+    "head": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseSha": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseTree": "c30e04f5299ca9ae04c1a472ff68b7381070ef17",
+    "statusPorcelain": [
+      " M plugins/core/lib-ps/McpPluginShim.psm1",
+      " M plugins/core/lib-ps/plugin-hook.ps1",
+      " M plugins/core/lib-ps/repl-invoke.ps1",
+      " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+      " M plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      " M src/McpServer.Services/Services/SessionLogService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      " M src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "?? plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "?? src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs"
+    ],
+    "trackedModifiedCount": 18,
+    "untrackedCopiedCount": 9,
+    "contentManifestAlgorithm": "SHA256 over UTF-8 sorted lines path NUL candidateSha256 NUL length LF",
+    "contentManifestSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+    "diffCheckExitCode": 0,
+    "diffCheckOutput": []
+  },
+  "replacementArtifacts": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r2/acceptance-manifest.json",
+      "sha256": "0E4139688A0C3917A465BE7EF0BE16A48E463E412C4CB75B2BF4C2B3F6496E2E",
+      "length": 433626
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r2/requirements-path-inventory.json",
+      "sha256": "EABE58E2B9DCA2E6F0F6C4189D685E393C6F9FED25C212466C4F83579E1999DC",
+      "length": 123427
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r2/requirements-post-state.json",
+      "sha256": "FABB71F7A6BAC62B7E0CDAB8C97AF83D271EE06004D18AADC3F61F340FDF176D",
+      "length": 22323
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r2/requirements-reconciliation.json",
+      "sha256": "E6740E47340FEB61D4A06851A7D86BF2AC25562C9D3977DA597EDE801C5734BA",
+      "length": 15280
+    }
+  ],
+  "authoritativeRequirementsSnapshot": "R1 requirements-post-state full snapshot, plus R2 targeted live readback/invariant confirmation; no live requirement/TODO mutations in R2",
+  "correction": "Exact BUG246/P2 three-document identities and separated planned documentation tests; all runtime metadata assertions preserved. State-aware schema documentation does not invent a wire discriminator or globally reject approved durable-reopen omission.",
+  "parentVerification": {
+    "r1ArtifactsUnchanged": 27,
+    "r2ArtifactHashesMatch": 4,
+    "candidateFilesUnchanged": 27,
+    "acceptanceRows": 109,
+    "todoRows": 35,
+    "mappingEdges": 47,
+    "anchors": 53,
+    "unresolved": 0,
+    "changedRequirementCoverageRows": 12,
+    "changedTodoCoverageRows": 5,
+    "requiredDocuments": [
+      "docs/context/module-bootstrap.md",
+      "docs/REPL-USER-GUIDE.md",
+      "docs/context/repl-yaml-message.schema.json"
+    ],
+    "requirementTextAndSatisfactionPreserved": true,
+    "failures": []
+  },
+  "r1Review": {
+    "response": "docs/receipts/hv/20260928T021500Z-sessionlife-p0.response.jsonl",
+    "sha256": "5C9650A4C5614CFC98A1E761EE7DCEA4E78DB3D724E61124253B41CD5BB737A3",
+    "fullNativeArchiveSha256": "F72DF87D248562FBA032CBF7A33564E42301FA12DCD356950884E0F0CC8BB80E",
+    "reviewSessionId": "Codex-20260928T022012Z-sessionlife-p0-review-feynman",
+    "reviewRequestId": "req-20260928T022100Z-sessionlife-p0-review",
+    "status": "completed",
+    "verdict": "DISAGREE"
+  },
+  "operationalBlockers": [
+    "Poincare and Hooke terminal audit calls failed; exact turns remain in_progress, not claimed completed. Poincare final needs-log envelope retained via normal plugin failsafe.",
+    "Live initial session graph query cancellation diagnosed; Cartesian expansion remains unproven. Early development-deployment sequence amendment awaits user approval."
+  ],
+  "newProductionEdits": false,
+  "testsExecuted": false,
+  "gate": "Fresh independent code/document/evidence review of R2 and preserved holistic scope; truthful scores both >=98, no applicable FAIL/UNKNOWN, full review body durable and terminal exact readback required."
+}

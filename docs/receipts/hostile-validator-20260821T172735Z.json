@@ -1,0 +1,71 @@
+{
+  "TimestampUtc": "2026-08-21T17:27:35Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-A completeness",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T161800Z.md",
+    "docs/receipts/hostile-validator-20260821T171357Z.md"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 92,
+  "Completeness": 90,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T172329Z-p0a-plan",
+    "requestId": "req-20260821T172329Z-001-hostile-p0a-plan-completeness",
+    "turnId": 42678,
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T17:20:00Z totalCount=1 turn status=completed actions=5 designDecisions=4 dialog=3"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 5,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [
+    "A3/C/D: TEST-HANDOFF-002 AC2 and TEST-HANDOFF-005 force=true unmapped; on-disk IngestAsync_SupportedFormats_AreAccepted and IngestAsync_ForceTrue_ExtractsAgain have zero plan hits; D0 also omits TodoServiceFailure and AmbiguousHandoff",
+    "A9: 171357Z AGREE-required TEST-HANDOFF AC map / D0 inventory still open",
+    "B1/D: B1 new-red list omits A5 named test Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout; D0 inventory incomplete"
+  ],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "C-red then C-green per named groups; E/F/G all-tests-first; D1.5 remains; mixed red+green hostiles gone." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "P19/P20 five named tests present in plan.md 392-401." },
+    { "id": "A3", "group": "A Requested", "verdict": "FAIL", "summary": "DraftOnly quartet mapped; TEST-HANDOFF-002 AC2 and TEST-HANDOFF-005 force=true not mapped despite on-disk tests." },
+    { "id": "A4", "group": "A Requested", "verdict": "PASS", "summary": "Copy range sections 1 through 19; section 19 exists." },
+    { "id": "A5", "group": "A Requested", "verdict": "PASS", "summary": "--dump binds WorkspaceClient.CreateAsync / POST /mcpserver/workspace, not FederationClient.RegisterWorkspaceAsync." },
+    { "id": "A6", "group": "A Requested", "verdict": "PASS", "summary": "TR-MCP-REPL-012 exception and 30s named test exist in A5; TEST-MCP-REPL-027 unchanged; TEST-MCP-195 AC5-7 remain." },
+    { "id": "A7", "group": "A Requested", "verdict": "PASS", "summary": "FR-MCP-HYGIENE-003 and 004 have AC1-AC6." },
+    { "id": "A8", "group": "A Requested", "verdict": "PASS", "summary": "Dual P0-A/create/P0-B remain; PLAN-PLUGINHANDOFF-001 not found." },
+    { "id": "A9", "group": "A Requested", "verdict": "FAIL", "summary": "171357Z mixed-hostile and dump/copy/REPL-012 items closed; TEST-HANDOFF map / D0 inventory not closed." },
+    { "id": "A10", "group": "A Requested", "verdict": "PASS", "summary": "Listed greens not relabeled as new reds; no skip placeholders; done:true requires hostile AGREE and Failed 0 Skipped 0." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "FAIL", "summary": "Mixed hostiles closed; D0 incomplete and B1 omits A5 30s-while-drain red test." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "Section 3 matched live todo_get and on-disk grep." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "MCP-only storage instruction present." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh-only / no Python named and followed in this review." },
+    { "id": "C", "group": "C Requirements", "verdict": "FAIL", "summary": "TEST-HANDOFF-002 AC2 and TEST-HANDOFF-005 force=true unmapped in P0-A text." },
+    { "id": "D", "group": "D Plan", "verdict": "FAIL", "summary": "P0-A DoD named-tests-for-remaining-AC not met." }
+  ],
+  "EvidenceAnchors": {
+    "pluginintLiveP0Done": true,
+    "pluginintLiveP1toP20Open": true,
+    "planPluginHandoffTodoExists": false,
+    "dbSetCount": 62,
+    "planDbSetCount": 62,
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:601-603",
+    "workspaceCreate": "src/McpServer.Support.Mcp/Controllers/WorkspaceController.cs:117-136",
+    "workspaceClientCreate": "src/McpServer.Client/WorkspaceClient.cs:37-39",
+    "federationRegister": "src/McpServer.Client/FederationClient.cs:68-75",
+    "supportedFormatsTest": "tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:51-73",
+    "forceTrueTest": "tests/McpServer.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:404-406",
+    "hygieneAc": "plan.md:189-209",
+    "p19p20Names": "plan.md:390-401"
+  }
+}

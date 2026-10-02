@@ -1,0 +1,30 @@
+{
+  "TimestampUtc": "2026-08-22T07:24:17.6892234Z",
+  "FileExists": true,
+  "HasTheoryAttribute": true,
+  "HasSkipOnTheory": false,
+  "MethodName": "AiTheory_Agent_RequiresValidJsonFields",
+  "MethodPresent": true,
+  "InlineDataCount": 8,
+  "InlineHosts": [
+    "Codex",
+    "ClaudeCode",
+    "ClaudeCowork",
+    "Copilot",
+    "Grok",
+    "Cline",
+    "ClineV2",
+    "OpenCode"
+  ],
+  "MissingExpectedHosts": [],
+  "ExtraHosts": [],
+  "AssertsValid": true,
+  "AssertsMissingFields": true,
+  "AssertsContradictions": true,
+  "CallsEvaluateAsync": true,
+  "UsesCatalog": true,
+  "CollectionName": "PluginSessionLog",
+  "HasFactSkip": false,
+  "HasTheorySkip": false,
+  "HasAssertSkip": false
+}

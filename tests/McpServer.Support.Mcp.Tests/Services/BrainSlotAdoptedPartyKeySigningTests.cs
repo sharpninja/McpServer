@@ -201,7 +201,7 @@ public sealed class BrainSlotAdoptedPartyKeySigningTests
         /// <returns>The constructed fixture.</returns>
         public static SigningFixture Create()
         {
-            var workspace = new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" };
+            var workspace = new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
             var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
                 .UseInMemoryDatabase("brain-slot-sign-" + Guid.NewGuid().ToString("N"))
                 .Options;

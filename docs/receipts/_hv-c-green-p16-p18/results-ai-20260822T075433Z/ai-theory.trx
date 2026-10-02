@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="afe8c3d7-f717-478b-94ef-ce06eaf790c0" name="kingd@PAYTON-LEGION2 2026-08-22 02:54:55" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T02:54:55.6019481-05:00" queuing="2026-08-22T02:54:55.6019487-05:00" start="2026-08-22T02:54:51.5456584-05:00" finish="2026-08-22T02:54:55.6165768-05:00" />
+  <TestSettings name="default" id="f2fc3b5d-2f11-48f6-9621-7a0185be6702">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_02_54_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="33cabfc0-55f9-4787-9b46-2796023d1bd6" testId="8b7ec712-9aa5-6e30-93a3-2e39139d53fc" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:00.0014693" startTime="2026-08-22T02:54:55.3228352-05:00" endTime="2026-08-22T02:54:55.3243760-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33cabfc0-55f9-4787-9b46-2796023d1bd6" />
+    <UnitTestResult executionId="16f4b513-b2dd-4a59-b11c-5c1624e6838c" testId="a3f7179d-224f-f712-0505-53bcb1b39b2d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure" computerName="PAYTON-LEGION2" duration="00:00:00.0144230" startTime="2026-08-22T02:54:55.3722349-05:00" endTime="2026-08-22T02:54:55.3867264-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16f4b513-b2dd-4a59-b11c-5c1624e6838c" />
+    <UnitTestResult executionId="2c278731-60c1-424c-8dd5-a70c8cd34132" testId="3dd847b5-7101-a387-584f-a447c0078512" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0068348" startTime="2026-08-22T02:54:55.3368614-05:00" endTime="2026-08-22T02:54:55.3437952-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c278731-60c1-424c-8dd5-a70c8cd34132" />
+    <UnitTestResult executionId="f31666d6-ade4-47ab-9a98-bda323a7c915" testId="0d94d9ea-2e88-7983-af02-8739ab212d15" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:00.0009927" startTime="2026-08-22T02:54:55.3464597-05:00" endTime="2026-08-22T02:54:55.3475007-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f31666d6-ade4-47ab-9a98-bda323a7c915" />
+    <UnitTestResult executionId="262c7a55-8706-4bcf-a692-8ff56e1936bd" testId="a819d0f0-58b2-a89b-3964-f2760cfb1ba3" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:00.0009528" startTime="2026-08-22T02:54:55.3497419-05:00" endTime="2026-08-22T02:54:55.3507293-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="262c7a55-8706-4bcf-a692-8ff56e1936bd" />
+    <UnitTestResult executionId="88f5a850-bbe1-4714-9b87-759a4a820f3a" testId="06662370-12ba-46c0-6690-5c95f450e80f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:00.1439403" startTime="2026-08-22T02:54:55.1571486-05:00" endTime="2026-08-22T02:54:55.3158864-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="88f5a850-bbe1-4714-9b87-759a4a820f3a" />
+    <UnitTestResult executionId="b56a13f7-1cdd-4996-91e8-9471ee9296ed" testId="d866ee6a-ddb8-9e68-69f3-feafaa9032a9" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:00.0013209" startTime="2026-08-22T02:54:55.3672349-05:00" endTime="2026-08-22T02:54:55.3686236-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b56a13f7-1cdd-4996-91e8-9471ee9296ed" />
+    <UnitTestResult executionId="09fd8bb7-df05-4da7-ae58-fc33866bad82" testId="33523881-f2db-c47e-d853-f3dbb49d03b4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:00.0011124" startTime="2026-08-22T02:54:55.3446446-05:00" endTime="2026-08-22T02:54:55.3458107-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09fd8bb7-df05-4da7-ae58-fc33866bad82" />
+    <UnitTestResult executionId="501ac078-aa6a-40e1-9ce1-141955261ff3" testId="4ce4b13d-54c6-ab06-77ae-25635f318e05" testName="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:00.0009344" startTime="2026-08-22T02:54:55.3480849-05:00" endTime="2026-08-22T02:54:55.3490822-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="501ac078-aa6a-40e1-9ce1-141955261ff3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="06662370-12ba-46c0-6690-5c95f450e80f">
+      <Execution id="88f5a850-bbe1-4714-9b87-759a4a820f3a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a3f7179d-224f-f712-0505-53bcb1b39b2d">
+      <Execution id="16f4b513-b2dd-4a59-b11c-5c1624e6838c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="0d94d9ea-2e88-7983-af02-8739ab212d15">
+      <Execution id="f31666d6-ade4-47ab-9a98-bda323a7c915" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="4ce4b13d-54c6-ab06-77ae-25635f318e05">
+      <Execution id="501ac078-aa6a-40e1-9ce1-141955261ff3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d866ee6a-ddb8-9e68-69f3-feafaa9032a9">
+      <Execution id="b56a13f7-1cdd-4996-91e8-9471ee9296ed" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3dd847b5-7101-a387-584f-a447c0078512">
+      <Execution id="2c278731-60c1-424c-8dd5-a70c8cd34132" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="8b7ec712-9aa5-6e30-93a3-2e39139d53fc">
+      <Execution id="33cabfc0-55f9-4787-9b46-2796023d1bd6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="33523881-f2db-c47e-d853-f3dbb49d03b4">
+      <Execution id="09fd8bb7-df05-4da7-ae58-fc33866bad82" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a819d0f0-58b2-a89b-3964-f2760cfb1ba3">
+      <Execution id="262c7a55-8706-4bcf-a692-8ff56e1936bd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests" name="AiTheory_Agent_RequiresValidJsonFields" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8b7ec712-9aa5-6e30-93a3-2e39139d53fc" executionId="33cabfc0-55f9-4787-9b46-2796023d1bd6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a3f7179d-224f-f712-0505-53bcb1b39b2d" executionId="16f4b513-b2dd-4a59-b11c-5c1624e6838c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3dd847b5-7101-a387-584f-a447c0078512" executionId="2c278731-60c1-424c-8dd5-a70c8cd34132" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d94d9ea-2e88-7983-af02-8739ab212d15" executionId="f31666d6-ade4-47ab-9a98-bda323a7c915" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a819d0f0-58b2-a89b-3964-f2760cfb1ba3" executionId="262c7a55-8706-4bcf-a692-8ff56e1936bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06662370-12ba-46c0-6690-5c95f450e80f" executionId="88f5a850-bbe1-4714-9b87-759a4a820f3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d866ee6a-ddb8-9e68-69f3-feafaa9032a9" executionId="b56a13f7-1cdd-4996-91e8-9471ee9296ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="33523881-f2db-c47e-d853-f3dbb49d03b4" executionId="09fd8bb7-df05-4da7-ae58-fc33866bad82" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ce4b13d-54c6-ab06-77ae-25635f318e05" executionId="501ac078-aa6a-40e1-9ce1-141955261ff3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.44]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.28]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.86]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:02.22]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

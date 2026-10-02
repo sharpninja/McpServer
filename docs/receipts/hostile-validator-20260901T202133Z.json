@@ -1,0 +1,192 @@
+{
+  "TimestampUtc": "2026-09-01T20:21:33Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 2,
+  "WorkClassName": "User-directed general action (git fetch from GitHub origin)",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ],
+    "directory": "C:\\Users\\kingd\\.claude\\profile"
+  },
+  "Classification": "Class 2. Operator-directed git fetch. Not project requirement implementation. Surface C N/A. Surface D N/A (no plan-step claim). Byrd v4 not applied to the ops action.",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 17,
+    "FAIL": 2,
+    "UNKNOWN": 1
+  },
+  "FailList": [
+    "A9: MCP plugin session-start wrote MCP_UNTRUSTED at session-state.yaml lastUpdated 2026-09-01T20:08:26Z; Test-MarkerSignature True; Invoke-FullBootstrap health timeout 5s; earlier GET /health nonce d2c18bcdb442429db5649e923416c425 HTTP 200 matching nonce storage unreachable; continued fetch without MCP session-log/TODO because MCP_UNTRUSTED forbids further MCP endpoint probing.",
+    "B5: Honesty: claims match artifacts; MCP_UNTRUSTED forbids further MCP probes."
+  ],
+  "UnknownList": [
+    "R1: Adversarial reviewer complete MCP session-log turn with server queryHistory proof."
+  ],
+  "SessionLogAttempt": {
+    "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+    "agent": "GrokCode",
+    "attemptedSessionId": "GrokSubagentHostile-20260901T201646Z-git-fetch-review",
+    "turnRequestId": "req-20260901T201646Z-001-hostile-git-fetch-review",
+    "cacheSessionId": "GrokCode-20260901T201012Z-plugin-session",
+    "markerSignatureIndependent": true,
+    "bootstrapInitialized": true,
+    "beginTurn": "queued/degraded failsafe",
+    "completeTurn": "failed QueryText empty; current-turn remains in_progress",
+    "queryHistory": "backend_unavailable",
+    "mcpUntrustedThisReviewer": false,
+    "note": "Health/signature verified for this reviewer. Storage/backend unavailable. Not MCP_UNTRUSTED. Reviewer turn not server-persisted."
+  },
+  "AccuracyRating": {
+    "score": 82,
+    "justification": "Git fetch facts re-verified on disk. MCP_UNTRUSTED historical write re-verified from hook listing plus implementer ReadFile. Current session-state is verified overwrite by this reviewer session-start, not the claimed UNTRUSTED artifact."
+  },
+  "CompletenessRating": {
+    "score": 74,
+    "justification": "A-D scored. Reviewer session-log server proof missing (failsafe + backend_unavailable). Did not re-run FullBootstrap (would be extra /health probe)."
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "User request fetch from github was executed as git fetch origin --prune --tags in F:\\GitHub\\McpServer (cwd).",
+      "verdict": "PASS",
+      "evidence": "Independent: .git/logs/refs/remotes/origin/main last line records fetch origin --prune --tags --progress fast-forward at unix 1788293346 (2026-09-01T20:09:06Z). Implementer pipeline at F:\\GitHub\\McpServer ran git fetch origin --prune --tags --progress 2>&1. Extra --progress is git progress, not a different remote/refspec."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "Fetch exit code was 0.",
+      "verdict": "PASS",
+      "evidence": "Implementer pipeline printed FETCH_EXIT=0 and updated origin/main d14a2330..c9551bc8. Independent: FETCH_HEAD LastWriteTimeUtc=2026-09-01T20:09:06.9353621Z; origin/main reflog fast-forward. A failed fetch would not record that reflog line."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "Before fetch: HEAD = 910a444959969a87099b800b4b6fe12c77c0aece, origin/develop = 910a444959969a87099b800b4b6fe12c77c0aece.",
+      "verdict": "PASS",
+      "evidence": "Implementer printed BEFORE_HEAD and BEFORE_ORIGIN_DEVELOP as that SHA. Independent: HEAD log last write 2026-08-21T11:25:48Z still at 910a4449; origin/develop log last write 2026-08-21T11:25:58Z still at 910a4449."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "After fetch: origin/develop unchanged at 910a444959969a87099b800b4b6fe12c77c0aece.",
+      "verdict": "PASS",
+      "evidence": "Independent git rev-parse origin/develop = 910a444959969a87099b800b4b6fe12c77c0aece. FETCH_HEAD first line is that SHA for branch develop. origin/develop reflog not updated on 2026-09-01."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "claim": "After fetch: origin/main moved d14a2330 -> c9551bc83bd3ab9c705541c491d920258f3ae853 (Merge pull request #41 from sharpninja/develop; author Payton Byrd; date 2026-09-01T11:54:12-05:00).",
+      "verdict": "PASS",
+      "evidence": "Independent git log -1 origin/main: FULL=c9551bc83bd3ab9c705541c491d920258f3ae853 SUBJECT=Merge pull request #41 from sharpninja/develop AUTHOR=Payton Byrd DATE_ISO=2026-09-01T11:54:12-05:00. Reflog: d14a2330 to c9551bc8 fetch origin --prune --tags --progress."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "claim": "HEAD remains on local develop at 910a4449; git rev-list --left-right --count HEAD...origin/develop is 0 0.",
+      "verdict": "PASS",
+      "evidence": "Independent: rev-parse --abbrev-ref HEAD=develop; HEAD=910a444959969a87099b800b4b6fe12c77c0aece; rev-list --left-right --count HEAD...origin/develop => 0 0."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "claim": "Working tree was not merged, pulled, reset, or otherwise mutated by the fetch beyond remote-tracking refs/tags (dirty local files remain dirty).",
+      "verdict": "PASS",
+      "evidence": "HEAD reflog last entry 2026-08-21 commit 910a4449, not merge/pull/reset on 2026-09-01. git status still dirty (modified requirements/docs/src/tests plus untracked receipts). Pre-fetch PowerShell.MCP dump 20260901_150853 shows the same dirty set."
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "claim": "origin remote URL is https://github.com/sharpninja/McpServer.git.",
+      "verdict": "PASS",
+      "evidence": "Independent git remote get-url origin => https://github.com/sharpninja/McpServer.git"
+    },
+    {
+      "id": "A9",
+      "surface": "A",
+      "claim": "MCP plugin session-start wrote MCP_UNTRUSTED at session-state.yaml lastUpdated 2026-09-01T20:08:26Z; Test-MarkerSignature True; Invoke-FullBootstrap health timeout 5s; earlier GET /health nonce d2c18bcdb442429db5649e923416c425 HTTP 200 matching nonce storage unreachable; continued fetch without MCP session-log/TODO because MCP_UNTRUSTED forbids further MCP endpoint probing.",
+      "verdict": "FAIL",
+      "evidence": "Historical UNTRUSTED write is true: session-start hook listed session-state.yaml Length=169 LastWriteTime 2026-09-01 15:08:26 local; implementer ReadFile showed status MCP_UNTRUSTED lastUpdated 2026-09-01T20:08:26Z. Independent Test-MarkerSignature=True. Implementer later printed SIGNATURE_OK=True and MCP_UNTRUSTED: Health check failed - HttpClient.Timeout of 5 seconds. Health GET nonce d2c18bcdb442429db5649e923416c425 HEALTH_STATUS=200 matching nonce storage=unreachable is in implementer chat_history.jsonl tool_result call-0542bda5. FAIL: after UNTRUSTED they still invoked Invoke-FullBootstrap which GETs /health. Current file was overwritten at 2026-09-01T20:10:12Z by this validator session-start to status=verified (CreationTimeUtc=2026-09-01T20:10:12.8183824Z)."
+    },
+    {
+      "id": "A10",
+      "surface": "A",
+      "claim": "Operator profile was loaded from 18 non-skill markdown files under C:\\Users\\kingd\\.claude\\profile\\ before the fetch.",
+      "verdict": "PASS",
+      "evidence": "Independent list: 19 *.md including add-profile.grok.md; 18 non-skill files. Implementer list_dir and 18 Read tool calls appear in session 01a05e93 chat_history.jsonl before git fetch."
+    },
+    {
+      "id": "A11",
+      "surface": "A",
+      "claim": "No Python was used. Shell work used PowerShell.Mcp / pwsh.",
+      "verdict": "PASS",
+      "evidence": "Implementer events.jsonl mcp_server_starting PowerShell.MCP 1.11.0. All shell via pwsh__start_console / pwsh__invoke_expression. No python.exe / py.exe invocations. python3 string hits are profile text (no-python-lab.md), not commands."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Byrd v4 tests-first / phase-order for this work.",
+      "verdict": "PASS",
+      "evidence": "N/A. Work class 2 user-directed ops (git fetch). Byrd v4 does not apply. Not scored as FAIL."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "Always bring the receipts.",
+      "verdict": "PASS",
+      "evidence": "Fetch claims re-verified against git reflog, FETCH_HEAD, remotes, and live rev-parse. Validator did not take implementer chat as sole proof."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "MCP-only TODO/session/requirements storage; no direct store edits.",
+      "verdict": "PASS",
+      "evidence": "git status --porcelain docs/Project/TODO.yaml docs/todo.yaml todo.yaml empty. No hand-edit of session-log store. session-state.yaml written by plugin hook."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "claim": "Lab PowerShell / no Python.",
+      "verdict": "PASS",
+      "evidence": "Same as A11. Validator used pwsh.exe -NoProfile -NonInteractive only."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "claim": "Honesty: claims match artifacts; MCP_UNTRUSTED forbids further MCP probes.",
+      "verdict": "FAIL",
+      "evidence": "Rule: AGENTS-README-FIRST.yaml trust_bootstrap.fallback and prompt: if signature, /health, or nonce verification fails, log MCP_UNTRUSTED and do not probe additional MCP endpoints. After session-start wrote MCP_UNTRUSTED, implementer still ran Invoke-FullBootstrap (GET /health, 5s timeout) in call-fd090f83. That is additional MCP endpoint probing they claimed they stopped."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "claim": "Look-before-delete.",
+      "verdict": "PASS",
+      "evidence": "N/A. No delete of operator data. Fetch --prune only removes stale remote-tracking refs."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "FR/TR/TEST/AC coverage for claimed-complete product work.",
+      "verdict": "PASS",
+      "evidence": "N/A. Class 2 operator-directed git fetch. Surface C must not FAIL for missing FR/TR."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "Current plan DoD / plan-step completion.",
+      "verdict": "PASS",
+      "evidence": "N/A. Implementer did not claim a plan step done. Ops fetch does not have to satisfy an unrelated product plan DoD."
+    },
+    {
+      "id": "R1",
+      "surface": "ReviewerSessionLog",
+      "claim": "Adversarial reviewer complete MCP session-log turn with server queryHistory proof.",
+      "verdict": "UNKNOWN",
+      "evidence": "Plugin path used (mcpserver-grok-plugin Invoke-McpPlugin). Marker signature True; session-state status=verified. beginTurn queued/degraded; client.SessionLog.SubmitAsync failsafe pending 20260901T201738Z-session_submit-0eff.yaml. completeTurn failed: QueryText empty. queryHistory backend_unavailable (McpServer.Client.McpServerException). No server persistence proof. Did not hand-edit session-log files. Did not probe further MCP endpoints after queryHistory failure."
+    }
+  ]
+}

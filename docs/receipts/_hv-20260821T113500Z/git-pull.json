@@ -1,0 +1,6 @@
+{
+  "gitPull": "Already up to date.",
+  "gitExit": 0,
+  "gitHead": "e3a95067dca7a21880f0247ab5817d8b070b725c",
+  "gitStatus": "## \u001b[32mmain\u001b[m...\u001b[31morigin/main\u001b[m\r\n \u001b[31mM\u001b[m .claude-plugin/plugin.json\r\n \u001b[31mM\u001b[m .codex-plugin/plugin.json\r\n \u001b[31mM\u001b[m .grok-plugin/plugin.json\r\n \u001b[31mM\u001b[m .version\r\n \u001b[31mM\u001b[m CORE-MANIFEST.yaml\r\n \u001b[31mM\u001b[m hooks/scripts/cache-flush.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/code-verify.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/health-check.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/plan-approved.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/plan-modified.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/post-compact.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/pre-compact.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/session-end.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/session-start.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/stop-gate.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/subagent-import.ps1\r\n \u001b[31mM\u001b[m hooks/scripts/user-prompt-submit.ps1\r\n \u001b[31mM\u001b[m lib/Invoke-McpPlugin.ps1\r\n \u001b[31mM\u001b[m lib/McpPluginShim.psm1\r\n \u001b[31mM\u001b[m lib/cache-manager.ps1\r\n \u001b[31mM\u001b[m lib/plugin-hook.ps1\r\n \u001b[31mM\u001b[m lib/repl-invoke.ps1\r\n \u001b[31mM\u001b[m lib/resolve-cache-dir.ps1"
+}

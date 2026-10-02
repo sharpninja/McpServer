@@ -1,0 +1,791 @@
+{
+  "SchemaVersion": 1,
+  "Utc": "2026-10-02T01:52:36.0563967Z",
+  "Gate": "BUG-UNITFAIL-001",
+  "Phase": "Final independent repair recheck",
+  "OverallVerdict": "AGREE",
+  "AccuracyScore": 99,
+  "CompletenessScore": 99,
+  "MinimumApprovalScore": 98,
+  "ScoreRationale": "All bounded repair claims are supported by direct code/documentation review, red/green evidence, full final unit results, current hashes and live requirements. Ratings are review judgments, not statistical probabilities or claims of zero residual risk. The disclosed formatting/provenance observations do not contradict the scoped code/test acceptance criteria.",
+  "Reviewer": {
+    "ReasoningEffort": "xhigh",
+    "PowerShellAgentId": "sa-ef70105b",
+    "Model": "gpt-6-astra",
+    "Agent": "Codex",
+    "FullProfileReloadAfterAutomaticCompaction": true,
+    "AdditionalAgents": 0,
+    "ProfileFilesRead": 22,
+    "NativeSessionId": "01a0f9f4-d605-7301-9b42-d8955d664e56",
+    "ProfileSkill": "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md"
+  },
+  "Workspace": {
+    "Branch": "develop",
+    "Scope": "Repair code, tests, generated traceability and documentation only. Operator actions, historical unrelated diffs, benchmark JSON and .worktrees are excluded.",
+    "Path": "F:\\GitHub\\McpServer",
+    "Head": "35822cd9f028d60762a9822b272cf2f7becfa7ce"
+  },
+  "ClaimCounts": {
+    "PASS": 15,
+    "UNKNOWN": 0,
+    "FAIL": 0
+  },
+  "Claims": [
+    {
+      "Id": "R01",
+      "Status": "PASS",
+      "Claim": "F1 metadata preservation",
+      "Evidence": "Resolved finding F1; shared resolver used and meaningful durable/degraded regression cases green."
+    },
+    {
+      "Id": "R02",
+      "Status": "PASS",
+      "Claim": "F2 typed session retitle and recovery retention",
+      "Evidence": "Resolved finding F2; empty, wrong-session, case-mismatch, not-retitled and legitimate session-only reply tests green."
+    },
+    {
+      "Id": "R03",
+      "Status": "PASS",
+      "Claim": "F3 empty-output caller behavior",
+      "Evidence": "Resolved finding F3; helper and real caller tests green, including actual queued-dialog recovery hash."
+    },
+    {
+      "Id": "R04",
+      "Status": "PASS",
+      "Claim": "F4 public receipt and multi-step failure behavior",
+      "Evidence": "Resolved finding F4; real public wrapper process tests green. Recovered original multi-step red native event proves expected rejected versus actual persisted; final focused test passes."
+    },
+    {
+      "Id": "R05",
+      "Status": "PASS",
+      "Claim": "Typed client preserves retitled",
+      "Evidence": "SessionLogModels.cs:526-528 adds documented JsonPropertyName(retitled) Boolean. Existing source-generation registration covers the type. Both real typed-client deserialize/reserialize assertions failed red and pass in final Client304."
+    },
+    {
+      "Id": "A06",
+      "Status": "PASS",
+      "Claim": "Restored requirements and generated traceability",
+      "Evidence": "Fresh supported GetEffectiveRequirementsAsync verifies FR/TR/TEST-MCP-SERVICEUPDATE-001 each pending with4structured AC and correct mapping. TEST-MCP-TRIM-001 pending4AC maps to FR-MCP-139/TR-MCP-QUALITY-001. Five generated projection hashes are unchanged from initial review; supported GenerateAsync provenance retained in original receipt. No generated hand edits."
+    },
+    {
+      "Id": "A07",
+      "Status": "PASS",
+      "Claim": "Byte-identical runner relocation and compatibility",
+      "Evidence": "All3 new files again match old HEAD raw git blobs. Five type forwards, unchanged namespace/signatures, QBAgent dependency reference and boundary documentation were reviewed; ownership/dependency/forwarding tests green."
+    },
+    {
+      "Id": "A08",
+      "Status": "PASS",
+      "Claim": "Exact warning inventory",
+      "Evidence": "Measured QBAgent trim inventory12 IL2026 +5 IL2104; publish exit0 in retained receipt. Exact dictionary equality unchanged and no suppression added. Final Build225 passes, including trim/parity checks."
+    },
+    {
+      "Id": "A09",
+      "Status": "PASS",
+      "Claim": "Red-before-green regression evidence",
+      "Evidence": "Original runner6fail and forwarding1fail receipts retained. Title typed-client2fail proof retained. Focused PowerShell red27cases/25fail/2pass retained. Added multi-step original public event:28discovered/1fail/0pass/27notrun. Focused final28green; full Pester208green. Focused red exclusions are not validation-gate skips."
+    },
+    {
+      "Id": "A10",
+      "Status": "PASS",
+      "Claim": "Full eight-project .NET unit gate",
+      "Evidence": "Independently parsed every TRX and all4523 UnitTestResult entries:4523 passed,0failed,0notExecuted,0other. All8 SummaryOutcome Completed; all8TRX hashes match consolidated receipt. Build uses accepted225pass retry, not aborted19pass attempt."
+    },
+    {
+      "Id": "A11",
+      "Status": "PASS",
+      "Claim": "Post-sync full Pester gate",
+      "Evidence": "Final XML verifies208 passed,0failed,0skipped,0notrun after synchronization. XML SHA256 recorded in FinalPesterAudit."
+    },
+    {
+      "Id": "A12",
+      "Status": "PASS",
+      "Claim": "Sibling preservation and synchronized manifests",
+      "Evidence": "Independent rehash of571 pre-sync entries finds exactly16expected changes:8repl-invoke.ps1 and8CORE-MANIFEST.yaml. Zero unexpected changed paths. All128manifest entries match files; all8runtime copies and staged runtime match canonical."
+    },
+    {
+      "Id": "A13",
+      "Status": "PASS",
+      "Claim": "Reviewed source identity and final file inventory",
+      "Evidence": "develop HEAD35822cd9f028d60762a9822b272cf2f7becfa7ce remains unchanged. All33consolidated source/doc/test path checks match, including absence of3deleted originals. Preexisting benchmark JSON and .worktrees entries excluded, not altered by reviewer."
+    },
+    {
+      "Id": "A14",
+      "Status": "PASS",
+      "Claim": "Durable review receipts with truthful provenance",
+      "Evidence": "Original findings, red reviews and final evidence retained. Current public response JSONL has365parseable public events,0private reasoning events and0matches for the previously read workspace key. Parent owns final public-stream refresh after this response. Support process exit remains null; completed TRX and successful stdout establish its test result. No claim of exact first-abort root cause."
+    },
+    {
+      "Id": "A15",
+      "Status": "PASS",
+      "Claim": "Single-reviewer bounded recheck and isolated audit",
+      "Evidence": "Same Codex/gpt-6-astra/xhigh reviewer and PowerShell.Mcp console sa-ef70105b. Same dedicated session/current review request reused; parent cache protected. No additional agents, production edits, commits, pushes, deployment, integration/AI test runs or operator-action review. Full final verdict persisted and read back using supported APIs, with separate readback receipt."
+    }
+  ],
+  "Findings": [],
+  "ResolvedFindings": [
+    {
+      "Id": "F1",
+      "OriginalSeverity": "P1",
+      "Status": "RESOLVED",
+      "Title": "Supersession metadata preservation",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 2151,
+      "Evidence": "Supersession now invokes Resolve-ReplPersistPlanTodo plus Set-ReplPersistPlanTodoArgs. Durable turns omit unbound metadata; first/degraded persistence preserves cached links before exact None. The original meaningful-plan/TODO red cases now pass.",
+      "Requirements": [
+        "FR-MCP-SESSIONLIFE-002-AC001",
+        "FR-MCP-SESSIONLIFE-002-AC003"
+      ]
+    },
+    {
+      "Id": "F2",
+      "OriginalSeverity": "P1",
+      "Status": "RESOLVED",
+      "Title": "Typed session-title persistence confirmation",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 3020,
+      "Evidence": "SetSessionTitle validates matching ordinal session identity and retitled=true through the SessionOnly parameter set before clearing recovery. Invalid or empty results publish rejected and retain the failsafe. Valid session-only replies do not require requestId.",
+      "Requirements": [
+        "FR-MCP-SESSIONLIFE-003-AC001",
+        "FR-MCP-SESSIONLIFE-003-AC006"
+      ]
+    },
+    {
+      "Id": "F3",
+      "OriginalSeverity": "P2",
+      "Status": "RESOLVED",
+      "Title": "Empty typed result is classified rather than rejected by parameter binding",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 1519,
+      "Evidence": "AllowEmptyString lets empty output reach Ok=false missing/unparseable handling. Real setTurnTitle and appendDialog caller regressions cover rejected outcome, current identity, stale-success rejection, and retained recovery bytes. Dialog test first creates its genuine queued failsafe through the real handler/writer.",
+      "Requirements": [
+        "FR-MCP-SESSIONLIFE-003-AC002",
+        "TR-MCP-SESSIONLIFE-003-AC001"
+      ]
+    },
+    {
+      "Id": "F4",
+      "OriginalSeverity": "P2",
+      "Status": "RESOLVED",
+      "Title": "Public typed receipt boundary",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 3080,
+      "Evidence": "Invoke-ReplMethod wraps internal Boolean dispatch, resets prior outcomes, emits one serialized result envelope, and derives process success from the classified outcome. A false result after an earlier persisted substep is downgraded to rejected at line3122. Actual generic/Codex wrapper child tests cover all five dispositions. Hook callers capture output and continue emitting hook JSON.",
+      "Requirements": [
+        "TR-MCP-SESSIONLIFE-003-AC001",
+        "TR-MCP-SESSIONLIFE-003-AC002"
+      ]
+    }
+  ],
+  "ResidualObservations": [
+    {
+      "Id": "O1",
+      "Kind": "Formatting",
+      "Detail": "git diff --check exits2 for new blank line at EOF in generated Functional-Requirements.md:2874 and Technical-Requirements.md:4008. This is not a clean diff check. User explicitly excludes exporter changes and direct edits to generated projections."
+    },
+    {
+      "Id": "O2",
+      "Kind": "Process provenance",
+      "Detail": "Support process exit code was not observed after parent lost its handle. It remains null, not invented. Completed TRX contains2914passing entries and stdout says Test Run Successful."
+    },
+    {
+      "Id": "O3",
+      "Kind": "Attempt history",
+      "Detail": "Initial final Build attempt was aborted by the3-minute watchdog after19passes, not accepted as225green. Accepted retry has225passing TRX entries, successful stdout and parent-recorded exit0 with same watchdog, MSBUILDDISABLENODEREUSE=1 and workspace TEMP/TMP. Exact first-run pipe root cause is not claimed."
+    },
+    {
+      "Id": "O4",
+      "Kind": "Transcript completion",
+      "Detail": "Current public response snapshot was verified. Parent will append/refresh the final public events after this response, excluding private reasoning and redacting credentials as explicitly directed. That future refresh is not claimed complete here."
+    },
+    {
+      "Id": "O5",
+      "Kind": "Historical reviewer disclosure",
+      "Detail": "The earlier reviewer marker-redaction failure remains recorded as B03 in the original DISAGREE receipt. This final repair-only acceptance does not erase or retroactively pass that procedural failure. Current public response contains no match for the previously read workspace key."
+    }
+  ],
+  "UnitScope": "Eight unit projects; Category!=AiReview&Category!=Integration",
+  "FinalUnitAudit": [
+    {
+      "Project": "McpServer.Client.Tests",
+      "Total": 304,
+      "Passed": 304,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 304,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "FF40D2AB4083899EDC2A006D2F6D8FC899B251260EEA76628E64AC65C3D4AB2E",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Client.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.Cqrs.Tests",
+      "Total": 33,
+      "Passed": 33,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 33,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "4CC9D1D9ACCFF85807314ABA3CB287D7933A8E438A690E203EB4B63C67AC181A",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Cqrs.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.Launcher.Tests",
+      "Total": 20,
+      "Passed": 20,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 20,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "0C86B27829FD6F23B6F2B73F6A021439F311F4CAF00524B130D897F9ABC511F0",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Launcher.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.McpAgent.Tests",
+      "Total": 63,
+      "Passed": 63,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 63,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "7C27FC6AD805AB5D0FD9B2BC2E135F3C765BDA7452DAC685F80F3F1C8F06878F",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.McpAgent.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.QBAgent.Tests",
+      "Total": 96,
+      "Passed": 96,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 96,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "8124BCA4F5B3BE032736ACD88687A2861C4EF6E1C0107379D761C0564CB7BD82",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.QBAgent.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.Repl.Core.Tests",
+      "Total": 868,
+      "Passed": 868,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 868,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "49DC2C76918D1A7B94FE28B6A2CDE704028EEB4C76ECCBBCAD27FC15B16F680B",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Repl.Core.Tests\\results.trx"
+    },
+    {
+      "Project": "McpServer.Support.Mcp.Tests",
+      "Total": 2914,
+      "Passed": 2914,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 2914,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "8F76EA690DD391A0C130F3111DEF62FA434F4205CB4C2343679CD8EDCD2958EB",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": null,
+      "ExitCodeNote": "Handle lost during console recovery; TRX Completed and Test Run Successful stdout verified.",
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\McpServer.Support.Mcp.Tests\\results.trx"
+    },
+    {
+      "Project": "Build.Tests",
+      "Total": 225,
+      "Passed": 225,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Other": 0,
+      "ResultEntries": 225,
+      "NonPassingEntries": 0,
+      "SummaryOutcome": "Completed",
+      "TrxSha256": "2AA806816989E301EA41DF187C79DD9FAD18B87D8A21DF7996B3E7CAA9B7A0F9",
+      "HashMatches": true,
+      "CountersMatch": true,
+      "ObservedExitCode": 0,
+      "ExitCodeNote": null,
+      "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests-retry\\results.trx"
+    }
+  ],
+  "FinalPesterAudit": {
+    "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\pester-synced-final\\pester-results.xml",
+    "Sha256": "F2BE2F8A4FE5B56DFB2BC1B77A2F4B77AC02D8859C62BCF09293378D522AF773",
+    "Total": 208,
+    "Passed": 208,
+    "Failed": 0,
+    "Skipped": 0,
+    "NotRun": 0
+  },
+  "FinalFileAudit": [
+    {
+      "Path": "docs/Project/Functional-Requirements.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "648401B8D517848634BCCE1F8D45D802C5F859A126631094F83B5BE722F0766A",
+      "Matches": true
+    },
+    {
+      "Path": "docs/Project/Requirements-Matrix.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "CC4083246685EF688328BBB476A0151CF2DD69AD284F549FCAD8FB11AD193AB0",
+      "Matches": true
+    },
+    {
+      "Path": "docs/Project/Technical-Requirements.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "87001864113272AF08E265E969FEF3BFFFB964E2AF2118485B1152109875EA28",
+      "Matches": true
+    },
+    {
+      "Path": "docs/Project/Testing-Requirements.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "8E3738732B1C21329CBC8B411F39C8A40A25DA6B85B43DF44EAEC4C8A1F944FB",
+      "Matches": true
+    },
+    {
+      "Path": "docs/Project/TR-per-FR-Mapping.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "BEA6D028D48309DC58CF1577988CA5A3819E7F27629AAEB3CCA9FFDCBAF829E4",
+      "Matches": true
+    },
+    {
+      "Path": "docs/QBAGENT.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "D1F6546CE7BAD76D8D03E1C4D8F9254B26DE3744018C948241507679C074DE24",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/plugin-env.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/README.md",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "423983D29E68C587795EC8A1261556530D42DD13C8B353469AFC2D5BE56FD053",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "B6E3DCF03F0D1498ABC9F82E5A2D1D54E7CD0923650801ACB1DD655CD2916D62",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "4F321F50481CEC943EC25757AC28B7CFBAA40C701668AA9769E65E452130C048",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "E1C5EDAAD2DAA9D4325C7A2012E3C71CBA191DB55402B781BCC2ECA11C4F4B98",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "2D9548429B438DFCC3506CE9A9ED6864D07C70C26037AA83912102491666D7AF",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "6D7ADE4FFC9CDB2D8E242A58F952EB68B8940B9D85B0F00B6F0EC4743EC3FF4E",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/SessionLogReviewRegression.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "310D7B67D661C37368680904BFCEE1F81B91A96EB62F080BB02F366C5A5C1E7D",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "92FD2AB8307DF4C35E66DCFDCCC8015580B92F106078281136D41956F34483CC",
+      "Matches": true
+    },
+    {
+      "Path": "plugins/core/test-fixtures/SessionLogWrapperHarness.ps1",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "DD5D1B1EF9B4F33DFA64CD778153D126FAF7B217E36BB174FD10B55F17390264",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Client/Models/SessionLogModels.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "B9CA5338E1CF1C9C42B915C5F4CC3B7994CBA6E89C803D2DF6370B65FD156703",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/IProcessRunner.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.Windows.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.QBAgent.Tools/McpServer.QBAgent.Tools.csproj",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "89B13116D977A285623939AED4AF270A867C8F056C9D58148710C148A75E4A86",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Services/Properties/ProcessRunnerTypeForwards.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "8C13FFE70760F330421002D6F9D15058371E41EE46360ACC2741EEECC9087A95",
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Services/Services/IProcessRunner.cs",
+      "Deleted": true,
+      "Exists": false,
+      "Sha256": null,
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Services/Services/ProcessRunner.cs",
+      "Deleted": true,
+      "Exists": false,
+      "Sha256": null,
+      "Matches": true
+    },
+    {
+      "Path": "src/McpServer.Services/Services/ProcessRunner.Windows.cs",
+      "Deleted": true,
+      "Exists": false,
+      "Sha256": null,
+      "Matches": true
+    },
+    {
+      "Path": "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "C16EEA049C124FD8ED5D4A76EC5EC2BE9A9A4957B62F6C88E93583A0E8CD3C8E",
+      "Matches": true
+    },
+    {
+      "Path": "tests/McpServer.Client.Tests/SessionLogClientRequestBodyTests.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "F6813FE19D19E587FFF872E5B7A583DFB62FB4A5A6EF24D1ADC808769B7C9CA6",
+      "Matches": true
+    },
+    {
+      "Path": "tests/McpServer.QBAgent.Tests/ProcessRunnerDependencyTests.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "664F4FC675D00216BA754E796CF718E74A4742B5BC8D1585B5F0D74FECAB9D88",
+      "Matches": true
+    },
+    {
+      "Path": "tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "B8DFC422424CB6D8A65DB6EE09ACF2BF72CC822A94FB0E0505D29B49245ABDF1",
+      "Matches": true
+    },
+    {
+      "Path": "tests/McpServer.Support.Mcp.Tests/Services/ProcessRunnerTypeForwardingTests.cs",
+      "Deleted": false,
+      "Exists": true,
+      "Sha256": "5E7BF17E29A85D7719DD5E6E1F2F3373A75DCCF0FD3962EFB98C7F699FC780C2",
+      "Matches": true
+    }
+  ],
+  "RunnerByteIdentity": [
+    {
+      "Name": "IProcessRunner.cs",
+      "OldPath": "src/McpServer.Services/Services/IProcessRunner.cs",
+      "NewPath": "src/McpServer.Common.AgentCli/Processes/IProcessRunner.cs",
+      "OldBlob": "6ac5ce045131928786a925837faa8159a08ab727",
+      "NewBlob": "6ac5ce045131928786a925837faa8159a08ab727",
+      "ByteIdentical": true
+    },
+    {
+      "Name": "ProcessRunner.cs",
+      "OldPath": "src/McpServer.Services/Services/ProcessRunner.cs",
+      "NewPath": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.cs",
+      "OldBlob": "af0ad758a62f80348dd95dab571dd1b8c84205c3",
+      "NewBlob": "af0ad758a62f80348dd95dab571dd1b8c84205c3",
+      "ByteIdentical": true
+    },
+    {
+      "Name": "ProcessRunner.Windows.cs",
+      "OldPath": "src/McpServer.Services/Services/ProcessRunner.Windows.cs",
+      "NewPath": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.Windows.cs",
+      "OldBlob": "889af53431672663c3d262e7148daafedc401c79",
+      "NewBlob": "889af53431672663c3d262e7148daafedc401c79",
+      "ByteIdentical": true
+    }
+  ],
+  "Requirements": [
+    {
+      "Kind": "functional",
+      "Id": "FR-MCP-SERVICEUPDATE-001",
+      "Status": "pending",
+      "AcCount": 4,
+      "AcceptanceCriteria": [
+        {
+          "id": "platform",
+          "isSatisfied": false,
+          "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes."
+        },
+        {
+          "id": "preserve",
+          "isSatisfied": false,
+          "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive."
+        },
+        {
+          "id": "lifecycle",
+          "isSatisfied": false,
+          "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success."
+        },
+        {
+          "id": "validation",
+          "isSatisfied": false,
+          "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior."
+        }
+      ]
+    },
+    {
+      "Kind": "technical",
+      "Id": "TR-MCP-SERVICEUPDATE-001",
+      "Status": "pending",
+      "AcCount": 4,
+      "AcceptanceCriteria": [
+        {
+          "id": "platform",
+          "isSatisfied": false,
+          "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes."
+        },
+        {
+          "id": "preserve",
+          "isSatisfied": false,
+          "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive."
+        },
+        {
+          "id": "lifecycle",
+          "isSatisfied": false,
+          "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success."
+        },
+        {
+          "id": "validation",
+          "isSatisfied": false,
+          "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior."
+        }
+      ]
+    },
+    {
+      "Kind": "testing",
+      "Id": "TEST-MCP-SERVICEUPDATE-001",
+      "Status": "pending",
+      "AcCount": 4,
+      "AcceptanceCriteria": [
+        {
+          "id": "platform",
+          "isSatisfied": false,
+          "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes."
+        },
+        {
+          "id": "preserve",
+          "isSatisfied": false,
+          "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive."
+        },
+        {
+          "id": "lifecycle",
+          "isSatisfied": false,
+          "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success."
+        },
+        {
+          "id": "validation",
+          "isSatisfied": false,
+          "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior."
+        }
+      ]
+    },
+    {
+      "Kind": "testing",
+      "Id": "TEST-MCP-TRIM-001",
+      "Status": "pending",
+      "AcCount": 4,
+      "AcceptanceCriteria": [
+        {
+          "id": "ownership",
+          "isSatisfied": false,
+          "text": "Runner implementation, options, interface, request and result reside in Common.AgentCli with unchanged namespaces and signatures."
+        },
+        {
+          "id": "isolation",
+          "isSatisfied": false,
+          "text": "QBAgent dependency graph excludes server Services, Storage and EF assemblies."
+        },
+        {
+          "id": "compatibility",
+          "isSatisfied": false,
+          "text": "Services forwards all moved public types, and existing mock-backed process/tool unit tests remain green."
+        },
+        {
+          "id": "warnings",
+          "isSatisfied": false,
+          "text": "Trim inventory is reduced from verified diagnostics only, with no new suppression or relaxed assertions."
+        }
+      ]
+    }
+  ],
+  "PluginPreservation": {
+    "StagedRuntimeMatches": true,
+    "CanonicalRuntimeSha256": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+    "ExpectedChanges": 16,
+    "ManifestMismatches": 0,
+    "ManifestEntries": 128,
+    "UnexpectedChanges": 0,
+    "SnapshotEntries": 571
+  },
+  "AbortedAttempts": [
+    {
+      "project": "Build.Tests",
+      "exitCode": 1,
+      "passedBeforeAbort": 19,
+      "assertionFailures": 0,
+      "reason": "Blame collector 3 minute inactivity timeout; run aborted, not an accepted gate",
+      "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\post-review-units\\Build.Tests"
+    }
+  ],
+  "BuildRetryEnvironment": {
+    "MSBUILDDISABLENODEREUSE": "1",
+    "TEMP": "F:\\GitHub\\McpServer\\.mcpServer\\tmp",
+    "TMP": "F:\\GitHub\\McpServer\\.mcpServer\\tmp",
+    "watchdog": "3m",
+    "codeChangedForRetry": false
+  },
+  "PublicResponseAudit": {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.response.jsonl",
+    "Lines": 365,
+    "AllLinesParse": true,
+    "Bytes": 1390995,
+    "Sha256": "D20D38983AC156AE8BFC6E332F69EBF4026F9CC69A42EBBEEE9BE04F5680DB4D",
+    "RootEventTypes": [
+      "event_msg",
+      "response_item"
+    ],
+    "FinalRefreshOwner": "Parent after this final response",
+    "PrivateReasoningEvents": 0,
+    "PreviouslyReadMarkerKeysChecked": 1,
+    "UnredactedKnownKeyMatches": 0
+  },
+  "SessionLog": {
+    "RequestId": "req-20261002T010410Z-red-gate-final",
+    "CacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\review-sa-ef70105b",
+    "ParentTurnProtected": "req-20261001T234043Z-fix-unit-failures",
+    "FullVerdictReadbackReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.final-review-sa-ef70105b.readback.json",
+    "ParentSessionProtected": "Codex-20261001T133708Z-plugin-session",
+    "SessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b"
+  },
+  "Receipts": {
+    "MultiStepRed": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\multi-step-red.tool.jsonl",
+    "FinalMarkdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.final-review-sa-ef70105b.md",
+    "NativeTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\01\\rollout-2026-10-01T19-12-47-01a0f9f4-d605-7301-9b42-d8955d664e56.jsonl",
+    "OriginalDisagree": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.json",
+    "ResponseJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.response.jsonl",
+    "ConsolidatedValidationSha256": "1F75B9DA8343ECF16E90896A71C852CC9D005EA6B4CF4D0B307F109484E329BE",
+    "FinalVerdict": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.final-review-sa-ef70105b.json",
+    "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.request.jsonl",
+    "ConsolidatedValidation": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.post-review.validation.json",
+    "AcceptedRedGate": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-accepted-sa-ef70105b.json",
+    "MultiStepRedSha256": "345F5EC715793655D6AF7FBB79099FBC8D4A6902FDBB9D4C4F55315E8C1835B6"
+  },
+  "Conclusion": "Accept the bounded BUG-UNITFAIL-001 code/documentation repair and its final unit gates. No remaining actionable repair finding. Reviewer does not mutate TODO/requirements done-state, commit, push, or deploy. Close this review and pause all work as requested; parent owns final public-response refresh."
+}

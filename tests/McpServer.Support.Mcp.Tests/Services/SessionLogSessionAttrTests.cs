@@ -19,7 +19,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class SessionLogSessionAttrTests : IDisposable
 {
     private const string WorkspacePath = @"E:\tests\sessionlog-session-attr";
-    private const string ForeignPluginPath = @"F:\GitHub\mcpserver-claude-code-plugin\src\index.ts";
+    private const string ForeignPluginPath = @"Q:\__mcp_unit_test__\mcpserver-claude-code-plugin\src\index.ts";
     private const string LocalRelativePath = @"src\McpServer.Services\SessionLogService.cs";
     private const string ForeignPrefix = "foreign:";
     private const string ForeignRepoTag = "foreign-repo";

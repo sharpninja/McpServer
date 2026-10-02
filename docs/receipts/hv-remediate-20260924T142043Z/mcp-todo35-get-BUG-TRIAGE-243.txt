@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142346Z-ef00
+  result:
+    id: BUG-TRIAGE-243
+    title: sessionlog updateTurn persist timeout exits 1 with empty body
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - workflow.sessionlog.updateTurn failed once during Nashville planning after about 17 seconds, left the previous turn title in place, queued one failsafe YAML, and succeeded on retry while requirements calls stayed healthy. In plugins/core/lib-ps/repl-invoke.ps1, Invoke-ReplPersistTurn always queues client.SessionLog.SubmitAsync, then on timeout or HTTP 503 returns false without writing a diagnostic. Invoke-WorkflowUpdateTurn forwards that false; unlike beginTurn and completeTurn it does not emit LastReplPersistenceDetails. The script entry then exits 1 with empty stdout, so the host surfaces no error body even though failsafe.status correctly shows the queued record.
+    - 'Triage group: triage-group-5fbcaddbf8ca3175'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When workflow.sessionlog.updateTurn persist times out or returns HTTP 503, the wrapper still exits non-zero if the requested title was not persisted.'
+    - '- The same failure emits a non-empty diagnostic (stderr or result body) that states degraded/queued persist and includes the failsafe path.'
+    - '- failsafe.status reports the queued session_submit YAML after that failure.'
+    - '- A live sessionlog query after the failed update still shows the previous title; a later updateTurn retry persists the requested title once the backend accepts SubmitAsync.'
+    - '- Other MCP surfaces (for example requirements) remain usable during the transient persist failure.'
+    - 'Implementation notes:'
+    - '- Treat the Nashville incident as a transient SubmitAsync timeout or 503, not a workspace outage. Do not implement product work from the failed call.'
+    - '- In Invoke-WorkflowUpdateTurn, on a false return from Invoke-ReplPersistTurn, emit LastReplPersistenceDetails the same way Invoke-WorkflowCompleteTurn already does (message plus FailsafePath).'
+    - '- Local workflow methods currently write no stdout by design; diagnostics must go to stderr or a structured result body the host actually surfaces.'
+    - '- Keep the failsafe-first persist path. Do not clear the queued submit on timeout. Do not retitle the session from an incidental retry unless the caller explicitly set the turn title.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

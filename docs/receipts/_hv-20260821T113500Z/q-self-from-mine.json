@@ -1,0 +1,20 @@
+{
+  "sessionId": "GrokCode-20260821T114530Z-hostile-add-profile",
+  "sessionTitle": "Hostile validate add-profile new session",
+  "sessionStatus": "in_progress",
+  "requestId": "req-20260821T114530Z-001-hostile-validate-add-profile",
+  "queryTitle": "Hostile validate add-profile new session",
+  "status": "completed",
+  "response": "Hostile review DISAGREE. A6 FAIL: session-state.yaml lacks claimed title and currently has a later hook sessionId. B1 FAIL: title was on current-turn.yaml and the server session, not session-state.yaml. Receipt: docs/receipts/hostile-validator-20260821T114530Z.md",
+  "tags": [
+    "hostile-review",
+    "class-2",
+    "add-profile",
+    "GrokCode",
+    "session-bootstrap"
+  ],
+  "actionCount": 8,
+  "dialogCount": 5,
+  "decisionCount": 3,
+  "contextCount": 7
+}

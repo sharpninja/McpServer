@@ -1,0 +1,36 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142342Z-bc35
+  result:
+    id: BUG-TRIAGE-240
+    title: appendDialog persist failure exits 1 with empty stdout and a queued failsafe
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - workflow.sessionlog.appendDialog is a local shim in plugins/core/lib-ps/repl-invoke.ps1. On success or failure it emits no stdout (boolean output is suppressed). Script-entry then exits 1 whenever LastInvokeReplMethodSuccess is false. The timeout/HTTP 503 branch queues a failsafe and returns false without writing stderr, so Invoke-McpPlugin.ps1 sees a non-zero child with empty stdout and throws only 'Plugin command failed with exit code 1' (stderr is not copied into that throw). That matches empty diagnostics while model work continues. Retryable persist is inconsistent with beginTurn, which treats timeout/503 as degraded/queued success and keeps current-turn active. A pending client.SessionLog.SubmitAsync record is written by Invoke-ReplPersistTurn (beginTurn/updateTurn/completeTurn) before the upsert; current appendDialog failsafe is client.SessionLog.AppendDialogAsync. The observed SubmitAsync item is leftover persist-queue state that still needs drain/reconciliation, not proof that appendDialog itself submitted a full session.
+    - 'Triage group: triage-group-e958ce9ca09c2f55'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When workflow.sessionlog.appendDialog persist times out or returns HTTP 503 backend_unavailable, the plugin emits a classified diagnostic (code, retryable, degraded, queued, method, failsafe retained) on stdout or stderr before returning. Empty stdout plus empty stderr is a failure.'
+    - "- Invoke-McpPlugin.ps1 must not surface that case as an unclassified 'Plugin command failed with exit code 1' that drops child stderr. Either include child stderr in the wrapper error or emit the same classified YAML envelope used for wrapper command_timeout."
+    - '- Retryable appendDialog persist failure retains the failsafe, leaves current-turn in_progress, and does not block the caller the way a hard persist failure does. Align with beginTurn degraded/queued success, or keep exit 1 only when the classified diagnostic from criterion 1 is present.'
+    - '- mcp-status / failsafe.status identifies the queued method as written (client.SessionLog.AppendDialogAsync versus client.SessionLog.SubmitAsync) so a leftover session_submit record is distinguishable from an appendDialog failsafe.'
+    - '- A successful appendDialog still uses client.SessionLog.AppendDialogAsync and does not fall back to a full-session client.SessionLog.SubmitAsync upsert (TEST-MCP-195).'
+    - 'Implementation notes:'
+    - '- Fix site 1: Invoke-WorkflowAppendDialog timeout/503 branch in plugins/core/lib-ps/repl-invoke.ps1 currently sets LastReplPersistenceDetails and returns false with no [Console]::Error.WriteLine. Script-entry then exit 1 with no stdout.'
+    - '- Fix site 2: plugins/core/lib-ps/Invoke-McpPlugin.ps1 copies child stderr to Console.Error then throws using stdout only. On empty stdout the throw is a generic exit-code message.'
+    - '- Do not retarget appendDialog onto SubmitAsync. PersistTurn still writes method client.SessionLog.SubmitAsync label session_submit before the call; appendDialog writes AppendDialogAsync label session_dialog. Reconcile both queue shapes.'
+    - "- beginTurn already documents the desired degrade contract: Complete-ReplBeginTurnAfterPersist returns success with stderr 'queued/degraded' and keeps current-turn active. Reuse that pattern or the wrapper command_timeout envelope (type: error, code: command_timeout, retryable: true, degraded/queued)."
+    - '- Cover with a Pester case: stub AppendDialogAsync timeout/503, assert classified diagnostic is visible through Invoke-McpPlugin, failsafe remains, current-turn stays in_progress, and SubmitAsync is not invoked.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

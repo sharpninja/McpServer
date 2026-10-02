@@ -1,0 +1,46 @@
+136:var heartbeat = RenewProcessingLeaseLoopAsync(entity, heartbeatCts.Token);
+193:extraction.PromptVersion,
+194:extraction.TemplateVersion,
+247:extraction.PromptVersion,
+248:extraction.TemplateVersion,
+610:PromptVersion = HandoffPromptDefaults.PromptVersion,
+611:TemplateVersion = HandoffPromptDefaults.TemplateId,
+620:ReplayIdentity = HandoffReplayKeys.Create(
+623:HandoffPromptDefaults.PromptVersion,
+654:HandoffPromptDefaults.PromptVersion,
+661:.FirstOrDefaultAsync(run => run.ReplayIdentity == identity, cancellationToken)
+676:PromptVersion = HandoffPromptDefaults.PromptVersion,
+677:TemplateVersion = HandoffPromptDefaults.TemplateId,
+681:ReplayIdentity = identity,
+685:ProcessingLeaseExpiresAtUtc = now.Add(_lease.Duration),
+698:.FirstAsync(run => run.ReplayIdentity == identity, cancellationToken)
+718:&& existing.ProcessingLeaseExpiresAtUtc is { } expires
+728:&& (run.ProcessingLeaseExpiresAtUtc == null || run.ProcessingLeaseExpiresAtUtc < now))
+732:.SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration))
+770:string? promptVersion,
+771:string? templateVersion,
+776:var effectivePrompt = string.IsNullOrWhiteSpace(promptVersion)
+777:? HandoffPromptDefaults.PromptVersion
+778:: promptVersion.Trim();
+779:var effectiveTemplate = string.IsNullOrWhiteSpace(templateVersion)
+781:: templateVersion.Trim();
+782:var replayIdentity = HandoffReplayKeys.Create(
+794:.SetProperty(run => run.PromptVersion, effectivePrompt)
+795:.SetProperty(run => run.TemplateVersion, effectiveTemplate)
+796:.SetProperty(run => run.ReplayIdentity, replayIdentity)
+804:.SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)
+816:entity.PromptVersion = effectivePrompt;
+817:entity.TemplateVersion = effectiveTemplate;
+818:entity.ReplayIdentity = replayIdentity;
+826:entity.ProcessingLeaseExpiresAtUtc = null;
+902:.SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)
+945:.SetProperty(run => run.ProcessingLeaseExpiresAtUtc, (DateTimeOffset?)null)
+958:entity.ProcessingLeaseExpiresAtUtc = null;
+994:private async Task RenewProcessingLeaseLoopAsync(HandoffIngestionRunEntity entity, CancellationToken cancellationToken)
+1000:await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);
+1010:.SetProperty(run => run.ProcessingLeaseExpiresAtUtc, now.Add(_lease.Duration)),
+1015:entity.ProcessingLeaseExpiresAtUtc = now.Add(_lease.Duration);
+1023:private async Task WaitForHeartbeatIntervalAsync(CancellationToken cancellationToken)
+1025:var due = _time.GetUtcNow() + _lease.HeartbeatInterval;
+1228:PromptVersion = entity.PromptVersion,
+1229:TemplateVersion = entity.TemplateVersion,

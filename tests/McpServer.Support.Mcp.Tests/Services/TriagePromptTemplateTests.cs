@@ -10,8 +10,33 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// TEST-MCP-TRIAGE-003: verifies the production triage research prompt template
 /// renders the group JSON contract passed to the configured direct triage agent.
 /// </summary>
-public sealed class TriagePromptTemplateTests
+public sealed class TriagePromptTemplateTests : IDisposable
 {
+    private const string TemplateResourceName = "TriagePromptTemplate.prompt-templates.yaml";
+    private readonly string _tempDirectory;
+    private readonly string _templatePath;
+
+    /// <summary>Copies the current source template resource to an isolated test workspace.</summary>
+    public TriagePromptTemplateTests()
+    {
+        _tempDirectory = Path.Combine(
+            Path.GetTempPath(), "McpServer.Tests", nameof(TriagePromptTemplateTests),
+            Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(_tempDirectory);
+        _templatePath = Path.Combine(_tempDirectory, "prompt-templates.yaml");
+        using var resource = typeof(TriagePromptTemplateTests).Assembly
+            .GetManifestResourceStream(TemplateResourceName)
+            ?? throw new InvalidOperationException($"Missing embedded resource {TemplateResourceName}.");
+        using var output = File.Create(_templatePath);
+        resource.CopyTo(output);
+    }
+
+    /// <summary>Removes the isolated test workspace.</summary>
+    public void Dispose()
+    {
+        if (Directory.Exists(_tempDirectory))
+            Directory.Delete(_tempDirectory, recursive: true);
+    }
     /// <summary>
     /// TEST-MCP-MARKER-TRIAGE-001: the production marker prompt tells agents to
     /// write failsafe YAML for MCP Server and plugin failures, submit triage,
@@ -23,7 +48,7 @@ public sealed class TriagePromptTemplateTests
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
             {
-                FilePath = Path.Combine(FindRepositoryRoot(), "templates", "prompt-templates.yaml"),
+                FilePath = _templatePath,
             }),
             new PromptTemplateRenderer(NullLogger<PromptTemplateRenderer>.Instance),
             NullLogger<PromptTemplateService>.Instance);
@@ -36,7 +61,7 @@ public sealed class TriagePromptTemplateTests
                     "http://localhost:7147",
                     "test-token",
                     workspace: null,
-                    workspacePath: @"F:\GitHub\McpServer",
+                    workspacePath: @"Q:\__mcp_unit_test__\McpServer",
                     workspaceName: "McpServer"),
             }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -66,7 +91,7 @@ public sealed class TriagePromptTemplateTests
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
             {
-                FilePath = Path.Combine(FindRepositoryRoot(), "templates", "prompt-templates.yaml"),
+                FilePath = _templatePath,
             }),
             new PromptTemplateRenderer(NullLogger<PromptTemplateRenderer>.Instance),
             NullLogger<PromptTemplateService>.Instance);
@@ -79,7 +104,7 @@ public sealed class TriagePromptTemplateTests
                     "http://localhost:7147",
                     "test-token",
                     workspace: null,
-                    workspacePath: @"F:\GitHub\McpServer",
+                    workspacePath: @"Q:\__mcp_unit_test__\McpServer",
                     workspaceName: "McpServer"),
             }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -101,7 +126,7 @@ public sealed class TriagePromptTemplateTests
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
             {
-                FilePath = Path.Combine(FindRepositoryRoot(), "templates", "prompt-templates.yaml"),
+                FilePath = _templatePath,
             }),
             new PromptTemplateRenderer(NullLogger<PromptTemplateRenderer>.Instance),
             NullLogger<PromptTemplateService>.Instance);
@@ -114,7 +139,7 @@ public sealed class TriagePromptTemplateTests
                 {
                     ["groupJson"] = """{"groupId":"triage-group-001","reports":[{"title":"bug"}]}""",
                     ["groupId"] = "triage-group-001",
-                    ["workspacePath"] = @"F:\GitHub\McpServer",
+                    ["workspacePath"] = @"Q:\__mcp_unit_test__\McpServer",
                     ["reportCount"] = 1,
                 },
             }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -130,19 +155,5 @@ public sealed class TriagePromptTemplateTests
         Assert.Contains("Use the supplied Group JSON as the primary source", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("Do not run broad recursive repository searches", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("Return only the JSON object as soon as you can make a defensible triage determination", result.RenderedContent, StringComparison.Ordinal);
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
-                return directory.FullName;
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
     }
 }

@@ -1,0 +1,9 @@
+{
+  "OwnedSessionId": "GrokSubagentHostile-20260822T072417Z-c-red-p16",
+  "OwnedRequestId": "req-20260822T072417Z-001-hostile-c-red-p16",
+  "OwnedTurnId": 42917,
+  "OwnedStamp": "20260822T072417Z",
+  "SiblingSessionIdOverwroteFile": "GrokSubagentHostile-20260822T072515Z-pluginhandoff-p16red",
+  "SiblingRequestIdOverwroteFile": "req-20260822T072515Z-001-hostile-c-red-p16-aitheory",
+  "Note": "Sibling collector wrote the same docs/receipts/_hv-c-red-p16 path after this review bootstrapped. This subdirectory owns the independent rerun."
+}

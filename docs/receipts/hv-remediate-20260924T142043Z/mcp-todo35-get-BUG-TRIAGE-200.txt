@@ -1,0 +1,38 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142314Z-6153
+  result:
+    id: BUG-TRIAGE-200
+    title: Valid sessionlog appendDialog returns HTTP 500 after subscriber commit rollback
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+    description:
+    - "workflow.sessionlog.appendDialog for an existing turn posts incrementally to POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog. With turn transactions required, TransactionGatedSessionLogService gates that as sessionlog.dialog: the local dialog mutation is saved, then TurnTransactionCoordinator subscriber commit is required. Any non-committed/non-duplicate commit result rolls the turn graph back and throws InvalidOperationException 'Turn transaction coordinator did not commit sessionlog.dialog ... Subscriber commit failed. Rollback completed.' SessionLogController.ClassifiedError maps that to HTTP 500 internal_server_error with retryable=false. The actual TransactionFailureReason (StaleSequence, timeout, subscriber unavailable, hash mismatch) is not returned. Per-request millisecond sequences on scoped gated services can collide on the singleton publisher/subscriber cursor after the row is already saved. A degraded latch then blocks later session-log writes. Plugin Invoke-WorkflowAppendDialog only queues a session_dialog failsafe on timeout/HTTP 503, so a 500 drops valid model-authored dialog instead of persisting or replaying it."
+    - 'Triage group: triage-group-c7be9d2a10b8008d'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- A supported workflow.sessionlog.appendDialog call against an existing in-progress turn with at least one valid dialog item returns HTTP 200 and the items remain queryable on that turn.'
+    - "- A valid dialog append must not return HTTP 500 with detail containing 'Subscriber commit failed' and 'Rollback completed'."
+    - '- If subscriber commit is unavailable or times out after a valid local append, the API returns a retryable 503 (or equivalent classified retryable envelope) rather than non-retryable internal_server_error, and a later replay or retry persists the same dialog items.'
+    - '- Concurrent valid session-log and other gated mutations in the same millisecond must not reject a valid appendDialog as a stale/duplicate subscriber sequence after the local mutation succeeded.'
+    - '- A prior subscriber commit failure must not latch the coordinator into degraded mode that causes later valid appendDialog calls to fail without attempting persist.'
+    - '- True invalid or unauthorized mutations still fail closed and roll back; only valid incremental dialog appends must persist.'
+    - 'Implementation notes:'
+    - "- Server path: SessionLogController.AppendDialogAsync -> TransactionGatedSessionLogService.AppendProcessingDialogAsync (operationName sessionlog.dialog, MissingSnapshotRollbackPolicy.RestorePreMutation) -> ITurnTransactionCoordinator.ExecuteAsync. Post-mutation Failure() always sets Message 'Subscriber commit failed.' ToTransactionException appends 'Rollback completed.' when RollbackSucceeded."
+    - '- Do not hide commit.Reason. Surface StaleSequence, CommitTimeout, SubscriberUnavailable, hash/decrypt failures in the classified envelope so 503 retryable vs 400/409 vs 500 can be distinguished. McpErrorClassifier currently falls through InvalidOperationException to HTTP 500 retryable=false.'
+    - '- Replace scoped unix-millisecond NextSequence() with a process-wide monotonic sequence (or keyserver-issued sequence) shared by all TransactionGated* adapters. Subscriber last-sequence is per publisher/subscriber pair across all operations, not per turn.'
+    - '- Keep compensation for genuinely rejected commits, but a valid incremental dialog persist should not be undone solely because subscriber ack failed; either commit the dialog and retry subscriber evidence, or return retryable degrade without deleting the accepted items.'
+    - '- Plugin: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog already uses client.SessionLog.AppendDialogAsync. Align failsafe/replay with the classified retryable persist path so HTTP 500 rollback is not a silent drop and is not confused with triage failsafe YAML.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

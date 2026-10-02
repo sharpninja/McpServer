@@ -1,0 +1,103 @@
+[
+  {
+    "file": "plugins/core/lib-ps/repl-invoke.ps1",
+    "lastWriteUtc": "2026-08-21T22:31:34.2631031Z",
+    "lastWriteAfterB2": true,
+    "porcelain": " M plugins/core/lib-ps/repl-invoke.ps1",
+    "log": [
+      "0e0c57638bf7b75342f0893763a656677579b769 2026-08-20T19:46:32-05:00 feat(sessionlog): incremental dialog persist and 503 degrade-queue",
+      "9649753a8e6e0244ce6efc20bc34685928eb4a6b 2026-08-19T16:12:31-05:00 fix(plugin-core): leftover S2 StrictMode, failsafe 503, SessionEnd, xagent, verify, beginTurn timeout",
+      "c81abaf0193c393bfecffc07015962424a601dfe 2026-08-19T11:34:24-05:00 feat(triage): unified errors, session-log persist, hook isolation",
+      "7c4821ca9d0ce9e205482b6f68afbc9e058cfb28 2026-08-12T17:31:22-05:00 feat(sessionlog): require planFile and todoId on session turns",
+      "508b1690fec7fb911afad4667c76523b46b0530a 2026-07-23T11:58:22-05:00 fix(plugin): close the cached-value recurrence vector for agent header fields"
+    ]
+  },
+  {
+    "file": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+    "lastWriteUtc": "2026-08-21T22:31:34.2620934Z",
+    "lastWriteAfterB2": true,
+    "porcelain": " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+    "log": [
+      "9c7c3ec3c1e792a1476ca711392812a0ba29425a 2026-08-19T18:18:03-05:00 fix(plugin): leftover S5 same-volume TEMP/TMP for wrappers",
+      "9649753a8e6e0244ce6efc20bc34685928eb4a6b 2026-08-19T16:12:31-05:00 fix(plugin-core): leftover S2 StrictMode, failsafe 503, SessionEnd, xagent, verify, beginTurn timeout",
+      "c81abaf0193c393bfecffc07015962424a601dfe 2026-08-19T11:34:24-05:00 feat(triage): unified errors, session-log persist, hook isolation",
+      "b1615e9a29503cd415bb0bc830bc3e6127ec954d 2026-07-20T18:54:43-05:00 fix(security): mint a fresh signing key on party rename, and close the day's loose ends",
+      "1ee9def9e1fcecf8e08c5ce9ea579c5a9d8fd5e5 2026-07-12T03:15:17-05:00 fix(plugin-core): enforce single workspace cache resolver"
+    ]
+  },
+  {
+    "file": "plugins/core/sync/sync-plugin-core.ps1",
+    "lastWriteUtc": "2026-08-21T22:16:00.5277415Z",
+    "lastWriteAfterB2": true,
+    "porcelain": " M plugins/core/sync/sync-plugin-core.ps1",
+    "log": [
+      "bf000bb7fc495b6011eb5888a8c9293c992eb305 2026-08-18T13:38:20-05:00 feat(products,handoff): ship products + handoff; refresh docs and wiki",
+      "1ee9def9e1fcecf8e08c5ce9ea579c5a9d8fd5e5 2026-07-12T03:15:17-05:00 fix(plugin-core): enforce single workspace cache resolver",
+      "f48a941185cbca3dda94e64b49b609eade2e94be 2026-06-29T05:23:54-05:00 fix(triage): stabilize run processing and schema",
+      "4b141000dabace4038e6ead263841a0381f1ca33 2026-06-28T05:56:40-05:00 feat: harden plugin and triage workflows",
+      "95e1cce9da2b26e13606b797651d5bcf1670bf79 2026-06-26T15:49:28-05:00 feat: migrate plugins to PowerShell runtime"
+    ]
+  },
+  {
+    "file": "src/McpServer.Repl.Core/ReplCommandDispatcher.cs",
+    "lastWriteUtc": "2026-08-21T22:31:34.2620934Z",
+    "lastWriteAfterB2": true,
+    "porcelain": " M src/McpServer.Repl.Core/ReplCommandDispatcher.cs",
+    "log": [
+      "bf000bb7fc495b6011eb5888a8c9293c992eb305 2026-08-18T13:38:20-05:00 feat(products,handoff): ship products + handoff; refresh docs and wiki",
+      "7c4821ca9d0ce9e205482b6f68afbc9e058cfb28 2026-08-12T17:31:22-05:00 feat(sessionlog): require planFile and todoId on session turns",
+      "0873a5c20697abaf524546b28b3716453893fc68 2026-07-14T15:43:20-05:00 fix(triage): restore research runner, workspace binding, and workspacePath export",
+      "ecdc34cb024c80be58eababc607bd98eca3e27c9 2026-07-14T13:07:52-05:00 feat(sessionlog): codex transcript normalization, soft-delete revive, docs refresh",
+      "51fbe120424f5190e7dfd5d14ca0228c5bbf1383 2026-07-12T01:56:21-05:00 fix(triage): complete MCP remediation"
+    ]
+  },
+  {
+    "file": "src/McpServer.Repl.Core/SessionLogPersistence.cs",
+    "lastWriteUtc": "2026-07-11T15:32:14.6479935Z",
+    "lastWriteAfterB2": false,
+    "porcelain": null,
+    "log": [
+      "7a755c117f2783aed228039ed8056d3f0fa05739 2026-07-09T17:46:39-05:00 feat(repl): add durable session persistence fail-safe"
+    ]
+  },
+  {
+    "file": "src/McpServer.Repl.Host/ServiceCollectionExtensions.cs",
+    "lastWriteUtc": "2026-08-16T18:18:32.7983706Z",
+    "lastWriteAfterB2": false,
+    "porcelain": null,
+    "log": [
+      "bf000bb7fc495b6011eb5888a8c9293c992eb305 2026-08-18T13:38:20-05:00 feat(products,handoff): ship products + handoff; refresh docs and wiki",
+      "51fbe120424f5190e7dfd5d14ca0228c5bbf1383 2026-07-12T01:56:21-05:00 fix(triage): complete MCP remediation",
+      "c217d7a081c1ab4945e44eac381d8b9bea2a2df4 2026-07-10T07:58:05-05:00 feat(transcripts): add multi-agent transcript ingestion",
+      "7a755c117f2783aed228039ed8056d3f0fa05739 2026-07-09T17:46:39-05:00 feat(repl): add durable session persistence fail-safe",
+      "c56f391a04c5858485251560a3bee95c695f5d9b 2026-07-08T13:00:13-05:00 feat(agent-help): add conversation API, REPL workflow, and traceability backfill"
+    ]
+  },
+  {
+    "file": "tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs",
+    "lastWriteUtc": "2026-08-21T22:33:28.1125932Z",
+    "lastWriteAfterB2": true,
+    "porcelain": "?? tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs",
+    "log": []
+  },
+  {
+    "file": "tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+    "lastWriteUtc": "2026-08-21T21:47:58.2784977Z",
+    "lastWriteAfterB2": false,
+    "porcelain": "?? tests/Build.Tests/SyncAgentPluginsChecksumTests.cs",
+    "log": []
+  },
+  {
+    "file": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+    "lastWriteUtc": "2026-08-21T22:31:34.2620934Z",
+    "lastWriteAfterB2": true,
+    "porcelain": " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+    "log": [
+      "0e0c57638bf7b75342f0893763a656677579b769 2026-08-20T19:46:32-05:00 feat(sessionlog): incremental dialog persist and 503 degrade-queue",
+      "9649753a8e6e0244ce6efc20bc34685928eb4a6b 2026-08-19T16:12:31-05:00 fix(plugin-core): leftover S2 StrictMode, failsafe 503, SessionEnd, xagent, verify, beginTurn timeout",
+      "508b1690fec7fb911afad4667c76523b46b0530a 2026-07-23T11:58:22-05:00 fix(plugin): close the cached-value recurrence vector for agent header fields",
+      "d22a154876ff95ed8a36b3e149f39faf7ad4baf6 2026-07-23T11:38:51-05:00 fix(plugin): stop agent runtime header fields fabricating values",
+      "1fb065e8eea53215fc16a327bd8840f2fa768bb2 2026-07-22T18:54:59-05:00 fix: populate plugin session headers"
+    ]
+  }
+]

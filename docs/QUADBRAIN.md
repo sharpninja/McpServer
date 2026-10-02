@@ -98,20 +98,22 @@ Mcp:
     AllowedEndpointHosts: []       # explicit allowlist of custom endpoint hosts
     DefaultTimeoutSeconds: 30
     MaxTimeoutSeconds: 300
+    CliRunAs: ''                   # Windows profile used to spawn Cli slots (PATH + auth caches)
+    CliWorkingDirectory: ''
     Slots: []                      # the four brain definitions (see below)
 ```
 
-Each entry in `Slots` defines one brain:
+Each entry in `Slots` defines one brain. `ProviderKind` may be `OpenAI`, `OpenAICompatible`, or `Cli`.
 
 ```yaml
     Slots:
       - SlotId: brain-slot-creativity
         Role: Creativity           # Creativity | Logic | CuriosityEngine | ArbiterOfTruth
         DisplayName: Creativity
-        ProviderKind: OpenAICompatible # OpenAI | OpenAICompatible
-        ModelId: my-model
-        Endpoint: http://127.0.0.1:8312/v1   # optional; required for OpenAICompatible
-        CredentialReference: env:MY_CREATIVITY_API_KEY
+        ProviderKind: Cli          # OpenAI | OpenAICompatible | Cli
+        ModelId: grok-4.6
+        Endpoint: cli://grok-cli   # cli://grok-cli | cli://grok-build | cli://codex-cli
+        CredentialReference: cli:interactive
         Enabled: true
         TimeoutSeconds: 180
         MaxOutputTokens: 4096
@@ -120,9 +122,10 @@ Each entry in `Slots` defines one brain:
         ReplaceExisting: true
 ```
 
+`Cli` slots reuse the existing Grok Build CLI and Codex CLI strategies. Grok turns keep a stable `--session-id` and later `--resume` that session at `xhigh` effort. Codex turns start with `codex exec` and later `codex exec resume` at `model_reasoning_effort=xhigh`. Live invocation still requires `Mcp:BrainSlots:ExecutionEnabled: true` and `Mcp:TurnTransactions:Enabled: true`.
+
 A ready-to-use template for all four roles ships at
-`config/brain-slots/quad-brain-slot-assignments.yaml`; copy its `Slots` into your config and set the
-credential environment variables it references.
+`config/brain-slots/quad-brain-slot-assignments.yaml`; copy its `Slots` into your config.
 
 ### Credentials are referenced, never inlined
 
@@ -130,6 +133,7 @@ credential environment variables it references.
 
 - `env:NAME` - read from the environment variable `NAME`.
 - `config:Some:Key` - read from configuration at `Some:Key`.
+- `cli:interactive` - Cli slots; the CLI process uses the `CliRunAs` profile, not an API key.
 - `file:/path/to/secret` - read from a file.
 
 ### Endpoint policy
@@ -152,6 +156,12 @@ Mcp:
 
 When `ExecutionEnabled` is false, or transactions are disabled/degraded, invocations fail closed (no
 provider is called).
+
+Keyserver signing is QuadBrain-only (FR-MCP-173, `TurnTransactionKeyserverScope`). First-party adapters
+(TODO, session-log including QBAgent, requirements, memory, repo, and the rest) persist without the
+coordinator or keyserver even when `TurnTransactions.Enabled=true`. Do not disable that live flag to
+unblock general-agent writes. The Linux box MCP at `/opt/mcpserver` runs `develop` `8f30caf` with the
+bypass live; that close-out was a Linux publish/swap, not Windows Nuke `UpdateService`.
 
 ## 4. Provisioning the quad
 
@@ -217,9 +227,11 @@ version mismatch is rejected.
 2. ArbiterOfTruth reconciles the three committed outputs over the original input and commits the final
    decision.
 3. If the Arbiter elects tools, **MCP-internal tools** (named `mcp_*` - TODO, repo, and FR/TR/TEST
-   requirements mutations) run **server-side** through the transaction-gated services and are stripped from
-   the response; **external tools** are emitted to the caller as OpenAI `tool_calls`. Internal-tool failures
-   are surfaced as an assistant note and recorded to the session log, never emitted as tool commands.
+   requirements mutations) run **server-side** through the first-party adapters and are stripped from
+   the response; **external tools** are emitted to the caller as OpenAI `tool_calls`. Those internal
+   adapters now bypass the keyserver (FR-MCP-173). Brain-slot invoke and weight-update stay
+   coordinator-gated. Internal-tool failures are surfaced as an assistant note and recorded to the
+   session log, never emitted as tool commands.
 4. The full prompt and output of every brain interaction are logged (best-effort, secret-redacted) to the
    attached session's log.
 
@@ -229,8 +241,9 @@ version mismatch is rejected.
 - **Credential references only.** Raw secrets are never stored or returned; only `env:`/`config:`/`file:`
   references are persisted.
 - **Endpoint allowlist.** Custom endpoints must be permitted by host allowlist or the loopback gate.
-- **Transaction gating.** Every invocation and weight update commits through the turn transaction
-  coordinator with a trusted-party signed manifest; degraded transactions fail closed.
+- **Transaction gating.** Every brain-slot invocation and weight update commits through the turn
+  transaction coordinator with a trusted-party signed manifest; degraded QuadBrain transactions fail
+  closed. Non-QuadBrain first-party mutations bypass the coordinator and keyserver.
 - **Audit.** Invocations and weight updates write hashed audit rows; full-text dialog is captured in the
   session log.
 

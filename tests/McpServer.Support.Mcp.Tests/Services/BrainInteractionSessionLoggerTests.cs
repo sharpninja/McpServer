@@ -40,6 +40,27 @@ public sealed class BrainInteractionSessionLoggerTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>FR-MCP-QBEXEC-001 AC-5: an internal-tool failure is appended through ISessionLogService.</summary>
+    [Fact]
+    public async Task LogInternalToolFailure_AppendsDialogViaSessionLog()
+    {
+        _sessionLog.AppendProcessingDialogAsync("QBAgent", "S", "T", Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
+            .Returns(1);
+        var sut = CreateSut();
+
+        await sut.LogInternalToolFailureAsync("QBAgent", "S", "T", "mcp_todo_update", "transaction rejected", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sessionLog.Received(1).AppendProcessingDialogAsync(
+            "QBAgent", "S", "T",
+            Arg.Is<IReadOnlyList<ProcessingDialogItemDto>>(items =>
+                items != null
+                && items.Count == 1
+                && items[0].Content!.Contains("mcp_todo_update", StringComparison.Ordinal)
+                && items[0].Content!.Contains("transaction rejected", StringComparison.Ordinal)
+                && string.Equals(items[0].Category, "error", StringComparison.Ordinal)),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
     /// <summary>Without session/turn context, nothing is appended.</summary>
     [Fact]
     public async Task Log_NoSessionContext_NoOps()

@@ -52,7 +52,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
     public void BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag()
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt",
             model: "grok-4.3");
 
@@ -77,7 +77,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
     public void BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(string? model)
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt",
             model: model);
 
@@ -90,7 +90,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
     public void BuildGrokArgumentList_ContainsExpectedFlagsInOrder()
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
-            workingDirectory: @"F:\GitHub\McpServer",
+            workingDirectory: @"Q:\__mcp_unit_test__\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt");
 
         // "high" is the strongest effort level every deployed Grok CLI accepts; "max" is
@@ -99,7 +99,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
             new[]
             {
                 "--prompt-file", @"C:\temp\grok-prompt.txt",
-                "--cwd", @"F:\GitHub\McpServer",
+                "--cwd", @"Q:\__mcp_unit_test__\McpServer",
                 "--permission-mode", "plan",
                 "--output-format", "plain",
                 "--effort", "high",

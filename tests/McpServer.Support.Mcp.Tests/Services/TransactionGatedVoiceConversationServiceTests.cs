@@ -9,49 +9,47 @@ using MsOptions = Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Verifies voice/external agent mutations fail closed while required turn transactions are active.
+/// TEST-MCP-221 / FR-MCP-173: Voice/external agent mutations skip coordinator/keyserver.
 /// </summary>
 public sealed class TransactionGatedVoiceConversationServiceTests
 {
-    /// <summary>submit-turn fails before invoking the interactive voice service while required transactions are active.</summary>
+    /// <summary>submit-turn delegates to the inner voice service while required transactions are active.</summary>
     [Fact]
-    public async Task SubmitTurnAsync_WhenTransactionsRequired_ThrowsWithoutCallingInner()
+    public async Task SubmitTurnAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "Hello" }, cancellationToken: TestContext.Current.CancellationToken))
+        await sut.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "Hello" }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
-        Assert.Contains("not transaction compensated", ex.Message, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive()
-            .SubmitTurnAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .SubmitTurnAsync("voice-1", Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>send-session-message fails before writing to the external interactive process when degraded.</summary>
+    /// <summary>send-session-message delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task SendSessionMessageAsync_WhenCoordinatorDegraded_ThrowsWithoutCallingInner()
+    public async Task SendSessionMessageAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.SendSessionMessageAsync("voice-1", "User is here.", cancellationToken: TestContext.Current.CancellationToken))
+        await sut.SendSessionMessageAsync("voice-1", "User is here.", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
-        Assert.Contains("txn degraded", ex.Message, StringComparison.Ordinal);
-        await inner.DidNotReceive()
-            .SendSessionMessageAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .SendSessionMessageAsync("voice-1", "User is here.", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>voice streaming returns a single error event without invoking the inner stream when blocked.</summary>
+    /// <summary>voice streaming delegates to the inner stream while required transactions are active.</summary>
     [Fact]
-    public async Task SubmitTurnStreamingAsync_WhenTransactionsRequired_ReturnsBlockedErrorEventWithoutCallingInner()
+    public async Task SubmitTurnStreamingAsync_WhenTransactionsRequired_DelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
+        inner.SubmitTurnStreamingAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
+            .Returns(OneVoiceEvent());
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
         var events = new List<VoiceTurnStreamEvent>();
@@ -63,10 +61,9 @@ public sealed class TransactionGatedVoiceConversationServiceTests
             events.Add(streamEvent);
         }
 
-        var blockedEvent = Assert.Single(events);
-        Assert.Equal("error", blockedEvent.Type);
-        Assert.Contains("not transaction compensated", blockedEvent.Message, StringComparison.OrdinalIgnoreCase);
-        inner.DidNotReceive()
+        var streamed = Assert.Single(events);
+        Assert.Equal("chunk", streamed.Type);
+        inner.Received(1)
             .SubmitTurnStreamingAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -133,6 +130,12 @@ public sealed class TransactionGatedVoiceConversationServiceTests
             LastUpdatedUtc = "2026-06-14T12:00:00Z",
             ExecutionStrategy = "test",
         };
+
+    private static async IAsyncEnumerable<VoiceTurnStreamEvent> OneVoiceEvent()
+    {
+        yield return new VoiceTurnStreamEvent { Type = "chunk", Text = "ok" };
+        await Task.CompletedTask;
+    }
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator
     {

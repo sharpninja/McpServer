@@ -16,9 +16,9 @@ namespace McpServer.Support.Mcp.Tests.Products;
 /// </summary>
 public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposable
 {
-    private const string Owner = @"F:\GitHub\product-owner";
-    private const string Sibling = @"F:\GitHub\product-sibling";
-    private const string Outsider = @"F:\GitHub\product-outsider";
+    private const string Owner = @"Q:\__mcp_unit_test__\product-owner";
+    private const string Sibling = @"Q:\__mcp_unit_test__\product-sibling";
+    private const string Outsider = @"Q:\__mcp_unit_test__\product-outsider";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
     private readonly CallContext _ctx = new();
@@ -217,6 +217,48 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
         Assert.True(result.IsSuccess, result.Error);
         Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == Owner);
         Assert.Contains(result.Value.Functional, f => f.Id == "FR-OUT-001");
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQSCOPE-REPL-001: a null layerKey must read the persisted workspace
+    /// current layer after another context updates it. Captive/tracked workspace rows
+    /// must not keep effective() on the pre-update layer (FR-MCP-REQSCOPE-951 after
+    /// SetCurrentRequirementLayerAsync(layer-2)).
+    /// </summary>
+    [Fact]
+    public async Task HandleAsync_NullLayerKey_UsesPersistedCurrentLayerAfterExternalUpdate()
+    {
+        await using var db = new McpDbContext(_options);
+        SeedRequirement(db, Owner, "fr", "FR-LAYER2-LOCAL", "Layer 2 FR", "body", "layer-2");
+        await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var handler = new GetProductEffectiveRequirementsQueryHandler(db);
+        var before = await handler.HandleAsync(
+            new GetProductEffectiveRequirementsQuery(Owner, null, "local"),
+            _ctx).ConfigureAwait(true);
+
+        Assert.True(before.IsSuccess, before.Error);
+        Assert.Equal("layer-1", before.Value!.CurrentLayer.Key);
+        Assert.Contains(before.Value.Functional, f => f.Id == "FR-OWNER-001");
+        Assert.DoesNotContain(before.Value.Functional, f => f.Id == "FR-LAYER2-LOCAL");
+
+        await using (var writer = new McpDbContext(_options))
+        {
+            var workspace = await writer.Workspaces
+                .IgnoreQueryFilters()
+                .FirstAsync(w => w.WorkspaceId == Owner, TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            workspace.CurrentRequirementLayerKey = "layer-2";
+            await writer.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var after = await handler.HandleAsync(
+            new GetProductEffectiveRequirementsQuery(Owner, null, "local"),
+            _ctx).ConfigureAwait(true);
+
+        Assert.True(after.IsSuccess, after.Error);
+        Assert.Equal("layer-2", after.Value!.CurrentLayer.Key);
+        Assert.Contains(after.Value.Functional, f => f.Id == "FR-LAYER2-LOCAL");
     }
 
     private async Task CreateProductAsync(McpDbContext db)

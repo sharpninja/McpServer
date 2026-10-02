@@ -10,19 +10,35 @@ using MsOptions = Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: Verifies GitHub CLI writes fail closed while required turn
-/// transactions are active because external GitHub side effects are not compensated.
+/// TEST-MCP-221 / FR-MCP-173: GitHub CLI writes skip coordinator/keyserver and
+/// invoke the inner service even when turn transactions are required.
 /// </summary>
 public sealed class TransactionGatedGitHubCliServiceTests
 {
     /// <summary>
-    /// TEST-MCP-161: GitHub issue, comment, and workflow mutations return
-    /// failures before invoking the underlying gh CLI service.
+    /// TEST-MCP-221: GitHub issue, comment, and workflow mutations invoke the
+    /// inner gh CLI service even when turn transactions are required.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_ReturnDeferredFailuresWithoutCallingInner()
+    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
     {
         var inner = Substitute.For<IGitHubCliService>();
+        inner.CreateIssueAsync("title", "body", Arg.Any<CancellationToken>())
+            .Returns(new GitHubCreateIssueResult(true, 42, "url", null));
+        inner.CommentOnIssueAsync("42", "comment", Arg.Any<CancellationToken>())
+            .Returns(new GitHubCommentResult(true, null));
+        inner.CommentOnPullAsync("43", "comment", Arg.Any<CancellationToken>())
+            .Returns(new GitHubCommentResult(true, null));
+        inner.UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        inner.CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        inner.ReopenIssueAsync(42, Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        inner.RerunWorkflowRunAsync(1001, Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        inner.CancelWorkflowRunAsync(1001, Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
         var sut = CreateSut(inner, new CapturingCoordinator());
 
         var create = await sut.CreateIssueAsync("title", "body", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -34,30 +50,22 @@ public sealed class TransactionGatedGitHubCliServiceTests
         var rerun = await sut.RerunWorkflowRunAsync(1001, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var cancel = await sut.CancelWorkflowRunAsync(1001, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(create.Success);
-        Assert.False(issueComment.Success);
-        Assert.False(pullComment.Success);
-        Assert.False(update.Success);
-        Assert.False(close.Success);
-        Assert.False(reopen.Success);
-        Assert.False(rerun.Success);
-        Assert.False(cancel.Success);
-        Assert.Contains("not transaction compensated", create.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", issueComment.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", pullComment.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", update.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", close.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", reopen.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", rerun.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", cancel.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive().CreateIssueAsync(Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().CommentOnIssueAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().CommentOnPullAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().UpdateIssueAsync(Arg.Any<int>(), Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().CloseIssueAsync(Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().ReopenIssueAsync(Arg.Any<int>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().RerunWorkflowRunAsync(Arg.Any<long>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().CancelWorkflowRunAsync(Arg.Any<long>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.True(create.Success);
+        Assert.True(issueComment.Success);
+        Assert.True(pullComment.Success);
+        Assert.True(update.Success);
+        Assert.True(close.Success);
+        Assert.True(reopen.Success);
+        Assert.True(rerun.Success);
+        Assert.True(cancel.Success);
+        await inner.Received(1).CreateIssueAsync("title", "body", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).CommentOnIssueAsync("42", "comment", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).CommentOnPullAsync("43", "comment", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).ReopenIssueAsync(42, Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).RerunWorkflowRunAsync(1001, Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).CancelWorkflowRunAsync(1001, Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -106,20 +114,20 @@ public sealed class TransactionGatedGitHubCliServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-161: Degraded transaction security fails closed with the
-    /// coordinator message.
+    /// TEST-MCP-221: Degraded transaction security does not block GitHub CLI writes.
     /// </summary>
     [Fact]
-    public async Task CloseIssueAsync_WhenCoordinatorDegraded_ReturnsCoordinatorFailure()
+    public async Task CloseIssueAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IGitHubCliService>();
+        inner.CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
         var result = await sut.CloseIssueAsync(42, "completed", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal("txn degraded", result.ErrorMessage);
-        await inner.DidNotReceive().CloseIssueAsync(Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.True(result.Success);
+        await inner.Received(1).CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>

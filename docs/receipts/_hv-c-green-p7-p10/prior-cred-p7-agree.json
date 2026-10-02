@@ -1,0 +1,19 @@
+{
+  "Exists": true,
+  "Length": 15010,
+  "LastWriteTimeUtc": "2026-08-22T01:46:20.8022941Z",
+  "OverallVerdictLineMatch": true,
+  "MentionsCRedP7": true,
+  "MentionsNotImplemented": true,
+  "MentionsFailed8": true,
+  "MentionsPassed14": true,
+  "MentionsSkipped0": true,
+  "MentionsP8Absent": true,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "LaunchAsyncThrowsNotImplemented": true,
+  "P8NamedTestsPresent": false,
+  "FilterFailed": 8,
+  "AllPassed": 14,
+  "AllFailed": 8
+}

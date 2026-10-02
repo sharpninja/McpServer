@@ -59,6 +59,34 @@ public sealed class TurnTransactionCoordinatorTests
             .ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-221 / FR-MCP-173: a general-agent mutation (todo.update) does not
+    /// call keyserver even when turn transactions are enabled and required.
+    /// </summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenEnabledForGeneralAgentMutation_BypassesKeyserver()
+    {
+        var keyServer = Substitute.For<IKeyServerManifestService>();
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true, RequiredForMutations = true },
+            keyServer: keyServer,
+            transactionPubSub: transactionPubSub);
+
+        var result = await coordinator.ExecuteAsync(
+            CreateGeneralAgentRequest("txn-todo-update"),
+            _ => Task.FromResult(new TurnMutationResult { Success = true, ResultJson = "{\"ok\":true}" }),
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("bypassed", result.Status);
+        Assert.True(result.MutationApplied);
+        Assert.Contains("QuadBrain", result.Message, StringComparison.OrdinalIgnoreCase);
+        await keyServer.DidNotReceive().SignManifestAsync(Arg.Any<TransactionManifestSignRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await transactionPubSub.DidNotReceive().PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     /// <summary>Enabled coordinator returns committed only after subscriber commit confirms the diffgram.</summary>
     [Fact]
     public async Task ExecuteAsync_WhenEnabled_CommitsAfterSubscriberConfirmation()
@@ -602,8 +630,21 @@ public sealed class TurnTransactionCoordinatorTests
         {
             TransactionId = transactionId,
             TurnId = "turn-1",
-            OperationName = "todo.update",
+            OperationName = "brain-slot.invoke",
             OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
+            PublisherPartyId = "brain-slot:arbiter-of-truth",
+            SubscriberPartyId = "subscriber-1",
+            Sequence = 1,
+            Mutating = true,
+        };
+
+    private static TurnTransactionRequest CreateGeneralAgentRequest(string transactionId)
+        => new()
+        {
+            TransactionId = transactionId,
+            TurnId = "turn-1",
+            OperationName = "todo.update",
+            OperationBodyJson = "{\"id\":\"PLAN-TXNKEYSERVER-001\"}",
             PublisherPartyId = "mcpserver",
             SubscriberPartyId = "subscriber-1",
             Sequence = 1,

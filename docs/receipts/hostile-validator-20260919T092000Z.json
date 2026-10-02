@@ -1,0 +1,42 @@
+{
+  "phase": "H7b-green",
+  "workClass": "Class 1 H7b-green",
+  "todoId": "MCP-MEMORY-002",
+  "branch": "cursor/memory-s7b-h7b-c219",
+  "baseSha": "63f2e74515e23e4b3068bcf4071986e4ef4ca82f",
+  "h7aReceipt": "docs/receipts/hostile-validator-20260919T081530Z.md",
+  "h7aValueGateAgree": true,
+  "overallVerdict": "AGREE",
+  "filters": {
+    "memoryNamespace": { "failed": 0, "passed": 337, "skipped": 0 },
+    "s7Focus": { "failed": 0, "passed": 91, "skipped": 0 }
+  },
+  "bench": {
+    "v1Cells": 128,
+    "v1PassRate": 1.0,
+    "v1MeanTokensWithMemory": 38.125,
+    "v1MeanTokensWithoutMemory": 20.25,
+    "v2Jobs": 40,
+    "v2PairedSuccesses": 40,
+    "v2SuccessGatedMeanWithMemory": 118.6,
+    "v2SuccessGatedMeanWithoutMemory": 189.6,
+    "v1JsonSha256": "ee4f295e0c9124f23d9172899fd357e1c9c06feea60dade6ec0e92dc0cb6850b",
+    "v2JsonSha256": "97f3e7f0be72d9e839ed3e5042d467e3f96a1c717ef2121672903f3dc94907c9"
+  },
+  "plugins": [
+    "grok",
+    "claude-code",
+    "claude-cowork",
+    "cline",
+    "cline-v2",
+    "codex",
+    "copilot",
+    "opencode"
+  ],
+  "gaps": [
+    "Sibling plugin repo push/fork 403 for cursor[bot]; apply-memory-s7b-hosts.ps1 is the ship path.",
+    "No separate H7b-red receipt (one-pass red+green).",
+    "MCP TODO store unavailable; MCP-MEMORY-002 not marked Done.",
+    "Node plugin jest not run (no node_modules); bats 8/8 on PS hosts."
+  ]
+}

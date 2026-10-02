@@ -1,0 +1,105 @@
+[
+  {
+    "file": "d2g-handoff-csharp.trx",
+    "total": 2,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ProcessingLease_RenewsAndFencesTerminalUpdates",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.Provenance_IncludesEffectiveCustomPromptIdentityAndVersion"
+    ]
+  },
+  {
+    "file": "d2g-handoff-durability.trx",
+    "total": 24,
+    "executed": 24,
+    "passed": 24,
+    "failed": 0,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_InvalidRequireReviewDraft_IsFailedAndNotSuccess",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_StaleApprovalLease_IsRecoveredBySecondInstance",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_ExistingTodoFromThisRun_HealsInsteadOfColliding",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.SaveRunAfterTodo_CommitFailure_HealsAndPreservesUnrelatedTrackedEntities",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CancelledAfterReserve_PersistsFailureThenThrows",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_ConcurrentReplayOfLiveLease_ReturnsInProgressNotReplay",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.SaveRunAfterTodo_CancellationAfterTodo_PersistsCreatedThenThrows",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_UndefinedMode_DoesNotCreate",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ProcessingLease_RenewsAndFencesTerminalUpdates",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_SameKeyChangedPayload_IsCollisionNotHeal",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.SaveRunAfterTodo_CallerCancellation_PersistsCreatedReceipt",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CallerOwnedTodoId_IsNonSuccessCollision",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAndApprove_CredentialBearingProvenance_IsSanitized",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CustomPromptTemplate_IsRejected",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_TwoInstances_CreateExactlyOneTodo",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_Rejection_DoesNotCreateTodo",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_StaleLease_IsTakenOverBySecondInstance",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.GetRunAsync_AfterCollision_PreservesPersistedSuccessAndErrorCode",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.SaveRunAfterTodo_CompensationTimeout_DoesNotReportCreatedFromMemory",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_LiveClaimant_RejectsStaleSecondClaim",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.Provenance_IncludesEffectiveCustomPromptIdentityAndVersion",
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.SaveRunAfterTodo_TodoAbsent_DoesNotReportCreatedFromMemory"
+    ]
+  },
+  {
+    "file": "d2g-handoff-migration-postgres.trx",
+    "total": 1,
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.PostgreSql_HandoffMigration_DowngradeAndReupgrade"
+    ]
+  },
+  {
+    "file": "d2g-handoff-migration-sqlite.trx",
+    "total": 1,
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.Sqlite_HandoffMigration_DowngradeAndReupgrade"
+    ]
+  },
+  {
+    "file": "d2g-handoff-migration-sqlserver.trx",
+    "total": 1,
+    "executed": 1,
+    "passed": 0,
+    "failed": 1,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade"
+    ]
+  },
+  {
+    "file": "d2g-plugin-sync-reject.trx",
+    "total": 2,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "notExecuted": 0,
+    "timeout": 0,
+    "error": 0,
+    "methods": [
+      "McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CustomPromptTemplate_IsRejected",
+      "McpServer.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact"
+    ]
+  }
+]

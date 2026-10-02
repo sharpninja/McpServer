@@ -1,0 +1,10 @@
+{
+  "missingCount": 0,
+  "secretInPlan": true,
+  "secretOnAuditLine": true,
+  "classifiedCount": 113,
+  "d0NameCount": 116,
+  "factTheoryRawCount": 113,
+  "secretInD0Block": true,
+  "filesCount": 20
+}

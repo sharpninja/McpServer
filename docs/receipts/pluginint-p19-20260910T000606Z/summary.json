@@ -1,0 +1,121 @@
+{
+  "branch": "develop",
+  "sha": "08eaf2a506a0aa2db89766e6a547d9ae1c85f681",
+  "unrelatedCommitCount": 0,
+  "plugins": [
+    {
+      "repositoryName": "mcpserver-codex-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-codex-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-claude-code-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-claude-code-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-claude-cowork-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-claude-cowork-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-copilot-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-copilot-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-grok-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-grok-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-cline-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-cline-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-cline-v2-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-cline-v2-plugin-before.log"
+    },
+    {
+      "repositoryName": "mcpserver-opencode-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-opencode-plugin-before.log"
+    }
+  ],
+  "afterSync": [
+    {
+      "repositoryName": "mcpserver-codex-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-codex-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-claude-code-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-claude-code-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-claude-cowork-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-claude-cowork-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-copilot-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-copilot-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-grok-plugin",
+      "nativeSuite": "Pester",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-grok-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-cline-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-cline-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-cline-v2-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-cline-v2-plugin-after-sync.log"
+    },
+    {
+      "repositoryName": "mcpserver-opencode-plugin",
+      "nativeSuite": "Jest",
+      "failed": 0,
+      "skipped": 0,
+      "logFile": "mcpserver-opencode-plugin-after-sync.log"
+    }
+  ]
+}

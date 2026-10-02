@@ -5,7 +5,9 @@ using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging.Abstractions;
+using McpServer.Support.Mcp.Storage.Entities;
 using NSubstitute;
 using Xunit;
 
@@ -188,7 +190,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var sessionId = BuildSessionId("Codex", "agent-runtime-header");
         var dto = CreateTestDto("Codex", sessionId);
         dto.AgentSessionId = "Codex-20260722T213000Z-agent";
-        dto.AgentSessionTranscriptFile = @"F:\GitHub\McpServer\.mcpServer\codex\transcripts\session.jsonl";
+        dto.AgentSessionTranscriptFile = @"Q:\__mcp_unit_test__\McpServer\.mcpServer\codex\transcripts\session.jsonl";
         dto.AgentExecutablePath = @"C:\Users\kingd\AppData\Roaming\npm\codex.cmd";
         dto.AgentExecutableVersion = "1.2.3";
 
@@ -1830,14 +1832,145 @@ public sealed class SessionLogServiceTests : IDisposable
         bool useServiceWorkspaceContext)
         => BuildSqliteSut(connection, WorkspacePath, useServiceWorkspaceContext);
 
+    /// <summary>
+    /// TEST-MCP-SESSIONLIFE-005: a unique SessionLogTurns race on the first insert
+    /// retries once and updates the row that won, leaving a single request id.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates()
+    {
+        var databasePath = Path.Combine(Path.GetTempPath(), "sessionlog-unique-" + Guid.NewGuid().ToString("N") + ".db");
+        var connectionString = new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString();
+        var sessionId = BuildSessionId("GrokCode", "unique-race");
+        try
+        {
+            using (var seedConnection = new SqliteConnection(connectionString))
+            {
+                seedConnection.Open();
+                var (seed, seedDb) = BuildSqliteSut(seedConnection);
+                using (seedDb)
+                {
+                    await seed.SubmitAsync(
+                        CreateTestDto("GrokCode", sessionId),
+                        cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                }
+            }
+
+            var interceptor = new RivalTurnInsertInterceptor();
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var (sut, db) = BuildSqliteSut(connection, WorkspacePath, interceptor: interceptor);
+            using (db)
+            {
+                var turn = new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260923T205606Z-001-race",
+                    Timestamp = "2026-09-23T20:56:06Z",
+                    QueryText = "winner text",
+                    Status = "in_progress",
+                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                };
+
+                var turnId = await sut.UpsertTurnAsync(
+                    "GrokCode",
+                    sessionId,
+                    turn,
+                    TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+                Assert.True(turnId > 0);
+                Assert.Equal(1, interceptor.Inserts);
+                var rows = await db.SessionLogTurns
+                    .IgnoreQueryFilters()
+                    .Where(item => item.RequestId == turn.RequestId)
+                    .ToListAsync(TestContext.Current.CancellationToken)
+                    .ConfigureAwait(true);
+                var stored = Assert.Single(rows);
+                Assert.Equal("winner text", stored.QueryText);
+            }
+        }
+        finally
+        {
+            TryDelete(databasePath);
+        }
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+        catch (IOException)
+        {
+        }
+    }
+
+    /// <summary>Inserts the racing turn on a second connection before the first save.</summary>
+    private sealed class RivalTurnInsertInterceptor : SaveChangesInterceptor
+    {
+        /// <summary>How many rival rows this interceptor inserted.</summary>
+        public int Inserts { get; private set; }
+
+        /// <inheritdoc />
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        {
+            InsertRival(eventData);
+            return result;
+        }
+
+        /// <inheritdoc />
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            InsertRival(eventData);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
+
+        private void InsertRival(DbContextEventData eventData)
+        {
+            if (Inserts > 0 || eventData.Context is null)
+                return;
+
+            var added = eventData.Context.ChangeTracker
+                .Entries<SessionLogTurnEntity>()
+                .FirstOrDefault(entry => entry.State == EntityState.Added);
+            if (added is null)
+                return;
+
+            var connectionString = eventData.Context.Database.GetConnectionString();
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return;
+
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = """
+                INSERT INTO SessionLogTurns (WorkspaceId, SessionLogId, RequestId, PlanFile, TodoId, QueryText)
+                VALUES ($ws, $sid, $rid, 'None', 'None', 'rival')
+                """;
+            command.Parameters.AddWithValue("$ws", added.Entity.WorkspaceId ?? string.Empty);
+            command.Parameters.AddWithValue("$sid", added.Entity.SessionLogId);
+            command.Parameters.AddWithValue("$rid", added.Entity.RequestId ?? string.Empty);
+            command.ExecuteNonQuery();
+            Inserts++;
+        }
+    }
+
     private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
         SqliteConnection connection,
         string workspacePath,
-        bool useServiceWorkspaceContext = true)
+        bool useServiceWorkspaceContext = true,
+        SaveChangesInterceptor? interceptor = null)
     {
-        var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(connection)
-            .Options;
+        var builder = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(connection);
+        if (interceptor is not null)
+            builder.AddInterceptors(interceptor);
+        var options = builder.Options;
         var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath };
         var db = new McpDbContext(options, workspaceContext);
         db.Database.EnsureCreated();

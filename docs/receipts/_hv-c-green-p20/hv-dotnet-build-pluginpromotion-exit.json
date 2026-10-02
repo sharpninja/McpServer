@@ -1,0 +1,6 @@
+{
+  "command": "dotnet build F:\\GitHub\\McpServer\\build\\_build.csproj -c Debug -m:1 --nologo",
+  "exitCode": 0,
+  "durationMs": 2696,
+  "project": "F:\\GitHub\\McpServer\\build\\_build.csproj"
+}

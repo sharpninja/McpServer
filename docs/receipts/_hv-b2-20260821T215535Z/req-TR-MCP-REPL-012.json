@@ -1,0 +1,31 @@
+{
+  "id": "TR-MCP-REPL-012",
+  "title": "Per-method REPL invocation timeout",
+  "body": "REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget (REPL_LONG_TIMEOUT, default 300s) while all other methods keep the short default (REPL_TIMEOUT, default 30s). Acceptance Criteria: (AC1) Get-ReplMethodTimeoutSeconds returns >30 for analyzeRequirements/generateDocument and 30 for sessionlog methods; (AC2) REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds. Origin: BUG-TRIAGE-072 (workflow.todo.analyzeRequirements, which blocks on an external Copilot CLI, was killed at the flat 30s REPL_TIMEOUT). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-REPL-027.",
+  "workspaceId": "F:\\GitHub\\McpServer",
+  "priority": "medium",
+  "status": "pending",
+  "notes": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC1",
+      "text": "Get-ReplMethodTimeoutSeconds returns greater than 30 for analyzeRequirements/generateDocument and 30 for sessionlog workflow methods completeTurn and beginTurn.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC2",
+      "text": "REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "AC3",
+      "text": "client.SessionLog.SubmitAsync while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120 or REPL_TIMEOUT when that is greater; this does not raise completeTurn/beginTurn above 30s.",
+      "isSatisfied": false,
+      "evidence": null
+    }
+  ],
+  "scopeStartLayerKey": "layer-1",
+  "scopeEndLayerKey": null
+}

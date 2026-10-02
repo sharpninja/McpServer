@@ -21,6 +21,9 @@ public enum AgentPoolOneShotContext
 
     /// <summary>TR-HANDOFF-AGENT-001: Extract a structured MCP TODO draft from a handoff document.</summary>
     HandoffTodoDraft,
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Protected one-shot context for hostile-review dispatch.</summary>
+    HostileReview,
 }
 
 /// <summary>Request payload for one-shot queue and resolve operations.</summary>

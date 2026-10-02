@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "verifiedAtUtc": "2026-09-28T03:10:50.5423036Z",
+  "method": "client.SessionLog.QueryAsync",
+  "sessionId": "Codex-20260927T191745Z-plugin-session",
+  "requestId": "req-20260928T020045Z-sessionlife-r4-execution",
+  "turnId": 86512,
+  "status": "in_progress",
+  "sessionCount": 1,
+  "turnCount": 1,
+  "action11ExactCount": 1,
+  "submitExitCode": 0,
+  "writeAheadPath": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\Codex\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260928T030520Z-req-20260928T020045Z-sessionlife-r4-execution-action11-4945.yaml",
+  "failsafeRemovedAfterExactReadback": true,
+  "contentSha256": "595D11D573FDD18ADB15DA4D85DEC7CDB6A7024C88717D37C51306036FF686CC",
+  "clearHelper": "installed lib/repl-invoke.ps1 Clear-ReplFailsafe",
+  "result": "Parent audit update durable; worker terminal failures remain distinct"
+}

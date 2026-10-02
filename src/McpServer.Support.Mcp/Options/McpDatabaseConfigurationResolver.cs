@@ -82,9 +82,15 @@ internal static class McpDatabaseConfigurationResolver
             _ => throw new InvalidOperationException($"Unsupported MCP database provider '{requestedProvider}'."),
         };
 
+        var autoMigrateRaw = GetEffectiveDatabaseValue(configuration, instanceName, "AutoMigrate");
+        if (autoMigrateRaw is not null && !bool.TryParse(autoMigrateRaw, out _))
+            throw new InvalidOperationException("Mcp:Database:AutoMigrate must be true or false.");
+        var autoMigrate = autoMigrateRaw is null || bool.Parse(autoMigrateRaw);
+
         return new McpDatabaseRuntimeOptions(
             McpDatabaseProviderFactory.CreateOptions(requestedProvider, connectionString, migrationsAssembly),
-            ResolveEncryptionOptions(configuration, instanceName));
+            ResolveEncryptionOptions(configuration, instanceName),
+            autoMigrate);
     }
 
     private static bool ShouldUseInMemoryDatabase(IConfiguration configuration, string? instanceName)

@@ -1,0 +1,6 @@
+﻿TimestampUtc=20260924T142043Z
+SqlHost=PAYTON-DESKTOP
+Tcp1433Connected=True
+Ping=True
+HealthHttp=200
+HealthBody={"status":"Healthy","version":"1.4.39\u002Bc59185ad0bcc518fd673a2f8b418d30739765f19","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0003},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0014}],"storage":"reachable"}

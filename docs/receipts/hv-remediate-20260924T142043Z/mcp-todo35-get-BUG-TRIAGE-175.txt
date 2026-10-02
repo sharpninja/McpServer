@@ -1,0 +1,32 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142257Z-ab70
+  result:
+    id: BUG-TRIAGE-175
+    title: beginTurn degrade path clobbers current-turn.yaml after SubmitAsync timeout
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - 'Grok plugin workflow.sessionlog.beginTurn for req-20260822T141800Z-001-continue-plan-completion hit the designed failsafe-queue path: client.SessionLog.SubmitAsync timed out or returned HTTP 503/backend_unavailable, so persist returned queued/degraded, the session_submit failsafe was kept, and the agent continued PLAN-ANDROIDALIGN-001. That timeout/503 mapping in Invoke-ReplPersistTurn is the FR-MCP-SESSIONPERSIST-002 contract, not a new persist defect. The product bug is Complete-ReplBeginTurnAfterPersist: after Invoke-WorkflowBeginTurn already wrote the full current-turn.yaml (queryTitle, queryText, planFile, todoId, openedAt, audit counters), the degrade helper Set-Content overwrites that file with only turnRequestId, sessionId, and status=in_progress. Later append/complete in the same session then persist from a stripped cache.'
+    - 'Triage group: triage-group-7bfa3538b3f212bc'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When workflow.sessionlog.beginTurn persist via client.SessionLog.SubmitAsync times out or returns HTTP 503/backend_unavailable, the call still reports queued/degraded, retains the session_submit failsafe, does not throw, and returns success so the agent can continue.'
+    - '- After that degrade, current-turn.yaml for the same requestId stays status=in_progress and still contains the fields already written for the turn (queryTitle, queryText, planFile, todoId, openedAt, and audit counters). Degrade must not replace the file with a three-field stub.'
+    - '- A later successful persist or failsafe drain of that retained session_submit record writes the same requestId with the original planFile and todoId.'
+    - 'Implementation notes:'
+    - '- Do not treat the SubmitAsync timeout/503 itself as the TODO. Invoke-ReplPersistTurn already classifies timeout|timed out|command_timeout|backend_unavailable|HTTP 503 as degraded/queued and keeps the failsafe. Do not raise the default 30s sessionlog timeout (BUG-TRIAGE-072 hang risk).'
+    - '- Fix Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1: if current-turn.yaml already exists for that requestId, leave it (or merge status=in_progress). Only write a minimal identity file when the turn file is missing.'
+    - '- Incident context: original workspace F:\GitHub\LyftAuditTools, Grok plugin, request req-20260822T141800Z-001-continue-plan-completion, TODO PLAN-ANDROIDALIGN-001. Failsafe replay was correctly deferred.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

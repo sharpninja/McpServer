@@ -1,0 +1,62 @@
+{
+  "PlanId": "PLAN-PLUGINHANDOFF-001",
+  "PlanDone": "false",
+  "PlanNote": "2026-08-22T07:19:24Z. Session GrokCode-20260822T071924Z-pluginhandoff-p16. C-green-P15 AGREE on disk. C-red-P16 hostile dispatched.",
+  "PlanTaskCount": 31,
+  "PlanTasksDoneTrue": [
+    "P0-A: hostile AGREE on this plan.",
+    "P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.",
+    "A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.",
+    "A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.",
+    "A3: create HYGIENE FR/TR/TEST 001-005 and mappings.",
+    "A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.",
+    "A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.",
+    "A6: hostile AGREE on requirements; no product code.",
+    "B1: write new red tests listed in section 6; do not relabel existing green.",
+    "B2: hostile after red.",
+    "B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.",
+    "B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.",
+    "B5: hostile after green.",
+    "D0 inventory of Handoff findings vs on-disk tests.",
+    "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+    "D1.5 hostile after red.",
+    "D2 implement remediations + three-provider migrations."
+  ],
+  "PlanTasksContainingP16": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "PlanTasksContainingC": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "PluginintId": "MCP-PLUGININT-001",
+  "PluginintDone": "false",
+  "PluginintP16": [
+    {
+      "task": "P16 [Red] Add companion AiTheory rows using the same scenario catalog; send the redacted persistence receipt/session artifact to AiStrategyFixture and require strict JSON fields valid, missingFields, and contradictions.",
+      "done": false
+    }
+  ],
+  "PluginintP15": [
+    {
+      "task": "P15 [Red] Add failsafe assertions: successful turns leave no pending recovery document, failed submit retains a root-ID-named pending file, and retry success deletes only that matching file.",
+      "done": false
+    }
+  ],
+  "PluginintP17": [
+    {
+      "task": "P17 [Green] Implement semantic assertions that reject model errors, invalid JSON, valid=false, missing required workflow fields, or contradictions with deterministic evidence; AI output never overrides deterministic failures.",
+      "done": false
+    }
+  ],
+  "AllIntDoneTrue": [
+    "P0 [Planning] Lock the central harness architecture, deterministic Theory plus companion AiTheory pattern, and FR-MCP-PLUGININT-001/TR-MCP-PLUGININT-001/TEST-MCP-PLUGININT-001 mapping."
+  ],
+  "PlanClientDone": "false",
+  "PluginintClientDone": "false"
+}

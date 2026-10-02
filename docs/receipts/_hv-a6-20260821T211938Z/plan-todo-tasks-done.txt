@@ -1,0 +1,2 @@
+P0-A: hostile AGREE on this plan.
+P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.

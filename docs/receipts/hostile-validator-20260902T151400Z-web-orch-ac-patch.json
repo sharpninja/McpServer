@@ -1,0 +1,191 @@
+{
+  "TimestampUtc": "2026-09-02T15:28:18Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class-1-project-requirement-work",
+  "SurfaceC": "applies",
+  "ActivePlan": "docs/plans/PLAN-WEB-ORCH-001.md",
+  "PriorReceipt": "docs/receipts/hostile-validator-20260902T150548Z-web-orch-reqs.md",
+  "OverallVerdict": "AGREE",
+  "AddProfile": {
+    "executed": true,
+    "profileDirectory": "C:\\Users\\kingd\\.claude\\profile\\",
+    "nonSkillMarkdownFilesRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "ValidatorLimitation": "Cannot persist an MCP session-log turn. Operator directed: no MCP HTTP, MCP_UNTRUSTED, local files only.",
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "FR-WEB-003 ac-4 recycle via AgentPool present; isSatisfied false."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "FR-WEB-010 ac-4 distinct added/removed; ac-5 files analyzed."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "TEST-WEB-003 ac-3 RecycleAgentAsync; TEST-WEB-010 ac-3 distinct added/removed/files-analyzed fields."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "No McpServer.Web product UI; plan still waiting for operator approval."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Prior C3 FAILs resolved: recycle AC and files-analyzed/distinct-lines AC now on disk. AC_TOTAL 133."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Phase 0 requirements-first; no product tests or implementation on disk."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Batch YAML object-parsed; ConvertTo-Yaml roundtrip byte-identical (52858)."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP-only via failsafe createBatch YAML; markdown projections and TODO.yaml not the write target."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "PowerShell object YAML (Write-McpYamlObject contract); no Python. Generator script stale residual."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Claimed AC text and no-UI/plan-wait match artifacts; no em-dash in batch or plan."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Plan-first wait; no unapproved implementation."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-WEB-001..020, 14 TR-WEB-*, TEST-WEB-001..020 identified."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "133 structured AC, all isSatisfied false."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-WEB-003 and FR-WEB-010 SHALL text now have AC; prior recycle and files-analyzed holes closed."
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Phase 0; tests covering AC are the next inter-phase gate."
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR/TR/TEST queued; not marked satisfied; not claimed product-done."
+    },
+    {
+      "id": "C-map",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Mapping-03 and mapping-10 still bind patched FRs to TEST-WEB-003 and TEST-WEB-010."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Phase 0 DoD artifacts exist; later phases not claimed done."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Plan names storage 503 and missing McpServer.Web; session MCP_UNTRUSTED."
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "No Phase 1-6 completion marks."
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Stop condition matches absence of product implementation; still Phase 0 wait."
+    }
+  ],
+  "FailList": [],
+  "UnknownList": [],
+  "ResidualNotes": [
+    "write-failsafe-requirements.ps1 still encodes FR-WEB-003 with only ac-1..ac-3; re-run would drop the patch.",
+    "session_actions-a466.yaml was not updated for the AC patch.",
+    "FR-WEB-010 ac-4 does not restate current UTC day; it adds fields to Progress metrics already scoped by ac-3.",
+    "TEST-WEB-003 has no dedicated Stop / Stop All AC."
+  ],
+  "PassCount": 20,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "AccuracyRating": 10,
+  "CompletenessRating": 9,
+  "MarkdownReceipt": "docs/receipts/hostile-validator-20260902T151400Z-web-orch-ac-patch.md",
+  "Evidence": {
+    "batchPath": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260902T150548Z-requirements_create_batch-990e.yaml",
+    "batchLastWriteUtc": "2026-09-02T15:20:07.9323005Z",
+    "recordCount": 54,
+    "kindFr": 20,
+    "kindTr": 14,
+    "kindTest": 20,
+    "acTotal": 133,
+    "acFalse": 133,
+    "yamlRoundtripEqual": true,
+    "yamlRoundtripLength": 52858,
+    "frWeb003AcIds": [
+      "ac-1",
+      "ac-2",
+      "ac-3",
+      "ac-4"
+    ],
+    "frWeb010AcIds": [
+      "ac-1",
+      "ac-2",
+      "ac-3",
+      "ac-4",
+      "ac-5"
+    ],
+    "webProjectExists": false,
+    "webTestsExist": false,
+    "planStatus": "requirements captured; waiting for operator approval before implementation.",
+    "sessionStatus": "MCP_UNTRUSTED"
+  }
+}

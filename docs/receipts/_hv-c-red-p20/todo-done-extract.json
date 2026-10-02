@@ -1,0 +1,31 @@
+{
+  "planId": "PLAN-PLUGINHANDOFF-001",
+  "planDone": "false",
+  "pluginintId": "MCP-PLUGININT-001",
+  "pluginintDone": "false",
+  "hygieneId": "MCP-WORKSPACEHYGIENE-002",
+  "hygieneDone": "false",
+  "hygieneRemaining": "HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open per owner. OrphanReason: no FR/TR family for workspace data-hygiene validation across Server, Director, REPL, and plugin. Needs requirements-first design. Do not store-close.",
+  "p20TaskHits": [
+    {
+      "line": 757,
+      "text": "- 19. C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+      "done": null
+    },
+    {
+      "line": 838,
+      "text": "- task: C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.",
+      "done": "false"
+    },
+    {
+      "line": 410,
+      "text": "- 'P20 red tests, then hostile C-red-P20, then execute:'",
+      "done": null
+    },
+    {
+      "line": 63,
+      "text": "- task: P20 [Deployment] Run the harness against the development UpdateService deployment using sanitized fixture values, then require explicit operator approval before any staging or production plugin promotion.",
+      "done": "false"
+    }
+  ]
+}

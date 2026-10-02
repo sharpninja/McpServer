@@ -20,9 +20,10 @@ internal sealed class GrokCliAgentExecutionStrategy(
     IProcessSpawner processSpawner,
     ILogger<GrokCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
 {
-    // "high" is the strongest effort level current Grok CLIs accept; "max" is rejected at
-    // startup with "unknown effort level 'max'; use one of: high, medium, low".
+    // "high" is the strongest effort level current Grok CLIs accept for Agent Help one-shot;
+    // QuadBrain persistent slots use xhigh on grok-4.6.
     private const string HighestEffort = "high";
+    internal const string PersistentEffort = "xhigh";
 
     /// <inheritdoc />
     public string Name => AgentExecutionStrategyNames.GrokCli;
@@ -81,6 +82,52 @@ internal sealed class GrokCliAgentExecutionStrategy(
             "--effort", HighestEffort,
             "--reasoning-effort", HighestEffort,
         ]);
+
+        return arguments;
+    }
+
+    /// <summary>
+    /// Builds Grok CLI args for a QuadBrain Cli slot: xhigh effort, a stable session UUID, and
+    /// either <c>--session-id</c> (first turn) or <c>--resume</c> (later turns).
+    /// </summary>
+    internal static IReadOnlyList<string> BuildPersistentGrokArgumentList(
+        string workingDirectory,
+        string promptFilePath,
+        string? model,
+        string sessionId,
+        bool resume)
+    {
+        var arguments = new List<string>
+        {
+            "--prompt-file", promptFilePath,
+            "--cwd", workingDirectory,
+            "--no-plan",
+            "--no-subagents",
+            "--verbatim",
+            "--max-turns", "1",
+            "--always-approve",
+            "--output-format", "plain",
+            "--effort", PersistentEffort,
+            "--reasoning-effort", PersistentEffort,
+        };
+
+        if (!string.IsNullOrWhiteSpace(model) &&
+            !string.Equals(model.Trim(), "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            arguments.Add("--model");
+            arguments.Add(model.Trim());
+        }
+
+        if (resume)
+        {
+            arguments.Add("--resume");
+            arguments.Add(sessionId);
+        }
+        else
+        {
+            arguments.Add("--session-id");
+            arguments.Add(sessionId);
+        }
 
         return arguments;
     }

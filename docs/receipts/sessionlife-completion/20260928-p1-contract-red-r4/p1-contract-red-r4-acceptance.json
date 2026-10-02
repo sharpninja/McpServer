@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "timestampUtc": "2026-09-28T07:33:05.9889174+00:00",
+  "gate": "P1 contract-only Red R4",
+  "accepted": true,
+  "phaseComplete": false,
+  "overallVerdict": "AGREE",
+  "counts": {
+    "PASS": 33,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "accuracy": 99,
+  "completeness": 99,
+  "frozenIndex": {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-contract-red-r4\\p1-contract-red-r4-frozen-index.json",
+    "sha256": "07E07C9994B71715E0DF13AD00A706DB22A91E6449B775615E0F0A9DC38FBAC7"
+  },
+  "request": {
+    "path": "docs/receipts/hv/20260928T065454Z-sessionlife-p1-contract-red-r4.request.jsonl",
+    "sha256": "AC09A2097B8BA7363EF81213569C4C98FA58DFE1866CFCF16DDD48E7298525FA"
+  },
+  "response": {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T065454Z-sessionlife-p1-contract-red-r4.response.jsonl",
+    "sha256": "FF332A64054BBDB9C5D69C9C5BDF4746882D5A2AD3137E7C9591FA62517C688A"
+  },
+  "parentProof": {
+    "recordType": "parent-independent-terminal-and-completed-native-proof",
+    "timestampUtc": "2026-09-28T07:32:31.5970204+00:00",
+    "sessionId": "Codex-20260928T022012Z-sessionlife-p0-review-feynman",
+    "requestId": "req-20260928T070408Z-sessionlife-p1-r4-review",
+    "queryReceipt": "req-20260928T073141Z-66f6",
+    "queryExit": 0,
+    "status": "completed",
+    "characters": 49496,
+    "bodySha256": "81F7DAC2FE86972651A84FA77312D33FE62E2B6348116B31DF72E0056763981B",
+    "directPinsVerified": 70,
+    "pinErrors": [],
+    "native": {
+      "path": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\sessions\\01a0e5ca-ae6d-7290-ac38-8d22df00947b\\20260928T065454Z-sessionlife-p1-contract-red-r4.completed.native.response.jsonl",
+      "sha256": "A630FE666E577DBB84B90B2C18DE8A4617101CFA2C3DD7A7E36CBD08703E2214",
+      "bytes": 17425209,
+      "validRecords": 3366,
+      "invalidRecords": 0,
+      "taskCompleteCount": 1,
+      "nativeTurnId": "01a0e6cc-e862-7503-9a55-64df935eb1a1",
+      "gitIgnored": true
+    }
+  },
+  "nextBoundary": "Minimum SessionLifeUnitGateScope enum, five-property request, single-method interface and non-delegating internal static consumer stub needed to compile typed tests only. Before delegation: a failing typed NSubstitute consumer test requiring the same request exactly once, then applicable independent Red review. Before physical validator/report plumbing: real temporary-report fixtures failing on absent behavior plus mocks-first validation and independent Red review. These may be presented together as the next behavior-Red checkpoint. No actual delegation or report behavior may precede that applicable review. Do not exit the increment before the full cumulative current-plus-prior unit scope is green with zero failures/skips/missing reports/zero discovery. No new NuGet dependency, synchronization, deployment, phase or TODO completion is authorized by this contract checkpoint.",
+  "remainingObligations": [
+    "Hooke historical P0 turn remains in_progress after its timeout; no retry, deletion or waiver by this reviewer.",
+    "Poincare R3 actions6..9 additively persisted perE4AB7AC6 proof; two stale original envelopes retained pending proper disposition. Do not call those actions still unpersisted.",
+    "Hooke newer R3 failed turn has verified headers; it is not a successful test run or replacement for parent R4 execution.",
+    "Parent decision repair was late; current33added action/dialog pairs are proven, original omission stays disclosed.",
+    "All later behavior, cumulative units, providers, integration, sync, deployment and bug acceptance gates remain outstanding."
+  ],
+  "currentAuditExceptions": [
+    "Parent action65 primary persistence failed; exact query proved absence. Retained write-ahead 20260928T072041Z-req-20260928T020045Z-sessionlife-r4-execution-action65-c6a6.yaml.",
+    "Hooke P0 terminal write remains unconfirmed; retained failsafe and no blind replay.",
+    "Two Poincare stale envelopes retained; additive reconciliation proven, stale whole-payload replay prohibited."
+  ],
+  "nonClaims": [
+    "No delegation or report validation implemented.",
+    "No complete cumulative unit gate.",
+    "No P1-P7, requirement AC or BUG closure.",
+    "No synchronization, deployment or merge."
+  ]
+}

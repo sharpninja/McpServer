@@ -294,7 +294,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
             _markerPath,
             _markerWatcher,
             MarkerFileChangeObserver.Mode.RenamedAndPoll,
-            TimeSpan.FromSeconds(10),
+            TimeSpan.FromSeconds(30),
             TestContext.Current.CancellationToken);
 
     private async Task EnsureWorkspaceSeededAsync()

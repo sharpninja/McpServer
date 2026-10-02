@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpserver.local/schemas/memory-bench-result.schema.json",
+  "title": "memory-bench-result",
+  "type": "object",
+  "required": ["pack_id", "mode", "plugins", "cells", "summary"],
+  "properties": {
+    "pack_id": { "type": "string" },
+    "mode": { "type": "string", "enum": ["stub", "recorded", "live"] },
+    "plugins": { "type": "array", "items": { "type": "string" } },
+    "cells": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/cell" }
+    },
+    "summary": { "type": "array" }
+  },
+  "$defs": {
+    "cell": {
+      "type": "object",
+      "required": [
+        "plugin",
+        "prompt_id",
+        "condition",
+        "tokens_in",
+        "tokens_out",
+        "tokens_total",
+        "token_source"
+      ],
+      "properties": {
+        "plugin": { "type": "string" },
+        "prompt_id": { "type": "string" },
+        "condition": { "type": "string", "enum": ["without_memory", "with_memory"] },
+        "tokens_in": { "type": "integer", "minimum": 0 },
+        "tokens_out": { "type": "integer", "minimum": 0 },
+        "tokens_total": { "type": "integer", "minimum": 0 },
+        "token_source": { "type": "string", "enum": ["host", "estimator", "recorded"] },
+        "latency_ms": { "type": "integer", "minimum": 0 },
+        "pass": { "type": "boolean" }
+      }
+    }
+  }
+}

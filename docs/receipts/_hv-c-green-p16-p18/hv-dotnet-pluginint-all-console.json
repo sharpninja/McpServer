@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18\\hv-dotnet-pluginint-all.log",
+  "successful": true,
+  "failedBang": false,
+  "totalTests": 95,
+  "passed": 95,
+  "failed": 0,
+  "skipped": 0,
+  "totalTime": null,
+  "failedResultLines": 0,
+  "length": 17957,
+  "lastWriteTimeUtc": "2026-08-22T08:15:28.2651461Z"
+}

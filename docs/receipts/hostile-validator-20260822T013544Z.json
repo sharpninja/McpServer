@@ -1,0 +1,130 @@
+{
+  "TimestampUtc": "2026-08-22T01:35:44Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P5-P6",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "jsonVersion": "1.99.0",
+    "dotVersion": "1.99.0",
+    "testMarkerSignature": true,
+    "toolSearchExact": true
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "RequirementIds": [
+    "FR-MCP-PLUGININT-001",
+    "TR-MCP-PLUGININT-001",
+    "TEST-MCP-PLUGININT-001"
+  ],
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T005108Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p5-p6-20260822T012151Z/",
+  "SessionId": "GrokSubagentHostile-20260822T012646Z-c-green-p5-p6",
+  "RequestId": "req-20260822T012646Z-001-hostile-c-green-p5-p6",
+  "BeginTurnId": 42839,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "PassCount": 17,
+  "UnknownCount": 0,
+  "NaCount": 0,
+  "ExplicitFailList": [],
+  "MandatorySurfaceUnevaluated": [],
+  "Health": {
+    "nonceSent": "42804f263bf84a25a9f1523539a4b563",
+    "nonceEcho": "42804f263bf84a25a9f1523539a4b563",
+    "match": true,
+    "status": "Healthy",
+    "storage": "reachable",
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+  },
+  "DeveloperService": {
+    "pid": 16936,
+    "name": "McpServer",
+    "state": "Running",
+    "pathName": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+    "listeners7147After": 16936,
+    "dataFolder": "C:\\ProgramData\\McpServer-Data",
+    "liveSqlite": "C:\\ProgramData\\McpServer-Data\\mcp.db",
+    "liveSqliteLastWriteTimeUtc": "2026-05-22T13:50:24Z"
+  },
+  "Tests": {
+    "filter": {
+      "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginIntegrationServerFixtureTests",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "total": 7,
+      "trxTotal": 7,
+      "trxExecuted": 7,
+      "trxPassed": 7,
+      "trxFailed": 0,
+      "trxNotExecuted": 0,
+      "durationConsole": "1 m 35 s"
+    },
+    "fullProject": {
+      "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+      "exitCode": 0,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "total": 14,
+      "trxTotal": 14,
+      "trxExecuted": 14,
+      "trxPassed": 14,
+      "trxFailed": 0,
+      "trxNotExecuted": 0,
+      "durationConsole": "1 m 18 s"
+    },
+    "namedPassed": [
+      "ServerFixture_SelectsFreePort",
+      "ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "ServerFixture_StartupTimeout",
+      "ServerFixture_CreatesMarker",
+      "ServerFixture_SignatureAndNonceTrust",
+      "ServerFixture_DeterministicCleanup",
+      "ServerFixture_HealthReady_ExposesTrustedMarkerAndClient"
+    ]
+  },
+  "Isolation": {
+    "reservedServicePortConst": 7147,
+    "portAssignedLiteral7147": false,
+    "allocateRejects7147": true,
+    "tempPrefix": "mcp-pluginint-",
+    "tempLeftoverAfterTests": 0,
+    "supportMcpProcessesAfter": [16936],
+    "repoMcpDbUnchanged": true,
+    "srcMcpDbUnchanged": true
+  },
+  "Todos": {
+    "PLAN-PLUGINHANDOFF-001": { "done": false },
+    "MCP-PLUGININT-001": { "done": false, "p5": false, "p6": false, "p7": false }
+  },
+  "P7AdapterCapturesPresent": false,
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "text": "C-red-P5 AGREE exists; StartAsync threw; HealthReady absent" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "text": "StartAsync launches compiled Support.Mcp Process; isolated temp; marker and health wait; port never 7147; dispose kills tree and deletes temp" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "text": "Seven fixture tests exist and pass Failed 0 Skipped 0; full PluginIntegration.Tests 14/14" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "text": "Never uses developer 7147 database; ReservedServicePort exclusion only" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "text": "P7 Adapter_Captures not implemented" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "text": "PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 done false" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "text": "Byrd v4 C-red-P5 AGREE then P6 green; suite Failed 0 Skipped 0" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "text": "Receipts independently re-run" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "text": "MCP-only TODO/session/requirements" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "text": "PowerShell only; no Python" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "text": "Honesty; claims match artifacts" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "text": "FR/TR/TEST exist with structured AC; isSatisfied false" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "text": "FR maps to TR and TEST" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "text": "P5/P6 tests cover TR AC2 fixture slice; later AC not required" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "text": "C-green-P5-P6 exit criteria met; not PLAN done" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "text": "Not a P7 receipt" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "text": "Attacks against this green gate not sustained" }
+  ],
+  "Accuracy": 96,
+  "Completeness": 95
+}

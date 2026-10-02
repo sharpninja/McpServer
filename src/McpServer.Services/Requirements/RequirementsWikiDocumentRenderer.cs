@@ -1,6 +1,8 @@
+using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.Requirements.Models;
+using McpServer.Support.Mcp.Storage;
 
 namespace McpServer.Support.Mcp.Requirements;
 
@@ -473,6 +475,14 @@ internal sealed record RequirementsRenderedDocument(string RelativePath, string 
 
 internal static class RequirementsDocumentExportWriter
 {
+    private static readonly WorkspaceTraversalLimits s_exportTraversalLimits = new()
+    {
+        MaxFiles = 10_000,
+        MaxFileBytes = 64L * 1024 * 1024,
+        MaxAggregateBytes = 256L * 1024 * 1024,
+        MaxDepth = 64,
+    };
+
     internal static async Task<RequirementsDocumentExportResult> WriteAsync(
         string outputRoot,
         string format,
@@ -485,44 +495,68 @@ internal static class RequirementsDocumentExportWriter
         if (string.IsNullOrWhiteSpace(outputRoot))
             throw new ArgumentException("Requirements export output root is required.", nameof(outputRoot));
 
-        var normalizedRoot = Path.GetFullPath(outputRoot);
-        Directory.CreateDirectory(normalizedRoot);
+        using var exportRoot = WorkspaceContainedFileSystem.OpenExportRoot(outputRoot);
+        return await WriteAsync(
+                exportRoot,
+                format,
+                docType,
+                generatedAtUtc,
+                documents,
+                cleanRelativeDirectories,
+                ct)
+            .ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Writes one requirements export through an already-pinned root capability.
+    /// </summary>
+    internal static async Task<RequirementsDocumentExportResult> WriteAsync(
+        WorkspaceContainedFileSystem.WorkspaceExportRoot exportRoot,
+        string format,
+        string docType,
+        DateTimeOffset generatedAtUtc,
+        IReadOnlyList<RequirementsRenderedDocument> documents,
+        IReadOnlyCollection<string>? cleanRelativeDirectories = null,
+        CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(exportRoot);
+        ArgumentNullException.ThrowIfNull(documents);
+
+        // Cleanup is entirely planned and validated before the first generated file becomes
+        // externally visible. The same pinned capability then owns cleanup and every write.
+        if (cleanRelativeDirectories is { Count: > 0 })
+        {
+            await DeleteStaleFilesAsync(
+                    exportRoot,
+                    cleanRelativeDirectories,
+                    documents.Select(document => NormalizeRelativePath(exportRoot, document.RelativePath)),
+                    ct)
+                .ConfigureAwait(false);
+        }
 
         var written = new List<RequirementsDocumentExportFile>(documents.Count);
         foreach (var document in documents)
         {
             ct.ThrowIfCancellationRequested();
-            var fullPath = ResolveUnderRoot(normalizedRoot, document.RelativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-
-            var tempPath = Path.Combine(
-                Path.GetDirectoryName(fullPath)!,
-                $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
-            await File.WriteAllTextAsync(tempPath, document.Content, RequirementsWikiDocumentRenderer.Utf8NoBom, ct).ConfigureAwait(false);
-            File.SetLastWriteTimeUtc(tempPath, generatedAtUtc.UtcDateTime);
-            ClearReadOnly(fullPath);
-            try
-            {
-                File.Move(tempPath, fullPath, overwrite: true);
-                File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
-            }
-            finally
-            {
-                if (File.Exists(fullPath))
-                    SetReadOnly(fullPath);
-            }
+            var relativePath = NormalizeRelativePath(exportRoot, document.RelativePath);
+            var fullPath = exportRoot.ResolvePath(relativePath);
+            await exportRoot.WriteTextFileAsync(
+                    relativePath,
+                    document.Content,
+                    RequirementsWikiDocumentRenderer.Utf8NoBom,
+                    generatedAtUtc.UtcDateTime,
+                    readOnly: true,
+                    ct)
+                .ConfigureAwait(false);
 
             written.Add(new RequirementsDocumentExportFile
             {
-                RelativePath = document.RelativePath.Replace('\\', '/'),
+                RelativePath = relativePath,
                 FullPath = fullPath,
                 ContentType = document.ContentType,
                 LastModifiedUtc = generatedAtUtc
             });
         }
-
-        if (cleanRelativeDirectories is { Count: > 0 })
-            DeleteStaleFiles(normalizedRoot, cleanRelativeDirectories, written.Select(file => file.FullPath), ct);
 
         return new RequirementsDocumentExportResult
         {
@@ -530,88 +564,150 @@ internal static class RequirementsDocumentExportWriter
             Format = format,
             DocType = docType,
             GeneratedAtUtc = generatedAtUtc,
-            OutputRoot = normalizedRoot,
+            OutputRoot = exportRoot.RootPath,
             Files = written
         };
     }
 
-    private static void DeleteStaleFiles(
-        string outputRoot,
+    private static async Task DeleteStaleFilesAsync(
+        WorkspaceContainedFileSystem.WorkspaceExportRoot exportRoot,
         IReadOnlyCollection<string> cleanRelativeDirectories,
         IEnumerable<string> expectedFiles,
         CancellationToken ct)
     {
-        var expected = new HashSet<string>(
-            expectedFiles.Select(Path.GetFullPath),
-            StringComparer.OrdinalIgnoreCase);
+        var expected = new HashSet<string>(expectedFiles, exportRoot.NameComparer);
+        var staleFiles = new HashSet<string>(exportRoot.NameComparer);
+        var knownDirectories = new HashSet<string>(exportRoot.NameComparer);
+        var staleDirectories = new List<string>();
 
-        foreach (var relativeDirectory in cleanRelativeDirectories)
+        foreach (var requestedDirectory in cleanRelativeDirectories)
         {
-            var fullDirectory = ResolveUnderRoot(outputRoot, relativeDirectory);
-            if (!Directory.Exists(fullDirectory))
-                continue;
-
-            foreach (var file in Directory.EnumerateFiles(fullDirectory, "*", SearchOption.AllDirectories))
+            ct.ThrowIfCancellationRequested();
+            var relativeDirectory = NormalizeRelativePath(exportRoot, requestedDirectory);
+            var files = await exportRoot.EnumerateFilesBoundedAsync(
+                    relativeDirectory,
+                    s_exportTraversalLimits,
+                    TimeSpan.FromSeconds(5),
+                    ct)
+                .ConfigureAwait(false);
+            foreach (var file in files)
             {
                 ct.ThrowIfCancellationRequested();
-                if (!expected.Contains(Path.GetFullPath(file)))
-                {
-                    ClearReadOnly(file);
-                    try
-                    {
-                        File.Delete(file);
-                    }
-                    finally
-                    {
-                        if (File.Exists(file))
-                            SetReadOnly(file);
-                    }
-                }
+                var relativeFile = NormalizeRelativePath(exportRoot, file.FullPath);
+                if (!expected.Contains(relativeFile))
+                    staleFiles.Add(relativeFile);
             }
 
-            foreach (var directory in Directory.EnumerateDirectories(fullDirectory, "*", SearchOption.AllDirectories)
-                         .OrderByDescending(static path => path.Length))
+            var directories = await exportRoot.EnumerateDirectoriesBoundedAsync(
+                    relativeDirectory,
+                    s_exportTraversalLimits,
+                    TimeSpan.FromSeconds(5),
+                    ct)
+                .ConfigureAwait(false);
+            foreach (var directory in directories)
             {
                 ct.ThrowIfCancellationRequested();
-                if (!Directory.EnumerateFileSystemEntries(directory).Any())
-                    Directory.Delete(directory);
+                var relativeDirectoryPath = NormalizeRelativePath(exportRoot, directory);
+                if (knownDirectories.Add(relativeDirectoryPath))
+                    staleDirectories.Add(relativeDirectoryPath);
             }
+        }
+
+        // Linux offers no unlinkat operation with openat2's RESOLVE_IN_ROOT guarantees for a
+        // nested path. Reject every unsafe nested deletion before any stale file is mutated.
+        if (exportRoot.IsCaseSensitive &&
+            (staleFiles.Any(static path => path.Contains('/')) ||
+             staleDirectories.Any(static path => path.Contains('/'))))
+        {
+            var nested = staleFiles.FirstOrDefault(static path => path.Contains('/'))
+                ?? staleDirectories.First(static path => path.Contains('/'));
+            throw new NotSupportedException(
+                "Linux requirements export cleanup rejects nested stale paths before mutation because the kernel lacks a contained atomic delete: '" +
+                nested +
+                "'.");
+        }
+
+        foreach (var staleFile in staleFiles.Order(exportRoot.NameComparer))
+        {
+            ct.ThrowIfCancellationRequested();
+            _ = exportRoot.SetFileReadOnlyIfExists(staleFile, readOnly: false);
+            _ = exportRoot.DeleteFileIfExists(staleFile);
+        }
+
+        // EnumerateDirectoriesBoundedAsync returns deterministic post-order; retain it while
+        // de-duplicating scopes, rather than re-sorting by path.
+        foreach (var staleDirectory in staleDirectories)
+        {
+            ct.ThrowIfCancellationRequested();
+            _ = exportRoot.DeleteEmptyDirectory(staleDirectory);
         }
     }
 
-    private static string ResolveUnderRoot(string outputRoot, string relativePath)
+    private static string NormalizeRelativePath(
+        WorkspaceContainedFileSystem.WorkspaceExportRoot exportRoot,
+        string path)
     {
-        var fullPath = Path.GetFullPath(Path.Combine(outputRoot, relativePath));
-        var rootWithSeparator = outputRoot.EndsWith(Path.DirectorySeparatorChar)
-            ? outputRoot
-            : outputRoot + Path.DirectorySeparatorChar;
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        if (Path.IsPathFullyQualified(path))
+            return exportRoot.GetRelativePathFromFullPath(path);
 
-        if (!fullPath.StartsWith(rootWithSeparator, StringComparison.OrdinalIgnoreCase)
-            && !fullPath.Equals(outputRoot, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new IOException($"Requirements export path escapes output root: {relativePath}");
-        }
-
-        return fullPath;
-    }
-
-    private static void ClearReadOnly(string path)
-    {
-        if (!File.Exists(path))
-            return;
-
-        var attributes = File.GetAttributes(path);
-        if (attributes.HasFlag(FileAttributes.ReadOnly))
-            File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
-    }
-
-    private static void SetReadOnly(string path)
-    {
-        var attributes = File.GetAttributes(path);
-        if (!attributes.HasFlag(FileAttributes.ReadOnly))
-            File.SetAttributes(path, attributes | FileAttributes.ReadOnly);
+        var fullPath = exportRoot.ResolvePath(path);
+        return Path.GetRelativePath(exportRoot.RootPath, fullPath)
+            .Replace(Path.DirectorySeparatorChar, '/');
     }
 }
+
+/// <summary>
+/// Reads the optional existing matrix through a contained native file-open boundary and limits
+/// fallback to that boundary's exact absent-file outcomes.
+/// </summary>
+internal static class RequirementsExportMatrixReader
+{
+    /// <summary>
+    /// Reads a contained matrix stream or obtains a configured fallback only when that contained
+    /// operation reports a native absent file or path.
+    /// </summary>
+    /// <param name="openContainedMatrix">Opens the exact contained matrix stream.</param>
+    /// <param name="readFallback">Reads the configured non-export fallback matrix.</param>
+    /// <param name="ct">The caller cancellation token.</param>
+    /// <returns>The contained matrix text or the exact fallback value.</returns>
+    internal static async Task<string?> ReadExistingAsync(
+        Func<CancellationToken, Task<Stream>> openContainedMatrix,
+        Func<string?> readFallback,
+        CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(openContainedMatrix);
+        ArgumentNullException.ThrowIfNull(readFallback);
+
+        try
+        {
+            await using var stream = await openContainedMatrix(ct).ConfigureAwait(false);
+            using var reader = new StreamReader(
+                stream,
+                RequirementsWikiDocumentRenderer.Utf8NoBom,
+                detectEncodingFromByteOrderMarks: true,
+                bufferSize: 64 * 1024,
+                leaveOpen: false);
+            return await reader.ReadToEndAsync(ct).ConfigureAwait(false);
+        }
+        catch (FileNotFoundException)
+        {
+            return readFallback();
+        }
+        catch (DirectoryNotFoundException)
+        {
+            return readFallback();
+        }
+        catch (IOException exception) when (IsNativeAbsentFileOrPath(exception))
+        {
+            return readFallback();
+        }
+    }
+
+    private static bool IsNativeAbsentFileOrPath(IOException exception) =>
+        exception.InnerException is Win32Exception { NativeErrorCode: 2 or 3 };
+}
+
 
 internal static class RequirementsWikiDocumentSelector
 {

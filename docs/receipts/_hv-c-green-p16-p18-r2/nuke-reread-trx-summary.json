@@ -1,0 +1,13 @@
+{
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\results-nuke-reread-20260822T084513Z\\nuke-skip-reread.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:45:17.5325834Z",
+  "total": "1",
+  "executed": "1",
+  "passed": "1",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure",
+  "outcome": "Passed",
+  "duration": "00:00:00.1023977"
+}

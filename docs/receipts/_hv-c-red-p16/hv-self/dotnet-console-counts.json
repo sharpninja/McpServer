@@ -1,0 +1,30 @@
+{
+  "filterFailed": "8",
+  "filterPassed": null,
+  "filterSkipped": null,
+  "filterTotal": null,
+  "filterDuration": null,
+  "totalTestsLine": "8",
+  "failedLine": "8",
+  "filterFailedBang": false,
+  "filterPassedBang": false,
+  "testRunFailed": true,
+  "notImplementedCount": 16,
+  "totalTime": "2.1296 Seconds",
+  "listFqnApprox": 96,
+  "listP16": 8,
+  "listP17": 0,
+  "listNuke": 0,
+  "listAiTheory": 8,
+  "listSkipAttr": 0,
+  "listHosts": {
+    "Codex": 1,
+    "ClaudeCode": 1,
+    "ClaudeCowork": 1,
+    "Copilot": 1,
+    "Grok": 1,
+    "ClineV2": 1,
+    "OpenCode": 1,
+    "Cline": 1
+  }
+}

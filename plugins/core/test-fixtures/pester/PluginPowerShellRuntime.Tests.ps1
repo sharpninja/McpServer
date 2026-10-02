@@ -1,10 +1,31 @@
 #Requires -Version 7.0
 
 BeforeAll {
+    # Host plugin state must not select an agent, workspace, or drain policy for a fixture.
+    $script:HostPluginEnvironment = @{}
+    Get-ChildItem Env: | Where-Object Name -Match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' | ForEach-Object {
+        $script:HostPluginEnvironment[$_.Name] = $_.Value
+        Remove-Item -LiteralPath "Env:\$($_.Name)"
+    }
     $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
     $script:LibRoot = Join-Path $script:RepoRoot 'plugins\core\lib-ps'
     $script:StagedRoot = Join-Path $script:RepoRoot 'plugins\core\.staged-plugin'
-    $script:SmokeCache = Join-Path ([System.IO.Path]::GetTempPath()) 'mcp-plugin-psonly-pester'
+    # These fixtures include markerless directories; workspace-scoped TEMP has an ancestor marker.
+    $script:SmokeCache = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Temp/mcp-plugin-psonly-pester'
+
+    function New-TypedSessionMutationOutput {
+        param([Parameter(Mandatory)][string]$ParamsYaml)
+        $request = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+        return ([ordered]@{
+            type = 'result'
+            payload = [ordered]@{ result = [ordered]@{
+                sessionId = Get-ReplObjectValue -InputObject $request -Name 'sessionId'
+                requestId = Get-ReplObjectValue -InputObject $request -Name 'requestId'
+                retitled = $true
+                totalDialogCount = 1
+            } }
+        } | ConvertTo-Yaml -Options WithIndentedSequences)
+    }
 
     function Invoke-PluginChildProcess {
         param(
@@ -32,6 +53,9 @@ BeforeAll {
         $psi.RedirectStandardInput = $RedirectStandardInput
         $psi.RedirectStandardOutput = $true
         $psi.RedirectStandardError = $true
+        foreach ($key in @($psi.Environment.Keys | Where-Object { $_ -match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' })) {
+            [void]$psi.Environment.Remove($key)
+        }
         foreach ($key in $Environment.Keys) {
             $psi.Environment[$key] = [string]$Environment[$key]
         }
@@ -52,6 +76,15 @@ BeforeAll {
             Stdout = $stdout.Result.Trim()
             Stderr = $stderr.Result.Trim()
         }
+    }
+}
+
+AfterAll {
+    Get-ChildItem Env: | Where-Object Name -Match '^(MCP_|MCPSERVER_|CODEX_|CLAUDE_|GROK_|PLUGIN_)' | ForEach-Object {
+        Remove-Item -LiteralPath "Env:\$($_.Name)"
+    }
+    foreach ($entry in $script:HostPluginEnvironment.GetEnumerator()) {
+        [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, 'Process')
     }
 }
 
@@ -301,8 +334,15 @@ acceptanceCriteria:
                 response = 'Done'
             } | ConvertTo-Json -Depth 10 -Compress
 
-            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml $actionsPayload | Should -BeFalse
-            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $completePayload | Should -BeFalse
+            foreach ($invocation in @(
+                @{ Method = 'workflow.sessionlog.appendActions'; Params = $actionsPayload },
+                @{ Method = 'workflow.sessionlog.completeTurn'; Params = $completePayload }
+            )) {
+                $receipt = (Invoke-ReplMethod -Method $invocation.Method -ParamsYaml $invocation.Params | ConvertFrom-Yaml).payload.result
+                $receipt.code | Should -Be 'lost'
+                $receipt.persisted | Should -BeFalse
+                $script:LastInvokeReplMethodSuccess | Should -BeFalse
+            }
         } finally {
             if ($null -ne $previousPluginRoot) {
                 $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
@@ -555,7 +595,9 @@ acceptanceCriteria:
                     [Parameter(Mandatory)][string]$Status,
                     [string]$ResponseText = '',
                     [string]$ActionsYaml = '',
-                    [object[]]$ProcessingDialog = @()
+                    [object[]]$ProcessingDialog = @(),
+                    [string]$PlanFile,
+                    [string]$TodoId
                 )
                 $script:appendActionsPersistArgs = [ordered]@{
                     RequestId = $RequestId
@@ -653,7 +695,9 @@ actions:
                     [string]$Interpretation = '',
                     [int]$TokenCount = 0,
                     [string[]]$Tags = @(),
-                    [string[]]$ContextList = @()
+                    [string[]]$ContextList = @(),
+                    [string]$PlanFile,
+                    [string]$TodoId
                 )
                 $script:updateTurnPersistArgs = [ordered]@{
                     RequestId = $RequestId
@@ -758,7 +802,9 @@ contextList:
                     [string]$Interpretation = '',
                     [int]$TokenCount = 0,
                     [string[]]$Tags = @(),
-                    [string[]]$ContextList = @()
+                    [string[]]$ContextList = @(),
+                    [string]$PlanFile,
+                    [string]$TodoId
                 )
                 $script:reql030Args = [ordered]@{ Title = $Title; IncludeSessionTitle = [bool]$IncludeSessionTitle }
                 return $true
@@ -812,7 +858,7 @@ contextList:
             function Invoke-ReplRaw {
                 param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
                 $script:reql029Calls += [ordered]@{ Method = $Method; ParamsYaml = $ParamsYaml }
-                return [pscustomobject]@{ Success = $true; Output = ''; Error = '' }
+                return [pscustomobject]@{ Success = $true; Output = (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml); Error = '' }
             }
 
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
@@ -873,7 +919,8 @@ contextList:
             } | ConvertTo-Json -Depth 10 -Compress
 
             { $script:appendDialogResult = Invoke-ReplMethod -Method 'workflow.sessionlog.appendDialog' -ParamsYaml $dialogPayload } | Should -Not -Throw
-            $script:appendDialogResult | Should -BeFalse
+            ($script:appendDialogResult | ConvertFrom-Yaml).payload.result.code | Should -Be 'lost'
+            $script:LastInvokeReplMethodSuccess | Should -BeFalse
         } finally {
             if ($previousRaw) {
                 Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
@@ -1894,6 +1941,10 @@ if ($Method -eq 'workflow.sessionlog.beginTurn') {
     exit 0
 }
 
+if ($Method -eq 'client.SessionLog.OpenSessionAsync') {
+    exit 0
+}
+
 throw "Unexpected method $Method"
 '@
         [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
@@ -2304,6 +2355,150 @@ param(
                 Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-199 session-start calls OpenSessionAsync before writing verified' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($markerPath, "workspacePath: $workspace`n")
+        $markerStub = @'
+#Requires -Version 7.0
+$script:MARKER_FILENAME = 'AGENTS-README-FIRST.yaml'
+function Find-MarkerFile { param([string]$StartDir = (Get-Location).Path); return (Join-Path $StartDir $script:MARKER_FILENAME) }
+function Get-MarkerFileSnapshot {
+    param([string]$StartDir = (Get-Location).Path)
+    $path = Find-MarkerFile -StartDir $StartDir
+    $item = Get-Item -LiteralPath $path
+    [ordered]@{ markerFilePath = $item.FullName; markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O') }
+}
+function Invoke-FullBootstrap { param([string]$StartDir = (Get-Location).Path); return $true }
+function Test-MarkerSignature { param([string]$MarkerFile); return $true }
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'marker-resolver.ps1'), $markerStub, [System.Text.UTF8Encoding]::new($false))
+
+        $replLog = Join-Path $cacheDir 'repl.log'
+        $sessionId = 'GrokCode-20260916T000000Z-plugin-session'
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-start', '-HostName', 'grok', '-WorkspacePath', $workspace) `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_PLUGIN_HOST = 'grok'
+                    MCP_AGENT_NAME = 'GrokCode'
+                    PLUGIN_AGENT_DEFAULT = 'GrokCode'
+                    MCP_CACHE_DIR_OVERRIDE = $cacheDir
+                    MCP_WORKSPACE_PATH = $workspace
+                    MCPSERVER_WORKSPACE_PATH = $workspace
+                    MCP_WORKSPACE_START_DIR = $workspace
+                    MCP_SESSION_ID = $sessionId
+                    MCP_PLUGIN_REPL_LOG = $replLog
+                    MCP_PLUGIN_REPL_RESPONSE = 'ok'
+                } `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            Test-Path -LiteralPath $replLog | Should -BeTrue
+            $log = [System.IO.File]::ReadAllText($replLog)
+            $log | Should -Match 'client\.SessionLog\.OpenSessionAsync'
+            $log | Should -Match $sessionId
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['status'] | Should -Be 'verified'
+            $state['sessionId'] | Should -Be $sessionId
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-199 session-start does not write verified when OpenSessionAsync fails' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($markerPath, "workspacePath: $workspace`n")
+        $markerStub = @'
+#Requires -Version 7.0
+$script:MARKER_FILENAME = 'AGENTS-README-FIRST.yaml'
+function Find-MarkerFile { param([string]$StartDir = (Get-Location).Path); return (Join-Path $StartDir $script:MARKER_FILENAME) }
+function Get-MarkerFileSnapshot {
+    param([string]$StartDir = (Get-Location).Path)
+    $path = Find-MarkerFile -StartDir $StartDir
+    $item = Get-Item -LiteralPath $path
+    [ordered]@{ markerFilePath = $item.FullName; markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O') }
+}
+function Invoke-FullBootstrap { param([string]$StartDir = (Get-Location).Path); return $true }
+function Test-MarkerSignature { param([string]$MarkerFile); return $true }
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'marker-resolver.ps1'), $markerStub, [System.Text.UTF8Encoding]::new($false))
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [string]$Method,
+    [string]$ParamsYaml = ''
+)
+$ErrorActionPreference = 'Stop'
+$log = Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'open-session.log'
+Add-Content -LiteralPath $log -Value $Method
+if ($Method -eq 'client.SessionLog.OpenSessionAsync') {
+    Write-Error 'open failed'
+    exit 1
+}
+exit 0
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $sessionId = 'GrokCode-20260916T000001Z-plugin-session'
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'session-start', '-HostName', 'grok', '-WorkspacePath', $workspace) `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_PLUGIN_HOST = 'grok'
+                    MCP_AGENT_NAME = 'GrokCode'
+                    PLUGIN_AGENT_DEFAULT = 'GrokCode'
+                    MCP_CACHE_DIR_OVERRIDE = $cacheDir
+                    MCP_WORKSPACE_PATH = $workspace
+                    MCPSERVER_WORKSPACE_PATH = $workspace
+                    MCP_WORKSPACE_START_DIR = $workspace
+                    MCP_SESSION_ID = $sessionId
+                } `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            $openLog = Join-Path $cacheDir 'open-session.log'
+            Test-Path -LiteralPath $openLog | Should -BeTrue
+            [System.IO.File]::ReadAllText($openLog) | Should -Match 'client\.SessionLog\.OpenSessionAsync'
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['status'] | Should -Be 'persist-failed'
+            $state['status'] | Should -Not -Be 'verified'
+            $state['sessionId'] | Should -Be $sessionId
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 
@@ -3035,7 +3230,7 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:capturedAppendMethod = $Method
                 $script:capturedAppendYaml = $ParamsYaml
-                return New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260709T211900Z-plugin-session'
@@ -3957,15 +4152,7 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
 
             if ($Method -eq 'client.SessionLog.AppendDialogAsync') {
                 $script:t40Appends.Add($ParamsYaml)
-                $ok = [ordered]@{
-                    type = 'result'
-                    payload = [ordered]@{
-                        result = [ordered]@{
-                            totalDialogCount = 1
-                        }
-                    }
-                }
-                return New-McpPluginReplResult -Success $true -Output (ConvertTo-Yaml -Data $ok -Options WithIndentedSequences) -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
 
             if ($Method -eq 'client.SessionLog.QueryAsync') {
@@ -4501,13 +4688,15 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
 }
 
 Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
-    It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with silent stdout' {
+    It 'workflow.sessionlog.updateTurn omitted empty and scalar tags exit 0 with one typed receipt' {
         $root = Join-Path $script:SmokeCache ('strictcount-' + [guid]::NewGuid().ToString('N'))
         $cache = Join-Path $root 'cache'
         $persistLog = Join-Path $root 'persist.jsonl'
         [void][System.IO.Directory]::CreateDirectory($cache)
         . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
         Import-McpYamlSerializer
+        . (Join-Path $script:LibRoot 'marker-resolver.ps1')
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $script:RepoRoot
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
             status = 'verified'
             sessionId = 'GrokCode-20260819T000000Z-plugin-session'
@@ -4515,6 +4704,8 @@ Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
         })
         Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
             turnRequestId = 'req-20260819T000000Z-001-strictcount'
+            markerFilePath = $markerSnapshot.markerFilePath
+            markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             queryTitle = 'strictcount'
             openedAt = '2026-08-19T00:00:01Z'
             status = 'in_progress'
@@ -4542,8 +4733,12 @@ Describe 'TEST-MCP-STRICTCOUNT-001 updateTurn StrictMode collection Count' {
                         MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
                     }
 
-                $result.ExitCode | Should -Be 0 -Because $case.Name
-                $result.Stdout | Should -Be '' -Because $case.Name
+                $result.ExitCode | Should -Be 0 -Because "$($case.Name): $($result.Stderr)"
+                $documents = @(ConvertFrom-Yaml -Yaml $result.Stdout -AllDocuments)
+                $documents.Count | Should -Be 1 -Because $case.Name
+                $documents[0].type | Should -Be 'result'
+                $documents[0].payload.result.method | Should -Be 'workflow.sessionlog.updateTurn'
+                $documents[0].payload.result.persisted | Should -BeTrue
                 $result.Stderr | Should -Not -Match 'Count cannot be found' -Because $case.Name
             }
         } finally {
@@ -4760,7 +4955,7 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
             function Invoke-ReplRaw {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:persistRawMethods.Add($Method)
-                return New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    persisted: true" -ExitCode 0
+                return New-McpPluginReplResult -Success $true -Output (New-TypedSessionMutationOutput -ParamsYaml $ParamsYaml) -ExitCode 0
             }
 
             $payload = [ordered]@{
@@ -4946,6 +5141,147 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
             if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
             Remove-Variable -Name getFrSubmitCalls -Scope Script -ErrorAction SilentlyContinue
             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $script:ReplFailsafeDraining = $true
+        $priorDrain = $env:REPL_FAILSAFE_DRAIN_TIMEOUT
+        $priorTimeout = $env:REPL_TIMEOUT
+        try {
+            Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue
+            Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue
+            $seconds = Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync'
+            $seconds | Should -Be 120
+            $env:REPL_TIMEOUT = '180'
+            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Be 180
+        } finally {
+            $script:ReplFailsafeDraining = $false
+            if ($null -eq $priorDrain) { Remove-Item Env:REPL_FAILSAFE_DRAIN_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_FAILSAFE_DRAIN_TIMEOUT = $priorDrain }
+            if ($null -eq $priorTimeout) { Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_TIMEOUT = $priorTimeout }
+        }
+    }
+
+    It 'Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $script:ReplFailsafeDraining = $true
+        try {
+            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.completeTurn') | Should -Be 30
+            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.beginTurn') | Should -Be 30
+            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Not -Be 30
+            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -BeGreaterOrEqual 120
+        } finally {
+            $script:ReplFailsafeDraining = $false
+        }
+    }
+
+    It 'Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml' {
+        $sandbox = New-PersistSandbox
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+        try {
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $script:ReplFailsafeDrainCompleted = $false
+            $script:ReplFailsafeDraining = $false
+            $yamlPath = Join-Path $sandbox.FailsafeDir '20260821T000200Z-session_submit-drain.yaml'
+            Write-McpYamlObject -Path $yamlPath -Document ([ordered]@{
+                method = 'client.SessionLog.SubmitAsync'
+                label = 'session_submit'
+                timestamp = '20260821T000200Z'
+                params = [ordered]@{
+                    sessionLog = [ordered]@{
+                        sourceType = 'GrokCode'
+                        sessionId = 'GrokCode-20260821T000000Z-plugin-session'
+                        turns = @([ordered]@{ requestId = 'req-20260821T000200Z-003-drain'; status = 'in_progress' })
+                    }
+                }
+            })
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                if ($Method -eq 'client.SessionLog.SubmitAsync') {
+                    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
+                    if ($timeout -le 2) {
+                        return (New-McpPluginReplResult -Success $false -Output 'timed out after 2s' -Error 'timed out after 2s' -ExitCode 1)
+                    }
+                    return (New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    id: 1" -ExitCode 0)
+                }
+                return (New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0)
+            }
+            $summary = Invoke-ReplFailsafeDrain
+            $summary.replayed | Should -Be 1
+            Test-Path -LiteralPath $yamlPath | Should -BeFalse
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $script:ReplRawInFlight = $true
+        $script:ReplFailsafeDrainDeferred = $false
+        try {
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+            $script:ReplFailsafeDrainDeferred | Should -BeTrue
+        } finally {
+            $script:ReplRawInFlight = $false
+            $script:ReplFailsafeDrainDeferred = $false
+        }
+    }
+}
+
+Describe 'TEST-MCP-REPL-010 V4 failsafe path unification' {
+    It 'Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending' {
+        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-v4-failsafe-' + [guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $previousFailsafe = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFailsafe2 = $env:MCP_FAILSAFE_DIR
+        try {
+            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue
+            $env:MCP_WORKSPACE_PATH = $workspace
+            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')
+            $dir = Get-McpFailsafeDir -StartPath $workspace
+            $dir | Should -Match '[\\/]\.mcpServer[\\/]failsafe[\\/]'
+            $dir | Should -Match '[\\/]workspaces[\\/]'
+            $dir | Should -Match '[\\/]pending$'
+        } finally {
+            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafe) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafe }
+            if ($null -ne $previousFailsafe2) { $env:MCP_FAILSAFE_DIR = $previousFailsafe2 }
+            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource' {
+        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-legacy-failsafe-' + [guid]::NewGuid().ToString('N'))
+        $legacy = Join-Path $workspace '.mcpServer\grok\failsafe'
+        [void][System.IO.Directory]::CreateDirectory($legacy)
+        $legacyFile = Join-Path $legacy '20260821T000000Z-session_submit-legacy.yaml'
+        Set-Content -LiteralPath $legacyFile -Value 'method: client.SessionLog.SubmitAsync' -Encoding utf8
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        try {
+            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue
+            $env:MCP_WORKSPACE_PATH = $workspace
+            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')
+            $expectedHash = Get-McpFailsafeFileSha256Hex -Path $legacyFile
+            $dir = Get-McpFailsafeDir -StartPath $workspace
+            $migrated = Join-Path $dir '20260821T000000Z-session_submit-legacy.yaml'
+            Test-Path -LiteralPath $migrated | Should -BeTrue
+            Test-Path -LiteralPath $legacyFile | Should -BeFalse
+            $migratedHash = Get-McpFailsafeFileSha256Hex -Path $migrated
+            $migratedHash | Should -Match '^[0-9A-F]{64}$'
+            $migratedHash | Should -Be $expectedHash
+            (Get-Content -LiteralPath $migrated -Raw) | Should -Match 'client\.SessionLog\.SubmitAsync'
+        } finally {
+            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 }

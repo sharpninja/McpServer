@@ -1,0 +1,7 @@
+{
+  "path": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+  "lastWriteUtc": "2026-08-21T00:46:48.5956221Z",
+  "drainSubmitReturns2": true,
+  "timeoutMessagePresent": true,
+  "drainSubmitSnippet": "if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {\r\n        return 2\r\n    }"
+}

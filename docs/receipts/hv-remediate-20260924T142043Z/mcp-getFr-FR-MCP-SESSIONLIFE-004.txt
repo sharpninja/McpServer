@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142110Z-32f8
+  result:
+    id: FR-MCP-SESSIONLIFE-004
+    title: Failsafe replay, child deadline, and contention classification
+    description: One child deadline covers asynchronous stdin and stdout and process-tree cleanup. Hook default bound is 30 seconds. Codex failsafe identity stays Codex when PLUGIN_AGENT_NAME or MCP_AGENT_NAME is inherited as Grok. Quarantine files 3358, d5f9, and 9ad7 are repaired, replayed even when drainAttempts is exhausted, and deleted only after durable success. Import recovery scans pending importRecovery yaml, persists a mapped DTO, and deletes only that envelope after persisted true and degraded false. Busy, locked, budget expiry, and wrapped contention are retryable. Connection outage is backend_unavailable. Automatic and explicit drain do not latch completion on contention.
+    status: pending
+    priority: high
+    area: MCP
+    notes: 170 stays on FR-MCP-REPL-011. Governs BUG-TRIAGE-171, 172, 173, 221.
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:11.6911168+00:00
+    updatedAt: 2026-09-24T14:21:11.6912130+00:00
+  deprecated: true
+
+---
+

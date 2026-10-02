@@ -1,0 +1,7 @@
+{
+  "TimestampUtc": "2026-08-22T06:29:57.6862217Z",
+  "ReturnValue": 0,
+  "ProcessId": 32996,
+  "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File \"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\wait-then-wmi-tests.ps1\"",
+  "Pwsh": "C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe"
+}

@@ -765,6 +765,9 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         public IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential)
             => new RecordingBrainSlotChatClient(this, _inner.Create(slot, credential));
 
+        public IBrainSlotCompletionStrategy CreateStrategy(BrainSlotDefinitionEntity slot, string credential)
+            => new RecordingCompletionStrategy(this, _inner.CreateStrategy(slot, credential));
+
         private sealed class RecordingBrainSlotChatClient(
             RecordingBrainSlotChatClientFactory owner,
             IBrainSlotChatClient inner) : IBrainSlotChatClient
@@ -776,6 +779,28 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
                 CancellationToken cancellationToken = default)
             {
                 var output = await inner.CompleteAsync(slot, input, temperature, cancellationToken).ConfigureAwait(false);
+                lock (owner._gate)
+                {
+                    owner._invokedRoles.Add(slot.Role);
+                    owner._invokedModelIds.Add(slot.ModelId);
+                    owner._invokedEndpoints.Add(slot.Endpoint);
+                    owner._invokedOutputs.Add(output);
+                }
+
+                return output;
+            }
+        }
+
+        private sealed class RecordingCompletionStrategy(RecordingBrainSlotChatClientFactory owner, IBrainSlotCompletionStrategy inner) : IBrainSlotCompletionStrategy
+        {
+            public async Task<string> CompleteAsync(
+                BrainSlotDefinitionEntity slot,
+                string input,
+                BrainSlotTurnContext context,
+                double? temperature,
+                CancellationToken cancellationToken = default)
+            {
+                var output = await inner.CompleteAsync(slot, input, context, temperature, cancellationToken).ConfigureAwait(false);
                 lock (owner._gate)
                 {
                     owner._invokedRoles.Add(slot.Role);
@@ -805,6 +830,9 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
 
         public IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential)
             => new FieldVariantBrainSlotChatClient(this);
+
+        public IBrainSlotCompletionStrategy CreateStrategy(BrainSlotDefinitionEntity slot, string credential)
+            => new FieldVariantCompletionStrategy(Create(slot, credential));
 
         private void RecordOutput(string output)
         {
@@ -836,6 +864,17 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
                 owner.RecordOutput(output);
                 return Task.FromResult(output);
             }
+        }
+
+        private sealed class FieldVariantCompletionStrategy(IBrainSlotChatClient inner) : IBrainSlotCompletionStrategy
+        {
+            public Task<string> CompleteAsync(
+                BrainSlotDefinitionEntity slot,
+                string input,
+                BrainSlotTurnContext context,
+                double? temperature,
+                CancellationToken cancellationToken = default)
+                => inner.CompleteAsync(slot, input, temperature, cancellationToken);
         }
     }
 

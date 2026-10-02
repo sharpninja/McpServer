@@ -1,0 +1,109 @@
+{
+  "TimestampUtc": "2026-08-22T00:30:49.8487989Z",
+  "CatalogFilterExitFromLog": "Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 103 ms - McpServer.PluginIntegration.Tests.dll (net10.0)",
+  "PluginAllExitFromLog": "Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 112 ms - McpServer.PluginIntegration.Tests.dll (net10.0)",
+  "CatalogFilterTrx": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r3\\catalog-filter.trx",
+    "outcome": "Completed",
+    "total": "6",
+    "executed": "6",
+    "passed": "6",
+    "failed": "0",
+    "skipped": null,
+    "notExecuted": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0018446",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "outcome": "Passed",
+        "duration": "00:00:00.0081413",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "outcome": "Passed",
+        "duration": "00:00:00.0012146",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0015783",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "outcome": "Passed",
+        "duration": "00:00:00.0615418",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "outcome": "Passed",
+        "duration": "00:00:00.0007186",
+        "output": ""
+      }
+    ]
+  },
+  "PluginAllTrx": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p4-r3\\pluginintegration-all.trx",
+    "outcome": "Completed",
+    "total": "7",
+    "executed": "7",
+    "passed": "7",
+    "failed": "0",
+    "skipped": null,
+    "notExecuted": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+        "outcome": "Passed",
+        "duration": "00:00:00.0239742",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+        "outcome": "Passed",
+        "duration": "00:00:00.0076390",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+        "outcome": "Passed",
+        "duration": "00:00:00.0433642",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+        "outcome": "Passed",
+        "duration": "00:00:00.0008917",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0035243",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+        "outcome": "Passed",
+        "duration": "00:00:00.0025776",
+        "output": ""
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+        "outcome": "Passed",
+        "duration": "00:00:00.0029733",
+        "output": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p7-p10\\dotnet-adapter-filter.trx",
+  "outcome": "Completed",
+  "total": "16",
+  "executed": "16",
+  "passed": "16",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 16,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)"
+  ],
+  "skippedNames": [],
+  "p7Count": 8,
+  "p7Failed": 0,
+  "p7Passed": 8,
+  "p8Count": 5,
+  "p8Passed": 5,
+  "p9Count": 1,
+  "p9Passed": 1,
+  "p10Count": 2,
+  "p10Passed": 2,
+  "p11Count": 0,
+  "adapterClassCount": 16,
+  "adapterClassPassed": 16,
+  "adapterClassFailed": 0,
+  "notImplementedCount": 0,
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010787",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020787",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0010205",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0025396",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0020705",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007147",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008343",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007547",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008090",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+      "outcome": "Passed",
+      "duration": "00:00:00.0069337",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009151",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.1335879",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009632",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007161",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0011795",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008441",
+      "message": null,
+      "stack": null
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+Hostile validation of the remediated MCP frontier-agent setup prompt DRAFT (round after F01-F09 remediation).
+
+Prerequisites (mandatory before claim scoring):
+1. Run the add-profile skill/procedure first. Fully read all non-skill profile Markdown discovered for this operator before scoring.
+2. Use model gpt-6-astra with model_reasoning_effort=xhigh for this entire turn.
+3. Read-only on product code except creating HV receipts under docs/receipts/hv/. Do not mutate TODO done state, do not commit/push, do not publish add-profile, do not install/deploy the product for this review.
+4. No Python.
+5. Prefer PowerShell (pwsh) for inspection.
+
+Subject under review:
+- Draft: F:\github\McpServer\docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+- Prior DISAGREE receipt (context only): F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T113325Z.md
+- Ground truth sources to re-inspect as needed: src/McpServer.Repl.Host/*.csproj PackageId/ToolCommandName; README.md InstallReplTool/UpdateService; build/Build.UpdateService.cs; WindowsServiceDeploymentGuard.cs; Program.cs service bits; appsettings.yaml Database section; McpDatabaseConfigurationResolver.cs; AGENTS.md / AGENTS-README-FIRST.yaml; SessionLogWorkflow bootstrap no-op.
+
+Surfaces A-D (score each claim PASS/FAIL/UNKNOWN with evidence):
+
+Surface A — Draft suitability and scenario coverage:
+1. Draft exists and is suitable as copy-paste frontier-agent setup prompt (still labeled DRAFT is OK).
+2. Mandatory pre-obtain/install intake covers agents, process, storage, service (and host/endpoint as needed).
+3. Concrete scenario handling for every intake axis, including per-agent playbooks or explicit stop/redirect for unsupported families.
+4. Session-log exclusion plus usable post-intake artifact schemas that round-trip multi-agent + host (per-agent IDs, host/port/version, statuses/evidence). Bootstrap no-op must not be claimed as a log write.
+5. Windows and Linux examples have comparable actionable depth with source-aligned commands.
+6. Accurate refuse/redirect/caution guidance for conflicts and unsupported combinations (including SQLITE_MULTI_AGENT honesty).
+7. Clear honest verify/stop criteria and repository-matching commands (fail-closed; prove endpoint, provider/DB, workspace, service exe/config; trusted marker/nonce).
+8. No invented unsupported storage/service paths or plugin-hardcoded BDPv4. Windows service path must be UpdateService + McpServer.Support.Mcp.exe + deployment guard — not raw sc.exe as normal. Linux must not use Type=notify without sd_notify; systemd may be explicitly blocked pending validation. REPL obtain must use SharpNinja.McpServer.Repl / InstallReplTool (not NuGet id mcpserver-repl). Storage keys must match resolver (SQL Server not PG-shaped). chown must not target /opt itself. PowerShell-only guidance.
+
+Surface B — Workspace rules:
+- Honesty, receipts, PowerShell-only guidance in the prompt, no secrets in manifests, MCP plugin invoke not raw REST by default.
+
+Surface C — Requirements:
+- Discover whether FR/TR exist for MCP-SETUPPROMPT-001; if none, score whether claiming a production-ready prompt would be premature (DRAFT labeling OK).
+
+Surface D — Plan/TODO holistic:
+- Draft advances MCP-SETUPPROMPT-001 but inventory and dry-run tasks may remain open — DISAGREE any implication the TODO is complete. Do not mark the TODO done.
+
+Prior FAIL remediation expectations (must no longer FAIL if fixed):
+- F01 PackageId SharpNinja.McpServer.Repl / InstallReplTool; mcpserver-repl is ToolCommandName only
+- F02 Elevated ./build.ps1 UpdateService + real McpServer.Support.Mcp.exe + deployment manifest/guard; not raw sc.exe normal path
+- F03 systemd Type=notify absent or blocked; correct assembly; tested or explicit block pending validation
+- F04 Real provider keys from appsettings/resolver; SQL Server not PG-shaped ConnectionStrings:Mcp
+- F05 Executable playbooks or explicit stop/redirect per agent family
+- F06 Manifest/plan schemas round-trip multi-agent + host fields
+- F07 PowerShell-only (pwsh / PowerShell.MCP); native utils only via PowerShell; pre-PowerShell install exception only
+- F08 Verify proves selected endpoint, provider/DB, workspace, service exe/config; trusted marker/nonce; fail-closed
+- F09 chown only install dirs, never /opt itself
+- U01 SQLITE_MULTI_AGENT softened to caution/redirect pending evidence (or evidenced refuse)
+
+Rules:
+- Prefer DISAGREE when uncertain. AGREE only if accuracy AND completeness are both >= 98 with evidence.
+- Write public response JSONL to: F:\github\McpServer\docs\receipts\hv\20260928T121723Z-setupprompt-draft.response.jsonl
+- Also write markdown receipt: F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T121723Z.md (and optional JSON twin F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-draft-20260928T121723Z.json).
+- Return OverallVerdict AGREE or DISAGREE, PASS/FAIL/UNKNOWN counts, full FAIL list, accuracy and completeness scores with rationale, model/effort proof.
+- Receipt-only writes under docs/receipts/hv/.

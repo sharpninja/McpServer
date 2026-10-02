@@ -1,0 +1,572 @@
+{
+  "SchemaVersion": 1,
+  "Utc": "2026-10-02T00:48:10.1543199Z",
+  "Gate": "BUG-UNITFAIL-001",
+  "ReviewPhase": "Pre-remediation independent review",
+  "WorkClass": "Bounded product code/documentation review; operator actions excluded",
+  "OverallVerdict": "DISAGREE",
+  "AccuracyScore": 95,
+  "CompletenessScore": 92,
+  "MinimumApprovalScore": 98,
+  "ScoreMeaning": "Scores assess acceptance of the submitted repair, not statistical confidence in this review.",
+  "AccuracyRationale": "Relocation, checksums, traceability and test counters are supported, but four session-lifecycle behaviors violate the required contracts.",
+  "CompletenessRationale": "Green suites omit the four negative/public-boundary cases; original baseline and final parent-owned response capture are not independently closed.",
+  "Reviewer": {
+    "Agent": "Codex",
+    "Model": "gpt-6-astra",
+    "ReasoningEffort": "xhigh",
+    "NativeSessionId": "01a0f9f4-d605-7301-9b42-d8955d664e56",
+    "ConsoleAgentId": "sa-ef70105b",
+    "AdditionalAgents": 0,
+    "ProfileSkill": "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md",
+    "ProfileFilesRead": 22,
+    "ProfileReloadedAfterAutomaticCompaction": true,
+    "RequiredWorkspaceReads": [
+      "AGENTS.md",
+      "AGENTS-README-FIRST.yaml",
+      ".github/copilot-instructions.md",
+      "docs/Development-Process-draft-v4.md"
+    ]
+  },
+  "Workspace": {
+    "Path": "F:\\GitHub\\McpServer",
+    "Branch": "develop",
+    "BaseHead": "35822cd9f028d60762a9822b272cf2f7becfa7ce",
+    "EvidenceRoot": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z",
+    "Excluded": [
+      "Preexisting benchmark result JSON",
+      "Untracked .worktrees",
+      "Historical unrelated diffs",
+      "Operator actions",
+      "Remediation begun after these findings"
+    ]
+  },
+  "ClaimCounts": {
+    "PASS": 12,
+    "FAIL": 6,
+    "UNKNOWN": 2
+  },
+  "Findings": [
+    {
+      "Id": "F1",
+      "Severity": "P1",
+      "Title": "Supersession overwrites existing plan and TODO metadata",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 2132,
+      "Evidence": "Invoke-ReplSupersedeCurrentTurnIfInProgress unconditionally sends PlanFile=None and TodoId=None. The actual-function mock probe started with docs/plans/approved.md and BUG-UNITFAIL-001 and captured None/None on the canceled update. SessionLogService.cs:1651-1652 applies supplied non-null values.",
+      "Impact": "Beginning the next turn destroys the prior turn plan/TODO association instead of preserving omitted metadata.",
+      "RequirementIds": [
+        "FR-MCP-SESSIONLIFE-002-AC001",
+        "FR-MCP-SESSIONLIFE-002-AC003"
+      ],
+      "Remedy": "For a proven durable turn, omit unspecified metadata. For a first or degraded persist, preserve supplied/cached metadata before falling back to exact None. Add supersession tests for meaningful metadata in both durable and degraded cases."
+    },
+    {
+      "Id": "F2",
+      "Severity": "P1",
+      "Title": "Session retitling clears recovery data without typed persistence proof",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 3000,
+      "Evidence": "After Invoke-ReplRaw returns Success=true, SetSessionTitle clears its failsafe and publishes primary without checking Output. The actual-function mock probe with empty Output returned true, cleared failsafe, and published primary. SessionLogController.cs:324-325 returns agent/sessionId/retitled=true after a successful title update.",
+      "Impact": "Transport success with an empty, mismatched, or unsuccessful result can discard the only recovery payload and falsely claim persistence.",
+      "RequirementIds": [
+        "FR-MCP-SESSIONLIFE-003-AC001",
+        "FR-MCP-SESSIONLIFE-003-AC006"
+      ],
+      "Remedy": "Validate the session-level typed identity and retitled=true before clearing failsafe or publishing primary. Retain recovery data and classify rejection otherwise. Add empty, mismatched identity, false retitled, and valid-result tests."
+    },
+    {
+      "Id": "F3",
+      "Severity": "P2",
+      "Title": "Empty mutation receipts throw before fail-closed classification",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 1507,
+      "Evidence": "Mandatory string Output rejects empty strings before the parser and missing/unparseable branch at line 1525. Actual extracted function raised ParameterBindingValidationException with ParameterArgumentValidationErrorEmptyStringNotAllowed.",
+      "Impact": "The caller cannot publish the intended classified rejection receipt; a prior outcome may remain visible. This fails closed as an exception, but not through the required typed failure contract.",
+      "RequirementIds": [
+        "FR-MCP-SESSIONLIFE-003-AC002",
+        "TR-MCP-SESSIONLIFE-003-AC001"
+      ],
+      "Remedy": "Allow empty input into the validator and return Ok=false through the ordinary missing-result path. Ensure callers retain failsafe and publish rejected. Add negative empty-output tests; valid typed success mocks alone do not cover this boundary."
+    },
+    {
+      "Id": "F4",
+      "Severity": "P2",
+      "Title": "Typed session receipts never cross the public wrapper boundary",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "Line": 1397,
+      "Evidence": "Publish-ReplSessionVerbReceipt stores session-verb-outcome.yaml and returns only bool at line 1410. Dispatcher lines 3012-3025 consumes bool and emits no receipt. Script entry lines 3053-3058 provides only exit status. Core Invoke-McpPlugin.ps1:308-322 and Codex wrapper:158-173 forward stdout, not the receipt file. Live successful updateTurn and appendActions calls returned empty stdout, while supported server query proved persistence.",
+      "Impact": "Public callers cannot distinguish confirmed primary persistence from queued/degraded acceptance using the returned contract.",
+      "RequirementIds": [
+        "TR-MCP-SESSIONLIFE-003-AC001",
+        "TR-MCP-SESSIONLIFE-003-AC002"
+      ],
+      "Remedy": "Emit exactly one serialized typed receipt at the public wrapper invocation boundary. Keep internal boolean hook contracts where needed. Add public-boundary tests for primary, queued, and rejected outcomes rather than only checking cache-local receipt state."
+    }
+  ],
+  "Claims": [
+    {
+      "Id": "A01",
+      "Status": "PASS",
+      "Claim": "Source identity and bounded changed-file inventory",
+      "Evidence": "develop at 35822cd9f028d60762a9822b272cf2f7becfa7ce; all 24 validation receipt file hashes independently matched. Preexisting benchmark JSON and untracked .worktrees excluded."
+    },
+    {
+      "Id": "A02",
+      "Status": "PASS",
+      "Claim": "Restored SERVICEUPDATE records and mappings",
+      "Evidence": "Live GetEffectiveRequirementsAsync returned FR/TR/TEST-MCP-SERVICEUPDATE-001 pending with four structured unsatisfied AC each and the intended mappings. AC content compared with approved checked-in records."
+    },
+    {
+      "Id": "A03",
+      "Status": "PASS",
+      "Claim": "Generated traceability and trim mapping",
+      "Evidence": "Five docs/Project projections contain restored service records and TEST-MCP-TRIM-001 mapped to FR-MCP-139/TR-MCP-QUALITY-001. Parent persisted action records typed Requirements.GenerateAsync use. Reviewer did not regenerate or hand-edit them."
+    },
+    {
+      "Id": "A04",
+      "Status": "PASS",
+      "Claim": "Exact canonical-to-sibling reconciliation",
+      "Evidence": "SHA256 equal for all four canonical files and all five targeted sibling copies. Sibling repositories untouched. Behavioral defects are separately recorded as F1-F4."
+    },
+    {
+      "Id": "A05",
+      "Status": "PASS",
+      "Claim": "Byte-preserving relocation and compatibility forwards",
+      "Evidence": "git hash-object --no-filters on all three destination files matched HEAD old-path blobs. Five forwards present at ProcessRunnerTypeForwards.cs:5-9; namespaces and signatures unchanged. Reflection compatibility tests pass."
+    },
+    {
+      "Id": "A06",
+      "Status": "PASS",
+      "Claim": "QBAgent dependency boundary and documentation",
+      "Evidence": "QBAgent.Tools references Common.AgentCli instead of Services. Ownership/deps-manifest regression tests and docs/QBAGENT.md agree. No unrelated implementation changes found in runner bodies."
+    },
+    {
+      "Id": "A07",
+      "Status": "PASS",
+      "Claim": "Warning inventory is measured and still exact",
+      "Evidence": "Independently counted trim-green.log: 12 IL2026 and 5 IL2104, publish exit 0. Red inventory 60/13/3/3/5. Build test exact dictionary equality and exit assertion remain; no added suppression."
+    },
+    {
+      "Id": "A08",
+      "Status": "PASS",
+      "Claim": "New runner regression red-to-green evidence",
+      "Evidence": "runner-red.trx has 6 failures; forwarding-red.trx has 1 failure; forwarding-green.trx has 2 passes. Final QBAgent suite has 96 passes."
+    },
+    {
+      "Id": "A09",
+      "Status": "PASS",
+      "Claim": "Final eight .NET unit projects",
+      "Evidence": "Independently parsed final TRX counters: Build225 Client304 CQRS33 Launcher20 McpAgent63 QBAgent96 REPL868 Support2914 = 4523 passed, 0 failed, 0 skipped. Support uses full-units/McpServer.Support.Mcp.Tests-retry/results.trx. Category!=AiReview&Category!=Integration."
+    },
+    {
+      "Id": "A10",
+      "Status": "PASS",
+      "Claim": "Fixture corrections and final Pester suite",
+      "Evidence": "Reviewed all five fixture diffs and the Support source-path correction. Final pester-core-retry4 XML and summary: 180 passed, 0 failed, 0 skipped, 0 notrun. Earlier attempts preserved; no assertions removed. These tests do not cover F1-F4."
+    },
+    {
+      "Id": "A11",
+      "Status": "UNKNOWN",
+      "Claim": "Original pre-repair full-unit baseline of 4511/5/0",
+      "Evidence": "Stated in request, but reviewer did not independently locate and parse the original aggregate raw run. Final green counters independently verified instead."
+    },
+    {
+      "Id": "B01",
+      "Status": "PASS",
+      "Claim": "Single authorized reviewer, model, and isolation",
+      "Evidence": "Native transcript identifies gpt-6-astra with xhigh effort. PowerShell.Mcp console sa-ef70105b; dedicated cache/session/turn/failsafe. Parent active session and current-turn cache not overwritten."
+    },
+    {
+      "Id": "B02",
+      "Status": "PASS",
+      "Claim": "Review-only execution boundary",
+      "Evidence": "No additional agents, production edits, sibling edits, commits, pushes, deploys, integration/AI tests, or operator-action review. Reviewer ran isolated mocked function probes and read evidence."
+    },
+    {
+      "Id": "B03",
+      "Status": "FAIL",
+      "Claim": "Reviewer no-API-key-printing constraint",
+      "Evidence": "I failed to redact an embedded api_key query parameter during a required marker read. I disclosed the mistake immediately. The secret is not repeated in this receipt or the session-log verdict. This is a reviewer procedural failure, not a product finding."
+    },
+    {
+      "Id": "C01",
+      "Status": "FAIL",
+      "Claim": "Metadata omission preservation",
+      "Evidence": "F1: supersession explicitly overwrites existing plan/TODO values with None."
+    },
+    {
+      "Id": "C02",
+      "Status": "FAIL",
+      "Claim": "Typed session-title persistence proof and recovery retention",
+      "Evidence": "F2: transport success can clear failsafe without matching typed receipt."
+    },
+    {
+      "Id": "C03",
+      "Status": "FAIL",
+      "Claim": "Classified failure for empty typed receipts",
+      "Evidence": "F3: parameter binding throws before ordinary typed rejection."
+    },
+    {
+      "Id": "C04",
+      "Status": "FAIL",
+      "Claim": "Public typed session mutation receipt contract",
+      "Evidence": "F4: receipt is cache-local; public successful workflow calls return no typed receipt."
+    },
+    {
+      "Id": "D01",
+      "Status": "FAIL",
+      "Claim": "Holistic bounded repair acceptance",
+      "Evidence": "Green test counts do not discharge the four lifecycle defects. BUG-UNITFAIL-001 remains not done; this review does not authorize done-state changes."
+    },
+    {
+      "Id": "E01",
+      "Status": "UNKNOWN",
+      "Claim": "Final byte-complete response JSONL capture",
+      "Evidence": "Native transcript located and supplied. Parent owns byte-complete preservation after this reviewer finishes; that future capture cannot yet be verified."
+    }
+  ],
+  "MockedFunctionProbes": [
+    {
+      "probe": "supersession-metadata",
+      "originalPlan": "docs/plans/approved.md",
+      "originalTodo": "BUG-UNITFAIL-001",
+      "sentPlan": "None",
+      "sentTodo": "None",
+      "status": "canceled"
+    },
+    {
+      "probe": "session-title-empty-transport-success",
+      "returned": true,
+      "failsafeCleared": true,
+      "receipt": {
+        "disposition": "primary"
+      }
+    },
+    {
+      "probe": "typed-receipt-empty-output",
+      "exception": "System.Management.Automation.ParameterBindingValidationException",
+      "errorId": "ParameterArgumentValidationErrorEmptyStringNotAllowed,Test-ReplTypedSessionMutationResult",
+      "message": "Cannot bind argument to parameter 'Output' because it is an empty string."
+    }
+  ],
+  "Validation": {
+    "ParentReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.validation.json",
+    "UnitTotals": {
+      "projects": 8,
+      "total": 4523.0,
+      "passed": 4523.0,
+      "failed": 0.0,
+      "skipped": 0.0
+    },
+    "FinalUnitResults": [
+      {
+        "Project": "Build.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 236.2,
+        "Total": 225,
+        "Passed": 225,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\Build.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.Client.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 84.9,
+        "Total": 304,
+        "Passed": 304,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Client.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.Cqrs.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 40.6,
+        "Total": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Cqrs.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.Launcher.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 34.1,
+        "Total": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Launcher.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.McpAgent.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 16.2,
+        "Total": 63,
+        "Passed": 63,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.McpAgent.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.QBAgent.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 36.1,
+        "Total": 96,
+        "Passed": 96,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.QBAgent.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.Repl.Core.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 59.9,
+        "Total": 868,
+        "Passed": 868,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Repl.Core.Tests\\stderr.log",
+        "FailedTests": []
+      },
+      {
+        "Project": "McpServer.Support.Mcp.Tests",
+        "ExitCode": 0,
+        "ElapsedSeconds": 497.2,
+        "Total": 2914,
+        "Passed": 2914,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "Other": 0,
+        "Trx": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\results.trx",
+        "Stdout": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stdout.log",
+        "Stderr": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\full-units\\McpServer.Support.Mcp.Tests-retry\\stderr.log",
+        "FailedTests": []
+      }
+    ],
+    "Pester": {
+      "summary": {
+        "Total": 180,
+        "Passed": 180,
+        "Failed": 0,
+        "Skipped": 0,
+        "NotRun": 0
+      },
+      "path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\pester-core-retry4",
+      "exitCode": 0
+    },
+    "RunnerHashProof": [
+      {
+        "File": "IProcessRunner.cs",
+        "Original": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+        "Current": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC"
+      },
+      {
+        "File": "ProcessRunner.cs",
+        "Original": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+        "Current": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6"
+      },
+      {
+        "File": "ProcessRunner.Windows.cs",
+        "Original": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+        "Current": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4"
+      }
+    ],
+    "ChangedFileHashVerification": [
+      {
+        "path": "docs/Project/Functional-Requirements.md",
+        "expected": "648401B8D517848634BCCE1F8D45D802C5F859A126631094F83B5BE722F0766A",
+        "actual": "648401B8D517848634BCCE1F8D45D802C5F859A126631094F83B5BE722F0766A",
+        "match": true
+      },
+      {
+        "path": "docs/Project/Requirements-Matrix.md",
+        "expected": "CC4083246685EF688328BBB476A0151CF2DD69AD284F549FCAD8FB11AD193AB0",
+        "actual": "CC4083246685EF688328BBB476A0151CF2DD69AD284F549FCAD8FB11AD193AB0",
+        "match": true
+      },
+      {
+        "path": "docs/Project/Technical-Requirements.md",
+        "expected": "87001864113272AF08E265E969FEF3BFFFB964E2AF2118485B1152109875EA28",
+        "actual": "87001864113272AF08E265E969FEF3BFFFB964E2AF2118485B1152109875EA28",
+        "match": true
+      },
+      {
+        "path": "docs/Project/Testing-Requirements.md",
+        "expected": "8E3738732B1C21329CBC8B411F39C8A40A25DA6B85B43DF44EAEC4C8A1F944FB",
+        "actual": "8E3738732B1C21329CBC8B411F39C8A40A25DA6B85B43DF44EAEC4C8A1F944FB",
+        "match": true
+      },
+      {
+        "path": "docs/Project/TR-per-FR-Mapping.md",
+        "expected": "BEA6D028D48309DC58CF1577988CA5A3819E7F27629AAEB3CCA9FFDCBAF829E4",
+        "actual": "BEA6D028D48309DC58CF1577988CA5A3819E7F27629AAEB3CCA9FFDCBAF829E4",
+        "match": true
+      },
+      {
+        "path": "docs/QBAGENT.md",
+        "expected": "D1F6546CE7BAD76D8D03E1C4D8F9254B26DE3744018C948241507679C074DE24",
+        "actual": "D1F6546CE7BAD76D8D03E1C4D8F9254B26DE3744018C948241507679C074DE24",
+        "match": true
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-env.ps1",
+        "expected": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "actual": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "match": true
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "expected": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "actual": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "match": true
+      },
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "expected": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+        "actual": "615BCB13878D38456E6D9D98A5FCBBEF4B298AE5D6C3652DDE77C91EEDF93747",
+        "match": true
+      },
+      {
+        "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+        "expected": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "actual": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "match": true
+      },
+      {
+        "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+        "expected": "DADE18BAF7B8A2479B04CFC0C422C2960FCAF9D3DABBA6FE009531F2EC90ED7C",
+        "actual": "DADE18BAF7B8A2479B04CFC0C422C2960FCAF9D3DABBA6FE009531F2EC90ED7C",
+        "match": true
+      },
+      {
+        "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "expected": "4F321F50481CEC943EC25757AC28B7CFBAA40C701668AA9769E65E452130C048",
+        "actual": "4F321F50481CEC943EC25757AC28B7CFBAA40C701668AA9769E65E452130C048",
+        "match": true
+      },
+      {
+        "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "expected": "E1C5EDAAD2DAA9D4325C7A2012E3C71CBA191DB55402B781BCC2ECA11C4F4B98",
+        "actual": "E1C5EDAAD2DAA9D4325C7A2012E3C71CBA191DB55402B781BCC2ECA11C4F4B98",
+        "match": true
+      },
+      {
+        "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+        "expected": "6D7ADE4FFC9CDB2D8E242A58F952EB68B8940B9D85B0F00B6F0EC4743EC3FF4E",
+        "actual": "6D7ADE4FFC9CDB2D8E242A58F952EB68B8940B9D85B0F00B6F0EC4743EC3FF4E",
+        "match": true
+      },
+      {
+        "path": "plugins/core/test-fixtures/pester/TriagePluginIdentity.Tests.ps1",
+        "expected": "B5016E11C6061A7F6DEFC289FAD5182FABDBD1B6237574D4A0627989DCC8F3A9",
+        "actual": "B5016E11C6061A7F6DEFC289FAD5182FABDBD1B6237574D4A0627989DCC8F3A9",
+        "match": true
+      },
+      {
+        "path": "src/McpServer.Common.AgentCli/Processes/IProcessRunner.cs",
+        "expected": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+        "actual": "2D581626223D7DAEE36EE7189059085183D08102C6D6D385D1B2EA4EF299ABAC",
+        "match": true
+      },
+      {
+        "path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.cs",
+        "expected": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+        "actual": "3F181B547AEF55E54A8507EC6401E7B123984DAE79CCAADF2E9E0615AA73CED6",
+        "match": true
+      },
+      {
+        "path": "src/McpServer.Common.AgentCli/Processes/ProcessRunner.Windows.cs",
+        "expected": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+        "actual": "BEC59A59A360F275F8E8B368D3675C48BBA90A99C639BFE278818D7758C8D2E4",
+        "match": true
+      },
+      {
+        "path": "src/McpServer.QBAgent.Tools/McpServer.QBAgent.Tools.csproj",
+        "expected": "89B13116D977A285623939AED4AF270A867C8F056C9D58148710C148A75E4A86",
+        "actual": "89B13116D977A285623939AED4AF270A867C8F056C9D58148710C148A75E4A86",
+        "match": true
+      },
+      {
+        "path": "src/McpServer.Services/Properties/ProcessRunnerTypeForwards.cs",
+        "expected": "8C13FFE70760F330421002D6F9D15058371E41EE46360ACC2741EEECC9087A95",
+        "actual": "8C13FFE70760F330421002D6F9D15058371E41EE46360ACC2741EEECC9087A95",
+        "match": true
+      },
+      {
+        "path": "tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs",
+        "expected": "C16EEA049C124FD8ED5D4A76EC5EC2BE9A9A4957B62F6C88E93583A0E8CD3C8E",
+        "actual": "C16EEA049C124FD8ED5D4A76EC5EC2BE9A9A4957B62F6C88E93583A0E8CD3C8E",
+        "match": true
+      },
+      {
+        "path": "tests/McpServer.QBAgent.Tests/ProcessRunnerDependencyTests.cs",
+        "expected": "664F4FC675D00216BA754E796CF718E74A4742B5BC8D1585B5F0D74FECAB9D88",
+        "actual": "664F4FC675D00216BA754E796CF718E74A4742B5BC8D1585B5F0D74FECAB9D88",
+        "match": true
+      },
+      {
+        "path": "tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+        "expected": "B8DFC422424CB6D8A65DB6EE09ACF2BF72CC822A94FB0E0505D29B49245ABDF1",
+        "actual": "B8DFC422424CB6D8A65DB6EE09ACF2BF72CC822A94FB0E0505D29B49245ABDF1",
+        "match": true
+      },
+      {
+        "path": "tests/McpServer.Support.Mcp.Tests/Services/ProcessRunnerTypeForwardingTests.cs",
+        "expected": "5E7BF17E29A85D7719DD5E6E1F2F3373A75DCCF0FD3962EFB98C7F699FC780C2",
+        "actual": "5E7BF17E29A85D7719DD5E6E1F2F3373A75DCCF0FD3962EFB98C7F699FC780C2",
+        "match": true
+      }
+    ],
+    "Scope": "Category!=AiReview&Category!=Integration",
+    "IntegrationOrAiTestsRunByReviewer": false
+  },
+  "SessionLog": {
+    "SessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+    "RequestId": "req-20261002T002126Z-review-unitfail-001",
+    "CacheRoot": "F:\\GitHub\\McpServer\\.mcpServer\\review-sa-ef70105b",
+    "FailsafeRoot": "F:\\GitHub\\McpServer\\.mcpServer\\review-sa-ef70105b\\failsafe",
+    "ParentProtectedSession": "Codex-20261001T133708Z-plugin-session",
+    "ParentProtectedRequest": "req-20261001T234043Z-fix-unit-failures",
+    "FullVerdictPersistence": "Complete JSON body submitted through supported workflow/client operations and verified by exact server readback; separate readback receipt records confirmation without a self-referential body.",
+    "ReadbackReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.readback.json"
+  },
+  "Receipts": {
+    "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.request.jsonl",
+    "ResponseJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.response.jsonl",
+    "ResponseCaptureOwner": "Parent after reviewer finishes; preserve byte-complete native transcript",
+    "NativeTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\01\\rollout-2026-10-01T19-12-47-01a0f9f4-d605-7301-9b42-d8955d664e56.jsonl",
+    "ReviewJson": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.json",
+    "ReviewMarkdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.md"
+  },
+  "Conclusion": "Do not accept BUG-UNITFAIL-001 or mark it done on this review. Remediate F1-F4 with red-before-green regression evidence and recheck with this same reviewer. User has approved that follow-on repair; it is not included in this pre-remediation verdict."
+}

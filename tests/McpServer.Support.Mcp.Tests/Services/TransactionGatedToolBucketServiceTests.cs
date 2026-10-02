@@ -18,9 +18,17 @@ public sealed class TransactionGatedToolBucketServiceTests
     /// bucket service when transaction enforcement is required.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_ReturnDeferredFailuresWithoutCallingInner()
+    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
     {
         var inner = Substitute.For<IToolBucketService>();
+        inner.AddBucketAsync(Arg.Any<BucketAddRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new BucketMutationResult(true));
+        inner.RemoveBucketAsync("official", true, Arg.Any<CancellationToken>())
+            .Returns(new BucketMutationResult(true));
+        inner.InstallAsync("official", "tool-alpha", Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(new ToolMutationResult(true, null));
+        inner.SyncAsync("official", Arg.Any<CancellationToken>())
+            .Returns(new BucketSyncResult(true, null));
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(inner, coordinator);
 
@@ -29,18 +37,14 @@ public sealed class TransactionGatedToolBucketServiceTests
         var install = await sut.InstallAsync("official", "tool-alpha", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var sync = await sut.SyncAsync("official", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(add.Success);
-        Assert.False(remove.Success);
-        Assert.False(install.Success);
-        Assert.False(sync.Success);
-        Assert.Contains("deferred", add.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("deferred", remove.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("deferred", install.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("deferred", sync.Error, StringComparison.OrdinalIgnoreCase);
-        _ = inner.DidNotReceive().AddBucketAsync(Arg.Any<BucketAddRequest>(), Arg.Any<CancellationToken>());
-        _ = inner.DidNotReceive().RemoveBucketAsync(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
-        _ = inner.DidNotReceive().InstallAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
-        _ = inner.DidNotReceive().SyncAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
+        Assert.True(add.Success);
+        Assert.True(remove.Success);
+        Assert.True(install.Success);
+        Assert.True(sync.Success);
+        _ = inner.Received(1).AddBucketAsync(Arg.Any<BucketAddRequest>(), Arg.Any<CancellationToken>());
+        _ = inner.Received(1).RemoveBucketAsync("official", true, Arg.Any<CancellationToken>());
+        _ = inner.Received(1).InstallAsync("official", "tool-alpha", Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        _ = inner.Received(1).SyncAsync("official", Arg.Any<CancellationToken>());
         Assert.Null(coordinator.Request);
     }
 

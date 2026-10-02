@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="df57f805-904d-4b3f-875d-a45c3eba863a" name="kingd@PAYTON-LEGION2 2026-08-21 20:41:01" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T20:41:01.5226511-05:00" queuing="2026-08-21T20:41:01.5226517-05:00" start="2026-08-21T20:40:59.2126627-05:00" finish="2026-08-21T20:42:17.5192002-05:00" />
+  <TestSettings name="default" id="244d3f34-f261-447f-b072-e7e1afa537b6">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_20_41_01" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="82abb2c0-8711-46c7-adbd-d27b8a3b158a" testId="5bb017ac-c90e-9a36-e020-70d7c3733126" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" computerName="PAYTON-LEGION2" duration="00:00:01.0933459" startTime="2026-08-21T20:41:40.6930058-05:00" endTime="2026-08-21T20:41:41.7864257-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82abb2c0-8711-46c7-adbd-d27b8a3b158a" />
+    <UnitTestResult executionId="bd1b4fb5-bae3-4e3e-9146-c61842ea7676" testId="3b1b35d6-04b5-ae89-94b3-1a72cf86a187" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0010808" startTime="2026-08-21T20:41:01.4779682-05:00" endTime="2026-08-21T20:41:01.4796006-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd1b4fb5-bae3-4e3e-9146-c61842ea7676">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bc775345-36f3-4c55-850d-0c58d52069d0" testId="249e7608-e241-9d6b-5f9e-9784127451a5" testName="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" computerName="PAYTON-LEGION2" duration="00:00:00.0328447" startTime="2026-08-21T20:41:01.2764053-05:00" endTime="2026-08-21T20:41:01.3227201-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc775345-36f3-4c55-850d-0c58d52069d0" />
+    <UnitTestResult executionId="3e0dd2f9-b300-4ffd-86e7-9ce28d90282f" testId="6edf857f-c350-109d-e751-78f29179f4c4" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" computerName="PAYTON-LEGION2" duration="00:00:00.0014150" startTime="2026-08-21T20:41:01.4020765-05:00" endTime="2026-08-21T20:41:01.4035331-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e0dd2f9-b300-4ffd-86e7-9ce28d90282f" />
+    <UnitTestResult executionId="75931d27-36ae-409b-b285-1b12b075c74d" testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" computerName="PAYTON-LEGION2" duration="00:00:11.1559775" startTime="2026-08-21T20:41:54.4010089-05:00" endTime="2026-08-21T20:42:05.5570589-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75931d27-36ae-409b-b285-1b12b075c74d" />
+    <UnitTestResult executionId="aff91df8-de05-4c91-8336-f3eb9be3f30a" testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" computerName="PAYTON-LEGION2" duration="00:00:12.6103560" startTime="2026-08-21T20:41:41.7882698-05:00" endTime="2026-08-21T20:41:54.3987241-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aff91df8-de05-4c91-8336-f3eb9be3f30a" />
+    <UnitTestResult executionId="a0c45290-fb75-4b97-858d-c402895d43b3" testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" computerName="PAYTON-LEGION2" duration="00:00:14.4251516" startTime="2026-08-21T20:41:01.4810981-05:00" endTime="2026-08-21T20:41:15.9093696-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0c45290-fb75-4b97-858d-c402895d43b3" />
+    <UnitTestResult executionId="8f559d5d-97d2-4a1b-bafa-b8c57b4389f4" testId="b67667f1-956c-b969-5aff-30951534807a" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:00.0072295" startTime="2026-08-21T20:41:01.4240805-05:00" endTime="2026-08-21T20:41:01.4609472-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f559d5d-97d2-4a1b-bafa-b8c57b4389f4">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bd93d6d7-6389-470b-9e7a-04e1ec42e674" testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" computerName="PAYTON-LEGION2" duration="00:00:00.0014538" startTime="2026-08-21T20:41:01.4185134-05:00" endTime="2026-08-21T20:41:01.4200440-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd93d6d7-6389-470b-9e7a-04e1ec42e674" />
+    <UnitTestResult executionId="88896553-f3f7-4cdb-9da2-0bc3262e0d62" testId="259cc540-68dc-c0bc-63dc-08ee5851c9be" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:00.0009798" startTime="2026-08-21T20:41:01.4714669-05:00" endTime="2026-08-21T20:41:01.4729563-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="88896553-f3f7-4cdb-9da2-0bc3262e0d62">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ed10e12c-4724-4502-9284-3bc35cce6232" testId="b4a57976-1c8f-4410-0825-5899e07a7661" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" computerName="PAYTON-LEGION2" duration="00:00:00.0014716" startTime="2026-08-21T20:41:01.4162817-05:00" endTime="2026-08-21T20:41:01.4178106-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed10e12c-4724-4502-9284-3bc35cce6232" />
+    <UnitTestResult executionId="4dc52e2d-28df-47a5-9505-543392cd8e4d" testId="a1a83450-289c-1f21-5189-fd8a02f92b69" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" computerName="PAYTON-LEGION2" duration="00:00:00.0114438" startTime="2026-08-21T20:41:01.4038798-05:00" endTime="2026-08-21T20:41:01.4153888-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4dc52e2d-28df-47a5-9505-543392cd8e4d" />
+    <UnitTestResult executionId="90f50eef-af5e-4307-bc94-68add18ce011" testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" computerName="PAYTON-LEGION2" duration="00:00:11.8486811" startTime="2026-08-21T20:42:05.5581141-05:00" endTime="2026-08-21T20:42:17.4068502-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="90f50eef-af5e-4307-bc94-68add18ce011" />
+    <UnitTestResult executionId="1f772b83-c730-4ef8-83bf-39834ddfc5fd" testId="93bddd0a-6593-1efb-c454-577812c2cc12" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" computerName="PAYTON-LEGION2" duration="00:00:00.0014470" startTime="2026-08-21T20:41:01.4000589-05:00" endTime="2026-08-21T20:41:01.4015640-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f772b83-c730-4ef8-83bf-39834ddfc5fd" />
+    <UnitTestResult executionId="c329dfd4-cc11-4847-8a1b-7543ffa37c90" testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" testName="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" computerName="PAYTON-LEGION2" duration="00:00:00.0607704" startTime="2026-08-21T20:41:01.3385408-05:00" endTime="2026-08-21T20:41:01.3994477-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c329dfd4-cc11-4847-8a1b-7543ffa37c90" />
+    <UnitTestResult executionId="0d6da4f2-388c-456a-a05a-23da0b84b8cc" testId="0aac579d-c81e-7ee5-1d52-2c40b8fd390e" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:00.0018075" startTime="2026-08-21T20:41:01.4627387-05:00" endTime="2026-08-21T20:41:01.4651174-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d6da4f2-388c-456a-a05a-23da0b84b8cc">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c1666c48-9c3a-4bea-a58d-b1e1d4fea053" testId="3432ff42-672e-0305-93be-fe61923bb416" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" computerName="PAYTON-LEGION2" duration="00:00:12.3386358" startTime="2026-08-21T20:41:15.9187917-05:00" endTime="2026-08-21T20:41:28.2575078-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c1666c48-9c3a-4bea-a58d-b1e1d4fea053" />
+    <UnitTestResult executionId="586ee200-51a0-466c-9683-2e240f34053c" testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" computerName="PAYTON-LEGION2" duration="00:00:12.4288355" startTime="2026-08-21T20:41:28.2607851-05:00" endTime="2026-08-21T20:41:40.6897323-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="586ee200-51a0-466c-9683-2e240f34053c" />
+    <UnitTestResult executionId="b150e589-5987-41e8-a05b-4f46ab4a3df7" testId="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:00.0010078" startTime="2026-08-21T20:41:01.4757637-05:00" endTime="2026-08-21T20:41:01.4773474-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b150e589-5987-41e8-a05b-4f46ab4a3df7">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e20ab2e9-858c-44c6-8eaa-18df5698a7a6" testId="c2db256a-e7c9-78d2-d025-8768c4c06997" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:00.0012130" startTime="2026-08-21T20:41:01.4689931-05:00" endTime="2026-08-21T20:41:01.4708587-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e20ab2e9-858c-44c6-8eaa-18df5698a7a6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f51762d5-f52f-4428-be38-c8f4c8014cf9" testId="1d184306-ca46-c995-1980-88e55b415255" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:00.0010121" startTime="2026-08-21T20:41:01.4735988-05:00" endTime="2026-08-21T20:41:01.4751867-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f51762d5-f52f-4428-be38-c8f4c8014cf9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e76d6dd1-651a-42f4-9ffe-967ca483c77d" testId="fbe0ab7d-103a-2212-6706-b14331c649f7" testName="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:00.0017230" startTime="2026-08-21T20:41:01.4656655-05:00" endTime="2026-08-21T20:41:01.4681796-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e76d6dd1-651a-42f4-9ffe-967ca483c77d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs:line 36&#xD;
+   at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs:line 53&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e">
+      <Execution id="a0c45290-fb75-4b97-858d-c402895d43b3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_DeterministicCleanup" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29">
+      <Execution id="b150e589-5987-41e8-a05b-4f46ab4a3df7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="93bddd0a-6593-1efb-c454-577812c2cc12">
+      <Execution id="1f772b83-c730-4ef8-83bf-39834ddfc5fd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RepositoryRootsExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b4a57976-1c8f-4410-0825-5899e07a7661">
+      <Execution id="ed10e12c-4724-4502-9284-3bc35cce6232" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_UniqueAgentSourceCache" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="0aac579d-c81e-7ee5-1d52-2c40b8fd390e">
+      <Execution id="0d6da4f2-388c-456a-a05a-23da0b84b8cc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3b1b35d6-04b5-ae89-94b3-1a72cf86a187">
+      <Execution id="bd1b4fb5-bae3-4e3e-9146-c61842ea7676" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="87979b5e-268c-e227-3bdf-1cbbf14997ac">
+      <Execution id="586ee200-51a0-466c-9683-2e240f34053c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SignatureAndNonceTrust" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="b67667f1-956c-b969-5aff-30951534807a">
+      <Execution id="8f559d5d-97d2-4a1b-bafa-b8c57b4389f4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10">
+      <Execution id="90f50eef-af5e-4307-bc94-68add18ce011" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_HealthReady_ExposesTrustedMarkerAndClient" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="c2db256a-e7c9-78d2-d025-8768c4c06997">
+      <Execution id="e20ab2e9-858c-44c6-8eaa-18df5698a7a6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3432ff42-672e-0305-93be-fe61923bb416">
+      <Execution id="c1666c48-9c3a-4bea-a58d-b1e1d4fea053" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SelectsFreePort" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="fbe0ab7d-103a-2212-6706-b14331c649f7">
+      <Execution id="e76d6dd1-651a-42f4-9ffe-967ca483c77d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33">
+      <Execution id="aff91df8-de05-4c91-8336-f3eb9be3f30a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="9676f0d0-5f41-a32c-c2d9-8828d86f7808">
+      <Execution id="75931d27-36ae-409b-b285-1b12b075c74d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesMarker" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a6213a20-b401-20f3-7b2f-1044dcf1bcfe">
+      <Execution id="c329dfd4-cc11-4847-8a1b-7543ffa37c90" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_SupportedHostKinds" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="249e7608-e241-9d6b-5f9e-9784127451a5">
+      <Execution id="bc775345-36f3-4c55-850d-0c58d52069d0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests" name="PluginIntegrationProject_HasXmlDocsAndNonparallelCollection" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6edf857f-c350-109d-e751-78f29179f4c4">
+      <Execution id="3e0dd2f9-b300-4ffd-86e7-9ce28d90282f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_RequiredEntrypointFilesExist" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="5bb017ac-c90e-9a36-e020-70d7c3733126">
+      <Execution id="82abb2c0-8711-46c7-adbd-d27b8a3b158a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_StartupTimeout" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="18d5a8a3-7892-c234-f03d-8f0549399f5f">
+      <Execution id="bd93d6d7-6389-470b-9e7a-04e1ec42e674" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_VersionMetadataPresent" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a1a83450-289c-1f21-5189-fd8a02f92b69">
+      <Execution id="4dc52e2d-28df-47a5-9505-543392cd8e4d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests" name="Catalog_ExactlyEightEnabled" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1d184306-ca46-c995-1980-88e55b415255">
+      <Execution id="f51762d5-f52f-4428-be38-c8f4c8014cf9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="259cc540-68dc-c0bc-63dc-08ee5851c9be">
+      <Execution id="88896553-f3f7-4cdb-9da2-0bc3262e0d62" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests" name="Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5bb017ac-c90e-9a36-e020-70d7c3733126" executionId="82abb2c0-8711-46c7-adbd-d27b8a3b158a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3b1b35d6-04b5-ae89-94b3-1a72cf86a187" executionId="bd1b4fb5-bae3-4e3e-9146-c61842ea7676" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="249e7608-e241-9d6b-5f9e-9784127451a5" executionId="bc775345-36f3-4c55-850d-0c58d52069d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6edf857f-c350-109d-e751-78f29179f4c4" executionId="3e0dd2f9-b300-4ffd-86e7-9ce28d90282f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" executionId="75931d27-36ae-409b-b285-1b12b075c74d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" executionId="aff91df8-de05-4c91-8336-f3eb9be3f30a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" executionId="a0c45290-fb75-4b97-858d-c402895d43b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b67667f1-956c-b969-5aff-30951534807a" executionId="8f559d5d-97d2-4a1b-bafa-b8c57b4389f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18d5a8a3-7892-c234-f03d-8f0549399f5f" executionId="bd93d6d7-6389-470b-9e7a-04e1ec42e674" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="259cc540-68dc-c0bc-63dc-08ee5851c9be" executionId="88896553-f3f7-4cdb-9da2-0bc3262e0d62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4a57976-1c8f-4410-0825-5899e07a7661" executionId="ed10e12c-4724-4502-9284-3bc35cce6232" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1a83450-289c-1f21-5189-fd8a02f92b69" executionId="4dc52e2d-28df-47a5-9505-543392cd8e4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73d43f4a-648c-801f-1b0b-6b4cb0b0dd10" executionId="90f50eef-af5e-4307-bc94-68add18ce011" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93bddd0a-6593-1efb-c454-577812c2cc12" executionId="1f772b83-c730-4ef8-83bf-39834ddfc5fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6213a20-b401-20f3-7b2f-1044dcf1bcfe" executionId="c329dfd4-cc11-4847-8a1b-7543ffa37c90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0aac579d-c81e-7ee5-1d52-2c40b8fd390e" executionId="0d6da4f2-388c-456a-a05a-23da0b84b8cc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3432ff42-672e-0305-93be-fe61923bb416" executionId="c1666c48-9c3a-4bea-a58d-b1e1d4fea053" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" executionId="586ee200-51a0-466c-9683-2e240f34053c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdf796ed-bc6b-71ea-3f00-7a7f97e87e29" executionId="b150e589-5987-41e8-a05b-4f46ab4a3df7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2db256a-e7c9-78d2-d025-8768c4c06997" executionId="e20ab2e9-858c-44c6-8eaa-18df5698a7a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d184306-ca46-c995-1980-88e55b415255" executionId="f51762d5-f52f-4428-be38-c8f4c8014cf9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbe0ab7d-103a-2212-6706-b14331c649f7" executionId="e76d6dd1-651a-42f4-9ffe-967ca483c77d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="22" executed="22" passed="14" failed="8" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.48]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.89]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.27]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.56]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.56]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.56]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.56]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.56]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.57]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.57]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.57]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.57]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.58]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.58]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.58]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.58]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.58]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.58]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.58]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.58]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.58]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.58]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.58]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.59]       System.InvalidOperationException : PluginHostProcessAdapter.LaunchAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.59]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapter.cs(36,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapter.LaunchAsync(PluginSessionLogScenario scenario, String standardInput, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginHostProcessAdapterTests.cs(53,0): at McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)&#xD;
+[xUnit.net 00:00:01.59]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:01:17.51]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.4722419-05:00">
+        <Text>[xUnit.net 00:00:01.56]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.4784248-05:00">
+        <Text>[xUnit.net 00:00:01.56]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5382536-05:00">
+        <Text>[xUnit.net 00:00:01.58]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5383667-05:00">
+        <Text>[xUnit.net 00:00:01.58]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5385166-05:00">
+        <Text>[xUnit.net 00:00:01.58]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5385899-05:00">
+        <Text>[xUnit.net 00:00:01.58]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5387027-05:00">
+        <Text>[xUnit.net 00:00:01.58]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T20:41:01.5387684-05:00">
+        <Text>[xUnit.net 00:00:01.59]     McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

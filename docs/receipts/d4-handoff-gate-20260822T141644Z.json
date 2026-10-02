@@ -1,0 +1,158 @@
+{
+  "timestampUtc": "2026-08-22T14:24:49.9287443+00:00",
+  "agent": "GrokCode",
+  "sessionId": "GrokCode-20260822T141644Z-pluginhandoff-d4-gate",
+  "requestId": "req-20260822T141644Z-001-pluginhandoff-d4-gate",
+  "turnId": 43015,
+  "todoId": "PLAN-PLUGINHANDOFF-001",
+  "plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "phase": "D4",
+  "d4Complete": false,
+  "todosLeftDoneFalse": [
+    "PLAN-PLUGINHANDOFF-001",
+    "MCP-HANDOFF-001",
+    "MCP-HANDOFFPLAN-001",
+    "MCP-HANDOFFREVIEW-001"
+  ],
+  "overall": {
+    "failedZero": false,
+    "skippedZero": true,
+    "allGreen": false,
+    "failed": 1,
+    "skipped": 0,
+    "commandsRun": 2,
+    "commandsTotal": 9,
+    "stoppedAfter": 2,
+    "stoppedReason": "stop after index 2 name support-mcp-tests: exit=1 failed=1 skipped=0"
+  },
+  "commands": [
+    {
+      "index": 1,
+      "name": "client-tests",
+      "exactCommand": "dotnet test tests\\McpServer.Client.Tests\\McpServer.Client.Tests.csproj",
+      "exitCode": 0,
+      "passed": 284,
+      "failed": 0,
+      "skipped": 0,
+      "total": 284,
+      "status": "ran",
+      "logSha256": "00A67D2958837D82B9D8C0BA0369E81790787894DBF88691A035C053D1CFBDDB",
+      "trxSha256": "15CB1A4357C6CA29FCEC052DD05E77D1DE53C81103CFBCB1DEEC680E20BD5768"
+    },
+    {
+      "index": 2,
+      "name": "support-mcp-tests",
+      "exactCommand": "dotnet test tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj",
+      "exitCode": 1,
+      "passed": 2111,
+      "failed": 1,
+      "skipped": 0,
+      "total": 2112,
+      "status": "ran",
+      "logSha256": "2BA0594FDFE0B9813DDD0319B4E875849E170A1F4D5B2DCEE98AB375A3013820",
+      "trxSha256": "43DCB816CE9CD05F8A192E78674C2BB4C1C5A1C6A1A0EB60CAF2DC473A08B9C9",
+      "failure": {
+        "testName": "McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_NullLayerKey_UsesPersistedCurrentLayerAfterExternalUpdate",
+        "expected": "layer-2",
+        "actual": "layer-1",
+        "file": "tests/McpServer.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs",
+        "line": 260,
+        "message": "Assert.Equal() Failure: Strings differ. Expected \"layer-2\" Actual \"layer-1\"."
+      }
+    },
+    {
+      "index": 3,
+      "name": "repl-core-tests",
+      "exactCommand": "dotnet test tests\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.csproj",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 4,
+      "name": "support-mcp-integration",
+      "exactCommand": "dotnet test tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 5,
+      "name": "repl-integration",
+      "exactCommand": "dotnet test tests\\McpServer.Repl.IntegrationTests\\McpServer.Repl.IntegrationTests.csproj",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 6,
+      "name": "compile",
+      "exactCommand": ".\\build.ps1 Compile",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 7,
+      "name": "test",
+      "exactCommand": ".\\build.ps1 Test",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 8,
+      "name": "validate-traceability",
+      "exactCommand": ".\\build.ps1 ValidateTraceability",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    },
+    {
+      "index": 9,
+      "name": "sync-agent-plugins",
+      "exactCommand": ".\\build.ps1 SyncAgentPlugins",
+      "exitCode": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "status": "not_run"
+    }
+  ],
+  "artifactShas": {
+    "01-client-tests.json": "01490826E2427DEF5DCCD94FAE5FDA0CCD8C548EDDCEFF6781BA7C4FFCA0FC97",
+    "01-client-tests.log": "00A67D2958837D82B9D8C0BA0369E81790787894DBF88691A035C053D1CFBDDB",
+    "01-client-tests.trx": "15CB1A4357C6CA29FCEC052DD05E77D1DE53C81103CFBCB1DEEC680E20BD5768",
+    "02-support-mcp-tests.json": "A8AC1BFB635380B14AFB745805A82780182DD59BF89853185A92EE896B925D16",
+    "02-support-mcp-tests.log": "2BA0594FDFE0B9813DDD0319B4E875849E170A1F4D5B2DCEE98AB375A3013820",
+    "02-support-mcp-tests.trx": "43DCB816CE9CD05F8A192E78674C2BB4C1C5A1C6A1A0EB60CAF2DC473A08B9C9",
+    "ids.json": "CEFE6B4C2E38061C7E1FF5B9C519E06CFE4D6DB256683ED7CDE47DBCB6DA99EB",
+    "git-status-before.txt": "907F8D6A38F688BB33108905ED1B3823EE3F95A2A3F8997DDDC61F8A71035B65",
+    "git-status-after.txt": "61B923242426AB62A6AFFCCB8C8C016C777FF20D68E3C987B30D9B687EF33EBD",
+    "session-dialog-start.json": "EDAB5D1A6708FECB5DC88452BC90F8D48CE60AC99DE435608B1B3554811BF135",
+    "tools-list.json": "744BB6750E018BF64F96FB9C3639449D338AF43B313580F366B0309F83EEC977"
+  },
+  "trust": {
+    "markerSignature": true,
+    "healthNonceSent": "93a9873cb9d44c57b57c873436a3f6ba",
+    "healthNonceEcho": "93a9873cb9d44c57b57c873436a3f6ba",
+    "healthNonceMatch": true,
+    "healthStatus": "Healthy",
+    "pluginVersion": "1.105.0",
+    "pluginName": "mcpserver-grok-plugin"
+  },
+  "receiptMdSha256": "BE2197B523BABDD029F89CE2F86C654D61FDB2247BCCEB01C1FDC68D87BCC361",
+  "receiptJsonSha256": "C3572CC726138BF99E6949D104AF64A6496F803E0A2A0E6474CC985A42CCD313"
+}

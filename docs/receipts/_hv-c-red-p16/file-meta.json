@@ -1,0 +1,57 @@
+{
+  "TimestampUtc": "2026-08-22T07:24:17.4851490Z",
+  "AiTheoryTests": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogAiTheoryTests.cs",
+    "length": 2283,
+    "lastWriteTimeUtc": "2026-08-22T07:16:45.1961926Z"
+  },
+  "AiStrategyFixture": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\AiStrategyFixture.cs",
+    "length": 1066,
+    "lastWriteTimeUtc": "2026-08-22T07:16:45.1961926Z"
+  },
+  "AiStrategyEvaluation": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\AiStrategyEvaluation.cs",
+    "length": 663,
+    "lastWriteTimeUtc": "2026-08-22T07:16:45.1971938Z"
+  },
+  "PluginHostKind": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostKind.cs",
+    "length": 702,
+    "lastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z"
+  },
+  "Collection": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCollection.cs",
+    "length": 303,
+    "lastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z"
+  },
+  "P1BuildTests": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "length": 3963,
+    "lastWriteTimeUtc": "2026-08-21T23:08:56.4300101Z"
+  },
+  "NukeTarget": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\build\\Build.PluginSessionLogIntegration.cs",
+    "length": 2694,
+    "lastWriteTimeUtc": "2026-08-21T23:33:11.9992945Z"
+  },
+  "PriorMd": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T071202Z.md",
+    "length": 16753,
+    "lastWriteTimeUtc": "2026-08-22T07:13:03.6679975Z"
+  },
+  "PriorJson": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T071202Z.json",
+    "length": 6349,
+    "lastWriteTimeUtc": "2026-08-22T07:14:57.3602633Z"
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\results-20260822T063532Z\\kingd_PAYTON-LEGION2_2026-08-22_01_36_06_net10.0.trx",
+  "lastWriteUtc": "2026-08-22T06:40:34.8335533Z",
+  "outcome": "Completed",
+  "total": "24",
+  "executed": "24",
+  "passed": "24",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 24,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)"
+  ],
+  "skippedNames": [],
+  "p15Count": 24,
+  "p15SuccessCount": 8,
+  "p15SuccessPassed": 8,
+  "p15SuccessFailed": 0,
+  "p15FailedSubmitCount": 8,
+  "p15FailedSubmitPassed": 8,
+  "p15FailedSubmitFailed": 0,
+  "p15RetryCount": 8,
+  "p15RetryPassed": 8,
+  "p15RetryFailed": 0,
+  "p15Passed": 24,
+  "p15Failed": 0,
+  "p15Skipped": 0,
+  "p16Count": 0,
+  "otherCount": 0,
+  "otherNames": [],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:18.5667068",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:09.4483647",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:12.0540428",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:11.2925642",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:09.4166564",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:09.9974909",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:17.4056749",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:12.0416504",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:08.1911986",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:08.6417772",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:10.3606395",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:14.3329557",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:11.6640263",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:10.1858386",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:11.7574678",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:08.6432635",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:08.4974079",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:10.8686798",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:08.6928939",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:13.0610576",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:31.0189103",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:11.6894231",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:09.0411322",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:08.6668578",
+      "message": null
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+131:$handoffSkillSourceDir = Join-Path $coreRoot 'skills\handoff'
+132:if (Test-Path -LiteralPath $handoffSkillSourceDir) {
+133:$handoffSkillDestDir = Join-Path $PluginRoot 'skills\handoff'
+134:New-Item -ItemType Directory -Force $handoffSkillDestDir | Out-Null
+135:Get-ChildItem -LiteralPath $handoffSkillSourceDir -File | Sort-Object Name | ForEach-Object {
+136:$dest = Join-Path $handoffSkillDestDir $_.Name
+138:$manifestFiles["skills/handoff/$($_.Name)"] = (Get-FileHash -Path $dest -Algorithm SHA256).Hash.ToLowerInvariant()

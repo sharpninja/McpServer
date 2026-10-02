@@ -1,0 +1,7 @@
+{
+  "command": "Invoke",
+  "method": "workflow.sessionlog.beginTurn",
+  "durationMs": 3643,
+  "error": null,
+  "output": ""
+}

@@ -25,14 +25,14 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{\"groupId\":\"triage-group-001\"}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer");
+            "Q:\\__mcp_unit_test__\\McpServer");
 
     private static TriageOptions ThreeTierOptions() => new()
     {

@@ -1,0 +1,169 @@
+{
+  "TEST-MCP-HOSTILEREVIEW-006": {
+    "id": "TEST-MCP-HOSTILEREVIEW-006",
+    "status": "pending",
+    "title": "Hostile review no-mutation and parity tests",
+    "ac": [
+      "Named tests exist: HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin."
+    ]
+  },
+  "TEST-MCP-HOSTILEREVIEW-005": {
+    "id": "TEST-MCP-HOSTILEREVIEW-005",
+    "status": "pending",
+    "title": "Hostile review query tests",
+    "ac": [
+      "Named tests exist: HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns; HostileReviewQuery_ByRequesterAndTargetType_AndFilters; HostileReviewQuery_NoMatch_EmptyList."
+    ]
+  },
+  "TEST-MCP-HOSTILEREVIEW-004": {
+    "id": "TEST-MCP-HOSTILEREVIEW-004",
+    "status": "pending",
+    "title": "Hostile review findings taxonomy tests",
+    "ac": [
+      "Named tests exist: HostileReviewGet_NormalizedFindings_TaxonomyComplete; HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext."
+    ]
+  },
+  "TEST-MCP-HOSTILEREVIEW-003": {
+    "id": "TEST-MCP-HOSTILEREVIEW-003",
+    "status": "pending",
+    "title": "Hostile review execution capture tests",
+    "ac": [
+      "Named tests exist: HostileReviewExecution_RecordsModelEffortAgentTemplateRunId; HostileReviewExecution_OmitsFabricatedTokenCounts."
+    ]
+  },
+  "TEST-MCP-HOSTILEREVIEW-002": {
+    "id": "TEST-MCP-HOSTILEREVIEW-002",
+    "status": "pending",
+    "title": "Hostile review artifact diagnostic tests",
+    "ac": [
+      "Named tests exist: HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic."
+    ]
+  },
+  "TEST-MCP-HOSTILEREVIEW-001": {
+    "id": "TEST-MCP-HOSTILEREVIEW-001",
+    "status": "pending",
+    "title": "Hostile review submit and entity round-trip tests",
+    "ac": [
+      "Named tests exist: HostileReviewEntity_RoundTrip_SqlitePgSqlServer; HostileReviewSubmit_ValidRequest_CreatesQueueItem; HostileReviewSubmit_OversizedPayload_Rejected; HostileReviewSubmit_ForeignWorkspace_403."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-006": {
+    "id": "TR-MCP-HOSTILEREVIEW-006",
+    "status": "pending",
+    "title": "No auto-mutation and surface parity",
+    "ac": [
+      "Default complete does not mutate product files.",
+      "REST REPL Director plugin skill parity for submit/status/get/query."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-005": {
+    "id": "TR-MCP-HOSTILEREVIEW-005",
+    "status": "pending",
+    "title": "Hostile review query indexes",
+    "ac": [
+      "Query by model and effort returns only matching runs.",
+      "Requester and target type AND.",
+      "No match is empty list."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-004": {
+    "id": "TR-MCP-HOSTILEREVIEW-004",
+    "status": "pending",
+    "title": "Findings taxonomy and request-quality schema",
+    "ac": [
+      "Get returns taxonomy-complete findings.",
+      "Request-quality scores the five dimensions."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-003": {
+    "id": "TR-MCP-HOSTILEREVIEW-003",
+    "status": "pending",
+    "title": "Hostile review execution capture",
+    "ac": [
+      "Execution row records model, effort, agent, template, run id.",
+      "Missing token counts are omitted, not fabricated."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-002": {
+    "id": "TR-MCP-HOSTILEREVIEW-002",
+    "status": "pending",
+    "title": "Hostile review artifact resolver",
+    "ac": [
+      "Missing link returns a diagnostic and does not omit silently.",
+      "Stale or unauthorized link returns a diagnostic.",
+      "Ambiguous link returns a diagnostic."
+    ]
+  },
+  "TR-MCP-HOSTILEREVIEW-001": {
+    "id": "TR-MCP-HOSTILEREVIEW-001",
+    "status": "pending",
+    "title": "Hostile review request schema and storage",
+    "ac": [
+      "HostileReviewEntity round-trips on Sqlite, PostgreSQL, and SQL Server.",
+      "Valid submit creates a queued row with stable id.",
+      "Payload over 1048576 bytes is rejected with no queue row.",
+      "Foreign workspace is 403 with no row."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-006": {
+    "id": "FR-MCP-HOSTILEREVIEW-006",
+    "status": "pending",
+    "title": "Default queue-and-record no auto mutation",
+    "ac": [
+      "Completing a review does not edit product files, requirements, or TODOs.",
+      "REST, REPL, Director, plugin skill expose submit/status/get/query only.",
+      "No hidden repair/apply endpoint is registered in this TODO."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-005": {
+    "id": "FR-MCP-HOSTILEREVIEW-005",
+    "status": "pending",
+    "title": "Query failure modes by dimensions",
+    "ac": [
+      "Query with each dimension returns only matching runs.",
+      "Combined filters AND.",
+      "Empty match is empty list, not error."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-004": {
+    "id": "FR-MCP-HOSTILEREVIEW-004",
+    "status": "pending",
+    "title": "Normalized findings and request quality",
+    "ac": [
+      "Findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, uncertainty.",
+      "Verdicts are AGREE, DISAGREE, or UNKNOWN only.",
+      "Request-quality scores disclosure, scope clarity, objective clarity, confidence, enough-context as explicit fields."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-003": {
+    "id": "FR-MCP-HOSTILEREVIEW-003",
+    "status": "pending",
+    "title": "Reviewer run records model effort identity",
+    "ac": [
+      "Execution row records model string, effort level, agent identity, plugin/source surface.",
+      "Execution row records prompt template id and version, run id, start/end UTC.",
+      "Token/runtime metadata stored when provided; omitted with diagnostic when not provided, not fabricated."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-002": {
+    "id": "FR-MCP-HOSTILEREVIEW-002",
+    "status": "pending",
+    "title": "Artifact links resolve through MCP APIs",
+    "ac": [
+      "Missing link produces a diagnostic, not silent omit.",
+      "Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit.",
+      "Successful resolve stores the resolved artifact identity and hash when available."
+    ]
+  },
+  "FR-MCP-HOSTILEREVIEW-001": {
+    "id": "FR-MCP-HOSTILEREVIEW-001",
+    "status": "pending",
+    "title": "Enqueue bounded hostile review request",
+    "ac": [
+      "Request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, optional AC list.",
+      "Serialized request JSON greater than 1048576 bytes is rejected with no queue row.",
+      "Authenticated workspace scope: foreign workspace is 403 and no queue row.",
+      "Valid request creates a QueueItem with stable id and status queued."
+    ]
+  }
+}

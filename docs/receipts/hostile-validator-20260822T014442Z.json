@@ -1,0 +1,165 @@
+{
+  "TimestampUtc": "2026-08-22T01:44:42Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P7",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T012355Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p7/",
+  "SessionId": "GrokSubagentHostile-20260822T010850Z-c-red-p7",
+  "RequestId": "req-20260822T010850Z-001-hostile-c-red-p7-adapter",
+  "TurnId": 42845,
+  "HealthNonce": "ff129a213c5344a0a2c83fe2837f1e7a",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 19,
+  "Accuracy": 97,
+  "Completeness": 96,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr",
+    "FilterExitCode": 1,
+    "FilterPassed": 0,
+    "FilterFailed": 8,
+    "FilterSkippedConsole": 0,
+    "FilterTrxNotExecuted": 0,
+    "FilterDurationMs": 19133,
+    "FilterP7NotImplementedCount": 8,
+    "AllCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+    "AllExitCode": 1,
+    "AllPassed": 14,
+    "AllFailed": 8,
+    "AllSkippedConsole": 0,
+    "AllTrxNotExecuted": 0,
+    "AllTotal": 22,
+    "AllDurationMs": 96974,
+    "LaunchAsyncThrowsNotImplemented": true,
+    "P8NamedTestsPresent": false
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P7": false,
+    "MCP-PLUGININT-001-P8": false,
+    "MCP-PLUGININT-001-P9": false,
+    "MCP-PLUGININT-001-P10": false
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS"
+    }
+  ]
+}

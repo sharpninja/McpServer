@@ -1,6 +1,7 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -131,13 +132,13 @@ public sealed class TransactionGatedToolRegistryService : IToolRegistryService
         Func<CancellationToken, Task<MutationExecution>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
         {
             var direct = await mutation(cancellationToken).ConfigureAwait(false);
             return direct.Result;
         }
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new ToolMutationResult(

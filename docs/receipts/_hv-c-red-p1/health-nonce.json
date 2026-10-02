@@ -1,0 +1,26 @@
+{
+  "nonceSent": "2650adc7c44445df8c85e7efb337f6bc",
+  "nonceEcho": "2650adc7c44445df8c85e7efb337f6bc",
+  "status": "Healthy",
+  "match": true,
+  "raw": {
+    "status": "Healthy",
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0009
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0009
+      }
+    ],
+    "nonce": "2650adc7c44445df8c85e7efb337f6bc",
+    "storage": "reachable"
+  }
+}

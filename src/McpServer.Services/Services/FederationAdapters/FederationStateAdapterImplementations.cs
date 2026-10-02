@@ -417,26 +417,9 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
             PhaseLabel = row.PhaseLabel,
         };
 
-        var audit = await db.TodoAuditHistory
-            .AsNoTracking()
-            .Where(a => a.TodoId == resourceId)
-            .OrderByDescending(a => a.Version)
-            .ThenByDescending(a => a.AuditId)
-            .Take(20)
-            .Select(a => new TodoAuditPayload
-            {
-                Version = a.Version,
-                Action = a.Action,
-                RecordedAtUtc = a.RecordedAtUtc,
-                Source = a.Source,
-            })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
         var payload = new TodoSnapshotPayload
         {
             Item = item,
-            Audit = audit,
         };
         return JsonSerializer.Serialize(payload, typeof(TodoSnapshotPayload), FederationAdapterJsonContext.Default);
     }
@@ -532,7 +515,6 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
     {
         public TodoSnapshotItemPayload? Item { get; set; }
 
-        public List<TodoAuditPayload> Audit { get; set; } = [];
     }
 
     internal sealed class TodoSnapshotItemPayload
@@ -580,17 +562,6 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         public int ItemOrder { get; set; }
 
         public string? PhaseLabel { get; set; }
-    }
-
-    internal sealed class TodoAuditPayload
-    {
-        public int Version { get; set; }
-
-        public string Action { get; set; } = string.Empty;
-
-        public string RecordedAtUtc { get; set; } = string.Empty;
-
-        public string? Source { get; set; }
     }
 
     private static string? ResolveTodoId(FederationStateOperation operation)

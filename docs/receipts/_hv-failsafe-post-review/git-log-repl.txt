@@ -1,0 +1,3 @@
+0e0c5763 2026-08-20T19:46:32-05:00 feat(sessionlog): incremental dialog persist and 503 degrade-queue
+9649753a 2026-08-19T16:12:31-05:00 fix(plugin-core): leftover S2 StrictMode, failsafe 503, SessionEnd, xagent, verify, beginTurn timeout
+c81abaf0 2026-08-19T11:34:24-05:00 feat(triage): unified errors, session-log persist, hook isolation

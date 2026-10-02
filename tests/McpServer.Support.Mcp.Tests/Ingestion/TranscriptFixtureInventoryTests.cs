@@ -11,6 +11,7 @@ public sealed class TranscriptFixtureInventoryTests
     public void FixtureInventoryContainsEveryPlannedSourceFamily()
     {
         var root = ResolveFixtureRoot();
+        Assert.StartsWith(Path.GetFullPath(AppContext.BaseDirectory), Path.GetFullPath(root), StringComparison.OrdinalIgnoreCase);
         var expectedFiles = new[]
         {
             "README.md",
@@ -68,19 +69,5 @@ public sealed class TranscriptFixtureInventoryTests
     }
 
     private static string ResolveFixtureRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(directory.FullName, "tests", "McpServer.Support.Mcp.Tests", "Fixtures", "Transcripts");
-            if (Directory.Exists(candidate))
-            {
-                return candidate;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Unable to locate transcript fixture root from test output directory.");
-    }
+        => Path.Combine(AppContext.BaseDirectory, "Fixtures", "Transcripts");
 }

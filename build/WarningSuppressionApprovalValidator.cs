@@ -103,8 +103,25 @@ static class WarningSuppressionApprovalValidator
         var occurrences = WarningSuppressionScanner.Scan(root);
         var validationErrors = Validate(approvals, occurrences).ToList();
         AddUnapprovedOccurrenceErrors(approvals, occurrences, validationErrors);
+        AddGeneratedMigrationObsoletePragmaErrors(root, validationErrors);
         WriteInventory(artifactDirectory, occurrences, approvals, validationErrors);
         return validationErrors;
+    }
+
+    private static void AddGeneratedMigrationObsoletePragmaErrors(
+        string repositoryRoot,
+        List<WarningSuppressionApprovalValidationError> errors)
+    {
+        foreach (var (relativePath, lineNumber) in GeneratedMigrationObsoletePragmaNormalizer.ScanRepository(repositoryRoot))
+        {
+            errors.Add(new WarningSuppressionApprovalValidationError(
+                "generated_migration_obsolete_pragma",
+                $"Generated migration file contains exact CS0612/CS0618 pragma pair that must not remain: {relativePath}:{lineNumber}.",
+                "CS0618",
+                relativePath,
+                lineNumber,
+                nameof(WarningSuppressionMechanism.PragmaWarningDisable)));
+        }
     }
 
     private static void ValidateRequiredFields(

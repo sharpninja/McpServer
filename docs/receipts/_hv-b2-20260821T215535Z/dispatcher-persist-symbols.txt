@@ -1,0 +1,4 @@
+75:private readonly ISessionLogPersistenceStrategy? _sessionLogPersistenceStrategy;
+117:_sessionLogPersistenceStrategy = sessionLogPersistenceStrategy;
+259:if (_sessionLogPersistenceStrategy is null)
+274:var persistence = await _sessionLogPersistenceStrategy

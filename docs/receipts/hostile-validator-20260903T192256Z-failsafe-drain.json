@@ -1,0 +1,213 @@
+{
+  "TimestampUtc": "2026-09-03T19:31:21Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Agent": "GrokCode",
+  "SessionId": "GrokCode-20260903T192500Z-hostile-failsafe-drain",
+  "RequestId": "req-20260903T192500Z-001-hostile-validate-failsafe-drain",
+  "add-profile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "profileAllMdCount": 19,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "WorkClass": "class-2",
+  "WorkClassNote": "User-directed operator action: upload/drain failsafe records after MCP storage recovered. No product implementation and no plan-step done claim.",
+  "AccuracyRating": 97,
+  "CompletenessRating": 94,
+  "OverallVerdict": "AGREE",
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 0,
+    "UNKNOWN": 0,
+    "NA": 3
+  },
+  "FailList": [],
+  "UnknownList": [],
+  "NaList": [
+    "B5",
+    "C",
+    "D"
+  ],
+  "ResidualList": [
+    "Live GrokCode pending is 2 YAML files with drainAttempts=3, not the drain-1 set of 4 with drainAttempts=1.",
+    "session_submit-5f02 and session_submit-72ac are gone after later replay.",
+    "Three Tonkotsu invalid-session-id pending files remain outside the drained GrokCode directory."
+  ],
+  "LiveFrWeb": {
+    "frCount": 20,
+    "frIds": [
+      "FR-WEB-001",
+      "FR-WEB-002",
+      "FR-WEB-003",
+      "FR-WEB-004",
+      "FR-WEB-005",
+      "FR-WEB-006",
+      "FR-WEB-007",
+      "FR-WEB-008",
+      "FR-WEB-009",
+      "FR-WEB-010",
+      "FR-WEB-011",
+      "FR-WEB-012",
+      "FR-WEB-013",
+      "FR-WEB-014",
+      "FR-WEB-015",
+      "FR-WEB-016",
+      "FR-WEB-017",
+      "FR-WEB-018",
+      "FR-WEB-019",
+      "FR-WEB-020"
+    ],
+    "frWeb003AcIds": [
+      "ac-1",
+      "ac-2",
+      "ac-3",
+      "ac-4"
+    ],
+    "frWeb010AcIds": [
+      "ac-1",
+      "ac-2",
+      "ac-3",
+      "ac-4",
+      "ac-5"
+    ],
+    "trWebCount": 14,
+    "testWebCount": 20,
+    "frWebMappingCount": 20,
+    "mappingMissing": []
+  },
+  "Drain1": {
+    "utc": "2026-09-03T19:22:56.6625423Z",
+    "drainExit": 0,
+    "failsafeDir": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending",
+    "scanned": 37,
+    "replayed": 33,
+    "failed": 4,
+    "quarantined": 0,
+    "skipped": 0,
+    "aborted": false,
+    "pendingCountAfter": 4,
+    "pendingNames": [
+      "20260902T145530Z-session_recovery-3abc.yaml",
+      "20260902T145530Z-session_submit-5f02.yaml",
+      "20260902T150548Z-session_actions-a466.yaml",
+      "20260902T150548Z-session_submit-72ac.yaml"
+    ],
+    "sourceToolCallId": "call-ea1bfc49-da08-43c6-a1df-8289e4841747-199"
+  },
+  "LivePending": {
+    "grokCodeCount": 2,
+    "files": [
+      {
+        "name": "20260902T145530Z-session_recovery-3abc.yaml",
+        "method": "workflow.sessionlog.recovery",
+        "drainAttempts": 3,
+        "lastDrainErrorContains": "No YAML schema is registered for method 'workflow.sessionlog.recovery'",
+        "mtimeUtc": "2026-09-03T19:26:59.6382172Z"
+      },
+      {
+        "name": "20260902T150548Z-session_actions-a466.yaml",
+        "method": "workflow.sessionlog.appendActions",
+        "drainAttempts": 3,
+        "lastDrainErrorContains": "No active session exists",
+        "mtimeUtc": "2026-09-03T19:27:00.1665099Z"
+      }
+    ],
+    "quarantineFileCount": 0,
+    "sessionSubmit5f02Hits": 0,
+    "sessionSubmit72acHits": 0,
+    "createBatchHits": 0,
+    "mappingHits": 0
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Drain-1 tool_result 2026-09-03T19:22:56.6625423Z scanned 37 replayed 33 failed 4 quarantined 0 aborted false drainExit 0"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "createBatch and 20 mapping YAML gone from pending; live FR-WEB mappings=20"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Live FR-WEB-001..020 count 20; FR-WEB-003 ac-1..ac-4; FR-WEB-010 ac-1..ac-5"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Drain-1 pendingNames were the four claimed files, not quarantined; recovery/actions error text still matches. Residual: live remaining=2 drainAttempts=3"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "No product UI or PLAN-WEB-ORCH-001 done claim; todo_get not found; plan waiting for approval"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Drain-1 JSON, live FR-WEB, and remaining error text match; drain-2 disclosure matches live 2-file queue"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Independent requirements_list, pending listing, YAML deserialize, drain-1 tool_result"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP tools only for session/TODO/requirements; failsafe YAML inspected not deleted"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "pwsh.exe -NoProfile drain and review; no Python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "N/A",
+      "summary": "Class-2 ops; Byrd v4 not applied"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Remaining failsafe files not deleted; quarantine 0"
+    },
+    {
+      "id": "C",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Class-2 operator drain; not project requirement work"
+    },
+    {
+      "id": "D",
+      "surface": "D",
+      "verdict": "N/A",
+      "summary": "No plan-step complete claim"
+    }
+  ],
+  "PlanTodo": {
+    "todoGet": "TODO 'PLAN-WEB-ORCH-001' not found",
+    "planPath": "docs/plans/PLAN-WEB-ORCH-001.md",
+    "planStatus": "requirements captured; waiting for operator approval before implementation",
+    "checkedCompleteBoxes": 0
+  },
+  "ReceiptFiles": [
+    "docs/receipts/hostile-validator-20260903T192256Z-failsafe-drain.md",
+    "docs/receipts/hostile-validator-20260903T192256Z-failsafe-drain.json"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "filterFailed": "8",
+  "filterPassed": "0",
+  "filterSkipped": "0",
+  "filterTotal": "8",
+  "filterFailedBang": true,
+  "filterPassedBang": false,
+  "allFailed": "8",
+  "allPassed": "30",
+  "allSkipped": "0",
+  "allTotal": "38",
+  "allFailedBang": true,
+  "allPassedBang": false
+}

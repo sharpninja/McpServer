@@ -2,6 +2,7 @@ using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -12,8 +13,9 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-MCP-TXN-001: Executes session-log mutations through the turn transaction
-/// coordinator when available.
+/// TR-MCP-TXN-001 / FR-MCP-173 / TR-MCP-TXNKEY-001: Session-log mutations persist
+/// through the inner session-log service without coordinator or keyserver signing.
+/// Keyserver remains limited to QuadBrain brain-slot transactions.
 /// </summary>
 public sealed class TransactionGatedSessionLogService : ISessionLogService
 {
@@ -279,10 +281,10 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         Func<CancellationToken, Task<TResult>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
             return await mutation(cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
             throw new InvalidOperationException(
                 string.IsNullOrWhiteSpace(status.Message)
@@ -805,7 +807,7 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         if (_coordinator is null)
             return;
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             throw new InvalidOperationException(

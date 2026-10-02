@@ -1,0 +1,64 @@
+{
+  "TimestampUtc": "2026-08-21T22:01:15Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "B2-red-test-gate",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "AddProfile": { "executed": true, "profileFilesRead": 18 },
+  "Plugin": { "root": "F:\\GitHub\\mcpserver-grok-plugin", "version": "1.97.0" },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T213854Z.md",
+  "Collector": "docs/receipts/_hv-b2-20260821T215535Z/",
+  "SessionId": "GrokSubagentHostile-20260821T215535Z-b2-red",
+  "RequestId": "req-20260821T215535Z-001-phase-b2-red-test-gate",
+  "TurnId": 42774,
+  "HealthNonce": "632c3fbec35648738c30b81ee6f7f630",
+  "MarkerSignatureValid": true,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "Accuracy": 94,
+  "Completeness": 96,
+  "TestResults": {
+    "coordinator": { "failed": 6, "passed": 1, "skipped": 0, "passedName": "Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess" },
+    "checksum": { "failed": 1, "passed": 0, "skipped": 0 },
+    "existingCsharpGreens": { "failed": 0, "passed": 4, "skipped": 0 },
+    "pesterFocused8": { "failed": 5, "passed": 3, "skipped": 0 },
+    "existingGetFr": { "failed": 0, "passed": 1, "skipped": 0 }
+  },
+  "ProductStillUnchanged": {
+    "drainReturn2Line": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "failsafeDir": "Join-Path (Resolve-McpCacheDir) failsafe",
+    "observedFailsafePath": ".mcpServer\\default\\failsafe",
+    "replFailsafeDrainTimeoutSymbolInProduct": false,
+    "testMcpRepl041": 404
+  },
+  "Claims": [
+    { "id": "A1", "verdict": "PASS", "text": "New tests exist with plan names" },
+    { "id": "A2", "verdict": "PASS", "text": "Hedged red claim: drain timeout, V4 path, Coordinator_Open fail" },
+    { "id": "A3", "verdict": "PASS", "text": "Existing greens not relabeled" },
+    { "id": "A4", "verdict": "PASS", "text": "No B3 product implementation; drain still 2; failsafe still cache/agent failsafe" },
+    { "id": "A5", "verdict": "PASS", "text": "A6 AGREE receipt exists" },
+    { "id": "B1", "verdict": "PASS", "text": "Byrd v4 B2 red-test gate" },
+    { "id": "B2", "verdict": "PASS", "text": "Receipts re-ran" },
+    { "id": "B3", "verdict": "PASS", "text": "MCP-only storage" },
+    { "id": "B4", "verdict": "PASS", "text": "PowerShell only" },
+    { "id": "B5", "verdict": "PASS", "text": "Honesty" },
+    { "id": "C1", "verdict": "PASS", "text": "Phase B AC exist and map to named tests" },
+    { "id": "C2", "verdict": "PASS", "text": "Remaining unsatisfied Phase B AC have currently failing new tests" },
+    { "id": "D1", "verdict": "PASS", "text": "B2 DoD" },
+    { "id": "D2", "verdict": "PASS", "text": "No premature done or B3 mix-in" }
+  ],
+  "Residuals": [
+    "Coordinator_AppendActions currently green; does not prove failsafe PersistAsync",
+    "Nested-drain new test currently green because product already defers",
+    "AC1 tests do not assert failsafe.PersistAsync received",
+    "Legacy migrate test does not assert checksum match",
+    "PLAN tasks 1-8 Done=true; B1/B2/B3 still false"
+  ],
+  "Allows": [
+    "B3 implementation may start",
+    "Do not mark PLAN or MCP-PLUGINCORE-004 or B2/B5 done on this receipt"
+  ]
+}

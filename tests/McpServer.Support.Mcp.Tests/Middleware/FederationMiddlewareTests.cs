@@ -205,7 +205,7 @@ public sealed class FederationMiddlewareTests
         var ctx = CreateContext("/mcp-transport");
         ctx.Request.Method = "POST";
         ctx.Response.Body = new MemoryStream();
-        await mw.InvokeAsync(ctx, new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" }).ConfigureAwait(true);
+        await mw.InvokeAsync(ctx, new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" }).ConfigureAwait(true);
 
         Assert.False(nextCalled);
         Assert.NotNull(handler.Request);
@@ -213,7 +213,7 @@ public sealed class FederationMiddlewareTests
         Assert.True(handler.Request.Headers.Contains(FederationHeaders.ProxyId));
         Assert.Equal("PAYTON-LEGION2", handler.Request.Headers.GetValues(FederationHeaders.ProxyId).Single());
         Assert.True(handler.Request.Headers.Contains(FederationHeaders.OperationId));
-        Assert.Equal(@"F:\GitHub\McpServer", handler.Request.Headers.GetValues(FederationHeaders.GlobalWorkspaceId).Single());
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", handler.Request.Headers.GetValues(FederationHeaders.GlobalWorkspaceId).Single());
     }
 
     /// <summary>Standalone and DirectProxy modes keep MCP transport local for compatibility.</summary>

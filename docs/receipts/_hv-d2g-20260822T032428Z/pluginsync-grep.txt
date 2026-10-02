@@ -1,0 +1,1 @@
+F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\McpStdio\HandoffMcpToolTests.cs:113:public void PluginSync_HandoffSkill_MatchesCoreArtifact()

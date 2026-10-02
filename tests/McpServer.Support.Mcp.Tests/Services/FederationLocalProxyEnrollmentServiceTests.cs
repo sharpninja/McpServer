@@ -66,7 +66,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
         Assert.Equal("test-secret", root.GetProperty("enrollmentToken").GetString());
         Assert.Contains(":7147", root.GetProperty("baseUrl").GetString(), StringComparison.Ordinal);
         Assert.Equal("McpServer", root.GetProperty("workspaces")[0].GetProperty("workspaceName").GetString());
-        Assert.Equal(@"F:\GitHub\McpServer", root.GetProperty("workspaces")[0].GetProperty("workspacePath").GetString());
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", root.GetProperty("workspaces")[0].GetProperty("workspacePath").GetString());
     }
 
     /// <summary>After successful enrollment, the next LocalProxy cycle sends a heartbeat with fresh inventory.</summary>
@@ -99,7 +99,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
         Assert.Equal("hub-secret", handler.Requests[1].Headers.GetValues("X-Api-Key").Single());
         using var heartbeat = JsonDocument.Parse(handler.Bodies[1]);
         Assert.Equal("online", heartbeat.RootElement.GetProperty("status").GetString());
-        Assert.Equal(@"F:\GitHub\McpServer", heartbeat.RootElement.GetProperty("workspaces")[0].GetProperty("workspacePath").GetString());
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", heartbeat.RootElement.GetProperty("workspaces")[0].GetProperty("workspacePath").GetString());
     }
 
     /// <summary>Hub outages are logged and leave the next cycle ready to retry enrollment.</summary>
@@ -158,9 +158,9 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
                 new WorkspaceDto
                 {
                     Name = "McpServer",
-                    WorkspacePath = @"F:\GitHub\McpServer",
+                    WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
                     TodoPath = "docs/todo.yaml",
-                    DataDirectory = @"F:\GitHub\McpServer",
+                    DataDirectory = @"Q:\__mcp_unit_test__\McpServer",
                     IsEnabled = true,
                     IsPrimary = true,
                     StatusPrompt = "status",
@@ -170,7 +170,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
                 new WorkspaceDto
                 {
                     Name = "Disabled",
-                    WorkspacePath = @"F:\GitHub\Disabled",
+                    WorkspacePath = @"Q:\__mcp_unit_test__\Disabled",
                     TodoPath = "docs/todo.yaml",
                     IsEnabled = false,
                     StatusPrompt = "status",

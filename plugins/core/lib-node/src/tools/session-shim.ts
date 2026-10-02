@@ -50,6 +50,8 @@ export interface TurnState {
   queryTitle: string;
   queryText: string;
   status: 'in_progress' | 'completed' | 'failed';
+  planFile: string;
+  todoId: string;
   response?: string;
   interpretation?: string;
   tokenCount?: number;
@@ -73,6 +75,16 @@ export interface SessionState {
   status: 'in_progress' | 'completed' | 'failed';
   currentTurn?: TurnState;
   turns: TurnState[];
+}
+
+const NONE_SENTINEL = 'None';
+
+function normalizeTurnContext(value: string | undefined): string {
+  if (typeof value !== 'string') {
+    return NONE_SENTINEL;
+  }
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : NONE_SENTINEL;
 }
 
 export class SessionShim {
@@ -115,13 +127,21 @@ export class SessionShim {
     };
   }
 
-  beginTurn(args: { requestId: string; queryTitle: string; queryText: string }): void {
+  beginTurn(args: {
+    requestId: string;
+    queryTitle: string;
+    queryText: string;
+    planFile?: string;
+    todoId?: string;
+  }): void {
     this.requireSession('begin_turn');
     this.state!.currentTurn = {
       requestId: args.requestId,
       queryTitle: args.queryTitle,
       queryText: args.queryText,
       status: 'in_progress',
+      planFile: normalizeTurnContext(args.planFile),
+      todoId: normalizeTurnContext(args.todoId),
       actions: [],
       dialogItems: [],
     };
@@ -133,6 +153,8 @@ export class SessionShim {
     tokenCount?: number;
     tags?: string[];
     contextList?: string[];
+    planFile?: string;
+    todoId?: string;
   }): void {
     const turn = this.requireCurrentTurn('update_turn');
     if (args.response !== undefined) turn.response = args.response;
@@ -140,6 +162,8 @@ export class SessionShim {
     if (args.tokenCount !== undefined) turn.tokenCount = args.tokenCount;
     if (args.tags !== undefined) turn.tags = args.tags;
     if (args.contextList !== undefined) turn.contextList = args.contextList;
+    if (args.planFile !== undefined) turn.planFile = normalizeTurnContext(args.planFile);
+    if (args.todoId !== undefined) turn.todoId = normalizeTurnContext(args.todoId);
   }
 
   appendDialog(args: { dialogItems: DialogItem[] }): void {
@@ -237,6 +261,8 @@ export class SessionShim {
       queryTitle: turn.queryTitle,
       queryText: turn.queryText,
       status: turn.status,
+      planFile: turn.planFile,
+      todoId: turn.todoId,
     };
     if (turn.response !== undefined) out.response = turn.response;
     if (turn.interpretation !== undefined) out.interpretation = turn.interpretation;

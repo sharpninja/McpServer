@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="09bc7a84-836c-45a1-b5dd-2e608d0ebdab" name="kingd@PAYTON-LEGION2 2026-08-21 18:18:17" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T18:18:17.2563756-05:00" queuing="2026-08-21T18:18:17.2563764-05:00" start="2026-08-21T18:18:11.7165406-05:00" finish="2026-08-21T18:18:17.3382619-05:00" />
+  <TestSettings name="default" id="98f3f255-1375-4384-928b-28a4fd50d6a3">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_18_18_17" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="595faf7d-a4eb-4b3f-ab79-b42fd5f825dc" testId="811b18e0-ceb8-b393-87de-393eeac3e719" testName="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject" computerName="PAYTON-LEGION2" duration="00:00:00.0099637" startTime="2026-08-21T18:18:16.3834716-05:00" endTime="2026-08-21T18:18:16.3940555-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="595faf7d-a4eb-4b3f-ab79-b42fd5f825dc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Sub-string not found&#xD;
+String:    "\r\nMicrosoft Visual Studio Solution File, Format Ve"···&#xD;
+Not found: "McpServer.PluginIntegration.Tests"</Message>
+          <StackTrace>   at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject() in F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:line 41&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b1703902-b730-42b1-9b85-1440bd726b44" testId="0f20de03-7b13-ba50-c837-5c2e400e0b09" testName="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios" computerName="PAYTON-LEGION2" duration="00:00:00.0477221" startTime="2026-08-21T18:18:16.2536832-05:00" endTime="2026-08-21T18:18:16.3693952-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1703902-b730-42b1-9b85-1440bd726b44">
+      <Output>
+        <ErrorInfo>
+          <Message>plugin-sessionlog-scenarios.json is missing.</Message>
+          <StackTrace>   at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios() in F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:line 60&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="32276a66-fde3-4069-826a-823601895475" testId="b3fda62a-fd42-03d7-b18a-79750b89b4e4" testName="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail" computerName="PAYTON-LEGION2" duration="00:00:00.2281052" startTime="2026-08-21T18:18:16.3950856-05:00" endTime="2026-08-21T18:18:16.6238220-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32276a66-fde3-4069-826a-823601895475">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail() in F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:line 21&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="0f20de03-7b13-ba50-c837-5c2e400e0b09">
+      <Execution id="b1703902-b730-42b1-9b85-1440bd726b44" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests" name="Catalog_HasExactlyEightEnabledScenarios" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="811b18e0-ceb8-b393-87de-393eeac3e719">
+      <Execution id="595faf7d-a4eb-4b3f-ab79-b42fd5f825dc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests" name="Solution_ContainsMcpServerPluginIntegrationTestsProject" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail" storage="f:\github\mcpserver\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b3fda62a-fd42-03d7-b18a-79750b89b4e4">
+      <Execution id="32276a66-fde3-4069-826a-823601895475" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.PluginSessionLogIntegrationTargetTests" name="BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="811b18e0-ceb8-b393-87de-393eeac3e719" executionId="595faf7d-a4eb-4b3f-ab79-b42fd5f825dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f20de03-7b13-ba50-c837-5c2e400e0b09" executionId="b1703902-b730-42b1-9b85-1440bd726b44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3fda62a-fd42-03d7-b18a-79750b89b4e4" executionId="32276a66-fde3-4069-826a-823601895475" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="0" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.90]   Discovering: Build.Tests&#xD;
+[xUnit.net 00:00:02.32]   Discovered:  Build.Tests&#xD;
+[xUnit.net 00:00:02.98]   Starting:    Build.Tests&#xD;
+[xUnit.net 00:00:03.32]       plugin-sessionlog-scenarios.json is missing.&#xD;
+[xUnit.net 00:00:03.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:03.32]         F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs(60,0): at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios()&#xD;
+[xUnit.net 00:00:03.32]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:03.32]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:03.40]       Assert.Contains() Failure: Sub-string not found&#xD;
+[xUnit.net 00:00:03.40]       String:    "\r\nMicrosoft Visual Studio Solution File, Format Ve"···&#xD;
+[xUnit.net 00:00:03.41]       Not found: "McpServer.PluginIntegration.Tests"&#xD;
+[xUnit.net 00:00:03.41]       Stack Trace:&#xD;
+[xUnit.net 00:00:03.41]         F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs(41,0): at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject()&#xD;
+[xUnit.net 00:00:03.41]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:03.41]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:03.54]       Assert.NotNull() Failure: Value is null&#xD;
+[xUnit.net 00:00:03.54]       Stack Trace:&#xD;
+[xUnit.net 00:00:03.54]         F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs(21,0): at NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()&#xD;
+[xUnit.net 00:00:03.55]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:03.55]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:03.59]   Finished:    Build.Tests (ID = 'e1b1f30cb109091d20dcc58709bccb108b6668bc6c05d94cab09123b02db39aa')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T18:18:16.5068425-05:00">
+        <Text>[xUnit.net 00:00:03.31]     NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T18:18:16.5076502-05:00">
+        <Text>[xUnit.net 00:00:03.37]     NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T18:18:16.6251178-05:00">
+        <Text>[xUnit.net 00:00:03.54]     NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

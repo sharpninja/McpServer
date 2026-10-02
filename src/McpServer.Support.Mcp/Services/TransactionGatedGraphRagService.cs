@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -168,10 +169,10 @@ public sealed class TransactionGatedGraphRagService : IGraphRagService
 
     private void ThrowIfMutationBlocked()
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "graphrag.mutate"))
             return;
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             throw new InvalidOperationException(

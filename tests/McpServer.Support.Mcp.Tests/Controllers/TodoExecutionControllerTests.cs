@@ -23,7 +23,7 @@ public sealed class TodoExecutionControllerTests
     public async Task GetActiveTodoAsync_WhenNoTodoExists_ReturnsNotFound()
     {
         var service = Substitute.For<ITodoExecutionService>();
-        service.GetActiveTodoAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        service.GetActiveTodoAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns((ActiveTodoResult?)null);
 
         var controller = CreateController(service);
@@ -55,7 +55,7 @@ public sealed class TodoExecutionControllerTests
     public async Task GetNextReadyTodoAsync_WhenTodoExists_ReturnsOk()
     {
         var service = Substitute.For<ITodoExecutionService>();
-        service.GetNextReadyTodoAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        service.GetNextReadyTodoAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoResult
             {
                 TodoId = "TODO-202",
@@ -81,7 +81,7 @@ public sealed class TodoExecutionControllerTests
     public async Task GetExecutionContextAsync_WhenTodoExists_ReturnsOk()
     {
         var service = Substitute.For<ITodoExecutionService>();
-        service.GetExecutionContextAsync(@"F:\GitHub\McpServer", "TODO-201", 3, 2, Arg.Any<CancellationToken>())
+        service.GetExecutionContextAsync(@"Q:\__mcp_unit_test__\McpServer", "TODO-201", 3, 2, Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoContext
             {
                 TodoId = "TODO-201",
@@ -108,7 +108,7 @@ public sealed class TodoExecutionControllerTests
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.CreateTodosFromPlanAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 Arg.Any<CreateTodosFromPlanRequest>(),
                 Arg.Any<CancellationToken>())
             .Returns(new CreateTodosFromPlanResult
@@ -140,7 +140,7 @@ public sealed class TodoExecutionControllerTests
         var result = Assert.IsType<CreateTodosFromPlanResult>(ok.Value);
         Assert.Equal("PHASE-ROUTE", result.PhaseId);
         await service.Received(1).CreateTodosFromPlanAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             Arg.Is<CreateTodosFromPlanRequest>(request => request != null && request.PhaseId == "PHASE-ROUTE"),
             Arg.Any<CancellationToken>());
     }
@@ -154,7 +154,7 @@ public sealed class TodoExecutionControllerTests
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.UpdateStatusAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 Arg.Any<UpdateTodoStatusRequest>(),
                 Arg.Any<CancellationToken>())
@@ -183,7 +183,7 @@ public sealed class TodoExecutionControllerTests
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.AdbStepAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 Arg.Any<AdbStepRequest>(),
                 Arg.Any<CancellationToken>())
             .Returns(new AdbStepResult
@@ -215,7 +215,7 @@ public sealed class TodoExecutionControllerTests
             service,
             new WorkspaceContext
             {
-                WorkspacePath = @"F:\GitHub\McpServer"
+                WorkspacePath = @"Q:\__mcp_unit_test__\McpServer"
             })
         {
             ControllerContext = new ControllerContext

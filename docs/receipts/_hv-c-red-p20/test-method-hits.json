@@ -1,0 +1,17 @@
+{
+  "harnessMethod": true,
+  "promotionMethod": true,
+  "factCount": 2,
+  "skipFactCount": 0,
+  "theoryCount": 0,
+  "ignoreCount": 0,
+  "compileOnlyAssertTrue": false,
+  "developmentAssert": true,
+  "updateServiceAssert": true,
+  "sanitizedAssert": true,
+  "stagingApproval": true,
+  "productionApproval": true,
+  "developmentNoApproval": true,
+  "allowStagingNull": true,
+  "allowProductionNull": true
+}

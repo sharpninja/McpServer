@@ -1,0 +1,13 @@
+{
+    "mdExists":  true,
+    "note":  "DONE written by GrokCode post-process after runner exited before writing DONE (likely Protect/Write race after codex exit); artifacts already present from Codex",
+    "endedUtc":  "2026-09-28T16:37:45.3311078Z",
+    "residualSecretFileHits":  [
+
+                               ],
+    "respBytes":  1711727,
+    "stamp":  "20260928T161208Z-setupprompt-postdryrun",
+    "jsonExists":  true,
+    "lastExists":  true,
+    "exitCode":  0
+}

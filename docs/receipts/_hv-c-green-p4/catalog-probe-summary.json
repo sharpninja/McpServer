@@ -1,0 +1,15 @@
+{
+  "UniqueKeyCount": 8,
+  "RepoKeyedCount": 8,
+  "UniqueCacheFolderCount": 8,
+  "CodexCatalogEntrypoint": "Invoke-CodexMcpPlugin.ps1",
+  "CodexRootEntrypointExists": true,
+  "CodexLibEntrypointExists": false,
+  "ClineCacheFolder": "cline",
+  "ClineV2CacheFolder": "cline-v2",
+  "ClineV2Distinct": true,
+  "AllCatalogEntrypointsExist": true,
+  "AllReposExist": true,
+  "AllVersionPresent": true,
+  "UniqueKeysEqualRowCount": true
+}

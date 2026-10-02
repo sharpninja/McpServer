@@ -1,0 +1,4 @@
+4	0	plugins/core/skills/handoff/SKILL.md
+11	14	plugins/core/sync/sync-plugin-core.ps1
+48	4	src/McpServer.Services/Services/HandoffIngestionService.cs
+152	0	tests/McpServer.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs

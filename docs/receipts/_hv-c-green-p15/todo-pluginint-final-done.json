@@ -1,0 +1,13 @@
+{
+  "exists": true,
+  "topDone": false,
+  "taskCount": 21,
+  "doneTrueCount": 1,
+  "p15": [
+    {
+      "task": "'P15 [Red] Add failsafe assertions: successful turns leave no pending recovery document, failed submit retains a root-ID-named pending file, and retry success deletes only that matching file.'",
+      "done": false
+    }
+  ],
+  "combinedC": []
+}

@@ -3,12 +3,44 @@
 Load this file when you need to create, update, or query session logs.
 For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 
+
+Session-log mutations (every source type, including QBAgent) persist without the turn-transaction
+coordinator or keyserver on `develop` and on the live Linux box MCP (FR-MCP-173). Keep live
+`Mcp:TurnTransactions:Enabled=true` for QuadBrain; do not disable it to make session-log writes
+succeed. Workspace-stamp repair remains fail-closed.
+
 ## Endpoints
 
 - `POST /mcpserver/sessionlog` — create or update a session log
 - `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
+
+## Submit acknowledgement (FR-MCP-SESSIONLIFE-003)
+
+`POST /mcpserver/sessionlog` returns a durable-write receipt only after the storage service
+has completed its awaited save. The receipt retains `id`, `sourceType`, and `sessionId`,
+and adds `persisted: true`, `degraded: false`, and `queued: false`. It includes `requestId`
+for a single-turn submission; zero-turn and multi-turn submissions return a null request ID.
+Failed or canceled persistence never produces this successful receipt.
+
+`SessionLogSubmitResult` preserves these fields through the typed client and REPL YAML
+transport. A legacy response that omits `persisted` is not durable-write confirmation.
+Update both the service and the installed REPL when deploying this contract. Failsafes
+must remain until the plugin receives the required persistence acknowledgement.
+
+Whole-session snapshots cannot reopen a terminal turn with a supplied nonterminal status
+or replace it with a different cancellation status. This prevents a late hook or failsafe
+replay from overwriting completed history after an acknowledgement failure. Same-status
+and omitted-status enrichment, cancellation of active turns, and recovery from canceled
+to completed remain supported. Deliberate corrections and reopening use the explicit
+single-turn update API. Relational submissions protect the read/check/save sequence with
+serializable isolation and acknowledge after the owned transaction commits. A conflicting
+write that cannot serialize fails rather than acknowledging overwritten terminal history;
+its failsafe remains available for retry. Caller-owned, ambient, and enlisted transactions
+are rejected before mutation because submission cannot acknowledge their uncommitted writes.
+Reused contexts refresh the target session graph inside the transaction; pending edits to
+that graph are rejected without discarding them, and unrelated tracked changes are retained.
 
 ## Outbound sanitization (FR-MCP-SESSIONLOGSAN-001)
 

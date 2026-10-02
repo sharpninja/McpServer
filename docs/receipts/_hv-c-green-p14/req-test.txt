@@ -1,0 +1,33 @@
+type: result
+payload:
+  requestId: req-20260822T042732Z-0b8c
+  result:
+    id: TEST-MCP-PLUGININT-001
+    title: Eight-agent Session Log plugin integration matrix
+    description: A shared deterministic Theory and companion AiTheory matrix must exercise the real Session Log workflow for all supported agent plugins.
+    status: pending
+    priority: high
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-1
+      text: Exactly eight scenario rows cover Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode.
+      isSatisfied: false
+    - id: ac-2
+      text: Every deterministic row proves bootstrap, begin, append action/dialog, complete, durable query, and workspace cache isolation.
+      isSatisfied: false
+    - id: ac-3
+      text: Every AiTheory row receives the persisted receipt/artifact and returns a strict semantic completeness result that is asserted by the test.
+      isSatisfied: false
+    - id: ac-4
+      text: A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path.
+      isSatisfied: false
+    - id: ac-5
+      text: The focused target and each plugin native suite complete with zero failures and zero skips.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-22T04:27:34.6632732+00:00
+    updatedAt: 2026-08-22T04:27:34.6634577+00:00
+  deprecated: true
+
+---

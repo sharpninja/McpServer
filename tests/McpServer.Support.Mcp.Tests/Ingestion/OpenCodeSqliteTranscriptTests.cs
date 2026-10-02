@@ -59,7 +59,7 @@ public sealed class OpenCodeSqliteTranscriptTests
             Assert.Equal("ses_sqlite_fixture", session.SessionId);
             Assert.Equal("ses_sqlite_fixture", session.NativeSessionId);
             Assert.Equal("opencode/gpt-test", session.Model);
-            Assert.Equal("F:/GitHub/SampleWorkspace", session.WorkspacePath);
+            Assert.Equal("Q:/__mcp_unit_test__/SampleWorkspace", session.WorkspacePath);
             Assert.Contains(session.Events, item => item.Role.Equals("user", StringComparison.Ordinal) && JoinText(item.Content).Contains("hello from sqlite", StringComparison.Ordinal));
             Assert.Contains(session.Events, item => item.Role.Equals("assistant", StringComparison.Ordinal) && JoinText(item.Content).Contains("reply from sqlite", StringComparison.Ordinal));
             Assert.Contains(session.Events, item => item.NativeType.Equals("tool_event", StringComparison.Ordinal) && JoinText(item.Content).Contains("sqlite tool result", StringComparison.Ordinal));
@@ -197,7 +197,7 @@ public sealed class OpenCodeSqliteTranscriptTests
         await ExecuteNonQueryAsync(connection, "CREATE TABLE message (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, role TEXT NOT NULL, model_id TEXT, provider_id TEXT, time_created INTEGER, time_completed INTEGER);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE part (id TEXT PRIMARY KEY, message_id TEXT NOT NULL, session_id TEXT NOT NULL, type TEXT NOT NULL, json TEXT NOT NULL);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE tool_event (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, message_id TEXT, tool_name TEXT, status TEXT, payload_json TEXT, time_created INTEGER);").ConfigureAwait(true);
-        await ExecuteNonQueryAsync(connection, "INSERT INTO session (id, title, version, time_created, time_updated, workspace_path) VALUES ('ses_sqlite_fixture', 'SQLite Fixture', '1.0', 1735689600000, 1735689602000, 'F:/GitHub/SampleWorkspace');").ConfigureAwait(true);
+        await ExecuteNonQueryAsync(connection, "INSERT INTO session (id, title, version, time_created, time_updated, workspace_path) VALUES ('ses_sqlite_fixture', 'SQLite Fixture', '1.0', 1735689600000, 1735689602000, 'Q:/__mcp_unit_test__/SampleWorkspace');").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-user', 'ses_sqlite_fixture', 'user', NULL, 'opencode', 1735689600000, 1735689600000);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-assistant', 'ses_sqlite_fixture', 'assistant', 'opencode/gpt-test', 'opencode', 1735689601000, 1735689602000);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-followup', 'ses_sqlite_fixture', 'user', NULL, 'opencode', 1735689603000, 1735689603000);").ConfigureAwait(true);

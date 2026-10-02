@@ -1,0 +1,2 @@
+rg=C:\Users\kingd\scoop\shims\rg.exe
+mcpserver-repl=C:\Users\kingd\.dotnet\tools\mcpserver-repl.exe

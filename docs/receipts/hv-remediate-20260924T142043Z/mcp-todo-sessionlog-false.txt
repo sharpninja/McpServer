@@ -1,0 +1,1422 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142146Z-9dde
+  result:
+    items:
+    - id: BUG-TRIAGE-170
+      title: Failsafe drain hardcodes a 2s SubmitAsync timeout and aborts the queue
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: drain timeout stays under FR-MCP-REPL-011 and TR-MCP-REPL-012. Current Get-ReplMethodTimeoutSeconds default is REPL_FAILSAFE_DRAIN_TIMEOUT 120. Proof-only. Do not mark done until H-done AGREE.'
+      description:
+      - workflow.failsafe.drain sets ReplFailsafeDraining, then Get-ReplMethodTimeoutSeconds in plugins/core/lib-ps/repl-invoke.ps1 returns a hardcoded 2 seconds for client.SessionLog.SubmitAsync. Invoke-ReplRawCore kills the REPL after that budget and returns 'mcpserver-repl timed out after 2s'. Test-ReplFailsafeBackendUnreachable treats 'timed out' as backend unreachable, so the pass aborts after one record and leaves drainAttempts at 0. The same payload submitted outside drain with REPL_TIMEOUT=90 completed in 73s. The 2s cap was meant to keep a nested drain from blocking getFr/getTr (TR-MCP-PERSIST-003), but it also applies to the operator drain verb and to deferred automatic drain, so live SessionLog failsafe records cannot replay.
+      - 'Triage group: triage-group-1cf130328c87c15c'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.failsafe.drain replaying client.SessionLog.SubmitAsync must use a timeout at least as large as the non-drain SubmitAsync budget (REPL_TIMEOUT, or a dedicated drain timeout), not a hardcoded 2 seconds.'
+      - "- A failsafe SessionLog record whose SubmitAsync completes within the configured drain timeout must be replayed and removed from the live queue, not aborted with 'backend unreachable: mcpserver-repl timed out after 2s'."
+      - '- An explicit workflow.failsafe.drain of a payload that succeeds outside drain (observed ~73s with REPL_TIMEOUT=90) must not classify that latency as backend unreachable.'
+      - '- Automatic/nested drain must still avoid blocking an in-flight getFr/getTr caller for a long SubmitAsync (preserve TR-MCP-PERSIST-003 via deferral or an equivalent non-blocking path, not a 2s timeout that cannot succeed).'
+      - '- A timeout abort during drain must leave drainAttempts unchanged so a later successful pass can still replay the record.'
+      - 'Implementation notes:'
+      - "- The smoking gun is Get-ReplMethodTimeoutSeconds: if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') { return 2 }. Both Invoke-WorkflowFailsafeDrain and Invoke-ReplFailsafeDrainOnFirstSuccessCore share Invoke-ReplFailsafeDrain, so the cap hits operator drain and automatic drain."
+      - '- Do not reuse the 2s cap as the nested-drain safety valve. ReplRawInFlight / ReplFailsafeDrainDeferred already defer drain so it does not sit inside getFr/getTr. Raise or remove the drain-specific SubmitAsync timeout and keep that deferral.'
+      - '- Default non-drain timeout is still 30s unless REPL_TIMEOUT is set. Observed successful submit was 73s, so drain should use REPL_TIMEOUT, REPL_HELPER_TIMEOUT, or a dedicated REPL_FAILSAFE_DRAIN_TIMEOUT large enough for real session-log payloads.'
+      - "- Test-ReplFailsafeBackendUnreachable matching 'timed out' is correct for a true transport failure; the bug is the artificial 2s budget producing that timeout on a reachable backend."
+      implementationTasks: &o0 []
+      dependsOn: &o1 []
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      - FR-MCP-172
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+      - TR-MCP-PERSIST-003
+      - TR-MCP-REPL-012
+    - id: BUG-TRIAGE-171
+      title: SessionLog SubmitAsync 503 burst after large failsafe replay; 2s drain cannot recover
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Out-of-band replay of Grok session_submit failsafe YAML (drain hardcodes a 2s SubmitAsync timeout in Get-ReplMethodTimeoutSeconds while ReplFailsafeDraining) posted 41 records, many taking 73-88s, then 11 consecutive client.SessionLog.SubmitAsync calls failed with method_invocation_error HTTP 503 code backend_unavailable starting 2026-08-21T14:56:02Z. /health later echoed a nonce and stayed Healthy (TR-MCP-HEALTH-003 liveness; storage-only faults do not flip overall status). Remaining YAML stayed on disk until a later 120s-timeout replay succeeded (first leftover 76s for GrokCode-20260818T182741Z-plugin-session, then 1s). This is a live write-path burst, not the SQL error 19 classifier gap. SubmitAsync still full-graph upserts (FindExistingSessionAsync loads turns/actions/tags/dialog/commits unbounded; only SaveChangesAsync is under StorageCommandBudget 5s). Budget expiry and RetryLimitExceededException map to retryable backend_unavailable, so slow or contended saves look like storage-down while liveness stays Healthy. Drain cannot self-heal these payloads.
+      - 'Triage group: triage-group-d7d0df4bfbee15f1'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Sequential client.SessionLog.SubmitAsync of real failsafe session_submit payloads does not return HTTP 503 backend_unavailable while the process is up and /health remains Healthy with storage reachable.'
+      - '- When SaveChanges hits lock, busy, or the 5s StorageCommandBudget without a connection-class outage, the response is not backend_unavailable (busy/retryable persist, not storage-down).'
+      - '- workflow.failsafe.drain replays a session_submit that takes longer than 2s (observed 73-88s, leftover 76s) without aborting as backend-down and without leaving the YAML stranded after storage answers.'
+      - '- A 503 backend_unavailable burst leaves failsafe YAML on disk and a later in-process drain with storage answering replays it (no drainAttempts increment, no completed latch, no quarantine for this abort).'
+      - '- /health nonce echo and overall Healthy stay as liveness-only; if writes are 503 because storage is actually down, the health payload storage field is unreachable.'
+      - 'Implementation notes:'
+      - '- Do not treat this as BUG-TRIAGE-167 / SQL error 19 classification. Observed code is backend_unavailable (StorageCommandBudgetExceededException, RetryLimitExceededException, or connection-class SqlException), returned by SessionLogController.ClassifiedError or GlobalExceptionHandlerMiddleware.'
+      - '- Root overlap with sessionlog-remediate-001 RC1/RC4: plugin still POSTs a full UnifiedSessionLogDto; SessionLogService.FindExistingSessionAsync is unbounded; only SaveChangesBudgetedAsync is 5s. Prefer incremental persist (AppendDialogAsync) and/or busy-timeout/retry over raising the 5s budget blindly.'
+      - '- Get-ReplMethodTimeoutSeconds returns 2 when $script:ReplFailsafeDraining and Method is client.SessionLog.SubmitAsync (TR-MCP-PERSIST-003: do not block getFr/getTr). Large records must drain on a long-timeout background path, not the 2s in-request walk.'
+      - '- FR-MCP-FAILSAFE-001 / FR-MCP-SESSIONPERSIST-002 already require 503 degrade-queue and drain retry after storage answers; this incident is the live proof that 2s drain plus full-session upsert cannot meet that.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-180
+      title: Codex prompt hook reports turn-opened for a store-missing requestId
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - user-prompt-submit (Open-PluginTurn) treats workflow.sessionlog.beginTurn as success when persist is queued/degraded. beginTurn writes current-turn.yaml before SubmitAsync, then returns true on timeout/503 while the failsafe session_submit envelope is retained and the turn never lands in the session store. The hook still emits status turn-opened for that requestId (example req-20260904T022234Z-prompt-36ed). Later workflow.sessionlog.appendDialog posts client.SessionLog.AppendDialogAsync against the cached requestId, gets HTTP 404 not_found, and explicitly skips failsafe (retryable false). Incremental audit dialog is dropped even though the local turn remains in_progress.
+      - 'Triage group: triage-group-9aed94594cc7e59c'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After user-prompt-submit reports turn-opened for a requestId, either the session store contains that turn or the hook does not report turn-opened; a queued/degraded beginTurn must be surfaced as degraded rather than a durable open.'
+      - '- When current-turn.yaml is in_progress for a requestId that the store does not have, workflow.sessionlog.appendDialog must not return HTTP 404 not_found with failsafe refused. It must recover by persisting the missing turn then appending, or retain a replayable failsafe envelope, and the dialog items must not be lost.'
+      - '- A Codex prompt-submit that logs beginTurn queued/degraded followed by appendDialog must still produce durable dialog (store or failsafe) for that requestId.'
+      - 'Implementation notes:'
+      - '- plugins/core/lib-ps/plugin-hook.ps1 Open-PluginTurn reports turn-opened after beginTurn exit 0 and current-turn.yaml matching the new requestId. It does not inspect LastReplPersistenceDetails.degraded/queued.'
+      - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowBeginTurn writes current-turn.yaml, then Invoke-ReplPersistTurn. Timeout/503 sets degraded queued failsafe-queue and Complete-ReplBeginTurnAfterPersist returns ok=true with current-turn left in_progress, so beginTurn returns true.'
+      - "- Invoke-WorkflowAppendDialog uses incremental POST client.SessionLog.AppendDialogAsync. Combined output matching not_found|HTTP 404 logs 'turn not found (retryable false); failsafe not used' and returns false without Write-ReplFailsafe. Timeout/503 is the only appendDialog failsafe path."
+      - '- Fix at the seam: do not advertise a store-backed open until SubmitAsync (or failsafe drain) creates the turn; and/or on appendDialog 404, re-submit the cached turn then retry dialog (or queue a combined failsafe) instead of refusing persist.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-181
+      title: Codex CompleteTurn fails when current-turn.yaml lacks queryText
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Invoke-CodexMcpPlugin CompleteTurn routes through final-response.ps1 to workflow.sessionlog.completeTurn. That path omits queryTitle unless the caller supplies it (TR-MCP-REPL-015), then Invoke-ReplTurnUpsertParams fills QueryText from Get-ReplCurrentTurnQueryText and falls back only to that empty title. New-McpPluginTurnUpsertRequest still marks QueryText Mandatory without AllowEmptyString, so a leftover in_progress current-turn.yaml with no queryText is rejected at bind time instead of being closed. beginTurn always writes queryText, so this is a stale or partial cache document (for example after an independent review). The failed close leaves the in_progress turn in cache, so later work can attach to the wrong turn. The C# SessionLogWorkflow already recovers QueryText from QueryTitle or 'Recovered session-log turn'; the plugin persist path does not.
+      - 'Triage group: triage-group-465f4d2544057626'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Invoke-CodexMcpPlugin CompleteTurn (workflow.sessionlog.completeTurn) succeeds against an in_progress current-turn.yaml that has turnRequestId and session metadata but no queryText key (or an empty queryText value).'
+      - '- The completed persist payload includes a non-empty queryText recovered from cached queryTitle, or a recovered placeholder when both queryText and queryTitle are missing, and does not fail with a QueryText ParameterBindingValidationException.'
+      - '- After CompleteTurn succeeds, the cached turn is no longer in_progress, so a later beginTurn or CompleteTurn does not keep operating on the stale requestId.'
+      - '- Superseding that same queryText-less in_progress turn from beginTurn still persists the prior turn as canceled instead of dropping the persist with the same empty-QueryText bind failure.'
+      - 'Implementation notes:'
+      - '- Failure site: plugins/core/lib-ps/Invoke-McpPlugin.ps1 CompleteTurn -> plugins/core/lib-ps/final-response.ps1 -> Invoke-WorkflowCompleteTurn in plugins/core/lib-ps/repl-invoke.ps1. Upsert builder is New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 (QueryText is Mandatory, Title already has AllowEmptyString).'
+      - "- Get-ReplCurrentTurnQueryText returns '' when the key is absent and Invoke-ReplTurnUpsertParams does not fall back to cached queryTitle. Align that recovery with SessionLogWorkflow.NormalizeTurn (FirstNonEmpty(QueryText, QueryTitle) then 'Recovered session-log turn')."
+      - '- Keep TR-MCP-REPL-015 title omission on CompleteTurn. Recovered text belongs on queryText, not as a forced queryTitle rewrite.'
+      - '- Cover the missing-queryText CompleteTurn and supersede paths in PluginPowerShellRuntime tests; existing fixtures always seed queryText so this gap is untested.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-182
+      title: Plugin appendActions rebinds plugin-session and SubmitAsync omits planFile
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Invoke-McpPlugin workflow.sessionlog.appendActions does not persist against a native in_progress turn. Assert-ReplCurrentTurnFresh rebinds current-turn.yaml sessionId from the cached plugin session to the active session-state.yaml id (observed GrokCode-...015431Z-plugin-session to GrokCode-...055228Z-plugin-session). Invoke-WorkflowAppendActions then calls Invoke-ReplPersistTurn without PlanFile or TodoId; New-McpPluginTurnUpsertRequest omits blank planFile/todoId; client.SessionLog.SubmitAsync still runs SessionLogTurnContextValidator.ValidateForNewEntry, which 400s with planFile is omitted unless status is canceled. Native mcpserver sessionlog_dialog to the real session/request succeeded, confirming the plugin cache is a separate *-plugin-session identity rather than the native turn.
+      - 'Triage group: triage-group-4724db7d264834be'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After a native sessionlog_begin_turn with planFile and todoId, Invoke-McpPlugin workflow.sessionlog.appendActions persists the supplied actions onto that same sessionId and requestId.'
+      - '- appendActions must not rewrite current-turn.yaml sessionId from one *-plugin-session id onto a different *-plugin-session id when a native in_progress turn already exists.'
+      - '- The persist payload for an in_progress append must include the existing planFile and todoId, or the server must preserve omitted planFile/todoId on incremental upsert instead of returning HTTP 400 validation_error planFile is omitted.'
+      - '- The same native in_progress turn must accept both native sessionlog_dialog and plugin appendActions without failsafe session_submit 400s.'
+      - 'Implementation notes:'
+      - '- Fix plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions: pass PlanFile and TodoId from current-turn cache (or bind to the native in_progress sessionId/requestId) before Invoke-ReplPersistTurn.'
+      - '- Assert-ReplCurrentTurnFresh sessionId rebind (TR-MCP-PLUGIN-012) is the observed plugin-session rotation; do not rebind away from a native in_progress turn.'
+      - '- New-McpPluginTurnUpsertRequest in McpPluginShim.psm1 only emits planFile/todoId when non-empty; SubmitAsync in SessionLogService always ValidateForNewEntry except canceled superseded hook persists that stamp None.'
+      - '- Prefer an incremental turn-append path (actions POST/upsert) over full-session SubmitAsync so omitted planFile cannot clobber or reject an already begun turn.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-184
+      title: Codex updateTurn rejects active turn when cached QueryText is empty
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - workflow.sessionlog.updateTurn reports an active current-turn.yaml but then rebuilds a full client.SessionLog.SubmitAsync upsert. Invoke-ReplTurnUpsertParams reads cache queryText and, when that is empty, falls back only to Title. updateTurn omits Title per TR-MCP-REPL-015, so QueryText is passed as an empty string into New-McpPluginTurnUpsertRequest, whose QueryText parameter is Mandatory without AllowEmptyString. That bind fails before persist. Native REPL updateTurn does not require queryText, and the server already preserves omitted turn fields (FR-SUPPORT-015). Plugin status can still show the turn as active, so required model-authored session logging is blocked while the rest of the plugin looks healthy. The same persist helper is used by completeTurn, appendActions, failTurn, and supersede.
+      - 'Triage group: triage-group-cd540065f8f6a590'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given current-turn.yaml exists with status in_progress and queryText omitted or empty, workflow.sessionlog.updateTurn exits 0 and does not throw ParameterBindingValidationException or invalid_parameter for queryText.'
+      - '- When cached queryText is empty, the SubmitAsync turn payload omits queryText so the server preserves any previously persisted QueryText instead of writing an empty string.'
+      - '- Pester covers updateTurn against an in_progress cache with empty or omitted queryText and an omitted title, including the persist payload shape.'
+      - '- Plugin status continues to report the same active turn after a successful updateTurn.'
+      - 'Implementation notes:'
+      - '- Mirror Title handling in plugins/core/lib-ps/McpPluginShim.psm1 New-McpPluginTurnUpsertRequest: add AllowEmptyString to QueryText and include queryText on the turn object only when it is non-whitespace.'
+      - "- In plugins/core/lib-ps/repl-invoke.ps1 Get-ReplCurrentTurnQueryText / Invoke-ReplTurnUpsertParams, fall back cache queryText then cache queryTitle before using the Title argument; if still empty, omit queryText rather than sending ''."
+      - "- Do not send queryText: '' on incidental re-submits. SessionLogService.UpdateEntryFromDto treats a present empty string as an explicit value and would clobber a stored QueryText."
+      - '- Cover the shared Invoke-ReplPersistTurn path so completeTurn, appendActions, failTurn, and supersede do not fail the same empty-cache bind.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-185
+      title: Plugin complete/update/append omit required planFile and todoId
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Codex plugin workflow.sessionlog.completeTurn, updateTurn, and appendActions persist through Invoke-ReplPersistTurn without PlanFile/TodoId. beginTurn stores those fields on current-turn cache and passes them on first persist, including the 'None' default. completeTurn (repl-invoke.ps1 ~2011-2013), updateTurn (~1967-1969), appendActions (~1811-1813), failTurn, and supersede omit them. PersistTurn then defaults both to empty strings (~1250-1251) and still forwards them (~1270). The upsert DTO omits blank values, so later operations neither send the required metadata nor recover it from cache. That matches the TruckMate stop-gate block (completeTurn failed, turn left in_progress) and the identical child append failure, while a separate native sessionlog_submit that included planFile and todoId succeeded. This is a plugin payload/cache-closure defect, not an MCP outage. Shared cached audit must be reconciled, not erased.
+      - 'Triage group: triage-group-d9949a83fb997ad2'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- workflow.sessionlog.completeTurn on a plan-backed in_progress turn persists status completed with the same planFile and todoId that beginTurn stored (or None when none was supplied) and stop-gate.ps1 no longer returns decision:block for missing plan metadata.'
+      - '- workflow.sessionlog.updateTurn and appendActions persist without dropping planFile/todoId; current-turn cache still has those fields after a successful append or update.'
+      - '- Incomplete cached turns and preserved failsafe records (including req-20260908T140505Z-prompt-c4b5 and the 20260908T225559Z / 20260908T225747Z session_submit files) can be reconciled through the supported sessionlog persist/drain path without deleting shared cache audit entries or marking the cache terminal.'
+      - 'Implementation notes:'
+      - '- In plugins/core/lib-ps/repl-invoke.ps1, read planFile and todoId from current-turn cache (written by Invoke-WorkflowBeginTurn) and pass -PlanFile/-TodoId into Invoke-ReplPersistTurn from Invoke-WorkflowCompleteTurn, Invoke-WorkflowUpdateTurn, Invoke-WorkflowAppendActions, Invoke-WorkflowFailTurn, and Invoke-ReplSupersedeCurrentTurnIfInProgress.'
+      - '- If cache lacks the fields, default to None the same way beginTurn does for a new turn; do not rely on empty-string defaults. Empty values are omitted from New-McpPluginTurnUpsertRequest, so the server never receives the required metadata on later upserts.'
+      - '- Keep the beginTurn reopen path that omits unbound PlanFile/TodoId so a reopen cannot clobber server values; that omit-to-preserve behavior is not a substitute for complete/update/append, which must send the cached values.'
+      - '- Reconcile the saved incomplete plugin-session turns via supported persist/failsafe drain only. Do not wipe shared cached audit state or mark it terminal as part of the fix.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-186
+      title: appendActions submits cached turn and omits required planFile
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - workflow.sessionlog.appendActions in plugins/core/lib-ps/repl-invoke.ps1 always persists Get-ReplTurnCacheField turnRequestId and never reads an explicit params requestId. completeTurn already refuses a mismatch; appendActions does not. UserPromptSubmit Open-PluginTurn mints req-{utc}-prompt-{hex} and replaces current-turn.yaml when the in-progress cache is older than two minutes or the prompt differs, which is how req-20260909T120830Z-prompt-836a replaced the authorized req-20260909T120226Z-prompt-a628 turn. The append persist calls Invoke-ReplPersistTurn without -PlanFile/-TodoId. New-McpPluginTurnUpsertRequest drops blank planFile/todoId. SessionLogService still runs ValidateForNewEntry on SubmitAsync first persist and PUT replace (only canceled superseded persists stamp None), so HTTP 400 validation_error 'planFile is omitted' is thrown at repl-invoke.ps1:1337. After persist, appendActions returns true without checking the persisted flag.
+      - 'Triage group: triage-group-0514ef163b1662ca'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When current-turn.yaml holds an auto-opened req-*-prompt-* id and appendActions is invoked with an explicit alternate requestId, the plugin either persists that explicit requestId or refuses the call; it must not submit the cached id.'
+      - "- An additive appendActions persist for an in_progress turn includes the same planFile and todoId already stored on that turn (cache and/or params), so SessionLog.SubmitAsync does not return HTTP 400 'planFile is omitted'."
+      - '- appendActions returns success only after durable persistence is confirmed; a 400, throw, or non-persisted/degraded result must be a failed invoke with the failsafe retained.'
+      - 'Implementation notes:'
+      - '- Mirror completeTurn requestId handling in Invoke-WorkflowAppendActions: read params requestId and refuse when it differs from current-turn.yaml turnRequestId, unless an explicit retarget path is added.'
+      - '- Pass cached (or params) planFile and todoId through Invoke-ReplPersistTurn on additive in_progress submits. Empty-string omission is valid for queryTitle (TR-MCP-REPL-015) but not for planFile/todoId.'
+      - "- Check Invoke-ReplPersistTurn's persisted result before returning true; do not treat a swallowed false/degraded persist as success."
+      - '- Do not weaken SessionLogTurnContextValidator.ValidateForNewEntry; the server rejection is correct. Fix the plugin payload and target selection.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-187
+      title: Session-log begin/complete fail as internal_server_error on SQL Session Provider error 19
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - "Native sessionlog_begin_turn and sessionlog_complete_turn both failed at 2026-09-09T12:29Z for req-20260909T122926Z-current-bottleneck (Codex-20260908T153804Z-plugin-session, PLAN-GIGMERGE-001) with SqlClient 'A transport-level error has occurred when receiving results from the server. (provider: Session Provider, error: 19 - Physical connection is not usable)'. Session-log writes open user-initiated transactions in TransactionGatedSessionLogService, so EF EnableRetryOnFailure is intentionally disabled; SqlClient ConnectRetryCount only retries connection open, not a dead pooled connection used mid-command. StorageBackendUnavailability catalogs SQL connection numbers including 0 and 20 but not 19, and does not match this Session Provider text, so McpErrorClassifier/McpToolErrors emit non-retryable internal_server_error with the raw provider message instead of retryable backend_unavailable. A prior BUG-TRIAGE-079 mitigation serialized concurrent deletes after the same error-19 pool poisoning; begin/complete still have no retry or pool-clear. Durable session persistence did not occur."
+      - 'Triage group: triage-group-206e98260096c71d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- sessionlog_begin_turn and sessionlog_complete_turn that hit SqlClient Session Provider error 19 / 'Physical connection is not usable' return JSON with code backend_unavailable and retryable true, not code internal_server_error echoing the raw provider text"
+      - "- StorageBackendUnavailability.IsBackendUnavailable is true for a SqlException whose Number is 19 and for one whose message contains 'Physical connection is not usable' even when Number is not in the existing connection catalog"
+      - '- After a Session Provider error 19 on a session-log write, a later valid begin_turn or complete_turn against a reachable SQL Server succeeds without restarting the host (the dead pooled connection is discarded or the write is retried once)'
+      - 'Implementation notes:'
+      - "- Extend StorageBackendUnavailability (s_sqlConnectionErrorNumbers and/or a transport-text matcher like IsSqlHandshakeFailure) to cover Session Provider error 19 and 'Physical connection is not usable'; SqlException.Number for this SNI failure is 19 in the observed report and is not in the current set"
+      - '- Do not turn on EF EnableRetryOnFailure for SQL Server: session-log and requirements writes use BeginTransactionAsync and the retrying execution strategy rejects user-initiated transactions'
+      - '- Add a narrow application-level retry or SqlConnection.ClearPool on error 19 around session-log upsert/begin/complete, in the same pool-poisoning class as BUG-TRIAGE-079 (deletes only)'
+      - '- Prove classification with SqlExceptionFactory.Create(19, transport message) through McpErrorClassifier and the sessionlog_begin_turn / sessionlog_complete_turn tool payloads'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-191
+      title: Isolate DbContext per concurrent MCP tool call
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Native usecase_list failed with EF InvalidOperationException (A second operation was started on this context instance) while requirements_effective and sessionlog_begin_turn ran in parallel. ListUseCasesQueryHandler and GetProductEffectiveRequirementsQueryHandler both inject scoped McpDbContext. The CQRS Dispatcher is a singleton that resolves those handlers from the root IServiceProvider without creating a scope, so concurrent QueryAsync calls share one context. FwhMcpTools also captures McpDbContext and mutates it in ApplyWorkspaceOverride. UseCaseList maps the handler Failure through McpToolErrors to internal_server_error. Retry recovered; this is a systematic concurrency defect, not a TruckMate data issue.
+      - 'Triage group: triage-group-359ca38cb2a30337'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Parallel native MCP calls to usecase_list, requirements_effective, and sessionlog_begin_turn on the same server complete without InvalidOperationException about a second operation on the same DbContext.'
+      - '- usecase_list returns a successful use-case list payload when invoked concurrently with other DbContext-backed tools.'
+      - '- Each MCP tool invocation (or CQRS dispatch) uses its own DbContext instance so one in-flight operation cannot start another on the same context.'
+      - 'Implementation notes:'
+      - '- McpDbContext is registered scoped in McpDatabaseConfigurationResolver.AddConfiguredMcpDbContext. Dispatcher.DispatchAsync resolves handlers via _services.GetRequiredService on the singleton root provider and does not CreateScope.'
+      - '- Create an IServiceScope (or IDbContextFactory<McpDbContext> instance) per dispatch and per native tool call. Do not capture McpDbContext on FwhMcpTools for the lifetime of the MCP session.'
+      - '- ApplyWorkspaceOverride currently calls _db.PushWorkspaceId on the shared context; workspace targeting must not mutate a context that another tool is using.'
+      - '- Cover with a test that runs usecase_list and requirements_effective (and a session-log begin-turn) concurrently and asserts zero concurrent-operation failures.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-198
+      title: Do not rebind recovered in-progress turns to a post-restart session
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - After a server restart, current-turn.yaml can still hold an in-progress requestId on the pre-restart session while session-state.yaml has a newly minted sessionId. Assert-ReplCurrentTurnFresh (TR-MCP-PLUGIN-012) treats that as session rotation and rewrites current-turn.yaml sessionId to the new session before persist. workflow.sessionlog.appendDialog then POSTs AppendDialogAsync with the new sessionId plus the old requestId and fails HTTP 404 because that requestId does not exist on the new session. Get-ReplCompleteTurnPersistSessionId already prefers the current-turn sessionId, but the freshness rewrite runs first and makes that helper see only the rebound id.
+      - 'Triage group: triage-group-3a0027b60ca949cd'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given current-turn.yaml with sessionId A, in_progress requestId R, and session-state.yaml with a different post-restart sessionId B, workflow.sessionlog.appendDialog persists dialog against session A and request R, not session B.'
+      - '- current-turn.yaml sessionId remains A after appendDialog when R was created under A and still exists on the server.'
+      - '- appendDialog does not return HTTP 404 / not_found for a recovered requestId that still exists on the original session.'
+      - '- Marker-path or marker-timestamp drift (wrong workspace) is still rejected and does not persist against the recovered turn.'
+      - 'Implementation notes:'
+      - '- The destructive rewrite is in plugins/core/lib-ps/repl-invoke.ps1 Assert-ReplCurrentTurnFresh: a sessionId-only mismatch logs a re-bind and writes current-turn.yaml sessionId to the active session-state.yaml value before any persist call.'
+      - '- Invoke-WorkflowAppendDialog calls Assert-ReplCurrentTurnFresh first, then Get-ReplSessionMeta, which uses Get-ReplCompleteTurnPersistSessionId on the already-rebound turn value, so persist always targets the new session.'
+      - '- Same freshness gate is used by appendActions, completeTurn, and updateTurn, so the 404 is not unique to appendDialog.'
+      - '- TR-MCP-PLUGIN-012 was written for Start-PluginSession rotation of an unbound local cache; recovered persisted turns after restart need the opposite policy: keep the original sessionId, or restore session-state.yaml from current-turn.yaml instead of minting a new session.'
+      - '- The appendDialog 404 path already treats not_found as non-retryable and does not write failsafe, so the rebound cache is left pointing at a session that cannot accept R.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-199
+      title: Session-log appendActions returns HTTP 500 and rolls back after subscriber commit failure
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof, not a second bypass. Do not mark done until H-done AGREE.'
+      description:
+      - workflow.sessionlog.appendActions persists through REPL SessionLogWorkflow.SubmitCurrentStateAsync into sessionlog.submit. TransactionGatedSessionLogService gates that submit through TurnTransactionCoordinator. After the local session-log mutation, CommitDiffgramAsync rejects any non-committed/non-duplicate subscriber result as 'Subscriber commit failed.', rolls back the pre-append graph, and throws InvalidOperationException. SessionLogController.ClassifiedError maps that exception through McpErrorClassifier to HTTP 500 internal_server_error with retryable=false, so recovered in-progress turns cannot durably append actions even after MCP recovery. Rollback itself matches TEST-MCP-161 fail-closed compensation; the defect is that a known subscriber-commit rejection blocks audit logging and is misclassified as a non-retryable internal error.
+      - 'Triage group: triage-group-172deb84816be6be'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After MCP and subscriber recovery, workflow.sessionlog.appendActions on a recovered in-progress turn persists the submitted actions and returns success.'
+      - '- When subscriber commit rejects or times out, the session-log graph remains at the pre-append snapshot (rollback completed) and the caller receives the coordinator failure reason rather than a generic unclassified internal error.'
+      - '- Subscriber-unavailable and commit-timeout outcomes from session-log append/submit are classified as retryable backend/transaction failures (not HTTP 500 internal_server_error with retryable=false).'
+      - '- A later appendActions after subscriber recovery succeeds on the same recovered in-progress turn without requiring a process restart solely to clear the prior commit rejection.'
+      - 'Implementation notes:'
+      - '- Call path: workflow.sessionlog.appendActions -> src/McpServer.Repl.Core/SessionLogWorkflow.cs SubmitCurrentStateAsync -> POST sessionlog SubmitAsync -> TransactionGatedSessionLogService operation sessionlog.submit.'
+      - "- Coordinator message is produced in TurnTransactionCoordinator after CommitDiffgramAsync; ToTransactionException in TransactionGatedSessionLogService appends 'Rollback completed.'"
+      - '- McpErrorClassifier treats generic InvalidOperationException as internal_server_error/500/retryable=false; transaction rejections need structured classification (reason, retryable, status).'
+      - '- Keep existing TEST-MCP-161 rollback compensation; add coverage for recovered in-progress appendActions after subscriber recovery and for classified retryable commit-failure responses.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-200
+      title: Valid sessionlog appendDialog returns HTTP 500 after subscriber commit rollback
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+      description:
+      - "workflow.sessionlog.appendDialog for an existing turn posts incrementally to POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog. With turn transactions required, TransactionGatedSessionLogService gates that as sessionlog.dialog: the local dialog mutation is saved, then TurnTransactionCoordinator subscriber commit is required. Any non-committed/non-duplicate commit result rolls the turn graph back and throws InvalidOperationException 'Turn transaction coordinator did not commit sessionlog.dialog ... Subscriber commit failed. Rollback completed.' SessionLogController.ClassifiedError maps that to HTTP 500 internal_server_error with retryable=false. The actual TransactionFailureReason (StaleSequence, timeout, subscriber unavailable, hash mismatch) is not returned. Per-request millisecond sequences on scoped gated services can collide on the singleton publisher/subscriber cursor after the row is already saved. A degraded latch then blocks later session-log writes. Plugin Invoke-WorkflowAppendDialog only queues a session_dialog failsafe on timeout/HTTP 503, so a 500 drops valid model-authored dialog instead of persisting or replaying it."
+      - 'Triage group: triage-group-c7be9d2a10b8008d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- A supported workflow.sessionlog.appendDialog call against an existing in-progress turn with at least one valid dialog item returns HTTP 200 and the items remain queryable on that turn.'
+      - "- A valid dialog append must not return HTTP 500 with detail containing 'Subscriber commit failed' and 'Rollback completed'."
+      - '- If subscriber commit is unavailable or times out after a valid local append, the API returns a retryable 503 (or equivalent classified retryable envelope) rather than non-retryable internal_server_error, and a later replay or retry persists the same dialog items.'
+      - '- Concurrent valid session-log and other gated mutations in the same millisecond must not reject a valid appendDialog as a stale/duplicate subscriber sequence after the local mutation succeeded.'
+      - '- A prior subscriber commit failure must not latch the coordinator into degraded mode that causes later valid appendDialog calls to fail without attempting persist.'
+      - '- True invalid or unauthorized mutations still fail closed and roll back; only valid incremental dialog appends must persist.'
+      - 'Implementation notes:'
+      - "- Server path: SessionLogController.AppendDialogAsync -> TransactionGatedSessionLogService.AppendProcessingDialogAsync (operationName sessionlog.dialog, MissingSnapshotRollbackPolicy.RestorePreMutation) -> ITurnTransactionCoordinator.ExecuteAsync. Post-mutation Failure() always sets Message 'Subscriber commit failed.' ToTransactionException appends 'Rollback completed.' when RollbackSucceeded."
+      - '- Do not hide commit.Reason. Surface StaleSequence, CommitTimeout, SubscriberUnavailable, hash/decrypt failures in the classified envelope so 503 retryable vs 400/409 vs 500 can be distinguished. McpErrorClassifier currently falls through InvalidOperationException to HTTP 500 retryable=false.'
+      - '- Replace scoped unix-millisecond NextSequence() with a process-wide monotonic sequence (or keyserver-issued sequence) shared by all TransactionGated* adapters. Subscriber last-sequence is per publisher/subscriber pair across all operations, not per turn.'
+      - '- Keep compensation for genuinely rejected commits, but a valid incremental dialog persist should not be undone solely because subscriber ack failed; either commit the dialog and retry subscriber evidence, or return retryable degrade without deleting the accepted items.'
+      - '- Plugin: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog already uses client.SessionLog.AppendDialogAsync. Align failsafe/replay with the classified retryable persist path so HTTP 500 rollback is not a silent drop and is not confused with triage failsafe YAML.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-201
+      title: Session log writes 500 when Keyserver rejects concurrent Unix-ms sequences
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'sessionlog.open and sessionlog.replace_section are transaction-gated. Before the mutation runs, TurnTransactionCoordinator signs a manifest. Sign fails for StaleSequence, ReplayNonce, UnknownKey, or similar, but the client only sees internal_server_error: Turn transaction coordinator did not commit because Keyserver manifest signing failed. Each TransactionGated* service keeps its own _lastSequence initialized to Unix milliseconds, while KeyServer.TryReserveManifestReplayAsync requires a strictly increasing sequence per publisher/subscriber pair. Concurrent or same-millisecond writes from session log plus other gated services collide; a later retry with a higher sequence succeeds. Health and storage stay up because signing rejection happens before mutation and does not take the coordinator into KeyServerUnavailable degraded mode. Observed: first hostile-validator sessionlog.open failed then retry created GrokCode-20260910T230418Z-hostile-qbexec; a later actions replace_section failed while DesignDecisions replace_section succeeded.'
+      - 'Triage group: triage-group-a7414e1b7dcafd05'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog.open persists the session on the first call while other transaction-gated mutations are in flight and Keyserver plus storage are healthy.'
+      - '- sessionlog.replace_section for actions persists on the first call under the same conditions; a client retry is not required for success.'
+      - '- A signing rejection includes the concrete TransactionFailureReason (StaleSequence, ReplayNonce, UnknownKey, DisabledKey, or KeyServerUnavailable) in the operation error, not only the generic Keyserver manifest signing failed text.'
+      - '- Concurrent mutations from different TransactionGated* services do not fail solely because independent Unix-millisecond sequence counters reused or lagged the pair LastSequence.'
+      - 'Implementation notes:'
+      - '- Failure site: TurnTransactionCoordinator.ExecuteAsync returns rejected with mutationApplied false and message Keyserver manifest signing failed whenever SignManifestAsync is unsuccessful; TransactionGatedSessionLogService.ToTransactionException then throws the did not commit internal_server_error. The mutation (open or replace_section) never runs, so this is a reject, not a post-mutation rollback.'
+      - '- Root cause to fix: replace per-service Unix-ms NextSequence() in TransactionGatedSessionLogService and sibling gated services with one process-wide (or Keyserver-assigned) monotonic sequence for the publisher/subscriber pair. Optionally retry sign once on StaleSequence after bumping sequence.'
+      - '- Keep the generic message only as a fallback; surface sign.Reason on the exception so operators can tell sequence races from missing keys.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-202
+      title: Codex updateTurn persist fails after local cache write
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'The trusted Codex plugin path for workflow.sessionlog.updateTurn writes the turn into current-turn.yaml first, then Invoke-ReplPersistTurn failsafe-queues and calls client.SessionLog.SubmitAsync. That REPL child exits 1, so the plugin keeps the session_submit failsafe and does not confirm live persist. This repeats the TEST-MCP-161 subscriber-rollback class: TransactionGatedSessionLogService.SubmitAsync mutates locally, then a subscriber/keyserver reject throws after rollback. For an existing in-progress session the rollback policy restores the pre-mutation graph, so the local cache is ahead of authoritative storage while PLAN-GIGMERGE-001 work continues.'
+      - 'Triage group: triage-group-ad2aaeb3a4713b03'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given a trusted Codex plugin session with an in-progress current-turn.yaml, workflow.sessionlog.updateTurn persists the same requestId through client.SessionLog.SubmitAsync with process exit 0 and does not leave a new session_submit failsafe as the only durable copy.'
+      - '- After that updateTurn, session-log GET/query for the same sourceType, sessionId, and requestId returns the updated response, interpretation, tags, and contextList from server storage, matching current-turn.yaml.'
+      - '- When the turn-transaction subscriber rejects after a successful local session-log upsert of an existing in-progress turn, the plugin does not report persist failure while current-turn.yaml is already updated, and the operator is not left with failsafe-only copies of a locally accepted update.'
+      - '- Repeating updateTurn for the same requestId is idempotent: live query still shows one updated turn and the failsafe queue does not grow on the success path.'
+      - 'Implementation notes:'
+      - '- Named path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowUpdateTurn writes current-turn.yaml via Write-ReplCurrentTurnState, then Invoke-ReplPersistTurn writes a client.SessionLog.SubmitAsync failsafe and calls the REPL child. Non-timeout/non-503 failure throws; updateTurn catches and returns false, which the Codex wrapper surfaces as persist failure.'
+      - '- PersistTurn always submits a one-turn UnifiedSessionLogDto (turnCount=1). Server SubmitAsync is the full-session upsert, not UpsertTurnAsync. sessionlog-remediate-001 left updateTurn on that full upsert.'
+      - '- src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs gates sessionlog.submit. RestorePostMutation applies only when no pre-image exists (create). An existing-session upsert uses RestorePreMutation, so subscriber reject rolls the server back while the plugin cache already moved forward. TEST-MCP-161 covers create-style restore; add coverage for updateTurn/upsert of an existing in-progress turn.'
+      - '- Live Mcp:TurnTransactions RequiredForMutations is already known to break some sessionlog_begin_turn calls via keyserver/subscriber; the same gate applies to SubmitAsync used by updateTurn.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-204
+      title: Codex session-log wrappers fail with generic exit 1 after partial persist
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - With plugin Status showing an active session and turn, sequential Codex wrapper calls to workflow.sessionlog.appendDialog, appendActions, and updateTurn can run about 66 seconds and surface only 'Plugin command failed with exit code 1'. Invoke-McpPlugin.ps1 throws that message from the child exit code and attaches stdout only, so stderr diagnostics from repl-invoke.ps1 are dropped. Inner session-log REPL calls use a 30s default timeout (Get-ReplMethodTimeoutSeconds), which is below the 90s outer plugin timeout, so the already-classified outer command_timeout path does not fire. appendActions and updateTurn persist through Invoke-ReplPersistTurn, which writes a failsafe record before client.SessionLog.SubmitAsync and keeps it on timeout; that matches failsafe.status rising from 27 to 29. appendActions ignores the persist result and still returns success, while updateTurn returns false and exits 1. appendDialog uses a separate AppendDialogAsync path. The caller cannot tell which of the three writes persisted, queued, or only updated local turn cache, so retry and drain are unsafe.
+      - 'Triage group: triage-group-428dd7e86f2355e2'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given plugin Status reports an active session and current turn, sequential wrapper invokes of workflow.sessionlog.appendDialog, appendActions, and updateTurn must each return a structured result that states whether that call persisted, queued to failsafe, or failed, including method name and failsafe path when queued.'
+      - "- A failed or timed-out session-log wrapper must not end only with 'Plugin command failed with exit code 1'. Timeout and HTTP 503 cases must emit a classified retryable envelope (command_timeout or backend_unavailable), including stderr/persist details, matching the existing outer Invoke-McpPlugin timeout classification."
+      - '- workflow.sessionlog.appendActions must not report success when Invoke-ReplPersistTurn returns false or leaves a failsafe record. Local current-turn audit/cache updates must not be treated as durable persistence.'
+      - '- After a mixed batch, workflow.failsafe.status pendingCount must be reconcilable to the named methods that queued, and a later Status/get of the same turn must make it observable which of dialog, actions, and turn fields were durably stored versus only queued.'
+      - 'Implementation notes:'
+      - '- plugins/core/lib-ps/Invoke-McpPlugin.ps1 (non-zero ExitCode throw): stop collapsing inner REPL failures into a stdout-only generic throw. Emit a YAML error envelope that includes stderr and LastReplPersistenceDetails when present.'
+      - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions: honor the Invoke-ReplPersistTurn boolean; do not `$null =` the result and return true. Delay or revert local audit increments until persist confirms, matching the appendDialog post-accept increment (BUG-TRIAGE-165).'
+      - '- Keep per-call inspectability. appendDialog uses client.SessionLog.AppendDialogAsync; appendActions and updateTurn use full SubmitAsync upserts that write failsafe first. Do not present the three wrappers as an atomic batch unless a real batch API is added. Failsafe SubmitAsync payloads may omit dialog items already accepted by AppendDialogAsync, so drain/retry must not blindly resubmit a later upsert over a successful earlier dialog write.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-205
+      title: Degraded beginTurn caches an uncommitted turn; appendDialog 404 refuses failsafe
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Invoke-WorkflowBeginTurn writes current-turn.yaml before the server commit. When persist fails as degraded/queued, Complete-ReplBeginTurnAfterPersist keeps that cache in_progress and beginTurn returns success (FR-MCP-171). The next workflow.sessionlog.appendDialog then calls client.SessionLog.AppendDialogAsync because the cache file exists (FR-MCP-170). SessionLogService throws Entry not found for the never-committed requestId, which surfaces as HTTP 404. Invoke-WorkflowAppendDialog matches not_found/HTTP 404 and explicitly skips Write-ReplFailsafe (retryable false). Session logging stays stuck on a ghost turn until an operator writes a supported failsafe by hand. The 404 classifier is correct for a truly missing turn; the defect is treating a degraded local cache as a durable server turn.
+      - 'Triage group: triage-group-6f8863a6fc9027e4'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After beginTurn persist fails as degraded or queued, current-turn.yaml must not cause later appendDialog to POST incremental dialog against a requestId the server never stored.'
+      - "- appendDialog against that ghost turn must not return false with 'turn not found (retryable false); failsafe not used' and must either create the turn (SubmitAsync or equivalent), replay the retained beginTurn failsafe then append, or queue a dialog/session failsafe."
+      - '- After that recovery, a following appendDialog or completeTurn on the same requestId succeeds without a manually written failsafe file.'
+      - '- A genuine appendDialog to a requestId that was never opened locally still classifies as not-found, retryable false, and does not write failsafe.'
+      - 'Implementation notes:'
+      - '- plugins/core/lib-ps/repl-invoke.ps1: Invoke-WorkflowBeginTurn writes the turn file then Complete-ReplBeginTurnAfterPersist keeps it when Test-ReplBeginTurnDegradedQueued is true; Invoke-WorkflowAppendDialog lines 1891-1893 refuse failsafe on not_found/HTTP 404.'
+      - "- src/McpServer.Services/Services/SessionLogService.cs AppendDialogAsync throws InvalidOperationException 'Entry not found: {sourceType}/{sessionId}/{requestId}' when no turn row exists."
+      - "- Do not weaken FR-MCP-170's true-missing-turn 404 rule. Gate the recovery on locally active/degraded current-turn.yaml (or a persisted=false marker) so only the ghost-turn path falls back to create-or-failsafe."
+      - '- Pester already locks degraded beginTurn cache retention (TriagePluginIdentity BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued). Add a follow-on case: degraded beginTurn then appendDialog must not take the 404 no-failsafe branch.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-207
+      title: adb_step leaks opaque MCP invocation errors for LaunchApp failures
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - mcp__mcpserver__adb_step returned only the ModelContextProtocol SDK message "An error occurred invoking adb_step" for a Fold4 LaunchApp call during PLAN-GIGMERGE-001. FwhMcpTools.AdbStep runs ApplyWorkspaceOverride (HandoffWorkspacePaths.Canonicalize, which throws ArgumentException) outside the try/catch, the same leak class as BUG-TRIAGE-070/075. Uncaught tool exceptions become that opaque SDK text and never reach the caller. TodoExecutionService.AdbStepAsync already maps LaunchApp ADB failures (monkey -p {package} -c android.intent.category.LAUNCHER 1, or am start when activityName is set) into AdbStepResult.Error; the MCP tool has no equivalent test that a workspace-override or invocation exception returns structured JSON. The opaque result blocks the screenshot-inspect-act loop and forces local ADB diagnosis.
+      - 'Triage group: triage-group-317ae1fff44f1c91'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- A LaunchApp adb_step call that fails (missing/invalid workspacePath, Canonicalize/ApplyWorkspaceOverride throw, ADB non-zero exit, or missing packageName) returns structured JSON with the underlying message in AdbStepResult.Error or a McpToolErrors {code,message,retryable} payload; the tool result must not be only \"An error occurred invoking adb_step\" or \"An error occurred invoking 'adb_step'.\"."
+      - '- ApplyWorkspaceOverride failures in FwhMcpTools.AdbStep are caught inside the tool method and serialized the same way session-log lifecycle tools satisfy TR-MCP-SESSIONLOG-001.'
+      - '- When LaunchApp reaches TodoExecutionService and adb monkey/am start fails on a connected device (including Samsung Fold4), Success is false and Error contains the ADB stdout/stderr (or the existing InvalidOperationException text), not an MCP invocation wrapper.'
+      - '- Unit tests cover AdbStep MCP-tool failure paths (ApplyWorkspaceOverride/Canonicalize throw, service-returned Success=false LaunchApp, and uncaught service exception) and assert structured JSON without the SDK opaque invocation string.'
+      - 'Implementation notes:'
+      - '- Move ApplyWorkspaceOverride inside the try in FwhMcpTools.AdbStep (src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.Todo.cs), matching the session-log lifecycle fix in FwhMcpTools.SessionLog.cs and SessionLogLifecycleToolErrorTests.'
+      - "- Keep TodoExecutionService.AdbStepAsync's existing catch that already returns AdbStepResult.Error; do not convert Success=false results into thrown exceptions at the MCP tool or REST 422 layer."
+      - '- LaunchApp currently uses `shell monkey -p {package} -c android.intent.category.LAUNCHER 1` unless activityName is set (`shell am start -n {package}/{activity}`). After errors are visible, if Fold4 still cannot launch, add a launcher-activity resolve fallback; include monkey/am stderr in Error.'
+      - '- Extend TodoExecutionMcpToolTests beyond the current happy-path AdbStep_DelegatesToExecutionService so invocation-boundary failures cannot regress to the SDK opaque message.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-208
+      title: Do not expose a locally active turn after degraded beginTurn the server cannot update
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Codex user-prompt-submit maps a degraded workflow.sessionlog.beginTurn to status turn-opened. Invoke-WorkflowBeginTurn writes current-turn.yaml as in_progress before SubmitAsync, then returns success when persist times out or returns HTTP 503 with a retained session_submit failsafe. Open-PluginTurn treats that as a durable open because the REPL exit code is 0 and current-turn.yaml matches the requestId. The next workflow.sessionlog.appendDialog calls AppendDialogAsync, SessionLogService throws Entry not found for that sessionId/requestId, and the plugin classifies HTTP 404 as non-retryable with failsafe not used. Model dialog is dropped unless the caller manually enriches the original session_submit failsafe.
+      - 'Triage group: triage-group-9de0112de79b75ef'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.beginTurn persist is queued or degraded, user-prompt-submit must not return status turn-opened for a requestId the server does not own.'
+      - '- current-turn.yaml must not remain status in_progress for a requestId that later appendDialog or appendActions will reject with HTTP 404 Entry not found.'
+      - '- appendDialog after a degraded beginTurn must retain the submitted dialog items locally (failsafe or merge into the existing session_submit payload) instead of failing retryable false with failsafe not used.'
+      - '- A later session-log update for that requestId must either succeed against a durable server turn or stay queued until the beginTurn session_submit failsafe drains; it must not present a false active-turn state.'
+      - 'Implementation notes:'
+      - '- Root seam is plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowBeginTurn: Write-ReplCurrentTurnState happens before persist; Complete-ReplBeginTurnAfterPersist then returns ok=true degraded=true and beginTurn returns true with stderr queued/degraded.'
+      - '- plugins/core/lib-ps/plugin-hook.ps1 Open-PluginTurn only checks LastPluginReplExitCode and current-turn.yaml requestId, so it emits turn-opened without reading degraded or failsafe state.'
+      - '- Invoke-WorkflowAppendDialog uses client.SessionLog.AppendDialogAsync; SessionLogService.AppendProcessingDialogAsync throws Entry not found when the turn was never submitted. The 404 branch currently refuses failsafe by design; timeout/503 is the only appendDialog path that queues session_dialog.'
+      - '- Preferred fix: do not advertise turn-opened until SubmitAsync confirms the turn, or keep a local degraded turn and route later appends through SubmitAsync failsafe merge instead of AppendDialogAsync. TEST-MCP-TRIAGEPLUGIN-001 BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued currently encodes keeping current-turn.yaml and will need to change with the contract.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-210
+      title: 'appendActions 500: sessionlog.submit subscriber rollback stale turn'
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+      description:
+      - workflow.sessionlog.appendActions persists through Invoke-ReplPersistTurn as a full-session POST to /mcpserver/sessionlog (client.SessionLog.SubmitAsync). TransactionGatedSessionLogService wraps that write as operation sessionlog.submit. When the turn-transaction subscriber rejects the post-mutation commit, the coordinator rolls back the session graph and SubmitAsync throws InvalidOperationException. SessionLogController.ClassifiedError maps that to HTTP 500. The plugin writes a failsafe payload before the call and does not treat HTTP 500 as the retryable 503/timeout queue path, so the exception is thrown and the failsafe file is retained. For an existing session, rollback restores the pre-mutation graph, so the appended actions never stay on server truth and the active turn is not current until that failsafe can replay. Local turn-cache audit counters are incremented before persist, so cache and server diverge after rollback.
+      - 'Triage group: triage-group-fd8ab42bd4053136'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- A valid workflow.sessionlog.appendActions call on an existing in-progress turn persists those actions on the server turn after a durable commit.'
+      - '- If sessionlog.submit is rejected by the transaction subscriber after the local mutation, the client-visible failure is retryable and does not leave the server turn missing the appended actions once failsafe replay succeeds.'
+      - '- GET of the same sourceType/sessionId/requestId after recovery includes the appended actions, and the failsafe payload is cleared only after that durable write.'
+      - '- Local current-turn cache must not report the turn as current when the server rolled back the append.'
+      - 'Implementation notes:'
+      - '- Confirm the failure on TransactionGatedSessionLogService.SubmitAsync (operationName sessionlog.submit) and SessionLogController.SubmitAsync catch of InvalidOperationException via ClassifiedError.'
+      - '- appendDialog already uses incremental client.SessionLog.AppendDialogAsync (sessionlog.dialog). appendActions still full-session submits a one-turn payload via Invoke-ReplPersistTurn; consider routing appends through sessionlog.upsert_turn instead of sessionlog.submit.'
+      - '- Plugin path: plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions updates cache then Invoke-ReplPersistTurn; HTTP 500 is not in the timeout/503 failsafe-queue branch, so the throw keeps FailsafePath.'
+      - '- Subscriber-unavailable is an existing TransactionFailureReason; tests already expect rollback plus InvalidOperationException with Rollback completed. The product defect is that a routine action append becomes a stale-turn 500 rather than a committed incremental write or a retryable queued persist.'
+      - '- Do not change fail-closed transaction policy without an equivalent retry/replay that restores turn currency.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-214
+      title: updateTurn persist fails on empty QueryText binding
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - workflow.sessionlog.updateTurn is handled locally in plugins/core/lib-ps/repl-invoke.ps1 and then persisted through Invoke-ReplPersistTurn -> Invoke-ReplTurnUpsertParams -> New-McpPluginTurnUpsertRequest. QueryText is [Parameter(Mandatory)][string] with no AllowEmptyString, unlike Title which was already fixed for the same ParameterBindingValidationException (TR-MCP-REPL-018). updateTurn omits Title unless queryTitle is explicit, and QueryText is recovered only from current-turn.yaml then that empty Title. A valid model update (response, tags, contextList) therefore throws, the wrapper returns false (exit 1), and the live MCP turn is not patched. Persist-log tests never exercise this path; the STRICTCOUNT fixture even omits queryText and short-circuits before upsert. A session_submit failsafe can remain from write-ahead persist or an earlier beginTurn, but it is not a successful live-turn update.
+      - 'Triage group: triage-group-f98b9d1a62fa298e'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- A valid workflow.sessionlog.updateTurn payload that omits queryTitle and has empty or missing current-turn queryText must exit 0.'
+      - '- The persisted live turn must receive the submitted response, interpretation, tags, and contextList on MCP, not only a leftover session_submit failsafe.'
+      - '- New-McpPluginTurnUpsertRequest must accept empty QueryText without ParameterBindingValidationException.'
+      - '- Regression coverage must run the real persist/upsert path (not MCP_PLUGIN_PERSIST_LOG) with current-turn.yaml that has queryTitle but no queryText.'
+      - 'Implementation notes:'
+      - '- Mirror the Title fix in plugins/core/lib-ps/McpPluginShim.psm1: add [AllowEmptyString()] to QueryText on New-McpPluginTurnUpsertRequest.'
+      - "- In Invoke-ReplTurnUpsertParams, fall back to cached queryTitle when Get-ReplCurrentTurnQueryText and the persist Title are empty; do not bind Mandatory QueryText to ''."
+      - '- Server DTOs already treat QueryText as nullable and NormalizeTurn fills it from QueryTitle, so empty QueryText should be omitted or filled rather than rejected at the plugin bind.'
+      - '- completeTurn uses the same upsert helper and has the same empty-QueryText hole.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-215
+      title: sessionlog.dialog rejected before commit on keyserver manifest signing failure
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'mcpserver sessionlog.dialog against F:\GitHub\RomM (agent GrokCode, session GrokCode-20260915T210639Z-plugin-session, request req-20260915T210640Z-prompt-130d) failed with internal_server_error retryable=false. The message matches TransactionGatedSessionLogService wrapping TurnTransactionCoordinator: sessionlog.dialog txn-2722068463a14a6ea1807b2d4367c85f did not commit because SignManifestAsync returned Success=false or a null manifest, so the coordinator rejected with mutationApplied=false and never called AppendProcessingDialogAsync. sessionlog.open on the same session succeeded (created=false), so the session exists and the keyserver can sign some mutations; this is a per-transaction signing reject, not a missing session. Likely causes given that split: StaleSequence or ReplayNonce from per-scoped-instance millisecond sequences racing a process-wide publisher/subscriber LastSequence, UnknownKey if in-memory signing material was missing, or KeyServerUnavailable. The actual sign.Reason is discarded. McpErrorClassifier then maps the InvalidOperationException to internal_server_error retryable=false, so clients queue failsafe instead of retrying.'
+      - 'Triage group: triage-group-8d004715fbc27b3c'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog.dialog against an already-open session and existing turn commits and returns success when the keyserver is reachable and the publisher/subscriber pair can sign.'
+      - '- A failed sign does not persist dialog items (mutationApplied remains false) and returns the keyserver failure reason (UnknownKey, DisabledKey, StaleSequence, ReplayNonce, or KeyServerUnavailable) in the error envelope.'
+      - '- StaleSequence, ReplayNonce, and KeyServerUnavailable on sessionlog.dialog are classified retryable=true so a new transaction id and later sequence can succeed; only permanent key/party failures stay retryable=false.'
+      - '- Two sequential gated mutations in the same workspace (sessionlog.open then sessionlog.dialog, including same-millisecond scoped instances and other gated services sharing the publisher/subscriber pair) both obtain a strictly increasing keyserver sequence and both commit.'
+      - 'Implementation notes:'
+      - '- Failure site: TurnTransactionCoordinator.ExecuteAsync signs before mutation and returns Failure(..., mutationApplied: false, message: "Keyserver manifest signing failed.") without including sign.Reason.'
+      - '- Call site: TransactionGatedSessionLogService.AppendProcessingDialogAsync uses operation name sessionlog.dialog; ToTransactionException produces the observed coordinator message. MCP tool sessionlog_dialog in FwhMcpTools.SessionLog.cs serializes that exception via McpToolErrors.'
+      - '- Sequence bug to inspect first: TransactionGatedSessionLogService is scoped and NextSequence() starts from DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() per instance, while TryReserveManifestReplayAsync enforces a single LastSequence per publisher/subscriber pair. Concurrent gated services (todo, requirements, repo, memory) share that pair clock.'
+      - '- Nonce is transactionId:sequence, so ReplayNonce is unlikely unless the same txn id is retried; StaleSequence is the better fit when open succeeded and dialog failed immediately after.'
+      - '- Do not treat this as a session-not-found bug. Do not create TODOs from this triage output.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-216
+      title: sessionlog.replace_section coordinator NRE blocks action persist
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Replacing a Codex turn actions section via sessionlog.replace_section failed inside TurnTransactionCoordinator with a NullReferenceException. The coordinator swallows the mutation exception as Status=aborted with only ex.Message, and TransactionGatedSessionLogService rethrows InvalidOperationException ('Turn transaction coordinator did not commit sessionlog.replace_section...'). McpErrorClassifier maps that to internal_server_error with retryable false. RollbackAsync is registered only after inner ReplaceTurnSectionAsync returns, so a pre-SaveChanges NRE leaves the turn unchanged (22 actions, not 26). Clients do not get a validation diagnostic, and the four new action receipts never persist.
+      - 'Triage group: triage-group-a3ec42dc074bfcdd'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Replacing a turn actions section with N existing plus K new receipts either persists all N+K actions atomically (subsequent GET/query returns N+K) or returns a classified validation_error or persistence_error that names the rejected field or constraint.'
+      - "- A NullReferenceException or other unexpected failure in the sessionlog.replace_section transaction path must not be the only client-visible code as internal_server_error sourced from 'Turn transaction coordinator did not commit sessionlog.replace_section' without details.inner naming the original exception type and message."
+      - '- When replace_section does not commit, a live query of that turn still returns the pre-call action count; partial application of the replacement set is not observable.'
+      - '- retryable remains false for programming/validation failures; storage-unreachable replace_section failures remain retryable true (existing backend_unavailable contract).'
+      - 'Implementation notes:'
+      - '- TurnTransactionCoordinator.ExecuteAsync (mutation try/catch) converts any mutation exception, including NullReferenceException, into TurnMutationResult.Success=false with Error=ex.Message only, then returns aborted. The abort path sets MutationApplied=true even when persist never ran.'
+      - '- TransactionGatedSessionLogService.ToTransactionException wraps the aborted result as InvalidOperationException. McpErrorClassifier then emits internal_server_error retryable false because the original exception type is lost.'
+      - '- ExecuteMutationAsync assigns RollbackAsync only after inner ReplaceTurnSectionAsync returns. A NRE in CaptureSessionAsync or in ApplySectionReplace/MapActions before SaveChangesBudgetedAsync skips compensation and leaves the store at the pre-call 22 actions.'
+      - "- SessionLogService.MapActions dereferences each UnifiedActionDto (a.Order, a.Description, ...) with no null guard; a null element in payload.Actions throws NRE during replace of section 'actions'."
+      - '- Prefer: reject null/invalid action items as ArgumentException (validation_error) before SaveChanges; preserve original exception type through the coordinator envelope; keep actions replace atomic (inner SaveChanges already clears ChangeTracker on failure).'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-217
+      title: sessionlog.replace_section fails before commit with Keyserver manifest signing failed
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'mcpserver sessionlog_replace_section (section=actions) against workspace F:\GitHub\RomM failed with internal_server_error retryable=false. Message: Turn transaction coordinator did not commit sessionlog.replace_section txn-67733fb9c71b4dd2af3c5a184ca09bca: Keyserver manifest signing failed. ReplaceTurnSectionAsync is gated by TransactionGatedSessionLogService as operation sessionlog.replace_section, the same TurnTransactionCoordinator path as sessionlog.dialog. SignManifestAsync runs before the mutation; on !sign.Success the coordinator returns rejected with mutationApplied=false and a generic signing-failed message, so the section is never written. The InvalidOperationException is classified as internal_server_error retryable=false, so clients do not retry. Underlying sign.Reason (UnknownKey, DisabledKey, replay, missing party, or KeyServerUnavailable) is not surfaced. KeyServerUnavailable can also flip the coordinator into degraded mode and block later session-log writes.'
+      - 'Triage group: triage-group-0754c3393246283a'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog.replace_section for an existing turn section (including actions) commits and Get/query of that turn returns the replaced section when the keyserver can sign.'
+      - '- When manifest signing cannot complete, the mutation is not applied and the client envelope includes the coordinator transaction id plus the actual TransactionFailureReason rather than only the generic Keyserver manifest signing failed text.'
+      - '- Transient keyserver unavailability is classified retryable (not internal_server_error retryable=false) so a later replace_section of the same turn can succeed after keys or the keyserver recover.'
+      - '- sessionlog.dialog and other TransactionGatedSessionLogService mutations on the same coordinator do not fail with the same unsigned generic envelope when signing is healthy.'
+      - 'Implementation notes:'
+      - '- Failure site: TurnTransactionCoordinator.ExecuteAsync calls SignManifestAsync then returns Failure(..., mutationApplied: false, message: Keyserver manifest signing failed.) before the mutation callback.'
+      - '- TransactionGatedSessionLogService.ReplaceTurnSectionAsync uses operationName sessionlog.replace_section and throws ToTransactionException when status is not committed/bypassed. FwhMcpTools.SessionLogReplaceSection serializes that via McpToolErrors/McpErrorClassifier, which maps this InvalidOperationException to internal_server_error retryable=false.'
+      - '- SignManifestAsync nonce is {transactionId}:{sequence}. Signing can fail for unknown/disabled keys, missing publisher/subscriber parties, replay reservation, or a thrown KeyServerUnavailable. Preserve and return sign.Reason. Do not register public-only party PEMs; that yields UnknownKey while readiness looks green (BrainSlotAdoptedPartyKeySigningTests / TR-MCP-SEC-006).'
+      - '- If reason is KeyServerUnavailable, SubscriberUnavailable, or CommitTimeout, degraded mode can latch and then every later gated session-log mutation throws Turn transaction coordinator is degraded. Clear or avoid that latch for recoverable signing faults.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-218
+      title: sessionlog.replace_section Keyserver/subscriber faults are non-retryable; successful designDecisions can query as null
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'sessionlog.replace_section is transaction-gated. Observed txn-d613724b84c84a889c4514e80cb55582 failed before mutation with Keyserver manifest signing failed; txn-53d58f8df9594902853299933dc16e99 applied the mutation then rolled it back with Subscriber commit failed Rollback completed. Both surface as InvalidOperationException and McpErrorClassifier maps them to internal_server_error retryable false, so transient Keyserver/subscriber faults look fatal. A later designDecisions replace_section returned success=true replaced=true while sessionlog_query listed designDecisions as null: PUT with a null or empty matching property clears the string-list section and MapStringListToDto returns null for an empty list, and the tool success envelope does not echo persisted values. Failsafe YAML under the RomM GrokCode pending path is client-side queueing, not a server persist defect.'
+      - 'Triage group: triage-group-7b96938881f2dec6'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog.replace_section Keyserver manifest signing failure returns a classified retryable tool/HTTP error, does not persist the section change, and leaves the existing turn graph queryable.'
+      - '- sessionlog.replace_section subscriber commit failure rolls back, reports that rollback completed, restores the pre-image turn graph, and returns a classified retryable error rather than internal_server_error retryable false.'
+      - '- sessionlog.replace_section of designDecisions with a non-empty string array returns success and a later sessionlog_query of that turn returns those same strings, not null.'
+      - '- A named-section replace that clears designDecisions (omitted or empty payload) must not look like a successful write of values: either reject the empty named replace or return the persisted section contents in the success envelope so query-null is an explicit clear.'
+      - 'Implementation notes:'
+      - '- TurnTransactionCoordinator signs via IKeyServerManifestService before mutation and returns Keyserver manifest signing failed with mutationApplied false; SignManifestAsync catch maps exceptions to KeyServerUnavailable.'
+      - '- Non-committed subscriber status triggers RollbackMutationAsync then Failure(..., Subscriber commit failed.); TransactionGatedSessionLogService.ToTransactionException appends Rollback completed.'
+      - '- McpErrorClassifier has no KeyServerUnavailable/SubscriberUnavailable branch, so these InvalidOperationExceptions fall through to internal_server_error retryable false. Storage 503 retryable coverage (cluster 144) does not cover this path.'
+      - '- FR-SUPPORT-010G PUT: ReplaceStringListItems with mergeOmittedFields false clears on null/empty; SessionLogServiceReplaceDeleteTests.ReplaceTurnSectionAsync_EmptyPayload_ClearsSection asserts query DesignDecisions is null. Tool SessionLogReplaceSection reports only success/replaced.'
+      - '- Do not implement RomM GrokCode failsafe YAML queueing in this TODO; the server already returned the two transaction errors.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-221
+      title: Codex user-prompt-submit hangs after session_submit failsafe write
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - 'Codex plugin 1.106.0 lib/user-prompt-submit.ps1 opened req-20260916T103908Z-prompt-143b, wrote a valid client.SessionLog.SubmitAsync failsafe, then did not return (observed 99s, required cancel). The YAML payload is Codex (sourceType Codex, sessionId Codex-20260911T180443Z-plugin-session, codex.exe 0.153.4) but the pending path is .mcpServer/failsafe/GrokCode/workspaces/... because Get-McpFailsafeAgentSegment prefers inherited PLUGIN_AGENT_NAME/MCP_AGENT_NAME over the Codex host/session. After Write-ReplFailsafe, Invoke-ReplPersistTurn blocks in Invoke-ReplRaw SubmitAsync; the 30s method timeout never bounded the hook (stdin CopyTo/StandardInput.Close are untimed; PowerShell.Mcp outer stderr redirect can also stall the child after repl starts). Expected: return within the short sessionlog timeout with a persisted or degraded queued receipt, and queue under the Codex failsafe namespace.'
+      - 'Triage group: triage-group-0e3df16b5ea6f1f7'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- user-prompt-submit returns within the default 30s sessionlog timeout after writing session_submit failsafe, with either a durable persist receipt or degraded queued=true and failsafePath set'
+      - '- A Codex-hosted user-prompt-submit writes pending failsafe YAML under .mcpServer/failsafe/Codex/workspaces/<workspace-key>/pending, not GrokCode, even when the parent PowerShell.Mcp process has PLUGIN_AGENT_NAME or MCP_AGENT_NAME=GrokCode'
+      - '- Failsafe params.sessionLog.sourceType and sessionId stay Codex and match the Codex runtime; inherited Grok env must not select the agent path segment'
+      - '- A hung or silent mcpserver-repl SubmitAsync (blocked stdin copy, unclosed stdout, or filled stderr) cannot keep the hook process alive past the method timeout; the session_submit file remains on disk'
+      - 'Implementation notes:'
+      - '- Open-PluginTurn -> workflow.sessionlog.beginTurn -> Invoke-ReplPersistTurn already writes the failsafe then calls SubmitAsync; the existing timeout/503 degraded path in repl-invoke.ps1 is unreachable if SubmitAsync never returns'
+      - '- Bound the entire SubmitAsync child lifetime, including Process.Start, stdin CopyTo, and StandardInput.Close, not only ReadToEndAsync.Wait; on timeout keep the in-flight failsafe and return queued'
+      - '- Get-McpFailsafeAgentSegment in resolve-cache-dir.ps1 ranks PLUGIN_AGENT_NAME ahead of MCP_AGENT_NAME; plugin-env.ps1 sets MCP_AGENT_NAME from HostName but does not clear inherited PLUGIN_AGENT_NAME. Derive the failsafe agent segment from the canonical Codex host/session source type, not leftover parent env'
+      - "- Invoke-McpPlugin.ps1 and PowerShell.Mcp invocations inherit the caller environment; do not let a Grok parent pin the Codex hook's failsafe tree"
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-225
+      title: hostile_review_submit returns opaque SDK invocation error instead of HostileReviewResult
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - "Native hostile_review_submit failed twice from NeuralNetworks with only: An error occurred invoking 'hostile_review_submit'. No requestId, diagnostic code, or HostileReviewResult was returned. FwhMcpTools.HostileReviewSubmit calls ApplyWorkspaceOverride and HostileReviewService.SubmitAsync with no try/catch, so any exception is wrapped by the MCP SDK as that generic string. Session-log tools already convert the same class of failure through McpToolErrors.Serialize. The MCP tool also requires scopeStatement and requestingAgent even though SubmitAsync defaults them, so a call that only supplies workspacePath, targetType, and mode can fail before a structured result is produced. SubmitAsync can also throw ArgumentException from Path.GetFullPath when CurrentWorkspaceId is empty."
+      - 'Triage group: triage-group-03198a0a98c0628a'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- Calling hostile_review_submit with an authenticated workspacePath plus targetType and mode returns serialized HostileReviewResult JSON (success or structured failure) and never the opaque string An error occurred invoking 'hostile_review_submit'."
+      - '- Omitting scopeStatement and/or requestingAgent still returns structured JSON: either a successful queued HostileReviewResult using the service defaults, or a McpToolErrors payload with code, message, and retryable.'
+      - '- Any exception from ApplyWorkspaceOverride or SubmitAsync is caught in the tool and returned via McpToolErrors.Serialize rather than escaping to the MCP SDK invocation wrapper.'
+      - '- A structured failure includes errorCode and, on success, a non-empty requestId so independent adversarial review can record a durable receipt.'
+      - 'Implementation notes:'
+      - '- Mirror FwhMcpTools.SessionLog: put ApplyWorkspaceOverride inside try and catch Exception to McpToolErrors.Serialize. Apply the same guard to hostile_review_status, hostile_review_get, and hostile_review_query.'
+      - '- Make scopeStatement and requestingAgent optional on the MCP tool (string? with defaults) so they match HostileReviewService.SubmitAsync, which already substitutes empty scope and requestingAgent=unknown.'
+      - '- In HostileReviewService.SubmitAsync, do not call Path.GetFullPath on an empty constructor-captured _workspaceId; treat a blank workspace id as a structured foreign_workspace or backend failure instead of throwing.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-226
+      title: sessionlog_complete_turn subscriber commit fails on post-compaction additive reopen
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+      description:
+      - "sessionlog_complete_turn is a supported additive upsert (FR-SUPPORT-014): CompleteTurn sets status=completed and calls UpsertTurnAsync, which merges onto an existing turn including one that is already completed. TransactionGatedSessionLogService gates that as sessionlog.upsert_turn. The coordinator applies the local mutation, then subscriber CommitDiffgramAsync is rejected; Failure() hardcodes 'Subscriber commit failed.', rollback of the pre-image session graph succeeds, and ToTransactionException surfaces exactly the reported message. McpErrorClassifier then maps that InvalidOperationException to non-retryable internal_server_error (500), dropping TransactionFailureReason (SubscriberUnavailable, CommitTimeout, StaleSequence, hash/decrypt mismatch, and so on). Post-compaction reopen-and-complete is the documented stateless lifecycle (begin reopens, complete merges). Rollback means the earlier completed turn is preserved and the additive compaction update is lost. TEST-MCP-161 covers submit/replace/delete commit-fail rollback, not UpsertTurnAsync, which is the complete_turn path."
+      - 'Triage group: triage-group-29e4a2b4b1b47130'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Calling sessionlog_complete_turn (or POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/complete) on an already completed turn with the same requestId and an additive payload persists the merge and returns success when the subscriber is healthy.'
+      - '- A second complete_turn after a prior successful complete of that turn (compaction-style additive update) also persists and returns success when the subscriber is healthy.'
+      - "- When subscriber commit is rejected after the local upsert, the client response includes the structured TransactionFailureReason and whether rollback completed; it must not be only the generic 'Subscriber commit failed.' string classified as internal_server_error."
+      - '- SubscriberUnavailable and CommitTimeout on this path are classified retryable (not retryable=false internal_server_error).'
+      - '- After a rejected subscriber commit, the turn graph matches the pre-mutation state (already-completed turn and its children unchanged), and a later retry of the same complete_turn succeeds once the subscriber accepts the commit.'
+      - 'Implementation notes:'
+      - "- Path: FwhMcpTools.SessionLog.SessionLogCompleteTurn -> SessionLogController.FinalizeTurnAsync -> SessionLogService.UpsertTurnAsync -> TransactionGatedSessionLogService.ExecuteMutationAsync('sessionlog.upsert_turn') -> TurnTransactionCoordinator.ExecuteAsync -> CommitDiffgramAsync. Failure at TurnTransactionCoordinator.cs around the 'Subscriber commit failed.' return; exception text at TransactionGatedSessionLogService.ToTransactionException; tool/REST envelope at McpErrorClassifier."
+      - '- Do not treat already-completed turns as immutable on the REST/MCP complete_turn path; additive merge on reopen is intentional. Fix commit confirmation, reason surfacing, and error classification rather than rejecting the second complete.'
+      - '- Include commit.Reason in Failure/ToTransactionException. Classify coordinator failures separately from generic 500, with retryable=true for SubscriberUnavailable and CommitTimeout.'
+      - '- Add a TEST-MCP-161-style UpsertTurnAsync commit-fail test (missing today) plus a healthy-subscriber test that completes the same requestId twice with an additive post-compaction payload.'
+      - '- The reported txn did not include the subscriber reason. Investigate timeout, subscriber unavailable, stale sequence, and hash/decrypt mismatch on large post-compaction turnJson. CaptureSessionAsync snapshots the entire session graph (all turns and children) before every upsert; a long session can delay mutation before commit even though the diffgram body is only the TurnPayload.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-229
+      title: sessionlog_begin_turn SaveChanges fails after successful sessionlog_open
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - sessionlog_open persists only the SessionLogs row and succeeds. The immediately following sessionlog_begin_turn inserts the first SessionLogTurns row via UpsertTurnAsync and dies at SaveChanges with a non-retryable 500. Unlike SubmitAsync (used by open), UpsertTurnAsync does not run SessionLogSchemaGuard, does not retry UNIQUE races, and uses raw SaveChangesAsync. REST BeginTurn/UpsertLifecycleTurnAsync also does not catch DbUpdateException, so the EF message An error occurred while saving the entity changes escapes as internal_server_error retryable=false. The first-turn-after-open shape matches a SessionLogTurns schema or constraint failure that SessionLogs-only open never hits, especially missing PlanFile/TodoId columns (required, migration AddSessionLogTurnPlanFileAndTodoId) which the schema guard never probes.
+      - 'Triage group: triage-group-c935adecf602ba5e'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After sessionlog_open succeeds for a new Codex (or any agent) session, sessionlog_begin_turn with a valid requestId and planFile/todoId (including None/None) persists an in_progress turn and returns success without internal_server_error.'
+      - '- A DbUpdateException during begin_turn is classified as persistence_error or conflict with details.inner set to the provider text, retryable only for SQLITE_BUSY, and is never returned as internal_server_error with the raw EF saving-entity-changes message.'
+      - '- If SessionLogTurns is missing PlanFile or TodoId (or other required turn columns), begin_turn fails closed with pending_migration before SaveChanges, matching the SessionLogs agent-header guard used by open/query.'
+      - '- A UNIQUE constraint on SessionLogTurns (SessionLogId, RequestId) during begin_turn is retried as an update of the existing turn, the same way SubmitAsync retries SessionLogs UNIQUE races.'
+      - 'Implementation notes:'
+      - '- Primary persist path: FwhMcpTools.SessionLogBeginTurn -> UpsertLifecycleTurnToolAsync -> SessionLogService.UpsertTurnAsync -> _db.SaveChangesAsync. Open path: OpenSessionAsync -> SubmitAsync (schema guard, SaveChangesBudgetedAsync, UNIQUE retry).'
+      - '- REST gap: SessionLogController.UpsertLifecycleTurnAsync catches only ArgumentException and InvalidOperationException. SubmitAsync also catches DbUpdateException. An uncaught DbUpdateException becomes HTTP 500 internal_server_error retryable=false via GlobalExceptionHandlerMiddleware fallback/detail sanitization.'
+      - '- Schema gap: SessionLogSchemaGuard probes only SessionLogs AgentSession header columns. SessionLogTurns.PlanFile and TodoId are required (SQLite snapshot unique index SessionLogId+RequestId). QueryAsync maps missing header columns to SessionLogSchemaPendingMigrationException; UpsertTurnAsync does not.'
+      - '- Happy-path coverage already exists in SessionLogLifecycleToolErrorTests.SessionLogBeginTurn_NoneNone_ReturnsSuccess on an in-memory EnsureCreated schema. Add a SQLite predecessor-schema test (open succeeds, begin must not 500) and a REST BeginTurn DbUpdateException envelope test.'
+      - '- Do not treat this as a requestId format bug: req-20260916T170000Z-commit-valhalla-dependency matches SessionLogIdentifierValidator.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-232
+      title: sessionlog_begin_turn rolls back when subscriber commit fails
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+      description:
+      - "sessionlog_begin_turn maps to TransactionGatedSessionLogService.UpsertTurnAsync (operation sessionlog.upsert_turn). The turn mutation is applied, then TurnTransactionCoordinator.CommitDiffgramAsync must return committed or duplicate. Any other subscriber status triggers compensation with a generic Subscriber commit failed message and, when rollback succeeds, the exception Turn transaction coordinator did not commit sessionlog.upsert_turn '{txn}': Subscriber commit failed. Rollback completed. That matches txn-462e9f7d4be2483c9177565b406cbbd4 for req-20260916T184316Z-vice-sharp-readme on NeuralNetworks. The in-progress Codex turn is not persisted. The same post-mutation commit failure was reported on the preceding commit-sync turn, so this is a repeated subscriber-commit reject, not a one-off rollback bug. ToTransactionException currently prefers that generic Message and omits commit.Reason (CommitTimeout, SubscriberUnavailable, StaleSequence, ReplayNonce, hash/decrypt mismatch, DuplicateConflict)."
+      - 'Triage group: triage-group-a83bd7ae192db96b'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog_begin_turn for a new Codex requestId persists an in_progress turn in the target workspace session log and returns success when subscriber commit confirms.'
+      - '- When subscriber commit does not confirm, begin_turn fails, the in_progress turn is not left persisted, and the exception includes transaction id plus the structured commit.Reason rather than only Subscriber commit failed. Rollback completed.'
+      - '- Consecutive mutating session-log operations (commit-sync then begin_turn) either both persist or both fail with that structured reason.'
+      - 'Implementation notes:'
+      - '- Keep the named path: FwhMcpTools sessionlog_begin_turn -> ISessionLogService.UpsertTurnAsync -> TransactionGatedSessionLogService ExecuteMutationAsync("sessionlog.upsert_turn") -> TurnTransactionCoordinator.ExecuteAsync.'
+      - '- Do not treat successful rollback as the defect; rollback is intended compensation after a non-committed/non-duplicate DiffgramCommitResponse. The defect is that begin_turn cannot persist because subscriber commit does not confirm.'
+      - '- Surface commit.Reason in ToTransactionException (TransactionGatedSessionLogService) instead of replacing it with the generic Subscriber commit failed message.'
+      - '- Inspect subscriber commit for the failing txn: timeout (CommitTimeoutSeconds), HTTP/direct pub-sub SubscriberUnavailable, and InMemorySubscriberCommitService rejects. Sequence is per gated-service instance (unix milliseconds) while lastSequence is global per publisher/subscriber pair with Sequence <= lastSequence as StaleSequence.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-234
+      title: Stop gate blocks completed turns on a stale session-state timestamp
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Close-PluginTurnIfNeeded (plugin-hook.ps1, invoked as stop-gate) hard-blocks when session-state.yaml timestamp or lastUpdated is older than 24 hours, before it inspects current-turn.yaml status. After sessionlog_complete_turn successfully completed req-20260917T120934Z-diagnose-full-suite-hang (turn 45181) in Codex-20260915T201211Z-r0-parity, stop-gate still emitted decision=block with 'stale cached session cannot be reused for req-20260916T103908Z-prompt-143b'. That requestId is read from the local current-turn.yaml pin and is unrelated to the completed server turn. Open-PluginTurn already refreshes lastUpdated on the same 24h condition and continues; stop-gate does not. There is no Pester coverage of this 24h short-circuit.
+      - 'Triage group: triage-group-a009b840bb53ffaf'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- After the active session-log turn is already completed (workflow.sessionlog.completeTurn or sessionlog_complete_turn succeeded), stop-gate must not emit decision=block with reason 'stale cached session cannot be reused for <requestId>'."
+      - '- A session-state.yaml timestamp or lastUpdated older than 24 hours must not by itself block stop when current-turn.yaml is missing, status=completed, or its turnRequestId is not the in-progress turn.'
+      - '- The block reason must not cite a stale pinned current-turn.yaml requestId that is unrelated to the turn that was just completed.'
+      - '- Pester seeds session-state.yaml with timestamp/lastUpdated older than 24 hours and current-turn.yaml status=completed (plus a variant whose pinned turnRequestId differs from the completed server request) and asserts stop-gate returns allow/empty JSON with no stale-cache block.'
+      - 'Implementation notes:'
+      - "- The defect is the 24h short-circuit in Close-PluginTurnIfNeeded in plugins/core/lib-ps/plugin-hook.ps1 (the 'stale cached session cannot be reused' Write-PluginJson). stop-gate.ps1 is only the generated wrapper; change the shared hook function."
+      - '- Move or drop that check so completed/absent current turns fall through to the existing allow path. Align with Open-PluginTurn, which refreshes lastUpdated on the same age condition instead of blocking.'
+      - '- Prefer lastUpdated for recency. Do not treat a static session-start timestamp as proof the live session cannot be reused.'
+      - '- If MCP-tool completeTurn can close the server turn without rewriting plugin current-turn.yaml, stop-gate must still allow when the local pin is stale rather than blocking on that pin.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-235
+      title: Scope keyserver signing to QuadBrain transactions, not ordinary session-log writes
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - Native sessionlog_begin_turn for GrokCode (non-QuadBrain) routed sessionlog.upsert_turn through ITurnTransactionCoordinator and failed closed with Keyserver manifest signing failed (txn-082d9e0fd0a94d7f8fe615dfc820c65d); a retry then committed turnId 45191. TransactionGatedSessionLogService.ExecuteMutationAsync always calls the coordinator when it is registered. TurnTransactionCoordinator.ExecuteAsync then calls SignManifestAsync whenever Mcp:TurnTransactions Enabled and RequiredForMutations are true. Live C:\ProgramData\McpServer\appsettings.yaml has both true (QuadBrain brain-slot patch); repo default appsettings.yaml has Enabled=false. FR-MCP-120 currently requires session-log writes to go through coordinator/keyserver while required transactions are active, which conflicts with operator intent that keyserver is QuadBrain-only.
+      - 'Triage group: triage-group-81f17141af2ec492'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Native sessionlog_begin_turn / sessionlog.upsert_turn from a non-QuadBrain caller (for example GrokCode) does not invoke keyserver SignManifestAsync even when Mcp:TurnTransactions:Enabled=true and RequiredForMutations=true.'
+      - '- Ordinary session-log mutations succeed without a keyserver signature and do not fail closed on keyserver unavailability.'
+      - '- QuadBrain mutating transactions still require keyserver manifest signing and fail closed when signing fails.'
+      - '- FR-MCP-120 (or a follow-on requirement) no longer treats ordinary session-log writes as unconditionally coordinator/keyserver gated when turn transactions are enabled for QuadBrain.'
+      - 'Implementation notes:'
+      - '- Narrow TransactionGatedSessionLogService.ExecuteMutationAsync (or the coordinator bypass) so sessionlog.* mutations skip keyserver unless the call is a QuadBrain transaction (brain-slot/party context).'
+      - '- Do not rely on globally flipping TurnTransactions.Enabled: config/brain-slots/quad-brain-slot-assignments.yaml patches Enabled=true and RequiredForMutations=true for the whole host.'
+      - '- Existing coordinator bypass (!Enabled or !RequiredForMutations) is host-wide and cannot distinguish GrokCode session-log from QuadBrain transactions.'
+      - '- Update FR-MCP-120 acceptance criteria so session-log writes are not unconditionally keyserver-gated; keep QuadBrain mutation gating.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-236
+      title: sessionlog_begin_turn rolls back after subscriber commit failure
+      section: Backlog
+      priority: high
+      done: false
+      note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+      description:
+      - Native sessionlog_begin_turn for Codex-20260915T201211Z-r0-parity / req-20260917T134022Z-existing-gigdriving-app failed as nonretryable internal_server_error. The tool upserts an in_progress turn through TransactionGatedSessionLogService.UpsertTurnAsync (operation sessionlog.upsert_turn). TurnTransactionCoordinator signs the manifest, applies the session-log mutation, then CommitDiffgramAsync via pub-sub/subscriber did not return committed or duplicate for txn-0c488a1a6c48404d861edbdecaa5a2ea. The coordinator always replaces the structured commit.Reason with the generic message Subscriber commit failed., rolls back the mutation, and TransactionGatedSessionLogService throws InvalidOperationException (Rollback completed.). McpErrorClassifier maps that InvalidOperationException to retryable=false internal_server_error, so clients do not retry even for timeout or subscriber-unavailable. This is the post-mutation subscriber-commit stage of FR-MCP-120, not the earlier Keyserver manifest signing failed path (mutation never applied). Deduplicate only with other Subscriber commit failed. Rollback completed. reports.
+      - 'Triage group: triage-group-f9334cab9e154918'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- sessionlog_begin_turn on an existing session either commits sessionlog.upsert_turn (committed or duplicate) or returns a classified error that includes the subscriber commit.Reason (timeout, subscriber unavailable, hash mismatch, stale sequence, replay nonce, decrypt failure, or duplicate conflict).'
+      - '- When subscriber commit fails, the local session-log mutation stays rolled back: no orphan in_progress turn remains for that sessionId and requestId.'
+      - '- Subscriber unavailability and commit timeout are not classified as nonretryable internal_server_error.'
+      - 'Implementation notes:'
+      - '- Do not merge with Keyserver manifest signing failed reports: those fail in SignManifestAsync before mutation (mutationApplied false). This report is the later CommitDiffgramAsync reject/timeout/unavailable path.'
+      - '- TurnTransactionCoordinator.ExecuteAsync discards commit.Reason and always emits Subscriber commit failed. Preserve Reason (and DiffgramCommitResponse.Message if present) in TurnTransactionResult.Message so ToTransactionException can surface it.'
+      - '- McpErrorClassifier.Classify falls through generic InvalidOperationException to InternalError retryable false. Map TransactionFailureReason.CommitTimeout and SubscriberUnavailable to retryable timeout/backend-style codes.'
+      - '- Investigate live subscriber reject cause for txn-0c488a1a6c48404d861edbdecaa5a2ea: InMemorySubscriberCommitService can reject on verify failure, encrypted-body hash mismatch, decrypt failure, stale sequence, replay nonce, or duplicate conflict; the coordinator also maps publish exceptions to SubscriberUnavailable and commit deadline to CommitTimeout.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-239
+      title: Session log persist omits planFile after recovered-session rebind
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - "Plugin 1.107.0 session-start recovery mints a new sessionId and rebinds leftover current-turn.yaml onto that session. workflow.sessionlog.appendActions and updateTurn then persist via client.SessionLog.SubmitAsync without PlanFile/TodoId. New-McpPluginTurnUpsertRequest drops empty values, so the turn payload omits planFile. Submit treats the rebound requestId as a new turn and SessionLogTurnContextValidator.ValidateForNewEntry returns HTTP 400 'planFile is omitted'. current-turn.yaml already had planFile: None, and an explicit updateTurn planFile/todoId is ignored because updateTurn never reads those params. Two session_submit failsafe files are the expected side effect of those failed persists."
+      - 'Triage group: triage-group-d6001c20566c7d2f'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- After session-start recovery or sessionId rotation that rebinds current-turn.yaml, workflow.sessionlog.appendActions on that rebound turn returns success and does not return HTTP 400 'Invalid session turn planFile/todoId: planFile is omitted'."
+      - '- workflow.sessionlog.updateTurn with planFile and todoId in params includes those exact values on the SubmitAsync turn payload and does not omit planFile.'
+      - '- When current-turn.yaml has planFile: None and todoId: None, incremental persist sends the sentinel string None (not a missing property) so a rebound turn is accepted as a new entry.'
+      - '- A failed appendActions/updateTurn caused by omitted planFile does not leave a pending session_submit failsafe YAML for that call.'
+      - 'Implementation notes:'
+      - '- Defect is in plugins/core/lib-ps/repl-invoke.ps1: Invoke-WorkflowAppendActions and Invoke-WorkflowUpdateTurn call Invoke-ReplPersistTurn without -PlanFile/-TodoId. Only beginTurn passes those fields.'
+      - '- Assert-ReplCurrentTurnFresh (TR-MCP-PLUGIN-012) rewrites current-turn.yaml sessionId onto the recovered session, then SubmitAsync applies ValidateForNewEntry because that requestId is not on the new session.'
+      - '- Invoke-WorkflowUpdateTurn currently copies only response, interpretation, tokenCount, tags, and contextList from params. It must also accept planFile/todoId, write them to current-turn.yaml, and pass them through persist.'
+      - '- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 only serializes planFile/todoId when non-empty. Incremental persist must supply the cache values or the None sentinel rather than relying on omitted-field merge.'
+      - '- Do not weaken ValidateForNewEntry. First persist of a rebound turn on a recovered session is a new entry and must keep required planFile/todoId.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-245
+      title: Degraded Codex beginTurn drops query text and blocks updateTurn
+      section: Backlog
+      priority: high
+      done: false
+      description:
+      - After a healthy marker rewrite, UserPromptSubmit calls workflow.sessionlog.beginTurn. When SubmitAsync is queued to failsafe (timeout or HTTP 503), beginTurn still returns success and Complete-ReplBeginTurnAfterPersist rewrites current-turn.yaml to only turnRequestId, sessionId, and status in_progress, dropping queryText and queryTitle. The begin failsafe record still has the prompt, but workflow.sessionlog.updateTurn does not accept queryText, omits queryTitle unless that call sets it, and submits queryText as an empty string. If the server turn is not created yet, that submit is a first persist with no planFile or todoId and SessionLogTurnContextValidator.ValidateForNewEntry rejects it. If the turn already exists, ApplyValue treats the empty queryText as supplied and clears the stored query. Replaying beginTurn is the only path that writes queryText again.
+      - 'Triage group: triage-group-5c25c7ead8bad7d3'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After UserPromptSubmit beginTurn for a request such as req-20260923T164803Z-prompt-ccb9 is queued to failsafe following a healthy marker rewrite, current-turn.yaml remains status in_progress and still contains the original queryText and queryTitle.'
+      - '- workflow.sessionlog.updateTurn on that turn succeeds, and the server turn with the same requestId is queryable with that same queryText, without replaying beginTurn.'
+      - '- An updateTurn persist does not store an empty queryText over a server turn that already has query text.'
+      - '- While the begin payload is still only in the failsafe queue, updateTurn does not fail for a missing planFile or todoId that the queued begin payload already captured.'
+      - 'Implementation notes:'
+      - '- Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1 replaces the full current-turn.yaml from Invoke-WorkflowBeginTurn with a three-field stub. Keep queryText, queryTitle, openedAt, planFile, todoId, and the marker snapshot on the degraded in_progress cache.'
+      - '- Invoke-ReplTurnUpsertParams copies query text only from the cache, then from Title. Invoke-WorkflowUpdateTurn leaves Title empty unless queryTitle is passed, and ReplYamlMessageValidator does not allow queryText on workflow.sessionlog.updateTurn. Omit an empty queryText from the SubmitAsync payload so SessionLogService.ApplyValue does not treat "" as supplied.'
+      - '- The begin failsafe record is written before the stub overwrite and already contains queryText, planFile, and todoId. Replay that record before the update submit, or copy those fields onto the update payload.'
+      - '- BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued only checks the stub fields. Extend it so a degraded begin keeps queryText.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-165
+      title: appendDialog POST returns internal_server_error while sibling session-log writes succeed
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.appendDialog is intercepted by Invoke-WorkflowAppendDialog and calls client.SessionLog.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog -> SessionLogController.AppendDialogAsync -> AppendProcessingDialogAsync). That path returned method_invocation_error wrapping McpServerException with internal_server_error. The extracted error string matches GlobalExceptionHandlerMiddleware (payload.error=internal_server_error), not the controller ClassifiedError envelope, so an exception other than InvalidOperationException escaped AppendDialogAsync. appendActions, updateTurn, and completeTurn succeeded because they persist via Invoke-ReplPersistTurn (full session SubmitAsync/upsert), and queryHistory succeeded against the same cache, so the session/turn existed. Plugin still incremented current-turn.yaml auditDialog before the server call and did not roll it back; completeTurn then left local status=completed with auditDialog=3 even though the dialog POST failed.
+      - 'Triage group: triage-group-f9d6f7c128eb8e3f'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Given an existing turn that PersistTurn/upsert and queryHistory succeed against, POST .../dialog with at least one valid dialog item returns HTTP 200 and totalDialogCount increases by the posted item count.'
+      - '- A non-InvalidOperationException from AppendProcessingDialogAsync (for example DbUpdateException) is returned as a classified session-log error (not_found, persistence_error, validation_error, or backend_unavailable) rather than HTTP 500 with error=internal_server_error.'
+      - '- When appendDialog fails, current-turn.yaml auditDialog is unchanged from before the call.'
+      - '- After a failed appendDialog, a later successful completeTurn does not leave local auditDialog higher than the server-side processing dialog count for that requestId.'
+      - 'Implementation notes:'
+      - "- SessionLogController.AppendDialogAsync only catches InvalidOperationException and maps 'not found' to 404. Other exceptions fall through to GlobalExceptionHandlerMiddleware as opaque internal_server_error. Widen the catch and use ClassifiedError, matching the RequirementsController BUG-TRIAGE-073 pattern."
+      - '- AppendProcessingDialogAsync uses raw SaveChangesAsync. Submit/Replace/Upsert used by PersistTurn use SaveChangesBudgetedAsync. Keep dialog persist on the same save/classification path as those sibling mutations.'
+      - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog increments auditDialog before Invoke-ReplRaw client.SessionLog.AppendDialogAsync. Move the increment after success, or roll it back on failure. Failsafe currently queues only timeout/503, so a 500 drops the dialog items.'
+      - '- Do not treat local current-turn.yaml status=completed plus auditDialog as proof the incremental dialog POST persisted.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-166
+      title: Plugin getTest/listTest fail for existing TEST rows
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - 'Native mcpserver__requirements_list type=test already returns TEST-MCP-SESSIONLOG-006 with 15 acceptance criteria, so the row exists. Invoke-McpPlugin workflow.requirements.getTest hits the REPL client GET /mcpserver/requirements/test/{id} path (RequirementsController.GetTestByIdAsync). That action has no catch, so any throw becomes GlobalExceptionHandler internal_server_error; the REPL wraps it as method_invocation_error with exceptionType McpServerException. workflow.requirements.listTest area=MCP uses GET /mcpserver/requirements/test?area=MCP (QueryTestAsync over every TEST-MCP-* row plus criteria) and the plugin wrapper reported False; Invoke-McpPlugin defaults to a 90s timeout and large YAML results can fail even when in-process GetAllTestAsync succeeds. Budget exhaustion is unconfirmed (Invoke-McpPlugin has no budget field). Related gap: plugins/core/lib-node/src/tools/requirements.ts workflowMethodMap maps req_get_fr but omits req_get_test and req_get_tr.'
+      - 'Triage group: triage-group-c295520c2b5c6adb'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Invoke-McpPlugin workflow.requirements.getTest with id TEST-MCP-SESSIONLOG-006 returns a result envelope for that TEST, not method_invocation_error / internal_server_error (McpServerException).'
+      - '- Invoke-McpPlugin workflow.requirements.listTest with area MCP returns TEST items that include TEST-MCP-SESSIONLOG-006, not False or an error envelope.'
+      - '- Native requirements_list type=test continues to return TEST-MCP-SESSIONLOG-006 with its acceptance criteria.'
+      - 'Implementation notes:'
+      - '- Plugin path: Invoke-McpPlugin -> repl-invoke.ps1 -> workflow.requirements.getTest -> RequirementsWorkflow.GetTestAsync -> RequirementsClient GET mcpserver/requirements/test/{id} -> RequirementsController.GetTestByIdAsync. Do not treat this as a missing TEST row.'
+      - '- GetTestByIdAsync has no try/catch; unhandled exceptions become opaque internal_server_error. Mirror the classified-error pattern used by RepairFrPlaceholdersAsync and capture the server exception type/message in the REPL details.'
+      - '- listTest area=MCP is QueryTestAsync with prefix TEST-MCP-; it can be a large payload through the YAML REPL. Check plugin timeout (default 90s) and result size separately from get-by-id.'
+      - '- Add req_get_test and req_get_tr to workflowMethodMap (and typedMethodMap) in plugins/core/lib-node/src/tools/requirements.ts; typedParams already handles req_get_test.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-167
+      title: Classify SQL Session Provider error 19 as retryable backend_unavailable
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - sessionlog_dialog failed with internal_server_error carrying SqlClient Session Provider error 19 (Physical connection is not usable). A retry then returned backend_unavailable. /health later reported Healthy with storage reachable, and sessionlog_replace_section succeeded, so this was a transient pooled/transport drop, not a marker-trust failure. StorageBackendUnavailability maps connection-class SqlException numbers to backend_unavailable, but 19 is not in s_sqlConnectionErrorNumbers and IsSqlHandshakeFailure only matches pre-login/SSL text. Unrecognized transport failures fall through McpErrorClassifier to internal_server_error with retryable false, so the first sessionlog_dialog call violates the FR-MCP-TRIAGEERR-001 / TR-MCP-HEALTH-003 contract. ConnectRetryCount already covers open; EnableRetryOnFailure stays off because of user-initiated transactions, so callers must see retryable backend_unavailable on this error.
+      - 'Triage group: triage-group-5b9363facd51052d'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- A SqlException with Number 19, or message text containing Session Provider error 19 or Physical connection is not usable, classifies as code backend_unavailable, retryable true, HTTP 503 on sessionlog_dialog and the shared classifier.'
+      - '- That failure must not emit internal_server_error or the raw Session Provider text as the tool/REST code or primary message.'
+      - '- After SQL connectivity returns, the same sessionlog_dialog or sessionlog_replace_section call succeeds without a process restart.'
+      - '- /health stays liveness Healthy; the payload storage field reports reachable once the backend is usable again.'
+      - 'Implementation notes:'
+      - '- Add 19 to StorageBackendUnavailability.s_sqlConnectionErrorNumbers in src/McpServer.Support.Mcp/Services/StorageBackendUnavailability.cs.'
+      - '- Extend the SQL transport message matcher (alongside IsSqlHandshakeFailure) to treat Session Provider and Physical connection is not usable as backend-unavailable when Number is not 19.'
+      - '- Add StorageBackendUnavailabilityTests using SqlExceptionFactory.Create(19, ...) and a sessionlog_dialog tool test mirroring SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue.'
+      - '- Do not enable EF EnableRetryOnFailure; SqlServerMcpDatabaseProviderStrategy documents that user-initiated transactions reject the retrying execution strategy. Classification plus client retry is the intended contract.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-168
+      title: Retry SqlClient Session Provider error 19 on sessionlog_dialog without marking storage down
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - During a Wave 6 turn, native sessionlog_dialog returned backend_unavailable with SQL Session Provider error 19 (Physical connection is not usable), then a retryable backend_unavailable. /health still echoed the nonce and native todo_get succeeded, while plugin workflow.requirements.getTest also returned backend_unavailable. This is a dead pooled SQL connection classified as storage-down while SQL Server stayed up. ConnectRetryCount only retries new connection opens. EF EnableRetryOnFailure is intentionally off because session-log and requirements paths use user-initiated transactions, so a command on a broken pooled connection fails immediately.
+      - 'Triage group: triage-group-0968b39fdfb8fbe2'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When SqlClient reports Session Provider error 19 (Physical connection is not usable) during sessionlog_dialog and SQL Server is still up, the append retries on a fresh connection and succeeds instead of returning backend_unavailable.'
+      - '- workflow.requirements.getTest that hits the same error 19 succeeds on retry instead of returning backend_unavailable.'
+      - '- /health continues to echo the request nonce and stay Healthy, and native todo_get continues to succeed during the same window.'
+      - '- backend_unavailable with retryable true is returned only when storage is actually unreachable, not for a single dead pooled connection.'
+      - '- Do not enable EF EnableRetryOnFailure on user-initiated transaction paths. Keep the deployed SqlClient ConnectRetryCount=6 and ConnectRetryInterval=10s defaults.'
+      - 'Implementation notes:'
+      - '- sessionlog_dialog is FwhMcpTools.SessionLogDialog, which calls SessionLogService.AppendProcessingDialogAsync. TransactionGatedSessionLogService wraps that path in a user-initiated transaction.'
+      - '- SqlServerMcpDatabaseProviderStrategy applies ConnectRetryCount=6/ConnectRetryInterval=10s and documents that command-level EnableRetryOnFailure is unused because the retrying execution strategy rejects user-initiated transactions (session-log and requirements writes).'
+      - '- StorageBackendUnavailability maps transient SqlExceptions to backend_unavailable. Number 19 is not in s_sqlConnectionErrorNumbers (20 is). Classification of this flake is via IsTransient or inner provider text, which is why clients see retryable backend_unavailable while /health stays up (TR-MCP-HEALTH-003).'
+      - '- Related prior work: BUG-TRIAGE-079 / TR-MCP-DB-006 serialized concurrent sessionlog_delete_turn to reduce pool poisoning (error 19 then 40). This report is dialog append plus a requirements read, not a delete burst.'
+      - '- Preferred fix is a bounded reconnect retry (discard the broken pooled connection or ClearPool, then retry once) around the gated save/query for Session Provider error 19, without turning on EnableRetryOnFailure.'
+      - '- Original report workspace was F:\GitHub\TruckMate; MCP host is F:\GitHub\McpServer. Product work continued after the flake.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-172
+      title: Repair three unpostable Codex failsafe SessionLog.SubmitAsync quarantine records
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - After 167 successful Codex failsafe SessionLog.SubmitAsync replays, three files remain in F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine and still reject. 20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml stores turns as a string-keyed map ("0") instead of a sequence, so SubmitAsync cannot deserialize sessionLog.turns to List<UnifiedRequestEntryDto>. 20260817T123057Z-session_submit-d5f9.yaml and 20260817T123219Z-session_submit-9ad7.yaml have list-shaped turns but omit planFile and todoId; SessionLogTurnContextValidator.ValidateForNewEntry rejects omitted planFile. DrainAttempts already exceeded; later replay still fails. Files were not deleted.
+      - 'Triage group: triage-group-6538ff0abc1a3aff'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Replaying 20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml through client.SessionLog.SubmitAsync succeeds (map-shaped turns are converted to a list before deserialize, or submit accepts the repaired payload).'
+      - '- Replaying 20260817T123057Z-session_submit-d5f9.yaml and 20260817T123219Z-session_submit-9ad7.yaml succeeds without HTTP 400 validation_error Invalid session turn planFile/todoId: planFile is omitted.'
+      - '- After successful replay, those three files are no longer left in F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine.'
+      - '- A failsafe drain of remaining Codex session_submit quarantine files does not leave these three records stuck after DrainAttempts with the same deserialize or omitted-planFile rejection.'
+      - 'Implementation notes:'
+      - '- 3358 payload: params.sessionLog.turns is YAML mapping key "0" with only requestId; UnifiedSessionLogDto.Turns is List/ICollection of UnifiedRequestEntryDto, which requires a JSON array. Repair on drain by converting object-keyed turns to an ordered list; do not loosen the live DTO contract unless a compatibility converter is explicitly chosen.'
+      - '- d5f9 and 9ad7 payloads: turns is a one-item array with requestId req-20260817T104212Z-prompt-6212 but no planFile or todoId. Validator in src/McpServer.Services/Services/SessionLogTurnContextValidator.cs requires both on new persist; allowed sentinel is exact value None. Prefer drain-time injection of None for historical failsafe records over weakening live submit validation.'
+      - '- Do not delete the three quarantine files until they post successfully or are moved to an explicit terminal archive state.'
+      - '- August files currently show lastDrainError internal_server_error after later replay; the on-disk payloads still omit planFile/todoId, which remains a hard validation failure for new-entry submit.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-173
+      title: Codex pending importRecovery YAML has no replay path besides SessionLog.SubmitAsync
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - Codex transcript persist writes write-ahead envelopes at {workspace}/.mcpServer/{agent}/failsafe/pending/<rootId>.<sourceHash>.importRecovery.yaml with root key importRecovery (runId, agent, workspacePath, rootId, sessionId, sourceKind, sourceHash, persisted, degraded, status, yamlArtifactPath, compatibilityArtifactPath, sourceFiles, diagnostics). Plugin failsafe drain only replays client.SessionLog.SubmitAsync session_submit records from Get-McpFailsafeDir. After that drain, 019d6472-5ba7-77d0-9b90-ee0d3f99599a.3fe421946dfc1353.importRecovery.yaml and 019d6481-c77a-74b3-8bd7-103167e0e0bb.b8611bc5364bf417.importRecovery.yaml remain because they are not method/params SubmitAsync records. Envelope deletion happens only in TranscriptIngestionService.PersistPendingAsync after ITranscriptSessionPersister.PersistAsync reports success. There is no drain that reads leftover pending envelopes and re-invokes transcript persist.
+      - 'Triage group: triage-group-c1f7b55905a5f6c3'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Failsafe drain of session_submit queues does not POST *.importRecovery.yaml envelopes through client.SessionLog.SubmitAsync.'
+      - '- A dedicated import-recovery replay walks {workspace}/.mcpServer/{agent}/failsafe/pending/<rootId>.<sourceHash>.importRecovery.yaml documents whose root key is importRecovery.'
+      - '- Replay persists from yamlArtifactPath and/or sourceFiles (re-ingest Persist=true or ITranscriptSessionPersister.PersistAsync), not by treating the envelope as a UnifiedSessionLogDto.'
+      - '- On persisted=true and degraded=false the matching pending envelope is deleted; on persist failure the file stays in failsafe/pending.'
+      - '- Successful replay of the two named Codex pending files removes those files from Codex/failsafe/pending.'
+      - 'Implementation notes:'
+      - '- Writer: TranscriptRunArtifactWriter.WritePendingAsync and CreateRecoveryEnvelope in src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs.'
+      - '- Delete-on-success: TranscriptIngestionService.PersistPendingAsync in src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs; persister maps the transcript session then calls ISessionLogService.SubmitAsync on the DTO, not the envelope.'
+      - '- Plugin drain: Invoke-ReplFailsafeDrain in plugins/core/lib-ps/repl-invoke.ps1 requires method+params and only scans Get-McpFailsafeDir; it does not scan failsafe/pending.'
+      - '- Do not reuse workflow.sessionlog.importRecovery as the envelope drain unless it first loads yamlArtifactPath into a UnifiedSessionLogDto. That API currently merge-submits session logs, not importRecovery envelopes.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-175
+      title: beginTurn degrade path clobbers current-turn.yaml after SubmitAsync timeout
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - 'Grok plugin workflow.sessionlog.beginTurn for req-20260822T141800Z-001-continue-plan-completion hit the designed failsafe-queue path: client.SessionLog.SubmitAsync timed out or returned HTTP 503/backend_unavailable, so persist returned queued/degraded, the session_submit failsafe was kept, and the agent continued PLAN-ANDROIDALIGN-001. That timeout/503 mapping in Invoke-ReplPersistTurn is the FR-MCP-SESSIONPERSIST-002 contract, not a new persist defect. The product bug is Complete-ReplBeginTurnAfterPersist: after Invoke-WorkflowBeginTurn already wrote the full current-turn.yaml (queryTitle, queryText, planFile, todoId, openedAt, audit counters), the degrade helper Set-Content overwrites that file with only turnRequestId, sessionId, and status=in_progress. Later append/complete in the same session then persist from a stripped cache.'
+      - 'Triage group: triage-group-7bfa3538b3f212bc'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.beginTurn persist via client.SessionLog.SubmitAsync times out or returns HTTP 503/backend_unavailable, the call still reports queued/degraded, retains the session_submit failsafe, does not throw, and returns success so the agent can continue.'
+      - '- After that degrade, current-turn.yaml for the same requestId stays status=in_progress and still contains the fields already written for the turn (queryTitle, queryText, planFile, todoId, openedAt, and audit counters). Degrade must not replace the file with a three-field stub.'
+      - '- A later successful persist or failsafe drain of that retained session_submit record writes the same requestId with the original planFile and todoId.'
+      - 'Implementation notes:'
+      - '- Do not treat the SubmitAsync timeout/503 itself as the TODO. Invoke-ReplPersistTurn already classifies timeout|timed out|command_timeout|backend_unavailable|HTTP 503 as degraded/queued and keeps the failsafe. Do not raise the default 30s sessionlog timeout (BUG-TRIAGE-072 hang risk).'
+      - '- Fix Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1: if current-turn.yaml already exists for that requestId, leave it (or merge status=in_progress). Only write a minimal identity file when the turn file is missing.'
+      - '- Incident context: original workspace F:\GitHub\LyftAuditTools, Grok plugin, request req-20260822T141800Z-001-continue-plan-completion, TODO PLAN-ANDROIDALIGN-001. Failsafe replay was correctly deferred.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-176
+      title: sessionlog_open and triage_report return backend_unavailable together when storage is unreachable
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - During a TruckMate GigDriving wireframe comment pass, sessionlog_open returned backend_unavailable and triage_report then failed on the same storage path. sessionlog_open maps storage failures through McpToolErrors to a retryable backend_unavailable envelope. OpenSessionAsync still runs the SessionLogs existence query outside StorageCommandBudget; only SaveChanges is budgeted at 5 seconds. triage_report SubmitReportAsync uses that same budget and McpDbContext, so intake also fails when storage is down, and the MCP tool does not catch SubmitReportAsync exceptions the way SessionLogOpen does. Failsafe continue is the designed operator standing. SQLITE_BUSY inside the budget must not be classified as storage-down.
+      - 'Triage group: triage-group-cab3bbcdfcfbe10f'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When storage is unreachable, sessionlog_open returns {code: backend_unavailable, retryable: true} within about 5 seconds, including the OpenSessionAsync existence query, not only SaveChanges.'
+      - '- When storage is unreachable, triage_report returns the same classified retryable envelope within about 5 seconds, with no partial triage rows and without an unhandled MCP tool error.'
+      - '- Plugin failsafe continue remains valid operator standing; a later retry after storage recovers accepts the queued report.'
+      - '- SQLITE_BUSY or lock-wait inside the storage budget is not classified as backend_unavailable when subsequent TODO or requirements reads succeed.'
+      - 'Implementation notes:'
+      - '- Wrap SessionLogService.OpenSessionAsync existence query (and the rest of open persist) in StorageCommandBudget.ExecuteAsync so the 5 second intake budget covers connect plus command, not only SaveChanges.'
+      - '- Catch exceptions in FwhMcpTools.TriageReport and return McpToolErrors.Serialize(ex), matching SessionLogOpen.'
+      - '- Keep StorageBackendUnavailability mapping for StorageUnavailableException, StorageCommandBudgetExceededException, SqlClient connection-class errors, and SQLite CANTOPEN/IOERR. Do not change /health liveness semantics.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-192
+      title: Start-PluginSession leaves foreign-agent current-turn.yaml under MCP_CACHE_DIR_OVERRIDE
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - Grok session-start via plugins/core/lib-ps/plugin-hook.ps1 Start-PluginSession rewrites session-state.yaml with a new GrokCode sessionId and verified status, but never reads, clears, or replaces current-turn.yaml. With MCP_CACHE_DIR_OVERRIDE pointing at an isolated grok-reviews cache that already held a ClaudeCode current-turn.yaml (sessionId ClaudeCode-20260909T141659Z-plugin-session, turnRequestId req-20260909T141700Z-prompt-0c03), the Grok session stayed verified while the active-turn cache kept ClaudeCode identity. Assert-ReplCurrentTurnFresh already refuses cross-sourceType rebind (ClaudeCode vs GrokCode), so plugin persist stays blocked until the stale turn file is replaced; same-agent rotation still rebinds per TR-MCP-PLUGIN-012. Native sessionlog_open/begin_turn was used as a workaround. No infrastructure repair was attempted.
+      - 'Triage group: triage-group-f2988bfe92f9b625'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After Grok session-start against an MCP_CACHE_DIR_OVERRIDE directory that already contains current-turn.yaml with a ClaudeCode sessionId prefix, current-turn.yaml is removed or rewritten so its sessionId prefix matches the new GrokCode session-state.yaml sessionId.'
+      - '- session-state.yaml still records agent GrokCode, status verified, and the newly minted GrokCode sessionId.'
+      - '- A following plugin beginTurn or completeTurn for that Grok session does not refuse the cache because sourceType prefix differs (ClaudeCode vs GrokCode).'
+      - '- Same-agent sessionId rotation still rebinds current-turn.yaml per TR-MCP-PLUGIN-012 and does not delete a same-sourceType in-progress turn solely because session-start minted a new sessionId.'
+      - 'Implementation notes:'
+      - '- Start-PluginSession in plugins/core/lib-ps/plugin-hook.ps1 writes only session-state.yaml (status, sessionId, agent, marker snapshot, header fields) and returns; it does not touch current-turn.yaml. Grok hooks/scripts/session-start.ps1 is the generated wrapper that calls this function.'
+      - '- MCP_CACHE_DIR_OVERRIDE is highest-precedence cache resolution in plugins/core/lib-ps/resolve-cache-dir.ps1, so isolated grok-reviews directories reuse leftover files instead of an agent-keyed empty cache.'
+      - '- repl-invoke.ps1 Assert-ReplCurrentTurnFresh rebinds same-sourceType session rotation (TR-MCP-PLUGIN-012 / BUG-TRIAGE-071/075) and refuses ClaudeCode vs GrokCode via Test-ReplSessionSourceTypeCompatible (FR-MCP-XAGENT-001). That fail-closed path explains the stuck ClaudeCode turn after a successful Grok session-start.'
+      - '- Fix in Start-PluginSession: if current-turn.yaml sessionId prefix differs from the newly minted agent sessionId, remove or isolate the stale turn file. Do not cross-rebind. Add a Pester case that seeds ClaudeCode current-turn.yaml, runs session-start as GrokCode with MCP_CACHE_DIR_OVERRIDE, and asserts the turn file is gone or GrokCode-prefixed.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-213
+      title: Do not exit 1 when updateTurn queues a session_submit failsafe
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.updateTurn writes current-turn.yaml first, then Invoke-ReplPersistTurn writes a unique session_submit failsafe and calls client.SessionLog.SubmitAsync. On timeout/HTTP 503/backend_unavailable, persist returns false with degraded/queued details and keeps the failsafe, but does not emit that contract. Invoke-WorkflowUpdateTurn treats the false as failure, repl-invoke.ps1 exits 1, and Invoke-McpPlugin.ps1 throws Plugin command failed with exit code 1. That unclassified throw is indistinguishable from a rejected update, so a retry writes another timestamped failsafe and risks duplicate SubmitAsync replay. This violates FR-MCP-171, which requires the same retryable degraded/queued envelope as the existing command_timeout path and forbids throwing.
+      - 'Triage group: triage-group-a7223afe0f5a0c72'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.updateTurn retains a session_submit failsafe after SubmitAsync timeout, HTTP 503, or backend_unavailable, the Codex/plugin wrapper does not throw Plugin command failed with exit code 1.'
+      - '- The caller receives a retryable degraded/queued envelope with persisted false, degraded true, queued true, and the failsafe path, matching the existing command_timeout contract.'
+      - '- current-turn.yaml stays in_progress with the updated turn fields and is not rolled back.'
+      - '- A second updateTurn for the same requestId while that failsafe is queued does not create another session_submit yaml for the same payload.'
+      - '- A later successful persist or failsafe drain submits the turn once and then removes the queued record.'
+      - 'Implementation notes:'
+      - '- The inner persist contract already exists in plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplPersistTurn: Write-ReplFailsafe then SubmitAsync; timeout/503 sets LastReplPersistenceDetails and returns false without throwing. The gap is the wrapper boundary: Invoke-WorkflowUpdateTurn does not surface those details, script-entry maps false to exit 1, and plugins/core/lib-ps/Invoke-McpPlugin.ps1 throws on any nonzero child exit.'
+      - '- Reuse the command_timeout envelope already emitted by Invoke-McpPlugin.ps1 (type error, code command_timeout or a persist-degraded equivalent, retryable true, details.degraded/queued true) instead of a new ad-hoc stderr string. completeTurn already prints degraded details only when persist returns true; updateTurn never prints them.'
+      - '- Write-ReplFailsafe always creates a new {stamp}-session_submit-{random}.yaml. Deduplicate by requestId (or skip a second write while an in-flight/queued record exists for that turn) so retry-after-false-failure cannot enqueue duplicate SubmitAsync payloads.'
+      - '- Cover the process boundary in Pester, not only the inner return-false path from TEST-MCP-195: invoke updateTurn through Invoke-McpPlugin.ps1/Invoke-CodexMcpPlugin.ps1 with a stubbed 503 and assert exit/envelope plus a single failsafe file.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-240
+      title: appendDialog persist failure exits 1 with empty stdout and a queued failsafe
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.appendDialog is a local shim in plugins/core/lib-ps/repl-invoke.ps1. On success or failure it emits no stdout (boolean output is suppressed). Script-entry then exits 1 whenever LastInvokeReplMethodSuccess is false. The timeout/HTTP 503 branch queues a failsafe and returns false without writing stderr, so Invoke-McpPlugin.ps1 sees a non-zero child with empty stdout and throws only 'Plugin command failed with exit code 1' (stderr is not copied into that throw). That matches empty diagnostics while model work continues. Retryable persist is inconsistent with beginTurn, which treats timeout/503 as degraded/queued success and keeps current-turn active. A pending client.SessionLog.SubmitAsync record is written by Invoke-ReplPersistTurn (beginTurn/updateTurn/completeTurn) before the upsert; current appendDialog failsafe is client.SessionLog.AppendDialogAsync. The observed SubmitAsync item is leftover persist-queue state that still needs drain/reconciliation, not proof that appendDialog itself submitted a full session.
+      - 'Triage group: triage-group-e958ce9ca09c2f55'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.appendDialog persist times out or returns HTTP 503 backend_unavailable, the plugin emits a classified diagnostic (code, retryable, degraded, queued, method, failsafe retained) on stdout or stderr before returning. Empty stdout plus empty stderr is a failure.'
+      - "- Invoke-McpPlugin.ps1 must not surface that case as an unclassified 'Plugin command failed with exit code 1' that drops child stderr. Either include child stderr in the wrapper error or emit the same classified YAML envelope used for wrapper command_timeout."
+      - '- Retryable appendDialog persist failure retains the failsafe, leaves current-turn in_progress, and does not block the caller the way a hard persist failure does. Align with beginTurn degraded/queued success, or keep exit 1 only when the classified diagnostic from criterion 1 is present.'
+      - '- mcp-status / failsafe.status identifies the queued method as written (client.SessionLog.AppendDialogAsync versus client.SessionLog.SubmitAsync) so a leftover session_submit record is distinguishable from an appendDialog failsafe.'
+      - '- A successful appendDialog still uses client.SessionLog.AppendDialogAsync and does not fall back to a full-session client.SessionLog.SubmitAsync upsert (TEST-MCP-195).'
+      - 'Implementation notes:'
+      - '- Fix site 1: Invoke-WorkflowAppendDialog timeout/503 branch in plugins/core/lib-ps/repl-invoke.ps1 currently sets LastReplPersistenceDetails and returns false with no [Console]::Error.WriteLine. Script-entry then exit 1 with no stdout.'
+      - '- Fix site 2: plugins/core/lib-ps/Invoke-McpPlugin.ps1 copies child stderr to Console.Error then throws using stdout only. On empty stdout the throw is a generic exit-code message.'
+      - '- Do not retarget appendDialog onto SubmitAsync. PersistTurn still writes method client.SessionLog.SubmitAsync label session_submit before the call; appendDialog writes AppendDialogAsync label session_dialog. Reconcile both queue shapes.'
+      - "- beginTurn already documents the desired degrade contract: Complete-ReplBeginTurnAfterPersist returns success with stderr 'queued/degraded' and keeps current-turn active. Reuse that pattern or the wrapper command_timeout envelope (type: error, code: command_timeout, retryable: true, degraded/queued)."
+      - '- Cover with a Pester case: stub AppendDialogAsync timeout/503, assert classified diagnostic is visible through Invoke-McpPlugin, failsafe remains, current-turn stays in_progress, and SubmitAsync is not invoked.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-241
+      title: Session-log wrapper exits 1 with no diagnostic when appendDialog/completeTurn persist is queued
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - 'A 12834-character Nashville review body was already confirmed on the server via QueryAsync. The following workflow.sessionlog.appendDialog/completeTurn sequence failed with only Plugin command failed with exit code 1. Live status was available with pendingCount 1, failsafeCount 1, quarantine 0, and the turn was still unclaimed. That matches the plugin degrade path: repl-invoke.ps1 writes a failsafe record then returns false and exits 1 without printing the persist message, while Invoke-McpPlugin.ps1 throws using stdout only and drops stderr. The queued record is retained; completion is not durable until drain/retry succeeds.'
+      - 'Triage group: triage-group-6b33badacd78a229'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When appendDialog or completeTurn persist times out or returns HTTP 503, the plugin wrapper surfaces a structured failure that includes degraded=true, queued=true, the failsafe path or pendingCount, and the persist message. It must not throw only Plugin command failed with exit code 1.'
+      - '- On that failure the current turn stays in_progress, the failsafe record remains pending (not quarantined), and workflow.failsafe.status reports pendingCount greater than 0.'
+      - '- After a successful failsafe drain or retry, completeTurn marks the turn completed and QueryAsync still returns the verified review body.'
+      - '- A non-zero plugin exit includes child stderr (and any LastReplPersistenceDetails message) in the wrapper error payload, not only stdout.'
+      - 'Implementation notes:'
+      - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendDialog timeout/503 branch writes failsafe and returns false with no Console.Error line. Invoke-WorkflowCompleteTurn also returns false with no diagnostic when Invoke-ReplPersistTurn returns false; the degraded message is emitted only after a successful persist.'
+      - '- plugins/core/lib-ps/Invoke-McpPlugin.ps1 appends stdout to the thrown exit-code message and omits stderr, so even written diagnostics are dropped if the host only catches the exception.'
+      - '- Recover the existing queued session_submit/session_dialog record with failsafe drain, then retry completeTurn against the same requestId and confirm server status. Do not treat the already-verified QueryAsync body as lost.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-243
+      title: sessionlog updateTurn persist timeout exits 1 with empty body
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.updateTurn failed once during Nashville planning after about 17 seconds, left the previous turn title in place, queued one failsafe YAML, and succeeded on retry while requirements calls stayed healthy. In plugins/core/lib-ps/repl-invoke.ps1, Invoke-ReplPersistTurn always queues client.SessionLog.SubmitAsync, then on timeout or HTTP 503 returns false without writing a diagnostic. Invoke-WorkflowUpdateTurn forwards that false; unlike beginTurn and completeTurn it does not emit LastReplPersistenceDetails. The script entry then exits 1 with empty stdout, so the host surfaces no error body even though failsafe.status correctly shows the queued record.
+      - 'Triage group: triage-group-5fbcaddbf8ca3175'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.updateTurn persist times out or returns HTTP 503, the wrapper still exits non-zero if the requested title was not persisted.'
+      - '- The same failure emits a non-empty diagnostic (stderr or result body) that states degraded/queued persist and includes the failsafe path.'
+      - '- failsafe.status reports the queued session_submit YAML after that failure.'
+      - '- A live sessionlog query after the failed update still shows the previous title; a later updateTurn retry persists the requested title once the backend accepts SubmitAsync.'
+      - '- Other MCP surfaces (for example requirements) remain usable during the transient persist failure.'
+      - 'Implementation notes:'
+      - '- Treat the Nashville incident as a transient SubmitAsync timeout or 503, not a workspace outage. Do not implement product work from the failed call.'
+      - '- In Invoke-WorkflowUpdateTurn, on a false return from Invoke-ReplPersistTurn, emit LastReplPersistenceDetails the same way Invoke-WorkflowCompleteTurn already does (message plus FailsafePath).'
+      - '- Local workflow methods currently write no stdout by design; diagnostics must go to stderr or a structured result body the host actually surfaces.'
+      - '- Keep the failsafe-first persist path. Do not clear the queued submit on timeout. Do not retitle the session from an incidental retry unless the caller explicitly set the turn title.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-244
+      title: updateTurn persist degrade exits 1 with empty stderr
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - Isolated reviewer closure via workflow.sessionlog.appendDialog then updateTurn did not persist. Invoke-ReplPersistTurn writes a session_submit failsafe, then on timeout or HTTP 503 backend_unavailable returns false without throwing. Invoke-WorkflowUpdateTurn forwards that false with no Console.Error line, so repl-invoke script-entry exits 1 with empty stdout/stderr. The live request stays in_progress with the beginTurn placeholder '(turn opened)' (13 characters). FR-MCP-REPL-009 requires update and appendDialog to remain successful when failsafe succeeds; beginTurn already returns true and writes a queued/degraded diagnostic on the same persist path.
+      - 'Triage group: triage-group-bec438c68ef7c694'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- An isolated workflow.sessionlog.appendDialog then updateTurn closure whose primary persist times out or returns HTTP 503/backend_unavailable does not exit 1 with empty stderr.'
+      - '- When failsafe session_submit is retained, the command either exits 0 as degraded success or exits non-zero with stderr naming the method, requestId, failsafe path, and reason.'
+      - "- A live in_progress request whose response is still the 13-character beginTurn placeholder '(turn opened)' is reported as not durably updated."
+      - 'Implementation notes:'
+      - "- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowUpdateTurn returns Invoke-ReplPersistTurn's false on the timeout/503 branch; that branch sets LastReplPersistenceDetails but never WriteLine, and script-entry then exit 1."
+      - '- Invoke-WorkflowAppendDialog timeout/503 writes label session_dialog and also returns false with no stderr; the reported session_submit label is the PersistTurn path used by updateTurn.'
+      - '- Align updateTurn (and appendDialog) with Invoke-WorkflowBeginTurn: on LastReplPersistenceDetails.degraded/queued, write the failsafe diagnostic and return true per FR-MCP-REPL-009 AC1.'
+      - '- Do not treat this as a parent-turn or product-write defect; the reporter did not attempt those writes.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-246
+      title: Degraded beginTurn recovery omits planFile and todoId and gets HTTP 400
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.beginTurn documents requestId, queryTitle, and queryText as the required params. On a real first persist, Invoke-WorkflowBeginTurn stamps omitted planFile and todoId to the exact sentinel None before client.SessionLog.SubmitAsync. SessionLogService.ApplyTurnContext calls ValidateForNewEntry for any turn that is not already stored, and an omitted field becomes HTTP 400 validation_error. After a timed-out or HTTP 503 beginTurn, Complete-ReplBeginTurnAfterPersist leaves current-turn.yaml active with only turnRequestId, sessionId, and status. The retry uses the same requestId, so the adapter treats it as a same-requestId reopen and submits the in_progress turn with both fields omitted. The turn was never stored, so the server treats that recovery submit as a first persist and returns HTTP 400. New-McpPluginTurnUpsertRequest also drops blank planFile and todoId from the payload. The generic examples in module-bootstrap.md and REPL-USER-GUIDE.md, and repl-yaml-message.schema.json, still show beginTurn without planFile or todoId. session-log-workflow-api.md already states the None default and the reopen-omission rule.
+      - 'Triage group: triage-group-a79f78791a361214'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- After beginTurn persist times out or returns degraded, a later beginTurn for the same requestId that supplies only requestId, queryTitle, and queryText is accepted and stores planFile and todoId as None, or as the values captured before the failed persist.'
+      - '- That recovery submit does not return HTTP 400 validation_error for omitted planFile or todoId.'
+      - '- A beginTurn for a requestId that is already durably stored still omits planFile and todoId so the stored pair is left unchanged.'
+      - '- A first persist that reaches the server with both fields omitted still returns HTTP 400 validation_error, except a canceled or cancelled supersede persist, which stamps None and succeeds.'
+      - '- The beginTurn examples in docs/context/module-bootstrap.md and docs/REPL-USER-GUIDE.md, and the required params in docs/context/repl-yaml-message.schema.json, state that first persist requires planFile and todoId and that None is the sentinel when there is no plan or TODO.'
+      - 'Implementation notes:'
+      - '- Do not classify a degraded, never-persisted beginTurn as a same-requestId reopen. Stamp planFile and todoId before SubmitAsync: use the values written on the failed attempt, otherwise the exact sentinel None.'
+      - '- Complete-ReplBeginTurnAfterPersist in plugins/core/lib-ps/repl-invoke.ps1 rewrites current-turn.yaml without planFile and todoId. Keep those fields on the degraded turn file so recovery can resubmit them.'
+      - '- New-McpPluginTurnUpsertRequest in plugins/core/lib-ps/McpPluginShim.psm1 omits blank planFile and todoId. A recovery payload must set both before that helper runs.'
+      - '- Server rule stays in SessionLogTurnContextValidator.ValidateForNewEntry and SessionLogService.ApplyTurnContext. Only IsSupersededHookPersist may stamp None when status is canceled or cancelled. Do not relax first-persist validation for in_progress turns.'
+      - '- Invoke-WorkflowBeginTurn already defaults blanks to None when current-turn.yaml does not already hold that requestId. plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1 covers that default and the durable reopen omission. Add a degraded-retry case that expects None/None on the second persist.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-247
+      title: appendActions reports success with a blank diagnostic when the session submit is only queued
+      section: Backlog
+      priority: medium
+      done: false
+      description:
+      - workflow.sessionlog.appendActions persists through Invoke-ReplPersistTurn, which writes a session_submit failsafe before client.SessionLog.SubmitAsync. On timeout, HTTP 503, or backend_unavailable, persist returns false, sets LastReplPersistenceDetails to degraded/queued, and keeps that file. Invoke-WorkflowAppendActions discards that false result and returns true, and Invoke-ReplMethod emits no stdout for this shim, so the wrapper exits 0 with an empty payload and no queued/degraded diagnostic. A native sessionlog_query then shows actions null because the submit never confirmed. completeTurn is a separate SubmitAsync and can persist decisions while those actions stay absent. The new session_submit sits in the shared failsafe directory beside pre-existing parent-owned records, so a full drain would replay those records as well.
+      - 'Triage group: triage-group-468275fab535c8a8'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- When workflow.sessionlog.appendActions hits SubmitAsync timeout, HTTP 503, or backend_unavailable, the wrapper exits nonzero and writes a non-empty diagnostic that states degraded/queued and includes the failsafe path.'
+      - '- After that failed append, native sessionlog_query still returns actions null for the turn until that specific session_submit record is replayed successfully.'
+      - '- The retained failsafe is one new session_submit YAML file whose params contain the actions from that append call.'
+      - '- Replaying or draining that record does not submit, delete, or rewrite session_submit files that were already present, including the two parent-owned entries.'
+      - '- A later completeTurn success leaves previously persisted decisions in place and does not by itself make the earlier append actions appear in sessionlog_query.'
+      - '- When SubmitAsync confirms a durable write, the matching session_submit file is removed and sessionlog_query returns the appended actions.'
+      - 'Implementation notes:'
+      - '- In plugins/core/lib-ps/repl-invoke.ps1, Invoke-WorkflowAppendActions (around the Invoke-ReplPersistTurn call) assigns the result to $null and returns true. Propagate false and write the queued/degraded message plus FailsafePath to stderr, as Invoke-WorkflowBeginTurn and Invoke-WorkflowCompleteTurn already do.'
+      - '- Invoke-ReplPersistTurn already retains the session_submit file and fills LastReplPersistenceDetails on the timeout/503 path. appendActions never reads that object, which is why the caller sees a blank success.'
+      - '- Recover this incident by replaying only the reviewer session_submit created by the append. Leave the two pre-existing parent-owned queue entries untouched.'
+      - '- Do not treat completeTurn success as delivery of this append. completeTurn submits its own payload, which matches decisions present and actions null.'
+      - '- A REPL exit 0 with an empty stdout is currently synthesized as persisted true and then Clear-ReplFailsafe runs. This report kept the queue file, so it matches the retain path, not that clear path. A blank success payload must not be treated as a durable write.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-163
+      title: avalonia-remote MCP handshake fails with pipe closed (os error 232)
+      section: Backlog
+      priority: low
+      done: false
+      description:
+      - "Grok's MCP client failed to initialize the third-party avalonia-remote server during a TruckMate session on 2026-08-20. Transport xai_grok_mcp::servers::SafeTokioChildProcess reported Windows error 232 (pipe closed) while sending the MCP initialize request. McpServer is not involved: this workspace has no avalonia-remote code or config, and sessionlog/todo tools continued to work. The child process closed stdio before initialize completed, so the client surfaces an opaque pipe error instead of a process exit code or stderr."
+      - 'Triage group: triage-group-2e7fb52e191260ac'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - "- avalonia-remote either completes the MCP initialize handshake successfully, or the client reports a diagnosable child-process failure (exit code and/or captured stderr) instead of only 'The pipe is being closed. (os error 232)' during initialize."
+      - '- A failed avalonia-remote handshake must not be attributed to McpServer when McpServer sessionlog/todo tools still succeed.'
+      - 'Implementation notes:'
+      - '- Not an McpServer product defect. Targeted search of F:\GitHub\McpServer found no avalonia-remote or Avalonia MCP references.'
+      - "- Original observation workspace is F:\\GitHub\\TruckMate; error source is Grok's SafeTokioChildProcess stdio transport, not /mcpserver REST or MCP transport."
+      - '- Windows error 232 typically means the child closed the pipe (process exit or crash) before or during initialize. Inspect the Grok MCP launch command for avalonia-remote in the TruckMate or user Grok MCP config, capture child stdout/stderr/exit code, and fail initialize with that diagnostic rather than a generic pipe-closed send error.'
+      implementationTasks: *o0
+      remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): avalonia-remote MCP handshake pipe closed (os error 232) is not an McpServer in-repo defect. Keep open as triage record. Linked FR-MCP-TRIAGE-002 / TR-MCP-TRIAGE-004. Do not store-close from this audit.'
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: BUG-TRIAGE-189
+      title: Native sessionlog_begin_turn first persist returns retryable backend_unavailable then succeeds
+      section: Backlog
+      priority: low
+      done: false
+      description:
+      - 'One native mcpserver sessionlog_begin_turn for GrokCode-20260909T134337Z-r1-collection-source returned retryable backend_unavailable; the immediate retry created turnId 44007 and SOURCE review continued. Failsafe YAML was written under the isolated cache failsafe/pending directory. This matches the designed FR-MCP-TRIAGEERR-001 / FR-MCP-FAILSAFE-001 / FR-MCP-171 contract: storage-budget or transient provider faults map to retryable backend_unavailable, failsafe stays on disk, and the next persist after storage answers succeeds. Native MCP tools serialize that classified error via McpToolErrors without an automatic retry; the plugin persist path degrades without throw. Original observation was from F:\GitHub\TruckMate. No lasting outage, data loss, or infrastructure repair was involved.'
+      - 'Triage group: triage-group-dd47084cd9d81350'
+      - 'Reports: 1'
+      technicalDetails:
+      - 'Acceptance criteria:'
+      - '- Native sessionlog_begin_turn that hits a transient storage fault returns code backend_unavailable with retryable true, not a generic 500.'
+      - '- Immediate retry of the same agent, sessionId, and requestId creates an in_progress turn and returns a turnId.'
+      - '- Failsafe YAML is written under failsafe/pending for that class and is not quarantined or latched completed on the failed attempt.'
+      - '- After the successful retry, later sessionlog operations on that session succeed without another backend_unavailable.'
+      - 'Implementation notes:'
+      - '- Treat as a recovered retryable persist, not an infrastructure outage. No MCP repair was required.'
+      - '- Native sessionlog_begin_turn maps failures through McpToolErrors and McpErrorClassifier; it does not auto-retry. Plugin SubmitAsync/beginTurn follows FR-MCP-171 degrade-queue.'
+      - '- Likely cause is SQLITE_BUSY or the session-log SaveChanges storage budget on first persist of a new session.'
+      - '- Optional hardening: one automatic retry inside the native sessionlog_begin_turn tool when the classifier returns retryable backend_unavailable.'
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements:
+      - FR-MCP-TRIAGE-002
+      technicalRequirements:
+      - TR-MCP-TRIAGE-004
+    - id: PLAN-TXNKEYSERVER-001
+      title: Keyserver signs QuadBrain/QBAgent session-log only
+      section: MCP Server
+      priority: high
+      done: false
+      note: 'Reopened 2026-09-17: operator rejected session-log-only slice. Keyserver must not be used by TODO, requirements, or any other non-QuadBrain gated adapter. FR-MCP-173/FR-MCP-120 to be amended. HV AGREE on session-log slice does not close this TODO.'
+      description:
+      - 'Operator-approved 2026-09-17: keep live Mcp:TurnTransactions.Enabled=true for QuadBrain; stop non-QBAgent session-log writes from calling keyserver. FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221. Byrd: red tests first, then implement TransactionGatedSessionLogService.ExecuteMutationAsync bypass for non-QBAgent source types.'
+      - 'Operator-approved 2026-09-17: keep live Mcp:TurnTransactions.Enabled=true for QuadBrain; stop non-QBAgent session-log writes from calling keyserver. FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221. Byrd: red tests first, then implement TransactionGatedSessionLogService.ExecuteMutationAsync bypass for non-QBAgent source types.'
+      - 'Operator-approved 2026-09-17: keep live Mcp:TurnTransactions.Enabled=true for QuadBrain; stop non-QBAgent session-log writes from calling keyserver. FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221. Byrd: red tests first, then implement TransactionGatedSessionLogService.ExecuteMutationAsync bypass for non-QBAgent source types.'
+      technicalDetails: *o1
+      implementationTasks: *o0
+      dependsOn: *o1
+      functionalRequirements: *o1
+      technicalRequirements: *o1
+    totalCount: 54
+  deprecated: true
+
+---
+

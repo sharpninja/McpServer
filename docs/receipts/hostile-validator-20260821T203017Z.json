@@ -1,0 +1,82 @@
+{
+  "TimestampUtc": "2026-08-21T20:30:17Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-A completeness",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T161800Z.md",
+    "docs/receipts/hostile-validator-20260821T171357Z.md",
+    "docs/receipts/hostile-validator-20260821T172735Z.md",
+    "docs/receipts/hostile-validator-20260821T173914Z.md",
+    "docs/receipts/hostile-validator-20260821T200636Z.md",
+    "docs/receipts/hostile-validator-20260821T201813Z.md"
+  ],
+  "OverallVerdict": "AGREE",
+  "Accuracy": 97,
+  "Completeness": 92,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T202646Z-p0a-plan",
+    "requestId": "req-20260821T202646Z-001-hostile-p0a-d0-secretindraft",
+    "turnId": 42726,
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T20:20:00Z totalCount=1 turn status=completed actions=6 designDecisions=4 dialog=4"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 12,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "D0 Audit line includes IngestAsync_SecretInDraft_IsRedactedOnPersist with the other six HandoffAuditDefectTests facts." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "Mechanical tests/**/*Handoff*.cs Fact/Theory inventory vs D0: 113/113 missing 0. Dispose/Advance/SeedExisting are not Fact/Theory." },
+    { "id": "A3", "group": "A Requested", "verdict": "PASS", "summary": "Dual P0-A/P0-B remain. PLAN-PLUGINHANDOFF-001 not found." },
+    { "id": "A4", "group": "A Requested", "verdict": "PASS", "summary": "201813Z FAIL list closed: SecretInDraft is on the D0 Audit line and D0 inventory is complete." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "PASS", "summary": "D0 remaining-gap classification matches the complete Handoff* Fact/Theory inventory contract." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "Section 3 matched live todo_get and on-disk grep." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "MCP-only storage instruction present." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh-only / no Python named and followed in this review." },
+    { "id": "C", "group": "C Requirements", "verdict": "PASS", "summary": "TEST-HANDOFF AC maps remain; SecretInDraft is 007 AC2 reuse; wiki tables[] includes ProductWorkspaceMemberships (62/62)." },
+    { "id": "D", "group": "D Plan", "verdict": "PASS", "summary": "P0-A DoD complete D0 inventory met. Dual P0-B still required. No implementation authorized." }
+  ],
+  "EvidenceAnchors": {
+    "pluginintLiveP0Done": true,
+    "pluginintLiveP1toP20Open": true,
+    "planPluginHandoffTodoExists": false,
+    "dbSetCount": 62,
+    "planDbSetCount": 62,
+    "tableDiff": "NONE after trailing-period strip on ProductWorkspaceMemberships",
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "handoffIngestionServiceTestsFactCount": 21,
+    "handoffFileMethodsClassified": 113,
+    "d0Present": 113,
+    "d0Missing": [],
+    "d0NameCountIncludingExtras": 116,
+    "healthNonceEchoed": "f82551e85ed9474fa762ae76b2bd8406",
+    "planLastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "secretInDraftInPlan": true,
+    "secretInDraftInD0": true,
+    "secretOnAuditLine": true,
+    "d1NewRedTestHits": {
+      "PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods": 0,
+      "ProcessingLease_RenewsAndFencesTerminalUpdates": 0,
+      "Provenance_IncludesEffectiveCustomPromptIdentityAndVersion": 0
+    },
+    "srcHandoffCancellationTokenNone": "NONE",
+    "agentPoolDoesNotRetainAsD1NewRed": false
+  },
+  "ResidualsNotFail": [
+    "MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance is outside *Handoff*.cs",
+    "UnknownSourceNotes not in locked AC-to-method map",
+    "Plan status header still says third revision after 171357Z",
+    "Health storage=unreachable while todo_get succeeded"
+  ]
+}

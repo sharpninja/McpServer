@@ -1,0 +1,26 @@
+{
+  "slice": "S7b",
+  "requiredNow": [
+    "grok",
+    "claude-code",
+    "claude-cowork",
+    "cline",
+    "cline-v2",
+    "codex",
+    "copilot",
+    "opencode"
+  ],
+  "deferredUntilH7a": [],
+  "h7aReceipt": "docs/receipts/hostile-validator-20260919T081530Z.md",
+  "rows": [
+    { "plugin": "grok", "required": true, "status": "pass" },
+    { "plugin": "claude-code", "required": true, "status": "pass" },
+    { "plugin": "claude-cowork", "required": true, "status": "pass" },
+    { "plugin": "cline", "required": true, "status": "pass" },
+    { "plugin": "cline-v2", "required": true, "status": "pass" },
+    { "plugin": "codex", "required": true, "status": "pass" },
+    { "plugin": "copilot", "required": true, "status": "pass" },
+    { "plugin": "opencode", "required": true, "status": "pass" }
+  ],
+  "deferralNote": "H7a AGREE is recorded in docs/receipts/hostile-validator-20260919T081530Z.md and docs/benchmarks/h7a-value-gate.json agree:true. Grok remains first; the remaining seven hosts are required for H7b."
+}

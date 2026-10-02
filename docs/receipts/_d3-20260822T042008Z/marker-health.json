@@ -1,0 +1,13 @@
+{
+  "marker": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "port": 7147,
+  "pid": 16936,
+  "Test-MarkerSignature": true,
+  "nonceSent": "ff8aea961aeb42e5acbe7f0db9e45948",
+  "healthNonce": "ff8aea961aeb42e5acbe7f0db9e45948",
+  "nonceMatch": true,
+  "healthStatus": "Healthy",
+  "storage": "reachable",
+  "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+  "utcNowAtTrust": "20260822T042233Z"
+}

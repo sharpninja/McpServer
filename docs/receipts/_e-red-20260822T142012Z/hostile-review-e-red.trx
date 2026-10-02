@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e0787780-3afb-4ac1-9dd4-580ebd2cf086" name="kingd@PAYTON-LEGION2 2026-08-22 09:29:30" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T09:29:30.8721009-05:00" queuing="2026-08-22T09:29:30.8721033-05:00" start="2026-08-22T09:29:15.4403671-05:00" finish="2026-08-22T09:29:31.1770580-05:00" />
+  <TestSettings name="default" id="58addac8-ded4-459f-840f-aae1f3accad1">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_09_29_30" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="cb19233e-6356-4da5-93c5-fd267e16287d" testId="33dbf4cc-761e-2a81-0903-06f287f48551" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_OmitsFabricatedTokenCounts" computerName="PAYTON-LEGION2" duration="00:00:00.0024689" startTime="2026-08-22T09:29:30.6165843-05:00" endTime="2026-08-22T09:29:30.6206167-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cb19233e-6356-4da5-93c5-fd267e16287d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_OmitsFabricatedTokenCounts() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 237&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1e843406-3b4e-4c46-a010-9af51388ca76" testId="e0a88a5c-2423-1151-07e9-571b30b9f236" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer" computerName="PAYTON-LEGION2" duration="00:00:00.0029698" startTime="2026-08-22T09:29:30.8150776-05:00" endTime="2026-08-22T09:29:30.8188373-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e843406-3b4e-4c46-a010-9af51388ca76">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview entity persistence is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewEntityPersistence.RoundTripAsync(String provider, HostileReviewQueueItemEntity entity, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 101&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 43&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3872f30f-ebac-425e-ae22-b9fa86df962c" testId="82a2f247-d181-9c3b-2cf7-439091d1b752" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_OversizedPayload_Rejected" computerName="PAYTON-LEGION2" duration="00:00:00.1367224" startTime="2026-08-22T09:29:30.8323442-05:00" endTime="2026-08-22T09:29:30.9700181-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3872f30f-ebac-425e-ae22-b9fa86df962c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_OversizedPayload_Rejected() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 99&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="26e4f8cf-a7ba-43b9-bbe0-814349c28be2" testId="7e9040ef-691e-dc2a-2edd-db3c1eede5e8" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_SurfaceParity_RestReplDirectorPlugin" computerName="PAYTON-LEGION2" duration="00:00:00.1708757" startTime="2026-08-22T09:29:30.6288894-05:00" endTime="2026-08-22T09:29:30.8015846-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26e4f8cf-a7ba-43b9-bbe0-814349c28be2">
+      <Output>
+        <ErrorInfo>
+          <Message>C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Support.Mcp\Controllers\HostileReviewController.cs</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_SurfaceParity_RestReplDirectorPlugin() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 433&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1acd2fbf-63a4-4c03-bda5-e3c295766c96" testId="8eb722db-281d-17bb-7779-695b152907d9" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ForeignWorkspace_403" computerName="PAYTON-LEGION2" duration="00:00:00.0014394" startTime="2026-08-22T09:29:30.8285333-05:00" endTime="2026-08-22T09:29:30.8309889-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1acd2fbf-63a4-4c03-bda5-e3c295766c96">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ForeignWorkspace_403() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 116&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3a96f089-0bbb-47e6-8b74-db59ddca0c03" testId="17df0a42-4a0d-eb85-8ffe-9c3876763f9d" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_Default_DoesNotMutateProductFiles" computerName="PAYTON-LEGION2" duration="00:00:00.0060320" startTime="2026-08-22T09:29:30.9880354-05:00" endTime="2026-08-22T09:29:30.9954137-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a96f089-0bbb-47e6-8b74-db59ddca0c03">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_Default_DoesNotMutateProductFiles() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 406&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a9e70783-3191-47d7-bdf7-97fc7965fe58" testId="f9814853-39a1-58c6-a88a-0db7159ff0a6" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_AmbiguousLink_Diagnostic" computerName="PAYTON-LEGION2" duration="00:00:00.0017751" startTime="2026-08-22T09:29:30.8028594-05:00" endTime="2026-08-22T09:29:30.8056039-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9e70783-3191-47d7-bdf7-97fc7965fe58">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_AmbiguousLink_Diagnostic() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 182&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="09e797e3-8deb-4f31-a202-538e5058d475" testId="7d95ccc8-31ad-69a5-20fc-d047211fc6ee" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" computerName="PAYTON-LEGION2" duration="00:00:00.0017911" startTime="2026-08-22T09:29:30.8067027-05:00" endTime="2026-08-22T09:29:30.8096422-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09e797e3-8deb-4f31-a202-538e5058d475">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 197&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="820864a7-0a35-4399-9ed1-cf55dd5e3b55" testId="46a16f7e-79ec-cce9-9be1-643e1ddda1e5" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" computerName="PAYTON-LEGION2" duration="00:00:00.0018603" startTime="2026-08-22T09:29:30.9736666-05:00" endTime="2026-08-22T09:29:30.9785389-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="820864a7-0a35-4399-9ed1-cf55dd5e3b55">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 135&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="513656df-4749-45b0-9fd8-612fb383477f" testId="06c536ee-1b16-eb5d-3446-521a3f9e45da" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" computerName="PAYTON-LEGION2" duration="00:00:00.0015811" startTime="2026-08-22T09:29:30.8199462-05:00" endTime="2026-08-22T09:29:30.8231196-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="513656df-4749-45b0-9fd8-612fb383477f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SeedExecutionAsync(Harness harness, String runId, String model, HostileReviewEffortLevel effort, String requester, HostileReviewTargetType targetType) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 551&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 314&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f7f0dcc2-bab3-40e0-9e9b-b356004e5851" testId="45221515-ebf4-908f-95b3-90ea64f4516b" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" computerName="PAYTON-LEGION2" duration="00:00:00.0020638" startTime="2026-08-22T09:29:30.9798829-05:00" endTime="2026-08-22T09:29:30.9830427-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7f0dcc2-bab3-40e0-9e9b-b356004e5851">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 161&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="287b7a47-0fa2-464f-9aa5-1b57d2ba958d" testId="eea67539-f89a-6005-4333-abffd193cfc1" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_NoMatch_EmptyList" computerName="PAYTON-LEGION2" duration="00:00:00.0018340" startTime="2026-08-22T09:29:30.9839711-05:00" endTime="2026-08-22T09:29:30.9869731-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="287b7a47-0fa2-464f-9aa5-1b57d2ba958d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.QueryAsync(HostileReviewQueryFilter filter, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 68&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_NoMatch_EmptyList() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 374&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="08e0eb14-2ffb-470f-985a-98a32fd7296b" testId="d7b3a86a-d313-2e30-9aa3-96a454b01294" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters" computerName="PAYTON-LEGION2" duration="00:00:00.3934043" startTime="2026-08-22T09:29:30.1258882-05:00" endTime="2026-08-22T09:29:30.6020805-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="08e0eb14-2ffb-470f-985a-98a32fd7296b">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SeedExecutionAsync(Harness harness, String runId, String model, HostileReviewEffortLevel effort, String requester, HostileReviewTargetType targetType) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 551&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 345&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="240cae48-b989-45e7-8e12-182e81ddb19c" testId="58fdf27d-5bd4-6363-bf98-4b21ea4ff2b1" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete" computerName="PAYTON-LEGION2" duration="00:00:00.0039894" startTime="2026-08-22T09:29:30.6219744-05:00" endTime="2026-08-22T09:29:30.6279345-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="240cae48-b989-45e7-8e12-182e81ddb19c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SubmitAndCompleteAsync(Harness harness) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 514&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 269&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5c40bee4-4d09-4568-8136-021edaf11143" testId="45ca8e91-41c8-8c59-a85c-36ec6c9ab1ae" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" computerName="PAYTON-LEGION2" duration="00:00:00.0014249" startTime="2026-08-22T09:29:30.8240419-05:00" endTime="2026-08-22T09:29:30.8271384-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c40bee4-4d09-4568-8136-021edaf11143">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SubmitAndCompleteAsync(Harness harness) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 514&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 295&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="21986466-facd-44c7-aec0-9d99766d27d8" testId="5a2bb52b-8204-6aed-2e6c-c0b7675d7188" testName="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem" computerName="PAYTON-LEGION2" duration="00:00:00.0021802" startTime="2026-08-22T09:29:30.8106171-05:00" endTime="2026-08-22T09:29:30.8138060-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21986466-facd-44c7-aec0-9d99766d27d8">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken) in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs:line 30&#xD;
+   at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem() in C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs:line 70&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_OmitsFabricatedTokenCounts" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="33dbf4cc-761e-2a81-0903-06f287f48551">
+      <Execution id="cb19233e-6356-4da5-93c5-fd267e16287d" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewExecution_OmitsFabricatedTokenCounts" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="e0a88a5c-2423-1151-07e9-571b30b9f236">
+      <Execution id="1e843406-3b4e-4c46-a010-9af51388ca76" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewEntity_RoundTrip_SqlitePgSqlServer" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_SurfaceParity_RestReplDirectorPlugin" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="7e9040ef-691e-dc2a-2edd-db3c1eede5e8">
+      <Execution id="26e4f8cf-a7ba-43b9-bbe0-814349c28be2" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReview_SurfaceParity_RestReplDirectorPlugin" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ForeignWorkspace_403" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="8eb722db-281d-17bb-7779-695b152907d9">
+      <Execution id="1acd2fbf-63a4-4c03-bda5-e3c295766c96" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_ForeignWorkspace_403" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="5a2bb52b-8204-6aed-2e6c-c0b7675d7188">
+      <Execution id="21986466-facd-44c7-aec0-9d99766d27d8" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_ValidRequest_CreatesQueueItem" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="58fdf27d-5bd4-6363-bf98-4b21ea4ff2b1">
+      <Execution id="240cae48-b989-45e7-8e12-182e81ddb19c" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewGet_NormalizedFindings_TaxonomyComplete" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_Default_DoesNotMutateProductFiles" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="17df0a42-4a0d-eb85-8ffe-9c3876763f9d">
+      <Execution id="3a96f089-0bbb-47e6-8b74-db59ddca0c03" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReview_Default_DoesNotMutateProductFiles" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="46a16f7e-79ec-cce9-9be1-643e1ddda1e5">
+      <Execution id="820864a7-0a35-4399-9ed1-cf55dd5e3b55" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="45221515-ebf4-908f-95b3-90ea64f4516b">
+      <Execution id="f7f0dcc2-bab3-40e0-9e9b-b356004e5851" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="d7b3a86a-d313-2e30-9aa3-96a454b01294">
+      <Execution id="08e0eb14-2ffb-470f-985a-98a32fd7296b" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewQuery_ByRequesterAndTargetType_AndFilters" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="7d95ccc8-31ad-69a5-20fc-d047211fc6ee">
+      <Execution id="09e797e3-8deb-4f31-a202-538e5058d475" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_NoMatch_EmptyList" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="eea67539-f89a-6005-4333-abffd193cfc1">
+      <Execution id="287b7a47-0fa2-464f-9aa5-1b57d2ba958d" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewQuery_NoMatch_EmptyList" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="06c536ee-1b16-eb5d-3446-521a3f9e45da">
+      <Execution id="513656df-4749-45b0-9fd8-612fb383477f" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_AmbiguousLink_Diagnostic" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="f9814853-39a1-58c6-a88a-0db7159ff0a6">
+      <Execution id="a9e70783-3191-47d7-bdf7-97fc7965fe58" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_AmbiguousLink_Diagnostic" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_OversizedPayload_Rejected" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="82a2f247-d181-9c3b-2cf7-439091d1b752">
+      <Execution id="3872f30f-ebac-425e-ae22-b9fa86df962c" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReviewSubmit_OversizedPayload_Rejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" storage="c:\users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="45ca8e91-41c8-8c59-a85c-36ec6c9ab1ae">
+      <Execution id="5c40bee4-4d09-4568-8136-021edaf11143" />
+      <TestMethod codeBase="C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests" name="HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="33dbf4cc-761e-2a81-0903-06f287f48551" executionId="cb19233e-6356-4da5-93c5-fd267e16287d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e0a88a5c-2423-1151-07e9-571b30b9f236" executionId="1e843406-3b4e-4c46-a010-9af51388ca76" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="82a2f247-d181-9c3b-2cf7-439091d1b752" executionId="3872f30f-ebac-425e-ae22-b9fa86df962c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e9040ef-691e-dc2a-2edd-db3c1eede5e8" executionId="26e4f8cf-a7ba-43b9-bbe0-814349c28be2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8eb722db-281d-17bb-7779-695b152907d9" executionId="1acd2fbf-63a4-4c03-bda5-e3c295766c96" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17df0a42-4a0d-eb85-8ffe-9c3876763f9d" executionId="3a96f089-0bbb-47e6-8b74-db59ddca0c03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9814853-39a1-58c6-a88a-0db7159ff0a6" executionId="a9e70783-3191-47d7-bdf7-97fc7965fe58" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d95ccc8-31ad-69a5-20fc-d047211fc6ee" executionId="09e797e3-8deb-4f31-a202-538e5058d475" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46a16f7e-79ec-cce9-9be1-643e1ddda1e5" executionId="820864a7-0a35-4399-9ed1-cf55dd5e3b55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06c536ee-1b16-eb5d-3446-521a3f9e45da" executionId="513656df-4749-45b0-9fd8-612fb383477f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45221515-ebf4-908f-95b3-90ea64f4516b" executionId="f7f0dcc2-bab3-40e0-9e9b-b356004e5851" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eea67539-f89a-6005-4333-abffd193cfc1" executionId="287b7a47-0fa2-464f-9aa5-1b57d2ba958d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7b3a86a-d313-2e30-9aa3-96a454b01294" executionId="08e0eb14-2ffb-470f-985a-98a32fd7296b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58fdf27d-5bd4-6363-bf98-4b21ea4ff2b1" executionId="240cae48-b989-45e7-8e12-182e81ddb19c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45ca8e91-41c8-8c59-a85c-36ec6c9ab1ae" executionId="5c40bee4-4d09-4568-8136-021edaf11143" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a2bb52b-8204-6aed-2e6c-c0b7675d7188" executionId="21986466-facd-44c7-aec0-9d99766d27d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="16" executed="16" passed="0" failed="16" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:08.28]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:10.84]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:11.48]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:12.12]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.12]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.12]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.12]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(551,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SeedExecutionAsync(Harness harness, String runId, String model, HostileReviewEffortLevel effort, String requester, HostileReviewTargetType targetType)&#xD;
+[xUnit.net 00:00:12.13]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(345,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters()&#xD;
+[xUnit.net 00:00:12.13]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.15]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.15]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.15]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.15]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(237,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_OmitsFabricatedTokenCounts()&#xD;
+[xUnit.net 00:00:12.15]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.15]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.16]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.16]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(514,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SubmitAndCompleteAsync(Harness harness)&#xD;
+[xUnit.net 00:00:12.16]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(269,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete()&#xD;
+[xUnit.net 00:00:12.16]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.31]       C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Support.Mcp\Controllers\HostileReviewController.cs&#xD;
+[xUnit.net 00:00:12.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.31]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(433,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_SurfaceParity_RestReplDirectorPlugin()&#xD;
+[xUnit.net 00:00:12.31]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:12.31]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:12.31]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.31]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.31]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(182,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_AmbiguousLink_Diagnostic()&#xD;
+[xUnit.net 00:00:12.31]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.31]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.31]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.31]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(197,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId()&#xD;
+[xUnit.net 00:00:12.31]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.32]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(70,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem()&#xD;
+[xUnit.net 00:00:12.32]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.32]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview entity persistence is not implemented.&#xD;
+[xUnit.net 00:00:12.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(101,0): at McpServer.Support.Mcp.Services.HostileReviewEntityPersistence.RoundTripAsync(String provider, HostileReviewQueueItemEntity entity, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.32]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(43,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer()&#xD;
+[xUnit.net 00:00:12.32]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.33]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(551,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SeedExecutionAsync(Harness harness, String runId, String model, HostileReviewEffortLevel effort, String requester, HostileReviewTargetType targetType)&#xD;
+[xUnit.net 00:00:12.33]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(314,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns()&#xD;
+[xUnit.net 00:00:12.33]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.34]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.34]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.34]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.34]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(514,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.SubmitAndCompleteAsync(Harness harness)&#xD;
+[xUnit.net 00:00:12.34]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(295,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext()&#xD;
+[xUnit.net 00:00:12.34]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.35]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.35]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.35]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.35]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(116,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ForeignWorkspace_403()&#xD;
+[xUnit.net 00:00:12.35]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.48]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.48]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.48]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(99,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_OversizedPayload_Rejected()&#xD;
+[xUnit.net 00:00:12.48]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.48]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.48]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.48]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(135,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit()&#xD;
+[xUnit.net 00:00:12.48]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.49]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.49]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(161,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic()&#xD;
+[xUnit.net 00:00:12.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.49]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.49]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(68,0): at McpServer.Support.Mcp.Services.HostileReviewService.QueryAsync(HostileReviewQueryFilter filter, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.49]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(374,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_NoMatch_EmptyList()&#xD;
+[xUnit.net 00:00:12.49]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.51]       System.NotImplementedException : PLAN-PLUGINHANDOFF-001 E-red throw-stub. HostileReview queue is not implemented.&#xD;
+[xUnit.net 00:00:12.51]       Stack Trace:&#xD;
+[xUnit.net 00:00:12.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\src\McpServer.Services\Services\HostileReview\HostileReviewService.cs(30,0): at McpServer.Support.Mcp.Services.HostileReviewService.SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:12.51]         C:\Users\kingd\.grok\worktrees\github-mcpserver\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7\tests\McpServer.Support.Mcp.Tests\Services\HostileReviewQueueTests.cs(406,0): at McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_Default_DoesNotMutateProductFiles()&#xD;
+[xUnit.net 00:00:12.51]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:12.53]   Finished:    McpServer.Support.Mcp.Tests (ID = 'bc5e93f88448cb56043f568f21e6f20ee38797fc3d675c22a7255b761b543ac3')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.6180099-05:00">
+        <Text>[xUnit.net 00:00:12.12]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.6464130-05:00">
+        <Text>[xUnit.net 00:00:12.15]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_OmitsFabricatedTokenCounts [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.6523405-05:00">
+        <Text>[xUnit.net 00:00:12.15]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8031013-05:00">
+        <Text>[xUnit.net 00:00:12.30]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_SurfaceParity_RestReplDirectorPlugin [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8068909-05:00">
+        <Text>[xUnit.net 00:00:12.31]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_AmbiguousLink_Diagnostic [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8106963-05:00">
+        <Text>[xUnit.net 00:00:12.31]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8150684-05:00">
+        <Text>[xUnit.net 00:00:12.32]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8200512-05:00">
+        <Text>[xUnit.net 00:00:12.32]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8242200-05:00">
+        <Text>[xUnit.net 00:00:12.33]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8914141-05:00">
+        <Text>[xUnit.net 00:00:12.34]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.8914768-05:00">
+        <Text>[xUnit.net 00:00:12.35]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_ForeignWorkspace_403 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.9730338-05:00">
+        <Text>[xUnit.net 00:00:12.47]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_OversizedPayload_Rejected [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.9798586-05:00">
+        <Text>[xUnit.net 00:00:12.48]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.9840547-05:00">
+        <Text>[xUnit.net 00:00:12.49]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:30.9881636-05:00">
+        <Text>[xUnit.net 00:00:12.49]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReviewQuery_NoMatch_EmptyList [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T09:29:31.0109910-05:00">
+        <Text>[xUnit.net 00:00:12.51]     McpServer.Support.Mcp.Tests.Services.HostileReviewQueueTests.HostileReview_Default_DoesNotMutateProductFiles [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

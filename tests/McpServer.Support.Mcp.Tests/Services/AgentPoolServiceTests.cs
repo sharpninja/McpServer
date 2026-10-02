@@ -253,6 +253,41 @@ public sealed class AgentPoolServiceTests
         Assert.Equal(raw, captured!.UserTranscriptText);
     }
 
+    /// <summary>
+    /// D5 / P1-5 / TR-HANDOFF-AGENT-001: after dispatch the singleton queue must not retain
+    /// the raw Handoff ExecutionPrompt. Executor still received it; public DTOs stay redacted.
+    /// </summary>
+    [Fact]
+    public async Task D5_AgentPool_DoesNotRetainRawHandoffSourceAfterDispatch()
+    {
+        using var service = CreateService(out var voiceService);
+        const string raw = "RAW-HANDOFF-SOURCE-SHOULD-NOT-BE-RETAINED";
+        VoiceTurnRequest? captured = null;
+        voiceService.SubmitTurnAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
+            .Returns(ci =>
+            {
+                captured = ci.Arg<VoiceTurnRequest>();
+                return Task.FromResult<VoiceTurnResponse?>(CreateCompletedTurn(ci.ArgAt<string>(0)));
+            });
+
+        var enqueue = await service.EnqueueOneShotAsync(new AgentPoolOneShotRequest
+        {
+            Context = AgentPoolOneShotContext.HandoffTodoDraft,
+            PromptText = raw,
+            UseWorkspaceContext = true,
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(enqueue.Success, enqueue.Error);
+        var completed = await WaitForJobStatusAsync(service, enqueue.JobId!, "completed").ConfigureAwait(true);
+
+        Assert.NotNull(captured);
+        Assert.Equal(raw, captured!.UserTranscriptText);
+        Assert.DoesNotContain(raw, completed.RenderedPrompt ?? string.Empty, StringComparison.Ordinal);
+        Assert.Null(service.PeekExecutionPrompt(enqueue.JobId!));
+        var queue = await service.GetQueueItemsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.All(queue, item => Assert.DoesNotContain(raw, item.RenderedPrompt ?? string.Empty, StringComparison.Ordinal));
+    }
+
     [Fact]
     public async Task EnqueueOneShotAsync_IncludesWorkspaceInQueueItem()
     {
@@ -304,7 +339,8 @@ public sealed class AgentPoolServiceTests
         };
     }
 
-    private static async Task<AgentPoolQueueItemDto> WaitForJobStatusAsync(
+    /// <summary>G4 overlay helper: wait until a queued job reaches one of the named statuses.</summary>
+    internal static async Task<AgentPoolQueueItemDto> WaitForJobStatusAsync(
         AgentPoolService service,
         string jobId,
         params string[] statuses)
@@ -322,7 +358,8 @@ public sealed class AgentPoolServiceTests
         throw new TimeoutException($"Timed out waiting for job '{jobId}' status [{string.Join(", ", statuses)}].");
     }
 
-    private static AgentPoolService CreateService(out IVoiceConversationService voiceService, string executionStrategy = AgentExecutionStrategyNames.CopilotCli)
+    /// <summary>G4 overlay helper: construct a shipped AgentPoolService with a substitute voice backend.</summary>
+    internal static AgentPoolService CreateService(out IVoiceConversationService voiceService, string executionStrategy = AgentExecutionStrategyNames.CopilotCli)
     {
         voiceService = Substitute.For<IVoiceConversationService>();
         voiceService.GetStatusAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())

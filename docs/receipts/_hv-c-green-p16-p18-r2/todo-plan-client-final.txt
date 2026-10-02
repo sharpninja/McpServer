@@ -1,0 +1,925 @@
+type: result
+payload:
+  requestId: req-20260822T084548Z-108e
+  result:
+    id: PLAN-PLUGINHANDOFF-001
+    title: Implement plugin core, hostile review queue, plugin integration harness, workspace hygiene, handoff remediations, and wiki dump/import
+    section: Planning
+    priority: high
+    done: false
+    estimate: multi-phase
+    note: '2026-08-22T08:44:34Z. Session GrokCode-20260822T082521Z-pluginhandoff-p18. C-red-P16 AGREE 073737Z. C-green-P16-P18 DISAGREE 081750Z remediated with aiUnit preflight plus PluginInt trait TRX. Named filters and full PluginIntegration Passed 95 Failed 0. C-green-P16-P18 hostile re-dispatched. PLAN and MCP-PLUGININT-001 remain done: false.'
+    description:
+    - '# PLAN-PLUGINHANDOFF-001: Plugin core, hostile review, plugin integration, workspace hygiene, handoff, wiki hydration'
+    - ''
+    - 'Status: third revision after hostile P0-A DISAGREE `docs/receipts/hostile-validator-20260821T171357Z.md` (7 FAIL) and earlier `docs/receipts/hostile-validator-20260821T161800Z.md` (9 FAIL). Still draft until a fresh P0-A AGREE on this text, operator approval, then P0-B. Not implemented. No PLAN-PLUGINHANDOFF-001 create and no product code until those gates.'
+    - ''
+    - 'Owner: Payton Byrd. Executor: GrokCode after approval. Process: Byrd Development Process v4 (`docs/Development-Process-draft-v4.md`). Workspace: `F:\GitHub\McpServer`.'
+    - ''
+    - 'Verified this continuation (2026-08-21): MCP `/health` nonce `6561dde440af474ab9394bf42bd97577` echoed, status Healthy. Live `todo_get` of all eight child TODOs. Marker `AGENTS-README-FIRST.yaml` port 7147, pid 16936. Session `GrokCode-20260821T113141Z-plugin-session` turn `req-20260821T163000Z-007-plan-mcp-plugin-handoff-cluster`.'
+    - ''
+    - '## 1. Goal and V-squared'
+    - ''
+    - 'Deliver one gated implementation program that closes or faithfully remediates these open MCP TODOs as a single playlist:'
+    - ''
+    - '- MCP-PLUGINCORE-004: Repair plugin dialog parsing and add REPL degraded persistence'
+    - '- MCP-PLUGININT-001: Session Log workflow aiUnit Theory integration tests for each plugin'
+    - '- MCP-HANDOFF-001, MCP-HANDOFFPLAN-001, MCP-HANDOFFREVIEW-001: Handoff ingest to TODO (existing code plus adversarial remediations and docs/wiki closeout)'
+    - '- MCP-HOSTILEREVIEW-001: Hostile review queue MCP tool and normalized results'
+    - '- MCP-WORKSPACEHYGIENE-002: Workspace data-hygiene validation across Server, Director, REPL, plugin'
+    - '- MCP-WIKIEXPORT-001: Workspace-keyed wiki JSON dump, add-workspace import hydration, todo.yaml deprecation'
+    - ''
+    - 'Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named tests, and a zero-fail zero-skip gate. Valuable: these items are the remaining high-priority MCP Server operator/agent surfaces (plugin reliability, review automation, hygiene, handoff, portability).'
+    - ''
+    - '## 2. Locked decisions'
+    - ''
+    - '1. One master execution TODO, ID `PLAN-PLUGINHANDOFF-001`, holds this plan in its entirety (every section, not a stub, not "see plan.md"). Child TODOs stay as work items; they are not marked `done: true` without hostile OverallVerdict AGREE and a full applicable suite (Failed 0, Skipped 0).'
+    - '2. Implementation does not start until: (a) operator approval of this plan; (b) hostile AGREE that this plan is BDPv4-complete; (c) `PLAN-PLUGINHANDOFF-001` is created through `todo_create` / `workflow.todo.create` (never YAML); (d) a second hostile AGREE that the new TODO text faithfully reflects this plan (no omitted phases, AC, tests, or gates).'
+    - 3. Requirements drive tests. For any new FR/TR/TEST, capture structured AC in the MCP requirements store first. Markdown under `docs/Project/` is a projection, not the store. Do not write product implementation in the same breath as requirement creation.
+    - '4. TDD per AC: write the consumer test (and a real-service test where the TODO already requires it), show red, validate mocks/stubs where required, implement, then green. Refactor inside the slice. Exit a slice only when the executed current-plus-prior scope is Failed 0 and Skipped 0. Skipped tests are not passing.'
+    - '5. Hostile validation is a phase gate, not a closeout ornament. For every implementation slice group: write the red tests, hostile AGREE that they are currently failing, then implement, then hostile AGREE they are green. Do not mix red and green into one hostile gate. Surface C applies (project implementation). Surface D applies (this plan DoD).'
+    - '6. MCP-HANDOFFPLAN-001 is an execution prompt for MCP-HANDOFF-001, not a second product. Do not re-implement Handoff from scratch. Remaining work: satisfy FR-HANDOFF-001..007 AC (`isSatisfied` still false), remediate MCP-HANDOFFREVIEW-001 P1/P2/P3 that are still red after D0 inventory, docs/wiki export, serial gates. Closeout requires both a fresh independent Codex APPROVED verdict (HANDOFFREVIEW remaining text) and hostile OverallVerdict AGREE. One does not replace the other.'
+    - '7. PLUGININT failsafe assertions cannot pass while drain SubmitAsync is hardcoded to 2 seconds (`plugins/core/lib-ps/repl-invoke.ps1` Get-ReplMethodTimeoutSeconds). Repair is in-scope for Phase B by amending TR-MCP-PERSIST-003 and TEST-MCP-195 (FR-MCP-172), not by inventing TEST-MCP-REPL-041. Also amend TR-MCP-REPL-012 AC1 with an explicit exception: sessionlog workflow methods (completeTurn, beginTurn, appendDialog, appendActions, open, update) stay at REPL_TIMEOUT default 30s; TEST-MCP-REPL-027 keeps asserting 30 for completeTurn/beginTurn. The only drain-time exception is `client.SessionLog.SubmitAsync` while `ReplFailsafeDraining` is set, which uses `REPL_FAILSAFE_DRAIN_TIMEOUT` default 120 seconds, or `REPL_TIMEOUT` when that is greater. Nested automatic drain stays deferred via `ReplRawInFlight` / `ReplFailsafeDrainDeferred` so getFr still returns before 30s when a queued submit 503s (TEST-MCP-195 AC4). The 2s hardcoded return is removed. Timeout abort still must not increment drainAttempts and must not set ReplFailsafeDrainCompleted.'
+    - '8. BUG-TRIAGE-165 (appendDialog HTTP 500) is a known adjacent defect. If PLUGININT append-dialog against a real server hits it, remediate 165 inside Phase C as a pre-approved bug (operator 2026-07-13: bug reports execute via Byrd immediately). Do not silently skip dialog assertions.'
+    - 9. Deploy McpServer via Nuke only (`UpdateService`). Never manual binary copy. Plugin sync via `./build.ps1 SyncAgentPlugins`. No Python. `pwsh.exe -NoProfile -NonInteractive` only. No em-dashes in artifacts. XMLDocs on all public members. Central package management. Migrations for Sqlite, PostgreSQL, and SQL Server when schema changes. Apply/round-trip/down-up on all three providers.
+    - '10. No goal-state `done: true` on PLAN-PLUGINHANDOFF-001 or any child TODO without hostile OverallVerdict AGREE citing a receipt path in `doneSummary`.'
+    - '11. Out of scope unless a named AC forces them: QuadBrain/QBCODE playlist, FILETOOLS, Octopus, TR-AUDIT, avalonia-remote, importRecovery GUID sessionId product change (BUG-TRIAGE-173 stays its own TODO unless Phase G dump/import must hydrate those envelopes).'
+    - '12. Failsafe filesystem path is the existing V4 layout proven by `SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope`: `{workspace}/.mcpServer/failsafe/{agent}/workspaces/{workspace-key}/pending/`. Plugin `Get-McpFailsafeDir` currently resolving `{workspace}/.mcpServer/{agent}/failsafe` must be unified to that V4 layout in Phase B (red test: both resolver and C# strategy write the same tree). Do not invent a third path. Existing plugin-queue YAML is migrated (copy then delete source after checksum match), never silently deleted.'
+    - '13. PLUGININT catalog has eight plugin surfaces because FR-MCP-PLUGININT-001 lists them: Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, OpenCode. Marker `agent_plugins` required identities remain five (Codex, Claude, Copilot, Cline, Grok). Cowork, Cline v2, and OpenCode are extra catalog rows, not extra marker agents.'
+    - '14. Hygiene Director exit: process exit 1 when any finding has severity Error or Critical; exit 0 when findings are empty or Warning-only. JSON is always written. Threshold 48h for stale turns; override must be positive, at most 168h, authenticated, and recorded on the run.'
+    - 15. MCP-WIKIEXPORT-001 remaining work relinks off completed FR-MCP-WIKIEXPORT-001/002 onto FR-MCP-WIKIEXPORT-003/004/005 (and matching TR/TEST). Update the TODO FunctionalRequirements/TechnicalRequirements arrays when those IDs exist. Do not store-close against 001/002.
+    - '16. Hostile-review submit payload bound: serialized request JSON at most 1,048,576 bytes (1 MiB). Oversize is HTTP 413 / invocation error, no queue row.'
+    - '17. Wiki dump integrity: SHA-256 of canonical UTF-8 JSON per table payload, plus root SHA-256 over the sorted `tableName:hash` list. Algorithm name in the dump is `SHA-256`.'
+    - 18. todo.yaml deprecation is a breaking change for add-workspace hydration and for any workflow that treated todo.yaml as TODO source of truth. It is not a breaking change for wiki export without `--include-dump`. Default no-flag wiki export remains byte-equivalent to current behavior.
+    - '19. Wiki dump `tables[]` membership is the `McpDbContext` DbSet CLR property names listed in section 11. Import remaps rows that have a workspace id or workspace path column. Rows without workspace identity use `importPolicy: skip-if-exists` and emit a diagnostic. Hostile-review DbSets are included only if Phase E has landed; otherwise dump records diagnostic `tables-omitted: HostileReview*`.'
+    - '20. add-workspace dump parameter name is `--dump` (file or directory). Wiki export dump flag is `--include-dump` (default off). Bind `--dump` on live add-workspace: `WorkspaceClient.CreateAsync` and `POST /mcpserver/workspace` (`WorkspaceController.CreateAsync`). If the CLI/skill wrapper has no `--dump` yet, the first red test is a failing consumer of `--dump` on that CreateAsync contract (Director/REPL/plugin wrapper of workspace create). Do not bind hydration to `FederationClient.RegisterWorkspaceAsync` (that posts `mcpserver/federation/proxies/{proxyId}/workspaces` and is out of scope unless a named AC later requires federation proxy hydration).'
+    - 21. Plugin Pester gate is `pwsh -NoProfile -Command "Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI"` plus sibling pester files under `plugins/core/test-fixtures/pester/` that a slice touches. No Nuke Pester target exists in `build/*.cs` today; do not invent one as a skip.
+    - 22. Existing green tests are never relabeled as new reds. D0/B1 inventory classifies reuse vs remaining gap before any new test file is written.
+    - ''
+    - '## 3. Current state (verified 2026-08-21 live todo_get)'
+    - ''
+    - 'Store receipts from `todo_get` (not TODO.yaml):'
+    - ''
+    - '- MCP-PLUGINCORE-004: open. FR-MCP-PLUGINCORE-004 and FR-MCP-REPL-009 pending. Tasks 1-8 all Done=false. Canonical parser tests already exist in `plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1` (`parses dictionary-backed dialogItems YAML and property-backed JSON`, empty-payload reject). Remaining is reliability, checksum sync across official plugins, and REPL strategy isolation per TR-MCP-REPL-010.'
+    - '- MCP-PLUGININT-001: P0 planning task marked done. P1-P20 open. No `tests/McpServer.PluginIntegration.Tests` project found in repo search. FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001 / TEST-MCP-PLUGININT-001 exist; AC unchecked.'
+    - '- MCP-HANDOFF-001: ImplementationTasks 1-10 marked done in store; task 11 docs/wiki open. Code exists: `HandoffIngestionService`, `HandoffController`, `HandoffClient`, `HandoffDirectorCommands`, `HandoffMcpToolTests`, `HandoffIngestionServiceTests`, SQLite `HandoffIngestionRuns`. FR-HANDOFF-001..007 linked; `isSatisfied` false. Do not store-close.'
+    - '- MCP-HANDOFFPLAN-001: same code; independent Codex review NOT APPROVED. New-migration gate: `AddHandoffIngestionStorage` apply/round-trip/down-up on Sqlite, SQL Server, PostgreSQL, serially.'
+    - '- MCP-HANDOFFREVIEW-001: DependsOn HANDOFF-001 and HANDOFFPLAN-001. Remaining text still requires a fresh independent Codex APPROVED plus (this plan) hostile AGREE. P1 lease/fencing/heal/containment/mode-enum/path-scope; P2 8 MiB-before-allocate, prompt identity, HTTP mapping, missing tests; P3 dead `ReplayOfRunId` and `HandoffReviewState.Approved`. Many of those already have on-disk tests (section 8 D0). Do not rewrite those as new reds.'
+    - '- MCP-HOSTILEREVIEW-001: no FR/TR family. No queue tool or normalized store. OrphanReason: needs BDPv4 capture before implementation.'
+    - '- MCP-WORKSPACEHYGIENE-002: replacement for tombstoned MCP-WORKSPACEHYGIENE-001. No FR/TR family. Keep open per owner. Read-only by default.'
+    - '- MCP-WIKIEXPORT-001: still linked to completed FR-MCP-WIKIEXPORT-001/002. Dump/import hydration and todo.yaml deprecation NOT-STARTED. Relink to 003/004/005 after Phase A create.'
+    - ''
+    - 'Related live defects that interact with this plan: BUG-TRIAGE-170 (2s drain timeout), BUG-TRIAGE-165 (appendDialog 500), BUG-TRIAGE-171 (SubmitAsync 503 burst). 170 is in-scope (decision 7). 165/171 are blockers only if a named test in this plan hits them.'
+    - ''
+    - '## 4. Dual pre-implementation hostile gates'
+    - ''
+    - '### Gate P0-A: Plan completeness (this document)'
+    - ''
+    - Hostile validator (`hostile-validator` skill, independent sub-agent, add-profile first). Class 1 project implementation planning.
+    - ''
+    - 'Attack:'
+    - ''
+    - '- Every listed TODO has a phase, named tests, FR/TR/TEST, and exit gate.'
+    - '- BDPv4 order: requirements, red tests, mocks, implement, full suite green, hostile between phases.'
+    - '- No skipped-test placeholders.'
+    - '- Blast radius, breaking flags, migration providers, Nuke deploy, plugin sync named.'
+    - '- Handoff remediations are not omitted; existing green Handoff tests are not relabeled as red.'
+    - '- Drain 2s timeout is in-scope (TEST-MCP-195 AC5-7).'
+    - '- Plan is decision-complete: public contracts, data shapes, failure modes, rollout, validation commands.'
+    - ''
+    - OverallVerdict AGREE required before creating `PLAN-PLUGINHANDOFF-001`.
+    - ''
+    - '### Gate P0-B: TODO fidelity'
+    - ''
+    - After operator approval and P0-A AGREE, create `PLAN-PLUGINHANDOFF-001` via MCP TODO API. Body must contain this entire plan (sections 1 through 19), without omitting phases, AC, test names, or gates. Hostile compares TODO get payload to this plan file. AGREE required before Phase A product tests or implementation. A summary TODO with "see plan.md" is a FAIL.
+    - ''
+    - '## 5. Phase A: Requirements (no product implementation)'
+    - ''
+    - Hostile after this phase before any red tests that encode new behavior.
+    - ''
+    - '### A1. Verify existing families (read store, do not duplicate)'
+    - ''
+    - Confirm via `requirements_list` plus generated docs / `get_todo_execution_context` that these exist with structured AC. If the live store AC array is empty while markdown has bullets, hydrate AC through requirements update (requirement change, not product code).
+    - ''
+    - 'Existing (do not recreate):'
+    - ''
+    - '- FR-MCP-PLUGINCORE-004 AC: (1) documented dialogItems arrays preserve every item and increment auditDialog by accepted count; (2) empty/unparseable appendDialog returns failure, not silent success; (3) canonical fix propagates to every official plugin without checksum drift. TR-MCP-PLUGINCORE-004, TR-MCP-PLUGINCORE-005. TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005.'
+    - '- FR-MCP-REPL-009 AC: (1) Open, begin, update, appendDialog, appendActions remain successful when primary fails and failsafe succeeds; (2) failsafe artifact is a replayable envelope; (3) completeTurn and failTurn report degraded strategy name and absolute path; (4) primary success produces no pending failsafe artifact. TR-MCP-REPL-010..013. TEST-MCP-REPL-025..028.'
+    - '- FR-MCP-PLUGININT-001 AC: eight scenarios; cache only under `{workspace}/.mcpServer/{agent}`; PLUGIN_ROOT_OVERRIDE cannot redirect; deterministic plus AiTheory for all eight; target Failed 0 Skipped 0 with plugin source revision. TR-MCP-PLUGININT-001. TEST-MCP-PLUGININT-001 (five AC matching those).'
+    - '- FR-HANDOFF-001..007, TR-HANDOFF-CONTRACT-001, TR-HANDOFF-SECURITY-001, TR-HANDOFF-AGENT-001, TR-HANDOFF-VALIDATE-001, TR-HANDOFF-MODES-001, TR-HANDOFF-TODO-001, TR-HANDOFF-AUDIT-001, TR-HANDOFF-SURFACE-001, TEST-HANDOFF-001..007, mappings as in MCP-HANDOFFPLAN-001.'
+    - '- FR-MCP-172 / TR-MCP-PERSIST-003 / TEST-MCP-195 (drain). Amend only as A5.'
+    - ''
+    - '### A2. New FR/TR/TEST for hostile review queue'
+    - ''
+    - Create through MCP requirements only. One TR and one TEST per FR (six of each). Mapping 1:1. Link onto MCP-HOSTILEREVIEW-001 and PLAN-PLUGINHANDOFF-001.
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-001: Agent can enqueue a bounded hostile review request.'
+    - ''
+    - '- AC1: Request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, optional AC list.'
+    - '- AC2: Serialized request JSON greater than 1,048,576 bytes is rejected with no queue row.'
+    - '- AC3: Authenticated workspace scope: foreign workspace is 403 and no row.'
+    - '- AC4: Valid request creates a QueueItem with stable id and status queued.'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-001 schema/storage. TEST-MCP-HOSTILEREVIEW-001.
+    - ''
+    - 'Named tests: `HostileReviewEntity_RoundTrip_SqlitePgSqlServer`, `HostileReviewSubmit_ValidRequest_CreatesQueueItem`, `HostileReviewSubmit_OversizedPayload_Rejected`, `HostileReviewSubmit_ForeignWorkspace_403`.'
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-002: Artifact links resolve only through supported MCP APIs (TODO, FR/TR/TEST, session log, triage, plans, files, commits, generated docs).'
+    - ''
+    - '- AC1: Missing link produces a diagnostic, not silent omit.'
+    - '- AC2: Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit.'
+    - '- AC3: Successful resolve stores the resolved artifact identity and hash when available.'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-002. TEST-MCP-HOSTILEREVIEW-002.
+    - ''
+    - 'Named tests: `HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit`, `HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic`, `HostileReviewSubmit_AmbiguousLink_Diagnostic`.'
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-003: Reviewer run records model, effort, agent identity, plugin/source, prompt template/version, run id, timestamps, token/runtime metadata when available.'
+    - ''
+    - '- AC1: Execution row records model string, effort level, agent identity, plugin/source surface.'
+    - '- AC2: Execution row records prompt template id and version, run id, start/end UTC.'
+    - '- AC3: Token/runtime metadata stored when the reviewer surface provides it; omitted with diagnostic when not provided (not fabricated).'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-003. TEST-MCP-HOSTILEREVIEW-003.
+    - ''
+    - 'Named tests: `HostileReviewExecution_RecordsModelEffortAgentTemplateRunId`, `HostileReviewExecution_OmitsFabricatedTokenCounts`.'
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-004: Normalized findings taxonomy and request-quality.'
+    - ''
+    - '- AC1: Findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, uncertainty.'
+    - '- AC2: Verdicts are AGREE, DISAGREE, or UNKNOWN only.'
+    - '- AC3: Request-quality scores disclosure, scope clarity, objective clarity, confidence, enough-context as explicit fields.'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-004. TEST-MCP-HOSTILEREVIEW-004.
+    - ''
+    - 'Named tests: `HostileReviewGet_NormalizedFindings_TaxonomyComplete`, `HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext`.'
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-005: Query/report failure modes by workspace, model, effort, requesting agent, reviewer agent, target type, artifact type, severity, category.'
+    - ''
+    - '- AC1: Query with each dimension returns only matching runs.'
+    - '- AC2: Combined filters AND.'
+    - '- AC3: Empty match is empty list, not error.'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-005. TEST-MCP-HOSTILEREVIEW-005.
+    - ''
+    - 'Named tests: `HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns`, `HostileReviewQuery_ByRequesterAndTargetType_AndFilters`, `HostileReviewQuery_NoMatch_EmptyList`.'
+    - ''
+    - 'FR-MCP-HOSTILEREVIEW-006: Default is queue-and-record. Automated mutation from review output requires a separate explicit workflow (not this TODO).'
+    - ''
+    - '- AC1: Completing a review does not edit product files, requirements, or TODOs.'
+    - '- AC2: REST, REPL, Director, plugin skill expose submit/status/get/query only.'
+    - '- AC3: No hidden repair/apply endpoint is registered in this TODO.'
+    - ''
+    - TR-MCP-HOSTILEREVIEW-006. TEST-MCP-HOSTILEREVIEW-006.
+    - ''
+    - 'Named tests: `HostileReview_Default_DoesNotMutateProductFiles`, `HostileReview_SurfaceParity_RestReplDirectorPlugin`.'
+    - ''
+    - '### A3. New FR/TR/TEST for workspace hygiene'
+    - ''
+    - 'FR-MCP-HYGIENE-001: Read-only workspace validation service with versioned rule registry and shared result contract (rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, summary counts).'
+    - ''
+    - '- AC1: Result contract has those required fields.'
+    - '- AC2: Clean workspace produces zero findings.'
+    - '- AC3: Registry is versioned; unknown rule code is not silently skipped.'
+    - ''
+    - TR-MCP-HYGIENE-001. TEST-MCP-HYGIENE-001.
+    - ''
+    - 'Named tests: `WorkspaceValidation_ResultContract_HasRequiredFields`, `WorkspaceValidation_CleanWorkspace_ZeroFindings`, `WorkspaceValidation_UnknownRuleCode_Diagnostic`.'
+    - ''
+    - 'FR-MCP-HYGIENE-002: Traceability and missing-AC rules.'
+    - ''
+    - '- AC1: FR/TR (and TEST unless excluded by a documented rule) with no AC rows is a finding with record id and evidence.'
+    - '- AC2: TR mapped to no FR is a finding.'
+    - '- AC3: FR lacking required TR or TEST coverage is a finding.'
+    - '- AC4: TEST mapped to no FR is a finding.'
+    - '- AC5: Broken or duplicate mappings are findings.'
+    - ''
+    - TR-MCP-HYGIENE-002. TEST-MCP-HYGIENE-002.
+    - ''
+    - 'Named tests: `Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord`, `Rule_TrWithNoFr_Orphan`, `Rule_FrMissingTrOrTest_Orphan`, `Rule_TestWithNoFr_Orphan`, `Rule_BrokenOrDuplicateMapping`.'
+    - ''
+    - 'FR-MCP-HYGIENE-003: TODO consistency.'
+    - ''
+    - '- AC1: done=true with any incomplete implementation task is a finding.'
+    - '- AC2: done=false with all implementation tasks complete is a finding.'
+    - '- AC3: done=true without doneSummary is a finding.'
+    - '- AC4: remaining text that contradicts completion is a finding.'
+    - '- AC5: missing dependency target ids are findings.'
+    - '- AC6: missing referenced requirement IDs are findings.'
+    - ''
+    - TR-MCP-HYGIENE-003. TEST-MCP-HYGIENE-003.
+    - ''
+    - 'Named tests: `Rule_DoneTrue_IncompleteTasks`, `Rule_DoneFalse_AllTasksComplete`, `Rule_DoneWithoutDoneSummary`, `Rule_RemainingContradictsCompletion`, `Rule_MissingDependencyTarget`, `Rule_MissingReferencedRequirementId`.'
+    - ''
+    - 'FR-MCP-HYGIENE-004: Stale turns and non-terminal triage.'
+    - ''
+    - '- AC1: Turns in_progress more than 48h after the authoritative timestamp (injectable UTC clock) are findings.'
+    - '- AC2: Triage reports in live non-terminal states from the domain model are findings; processing failure is distinct from pending.'
+    - '- AC3: Threshold override must be positive, at most 168h, authenticated, and recorded on the run.'
+    - '- AC4: Unauthenticated validate is rejected.'
+    - '- AC5: Cancellation is honored.'
+    - '- AC6: Large workspaces paginate rather than unbounded load.'
+    - ''
+    - TR-MCP-HYGIENE-004. TEST-MCP-HYGIENE-004.
+    - ''
+    - 'Named tests: `Rule_InProgressTurn_OlderThan48h_UtcClock`, `Rule_TriageNonTerminal_UsesLiveDomainEnum`, `Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded`, `Validation_AuthRequired`, `Validation_CancellationHonored`, `Validation_LargeWorkspace_Paginates`.'
+    - ''
+    - 'FR-MCP-HYGIENE-005: Equivalent surfaces and no auto-repair.'
+    - ''
+    - '- AC1: Authenticated REST, Director command, REPL command, and plugin skill expose the same validation.'
+    - '- AC2: Parity: same rule codes, identities, severities, counts, and threshold.'
+    - '- AC3: Validation never auto-repairs or deletes records.'
+    - '- AC4: Director exit 1 when any finding has severity Error or Critical.'
+    - '- AC5: Director exit 0 when findings are empty or Warning-only; JSON is always written.'
+    - ''
+    - TR-MCP-HYGIENE-005. TEST-MCP-HYGIENE-005.
+    - ''
+    - 'Named tests: `Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts`, `Director_Exit1_WhenErrorSeverityPresent`, `Director_Exit0_WhenWarningOnly`, `Validation_NeverAutoRepairs`.'
+    - ''
+    - '### A4. New FR/TR/TEST for wiki dump/import (do not reuse completed 001/002 as dump AC)'
+    - ''
+    - 'FR-MCP-WIKIEXPORT-003: Optional wiki-export flag `--include-dump` emits versioned JSON dump of MCP tables keyed by source workspace, including TODO rows and requirement links. No-flag behavior unchanged.'
+    - ''
+    - '- AC1: Without flag, export is byte-equivalent to current wiki zip/tree behavior (no dump file).'
+    - '- AC2: With flag, dump has schemaVersion, exportedAtUtc, sourceWorkspaceKey, sourceWorkspacePath, tables[], todos[], todoRequirementLinks[], SHA-256 hashes, diagnostics.'
+    - '- AC3: Dump TODO rows and requirement links match store query for that workspace.'
+    - ''
+    - TR-MCP-WIKIEXPORT-003. TEST-MCP-WIKIEXPORT-003.
+    - ''
+    - 'Named tests: `WikiExport_WithoutDumpFlag_UnchangedBehavior`, `WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace`, `Dump_ContainsTodoRowsAndRequirementLinksMatchingStore`, `Dump_Sha256_MatchesCanonicalUtf8Json`.'
+    - ''
+    - 'FR-MCP-WIKIEXPORT-004: add-workspace `--dump` accepts dump path/folder; import remaps workspace id, paths, machine-specific keys, and workspace-scoped FKs. TODO hydrates from dump, not todo.yaml.'
+    - ''
+    - '- AC1: Hydrated TODOs come from dump rows.'
+    - '- AC2: Old workspace id does not appear in the new store.'
+    - '- AC3: Malformed dump, version mismatch, missing tables, unsafe path: rejected, no partial write.'
+    - ''
+    - TR-MCP-WIKIEXPORT-004. TEST-MCP-WIKIEXPORT-004.
+    - ''
+    - 'Named tests: `AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml`, `Import_RemapsWorkspaceIdAndPaths_OldIdAbsent`, `Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected`, `Import_IdempotentReimport_NoDuplicateTodos`.'
+    - ''
+    - 'FR-MCP-WIKIEXPORT-005: todo.yaml is deprecated as TODO source of truth. Cleanup discovers todo.yaml, classifies generated/shadow/deprecated, archives or reports, never silent delete. When dump and todo.yaml both exist: dump wins; diagnostic names both; operator-visible remediation.'
+    - ''
+    - '- AC1: todo.yaml is not used as TODO source when dump is present.'
+    - '- AC2: Cleanup archives to `.mcpServer/archive/todo-yaml/` with evidence; never silent delete.'
+    - '- AC3: Conflict diagnostic names both paths.'
+    - ''
+    - TR-MCP-WIKIEXPORT-005. TEST-MCP-WIKIEXPORT-005.
+    - ''
+    - 'Named tests: `TodoYaml_NotSourceOfTruth_WhenDumpPresent`, `TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete`, `DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth`.'
+    - ''
+    - Relink MCP-WIKIEXPORT-001 FunctionalRequirements from FR-MCP-WIKIEXPORT-001,002 to 003,004,005 after create. Same for TechnicalRequirements 003-005.
+    - ''
+    - '### A5. Drain timeout requirement (in-scope)'
+    - ''
+    - Amend existing TR-MCP-PERSIST-003 and TEST-MCP-195 (FR-MCP-172). Also amend TR-MCP-REPL-012 AC1 with the drain SubmitAsync exception in decision 7. Do not create TEST-MCP-REPL-041. Do not change TEST-MCP-REPL-027 expected 30s for completeTurn/beginTurn.
+    - ''
+    - 'Add structured AC on TEST-MCP-195 (keep existing AC 1-4):'
+    - ''
+    - '- AC5: Get-ReplMethodTimeoutSeconds during drain for client.SessionLog.SubmitAsync returns REPL_FAILSAFE_DRAIN_TIMEOUT (default 120) or REPL_TIMEOUT when that is greater, never 2.'
+    - '- AC6: A failsafe SubmitAsync that succeeds within that budget is replayed and the yaml is removed.'
+    - '- AC7: Nested drain while ReplRawInFlight is set is deferred; getFr still EXIT 0 with body before 30s when a queued session_submit 503s (existing AC4 unchanged).'
+    - ''
+    - 'Add structured AC on TR-MCP-REPL-012:'
+    - ''
+    - '- Keep AC1 for sessionlog workflow methods at 30s (completeTurn, beginTurn).'
+    - '- AC3: `client.SessionLog.SubmitAsync` while ReplFailsafeDraining uses REPL_FAILSAFE_DRAIN_TIMEOUT as above; this does not raise completeTurn/beginTurn above 30s.'
+    - ''
+    - 'Named tests: keep existing TEST-MCP-195 Pester examples and TEST-MCP-REPL-027; add `Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds`, `Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml`, `Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun`, `Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout`.'
+    - ''
+    - Link to MCP-PLUGINCORE-004, PLAN-PLUGINHANDOFF-001, BUG-TRIAGE-170.
+    - ''
+    - '### A6. Phase A hostile'
+    - ''
+    - 'Hostile AGREE on: every new FR has TR and TEST; every TEST has structured AC; mappings complete; no product files added in this phase except requirements store and generated wiki export if operator requests export. Then stop.'
+    - ''
+    - '## 6. Phase B: Plugin core dialog parse + REPL degraded persistence + drain timeout'
+    - ''
+    - 'Child TODO: MCP-PLUGINCORE-004. Also satisfies BUG-TRIAGE-170 for drain.'
+    - ''
+    - '### B1. Existing green vs new red'
+    - ''
+    - 'Do not rewrite already-green tests as if they were new reds. Hostile 161800Z: dictionary/JSON dialog parse examples already exist in `PluginPowerShellRuntime.Tests.ps1`; `SessionLogPersistenceStrategyTests` already covers failover, cancel, dual-fail, V4 envelope under `.mcpServer/failsafe/{agent}/workspaces`.'
+    - ''
+    - 'Reuse (must stay green; if red, that is a regression, not a new slice):'
+    - ''
+    - '- `parses dictionary-backed dialogItems YAML and property-backed JSON`'
+    - '- `rejects appendDialog when no dialog items can be parsed`'
+    - '- `SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope` and sibling coordinator facts (`PersistAsync_PrimaryFails_ReturnsFailsafeResult`, `PersistAsync_CallerCancels_DoesNotInvokeFailsafe`, `PersistAsync_BothStrategiesFail_ThrowsPersistenceException`)'
+    - ''
+    - 'New red tests (must be red before the corresponding code change):'
+    - ''
+    - '- FR-MCP-PLUGINCORE-004 AC3: `SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore` (Build.Tests)'
+    - '- FR-MCP-REPL-009 AC1, one test per method: `Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess`, `Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess`, `Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess`, `Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess`, `Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess`'
+    - '- FR-MCP-REPL-009 AC3: `Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath`'
+    - '- FR-MCP-REPL-009 AC4: `Coordinator_PrimarySuccess_NoPendingFailsafeArtifact`'
+    - '- Path unification: `Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending`, `Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource`'
+    - '- TEST-MCP-195 AC5-7 and TR-MCP-REPL-012 exception: `Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds`, `Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml`, `Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun`, `Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout`'
+    - ''
+    - 'Mocks: fake `ISessionLogPersistenceStrategy` pair. Drain tests may override Invoke-ReplRaw like TEST-MCP-REPL-031. No live 7147 in unit tests.'
+    - ''
+    - '### B2. Hostile after red'
+    - ''
+    - AGREE that every remaining unsatisfied AC has a currently failing new test, and that existing green tests were not relabeled as red.
+    - ''
+    - '### B3. Implement (green)'
+    - ''
+    - '- Canonical `Get-ReplDialogItemsFromParams` / `Invoke-WorkflowAppendDialog` in `plugins/core/lib-ps/repl-invoke.ps1`. Fail closed on empty parse. Do not increment auditDialog before server success (align with BUG-TRIAGE-165 plugin-side if still present).'
+    - '- `ISessionLogPersistenceStrategy` primary vs failsafe + coordinator in `src/McpServer.Repl.Core` per TR-MCP-REPL-010. Atomic V4 path `{workspace}/.mcpServer/failsafe/{agent}/workspaces/{key}/pending/` (same string the existing C# test already asserts). Unify plugin `Get-McpFailsafeDir` to that tree. Migrate legacy plugin queue files with checksum match then delete source.'
+    - '- Remove hardcoded `return 2` drain SubmitAsync timeout; use locked `REPL_FAILSAFE_DRAIN_TIMEOUT` (default 120) as in decision 7; keep ReplRawInFlight deferral. Amend TEST-MCP-195 rather than adding TEST-MCP-REPL-041.'
+    - '- `./build.ps1 SyncAgentPlugins`. Verify checksums of official plugin lib copies.'
+    - ''
+    - '### B4. Gate'
+    - ''
+    - '```'
+    - pwsh -NoProfile -File .\build.ps1 Compile
+    - pwsh -NoProfile -Command "Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI"
+    - dotnet test tests/McpServer.Repl.Core.Tests -c Debug
+    - pwsh -NoProfile -File .\build.ps1 Test
+    - '```'
+    - ''
+    - Failed 0, Skipped 0 in plugin Pester scope + Repl.Core.Tests + any new drain tests.
+    - ''
+    - '### B5. Hostile after green'
+    - ''
+    - AGREE on parser, coordinator (all five non-terminal methods), drain timeout, checksum sync, failsafe path unification. Then may start Phase C. MCP-PLUGINCORE-004 may be marked done after B5 AGREE plus gate (later phases are separate TODOs) only with receipt path in doneSummary.
+    - ''
+    - '## 7. Phase C: Plugin Session Log integration harness (MCP-PLUGININT-001)'
+    - ''
+    - Depends on Phase B AGREE (dialog parse + drain timeout + path unification).
+    - ''
+    - 'P0 is already done in the store. The following inlines MCP-PLUGININT-001 P1-P20 from live `todo_get`. Red-labeled P tasks write failing tests first. Hostile AGREE on those reds before any green implementation of that group. Green-labeled P tasks implement until the preceding red tests pass, then refactor. Mocks: adapter unit tests use process I/O doubles (executable/args/stdin/env/cwd/exit/stdout/stderr). Theory rows and fixture use a disposable real server (TODO requires it). No developer-service database.'
+    - ''
+    - 'Hostile-after-red-before-implement order (cannot write all C reds first because P4 needs the test project):'
+    - ''
+    - '- C-red-P1 AGREE, then P2-P3 green, then C-green-P1-P3 AGREE'
+    - '- C-red-P4 AGREE, then P4 green, then C-green-P4 AGREE'
+    - '- C-red-P5 AGREE, then P6 green, then C-green-P5-P6 AGREE'
+    - '- C-red-P7 AGREE, then P8-P10 green, then C-green-P7-P10 AGREE'
+    - '- C-red-P11 AGREE, then P12-P13 green, then C-green-P11-P13 AGREE'
+    - '- C-red-P14 AGREE, then P14 green, then C-green-P14 AGREE'
+    - '- C-red-P15 AGREE, then P15 green, then C-green-P15 AGREE'
+    - '- C-red-P16 AGREE, then P17-P18 green, then C-green-P16-P18 AGREE'
+    - '- C-red-P19 AGREE, then P19 execute, then C-green-P19 AGREE'
+    - '- C-red-P20 AGREE, then P20 execute, then C-green-P20 AGREE'
+    - ''
+    - 'P1 red: `BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail`; `Solution_ContainsMcpServerPluginIntegrationTestsProject`; `Catalog_HasExactlyEightEnabledScenarios`. Hostile C-red-P1. Then P2-P3 green.'
+    - ''
+    - 'P2 green of P1: create `tests/McpServer.PluginIntegration.Tests` (xUnit v3, SharpNinja.aiUnit, McpServer.Client, XMLDocs, nonparallel). Test: `PluginIntegrationProject_HasXmlDocsAndNonparallelCollection`.'
+    - ''
+    - 'P3 green of P1: `PluginSessionLogScenario` / `PluginHostKind` plus `scenarios/plugin-sessionlog-scenarios.json` with Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, OpenCode.'
+    - ''
+    - 'P4 red: `Catalog_UniqueAgentSourceCache`, `Catalog_RepositoryRootsExist`, `Catalog_SupportedHostKinds`, `Catalog_RequiredEntrypointFilesExist`, `Catalog_VersionMetadataPresent`, `Catalog_ExactlyEightEnabled`. Hostile C-red-P4. Then P4 green.'
+    - ''
+    - 'P5 red: `ServerFixture_SelectsFreePort`, `ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase`, `ServerFixture_StartupTimeout`, `ServerFixture_CreatesMarker`, `ServerFixture_SignatureAndNonceTrust`, `ServerFixture_DeterministicCleanup`. Never the developer service DB. Hostile C-red-P5. Then P6.'
+    - ''
+    - 'P6 green of P5: implement fixture launching compiled `McpServer.Support.Mcp` on loopback. Test: `ServerFixture_HealthReady_ExposesTrustedMarkerAndClient`.'
+    - ''
+    - 'P7 red: `Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr` for each PluginHostKind (eight rows or one theory). Mocks: fake process runner. Hostile C-red-P7. Then P8-P10.'
+    - ''
+    - 'P8 green of P7: Codex wrapper and PowerShell-hook adapters (`Invoke-CodexMcpPlugin.ps1`, `Invoke-CopilotMcpPlugin.ps1`, hooks/scripts session-start/user-prompt-submit/stop-gate). Test: `Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint`.'
+    - ''
+    - 'P9 green of P7: Cline v1 MCP-stdio `dist/index.js` after npm build. Test: `Adapter_ClineV1_StdioSessionLogTools`.'
+    - ''
+    - 'P10 green of P7: Cline v2 and OpenCode SDK adapters via existing test shims, not raw `lib/repl-invoke.ps1`. Test: `Adapter_ClineV2AndOpenCode_UseProductionExport`.'
+    - ''
+    - 'P11 red: `Theory_EachScenario_FailsUntilAdapterOperational` (eight rows). Maps TEST-MCP-PLUGININT-001 AC1. Hostile C-red-P11. Then P12-P13.'
+    - ''
+    - 'P12 green of P11: `Theory_{Agent}_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt` for each of the eight agents. Maps TEST-MCP-PLUGININT-001 AC2 workflow half.'
+    - ''
+    - 'P13 green of P11: `Theory_{Agent}_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace` via McpServer.Client. Maps TEST-MCP-PLUGININT-001 AC2 durable query.'
+    - ''
+    - 'P14 red: `Theory_{Agent}_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty`. Maps TEST-MCP-PLUGININT-001 AC4. Hostile C-red-P14. Then P14 green.'
+    - ''
+    - 'P15 red: `Theory_{Agent}_Success_NoPendingFailsafe`; `Theory_{Agent}_FailedSubmit_RetainsRootIdPending`; `Theory_{Agent}_RetrySuccess_DeletesOnlyMatchingPending`. Requires Phase B drain timeout and V4 failsafe path. Maps remaining AC2 isolation plus failsafe. Hostile C-red-P15. Then P15 green.'
+    - ''
+    - 'P16 red: `AiTheory_{Agent}_RequiresValidJsonFields` companion rows. Maps TEST-MCP-PLUGININT-001 AC3. Hostile C-red-P16. Then P17-P18.'
+    - ''
+    - 'P17 green of P16: `AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure`.'
+    - ''
+    - 'P18 gate: `Build.PluginSessionLogIntegration.cs` preflights aiUnit, runs deterministic and AI traits with TRX, fails on failed or skipped. Test: `NukeTarget_SkipIsFailure`. Maps TEST-MCP-PLUGININT-001 AC5 focused-target half.'
+    - ''
+    - 'P19 red tests (TEST-MCP-PLUGININT-001 AC5 native-suite half), then hostile C-red-P19, then execute:'
+    - ''
+    - '- `PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero`'
+    - '- `PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero`'
+    - '- `PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit`'
+    - ''
+    - 'P19 green: run each plugin native suite (Pester/Bats/Jest as applicable), `SyncAgentPlugins`, rerun native suites, record branch/SHA, no unrelated commits. Evidence under `docs/receipts/pluginint-p19-<utc>/`. The named tests fail until those TRX/Pester receipts exist and parse Failed 0 Skipped 0.'
+    - ''
+    - 'P20 red tests, then hostile C-red-P20, then execute:'
+    - ''
+    - '- `PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero`'
+    - '- `PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag`'
+    - ''
+    - 'P20 green: harness against development UpdateService with sanitized fixtures. Staging/production plugin promotion remains blocked unless an explicit operator approval artifact is present; the second test fails closed without it.'
+    - ''
+    - 'Validation commands after P18:'
+    - ''
+    - '```'
+    - dotnet test tests/Build.Tests --filter FullyQualifiedName~PluginSessionLog
+    - dotnet test tests/McpServer.PluginIntegration.Tests -c Debug
+    - pwsh -NoProfile -File .\build.ps1 PluginSessionLogIntegration
+    - '```'
+    - ''
+    - The Nuke target name is created in P1; until it exists the P1 test is red. Do not skip.
+    - ''
+    - 'If appendDialog 500 appears: stop Phase C, Byrd-fix BUG-TRIAGE-165, re-run C.'
+    - ''
+    - '## 8. Phase D: Handoff remediations and closeout'
+    - ''
+    - 'Children: MCP-HANDOFF-001, MCP-HANDOFFPLAN-001, MCP-HANDOFFREVIEW-001.'
+    - ''
+    - 'Do not rewrite the feature. Code already on disk. Order:'
+    - ''
+    - '### D0. Evidence inventory'
+    - ''
+    - 'Read `HandoffIngestionService`, tests, migrations. Read review file `C:\Users\kingd\AppData\Local\Temp\PowerShell.MCP.Output\pwsh_output_20260816_214119_608_0b1a5xex.qrj.txt` if present. For each P1/P2/P3 finding: grep source and tests. Classify reuse (already green) vs remaining gap (new red). Write the inventory as a PLAN TODO checkpoint before D1 new tests.'
+    - ''
+    - D0 reuse is the complete Handoff* test method inventory under `tests/` (excluding Dispose and nested helper members). If a later grep finds another Handoff* test, add it here as reuse. Do not invent a different new-red name for an existing method.
+    - ''
+    - 'Complete reuse inventory (must stay green; not new reds):'
+    - ''
+    - 'Client: `IngestHandoffAsync_PostsIngestContract`, `GetHandoffRunAsync_SendsCorrectUrl`, `ApproveHandoffAsync_PostsApprovalContract`, `HandoffContracts_RoundTripThroughClientJsonContext`, `HandoffEnums_ExposeDocumentedValues`.'
+    - 'Controller: `HandoffControllerTests.IngestAsync_DelegatesToSharedService`, `GetAndApprove_DelegateToSharedService`, `GetRunAsync_MissingRun_UsesErrorCodeForNotFound`.'
+    - 'MCP tools: `HandoffIngest_DelegatesToSharedService`, `HandoffIngest_NumericMode999_ReturnsInvalidMode`, `PublicSurfaces_ExposeIngestGetAndApprove`, `PluginSync_HandoffSkill_MatchesCoreArtifact`, `HandoffIngest_InvalidMode_ReturnsError`.'
+    - 'REPL: `Dispatcher_RoutesHandoffWorkflowMethods`, `Dispatcher_NumericMode999_ReturnsInvocationError`, `SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient`, `PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints`.'
+    - 'Director/DI: `AddHandoffServices_WithoutAgentPool_ResolvesUnavailableExtractor`, `HandoffIngestDirectorCommand_PrimaryCommand_DelegatesToExecutor`.'
+    - 'Validator: `HandoffTodoDraftValidatorTests.Validate_InvalidFields_ProduceFieldDiagnostics`, `Validate_BlankDescriptionAndTechnicalDetails_ProduceFieldDiagnostics`, `Validate_ValidDraft_NormalizesValues`, `Validate_MultiSegmentRequirementIds_AreAccepted`.'
+    - 'Ingestion service (21 facts): `IngestAsync_SupportedFormats_AreAccepted`, `IngestAsync_UnsafeSources_ProduceDiagnosticsAndNoTodo`, `IngestAsync_MalformedExtractorJson_DoesNotCreateTodo`, `IngestAsync_UnknownSourceNotes_AreNotDiscarded`, `IngestAsync_DraftOnly_DoesNotCreateTodo`, `IngestAsync_LowConfidence_RequiresReview`, `IngestAsync_CreateWhenConfident_CreatesExactlyOneTodo`, `IngestAsync_SameHashAndPrompt_ReplaysExistingRun`, `IngestAsync_DuplicateTodoId_RequiresReview`, `IngestAsync_PersistsProvenanceWithoutSourceContent`, `ApproveAsync_RevalidatesThenCreates`, `IngestAsync_ExtractorCancelled_DoesNotCreateTodo`, `IngestAsync_MissingExtractorFields_DoesNotCreateTodo`, `IngestAsync_AmbiguousHandoff_RequiresReview`, `IngestAsync_TodoServiceFailure_RequiresReview`, `IngestAsync_ForceTrue_ExtractsAgain`, `IngestAsync_ArtifactSource_UsesDocumentChunks`, `IngestAsync_ReparseEscape_IsRejected`, `IngestAsync_DifferentWorkspace_DoesNotReplay`, `ApproveAsync_ConcurrentApprovals_CreateOnce`, `IngestAsync_BlankDescriptionAndTechnicalDetails_ReturnFieldDiagnosticsAndDoNotCreateTodo`.'
+    - 'AgentPool/one-shot redaction (FR-HANDOFF-002 / P1-5 reuse, not D1 new reds): `AgentPoolServiceTests.EnqueueOneShotAsync_HandoffContext_ExecutorGetsRawPromptAndSurfacesStayRedacted`, `OneShotSensitivePromptPolicyTests.Publish_HandoffContext_RedactsRawSource`.'
+    - 'Empty-db apply: `ProviderDatabaseIntegrationTests.PostgreSql_CleanDatabase_AppliesHandoffMigrationAndPersistsEntity`.'
+    - 'Durability: `IngestAsync_ConcurrentReplayOfLiveLease_ReturnsInProgressNotReplay`, `IngestAsync_StaleLease_IsTakenOverBySecondInstance`, `IngestAsync_CancelledAfterReserve_PersistsFailureThenThrows`, `ApproveAsync_StaleApprovalLease_IsRecoveredBySecondInstance`, `ApproveAsync_TwoInstances_CreateExactlyOneTodo`, `ApproveAsync_Rejection_DoesNotCreateTodo`, `IngestAsync_ExistingTodoFromThisRun_HealsInsteadOfColliding`, `IngestAsync_CallerOwnedTodoId_IsNonSuccessCollision`, `IngestAsync_InvalidRequireReviewDraft_IsFailedAndNotSuccess`, `GetRunAsync_AfterCollision_PreservesPersistedSuccessAndErrorCode`, `SaveRunAfterTodo_CommitFailure_HealsAndPreservesUnrelatedTrackedEntities`, `SaveRunAfterTodo_CancellationAfterTodo_PersistsCreatedThenThrows`, `IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate`, `ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins`, `ApproveAsync_LiveClaimant_RejectsStaleSecondClaim`, `IngestAsync_SameKeyChangedPayload_IsCollisionNotHeal`, `SaveRunAfterTodo_TodoAbsent_DoesNotReportCreatedFromMemory`, `SaveRunAfterTodo_CallerCancellation_PersistsCreatedReceipt`, `SaveRunAfterTodo_CompensationTimeout_DoesNotReportCreatedFromMemory`, `IngestAsync_UndefinedMode_DoesNotCreate`, `IngestAsync_CustomPromptTemplate_IsRejected`, `IngestAndApprove_CredentialBearingProvenance_IsSanitized`.'
+    - 'Bounded/containment: `ResolveAsync_OversizedPath_FailsClosed`, `ResolveAsync_OversizedArtifactChunks_FailsBeforeJoin`, `ResolveAsync_ArtifactExactlyAtLimit_Succeeds`, `ResolveAsync_ArtifactCancelled_Throws`, `NormalizeFinalPath_UncDevicePrefix_BecomesUncPath`, `NormalizeFinalPath_LocalDevicePrefix_IsStripped`, `TryGetFinalPath_InvalidHandle_FailsClosedOnWindows`, `ReadBoundedAsync_ExactlyAtLimit_ReturnsText`, `ReadBoundedAsync_GrowingStream_StopsAtLimit`, `ReadBoundedAsync_Cancelled_Throws`, `ReadAsync_OpenShare_BlocksWritesAndDeletes`, `ReadAsync_LongContainedPath_SucceedsWhenSupported`.'
+    - 'Audit: `IngestAsync_ConcurrentSameHash_ReservesOnce`, `GetRunAsync_FailedExtraction_DoesNotReportSuccess`, `RequireReview_MalformedDraft_IsFailedAndNotApprovable`, `IngestAsync_Cancelled_ThrowsWithoutSuccessfulPersist`, `IngestAsync_SecretInDraft_IsRedactedOnPersist`, `Parser_UnknownField_IsNotSuccess`, `ApproveAsync_SeparateContexts_CreatedWins`.'
+    - 'HTTP/enum: `StrictEnumConverter_Numeric999_Throws`, `StrictEnumConverter_UndefinedName_Throws`, `FromErrorCode_MapsStableStatuses`, `Controller_MapsErrorCodesAndRedactsInternalErrors`, `Ingest_NumericMode999_DoesNotCreate`.'
+    - 'DB exceptions: `IsUniqueViolation_SqliteExtendedUniqueCode_IsTrue`, `IsUniqueViolation_PostgresSqlState23505_IsTrue`, `IsUniqueViolation_SqlServerNumbers_AreTrue`, `IsUniqueViolation_EnglishMessageWithoutProviderCode_IsFalse`, `IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue`, `IsCommitAmbiguous_PostgresSqlState40001_IsTrue`, `IsCommitAmbiguous_SqliteBusyCode_IsTrue`, `IsCommitAmbiguous_EnglishMessageOnly_IsFalse`, `IsCommitAmbiguous_TimeoutException_IsTrue`.'
+    - 'Replay keys: `Create_LongWorkspace_ReturnsFixedLengthSha256`, `Create_UnicodeWorkspace_IsStableAndFixedLength`, `Create_DelimiterCollisionInputs_ProduceDistinctIdentities`, `Create_ForceSemantics_PreserveDeterministicReplayAndUniqueForceRows`.'
+    - 'Workspace paths: `Canonicalize_RelativeAndNested_MatchGetFullPath`, `TryCanonicalize_Blank_Fails`, `IngestAsync_CrossWorkspace_DoesNotLeakRuns`.'
+    - 'Dead contracts: `HandoffReviewState_DoesNotDefineApproved`, `HandoffIngestionRunEntity_DoesNotExposeReplayOfRunId`, `SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved`.'
+    - 'Extractor: `ExtractAsync_UsesHandoffTodoDraftContextAndVersionedPrompt`.'
+    - 'Migrations: `Sqlite_HandoffMigration_DowngradeAndReupgrade`, `SqlServer_HandoffMigration_DowngradeAndReupgrade`, `PostgreSql_HandoffMigration_DowngradeAndReupgrade`.'
+    - ''
+    - '### D1. New red tests for remaining gaps only'
+    - ''
+    - Do not write new reds that duplicate D0 names. TEST-HANDOFF-004 AC1 is already covered by `Validate_InvalidFields_ProduceFieldDiagnostics` plus `Validate_BlankDescriptionAndTechnicalDetails_ProduceFieldDiagnostics`. Do not add `HandoffDraft_Invalid*` new reds.
+    - ''
+    - TEST-HANDOFF-006 AC1 API/client/REPL/Director/MCP is already covered by `IngestAsync_DelegatesToSharedService`, `GetAndApprove_DelegateToSharedService`, `PublicSurfaces_ExposeIngestGetAndApprove`, `Dispatcher_RoutesHandoffWorkflowMethods`, `HandoffIngestDirectorCommand_PrimaryCommand_DelegatesToExecutor`, client ingest/get/approve tests. Remaining gap is actual plugin skill-file invocation (checksum-only `PluginSync_HandoffSkill_MatchesCoreArtifact` is not invocation).
+    - ''
+    - 'New reds with zero on-disk method-name matches:'
+    - ''
+    - '- `PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods` (Pester against `plugins/core` handoff skill plus `workflow.handoff.*` in `F:\GitHub\mcpserver-grok-plugin\skills\handoff\SKILL.md`)'
+    - '- `ProcessingLease_RenewsAndFencesTerminalUpdates` (takeover tests exist; renewal interval is the remaining gap)'
+    - '- `Provenance_IncludesEffectiveCustomPromptIdentityAndVersion` (`IngestAsync_CustomPromptTemplate_IsRejected` rejects custom templates; it does not record effective prompt identity)'
+    - ''
+    - Do not add `AgentPool_DoesNotRetainRawHandoffSourceInPromptState` as a new red. That finding is reuse of `EnqueueOneShotAsync_HandoffContext_ExecutorGetsRawPromptAndSurfacesStayRedacted` and `Publish_HandoffContext_RedactsRawSource`.
+    - ''
+    - If D0 source grep finds `CancellationToken.None` still in handoff recovery, add `CancellationRecovery_DoesNotUseUnboundedCancellationTokenNone`. 2026-08-21 src Handoff grep of CancellationToken.None returned no matches, so that finding is reuse/absent unless D0 later finds it.
+    - ''
+    - 'Mocks: lease/clock fakes; TODO service substitute for heal/collision; no live 7147 in unit tests. Integration tests use in-memory or isolated DB.'
+    - ''
+    - TEST-HANDOFF-001..007 AC-to-method map is locked in this P0-A text.
+    - ''
+    - 'TEST-HANDOFF-001 AC1: `HandoffContracts_RoundTripThroughClientJsonContext`.'
+    - 'TEST-HANDOFF-001 AC2: `HandoffEnums_ExposeDocumentedValues`, `IngestHandoffAsync_PostsIngestContract`, `GetHandoffRunAsync_SendsCorrectUrl`, `ApproveHandoffAsync_PostsApprovalContract`.'
+    - 'TEST-HANDOFF-002 AC1: `IngestAsync_UnsafeSources_ProduceDiagnosticsAndNoTodo`, `IngestAsync_ReparseEscape_IsRejected`, `ReadBoundedAsync_GrowingStream_StopsAtLimit`, `ResolveAsync_OversizedPath_FailsClosed`, `ResolveAsync_OversizedArtifactChunks_FailsBeforeJoin`, `NormalizeFinalPath_UncDevicePrefix_BecomesUncPath`, `TryGetFinalPath_InvalidHandle_FailsClosedOnWindows`.'
+    - 'TEST-HANDOFF-002 AC2: `IngestAsync_SupportedFormats_AreAccepted`.'
+    - 'TEST-HANDOFF-003 AC1: `ExtractAsync_UsesHandoffTodoDraftContextAndVersionedPrompt`.'
+    - 'TEST-HANDOFF-003 AC2: `IngestAsync_MalformedExtractorJson_DoesNotCreateTodo`, `IngestAsync_MissingExtractorFields_DoesNotCreateTodo`. Remaining prompt identity: `Provenance_IncludesEffectiveCustomPromptIdentityAndVersion`.'
+    - 'TEST-HANDOFF-004 AC1: `Validate_InvalidFields_ProduceFieldDiagnostics`, `Validate_BlankDescriptionAndTechnicalDetails_ProduceFieldDiagnostics`, `IngestAsync_BlankDescriptionAndTechnicalDetails_ReturnFieldDiagnosticsAndDoNotCreateTodo`.'
+    - 'TEST-HANDOFF-004 AC2: `IngestAsync_DraftOnly_DoesNotCreateTodo`, `IngestAsync_LowConfidence_RequiresReview`, `IngestAsync_CreateWhenConfident_CreatesExactlyOneTodo`, `IngestAsync_UndefinedMode_DoesNotCreate`, `IngestAsync_AmbiguousHandoff_RequiresReview`.'
+    - 'TEST-HANDOFF-005 AC1: `IngestAsync_CreateWhenConfident_CreatesExactlyOneTodo`, `ApproveAsync_RevalidatesThenCreates`, `ApproveAsync_ConcurrentApprovals_CreateOnce`, `ApproveAsync_TwoInstances_CreateExactlyOneTodo`.'
+    - 'TEST-HANDOFF-005 AC2: `IngestAsync_SameHashAndPrompt_ReplaysExistingRun`, `IngestAsync_ForceTrue_ExtractsAgain`, `Create_ForceSemantics_PreserveDeterministicReplayAndUniqueForceRows`.'
+    - 'TEST-HANDOFF-005 AC3: `IngestAsync_DuplicateTodoId_RequiresReview`, `IngestAsync_TodoServiceFailure_RequiresReview`, `IngestAsync_ExistingTodoFromThisRun_HealsInsteadOfColliding`, `IngestAsync_SameKeyChangedPayload_IsCollisionNotHeal`.'
+    - 'TEST-HANDOFF-006 AC1: `IngestAsync_DelegatesToSharedService`, `GetAndApprove_DelegateToSharedService`, `PublicSurfaces_ExposeIngestGetAndApprove`, `Dispatcher_RoutesHandoffWorkflowMethods`, `HandoffIngestDirectorCommand_PrimaryCommand_DelegatesToExecutor`, `PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints`, remaining `PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods`.'
+    - 'TEST-HANDOFF-006 AC2: `IngestAsync_CrossWorkspace_DoesNotLeakRuns`, `IngestAsync_DifferentWorkspace_DoesNotReplay`, `Canonicalize_RelativeAndNested_MatchGetFullPath`.'
+    - 'TEST-HANDOFF-007 AC1: `IngestAsync_PersistsProvenanceWithoutSourceContent`, `Sqlite_HandoffMigration_DowngradeAndReupgrade`, `SqlServer_HandoffMigration_DowngradeAndReupgrade`, `PostgreSql_HandoffMigration_DowngradeAndReupgrade`, remaining `ProcessingLease_RenewsAndFencesTerminalUpdates`.'
+    - 'TEST-HANDOFF-007 AC2: `IngestAndApprove_CredentialBearingProvenance_IsSanitized`, `IngestAsync_SecretInDraft_IsRedactedOnPersist`.'
+    - ''
+    - '### D1.5 Hostile after red'
+    - ''
+    - AGREE that every remaining P1/P2/P3 gap and every unsatisfied TEST-HANDOFF AC has a currently failing named test, that reuse tests were not relabeled as red, and that no remediation code was added in D1. Then D2.
+    - ''
+    - '### D2. Implement remediations'
+    - ''
+    - 'Then migrations: `AddHandoffIngestionStorage` (or current name) apply/round-trip/down-up on Sqlite, SQL Server, PostgreSQL, serially, no competing LocalDB suite. Additional migrations if D2 schema changes.'
+    - ''
+    - '### D3. Docs and wiki'
+    - ''
+    - 'MCP-HANDOFF-001 task 11: docs, examples, mappings, `./build.ps1 ValidateTraceability`, wiki export `workflow.requirements.generateDocument` format wiki docType all. Do not hand-author generated requirement docs.'
+    - ''
+    - '### D4. Gate'
+    - ''
+    - 'Exact commands from MCP-HANDOFFPLAN-001:'
+    - ''
+    - '```'
+    - dotnet test tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj
+    - dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj
+    - dotnet test tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj
+    - dotnet test tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj
+    - dotnet test tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj
+    - .\build.ps1 Compile
+    - .\build.ps1 Test
+    - .\build.ps1 ValidateTraceability
+    - .\build.ps1 SyncAgentPlugins
+    - '```'
+    - ''
+    - Failed 0, Skipped 0.
+    - ''
+    - '### D5. Hostile + independent Codex APPROVED'
+    - ''
+    - 'Both required:'
+    - ''
+    - '- Independent Codex review VERDICT: APPROVED (HANDOFFREVIEW remaining text).'
+    - '- Hostile OverallVerdict AGREE on Handoff AC isSatisfied evidence plus review findings closed.'
+    - ''
+    - Neither substitutes for the other. Then MCP-HANDOFFREVIEW-001 / PLAN / 001 may be marked done only with both receipt paths in doneSummary.
+    - ''
+    - Preserve unrelated dirty worktree changes (sanitizer/requirements) as the TODOs require. Do not commit unless operator says so.
+    - ''
+    - '## 9. Phase E: Hostile review queue (MCP-HOSTILEREVIEW-001)'
+    - ''
+    - Depends on Phase A AGREE for HOSTILEREVIEW FRs. Independent of Handoff except shared MCP tool/REPL/plugin conventions.
+    - ''
+    - '### Contracts (lock)'
+    - ''
+    - 'Entities: ReviewRequest, QueueItem, ArtifactLink, ReviewExecution, ReviewerIdentity, ModelIdentity, EffortLevel, Finding, Recommendation, Verdict, RequestQualityAssessment.'
+    - ''
+    - 'Tool: `hostile_review_submit`, `hostile_review_status`, `hostile_review_get`, `hostile_review_query` (final names follow existing snake_case MCP tools).'
+    - ''
+    - REST under `/mcpserver/hostile-review/*`. Client methods. REPL `workflow.hostileReview.*`. Plugin skill.
+    - ''
+    - Default queue-and-record. No auto-edit of product files from verdicts. Payload max 1,048,576 bytes.
+    - ''
+    - '### Red then green slices (mocks first: fake artifact resolver, fake clock, in-memory store)'
+    - ''
+    - Write every named test in slices 1-7 first. Hostile E-red AGREE that they are failing. Then implement 1-7. Hostile E-green AGREE. Do not implement slice 2+ before E-red.
+    - ''
+    - '1. Schema/EF entities + Sqlite/Pg/SqlServer migrations (tests for apply/round-trip/down-up): `HostileReviewEntity_RoundTrip_SqlitePgSqlServer`.'
+    - '2. Submit tool validation: `HostileReviewSubmit_ValidRequest_CreatesQueueItem`, `HostileReviewSubmit_OversizedPayload_Rejected`, `HostileReviewSubmit_ForeignWorkspace_403`.'
+    - '3. Artifact link resolver: `HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit`, `HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic`, `HostileReviewSubmit_AmbiguousLink_Diagnostic`.'
+    - '4. Execution capture: `HostileReviewExecution_RecordsModelEffortAgentTemplateRunId`, `HostileReviewExecution_OmitsFabricatedTokenCounts`.'
+    - '5. Normalized findings + request-quality: `HostileReviewGet_NormalizedFindings_TaxonomyComplete`, `HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext`.'
+    - '6. Query/analytics: `HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns`, `HostileReviewQuery_ByRequesterAndTargetType_AndFilters`, `HostileReviewQuery_NoMatch_EmptyList`.'
+    - '7. Surface parity: `HostileReview_Default_DoesNotMutateProductFiles`, `HostileReview_SurfaceParity_RestReplDirectorPlugin`.'
+    - ''
+    - '## 10. Phase F: Workspace hygiene (MCP-WORKSPACEHYGIENE-002)'
+    - ''
+    - Depends on Phase A hygiene FRs. Keep TODO open until owner-approved close (owner instruction). Still require hostile AGREE before any done flip.
+    - ''
+    - '### Contracts'
+    - ''
+    - One rule registry. One result DTO. Injectable `IUtcClock`. Default stale-turn threshold 48h, bounded override recorded on the run. Director exit locked in decision 14.
+    - ''
+    - 'Rules (initial): missing AC; traceability orphans and broken mappings; TODO aggregate vs task mismatches and missing doneSummary; remaining vs completion contradiction; missing dependency targets; missing referenced requirement IDs; stale in_progress turns; non-terminal triage from live domain enum.'
+    - ''
+    - Read-only. No silent repair.
+    - ''
+    - '### Surfaces'
+    - ''
+    - '- REST: authenticated workspace-scoped validate endpoint'
+    - '- Director: validate-workspace, human + JSON, exit 1 on Error/Critical, exit 0 on empty or Warning-only'
+    - '- REPL: workspace.validate (exact wrapper schema)'
+    - '- Plugin skill: invocation, interpretation, no-auto-repair'
+    - ''
+    - '### Tests (must match A3 names)'
+    - ''
+    - '`WorkspaceValidation_ResultContract_HasRequiredFields`, `WorkspaceValidation_CleanWorkspace_ZeroFindings`, `WorkspaceValidation_UnknownRuleCode_Diagnostic`, `Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord`, `Rule_TrWithNoFr_Orphan`, `Rule_FrMissingTrOrTest_Orphan`, `Rule_TestWithNoFr_Orphan`, `Rule_BrokenOrDuplicateMapping`, `Rule_DoneTrue_IncompleteTasks`, `Rule_DoneFalse_AllTasksComplete`, `Rule_DoneWithoutDoneSummary`, `Rule_RemainingContradictsCompletion`, `Rule_MissingDependencyTarget`, `Rule_MissingReferencedRequirementId`, `Rule_InProgressTurn_OlderThan48h_UtcClock`, `Rule_TriageNonTerminal_UsesLiveDomainEnum`, `Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded`, `Validation_AuthRequired`, `Validation_CancellationHonored`, `Validation_LargeWorkspace_Paginates`, `Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts`, `Director_Exit1_WhenErrorSeverityPresent`, `Director_Exit0_WhenWarningOnly`, `Validation_NeverAutoRepairs`.'
+    - ''
+    - 'Mocks: in-memory requirement/TODO/session/triage stores plus fake clock. Integration fixture seeds each defect.'
+    - ''
+    - Write every named F test first. Hostile F-red AGREE that they are failing. Then implement registry, rules, and surfaces. Hostile F-green AGREE. Do not implement rules or surfaces before F-red.
+    - ''
+    - '## 11. Phase G: Wiki dump and add-workspace hydration (MCP-WIKIEXPORT-001)'
+    - ''
+    - Depends on Phase A wiki FRs 003-005. Do not treat FR-MCP-WIKIEXPORT-001/002 as this work.
+    - ''
+    - '### Dump schema (lock)'
+    - ''
+    - 'JSON object:'
+    - ''
+    - '- schemaVersion: `mcp-wiki-dump/v1`'
+    - '- exportedAtUtc'
+    - '- sourceWorkspaceKey'
+    - '- sourceWorkspacePath'
+    - '- tables[]: one object per DbSet name below, each with tableName, rowCount, sha256, rows'
+    - '- todos[]'
+    - '- todoRequirementLinks[]'
+    - '- integrity: algorithm `SHA-256`, tableHashes, rootHash'
+    - '- diagnostics[]'
+    - ''
+    - '`--include-dump` on existing wiki export command; default off.'
+    - ''
+    - '### Locked tables[] (McpDbContext DbSet CLR property names, inspected 2026-08-21)'
+    - ''
+    - Workspaces, WorkspaceBannedItems, DataAuditLogs, Documents, Chunks, SessionLogs, SessionLogTurns, SessionLogActions, SessionLogTurnTags, SessionLogTags, SessionLogTurnContexts, SessionLogProcessingDialogs, SessionLogCommits, SessionLogCommitFiles, SessionLogTurnStringLists, ToolDefinitions, ToolDefinitionTags, ToolBuckets, AgentDefinitions, AgentDefinitionModels, AgentWorkspaces, AgentWorkspaceListItems, AgentEventLogs, GraphEntities, GraphRelationships, TodoItems, TodoItemListItems, TodoItemTasks, TodoRequirementLinks, TodoAuditHistory, TodoDocumentMetadata, TodoDocumentNotes, TodoCompletedGroups, TodoCompletedItems, Requirements, RequirementAcceptanceCriteria, RequirementScopeLayers, RequirementTraceabilityLinks, Memories, UseCases, Actors, UseCaseActors, UseCaseFlows, UseCaseSteps, UseCaseSpecialRequirements, UseCaseExtensionPoints, UseCaseFrLinks, BrainSlotDefinitions, BrainSlotInvocations, TriageReports, TriageReportListItems, TriageGroups, TriageResearchRuns, FederationProxies, FederationWorkspaces, FederationOperations, FederationOutbox, FederationConflicts, HandoffIngestionRuns, HandoffDiagnostics, Products, ProductWorkspaceMemberships.
+    - ''
+    - 'Import remaps rows with workspace id or path. Rows without workspace identity: `importPolicy: skip-if-exists` plus diagnostic. If Phase E landed, also dump HostileReview* DbSets; else diagnostic `tables-omitted`.'
+    - ''
+    - '### Import'
+    - ''
+    - 'add-workspace `--dump` file or folder. Remap workspace id, paths, machine keys, FKs. TODO from dump only. If todo.yaml also present: dump wins; emit diagnostic; archive todo.yaml via explicit audited path (copy to `.mcpServer/archive/todo-yaml/` then remove or leave with report). Never silent delete. Idempotent re-import. Breaking change: todo.yaml is no longer TODO source of truth after this phase.'
+    - ''
+    - '### Tests (must match A4 names)'
+    - ''
+    - '`WikiExport_WithoutDumpFlag_UnchangedBehavior`, `WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace`, `Dump_ContainsTodoRowsAndRequirementLinksMatchingStore`, `Dump_Sha256_MatchesCanonicalUtf8Json`, `AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml`, `Import_RemapsWorkspaceIdAndPaths_OldIdAbsent`, `Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected`, `Import_IdempotentReimport_NoDuplicateTodos`, `TodoYaml_NotSourceOfTruth_WhenDumpPresent`, `TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete`, `DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth`.'
+    - ''
+    - Write every named G test first. Hostile G-red AGREE that they are failing. Then implement dump, import, and deprecation. Hostile G-green AGREE. Do not implement import or deprecation before G-red.
+    - ''
+    - Wiki generateDocument remains `workflow.requirements.generateDocument` format wiki docType all. The dump flag is an extension of that export path plus any Director wrapper that already calls it. add-workspace hydration binds to `WorkspaceClient.CreateAsync` / `POST /mcpserver/workspace`. G0 confirms that binding and any Director/REPL/plugin wrapper names, then checkpoints them on the PLAN TODO before G1 tests. Federation proxy register stays out of scope.
+    - ''
+    - '## 12. Phase H: Documentation, plugin sync, traceability, regression'
+    - ''
+    - '- Update docs/user, README only where behavior shipped'
+    - '- `./build.ps1 SyncAgentPlugins`'
+    - '- `./build.ps1 ValidateTraceability`'
+    - '- `./build.ps1 ValidateConfig`'
+    - '- `./build.ps1 Test` (excludes IntegrationTests per current Nuke Test target; run IntegrationTests projects explicitly for Handoff and PluginIntegration)'
+    - '- Wiki generateDocument wiki/all'
+    - '- No hand-authored generated requirement pages'
+    - ''
+    - Hostile on docs vs code (no em-dashes, no stale todo.yaml-as-source claims).
+    - ''
+    - '## 13. Phase I: Program closeout'
+    - ''
+    - 'Mark child TODOs done only with:'
+    - ''
+    - '- Gate command output Failed 0 Skipped 0'
+    - '- Hostile receipt path'
+    - '- OverallVerdict AGREE'
+    - '- doneSummary cites those receipts'
+    - ''
+    - Then PLAN-PLUGINHANDOFF-001 done the same way. Do not mark the program done while MCP-WORKSPACEHYGIENE-002 owner-keep-open instruction still forbids close unless owner retracts it; if still keep-open, PLAN remains open with hygiene as remaining.
+    - ''
+    - '## 14. Master TODO payload (what to persist after P0-A)'
+    - ''
+    - 'Create via MCP:'
+    - ''
+    - '- Id: PLAN-PLUGINHANDOFF-001'
+    - '- Title: Implement plugin core, hostile review queue, plugin integration harness, workspace hygiene, handoff remediations, and wiki dump/import'
+    - '- Section: Planning'
+    - '- Priority: high'
+    - '- Description: full copy of this entire plan file (sections 1-19), not a stub, not "see plan.md"'
+    - '- TechnicalDetails: contracts, IDs, test names, commands, locked decisions'
+    - '- ImplementationTasks: the list in section 18'
+    - '- FunctionalRequirements: union of all FR IDs in this plan'
+    - '- TechnicalRequirements: union of all TR IDs'
+    - '- DependsOn: MCP-PLUGINCORE-004, MCP-PLUGININT-001, MCP-HANDOFF-001, MCP-HANDOFFPLAN-001, MCP-HANDOFFREVIEW-001, MCP-HOSTILEREVIEW-001, MCP-WORKSPACEHYGIENE-002, MCP-WIKIEXPORT-001'
+    - '- planFile: copy into repo `docs/plans/PLAN-PLUGINHANDOFF-001.md` only after operator approval (plan-mode file is the draft)'
+    - ''
+    - '## 15. Validation command index'
+    - ''
+    - Always zero fails and zero skips in the named scope.
+    - ''
+    - '- Compile: `pwsh -NoProfile -File .\build.ps1 Compile`'
+    - '- Unit (CI Test target): `pwsh -NoProfile -File .\build.ps1 Test`'
+    - '- Traceability: `pwsh -NoProfile -File .\build.ps1 ValidateTraceability`'
+    - '- Plugin sync: `pwsh -NoProfile -File .\build.ps1 SyncAgentPlugins`'
+    - '- Repl core: `dotnet test tests/McpServer.Repl.Core.Tests -c Debug`'
+    - '- Support unit: `dotnet test tests/McpServer.Support.Mcp.Tests -c Debug`'
+    - '- Client: `dotnet test tests/McpServer.Client.Tests -c Debug`'
+    - '- Support integration: `dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug`'
+    - '- Repl integration: `dotnet test tests/McpServer.Repl.IntegrationTests -c Debug`'
+    - "- Plugin Pester (locked): `pwsh -NoProfile -Command \"Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI\"` plus sibling pester files under `plugins/core/test-fixtures/pester/` that Phase B or D touches"
+    - '- Plugin integration: new Nuke target from P18'
+    - '- Migrations: provider-specific apply/round-trip/down-up for every new migration'
+    - '- Deploy (only when operator asks): elevated Nuke UpdateService'
+    - ''
+    - '## 16. Blast radius, breaking changes, mocks policy'
+    - ''
+    - 'Blast radius (product code after gates):'
+    - ''
+    - '- `plugins/core/lib-ps/repl-invoke.ps1` and SyncAgentPlugins copies into official plugin repos'
+    - '- `src/McpServer.Repl.Core` persistence coordinator'
+    - '- `src/McpServer.Support.Mcp` controllers, MCP tools, Director commands'
+    - '- `src/McpServer.Storage` entities and three-provider migrations'
+    - '- `src/McpServer.Client` typed client'
+    - '- `src/McpServer.Services` hygiene, hostile-review, wiki dump/import'
+    - '- `tests/Build.Tests`, new `tests/McpServer.PluginIntegration.Tests`, Pester fixtures'
+    - '- docs and generated wiki after green'
+    - ''
+    - 'Breaking:'
+    - ''
+    - '- todo.yaml no longer hydrates TODOs when `--dump` is used (decision 18)'
+    - '- Plugin failsafe directory moves to V4 layout with audited migration (decision 12)'
+    - '- Drain SubmitAsync timeout 2s to 120s (behavior, not public API)'
+    - ''
+    - 'Non-breaking:'
+    - ''
+    - '- Wiki export without `--include-dump`'
+    - '- Existing Handoff REST/MCP tool names'
+    - '- Marker agent_plugins five identities'
+    - ''
+    - 'Mocks policy per phase: B fake persistence strategies; C fake process I/O for adapter unit tests, real disposable host for Theory; D fake lease/clock/TODO service; E fake artifact resolver and clock; F in-memory stores and clock; G fake filesystem dump plus isolated DB. No live developer 7147 in unit tests.'
+    - ''
+    - '## 17. Risks, blockers, and what happens after you approve'
+    - ''
+    - 'Risks:'
+    - ''
+    - '- Grok Build 402 can block hostile sub-agents. Mitigation: operator restores quota; do not substitute implementer self-check for hostile AGREE.'
+    - '- PLUGININT needs eight plugin repos at documented parent path or MCPSERVER_AGENT_PLUGIN_PARENT.'
+    - '- Handoff migration gate needs serial LocalDB.'
+    - '- Drain 2s vs 73s SubmitAsync: after timeout fix, still watch BUG-TRIAGE-171 503 bursts; treat as bug-report if it reappears under the long drain.'
+    - '- ImportRecovery GUID sessions (BUG-TRIAGE-173) are not this program unless wiki import must hydrate them; default exclude.'
+    - '- Owner keep-open on HYGIENE-002: program TODO may remain open after other children close.'
+    - ''
+    - 'After you approve:'
+    - ''
+    - 1. Hostile P0-A on this plan (if 402, wait; no self-AGREE).
+    - 2. Create PLAN-PLUGINHANDOFF-001 with the full text via MCP TODO API.
+    - 3. Hostile P0-B TODO vs plan.
+    - 4. Phase A requirements in the store.
+    - 5. Hostile after requirements.
+    - 6. Then B red tests, never sooner.
+    - ''
+    - No implementation in this planning turn.
+    - ''
+    - '## 18. Implementation task list (PLAN-PLUGINHANDOFF-001 tasks)'
+    - ''
+    - '1. P0-A: hostile AGREE on this plan.'
+    - '2. P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.'
+    - '3. A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.'
+    - '4. A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.'
+    - '5. A3: create HYGIENE FR/TR/TEST 001-005 and mappings.'
+    - '6. A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.'
+    - '7. A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.'
+    - '8. A6: hostile AGREE on requirements; no product code.'
+    - '9. B1: write new red tests listed in section 6; do not relabel existing green.'
+    - '10. B2: hostile after red.'
+    - '11. B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.'
+    - '12. B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.'
+    - '13. B5: hostile after green.'
+    - 14. C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.
+    - 15. C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.
+    - 16. C P14 red + hostile then green; P15 red + hostile then green.
+    - 17. C P16 red + hostile then P17-P18.
+    - 18. C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.
+    - 19. C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.
+    - 20. D0 inventory of Handoff findings vs on-disk tests.
+    - '21. D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.'
+    - 22. D1.5 hostile after red.
+    - 23. D2 implement remediations + three-provider migrations.
+    - 24. D3 docs/wiki generateDocument.
+    - 25. D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.
+    - 26. D5 Codex APPROVED and hostile AGREE.
+    - 27. E all reds + hostile, then implement, then E-green hostile.
+    - 28. F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.
+    - 29. G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.
+    - 30. H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.
+    - 31. I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary.
+    - ''
+    - '## 19. Inter-phase hostile checklist'
+    - ''
+    - Every hostile run uses the `hostile-validator` skill, add-profile first, writes `docs/receipts/hostile-validator-<utc>.md` + `.json`, and must AGREE before the next phase starts.
+    - ''
+    - '- P0-A plan completeness'
+    - '- P0-B TODO fidelity'
+    - '- A6 requirements'
+    - '- B2 red, B5 green'
+    - '- C-red then C-green for each group: P1, P4, P5, P7, P11, P14, P15, P16, P19, P20'
+    - '- D1.5 red, D5 green plus Codex APPROVED'
+    - '- E-red (all HOSTILEREVIEW tests), E-green'
+    - '- F-red (all HYGIENE tests), F-green'
+    - '- G-red (all WIKIEXPORT dump/import tests), G-green'
+    - '- H docs vs code'
+    - '- I before any done:true'
+    technicalDetails:
+    - 'Canonical plan file: docs/plans/PLAN-PLUGINHANDOFF-001.md SHA256 7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E'
+    - 'P0-A AGREE receipt: docs/receipts/hostile-validator-20260821T203017Z.md'
+    - 'Drain: REPL_FAILSAFE_DRAIN_TIMEOUT default 120; sessionlog completeTurn/beginTurn stay 30s'
+    - 'Failsafe path: {workspace}/.mcpServer/failsafe/{agent}/workspaces/{key}/pending/'
+    - Wiki dump --include-dump; add-workspace --dump on WorkspaceClient.CreateAsync / POST /mcpserver/workspace
+    - Hostile-review payload max 1048576 bytes; hygiene Director exit 1 on Error/Critical
+    implementationTasks:
+    - task: 'P0-A: hostile AGREE on this plan.'
+      done: true
+    - task: 'P0-B: create PLAN-PLUGINHANDOFF-001 with full text; hostile AGREE TODO matches plan.'
+      done: true
+    - task: 'A1: verify existing FR/TR/TEST AC in store; hydrate empty AC arrays.'
+      done: true
+    - task: 'A2: create HOSTILEREVIEW FR/TR/TEST 001-006 and mappings.'
+      done: true
+    - task: 'A3: create HYGIENE FR/TR/TEST 001-005 and mappings.'
+      done: true
+    - task: 'A4: create WIKIEXPORT FR/TR/TEST 003-005, mappings, relink MCP-WIKIEXPORT-001.'
+      done: true
+    - task: 'A5: amend TEST-MCP-195 AC5-7 and named tests onto TR-MCP-PERSIST-003.'
+      done: true
+    - task: 'A6: hostile AGREE on requirements; no product code.'
+      done: true
+    - task: 'B1: write new red tests listed in section 6; do not relabel existing green.'
+      done: true
+    - task: 'B2: hostile after red.'
+      done: true
+    - task: 'B3: implement parser, coordinator, drain timeout, V4 path unification, SyncAgentPlugins.'
+      done: true
+    - task: 'B4: Compile + Pester + Repl.Core.Tests + Test, Failed 0 Skipped 0.'
+      done: true
+    - task: 'B5: hostile after green.'
+      done: true
+    - task: D0 inventory of Handoff findings vs on-disk tests.
+      done: true
+    - task: 'D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.'
+      done: true
+    - task: D1.5 hostile after red.
+      done: true
+    - task: D2 implement remediations + three-provider migrations.
+      done: true
+    - task: C P1 red + hostile, P2-P3 green + hostile; P4 red + hostile then green; P5 red + hostile then P6.
+      done: false
+    - task: C P7 red + hostile then P8-P10; P11 red + hostile then P12-P13.
+      done: false
+    - task: C P14 red + hostile then green; P15 red + hostile then green.
+      done: false
+    - task: C P16 red + hostile then P17-P18.
+      done: false
+    - task: C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.
+      done: false
+    - task: C P20 named tests + hostile then UpdateService harness; staging/prod promotion blocked without operator approval artifact.
+      done: false
+    - task: D3 docs/wiki generateDocument.
+      done: false
+    - task: D4 HANDOFFPLAN gate commands Failed 0 Skipped 0.
+      done: false
+    - task: D5 Codex APPROVED and hostile AGREE.
+      done: false
+    - task: E all reds + hostile, then implement, then E-green hostile.
+      done: false
+    - task: F all reds + hostile, then implement, then F-green hostile. Keep TODO open unless owner retracts.
+      done: false
+    - task: G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.
+      done: false
+    - task: H docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, Test, wiki export; hostile on docs vs code.
+      done: false
+    - task: I close children only with Failed 0 Skipped 0, hostile AGREE, receipt paths in doneSummary.
+      done: false
+    remaining: 'C-green-P15 AGREE docs/receipts/hostile-validator-20260822T071202Z.md (P15 filter Passed 24 Failed 0 Skipped 0; full PluginIntegration Passed 86 Failed 0). Prior C-green-P15 DISAGREE docs/receipts/hostile-validator-20260822T064147Z.md (FailedSubmit root-id filename assert missing; scored residual on 071202Z). P16 reds on disk LastWriteTimeUtc 2026-08-22T07:16:45Z: AiTheory_Agent_RequiresValidJsonFields; EvaluateAsync throws not implemented. Next: C-red-P16 hostile then P17-P18. Residual DISAGREE docs/receipts/hostile-validator-20260822T035559Z.md (P12 persist). D3 receipt docs/receipts/d3-docs-wiki-20260822T042008Z.md. D4 blocked until P16 reds are green (Test includes PluginIntegration.Tests). PLAN done=false.'
+    dependsOn:
+    - MCP-PLUGINCORE-004
+    - MCP-PLUGININT-001
+    - MCP-HANDOFF-001
+    - MCP-HANDOFFPLAN-001
+    - MCP-HANDOFFREVIEW-001
+    - MCP-HOSTILEREVIEW-001
+    - MCP-WORKSPACEHYGIENE-002
+    - MCP-WIKIEXPORT-001
+    functionalRequirements:
+    - FR-MCP-PLUGINCORE-004
+    - FR-MCP-REPL-009
+    - FR-MCP-PLUGININT-001
+    - FR-HANDOFF-001
+    - FR-HANDOFF-002
+    - FR-HANDOFF-003
+    - FR-HANDOFF-004
+    - FR-HANDOFF-005
+    - FR-HANDOFF-006
+    - FR-HANDOFF-007
+    - FR-MCP-HOSTILEREVIEW-001
+    - FR-MCP-HOSTILEREVIEW-002
+    - FR-MCP-HOSTILEREVIEW-003
+    - FR-MCP-HOSTILEREVIEW-004
+    - FR-MCP-HOSTILEREVIEW-005
+    - FR-MCP-HOSTILEREVIEW-006
+    - FR-MCP-HYGIENE-001
+    - FR-MCP-HYGIENE-002
+    - FR-MCP-HYGIENE-003
+    - FR-MCP-HYGIENE-004
+    - FR-MCP-HYGIENE-005
+    - FR-MCP-WIKIEXPORT-003
+    - FR-MCP-WIKIEXPORT-004
+    - FR-MCP-WIKIEXPORT-005
+    - FR-MCP-172
+    technicalRequirements:
+    - TR-MCP-PLUGINCORE-004
+    - TR-MCP-REPL-010
+    - TR-MCP-PLUGININT-001
+    - TR-HANDOFF-CONTRACT-001
+    - TR-HANDOFF-SECURITY-001
+    - TR-HANDOFF-AGENT-001
+    - TR-HANDOFF-VALIDATE-001
+    - TR-HANDOFF-MODES-001
+    - TR-HANDOFF-TODO-001
+    - TR-HANDOFF-AUDIT-001
+    - TR-HANDOFF-SURFACE-001
+    - TR-MCP-HOSTILEREVIEW-001
+    - TR-MCP-HOSTILEREVIEW-002
+    - TR-MCP-HOSTILEREVIEW-003
+    - TR-MCP-HOSTILEREVIEW-004
+    - TR-MCP-HOSTILEREVIEW-005
+    - TR-MCP-HOSTILEREVIEW-006
+    - TR-MCP-HYGIENE-001
+    - TR-MCP-HYGIENE-002
+    - TR-MCP-HYGIENE-003
+    - TR-MCP-HYGIENE-004
+    - TR-MCP-HYGIENE-005
+    - TR-MCP-WIKIEXPORT-003
+    - TR-MCP-WIKIEXPORT-004
+    - TR-MCP-WIKIEXPORT-005
+    - TR-MCP-PERSIST-003
+    - TR-MCP-REPL-012
+    - TR-MCP-PLUGINCORE-005
+    - TR-MCP-REPL-011
+    - TR-MCP-REPL-013
+    idempotencyKey: PLAN-PLUGINHANDOFF-001-p0a-203017Z
+
+---

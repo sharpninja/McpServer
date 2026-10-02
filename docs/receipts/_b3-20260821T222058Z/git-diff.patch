@@ -1,0 +1,654 @@
+[1mdiff --git a/plugins/core/lib-ps/repl-invoke.ps1 b/plugins/core/lib-ps/repl-invoke.ps1[m
+[1mindex fca325e6..b4b45372 100644[m
+[1m--- a/plugins/core/lib-ps/repl-invoke.ps1[m
+[1m+++ b/plugins/core/lib-ps/repl-invoke.ps1[m
+[36m@@ -599,7 +599,12 @@[m [mfunction Get-ReplMethodTimeoutSeconds {[m
+     $helper = if ($env:REPL_HELPER_TIMEOUT) { [int]$env:REPL_HELPER_TIMEOUT } else { 120 }[m
+ [m
+     if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {[m
+[31m-        return 2[m
+[32m+[m[32m        # TR-MCP-REPL-012 AC3 / TEST-MCP-195 AC5-7: drain SubmitAsync uses[m
+[32m+[m[32m        # REPL_FAILSAFE_DRAIN_TIMEOUT (default 120s), or REPL_TIMEOUT when greater.[m
+[32m+[m[32m        # Sessionlog workflow methods keep $default (30s). Nested drain stays deferred.[m
+[32m+[m[32m        $drain = if ($env:REPL_FAILSAFE_DRAIN_TIMEOUT) { [int]$env:REPL_FAILSAFE_DRAIN_TIMEOUT } else { 120 }[m
+[32m+[m[32m        if ($default -gt $drain) { return $default }[m
+[32m+[m[32m        return $drain[m
+     }[m
+ [m
+     switch -Wildcard ($Method) {[m
+[36m@@ -1859,7 +1864,6 @@[m [mfunction Invoke-WorkflowAppendDialog {[m
+     }[m
+ [m
+     $null = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)[m
+[31m-    Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null[m
+     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'[m
+     $meta = Get-ReplSessionMeta[m
+     if (-not $meta -or [string]::IsNullOrWhiteSpace($reqId)) {[m
+[36m@@ -1877,6 +1881,8 @@[m [mfunction Invoke-WorkflowAppendDialog {[m
+     $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences[m
+     $result = Invoke-ReplRaw -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml[m
+     if ($result.Success) {[m
+[32m+[m[32m        # BUG-TRIAGE-165 / FR-MCP-PLUGINCORE-004: increment only after the server accepts the items.[m
+[32m+[m[32m        Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null[m
+         return $true[m
+     }[m
+ [m
+[1mdiff --git a/plugins/core/lib-ps/resolve-cache-dir.ps1 b/plugins/core/lib-ps/resolve-cache-dir.ps1[m
+[1mindex e0690daa..8228dbbc 100644[m
+[1m--- a/plugins/core/lib-ps/resolve-cache-dir.ps1[m
+[1m+++ b/plugins/core/lib-ps/resolve-cache-dir.ps1[m
+[36m@@ -128,21 +128,189 @@[m [mfunction Resolve-McpCacheDir {[m
+     throw "Unable to resolve the active workspace cache. Set MCP_WORKSPACE_PATH or MCP_CACHE_DIR_OVERRIDE; plugin install paths are not workspace caches."[m
+ }[m
+ [m
+[32m+[m[32mfunction Get-McpFailsafeFileSha256Hex {[m
+[32m+[m[32m    <#[m
+[32m+[m[32m    .SYNOPSIS[m
+[32m+[m[32m        SHA-256 of a file as uppercase hex, used for failsafe queue migration.[m
+[32m+[m[32m    #>[m
+[32m+[m[32m    [CmdletBinding()][m
+[32m+[m[32m    param([Parameter(Mandatory)][string]$Path)[m
+[32m+[m
+[32m+[m[32m    $sha = [System.Security.Cryptography.SHA256]::Create()[m
+[32m+[m[32m    try {[m
+[32m+[m[32m        $stream = [System.IO.File]::OpenRead($Path)[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            $hash = $sha.ComputeHash($stream)[m
+[32m+[m[32m            return (([BitConverter]::ToString($hash) -replace '-', ''))[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $stream.Dispose()[m
+[32m+[m[32m        }[m
+[32m+[m[32m    } finally {[m
+[32m+[m[32m        $sha.Dispose()[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction Get-McpFailsafeAgentSegment {[m
+[32m+[m[32m    <#[m
+[32m+[m[32m    .SYNOPSIS[m
+[32m+[m[32m        Agent path segment matching FilesystemSessionLogPersistenceStrategy.SanitizePathSegment.[m
+[32m+[m[32m    #>[m
+[32m+[m[32m    [CmdletBinding()][m
+[32m+[m[32m    param()[m
+[32m+[m
+[32m+[m[32m    $agent = @([m
+[32m+[m[32m        $env:PLUGIN_AGENT_NAME,[m
+[32m+[m[32m        $env:MCP_AGENT_NAME,[m
+[32m+[m[32m        $env:PLUGIN_AGENT_DEFAULT,[m
+[32m+[m[32m        $env:MCP_PLUGIN_HOST[m
+[32m+[m[32m    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1[m
+[32m+[m
+[32m+[m[32m    if (-not $agent) {[m
+[32m+[m[32m        return (Get-McpCacheAgentKey)[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    $builder = New-Object System.Text.StringBuilder[m
+[32m+[m[32m    foreach ($character in $agent.ToCharArray()) {[m
+[32m+[m[32m        if ([char]::IsLetterOrDigit($character) -or $character -eq '-' -or $character -eq '_' -or $character -eq '.') {[m
+[32m+[m[32m            [void]$builder.Append($character)[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m            [void]$builder.Append('_')[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    $result = $builder.ToString().Trim('.')[m
+[32m+[m[32m    if ([string]::IsNullOrWhiteSpace($result)) { return 'unknown' }[m
+[32m+[m[32m    return $result[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction Get-McpFailsafeWorkspaceKey {[m
+[32m+[m[32m    <#[m
+[32m+[m[32m    .SYNOPSIS[m
+[32m+[m[32m        Workspace key matching FilesystemSessionLogPersistenceStrategy (base64url of UTF-8 full path).[m
+[32m+[m[32m    #>[m
+[32m+[m[32m    [CmdletBinding()][m
+[32m+[m[32m    param([Parameter(Mandatory)][string]$WorkspacePath)[m
+[32m+[m
+[32m+[m[32m    $full = [System.IO.Path]::GetFullPath($WorkspacePath)[m
+[32m+[m[32m    $bytes = [System.Text.Encoding]::UTF8.GetBytes($full)[m
+[32m+[m[32m    $b64 = [Convert]::ToBase64String($bytes)[m
+[32m+[m[32m    return (($b64 -replace '\+', '-') -replace '/', '_').TrimEnd('=')[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction Resolve-McpFailsafeWorkspacePath {[m
+[32m+[m[32m    <#[m
+[32m+[m[32m    .SYNOPSIS[m
+[32m+[m[32m        Resolves the workspace root used for the V4 failsafe tree.[m
+[32m+[m[32m    #>[m
+[32m+[m[32m    [CmdletBinding()][m
+[32m+[m[32m    param([string]$StartPath)[m
+[32m+[m
+[32m+[m[32m    if (-not [string]::IsNullOrWhiteSpace($StartPath) -and (Test-Path -LiteralPath $StartPath -PathType Container)) {[m
+[32m+[m[32m        return [System.IO.Path]::GetFullPath($StartPath)[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    $configured = Get-McpWorkspaceFromEnvironment[m
+[32m+[m[32m    if ($configured) { return $configured }[m
+[32m+[m
+[32m+[m[32m    if (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue) {[m
+[32m+[m[32m        $startCandidates = if (-not [string]::IsNullOrWhiteSpace($StartPath)) { @($StartPath) } else {[m
+[32m+[m[32m            @([m
+[32m+[m[32m                $env:MCP_WORKSPACE_START_DIR,[m
+[32m+[m[32m                $env:MCP_WORKSPACE_PATH,[m
+[32m+[m[32m                $env:MCPSERVER_WORKSPACE_PATH,[m
+[32m+[m[32m                (Get-Location).Path[m
+[32m+[m[32m            ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique[m
+[32m+[m[32m        }[m
+[32m+[m[32m        foreach ($startDir in $startCandidates) {[m
+[32m+[m[32m            try {[m
+[32m+[m[32m                $markerFile = Find-MarkerFile -StartDir $startDir[m
+[32m+[m[32m                if ($markerFile) {[m
+[32m+[m[32m                    return [System.IO.Path]::GetFullPath((Split-Path -Parent $markerFile))[m
+[32m+[m[32m                }[m
+[32m+[m[32m            } catch {[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    throw "Unable to resolve the workspace root for the V4 failsafe queue. Set MCP_WORKSPACE_PATH or MCPSERVER_FAILSAFE_DIR."[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction Invoke-McpFailsafeLegacyQueueMigration {[m
+[32m+[m[32m    <#[m
+[32m+[m[32m    .SYNOPSIS[m
+[32m+[m[32m        Copy-then-delete legacy plugin failsafe YAML into the V4 pending directory after SHA-256 match.[m
+[32m+[m[32m    #>[m
+[32m+[m[32m    [CmdletBinding()][m
+[32m+[m[32m    param([m
+[32m+[m[32m        [Parameter(Mandatory)][string]$WorkspacePath,[m
+[32m+[m[32m        [Parameter(Mandatory)][string]$PendingDir[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    $mcpRoot = Join-Path $WorkspacePath '.mcpServer'[m
+[32m+[m[32m    if (-not (Test-Path -LiteralPath $mcpRoot -PathType Container)) {[m
+[32m+[m[32m        return[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [void][System.IO.Directory]::CreateDirectory($PendingDir)[m
+[32m+[m
+[32m+[m[32m    $legacyDirs = New-Object System.Collections.Generic.List[string][m
+[32m+[m[32m    foreach ($child in [System.IO.Directory]::GetDirectories($mcpRoot)) {[m
+[32m+[m[32m        $name = [System.IO.Path]::GetFileName($child)[m
+[32m+[m[32m        if ([string]::Equals($name, 'failsafe', [System.StringComparison]::OrdinalIgnoreCase)) {[m
+[32m+[m[32m            continue[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        $legacy = Join-Path $child 'failsafe'[m
+[32m+[m[32m        if (Test-Path -LiteralPath $legacy -PathType Container) {[m
+[32m+[m[32m            $legacyDirs.Add($legacy)[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    foreach ($legacy in $legacyDirs) {[m
+[32m+[m[32m        $files = @(Get-ChildItem -LiteralPath $legacy -File -Filter '*.yaml' -ErrorAction SilentlyContinue)[m
+[32m+[m[32m        foreach ($file in $files) {[m
+[32m+[m[32m            $dest = Join-Path $PendingDir $file.Name[m
+[32m+[m[32m            if (-not (Test-Path -LiteralPath $dest)) {[m
+[32m+[m[32m                Copy-Item -LiteralPath $file.FullName -Destination $dest -Force[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            if (Test-Path -LiteralPath $dest) {[m
+[32m+[m[32m                $sourceHash = Get-McpFailsafeFileSha256Hex -Path $file.FullName[m
+[32m+[m[32m                $destHash = Get-McpFailsafeFileSha256Hex -Path $dest[m
+[32m+[m[32m                if ($sourceHash -eq $destHash) {[m
+[32m+[m[32m                    Remove-Item -LiteralPath $file.FullName -Force[m
+[32m+[m[32m                }[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+ function Get-McpFailsafeDir {[m
+     <#[m
+     .SYNOPSIS[m
+[31m-        TR-MCP-REPL-016: resolves the failsafe queue directory.[m
+[32m+[m[32m        TR-MCP-REPL-016: resolves the V4 failsafe pending directory.[m
+     .DESCRIPTION[m
+         Single source of truth for the queue location so the writer (repl-invoke),[m
+[31m-        the drain, and the status reporter all agree. MCPSERVER_FAILSAFE_DIR and[m
+[31m-        MCP_FAILSAFE_DIR override the workspace cache for tests and recovery.[m
+[32m+[m[32m        the drain, and the status reporter all agree with[m
+[32m+[m[32m        FilesystemSessionLogPersistenceStrategy:[m
+[32m+[m[32m        {workspace}/.mcpServer/failsafe/{agent}/workspaces/{workspace-key}/pending/.[m
+[32m+[m[32m        MCPSERVER_FAILSAFE_DIR and MCP_FAILSAFE_DIR override for tests and recovery.[m
+[32m+[m[32m        Legacy {workspace}/.mcpServer/{agent}/failsafe YAML is migrated by checksum[m
+[32m+[m[32m        match then source delete.[m
+     #>[m
+     [CmdletBinding()][m
+     param([string]$StartPath)[m
+ [m
+     if ($env:MCPSERVER_FAILSAFE_DIR) { return $env:MCPSERVER_FAILSAFE_DIR }[m
+     if ($env:MCP_FAILSAFE_DIR) { return $env:MCP_FAILSAFE_DIR }[m
+[31m-    return (Join-Path (Resolve-McpCacheDir -StartPath $StartPath) 'failsafe')[m
+[32m+[m
+[32m+[m[32m    $workspace = Resolve-McpFailsafeWorkspacePath -StartPath $StartPath[m
+[32m+[m[32m    $agent = Get-McpFailsafeAgentSegment[m
+[32m+[m[32m    $key = Get-McpFailsafeWorkspaceKey -WorkspacePath $workspace[m
+[32m+[m[32m    $pending = Join-Path $workspace (Join-Path '.mcpServer' (Join-Path 'failsafe' (Join-Path $agent (Join-Path 'workspaces' (Join-Path $key 'pending')))))[m
+[32m+[m[32m    [void][System.IO.Directory]::CreateDirectory($pending)[m
+[32m+[m[32m    Invoke-McpFailsafeLegacyQueueMigration -WorkspacePath $workspace -PendingDir $pending[m
+[32m+[m[32m    return $pending[m
+ }[m
+ [m
+ function Get-McpFailsafeQuarantineDir {[m
+[1mdiff --git a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[1mindex d4eb33f8..3dc041fb 100644[m
+[1m--- a/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[1m+++ b/plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1[m
+[36m@@ -4948,4 +4948,138 @@[m [mDescribe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {[m
+             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue[m
+         }[m
+     }[m
+[32m+[m
+[32m+[m[32m    It 'Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplFailsafeDraining = $true[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            $seconds = Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync'[m
+[32m+[m[32m            $seconds | Should -BeGreaterThan 2[m
+[32m+[m[32m            $seconds | Should -BeGreaterOrEqual 120[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplFailsafeDraining = $true[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.completeTurn') | Should -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.beginTurn') | Should -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -Not -Be 30[m
+[32m+[m[32m            (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -BeGreaterOrEqual 120[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml' {[m
+[32m+[m[32m        $sandbox = New-PersistSandbox[m
+[32m+[m[32m        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR[m
+[32m+[m[32m        $previousRaw = $null[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m            $script:ReplFailsafeDrainCompleted = $false[m
+[32m+[m[32m            $script:ReplFailsafeDraining = $false[m
+[32m+[m[32m            $yamlPath = Join-Path $sandbox.FailsafeDir '20260821T000200Z-session_submit-drain.yaml'[m
+[32m+[m[32m            Write-McpYamlObject -Path $yamlPath -Document ([ordered]@{[m
+[32m+[m[32m                method = 'client.SessionLog.SubmitAsync'[m
+[32m+[m[32m                label = 'session_submit'[m
+[32m+[m[32m                timestamp = '20260821T000200Z'[m
+[32m+[m[32m                params = [ordered]@{[m
+[32m+[m[32m                    sessionLog = [ordered]@{[m
+[32m+[m[32m                        sourceType = 'GrokCode'[m
+[32m+[m[32m                        sessionId = 'GrokCode-20260821T000000Z-plugin-session'[m
+[32m+[m[32m                        turns = @([ordered]@{ requestId = 'req-20260821T000200Z-003-drain'; status = 'in_progress' })[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m            })[m
+[32m+[m[32m            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue[m
+[32m+[m[32m            function Invoke-ReplRaw {[m
+[32m+[m[32m                param([string]$Method, [string]$ParamsYaml = '')[m
+[32m+[m[32m                if ($Method -eq 'client.SessionLog.SubmitAsync') {[m
+[32m+[m[32m                    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method[m
+[32m+[m[32m                    if ($timeout -le 2) {[m
+[32m+[m[32m                        return (New-McpPluginReplResult -Success $false -Output 'timed out after 2s' -Error 'timed out after 2s' -ExitCode 1)[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    return (New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    id: 1" -ExitCode 0)[m
+[32m+[m[32m                }[m
+[32m+[m[32m                return (New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0)[m
+[32m+[m[32m            }[m
+[32m+[m[32m            $summary = Invoke-ReplFailsafeDrain[m
+[32m+[m[32m            $summary.replayed | Should -Be 1[m
+[32m+[m[32m            Test-Path -LiteralPath $yamlPath | Should -BeFalse[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun' {[m
+[32m+[m[32m        . (Join-Path $script:LibRoot 'repl-invoke.ps1')[m
+[32m+[m[32m        $script:ReplRawInFlight = $true[m
+[32m+[m[32m        $script:ReplFailsafeDrainDeferred = $false[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Invoke-ReplFailsafeDrainOnFirstSuccess[m
+[32m+[m[32m            $script:ReplFailsafeDrainDeferred | Should -BeTrue[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            $script:ReplRawInFlight = $false[m
+[32m+[m[32m            $script:ReplFailsafeDrainDeferred = $false[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mDescribe 'TEST-MCP-REPL-010 V4 failsafe path unification' {[m
+[32m+[m[32m    It 'Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending' {[m
+[32m+[m[32m        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-v4-failsafe-' + [guid]::NewGuid().ToString('N'))[m
+[32m+[m[32m        [void][System.IO.Directory]::CreateDirectory($workspace)[m
+[32m+[m[32m        $previousWorkspace = $env:MCP_WORKSPACE_PATH[m
+[32m+[m[32m        $previousFailsafe = $env:MCPSERVER_FAILSAFE_DIR[m
+[32m+[m[32m        $previousFailsafe2 = $env:MCP_FAILSAFE_DIR[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            $env:MCP_WORKSPACE_PATH = $workspace[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')[m
+[32m+[m[32m            $dir = Get-McpFailsafeDir -StartPath $workspace[m
+[32m+[m[32m            $dir | Should -Match '[\\/]\.mcpServer[\\/]failsafe[\\/]'[m
+[32m+[m[32m            $dir | Should -Match '[\\/]workspaces[\\/]'[m
+[32m+[m[32m            $dir | Should -Match '[\\/]pending$'[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            if ($null -ne $previousFailsafe) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafe }[m
+[32m+[m[32m            if ($null -ne $previousFailsafe2) { $env:MCP_FAILSAFE_DIR = $previousFailsafe2 }[m
+[32m+[m[32m            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    It 'Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource' {[m
+[32m+[m[32m        $workspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-legacy-failsafe-' + [guid]::NewGuid().ToString('N'))[m
+[32m+[m[32m        $legacy = Join-Path $workspace '.mcpServer\grok\failsafe'[m
+[32m+[m[32m        [void][System.IO.Directory]::CreateDirectory($legacy)[m
+[32m+[m[32m        $legacyFile = Join-Path $legacy '20260821T000000Z-session_submit-legacy.yaml'[m
+[32m+[m[32m        Set-Content -LiteralPath $legacyFile -Value 'method: client.SessionLog.SubmitAsync' -Encoding utf8[m
+[32m+[m[32m        $previousWorkspace = $env:MCP_WORKSPACE_PATH[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            Remove-Item Env:\MCP_FAILSAFE_DIR -ErrorAction SilentlyContinue[m
+[32m+[m[32m            $env:MCP_WORKSPACE_PATH = $workspace[m
+[32m+[m[32m            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')[m
+[32m+[m[32m            $expectedHash = Get-McpFailsafeFileSha256Hex -Path $legacyFile[m
+[32m+[m[32m            $dir = Get-McpFailsafeDir -StartPath $workspace[m
+[32m+[m[32m            $migrated = Join-Path $dir '20260821T000000Z-session_submit-legacy.yaml'[m
+[32m+[m[32m            Test-Path -LiteralPath $migrated | Should -BeTrue[m
+[32m+[m[32m            Test-Path -LiteralPath $legacyFile | Should -BeFalse[m
+[32m+[m[32m            $migratedHash = Get-McpFailsafeFileSha256Hex -Path $migrated[m
+[32m+[m[32m            $migratedHash | Should -Match '^[0-9A-F]{64}$'[m
+[32m+[m[32m            $migratedHash | Should -Be $expectedHash[m
+[32m+[m[32m            (Get-Content -LiteralPath $migrated -Raw) | Should -Match 'client\.SessionLog\.SubmitAsync'[m
+[32m+[m[32m        } finally {[m
+[32m+[m[32m            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }[m
+[32m+[m[32m            Remove-Item -LiteralPath $workspace -Recurse -Force -ErrorAction SilentlyContinue[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+ }[m
+[1mdiff --git a/src/McpServer.Repl.Core/ReplCommandDispatcher.cs b/src/McpServer.Repl.Core/ReplCommandDispatcher.cs[m
+[1mindex 38b2389e..a1e0810a 100644[m
+[1m--- a/src/McpServer.Repl.Core/ReplCommandDispatcher.cs[m
+[1m+++ b/src/McpServer.Repl.Core/ReplCommandDispatcher.cs[m
+[36m@@ -346,15 +346,14 @@[m [mpublic sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher[m
+                 // Call workflow.Open to set local REPL state (_state) so subsequent beginTurn/appendActions (workflow.*) find active session.[m
+                 // Also route via client for server-side open/submit (passthrough).[m
+                 // agent/sessionId already validated non-empty above; no magic "Codex" default.[m
+[31m-                if (_sessionLogWorkflow is not null)[m
+[31m-                {[m
+[31m-                    await _sessionLogWorkflow.OpenSessionAsync([m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    () => _sessionLogWorkflow!.OpenSessionAsync([m
+                         agent,[m
+                         RequireString(args, "sessionId"),[m
+                         RequireString(args, "title"),[m
+                         GetString(args, "model") ?? "unknown",[m
+[31m-                        cancellationToken).ConfigureAwait(false);[m
+[31m-                }[m
+[32m+[m[32m                        cancellationToken),[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+                 clientMethod = "OpenSessionAsync";[m
+                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)[m
+                 {[m
+[36m@@ -369,16 +368,15 @@[m [mpublic sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher[m
+             case SessionLogCommandShapes.BeginTurnMethod:[m
+                 // Mirror to local workflow state so that subsequent appendActions (even if sent without ids)[m
+                 // will find an active turn in _state. The client passthrough handles the server side.[m
+[31m-                if (_sessionLogWorkflow is not null)[m
+[31m-                {[m
+[31m-                    await _sessionLogWorkflow.BeginTurnAsync([m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    () => _sessionLogWorkflow!.BeginTurnAsync([m
+                         RequireString(args, "requestId"),[m
+                         RequireString(args, "queryTitle"),[m
+                         RequireString(args, "queryText"),[m
+                         cancellationToken,[m
+                         GetString(args, "planFile") ?? "None",[m
+[31m-                        GetString(args, "todoId") ?? "None").ConfigureAwait(false);[m
+[31m-                }[m
+[32m+[m[32m                        GetString(args, "todoId") ?? "None"),[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+                 clientMethod = "BeginTurnAsync";[m
+                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)[m
+                 {[m
+[36m@@ -395,52 +393,90 @@[m [mpublic sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher[m
+                 break;[m
+ [m
+             case SessionLogCommandShapes.CompleteTurnMethod:[m
+[31m-                if (_sessionLogWorkflow is not null)[m
+[31m-                {[m
+[31m-                    // Mirror completion to clear local active turn for any follow-on legacy commands.[m
+[31m-                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);[m
+[31m-                    var resp = GetString(args, "response") ?? "completed";[m
+[31m-                    await _sessionLogWorkflow.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);[m
+[31m-                }[m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    async () =>[m
+[32m+[m[32m                    {[m
+[32m+[m[32m                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                        var resp = GetString(args, "response") ?? "completed";[m
+[32m+[m[32m                        await _sessionLogWorkflow!.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                    },[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+                 clientMethod = "CompleteTurnAsync";[m
+                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);[m
+                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "completed" };[m
+                 break;[m
+ [m
+             case SessionLogCommandShapes.FailTurnMethod:[m
+[31m-                if (_sessionLogWorkflow is not null)[m
+[31m-                {[m
+[31m-                    var err = GetString(args, "errorMessage") ?? GetString(args, "failureNote") ?? "failed";[m
+[31m-                    await _sessionLogWorkflow.FailTurnAsync(err, GetString(args, "errorCode"), cancellationToken).ConfigureAwait(false);[m
+[31m-                }[m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    () =>[m
+[32m+[m[32m                    {[m
+[32m+[m[32m                        var err = GetString(args, "errorMessage") ?? GetString(args, "failureNote") ?? "failed";[m
+[32m+[m[32m                        return _sessionLogWorkflow!.FailTurnAsync(err, GetString(args, "errorCode"), cancellationToken);[m
+[32m+[m[32m                    },[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+                 clientMethod = "FailTurnAsync";[m
+                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: GetString(args, "errorMessage") ?? GetString(args, "failureNote"));[m
+                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "failed" };[m
+                 break;[m
+ [m
+[31m-            case SessionLogCommandShapes.AppendActionsMethod:[m
+[31m-                // When ids are present we can still honor appendActions by routing through the (now populated) local workflow state.[m
+[31m-                // This keeps the legacy append path working even after a begin that carried explicit ids.[m
+[31m-                if (_sessionLogWorkflow is not null)[m
+[31m-                {[m
+[31m-                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);[m
+[31m-                    var acts = GetSessionActions(args, "actions");[m
+[31m-                    if (acts.Count > 0)[m
+[32m+[m[32m            case SessionLogCommandShapes.UpdateTurnMethod:[m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    async () =>[m
+                     {[m
+[31m-                        await _sessionLogWorkflow.AppendActionsAsync(acts, cancellationToken).ConfigureAwait(false);[m
+[31m-                    }[m
+[31m-                }[m
+[31m-                // Return success directly (the workflow Submit already persisted the turn+actions).[m
+[31m-                return new YamlEnvelope[m
+[32m+[m[32m                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                        await _sessionLogWorkflow!.UpdateTurnAsync([m
+[32m+[m[32m                            GetString(args, "response"),[m
+[32m+[m[32m                            GetString(args, "interpretation"),[m
+[32m+[m[32m                            GetInt(args, "tokenCount"),[m
+[32m+[m[32m                            GetStringList(args, "tags"),[m
+[32m+[m[32m                            GetStringList(args, "contextList"),[m
+[32m+[m[32m                            cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                    },[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+[32m+[m
+[32m+[m[32m                clientMethod = "PatchTurnAsync";[m
+[32m+[m[32m                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);[m
+[32m+[m[32m                resultShape = new Dictionary<string, object?> { ["updated"] = true };[m
+[32m+[m[32m                break;[m
+[32m+[m
+[32m+[m[32m            case SessionLogCommandShapes.AppendDialogMethod:[m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    () => _sessionLogWorkflow!.AppendDialogAsync([m
+[32m+[m[32m                        GetDialogItems(args, "dialogItems"),[m
+[32m+[m[32m                        cancellationToken),[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+[32m+[m
+[32m+[m[32m                clientMethod = "AppendDialogAsync";[m
+[32m+[m[32m                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)[m
+                 {[m
+[31m-                    Type = "result",[m
+[31m-                    Payload = new ResultPayload[m
+[32m+[m[32m                    ["agent"] = agent,[m
+[32m+[m[32m                    ["sessionId"] = sessionId,[m
+[32m+[m[32m                    ["requestId"] = GetString(args, "requestId"),[m
+[32m+[m[32m                    ["items"] = args.TryGetValue("dialogItems", out var dialogItems) ? dialogItems : Array.Empty<object>(),[m
+[32m+[m[32m                };[m
+[32m+[m[32m                resultShape = new Dictionary<string, object?> { ["appended"] = true };[m
+[32m+[m[32m                break;[m
+[32m+[m
+[32m+[m[32m            case SessionLogCommandShapes.AppendActionsMethod:[m
+[32m+[m[32m                // FR-MCP-REPL-009 AC1: appendActions must use the same primary-then-failsafe[m
+[32m+[m[32m                // coordinator path as open/begin/update/appendDialog. Do not return Type=result[m
+[32m+[m[32m                // without invoking the Session Log client and PersistAsync on primary failure.[m
+[32m+[m[32m                await TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m                    async () =>[m
+                     {[m
+[31m-                        RequestId = request.RequestId,[m
+[31m-                        Result = new Dictionary<string, object?> { ["appended"] = true },[m
+[31m-                        Deprecated = true,[m
+[32m+[m[32m                        await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow!, args, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                        var acts = GetSessionActions(args, "actions");[m
+[32m+[m[32m                        if (acts.Count > 0)[m
+[32m+[m[32m                        {[m
+[32m+[m[32m                            await _sessionLogWorkflow!.AppendActionsAsync(acts, cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m                        }[m
+                     },[m
+[31m-                };[m
+[32m+[m[32m                    cancellationToken).ConfigureAwait(false);[m
+[32m+[m
+[32m+[m[32m                clientMethod = "PatchTurnAsync";[m
+[32m+[m[32m                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);[m
+[32m+[m[32m                resultShape = new Dictionary<string, object?> { ["appended"] = true };[m
+[32m+[m[32m                break;[m
+ [m
+             default:[m
+                 return null;[m
+[36m@@ -465,6 +501,16 @@[m [mpublic sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher[m
+         }[m
+         catch (Exception ex)[m
+         {[m
+[32m+[m[32m            var persisted = await TryPersistSessionLogWhenPrimaryFailsAsync([m
+[32m+[m[32m                request,[m
+[32m+[m[32m                args,[m
+[32m+[m[32m                resultShape,[m
+[32m+[m[32m                cancellationToken).ConfigureAwait(false);[m
+[32m+[m[32m            if (persisted is not null)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                return persisted;[m
+[32m+[m[32m            }[m
+[32m+[m
+             return BuildError([m
+                 requestId: request.RequestId,[m
+                 code: "method_invocation_error",[m
+[36m@@ -477,6 +523,93 @@[m [mpublic sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher[m
+         }[m
+     }[m
+ [m
+[32m+[m[32m    /// <summary>[m
+[32m+[m[32m    /// Mirrors workflow.sessionlog state when a local workflow is registered.[m
+[32m+[m[32m    /// Primary-client failures are swallowed when a persistence coordinator can[m
+[32m+[m[32m    /// still write a failsafe snapshot.[m
+[32m+[m[32m    /// </summary>[m
+[32m+[m[32m    private async Task TryMirrorSessionLogWorkflowAsync([m
+[32m+[m[32m        Func<Task> action,[m
+[32m+[m[32m        CancellationToken cancellationToken)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        if (_sessionLogWorkflow is null)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        try[m
+[32m+[m[32m        {[m
+[32m+[m[32m            await action().ConfigureAwait(false);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (Exception) when (_sessionLogPersistenceStrategy is not null)[m
+[32m+[m[32m        {[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /// <summary>[m
+[32m+[m[32m    /// FR-MCP-REPL-009: when the primary Session Log client fails, persist through the[m
+[32m+[m[32m    /// registered coordinator so non-terminal methods stay successful and terminal[m
+[32m+[m[32m    /// close reports the degraded strategy name plus absolute failsafe path.[m
+[32m+[m[32m    /// </summary>[m
+[32m+[m[32m    private async Task<IYamlEnvelope?> TryPersistSessionLogWhenPrimaryFailsAsync([m
+[32m+[m[32m        IRequestPayload request,[m
+[32m+[m[32m        Dictionary<string, object?> args,[m
+[32m+[m[32m        Dictionary<string, object?> resultShape,[m
+[32m+[m[32m        CancellationToken cancellationToken)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        if (_sessionLogPersistenceStrategy is null)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return null;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        try[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var sessionLog = BuildSessionLogRecovery(args);[m
+[32m+[m[32m            if (string.IsNullOrWhiteSpace(sessionLog.SourceType) || string.IsNullOrWhiteSpace(sessionLog.SessionId))[m
+[32m+[m[32m            {[m
+[32m+[m[32m                return null;[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            var persistence = await _sessionLogPersistenceStrategy[m
+[32m+[m[32m                .PersistAsync(sessionLog, cancellationToken)[m
+[32m+[m[32m                .ConfigureAwait(false);[m
+[32m+[m[32m            if (!persistence.Persisted)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                return null;[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            var result = new Dictionary<string, object?>(resultShape, StringComparer.OrdinalIgnoreCase)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                ["persisted"] = persistence.Persisted,[m
+[32m+[m[32m                ["degraded"] = persistence.Degraded,[m
+[32m+[m[32m                ["persistenceStrategy"] = persistence.Strategy,[m
+[32m+[m[32m                ["failsafePath"] = persistence.FailsafePath,[m
+[32m+[m[32m                ["message"] = persistence.Message,[m
+[32m+[m[32m            };[m
+[32m+[m[32m            return new YamlEnvelope[m
+[32m+[m[32m            {[m
+[32m+[m[32m                Type = "result",[m
+[32m+[m[32m                Payload = new ResultPayload[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    RequestId = request.RequestId,[m
+[32m+[m[32m                    Result = result,[m
+[32m+[m[32m                },[m
+[32m+[m[32m            };[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (Exception)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return null;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+     private static Dictionary<string, object?> BuildFinalizeArgs([m
+         string agent,[m
+         string sessionId,[m

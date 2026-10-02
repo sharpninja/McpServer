@@ -1,5 +1,7 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +29,7 @@ public sealed class EventStreamController : ControllerBase
         [FromQuery] string? category,
         [FromServices] IChangeEventBus eventBus,
         [FromServices] ILogger<EventStreamController> logger,
+        [FromServices] WorkspaceContext workspaceContext,
         CancellationToken ct)
     {
         Response.Headers["Cache-Control"] = "no-cache";
@@ -49,6 +52,9 @@ public sealed class EventStreamController : ControllerBase
             await foreach (var evt in eventBus.SubscribeAsync(ct).ConfigureAwait(false))
             {
                 if (category is not null && !string.Equals(evt.Category, category, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!MemorySseWorkspaceFilter.Allow(evt, workspaceContext.WorkspacePath))
                     continue;
 
                 var data = JsonSerializer.Serialize(evt, s_jsonOptions);

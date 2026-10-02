@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b57b99ec-d06d-4334-b8ba-bd0dd10bf618" name="kingd@PAYTON-LEGION2 2026-08-21 21:35:26" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T21:35:26.8196704-05:00" queuing="2026-08-21T21:35:26.8196711-05:00" start="2026-08-21T21:35:15.6779064-05:00" finish="2026-08-21T21:35:28.0601251-05:00" />
+  <TestSettings name="default" id="1f83378a-0c8b-4d72-936a-73acf5ab4d1a">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_21_35_26" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9bd596e9-f487-4055-860c-fdbfb74d1162" testId="f0e74989-731b-dc0d-e6cf-6b702bbb00a2" testName="McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CustomPromptTemplate_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:04.2147598" startTime="2026-08-21T21:35:23.6943065-05:00" endTime="2026-08-21T21:35:27.9157670-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bd596e9-f487-4055-860c-fdbfb74d1162" />
+    <UnitTestResult executionId="f598ceb8-3cfd-40bb-8074-86228de5a01c" testId="777d6c87-1f06-f9e3-fead-781624034b83" testName="McpServer.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact" computerName="PAYTON-LEGION2" duration="00:00:02.0151657" startTime="2026-08-21T21:35:23.6943065-05:00" endTime="2026-08-21T21:35:25.7256247-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f598ceb8-3cfd-40bb-8074-86228de5a01c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests.IngestAsync_CustomPromptTemplate_IsRejected" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="f0e74989-731b-dc0d-e6cf-6b702bbb00a2">
+      <Execution id="9bd596e9-f487-4055-860c-fdbfb74d1162" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.HandoffDurabilityTests" name="IngestAsync_CustomPromptTemplate_IsRejected" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact" storage="f:\github\mcpserver\tests\mcpserver.support.mcp.tests\bin\debug\net10.0\mcpserver.support.mcp.tests.dll" id="777d6c87-1f06-f9e3-fead-781624034b83">
+      <Execution id="f598ceb8-3cfd-40bb-8074-86228de5a01c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests" name="PluginSync_HandoffSkill_MatchesCoreArtifact" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f0e74989-731b-dc0d-e6cf-6b702bbb00a2" executionId="9bd596e9-f487-4055-860c-fdbfb74d1162" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="777d6c87-1f06-f9e3-fead-781624034b83" executionId="f598ceb8-3cfd-40bb-8074-86228de5a01c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:03.81]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:05.36]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:05.83]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:10.19]   Finished:    McpServer.Support.Mcp.Tests (ID = 'fb6b7ca1b59a739774a8a8668e88283949ecc0192ba18c822eead5027e319992')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

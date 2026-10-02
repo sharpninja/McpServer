@@ -1,0 +1,29 @@
+{
+  "session": {
+    "Path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+    "Exists": true,
+    "Length": 68486,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "SHA256": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E"
+  },
+  "docs": {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "Length": 68486,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "SHA256": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E"
+  },
+  "todoJson": {
+    "Path": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a0260a-75e8-7161-b5e8-e41ae15784e6\\mcp\\call-4b3a8cf6-cb8b-43a9-8bd8-6a8c5461dfdc-31.json",
+    "Exists": true,
+    "Length": 81254,
+    "LastWriteTimeUtc": "2026-08-21T20:38:20.8752066Z",
+    "SHA256": "44013EDCA5F13CD3AA66A5E4317E10C280622FFF8B2DD6190F0FB8C4ECD67E3E"
+  },
+  "byteIdentical": true,
+  "textNormalizedEqual": true,
+  "sessionLength": 68486,
+  "docsLength": 68486,
+  "sessionTextChars": 68486,
+  "docsTextChars": 68486
+}

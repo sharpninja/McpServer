@@ -1,0 +1,120 @@
+{
+  "TimestampUtc": "2026-09-10T23:11:52Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation validation of QBEXEC mcp_* executor AC coverage",
+  "AddProfileExecuted": true,
+  "AddProfileFileCount": 18,
+  "AddProfileExcluded": ["add-profile.grok.md"],
+  "McpTrust": {
+    "signatureOk": true,
+    "nonceSent": "6d0996fa3d8f43f69cfaeecb1837fb49",
+    "nonceEchoed": true,
+    "plugin": "mcpserver-grok-plugin",
+    "pluginVersion": "1.106.0",
+    "sourceType": "GrokCode",
+    "workspacePath": "F:\\GitHub\\McpServer"
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260910T230418Z-hostile-qbexec",
+    "requestId": "req-20260910T230418Z-001-hostile-validate-qbexec-acs",
+    "turnId": 44382
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": { "PASS": 18, "FAIL": 2, "UNKNOWN": 0 },
+  "AccuracyRating": 93,
+  "CompletenessRating": 86,
+  "ExplicitFailList": [
+    "A12: blanket flip of unsatisfied QBEXEC completeness ACs would not currently be honest",
+    "C1: tests do not cover every unsatisfied AC well enough for a blanket isSatisfied true flip"
+  ],
+  "ExplicitUnknownList": [],
+  "ResidualNotes": [
+    "Catalog extras versus adapter: All 50, published/adapter/Allowed+Blocked 42. Extras mcp_repo_edit, mcp_git, six requirements create/update. Not a published-name hole.",
+    "FakeExecutor remains on interceptor unhandled/failed paths and OpenAI endpoint integration tests. Catalog interceptor and OpenAI catalog theories use real QuadBrainInternalToolExecutor.",
+    "CompleteAsync_McpTodoQuery_ReturnsNormalAssistantContent still uses HandlingExecutor for content-contains-result.",
+    "PLAN-LLMSTRATEGY-001 remains Done=false. Completeness ACs remain isSatisfied false.",
+    "First sessionlog.open failed Keyserver manifest signing failed; retry created the session."
+  ],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Focused Support.Mcp filter Failed 0 Passed 198 Skipped 0.", "evidence": "Independent dotnet test EXIT=0; TRX total=198 executed=198 passed=198 failed=0 notExecuted=0; 50/50/50 catalog theories Passed" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "Execute_CatalogName_IsHandled asserts matching mock Received or powershell in-memory session JSON for every catalog name.", "evidence": "AssertMatchingServiceInvokedAsync switch; powershell create/close empty break; command/close parses ResultJson sessionId; 50 Passed" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Interceptor_CatalogName_IsNotEmittedToAgent uses real QuadBrainInternalToolExecutor; RemainingToolCalls lacks catalog name.", "evidence": "QuadBrainToolInterceptionTests.cs:44-63 fixture.CreateExecutor; 50 Passed" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "CompleteAsync_CatalogName_StopsWithoutEmittingToolCall over All: finish_reason stop, tool_calls null.", "evidence": "QuadBrainOpenAiChatServiceTests.cs:513-538; 50 Passed. Does not pin service-result token." },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "HostedAgentPublishedNames is a subset of All.", "evidence": "All 50, Pub 42, PUB_NOT_IN_ALL empty; adapter 42 match published; Allowed+Blocked 42 match published" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "Executor constructor/fields have no HttpClient.", "evidence": "AssertNoHttpClientDependency; grep HttpClient in executor file 0 hits" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "claim": "Registration_CreateRunOptions asserts Allowed+Blocked in expectedToolNames; focused McpAgent filter 1/0/0.", "evidence": "McpHostedAgentAdapterTests.cs:112-113; independent Passed 1 Failed 0 Skipped 0 EXIT=0" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "claim": "Program.cs AddScoped IQuadBrainInternalToolExecutor to QuadBrainInternalToolExecutor, not Noop as live DI default.", "evidence": "Program.cs:510; only AddScoped registration in src" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "claim": "CompleteAsync_InternalToolFailure_RecordsFailureToSessionLog still exists for FR-MCP-QBEXEC-001 ac-5.", "evidence": "QuadBrainOpenAiChatServiceTests.cs:355-375. BrainInteractionSessionLoggerTests has no LogInternalToolFailure case." },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "claim": "PLAN-LLMSTRATEGY-001 Done=false. Completeness ACs still isSatisfied false.", "evidence": "todo_get Done=false; live GET FR/TR/TEST-MCP-QBEXEC-001/002 completeness ACs false" },
+    { "id": "A11", "surface": "A", "verdict": "PASS", "claim": "Does not claim compact-before-submit fixed, live QBAgent run, or Update-McpService run.", "evidence": "Non-claim; handoff section 10 still unverified" },
+    { "id": "A12", "surface": "A", "verdict": "FAIL", "claim": "Flipping all unsatisfied completeness ACs would currently be honest.", "evidence": "mcp_client_invoke subset; OpenAI catalog theory does not pin service-result content; powershell in-memory map; LogInternalToolFailureAsync untested against ISessionLogService" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty." },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Always bring the receipts; independent re-run." },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage." },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only / no Python this review." },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "Look-before-delete N/A." },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Byrd phase-order not failed from FR createdAt versus file mtimes." },
+    { "id": "C1", "surface": "C", "verdict": "FAIL", "claim": "Tests cover unsatisfied ACs well enough that flipping isSatisfied would be honest.", "evidence": "FR-001 ac-5/ac-7, TR-001 ac-2, TEST-002 ac-4, FR-002 ac-7 remain incompletely proven" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "FR/TR/TEST-MCP-QBEXEC-001/002 exist with ACs and mappings; not flipped this turn.", "evidence": "Live GET mapping 001->TR/TEST-001 and 002->TR/TEST-002" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "PLAN-LLMSTRATEGY-001 remains Done=false; no full LLM strategy done claim." }
+  ],
+  "TestRuns": {
+    "focusedSupportMcp": {
+      "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+      "filter": "FullyQualifiedName~QuadBrainInternalToolExecutorTests|FullyQualifiedName~QuadBrainToolInterceptionTests|FullyQualifiedName~QuadBrainOpenAiChatServiceTests",
+      "failed": 0,
+      "passed": 198,
+      "skipped": 0,
+      "total": 198,
+      "exitCode": 0,
+      "trx": "docs/receipts/artifacts/hostile-qbexec-20260910T230418Z.trx",
+      "catalogTheories": {
+        "Execute_CatalogName_IsHandled": 50,
+        "Interceptor_CatalogName_IsNotEmittedToAgent": 50,
+        "CompleteAsync_CatalogName_StopsWithoutEmittingToolCall": 50
+      }
+    },
+    "mcpAgentAdapter": {
+      "project": "tests/McpServer.McpAgent.Tests/McpServer.McpAgent.Tests.csproj",
+      "filter": "FullyQualifiedName~McpHostedAgentAdapterTests.Registration_CreateRunOptions_AttachesStableToolsAndFunctionInvocation",
+      "failed": 0,
+      "passed": 1,
+      "skipped": 0,
+      "total": 1,
+      "exitCode": 0,
+      "trx": "docs/receipts/artifacts/hostile-qbexec-adapter-20260910T230418Z.trx"
+    }
+  },
+  "Catalog": {
+    "allCount": 50,
+    "hostedAgentPublishedCount": 42,
+    "publishedNotInAll": [],
+    "allExtras": [
+      "mcp_repo_edit",
+      "mcp_requirements_create_fr",
+      "mcp_requirements_update_fr",
+      "mcp_requirements_create_tr",
+      "mcp_requirements_update_tr",
+      "mcp_requirements_create_test",
+      "mcp_requirements_update_test",
+      "mcp_git"
+    ],
+    "adapterFunctionCount": 42,
+    "allowedPlusBlockedCount": 42
+  },
+  "Store": {
+    "todoId": "PLAN-LLMSTRATEGY-001",
+    "todoDone": false,
+    "completenessAcsStillUnsatisfied": true
+  },
+  "DoNotFlip": [
+    "FR-MCP-QBEXEC-001 ac-4 through ac-8",
+    "FR-MCP-QBEXEC-002 ac-1 through ac-8",
+    "TR-MCP-QBEXEC-001 ac-1 ac-2",
+    "TR-MCP-QBEXEC-002 ac-1 through ac-4",
+    "TEST-MCP-QBEXEC-001 ac-2 ac-4 ac-5",
+    "TEST-MCP-QBEXEC-002 ac-1 through ac-5",
+    "PLAN-LLMSTRATEGY-001"
+  ]
+}

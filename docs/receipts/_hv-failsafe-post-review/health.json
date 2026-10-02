@@ -1,0 +1,26 @@
+{
+  "url": "http://PAYTON-LEGION2:7147/health?nonce=nonce-0db6aca0562548a49cdec0ff7a4ba64a",
+  "nonce": "nonce-0db6aca0562548a49cdec0ff7a4ba64a",
+  "healthNonceMatch": true,
+  "status": "Healthy",
+  "raw": {
+    "status": "Healthy",
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0011
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.001
+      }
+    ],
+    "nonce": "nonce-0db6aca0562548a49cdec0ff7a4ba64a",
+    "storage": "reachable"
+  }
+}

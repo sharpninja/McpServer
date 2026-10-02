@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -116,10 +117,10 @@ public sealed class TransactionGatedVoiceConversationService : IVoiceConversatio
     private bool ShouldDeferMutation(out string error)
     {
         error = string.Empty;
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "voice.turn"))
             return false;
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             error = string.IsNullOrWhiteSpace(status.Message)

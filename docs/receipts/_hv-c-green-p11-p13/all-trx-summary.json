@@ -1,0 +1,640 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p11-p13\\dotnet-pluginintegration-all.trx",
+  "outcome": "Completed",
+  "total": "54",
+  "executed": "54",
+  "passed": "54",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 54,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)"
+  ],
+  "skippedNames": [],
+  "failedMessages": [],
+  "p11Count": 8,
+  "p11Failed": 0,
+  "p11Passed": 8,
+  "p11Skipped": 0,
+  "p12Count": 8,
+  "p12Failed": 0,
+  "p12Passed": 8,
+  "p12Skipped": 0,
+  "p13Count": 8,
+  "p13Failed": 0,
+  "p13Passed": 8,
+  "p13Skipped": 0,
+  "p14Count": 0,
+  "notImplementedCount": 0,
+  "p11ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 2,
+      "Failed": 0,
+      "Passed": 2,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    }
+  ],
+  "p12ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 2,
+      "Failed": 0,
+      "Passed": 2,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    }
+  ],
+  "p13ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 2,
+      "Failed": 0,
+      "Passed": 2,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    }
+  ],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005452",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:15.8539120",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+      "outcome": "Passed",
+      "duration": "00:00:01.0828487",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+      "outcome": "Passed",
+      "duration": "00:00:13.3207135",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004828",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0014572",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:20.2515906",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0021455",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "outcome": "Passed",
+      "duration": "00:00:11.9816589",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016844",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:13.1757442",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0005249",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:14.8598271",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:25.7185158",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:16.9680262",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:15.4057129",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:19.3568830",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+      "outcome": "Passed",
+      "duration": "00:00:00.0169488",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:21.2191465",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013884",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:14.7360503",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV2AndOpenCode_UseProductionExport(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009166",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+      "outcome": "Passed",
+      "duration": "00:00:09.7852283",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016632",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:14.9358583",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+      "outcome": "Passed",
+      "duration": "00:00:11.3293882",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_ClineV1_StdioSessionLogTools",
+      "outcome": "Passed",
+      "duration": "00:00:00.0038574",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:30.1133744",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006797",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009013",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007584",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:17.4649249",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007873",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0091185",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007478",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:17.3149149",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:18.6135051",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:26.2498124",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:18.7988180",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016028",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "outcome": "Passed",
+      "duration": "00:00:00.0017356",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0068481",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:17.7104960",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:17.2693491",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:15.0483757",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+      "outcome": "Passed",
+      "duration": "00:00:00.0840864",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "outcome": "Passed",
+      "duration": "00:00:00.0933849",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:14.8699054",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:27.6616865",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+      "outcome": "Passed",
+      "duration": "00:00:11.0601792",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:20.0593646",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+      "outcome": "Passed",
+      "duration": "00:00:09.5152968",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:15.0958275",
+      "message": null,
+      "stack": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:00.0006841",
+      "message": null,
+      "stack": null
+    }
+  ]
+}

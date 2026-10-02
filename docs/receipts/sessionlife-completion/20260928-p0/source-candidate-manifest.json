@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 2,
+  "capturedAtUtc": "2026-09-28T02:53:23.4743769Z",
+  "preparationOnly": true,
+  "accepted": false,
+  "planId": "PLAN-SESSIONLIFE-001",
+  "planRevision": 4,
+  "candidate": {
+    "root": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+    "branch": "codex/sessionlife-acceptance-20260928",
+    "head": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseSha": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseTree": "c30e04f5299ca9ae04c1a472ff68b7381070ef17",
+    "statusPorcelain": [
+      " M plugins/core/lib-ps/McpPluginShim.psm1",
+      " M plugins/core/lib-ps/plugin-hook.ps1",
+      " M plugins/core/lib-ps/repl-invoke.ps1",
+      " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+      " M plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      " M src/McpServer.Services/Services/SessionLogService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      " M src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "?? plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "?? src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs"
+    ],
+    "trackedModifiedCount": 18,
+    "untrackedCopiedCount": 9,
+    "contentManifestAlgorithm": "SHA256 over UTF-8 sorted lines path NUL candidateSha256 NUL length LF",
+    "contentManifestSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+    "diffCheckExitCode": 0,
+    "diffCheckOutput": []
+  },
+  "transfer": {
+    "sourceRoot": "F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle",
+    "sourceBranch": "grok/session-lifecycle",
+    "sourceHead": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "sourceFullPatchPath": "docs/receipts/sessionlife-completion/20260928-p0/source-full-selected.patch",
+    "sourceFullPatchSha256": "48D3EE4A5E11920F10C9638C2EE110AED18DF12384E0FE37AA4DBC76C1408E97",
+    "selectedPatchPath": "docs/receipts/sessionlife-completion/20260928-p0/source-selected.patch",
+    "selectedPatchSha256": "FF8835E5DB2B74BDFD1EB1BD789CD53795317C3C76A755DB112F6527B29FE09D",
+    "hunkExclusionPatchPath": "docs/receipts/sessionlife-completion/20260928-p0/source-selected-hunk-exclusions.patch",
+    "hunkExclusionPatchSha256": "758A901E57F1A59448F0D558EA4CC7258F84EC0988468AF2C9F91143C6A8EB44",
+    "fullFileSelectionCount": 26,
+    "partialHunkSelectionCount": 1,
+    "allFullFileSelectionsMatchSource": true,
+    "fullSourceFileMismatchPaths": [
+      "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs"
+    ],
+    "exactCandidateSelectionManifestComplete": true,
+    "parentVerificationCurrentPath": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification-v2.json",
+    "parentVerificationCurrentSha256": "DE4DBF5FCAD1E50847DC8E5CDC603896F25B5673E1DB2B9DF00FC71569CCE4A3",
+    "parentVerificationSupersededPath": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification.json",
+    "correctiveApplyPatchReceiptPath": "docs/receipts/sessionlife-completion/20260928-p0/source-catalog-apply-patch-reconstitution.json",
+    "correctiveApplyPatchReceiptSha256": "EE499792698DF2946B7B6305ED929A0D002A7D6D936C847E18A4B272C0585D57"
+  },
+  "selectedFiles": [
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 23985,
+      "candidateSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "fullSourceSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 60122,
+      "candidateSha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "fullSourceSha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 110129,
+      "candidateSha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "fullSourceSha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 18380,
+      "candidateSha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "fullSourceSha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 5642,
+      "candidateSha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "fullSourceSha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 285959,
+      "candidateSha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "fullSourceSha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 3524,
+      "candidateSha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "fullSourceSha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 17546,
+      "candidateSha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "fullSourceSha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 12471,
+      "candidateSha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "fullSourceSha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 7144,
+      "candidateSha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "fullSourceSha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 94673,
+      "candidateSha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "fullSourceSha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 4019,
+      "candidateSha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "fullSourceSha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 12750,
+      "candidateSha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "fullSourceSha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 9671,
+      "candidateSha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "fullSourceSha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 34122,
+      "candidateSha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "fullSourceSha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 8768,
+      "candidateSha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "fullSourceSha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 10619,
+      "candidateSha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "fullSourceSha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "kind": "tracked-partial-hunk",
+      "selectionMode": "partial-hunk",
+      "length": 6771,
+      "candidateSha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "fullSourceLength": 7362,
+      "fullSourceSha256": "D84B28127BBAED2E5B550F8C6B54791F074CA4FE7A1084286567DA4C9DAD5525",
+      "baseBlobId": "672f3baba0de3ba58301dfd9b07c8f9c69c7c5c9",
+      "fullSourceFileMatch": false,
+      "includedHunks": "SiblingPluginParent helper plus LoadAndValidate parent-resolution consumer replacement.",
+      "excludedHunks": "PrimaryRepositoryRoot helper declaration and implementation only.",
+      "selectionMethod": "Actual selection method: Remove-LinesFromFile removed candidate lines 18-29 after three git apply checks failed (reverse zero-context patch, direct zero-context patch, and --unidiff-zero). No source file was edited. A git diff --no-index receipt then captured the exact full-source-to-candidate hunk exclusion. This method violated the manual code edit requirement and is retained here without rewriting history.",
+      "provenancePatchPath": "docs/receipts/sessionlife-completion/20260928-p0/source-selected-hunk-exclusions.patch",
+      "provenancePatchSha256": "758A901E57F1A59448F0D558EA4CC7258F84EC0988468AF2C9F91143C6A8EB44",
+      "currentSelectionEvidence": "Reconstituted through verified Codex apply_patch engine using exact reviewed selected bytes; final candidate SHA-256 unchanged.",
+      "correctiveApplyPatchReceiptPath": "docs/receipts/sessionlife-completion/20260928-p0/source-catalog-apply-patch-reconstitution.json",
+      "correctiveApplyPatchReceiptSha256": "EE499792698DF2946B7B6305ED929A0D002A7D6D936C847E18A4B272C0585D57"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 4487,
+      "candidateSha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "fullSourceSha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 35801,
+      "candidateSha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "fullSourceSha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 12633,
+      "candidateSha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "fullSourceSha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 220,
+      "candidateSha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "fullSourceSha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 6063,
+      "candidateSha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "fullSourceSha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 5561,
+      "candidateSha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "fullSourceSha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "kind": "untracked-copied",
+      "selectionMode": "full-file",
+      "length": 1934,
+      "candidateSha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "fullSourceSha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 11378,
+      "candidateSha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "fullSourceSha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "fullSourceFileMatch": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "kind": "tracked-modified",
+      "selectionMode": "full-file",
+      "length": 103517,
+      "candidateSha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "fullSourceSha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "fullSourceFileMatch": true
+    }
+  ],
+  "excludedTracked": [
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "classification": "unrelated",
+      "rationale": "Historical memory benchmark rewrite; explicitly excluded and not a session-lifecycle dependency.",
+      "sha256": "6E81A960593453011E687D05B3DBC4D865AF1BFFF56A6BF03955D647FDFC9262",
+      "baseBlobId": "c92896c4b6ca668d6eaa4e632486953644cef8e0",
+      "status": "M\tdocs/benchmarks/results/memory-bench-20260919T091800Z.json"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.md",
+      "classification": "unrelated",
+      "rationale": "Historical memory benchmark rewrite; explicitly excluded and not a session-lifecycle dependency.",
+      "sha256": "CDF7436EA2213F2BC669D52C3C46DC12E22421F47FA506EFDCEAFD1A361D59E4",
+      "baseBlobId": "17960c46845675d175f175cc61643a5978a6d719",
+      "status": "M\tdocs/benchmarks/results/memory-bench-20260919T091800Z.md"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      "classification": "unrelated",
+      "rationale": "Historical memory benchmark rewrite; explicitly excluded and not a session-lifecycle dependency.",
+      "sha256": "1D3E56E7750F62F6248A98AFB1F12EE529AE36F42720315C7065D7C4D65F0DC8",
+      "baseBlobId": "1f37a68437c31fbefbd272c3ebd3d09ed3696cf5",
+      "status": "M\tdocs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md",
+      "classification": "unrelated",
+      "rationale": "Historical memory benchmark rewrite; explicitly excluded and not a session-lifecycle dependency.",
+      "sha256": "89932787FAA6C2408B4CCFC22B17B5AFECB8004B1EEB40965DBE32C325EFC249",
+      "baseBlobId": "e42a35e57bf8ff77bbdcead490745cf87c87d5e2",
+      "status": "M\tdocs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md"
+    },
+    {
+      "path": "src/McpServer.Services/Services/MemoryService.cs",
+      "classification": "unrelated",
+      "rationale": "Memory soft-delete behavior; explicitly excluded with no demonstrated session-lifecycle dependency.",
+      "sha256": "EBC7918853C0C2A11ECB0E282A340C628D8623CA7EACDB73E4B67A49D29BD8BD",
+      "baseBlobId": "9d5a2a8de55bdbd1278f3bb313968623f635e1a1",
+      "status": "M\tsrc/McpServer.Services/Services/MemoryService.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "28B3C79416EA137D0C28F3D32EAAC014F0EEA52685289D52E300A6EA0BCC14A3",
+      "baseBlobId": "ceb63260a566d3104060d8d15cbd9f4cf6428bdc",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "7180BC297DDAFD0606A724E99BD88F87A2F61F71B29B12DFF834A2F27D905D2B",
+      "baseBlobId": "b80144c051b69be4ce8b17733c368fd24a5714fa",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "95848A1B1DD07624B2AEEF4862BC7CA6C1124D7AF1BDCBAD273A906866399472",
+      "baseBlobId": "3c0d8442240c61cda619ecb27922a5238c9c149b",
+      "status": "M\tsrc/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "A11245E07540E15E58673E7A20C97CB40C408E723D2919266AF0262B51D1AE7F",
+      "baseBlobId": "2cf4b84e3bf4ce7e2a16a9e4a2d8847f301924f5",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "611885114023FF8DDE3CE7E33DE9F88389A85D65344674434A0C872E3FE70DC2",
+      "baseBlobId": "ab1f654329bf176a130eae09fccd5119197c71db",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "D9AEB3A1ECFF53F616936047EAC96E6FC172EB82AFBFE388B0AA12AD0C759416",
+      "baseBlobId": "eea07d1b4ba03f78acdf5279536d1ac0491709f2",
+      "status": "M\tsrc/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "C8850779B6A0D5C0DDCAC1510E197280F8715AB9A6A9C459F9449ADAA31A86DB",
+      "baseBlobId": "8e838b26910bcb22ca238d29d1bf90ebd6b5bf38",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "E8FCB4CC048A82FB25B937F26F672CBB1D3CA1E017BFBF292C7FA0ADDBD610B2",
+      "baseBlobId": "33d77ec08289fcc7efd47a752c104e3ce1407619",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs"
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "classification": "unrelated",
+      "rationale": "Previously approved memory migration history; explicitly excluded because P0 found no session-lifecycle dependency and ran no provider provisioning.",
+      "sha256": "0D0C09EE7D85C16CB24708B559074815F3812F20A6E27526982FA6720FC6E58F",
+      "baseBlobId": "aacc30b58bfd9425279647e64f852368d01519ed",
+      "status": "M\tsrc/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs"
+    },
+    {
+      "path": "src/McpServer.Storage/McpDbContext.cs",
+      "classification": "unrelated",
+      "rationale": "Memory relationship model changes; excluded with memory work because no session-lifecycle dependency was demonstrated.",
+      "sha256": "6D4E2246B464367A1D7D51583B21663C43FDEDF7866B1691D9E18D5E2FD8076C",
+      "baseBlobId": "b4b23a2cb7640c25f4f0e6f9d5d3f4bbf8b031ad",
+      "status": "M\tsrc/McpServer.Storage/McpDbContext.cs"
+    },
+    {
+      "path": "templates/prompt-templates.yaml",
+      "classification": "unrelated",
+      "rationale": "PowerShell.Mcp wording-only edit; not required for the session-lifecycle candidate.",
+      "sha256": "863548BA42D2FD6C4032AF44976AB2D0CEB286523BBE93C07DD9863FB835F95B",
+      "baseBlobId": "2cd560f179af31e3e1b7d649f5190a6fac2a27c1",
+      "status": "M\ttemplates/prompt-templates.yaml"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+      "classification": "unrelated",
+      "rationale": "All source diff hunks redirect LoadLatest to PrimaryRepositoryRoot, allowing historical primary-checkout receipts without run/source binding. The file contains no separate sibling-plugin discovery correction, so the entire diff is excluded; new receipt validation belongs to P1 tests-first work.",
+      "sha256": "C8B239F6131B8E029430FB657167D256557E373B908C735AC4D450182569EEBB",
+      "baseBlobId": "67b8772b801fd913ca0d6fca1dec5d3e08502866",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs"
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+      "classification": "unrelated",
+      "rationale": "All source diff hunks redirect LoadLatest to PrimaryRepositoryRoot, allowing historical primary-checkout receipts without run/source binding. The file contains no separate sibling-plugin discovery correction, so the entire diff is excluded; new receipt validation belongs to P1 tests-first work.",
+      "sha256": "A524F008DFADD6D7DBF1D6F2BF5743F841F0714281D0F7280C742EE57EA6E1A7",
+      "baseBlobId": "6a4d25c5dad4926cd21f4790773486ef49ece809",
+      "status": "M\ttests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs"
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "classification": "unrelated",
+      "rationale": "Memory transaction assertions exercise memory.add and RememberAsync, not session logging. No isolated-candidate gate dependency is demonstrated in P0; if a later baseline gate fails, it may be reconsidered only as a separately evidenced prerequisite.",
+      "sha256": "C0589AE10CA8AC280CC0BAF3CEEF52745117AB488F3A6154DF984CA66D6CDE99",
+      "baseBlobId": "843d5c7733e19121530aa6471d262fcac7dfea27",
+      "status": "M\ttests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs"
+    }
+  ],
+  "excludedUntracked": {
+    "count": 201,
+    "classification": "unrelated",
+    "disposition": "Retained unchanged in the original Grok worktree; full path/hash inventory is in source-scope-classification.json."
+  },
+  "references": [
+    "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-before.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-after.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-scope-classification.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-full-selected.patch",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-selected.patch",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-selected-hunk-exclusions.patch",
+    "docs/receipts/sessionlife-completion/20260928-p0/decision-register.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/preflight-plugin-providers.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/source-catalog-apply-patch-reconstitution.json",
+    "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification-v2.json"
+  ]
+}

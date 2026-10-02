@@ -29,6 +29,27 @@ public static class McpDatabaseMigrationCoordinator
         await dbContext.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>Applies migrations or verifies an operator-migrated database before runtime use.</summary>
+    public static async Task EnsureReadyAsync(
+        McpDbContext dbContext,
+        McpDatabaseRuntimeOptions runtimeOptions,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(dbContext);
+        ArgumentNullException.ThrowIfNull(runtimeOptions);
+        if (runtimeOptions.AutoMigrate)
+        {
+            await ApplyMigrationsAsync(dbContext, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        var pending = (await dbContext.Database.GetPendingMigrationsAsync(cancellationToken).ConfigureAwait(false)).ToArray();
+        if (pending.Length > 0)
+            throw new InvalidOperationException(
+                "Database migrations must be applied by the schema administrator before runtime startup. Pending: "
+                + string.Join(", ", pending));
+    }
+
     private static async Task AdoptLegacyHistoryAsync(McpDbContext dbContext, CancellationToken cancellationToken)
     {
         var definedMigrations = dbContext.GetService<IMigrationsAssembly>().Migrations.Keys.ToArray();

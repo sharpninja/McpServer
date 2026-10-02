@@ -1,0 +1,295 @@
+type: result
+payload:
+  requestId: req-20260822T132909Z-6248
+  result:
+  - agent: GrokCode
+    sessionId: GrokCode-20260821T113141Z-plugin-session
+    title: Load operator profile and start new session
+    model: grok
+    started:
+      dateTime: 2026-08-21T11:33:01.0000000
+      utcDateTime: 2026-08-21T11:33:01.0000000Z
+      localDateTime: 2026-08-21T06:33:01.0000000-05:00
+      date: 2026-08-21T00:00:00.0000000
+      day: 21
+      dayOfWeek: Friday
+      dayOfYear: 233
+      hour: 11
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 33
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 1
+      ticks: 639229087810000000
+      utcTicks: 639229087810000000
+      timeOfDay: 11:33:01
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:28:38.8780988
+      utcDateTime: 2026-08-22T13:28:38.8780988Z
+      localDateTime: 2026-08-22T08:28:38.8780988-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 878
+      microsecond: 98
+      nanosecond: 800
+      minute: 28
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 38
+      ticks: 639230021188780988
+      utcTicks: 639230021188780988
+      timeOfDay: 13:28:38.8780988
+      year: 2026
+    status: in_progress
+    turnCount: 17
+    tags:
+    - session-start
+    - add-profile
+    - GrokCode
+    - class-2-ops
+    - hostile-disagree
+    - ops
+    - health
+    - mcp-server-running
+    - failsafe
+    - replay
+    - triage
+    - todo
+    - query
+    - plan-mode
+    - PLAN-PLUGINHANDOFF-001
+    - BDPv4
+    - class-1-plan
+    - hostile-p0a-pending
+    - foreign-repo
+    - MCP-PLUGININT-001
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 30
+  - agent: GrokCode
+    sessionId: GrokCode-20260822T132344Z-pluginhandoff-g0
+    title: PLAN-PLUGINHANDOFF-001 Phase G0 dump-binding confirmation
+    model: grok-code
+    started:
+      dateTime: 2026-08-22T13:23:44.6336772
+      utcDateTime: 2026-08-22T13:23:44.6336772Z
+      localDateTime: 2026-08-22T08:23:44.6336772-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 633
+      microsecond: 677
+      nanosecond: 200
+      minute: 23
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 44
+      ticks: 639230018246336772
+      utcTicks: 639230018246336772
+      timeOfDay: 13:23:44.6336772
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:26:36.2088789
+      utcDateTime: 2026-08-22T13:26:36.2088789Z
+      localDateTime: 2026-08-22T08:26:36.2088789-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 208
+      microsecond: 878
+      nanosecond: 900
+      minute: 26
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 36
+      ticks: 639230019962088789
+      utcTicks: 639230019962088789
+      timeOfDay: 13:26:36.2088789
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-WIKIEXPORT-001
+    - G0
+    - dump-binding
+    filesModifiedCount: 6
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T131910Z-c-red-p20
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-red-P20 UpdateService harness reds
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T13:19:17.0559062
+      utcDateTime: 2026-08-22T13:19:17.0559062Z
+      localDateTime: 2026-08-22T08:19:17.0559062-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 55
+      microsecond: 906
+      nanosecond: 200
+      minute: 19
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 17
+      ticks: 639230015570559062
+      utcTicks: 639230015570559062
+      timeOfDay: 13:19:17.0559062
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:26:25.2759043
+      utcDateTime: 2026-08-22T13:26:25.2759043Z
+      localDateTime: 2026-08-22T08:26:25.2759043-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 275
+      microsecond: 904
+      nanosecond: 300
+      minute: 26
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 25
+      ticks: 639230019852759043
+      utcTicks: 639230019852759043
+      timeOfDay: 13:26:25.2759043
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-red-P20
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 9
+  - agent: GrokCode
+    sessionId: GrokCode-20260822T131500Z-pluginhandoff-p20
+    title: PLAN-PLUGINHANDOFF-001 hourly C-red-P20 continuation
+    model: grok-4.5
+    started:
+      dateTime: 2026-08-22T13:16:00.2822023
+      utcDateTime: 2026-08-22T13:16:00.2822023Z
+      localDateTime: 2026-08-22T08:16:00.2822023-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 282
+      microsecond: 202
+      nanosecond: 300
+      minute: 16
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 0
+      ticks: 639230013602822023
+      utcTicks: 639230013602822023
+      timeOfDay: 13:16:00.2822023
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:18:40.0434904
+      utcDateTime: 2026-08-22T13:18:40.0434904Z
+      localDateTime: 2026-08-22T08:18:40.0434904-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 43
+      microsecond: 490
+      nanosecond: 400
+      minute: 18
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 40
+      ticks: 639230015200434904
+      utcTicks: 639230015200434904
+      timeOfDay: 13:18:40.0434904
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-red-P20
+    - hourly
+    filesModifiedCount: 2
+  - agent: ClaudeCode
+    sessionId: ClaudeCode-20260822T130952Z-plugin-session
+    title: <system-reminder>
+    model: claude
+    started:
+      dateTime: 2026-08-22T13:09:52.0000000
+      utcDateTime: 2026-08-22T13:09:52.0000000Z
+      localDateTime: 2026-08-22T08:09:52.0000000-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 9
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 52
+      ticks: 639230009920000000
+      utcTicks: 639230009920000000
+      timeOfDay: 13:09:52
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T13:17:34.0000000
+      utcDateTime: 2026-08-22T13:17:34.0000000Z
+      localDateTime: 2026-08-22T08:17:34.0000000-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 13
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 17
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 34
+      ticks: 639230014540000000
+      utcTicks: 639230014540000000
+      timeOfDay: 13:17:34
+      year: 2026
+    status: in_progress
+    turnCount: 2
+    tags: []
+    filesModifiedCount: 0
+  deprecated: true
+
+---

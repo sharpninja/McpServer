@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20260821T230102Z-6fca
+  result:
+    agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260821T224147Z-b5-green
+    requestId: req-20260821T224147Z-001-phase-b5-green-gate
+    totalDialogCount: 3
+
+---

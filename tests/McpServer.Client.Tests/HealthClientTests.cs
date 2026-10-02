@@ -72,15 +72,15 @@ public sealed class HealthClientTests
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
-            """{"repoPath":"F:\\GitHub\\McpServer","markerPath":"F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml","exists":true,"lastWriteTimeUtc":"2026-06-25T12:00:00Z","creationTimeUtc":"2026-06-25T11:59:00Z","length":1024}""");
+            """{"repoPath":"Q:\\__mcp_unit_test__\\McpServer","markerPath":"Q:\\__mcp_unit_test__\\McpServer\\AGENTS-README-FIRST.yaml","exists":true,"lastWriteTimeUtc":"2026-06-25T12:00:00Z","creationTimeUtc":"2026-06-25T11:59:00Z","length":1024}""");
         using var http = new HttpClient(handler);
         var client = new HealthClient(http, DefaultOptions);
 
-        var result = await client.GetMarkerFileTimestampAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken);
+        var result = await client.GetMarkerFileTimestampAsync(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/marker-file-timestamp", handler.LastRequest.RequestUri!.AbsolutePath);
-        Assert.Contains("repoPath=F%3A%5CGitHub%5CMcpServer", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("repoPath=Q%3A%5C__mcp_unit_test__%5CMcpServer", handler.LastRequest.RequestUri.Query);
         Assert.True(result.Exists);
         Assert.Equal(1024, result.Length);
     }

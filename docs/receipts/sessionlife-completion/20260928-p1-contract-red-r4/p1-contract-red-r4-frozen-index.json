@@ -1,0 +1,409 @@
+{
+  "schemaVersion": 1,
+  "frozenAtUtc": "2026-09-28T06:54:43.4236087Z",
+  "gate": "P1 contract-only Red R4 after four review corrections and invalid R3 compiler attempt",
+  "planId": "PLAN-SESSIONLIFE-001",
+  "governingRequirements": [
+    "FR-MCP-107",
+    "TR-MCP-PLAN-001",
+    "TEST-MCP-143"
+  ],
+  "primaryRepository": "F:\\GitHub\\McpServer",
+  "candidateRoot": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+  "candidateHead": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "candidateBranch": "codex/sessionlife-acceptance-20260928",
+  "sourceManifest28": [
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "sha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "length": 23985
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "sha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3",
+      "length": 60122
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "sha256": "D6E1C53AFA3BD7B42B78DB43A271EBADD99D6C2AFE07CAAA86315B97270DF9D7",
+      "length": 110129
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "sha256": "C0445AB24C2C378E2B3A1048317F7077244BDC309C492B05238684080A0DF8B6",
+      "length": 18380
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "sha256": "F8A23BD73B7E52A7E4EBD4DDE57D2153C9A356C52020CD45963C0BB7A30710DE",
+      "length": 5642
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "sha256": "8683C1732A3A1AC722F84D53A3BDB077C2F0641F6C56F9B8A8528A639BECECC7",
+      "length": 285959
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "sha256": "F8B002BF315229920FA3F4BF9E4ED5EAA865A69A3D25A4A5FB4B0F0D91DEFBF2",
+      "length": 3524
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "sha256": "8CAD7B21E0CEC38F6C258E529EB73E4F5DA963B2E44D36E62F3270DFD1884907",
+      "length": 17546
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "sha256": "379FABDA60AFF828C80C5F046E0F6DE27CBC279E936113A73BFFAFAE5858316A",
+      "length": 12471
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "sha256": "E1535CD989D6EC4DB93071F8D573E61E416086090EB456E4023EC2ACC04178B7",
+      "length": 7144
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "sha256": "89B90B78DE5DDEC08EDBB06A1EFC4AB786DD572D7F3A9FBC73D98105912138AC",
+      "length": 94673
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "sha256": "0F2966C9C57232FB9A460A048A81960A38F56C688D4F366D606AFDA27AD5A3A6",
+      "length": 4019
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "sha256": "3259D007B487DE0BC81420098FE4CF1BAC722410CC2EBEC7A295C77E888EAF55",
+      "length": 12750
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "sha256": "10C47937FA379B71A62A14EC156B03D74E1FBE13BDD1119DF19FEECE6A482F85",
+      "length": 9671
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "sha256": "7B484DAA8C2AE3638F387D6F21E34DDC97C23042D7FF599E0AECB481CA0DC18D",
+      "length": 34122
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateContractTests.cs",
+      "sha256": "0F0D14853AAB587502289C80B8F6BF6CDDB4DFCAC4704DCBBF7E627F26772B08",
+      "length": 6386
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "sha256": "6EADDA7C9D3C206A12649252E7FF92584CBC58A63A0F7FC6917882DEE313BA46",
+      "length": 8768
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "sha256": "DDD9443FD96D6B207396C3FC66164356A0F2816C293709E51330C910C1758624",
+      "length": 10619
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "sha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "length": 6771
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "sha256": "6F4CC65AB6122886D1223DC58EE97AE8072803D6ACC28E8434FD3338875E9AC6",
+      "length": 4487
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "sha256": "4C3A1FA1FAD3BED673DE1C84032546406335930F49C2D112BA5293C8A727730A",
+      "length": 35801
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "sha256": "E535A9EC1FA53D9F412959719023909CE123B8FCF3774866157746E078311BC9",
+      "length": 12633
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "sha256": "2505633B860D125DAA928BBBCF6BD272EBE7A4E35C6C0BEE2E5C0584DABC7114",
+      "length": 220
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "sha256": "A862458653C294A7681C2D0AC5B450E223D0A638565F3DEC55390CE767C96A21",
+      "length": 6063
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "sha256": "EC98744A0A0BD05619CC98F5AF7FA4670B16FC7393A487BD0EFE552D3C68EBE2",
+      "length": 5561
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "sha256": "5400FBFE7CBEED46F79420CA5D995FD14B80378A768938793D767112781682B6",
+      "length": 1934
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "sha256": "548E49D5EE6C1BC8A7A585130BDCCA1095E329CE9B13B7EEEDEC578B6C757E4C",
+      "length": 11378
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "sha256": "0ED8F482BEA1235C55F0865E56B7248C93EAC69FD3B0F60433915ADC803ED219",
+      "length": 103517
+    }
+  ],
+  "sourceAggregate28": "8B1EF00CFAD95BC74656DA12520712E8336FC0E70A9AE4011206E3406E8E25F0",
+  "candidateArtifacts": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/p1-contract-red-r2-candidate-delta.json",
+      "sha256": "51BCA5A58E42C435BFDB3FA2A77A5A6D1015CCE56E7A2D943789F885E2930685",
+      "length": 8487
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/p1-contract-red-r2-pretest-snapshot.json",
+      "sha256": "9C20E0ABC18DB7A6B63B7C5C1A069A56A986C5B5BAD12C9E54464C43C00F4AE0",
+      "length": 7131
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/p1-contract-red-r2-result.json",
+      "sha256": "386B10B030E205FB86151C1C260A229A6E30E31AC4F733538EC1B7104293BE63",
+      "length": 5982
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/p1-contract-red-r2-structured-receipt-validation.json",
+      "sha256": "89F945688D9C84CD6C2FB0F885F1B65B50A36142B3AFE0FBDED74FD70C557F5D",
+      "length": 22937
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/p1-contract-red-r2.raw.log",
+      "sha256": "DEE23AC83DEED70DE79407F01F32481CB055E900451DCE3022EEBAFBC85812C4",
+      "length": 3182
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r2/test-results/p1-contract-red-r2.trx",
+      "sha256": "037A91F7C1EF089FC62DBB400C60BCE404C07F01E137759A5F91E435EC408DEB",
+      "length": 10819
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/history/p1-contract-red-r2-test-plan.md",
+      "sha256": "A616921C1CECEB6E2D657450EB0323A33B768C7F524BE74037C9AB7C4F848CFE",
+      "length": 6353
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/history/SessionLifeUnitGateContractTests.r2.cs",
+      "sha256": "3E4A6E4B6F28F2313EBC96465EECBC81520D1C850B019385C7A5417341CBFFEF",
+      "length": 5002
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/p1-contract-red-r3-pretest-snapshot.json",
+      "sha256": "1F1FE4C0F0AA51BC5315DD0221A0A193593D5087BA137601229C96FCC233340B",
+      "length": 14024
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/p1-contract-red-r3-result.json",
+      "sha256": "37B95DE8340FAB432E6D8DE9C02E0F05A2057BC99849B189B246A64F0D906F60",
+      "length": 1973
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/p1-contract-red-r3.raw.log",
+      "sha256": "881F32F7EB71C9CC570084D94FD9345828125EF26E056C298B3E0B5D8A5DC13A",
+      "length": 1393
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r3/r2-input-resolution.json",
+      "sha256": "F902B077926132BFCC2210E894765618911DD371CDD2A3FFE7826D08879F9223",
+      "length": 1756
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/history/p1-contract-red-r3-test-plan.md",
+      "sha256": "6033D372FC0B3BED37A4243F2CB4F53714DE65E6BF502EE04174104767C710EA",
+      "length": 9213
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/history/SessionLifeUnitGateContractTests.r3.cs",
+      "sha256": "00EE93871881643CA343D54A9F9822999C7F881727FD92F7BC8545E988CB65F8",
+      "length": 6479
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/p1-contract-red-r4-candidate-delta.json",
+      "sha256": "7FAEF36ABCA14ED15FEF75FD8D93DC15C873A9242F4EA58ADABBDFB546F5E01F",
+      "length": 89861
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/p1-contract-red-r4-pretest-snapshot.json",
+      "sha256": "77BEA4C7ED3C73238E99F0FFF9A83F2A0A91A087BC20B74A591C0628E4147310",
+      "length": 14818
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/p1-contract-red-r4-result.json",
+      "sha256": "0F9185B2CF9AA3487DC4546938C09A25063A0E036C171B1254FD325F09EEF92A",
+      "length": 7318
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/p1-contract-red-r4.raw.log",
+      "sha256": "14FB0DD261D52BA2768D88A0505E8C0AAC7AD5E22A35442FDAD5B828852E0D4F",
+      "length": 3183
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/r3-input-resolution.json",
+      "sha256": "0AD902F4D5CCF4EF8F62761E68D103F8994F6C54A4400E534AD6C2410EDC8212",
+      "length": 1421
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-r4/test-results/p1-contract-red-r4.trx",
+      "sha256": "AFB16B32E0003C54F5075DA25502E33C20F29AD4D9B40570F1A04CC862697219",
+      "length": 10821
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r1-input-resolution.json",
+      "sha256": "D964429224563E2177967F2C975BF4EC5B48494F09EDDDE8FFB6EE473EBECC31",
+      "length": 3372
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r1-input-resolution.noncompliant.json",
+      "sha256": "06D0602A731E71379161B309013A51C5D300924DDEFDD17FEC5007890D0755CE",
+      "length": 2461
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r1-test-plan.md",
+      "sha256": "7A171607CFB9370C724D2D72B2F1089D9A5DABA99AEA05BC2A30C2C2A0AF2695",
+      "length": 5728
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r2-candidate-delta.noncompliant.json",
+      "sha256": "0250ACBC60A142B80A0EFCC0E13F55617C00C4F73AC804A4F5EE5907791A55C9",
+      "length": 6030
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r2-pretest-snapshot.noncompliant.json",
+      "sha256": "6EFEEFA1A07D147411650B3010C9570C7529B8C8D9861DBE25314BA461884640",
+      "length": 6195
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r2-result.noncompliant.json",
+      "sha256": "AFDCBD0DA5065CEC4AC39285218E3B76D489DA0AFB1039DD317EBF7715C4F0D1",
+      "length": 4391
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/SessionLifeUnitGateContractTests.attempt1.cs",
+      "sha256": "333AA1546D91619D19C1BD7BB34AE1941C7C6EFD5EC243DEEC1B3EFF7B47C5C4",
+      "length": 4651
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/history/SessionLifeUnitGateContractTests.r1.cs",
+      "sha256": "4897B5F9DF3F8687C1219238CFC334221B20829277D35B4F637054EF10264152",
+      "length": 4657
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/p1-contract-red-attempt1-build-failure.raw.log",
+      "sha256": "F7C20F99A2F26D5485941743C2082565941BD62CF8CF4D4720B467136CB6D5B5",
+      "length": 860
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/p1-contract-red-pretest-snapshot.json",
+      "sha256": "D2BE6E39E7623121BC28F09764FE6B93BFDEE9A53E6DFF564A12BF2D615B593A",
+      "length": 4853
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/p1-contract-red-r1-result.json",
+      "sha256": "39E698D869A0034C3B59D0DAB88C7202E2D75BDC71A27C4D830E3AC8DA1B1B51",
+      "length": 3303
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/p1-contract-red-test-plan.md",
+      "sha256": "6675786A59D0C0428757752D582EFB33C830BBA87D02337F9F322FF3F5D15D2D",
+      "length": 9979
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/p1-contract-red.raw.log",
+      "sha256": "AC3C260A35CFA8038B3F6814B4B5F7488D5CA5F5E0BDA7612303D70B1E9DEE4C",
+      "length": 3177
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1/test-results/p1-contract-red.trx",
+      "sha256": "E887FF9FC1452DEB712DA8652C82D3565D570E46FBF2BAA73AF131A931FBBD02",
+      "length": 10819
+    }
+  ],
+  "primaryArtifacts": [
+    {
+      "path": "docs/plans/sessionlife-batch-completion-20260927.md",
+      "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+      "length": 63367
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r3/p0-acceptance.json",
+      "sha256": "49D2F809089B7A4778F3CF5EF0EE1D5FD700E4337692E45093DDA6F8C06863B1",
+      "length": 5518
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-candidate-manifest.json",
+      "sha256": "EAFA54BEA79AA1CA4B755817E568CD92E10BF2EDB7CDA7C8DE266038362B2142",
+      "length": 29459
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-before.json",
+      "sha256": "3DD9F2063BF2421F38623DFFFD34795EB4BE88457BB0B85D0C2E57E95FBAE18E",
+      "length": 79755
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-contract-red/p1-contract-red-frozen-index.json",
+      "sha256": "5C99D9F79AE6F8736EE1D7DC9DD43EC98D202FF75ED92DCB168F81526DEB5BDA",
+      "length": 18542
+    },
+    {
+      "path": "docs/receipts/hv/20260928T055344Z-sessionlife-p1-contract-red.request.jsonl",
+      "sha256": "D5782C6CCED1B61009C08C94A47B0D85D171A8C83C51C24F6534761D0757F0B3",
+      "length": 8577
+    },
+    {
+      "path": "docs/receipts/hv/20260928T055344Z-sessionlife-p1-contract-red.response.jsonl",
+      "sha256": "9937A0AF02548D5F172760903127C63674C7355A1C7C76293ED15D512A10CC9C",
+      "length": 43689
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-preparation/poincare-additive-audit-reconciliation.json",
+      "sha256": "E4AB7AC6CCE943FF724B79E67A7B96C23DB72B249954841EDB1F97070C313DBB",
+      "length": 7333
+    }
+  ],
+  "redClaim": {
+    "buildAndDiscoverySucceeded": true,
+    "executed": 3,
+    "failed": 3,
+    "passed": 0,
+    "notExecuted": 0,
+    "exitCode": 1,
+    "reason": "All three missing contract type Assert.NotNull failures at lines27,66,110",
+    "behavioralRed": false
+  },
+  "historicalResolution": {
+    "r1": "docs/receipts/sessionlife-completion/20260928-p1/history/p1-contract-red-r1-input-resolution.json",
+    "r2": "docs/receipts/sessionlife-completion/20260928-p1-r3/r2-input-resolution.json",
+    "r3": "docs/receipts/sessionlife-completion/20260928-p1-r4/r3-input-resolution.json"
+  },
+  "r3CompileFailureRetained": true,
+  "r4ParentExecuted": true,
+  "sourceP0FilesUnchanged": 27,
+  "originalWorktreeFilesUnchanged": 247,
+  "unexpectedSourceChanges": 0,
+  "diffCheckExit": 0,
+  "fullUnitGatePassed": false,
+  "productionScaffoldAuthorized": false,
+  "gateStatus": "Pending independent review",
+  "scopeBoundary": "Minimal declarations/stubs only after contract acceptance. Actual consumer delegation requires failing typed mock test before implementation. Physical report validator requires reviewed real behavior Red before implementation. Full cumulative units mandatory at true increment exit.",
+  "priorReview": {
+    "verdict": "DISAGREE",
+    "pass": 24,
+    "fail": 4,
+    "unknown": 0,
+    "accuracy": 97,
+    "completeness": 95,
+    "exactCompletedBodySha256": "068F90EE96151CFDAC2955070DCD9337821F9C184F9E0A7116BF98F86E166AD6",
+    "parentQuery": "req-20260928T062857Z-5bbc"
+  },
+  "processHistory": "Earlier handwritten JSON, manual JSON line edits and invalid compiler attempts remain disclosed and archived; current R3/R4 parent receipts are native-object serialized. No historical violation erased. Fresh pwsh7.6.6 recorded; R2 historical7.6.5 unchanged.",
+  "outstandingOperationalHistory": "Poincare R3 actions additively reconciled, old stale envelopes retained. Hooke historical P0 remains unresolved after timeout, no retry. Hooke reported new R3 failed audit missing runtime headers and is separately repairing only its own header; parent R4 execution audit is authoritative for this new command."
+}

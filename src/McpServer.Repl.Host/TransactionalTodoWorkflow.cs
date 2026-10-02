@@ -2,6 +2,7 @@ using System.Text.Json;
 using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.Repl.Core;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -10,7 +11,8 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Repl.Host;
 
 /// <summary>
-/// TR-MCP-TXN-001: Decorates REPL TODO create/update/delete workflow mutations with turn transaction gating.
+/// TR-MCP-TXN-001 / FR-MCP-173: REPL TODO mutations skip coordinator/keyserver
+/// unless the operation is a QuadBrain brain-slot transaction.
 /// </summary>
 public sealed class TransactionalTodoWorkflow : ITodoWorkflow
 {
@@ -62,7 +64,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.create"))
             return await _inner.CreateAsync(request, cancellationToken).ConfigureAwait(false);
 
         ITodoMutationResult? mutationResult = null;
@@ -100,7 +102,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         ITodoUpdateRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.update"))
             return await _inner.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
 
         return await UpdateCoreAsync(
@@ -118,7 +120,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         ITodoUpdateRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.updateSelected"))
             return await _inner.UpdateAsync(request, cancellationToken).ConfigureAwait(false);
 
         var selection = _inner.CurrentSelection()
@@ -136,7 +138,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
     /// <inheritdoc />
     public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.delete"))
         {
             await _inner.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
             return;
@@ -154,7 +156,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
     /// <inheritdoc />
     public async Task DeleteAsync(CancellationToken cancellationToken = default)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.deleteSelected"))
         {
             await _inner.DeleteAsync(cancellationToken).ConfigureAwait(false);
             return;
@@ -203,9 +205,9 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
     /// <inheritdoc />
     public async Task RepairProjectionAsync(string id, CancellationToken cancellationToken = default)
     {
-        if (_coordinator is not null)
+        if (!TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "workflow.todo.repairProjection"))
         {
-            var status = _coordinator.GetStatus();
+            var status = _coordinator!.GetStatus();
             if (status.Degraded)
             {
                 throw new InvalidOperationException(
@@ -326,10 +328,21 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         Func<CancellationToken, Task<TurnMutationResult>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
-            throw new InvalidOperationException("Turn transaction coordinator is not available.");
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, request.OperationName, request.PublisherPartyId))
+        {
+            var direct = await mutation(cancellationToken).ConfigureAwait(false);
+            return new TurnTransactionResult
+            {
+                TransactionId = request.TransactionId ?? string.Empty,
+                Status = "bypassed",
+                Reason = McpServer.TransactionSecurity.Models.TransactionFailureReason.None,
+                MutationApplied = true,
+                MutationResult = direct,
+                Message = "Keyserver signing is limited to QuadBrain transactions.",
+            };
+        }
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new TurnTransactionResult

@@ -1,0 +1,567 @@
+[
+  {
+    "File": "HandoffClientTests.cs",
+    "Method": "IngestHandoffAsync_PostsIngestContract",
+    "Relative": "tests\\McpServer.Client.Tests\\HandoffClientTests.cs"
+  },
+  {
+    "File": "HandoffClientTests.cs",
+    "Method": "GetHandoffRunAsync_SendsCorrectUrl",
+    "Relative": "tests\\McpServer.Client.Tests\\HandoffClientTests.cs"
+  },
+  {
+    "File": "HandoffClientTests.cs",
+    "Method": "ApproveHandoffAsync_PostsApprovalContract",
+    "Relative": "tests\\McpServer.Client.Tests\\HandoffClientTests.cs"
+  },
+  {
+    "File": "HandoffClientTests.cs",
+    "Method": "HandoffContracts_RoundTripThroughClientJsonContext",
+    "Relative": "tests\\McpServer.Client.Tests\\HandoffClientTests.cs"
+  },
+  {
+    "File": "HandoffClientTests.cs",
+    "Method": "HandoffEnums_ExposeDocumentedValues",
+    "Relative": "tests\\McpServer.Client.Tests\\HandoffClientTests.cs"
+  },
+  {
+    "File": "HandoffSkillDelegationTests.cs",
+    "Method": "SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient",
+    "Relative": "tests\\McpServer.Repl.Core.Tests\\HandoffSkillDelegationTests.cs"
+  },
+  {
+    "File": "HandoffSkillDelegationTests.cs",
+    "Method": "PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+    "Relative": "tests\\McpServer.Repl.Core.Tests\\HandoffSkillDelegationTests.cs"
+  },
+  {
+    "File": "HandoffWorkflowTests.cs",
+    "Method": "Dispatcher_RoutesHandoffWorkflowMethods",
+    "Relative": "tests\\McpServer.Repl.Core.Tests\\HandoffWorkflowTests.cs"
+  },
+  {
+    "File": "HandoffWorkflowTests.cs",
+    "Method": "Dispatcher_NumericMode999_ReturnsInvocationError",
+    "Relative": "tests\\McpServer.Repl.Core.Tests\\HandoffWorkflowTests.cs"
+  },
+  {
+    "File": "HandoffHttpEnumIntegrationTests.cs",
+    "Method": "Ingest_NumericMode999_DoesNotCreate",
+    "Relative": "tests\\McpServer.Support.Mcp.IntegrationTests\\HandoffHttpEnumIntegrationTests.cs"
+  },
+  {
+    "File": "HandoffIngestionStorageMigrationTests.cs",
+    "Method": "Sqlite_HandoffMigration_DowngradeAndReupgrade",
+    "Relative": "tests\\McpServer.Support.Mcp.IntegrationTests\\HandoffIngestionStorageMigrationTests.cs"
+  },
+  {
+    "File": "HandoffIngestionStorageMigrationTests.cs",
+    "Method": "SqlServer_HandoffMigration_DowngradeAndReupgrade",
+    "Relative": "tests\\McpServer.Support.Mcp.IntegrationTests\\HandoffIngestionStorageMigrationTests.cs"
+  },
+  {
+    "File": "HandoffIngestionStorageMigrationTests.cs",
+    "Method": "PostgreSql_HandoffMigration_DowngradeAndReupgrade",
+    "Relative": "tests\\McpServer.Support.Mcp.IntegrationTests\\HandoffIngestionStorageMigrationTests.cs"
+  },
+  {
+    "File": "HandoffControllerTests.cs",
+    "Method": "IngestAsync_DelegatesToSharedService",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\HandoffControllerTests.cs"
+  },
+  {
+    "File": "HandoffControllerTests.cs",
+    "Method": "GetAndApprove_DelegateToSharedService",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\HandoffControllerTests.cs"
+  },
+  {
+    "File": "HandoffControllerTests.cs",
+    "Method": "GetRunAsync_MissingRun_UsesErrorCodeForNotFound",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Controllers\\HandoffControllerTests.cs"
+  },
+  {
+    "File": "HandoffMcpToolTests.cs",
+    "Method": "HandoffIngest_DelegatesToSharedService",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\HandoffMcpToolTests.cs"
+  },
+  {
+    "File": "HandoffMcpToolTests.cs",
+    "Method": "HandoffIngest_NumericMode999_ReturnsInvalidMode",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\HandoffMcpToolTests.cs"
+  },
+  {
+    "File": "HandoffMcpToolTests.cs",
+    "Method": "PublicSurfaces_ExposeIngestGetAndApprove",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\HandoffMcpToolTests.cs"
+  },
+  {
+    "File": "HandoffMcpToolTests.cs",
+    "Method": "PluginSync_HandoffSkill_MatchesCoreArtifact",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\HandoffMcpToolTests.cs"
+  },
+  {
+    "File": "HandoffMcpToolTests.cs",
+    "Method": "HandoffIngest_InvalidMode_ReturnsError",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\McpStdio\\HandoffMcpToolTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "IngestAsync_ConcurrentSameHash_ReservesOnce",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "GetRunAsync_FailedExtraction_DoesNotReportSuccess",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "RequireReview_MalformedDraft_IsFailedAndNotApprovable",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "IngestAsync_Cancelled_ThrowsWithoutSuccessfulPersist",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "IngestAsync_SecretInDraft_IsRedactedOnPersist",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "Parser_UnknownField_IsNotSuccess",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffAuditDefectTests.cs",
+    "Method": "ApproveAsync_SeparateContexts_CreatedWins",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffAuditDefectTests.cs"
+  },
+  {
+    "File": "HandoffBoundedSourceTests.cs",
+    "Method": "ResolveAsync_OversizedPath_FailsClosed",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffBoundedSourceTests.cs"
+  },
+  {
+    "File": "HandoffBoundedSourceTests.cs",
+    "Method": "ResolveAsync_OversizedArtifactChunks_FailsBeforeJoin",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffBoundedSourceTests.cs"
+  },
+  {
+    "File": "HandoffBoundedSourceTests.cs",
+    "Method": "ResolveAsync_ArtifactExactlyAtLimit_Succeeds",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffBoundedSourceTests.cs"
+  },
+  {
+    "File": "HandoffBoundedSourceTests.cs",
+    "Method": "ResolveAsync_ArtifactCancelled_Throws",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffBoundedSourceTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "TryGetFinalPath_InvalidHandle_FailsClosedOnWindows",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "ReadBoundedAsync_GrowingStream_StopsAtLimit",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "ReadBoundedAsync_Cancelled_Throws",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "ReadAsync_OpenShare_BlocksWritesAndDeletes",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffContainedFileReaderTests.cs",
+    "Method": "ReadAsync_LongContainedPath_SucceedsWhenSupported",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffContainedFileReaderTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsUniqueViolation_SqliteExtendedUniqueCode_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsUniqueViolation_PostgresSqlState23505_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsUniqueViolation_SqlServerNumbers_AreTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsUniqueViolation_EnglishMessageWithoutProviderCode_IsFalse",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsCommitAmbiguous_SqlServerTimeoutNumber_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsCommitAmbiguous_PostgresSqlState40001_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsCommitAmbiguous_SqliteBusyCode_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsCommitAmbiguous_EnglishMessageOnly_IsFalse",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDbExceptionsTests.cs",
+    "Method": "IsCommitAmbiguous_TimeoutException_IsTrue",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDbExceptionsTests.cs"
+  },
+  {
+    "File": "HandoffDeadContractInventoryTests.cs",
+    "Method": "HandoffReviewState_DoesNotDefineApproved",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDeadContractInventoryTests.cs"
+  },
+  {
+    "File": "HandoffDeadContractInventoryTests.cs",
+    "Method": "HandoffIngestionRunEntity_DoesNotExposeReplayOfRunId",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDeadContractInventoryTests.cs"
+  },
+  {
+    "File": "HandoffDeadContractInventoryTests.cs",
+    "Method": "SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDeadContractInventoryTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_ConcurrentReplayOfLiveLease_ReturnsInProgressNotReplay",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_StaleLease_IsTakenOverBySecondInstance",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_CancelledAfterReserve_PersistsFailureThenThrows",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "ApproveAsync_StaleApprovalLease_IsRecoveredBySecondInstance",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "ApproveAsync_TwoInstances_CreateExactlyOneTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "ApproveAsync_Rejection_DoesNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_ExistingTodoFromThisRun_HealsInsteadOfColliding",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_CallerOwnedTodoId_IsNonSuccessCollision",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_InvalidRequireReviewDraft_IsFailedAndNotSuccess",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "GetRunAsync_AfterCollision_PreservesPersistedSuccessAndErrorCode",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "SaveRunAfterTodo_CommitFailure_HealsAndPreservesUnrelatedTrackedEntities",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "SaveRunAfterTodo_CancellationAfterTodo_PersistsCreatedThenThrows",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "ApproveAsync_LiveClaimant_RejectsStaleSecondClaim",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_SameKeyChangedPayload_IsCollisionNotHeal",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "SaveRunAfterTodo_TodoAbsent_DoesNotReportCreatedFromMemory",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "SaveRunAfterTodo_CallerCancellation_PersistsCreatedReceipt",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "SaveRunAfterTodo_CompensationTimeout_DoesNotReportCreatedFromMemory",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_UndefinedMode_DoesNotCreate",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAsync_CustomPromptTemplate_IsRejected",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffDurabilityTests.cs",
+    "Method": "IngestAndApprove_CredentialBearingProvenance_IsSanitized",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffDurabilityTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_SupportedFormats_AreAccepted",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_UnsafeSources_ProduceDiagnosticsAndNoTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_MalformedExtractorJson_DoesNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_UnknownSourceNotes_AreNotDiscarded",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_DraftOnly_DoesNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_LowConfidence_RequiresReview",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_CreateWhenConfident_CreatesExactlyOneTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_SameHashAndPrompt_ReplaysExistingRun",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_DuplicateTodoId_RequiresReview",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_PersistsProvenanceWithoutSourceContent",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "ApproveAsync_RevalidatesThenCreates",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_ExtractorCancelled_DoesNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_MissingExtractorFields_DoesNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_AmbiguousHandoff_RequiresReview",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_TodoServiceFailure_RequiresReview",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_ForceTrue_ExtractsAgain",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_ArtifactSource_UsesDocumentChunks",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_ReparseEscape_IsRejected",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_DifferentWorkspace_DoesNotReplay",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "ApproveAsync_ConcurrentApprovals_CreateOnce",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffIngestionServiceTests.cs",
+    "Method": "IngestAsync_BlankDescriptionAndTechnicalDetails_ReturnFieldDiagnosticsAndDoNotCreateTodo",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffIngestionServiceTests.cs"
+  },
+  {
+    "File": "HandoffOneShotExtractorTests.cs",
+    "Method": "ExtractAsync_UsesHandoffTodoDraftContextAndVersionedPrompt",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffOneShotExtractorTests.cs"
+  },
+  {
+    "File": "HandoffReplayKeysTests.cs",
+    "Method": "Create_LongWorkspace_ReturnsFixedLengthSha256",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffReplayKeysTests.cs"
+  },
+  {
+    "File": "HandoffReplayKeysTests.cs",
+    "Method": "Create_UnicodeWorkspace_IsStableAndFixedLength",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffReplayKeysTests.cs"
+  },
+  {
+    "File": "HandoffReplayKeysTests.cs",
+    "Method": "Create_DelimiterCollisionInputs_ProduceDistinctIdentities",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffReplayKeysTests.cs"
+  },
+  {
+    "File": "HandoffReplayKeysTests.cs",
+    "Method": "Create_ForceSemantics_PreserveDeterministicReplayAndUniqueForceRows",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffReplayKeysTests.cs"
+  },
+  {
+    "File": "HandoffServiceRegistrationTests.cs",
+    "Method": "AddHandoffServices_WithoutAgentPool_ResolvesUnavailableExtractor",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffServiceRegistrationTests.cs"
+  },
+  {
+    "File": "HandoffServiceRegistrationTests.cs",
+    "Method": "HandoffIngestDirectorCommand_PrimaryCommand_DelegatesToExecutor",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffServiceRegistrationTests.cs"
+  },
+  {
+    "File": "HandoffStrictEnumAndHttpTests.cs",
+    "Method": "StrictEnumConverter_Numeric999_Throws",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffStrictEnumAndHttpTests.cs"
+  },
+  {
+    "File": "HandoffStrictEnumAndHttpTests.cs",
+    "Method": "StrictEnumConverter_UndefinedName_Throws",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffStrictEnumAndHttpTests.cs"
+  },
+  {
+    "File": "HandoffStrictEnumAndHttpTests.cs",
+    "Method": "FromErrorCode_MapsStableStatuses",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffStrictEnumAndHttpTests.cs"
+  },
+  {
+    "File": "HandoffStrictEnumAndHttpTests.cs",
+    "Method": "Controller_MapsErrorCodesAndRedactsInternalErrors",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffStrictEnumAndHttpTests.cs"
+  },
+  {
+    "File": "HandoffTodoDraftValidatorTests.cs",
+    "Method": "Validate_InvalidFields_ProduceFieldDiagnostics",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffTodoDraftValidatorTests.cs"
+  },
+  {
+    "File": "HandoffTodoDraftValidatorTests.cs",
+    "Method": "Validate_BlankDescriptionAndTechnicalDetails_ProduceFieldDiagnostics",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffTodoDraftValidatorTests.cs"
+  },
+  {
+    "File": "HandoffTodoDraftValidatorTests.cs",
+    "Method": "Validate_ValidDraft_NormalizesValues",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffTodoDraftValidatorTests.cs"
+  },
+  {
+    "File": "HandoffTodoDraftValidatorTests.cs",
+    "Method": "Validate_MultiSegmentRequirementIds_AreAccepted",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffTodoDraftValidatorTests.cs"
+  },
+  {
+    "File": "HandoffWorkspacePathsTests.cs",
+    "Method": "Canonicalize_RelativeAndNested_MatchGetFullPath",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffWorkspacePathsTests.cs"
+  },
+  {
+    "File": "HandoffWorkspacePathsTests.cs",
+    "Method": "TryCanonicalize_Blank_Fails",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffWorkspacePathsTests.cs"
+  },
+  {
+    "File": "HandoffWorkspacePathsTests.cs",
+    "Method": "IngestAsync_CrossWorkspace_DoesNotLeakRuns",
+    "Relative": "tests\\McpServer.Support.Mcp.Tests\\Services\\HandoffWorkspacePathsTests.cs"
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "codexQuarantine": [
+    {
+      "name": "20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml",
+      "length": 1015,
+      "lastWriteUtc": "2026-07-22T23:24:40.1633860Z",
+      "hasPlanFile": false,
+      "turnsIsMappingZero": true,
+      "method": "client.SessionLog.SubmitAsync"
+    },
+    {
+      "name": "20260817T123057Z-session_submit-d5f9.yaml",
+      "length": 5686,
+      "lastWriteUtc": "2026-08-17T13:16:20.9333400Z",
+      "hasPlanFile": false,
+      "turnsIsMappingZero": false,
+      "method": "client.SessionLog.SubmitAsync"
+    },
+    {
+      "name": "20260817T123219Z-session_submit-9ad7.yaml",
+      "length": 5657,
+      "lastWriteUtc": "2026-08-17T13:16:28.1165996Z",
+      "hasPlanFile": false,
+      "turnsIsMappingZero": false,
+      "method": "client.SessionLog.SubmitAsync"
+    }
+  ],
+  "codexPending": [
+    {
+      "name": "019d6472-5ba7-77d0-9b90-ee0d3f99599a.3fe421946dfc1353.importRecovery.yaml",
+      "length": 1521,
+      "lastWriteUtc": "2026-07-23T16:03:35.2974646Z",
+      "isImportRecovery": true,
+      "persistedFalse": true
+    },
+    {
+      "name": "019d6481-c77a-74b3-8bd7-103167e0e0bb.b8611bc5364bf417.importRecovery.yaml",
+      "length": 1894,
+      "lastWriteUtc": "2026-07-23T16:03:38.9264941Z",
+      "isImportRecovery": true,
+      "persistedFalse": true
+    }
+  ]
+}

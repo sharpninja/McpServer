@@ -1,0 +1,21 @@
+Test run for F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\McpServer\.worktrees\session-lifecycle\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.22]   Discovering: McpServer.PluginIntegration.Tests
+[xUnit.net 00:00:00.55]   Discovered:  McpServer.PluginIntegration.Tests
+[xUnit.net 00:00:00.78]   Starting:    McpServer.PluginIntegration.Tests
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork) [24 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2) [10 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline) [15 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode) [9 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok) [24 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex) [28 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot) [24 s]
+  Passed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode) [26 s]
+[xUnit.net 00:02:45.91]   Finished:    McpServer.PluginIntegration.Tests (ID = '982e32cffaaa9f8dfcdea621185856aef3d7a7350aefd7ca630a75972d2ee3ec')
+
+Test Run Successful.
+Total tests: 8
+     Passed: 8
+ Total time: 2.7736 Minutes

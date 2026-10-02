@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142122Z-832b
+  result:
+    id: TR-MCP-SESSIONLIFE-005
+    title: Stop-hook stale pin and upsert uniqueness
+    description: Close-PluginTurnIfNeeded runs build and audit gates first and allows a stale pin only with authoritative server completion. SessionLogSchemaGuard, SessionLogService.UpsertTurnAsync, and SessionLogController implement predecessor-schema detection, details.inner, and one uniqueness retry.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SESSIONLIFE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:22.9223734+00:00
+    updatedAt: 2026-09-24T14:21:22.9224730+00:00
+  deprecated: true
+
+---
+

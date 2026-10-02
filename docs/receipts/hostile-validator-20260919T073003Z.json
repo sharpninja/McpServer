@@ -1,0 +1,91 @@
+{
+  "phase": "H4-green",
+  "branch": "memory-s4-red",
+  "tipSha": "a71baeb3930147185acb9d746e82045d44b6c6ec",
+  "filter": "FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+  "startedUtc": "2026-09-19T07:29:16Z",
+  "endedUtc": "2026-09-19T07:29:48Z",
+  "trxSha256": "5803d422336bbe0a4390ec0bdea302bf0300d937dd30124927358677f04de7ee",
+  "counts": {
+    "failed": 0,
+    "passed": 200,
+    "skipped": 0,
+    "total": 200
+  },
+  "catalog": {
+    "S1": {
+      "pass": 73,
+      "total": 73,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S2": {
+      "pass": 40,
+      "total": 40,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S3": {
+      "pass": 20,
+      "total": 20,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    },
+    "S4": {
+      "pass": 42,
+      "total": 42,
+      "fail": 0,
+      "miss": 0,
+      "skip": 0
+    }
+  },
+  "compat": {
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focus": [
+    {
+      "area": "per-workspace-lock-ttl",
+      "outcome": "Passed"
+    },
+    {
+      "area": "sse-workspace-run-id",
+      "outcome": "Passed"
+    },
+    {
+      "area": "allow-hard-delete-default-false",
+      "outcome": "Passed"
+    },
+    {
+      "area": "promote-sourcekind-sourceref",
+      "outcome": "Passed"
+    },
+    {
+      "area": "readonly-cannot-write-consolidate-promote",
+      "outcome": "Passed"
+    },
+    {
+      "area": "job-disabled-by-default",
+      "outcome": "Passed"
+    },
+    {
+      "area": "no-auto-promote",
+      "outcome": "Passed"
+    },
+    {
+      "area": "s4-catalog-100pct-green",
+      "outcome": "Passed"
+    }
+  ],
+  "accuracy": 99,
+  "completeness": 99,
+  "overallVerdict": "AGREE",
+  "notes": [
+    "S4 Green handlers + promote/consolidate ops on tip",
+    "No PR; memory-s4-red only; MCP-MEMORY-002 not Done; S5 not started"
+  ]
+}

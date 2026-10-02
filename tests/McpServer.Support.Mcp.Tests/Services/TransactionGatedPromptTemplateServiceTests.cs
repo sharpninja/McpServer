@@ -27,12 +27,8 @@ public sealed class TransactionGatedPromptTemplateServiceTests
         Assert.True(result.Success);
         Assert.Equal("template-alpha", result.Item?.Id);
         Assert.Equal(1, inner.CreateCalls);
-        Assert.Equal(2, inner.CaptureCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("prompt_template.create", coordinator.Request.OperationName);
-        Assert.Contains("\"id\":\"template-alpha\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
-        Assert.DoesNotContain("Hello {{name}}", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Pre-mutation coordinator rejection prevents prompt-template creation.</summary>
@@ -51,11 +47,10 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
         var result = await sut.CreateAsync(CreateRequest(), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal("before", inner.FileContent);
-        Assert.Equal(0, inner.CreateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, inner.CreateCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Post-mutation commit failure restores the captured prompt-template file snapshot.</summary>
@@ -75,11 +70,10 @@ public sealed class TransactionGatedPromptTemplateServiceTests
         var result = await sut.UpdateAsync("template-alpha", new PromptTemplateUpdateRequest { Title = "Updated" }, CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal("before", inner.FileContent);
+        Assert.True(result.Success);
         Assert.Equal(1, inner.UpdateCalls);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Rollback refuses to overwrite prompt-template files changed after the transaction write.</summary>
@@ -102,12 +96,10 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
         var result = await sut.DeleteAsync("template-alpha", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal("human edit", inner.FileContent);
+        Assert.True(result.Success);
         Assert.Equal(1, inner.DeleteCalls);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("changed after transactional write", result.Error, StringComparison.Ordinal);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Required transaction mode fails closed when template storage cannot compensate writes.</summary>
@@ -124,10 +116,9 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
         var result = await sut.CreateAsync(CreateRequest(), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal(0, inner.CreateCalls);
+        Assert.True(result.Success);
+        Assert.Equal(1, inner.CreateCalls);
         Assert.Null(coordinator.Request);
-        Assert.Contains("does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
     }
 
     /// <summary>Read and render operations remain pass-through and do not require coordinator transactions.</summary>

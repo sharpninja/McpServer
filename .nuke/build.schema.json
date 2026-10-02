@@ -27,6 +27,7 @@
         "AiCodeReview",
         "AiProjectReview",
         "AiWarningSuppressionReview",
+        "BenchMemory",
         "BuildAgent",
         "BuildTrustedThirdParty",
         "BumpVersion",
@@ -37,10 +38,12 @@
         "InstallReplTool",
         "InstallTestDependencies",
         "MigrationIntegrationTests",
+        "NormalizeGeneratedMigrationObsoletePragmas",
         "PackageMsix",
         "PackNuGet",
         "PackQBAgentTool",
         "PackReplTool",
+        "PluginSessionLogIntegration",
         "Publish",
         "PublishAgent",
         "PublishNuGet",
@@ -164,11 +167,19 @@
         },
         "InstallPath": {
           "type": "string",
-          "description": "Service installation directory (default: C:\\ProgramData\\McpServer)"
+          "description": "Service installation directory (Windows: C:\\ProgramData\\McpServer; Linux: /opt/mcpserver/app)"
         },
         "Instance": {
           "type": "string",
           "description": "MCP instance name from appsettings"
+        },
+        "LinuxBackupRoot": {
+          "type": "string",
+          "description": "Linux retained configuration/data archive directory (default: /var/backups/mcpserver)"
+        },
+        "MemoryBenchGate": {
+          "type": "boolean",
+          "description": "Fail BenchMemory when Memory:Bench:Gate=true"
         },
         "MsixVersion": {
           "type": "string",
@@ -181,6 +192,18 @@
         "PackageVersion": {
           "type": "string",
           "description": "Package version for NuGet pack (defaults to GitVersion output)"
+        },
+        "Plugin": {
+          "type": "string",
+          "description": "BenchMemory plugin id (default grok; all is post-H7a)"
+        },
+        "PluginPromotionApproval": {
+          "type": "string",
+          "description": "Path to the operator approval artifact for Staging/Production plugin promotion"
+        },
+        "PluginPromotionEnvironment": {
+          "type": "string",
+          "description": "Plugin promotion environment: Development, Staging, or Production"
         },
         "Port": {
           "type": "integer",
@@ -201,7 +224,7 @@
         },
         "ServiceName": {
           "type": "string",
-          "description": "Windows service name (default: McpServer)"
+          "description": "Service name (Windows: McpServer; Linux: mcpserver.service)"
         },
         "SkipBuild": {
           "type": "boolean",

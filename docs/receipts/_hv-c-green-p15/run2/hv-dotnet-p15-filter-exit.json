@@ -1,0 +1,12 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter \"FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending\" --logger trx --logger console --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\results-20260822T063532Z",
+  "ExitCode": 0,
+  "DurationMs": 302914,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\hv-dotnet-p15-filter.log",
+  "ResultsDirectory": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\results-20260822T063532Z",
+  "TrxFiles": [
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\results-20260822T063532Z\\kingd_PAYTON-LEGION2_2026-08-22_01_36_06_net10.0.trx"
+  ],
+  "TrxExists": true,
+  "FinishedUtc": "2026-08-22T06:40:35.8906266Z"
+}

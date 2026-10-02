@@ -1,0 +1,64 @@
+{
+  "todoTotalCount": 36,
+  "todoItemCount": 36,
+  "todoDoneTrue": 0,
+  "todoDoneFalse": 36,
+  "todoDoneNull": 0,
+  "todoIds": [
+    "BUG-TRIAGE-165",
+    "BUG-TRIAGE-166",
+    "BUG-TRIAGE-167",
+    "PLAN-DELETECOMPLIANCE-003",
+    "PLAN-OCTOPUS-001",
+    "TR-AUDIT-001",
+    "BUG-TRIAGE-163",
+    "PLAN-FILETOOLS-001",
+    "PLAN-FILETOOLS-002",
+    "PLAN-FILETOOLS-003",
+    "PLAN-FILETOOLS-004",
+    "MCP-HANDOFF-001",
+    "MCP-HANDOFFPLAN-001",
+    "MCP-HANDOFFREVIEW-001",
+    "MCP-WIKIEXPORT-001",
+    "MCP-PLUGINCORE-004",
+    "PLAN-BYRDPROCESS-001",
+    "PLAN-LLMSTRATEGY-001",
+    "PLAN-QBCODE-001",
+    "PLAN-QBCODE-C1-001",
+    "PLAN-QBCODE-C2-001",
+    "PLAN-QBCODE-C3-001",
+    "PLAN-QBCODE-E1-001",
+    "PLAN-QBCODE-I1-001",
+    "PLAN-QBCODE-T1-001",
+    "PLAN-QUADBRAIN-001",
+    "PLAN-QUADBRAIN-C1-001",
+    "PLAN-QUADBRAIN-C2-001",
+    "PLAN-QUADBRAIN-C3-001",
+    "PLAN-QUADBRAIN-E1-001",
+    "PLAN-QUADBRAIN-I1-001",
+    "PLAN-QUADBRAIN-T1-001",
+    "PLAN-SHARPMIND-001",
+    "MCP-HOSTILEREVIEW-001",
+    "MCP-PLUGININT-001",
+    "MCP-WORKSPACEHYGIENE-002"
+  ],
+  "memRawType": "System.Management.Automation.PSCustomObject",
+  "memKeys": [
+    "items",
+    "totalCount"
+  ],
+  "memItemCount": 2,
+  "memIds": [
+    "MEMORY-LAB-001",
+    "MEMORY-LAB-002"
+  ],
+  "memLabKeys": [
+    "items",
+    "totalCount"
+  ],
+  "memLabCount": 2,
+  "memLabIds": [
+    "MEMORY-LAB-001",
+    "MEMORY-LAB-002"
+  ]
+}

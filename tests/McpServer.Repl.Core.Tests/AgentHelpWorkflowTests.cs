@@ -29,7 +29,7 @@ public sealed class AgentHelpWorkflowTests
 
         var result = await sut.CreateSessionAsync(new AgentHelpSessionCreateRequest
         {
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
             Topic = "marker trust",
             AgentSeed = "callerAgent=Codex",
         }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -40,7 +40,7 @@ public sealed class AgentHelpWorkflowTests
         Assert.EndsWith("/mcpserver/agent-help/session", handler.LastRequest.RequestUri!.OriginalString, StringComparison.Ordinal);
         Assert.NotNull(handler.LastBody);
         using var document = JsonDocument.Parse(handler.LastBody!);
-        Assert.Equal("F:\\GitHub\\McpServer", document.RootElement.GetProperty("workspacePath").GetString());
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", document.RootElement.GetProperty("workspacePath").GetString());
     }
 
     /// <summary>Verifies that submit turn posts to the expected REST path.</summary>

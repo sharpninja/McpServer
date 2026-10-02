@@ -1,0 +1,75 @@
+{
+  "timestampUtc": "2026-08-22T13:24:29Z",
+  "agent": "GrokCode",
+  "sessionId": "GrokCode-20260822T132344Z-pluginhandoff-g0",
+  "requestId": "req-20260822T132344Z-001-g0-dump-binding",
+  "turnId": 42980,
+  "todoId": "PLAN-PLUGINHANDOFF-001",
+  "phase": "G0",
+  "bound": "no",
+  "federationRegisterWorkspaceAsyncOutOfScope": true,
+  "recommendedFirstGRedConsumer": "AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml",
+  "missingWrapperConsumers": [
+    "Director add-workspace --dump (BuildAddWorkspaceCommand)",
+    "REPL client.Workspace.CreateAsync dump field",
+    "plugin client.Workspace.CreateAsync dump field",
+    "wiki requirements generate --include-dump (inspect only; not first G-red this hour)"
+  ],
+  "createAsync": {
+    "workspaceClient": "McpServer.Client.WorkspaceClient.CreateAsync(WorkspaceCreateRequest request, CancellationToken cancellationToken = default) -> POST mcpserver/workspace",
+    "workspaceController": "WorkspaceController.CreateAsync([FromBody] WorkspaceCreateRequest? request, CancellationToken ct) HTTP POST /mcpserver/workspace",
+    "workspaceService": "WorkspaceService.CreateAsync(WorkspaceCreateRequest request, CancellationToken ct = default)",
+    "dumpParameterBound": false
+  },
+  "wrappers": {
+    "directorAddWorkspace": {
+      "found": true,
+      "type": "McpServerManager.Director.Commands.DirectorCommands",
+      "method": "BuildAddWorkspaceCommand",
+      "command": "add-workspace",
+      "options": [
+        "--workspace/-w",
+        "--name/-n",
+        "--server/-s"
+      ],
+      "dumpOption": false
+    },
+    "replClientWorkspaceCreateAsync": {
+      "found": true,
+      "method": "client.Workspace.CreateAsync",
+      "dumpField": false
+    },
+    "pluginWorkspaceSkill": {
+      "found": true,
+      "method": "client.Workspace.CreateAsync",
+      "dumpField": false
+    }
+  },
+  "wikiIncludeDump": {
+    "present": false,
+    "surfacesInspected": [
+      "IGenerateDocumentParams",
+      "RequirementsWorkflow.GenerateDocumentAsync",
+      "requirements_generate",
+      "RequirementsClient.GenerateAsync",
+      "RequirementsController.GenerateAsync",
+      "IRequirementsDocumentService.GenerateWikiAsync",
+      "DirectorCommands.Register (no wiki-export command)"
+    ]
+  },
+  "federation": {
+    "type": "McpServer.Client.FederationClient",
+    "method": "RegisterWorkspaceAsync(string proxyId, FederationWorkspaceRegistrationRequest request, CancellationToken cancellationToken = default)",
+    "path": "mcpserver/federation/proxies/{proxyId}/workspaces",
+    "outOfScope": true,
+    "dumpField": false
+  },
+  "todosRemainDoneFalse": [
+    "PLAN-PLUGINHANDOFF-001",
+    "MCP-WIKIEXPORT-001",
+    "MCP-PLUGININT-001"
+  ],
+  "gRedTestsWritten": false,
+  "createAsyncDumpImplemented": false,
+  "receiptMarkdown": "docs/receipts/g0-dump-binding-20260822T132429Z.md"
+}

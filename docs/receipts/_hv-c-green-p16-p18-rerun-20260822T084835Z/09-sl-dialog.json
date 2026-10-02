@@ -1,0 +1,7 @@
+{
+  "command": "Invoke",
+  "method": "workflow.sessionlog.appendDialog",
+  "durationMs": 2978,
+  "error": null,
+  "output": ""
+}

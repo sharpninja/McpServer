@@ -1,0 +1,82 @@
+{
+  "kind": "PLAN-PLUGINHANDOFF-001-E-red",
+  "utc": "2026-08-22T14:30:42Z",
+  "agent": "GrokCode",
+  "sessionId": "GrokCode-20260822T142012Z-pluginhandoff-e-red",
+  "requestId": "req-20260822T142012Z-001-pluginhandoff-e-red",
+  "turnId": 43020,
+  "worktree": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e5-7603-879b-832cfd4fe7f7",
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "phase": "E-red",
+  "mixedGreen": false,
+  "eGreenStarted": false,
+  "trust": {
+    "signatureMatch": true,
+    "signature": "98C4F6E54D9AEB7F7625DA9538AEE7380BE10C0204BC10C1CFCE722690941EBD",
+    "healthNonce": "76bdeee176d24aa3a9f5822da04a3d17",
+    "healthNonceEcho": true,
+    "healthStatus": "Healthy"
+  },
+  "filesAdded": [
+    "src/McpServer.Services/Services/HostileReview/HostileReviewContracts.cs",
+    "src/McpServer.Services/Services/HostileReview/HostileReviewService.cs",
+    "tests/McpServer.Support.Mcp.Tests/Services/HostileReviewQueueTests.cs"
+  ],
+  "productSurfacesAbsent": [
+    "src/McpServer.Support.Mcp/Controllers/HostileReviewController.cs",
+    "src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.HostileReview.cs",
+    "src/McpServer.Repl.Core/HostileReviewCommandShapes.cs",
+    "src/McpServer.Cqrs.Mvvm/HostileReviewDirectorCommands.cs",
+    "src/McpServer.Client/HostileReviewClient.cs",
+    "plugins/core/skills/hostile-review/SKILL.md"
+  ],
+  "dbContextHostileReviewHits": 0,
+  "namedTests": [
+    "HostileReviewEntity_RoundTrip_SqlitePgSqlServer",
+    "HostileReviewSubmit_ValidRequest_CreatesQueueItem",
+    "HostileReviewSubmit_OversizedPayload_Rejected",
+    "HostileReviewSubmit_ForeignWorkspace_403",
+    "HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit",
+    "HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic",
+    "HostileReviewSubmit_AmbiguousLink_Diagnostic",
+    "HostileReviewExecution_RecordsModelEffortAgentTemplateRunId",
+    "HostileReviewExecution_OmitsFabricatedTokenCounts",
+    "HostileReviewGet_NormalizedFindings_TaxonomyComplete",
+    "HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext",
+    "HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns",
+    "HostileReviewQuery_ByRequesterAndTargetType_AndFilters",
+    "HostileReviewQuery_NoMatch_EmptyList",
+    "HostileReview_Default_DoesNotMutateProductFiles",
+    "HostileReview_SurfaceParity_RestReplDirectorPlugin"
+  ],
+  "filter": {
+    "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+    "expression": "FullyQualifiedName~HostileReview",
+    "configuration": "Debug"
+  },
+  "dotnet": {
+    "failed": 16,
+    "passed": 0,
+    "skipped": 0,
+    "total": 16,
+    "durationMs": 869,
+    "exitCode": 1,
+    "summary": "Failed!  - Failed:    16, Passed:     0, Skipped:     0, Total:    16, Duration: 869 ms - McpServer.Support.Mcp.Tests.dll (net10.0)"
+  },
+  "trx": {
+    "path": "docs/receipts/_e-red-20260822T142012Z/hostile-review-e-red.trx",
+    "total": 16,
+    "executed": 16,
+    "passed": 0,
+    "failed": 16,
+    "inconclusive": 0,
+    "timeout": 0,
+    "notExecuted": 0
+  },
+  "todos": {
+    "PLAN-PLUGINHANDOFF-001": { "done": false },
+    "MCP-HOSTILEREVIEW-001": { "done": false }
+  },
+  "fullSuiteRun": false,
+  "nukeTestRun": false
+}

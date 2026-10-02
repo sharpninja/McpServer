@@ -1,0 +1,21 @@
+workflow.sessionlog.appendActions requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\13f42de186e8437a8836d31a7dfe3bf4\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.completeTurn requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\13f42de186e8437a8836d31a7dfe3bf4\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.appendDialog requires current-turn.yaml in 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\0c4112a93beb45d5b4bed911d5fd7a1b\cache'. Run the active agent prompt hook; it will health-check the marker, recreate session state when AGENTS-README-FIRST.yaml changes, submit triage if create fails after healthy bootstrap, and continue through failsafe session logging while degraded. Set MCP_CACHE_DIR_OVERRIDE only when intentionally targeting a different active-turn cache.
+workflow.sessionlog.appendDialog requires at least one valid dialogItems or dialog entry.
+Failsafe queue drain: replayed=1 failed=0 quarantined=0 skipped=0 dir='C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\drain-d0b39d4bd77f4467a424bb35f75d6346\failsafe'.
+workflow.sessionlog.failTurn requires a non-empty errorMessage (or failureNote).
+workflow.sessionlog.completeTurn refused current-turn cache 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\turnshim-1edeb279794e4a31a71a50553d111835\cache\current-turn.yaml' because sourceType prefix 'GrokCode' differs from active 'Codex'.
+workflow.sessionlog.completeTurn re-binding current-turn cache 'C:\Users\kingd\AppData\Local\Temp\mcp-plugin-psonly-pester\turnshim-1edeb279794e4a31a71a50553d111835\cache\current-turn.yaml' from rotated sessionId 'Codex-20260819T000000Z-plugin-session' to active sessionId 'Codex-20260819T010000Z-rotated'.
+workflow.sessionlog.completeTurn refused to close 'req-20260819T000000Z-999-other' because the current turn is 'req-20260819T000000Z-003-keep'.
+workflow.sessionlog.appendDialog server call failed: conflictpayload:
+  code: conflict
+
+appendDialog degraded turn not stored; session_dialog failsafe retained requestId=req-20260923T205606Z-001-life
+workflow.sessionlog.beginTurn queued/degraded for 'req-20260923T205606Z-001-life'. Failsafe retained; current-turn remains active.
+Failsafe queue drain: replayed=1 failed=0 quarantined=0 skipped=0 dir='C:\Users\kingd\AppData\Local\Temp\sessionlife-lock-e2b9bb11bded432baca141bbe87ceb31\failsafe-only'.
+workflow.sessionlog.appendActions refused requestId 'req-other' because the current turn is 'req-cached'.
+workflow.sessionlog.appendActions did not persist 'req-cached' and no failsafe was retained.
+workflow.sessionlog.appendActions did not persist 'req-cached' and no failsafe was retained.
+workflow.sessionlog.appendActions queued for 'req-cached'. Failsafe retained; primary persistence was not claimed.
+workflow.sessionlog.updateTurn queued for 'req-cached'. Failsafe retained; primary persistence was not claimed.
+Failsafe queue drain: replayed=1 failed=0 quarantined=0 skipped=0 dir='F:\GitHub\McpServer\.mcpServer\tmp\sessionlife-9ad7-c5afcb5375ec4331ad9744c44a3899f3\failsafe-only'.

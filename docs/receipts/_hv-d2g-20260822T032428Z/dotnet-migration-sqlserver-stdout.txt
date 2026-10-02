@@ -1,0 +1,62 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Repl.Host -> F:\GitHub\McpServer\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:03:20.36]     McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade [FAIL]
+  Failed McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade [3 m 18 s]
+  Error Message:
+   Microsoft.Data.SqlClient.SqlException : Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+---- System.ComponentModel.Win32Exception : The wait operation timed out.
+  Stack Trace:
+     at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.SqlCommand.InternalEndExecuteNonQuery(IAsyncResult asyncResult, Boolean isInternal, String endMethod)
+   at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryInternal(IAsyncResult asyncResult)
+   at Microsoft.Data.SqlClient.SqlCommand.EndExecuteNonQueryAsync(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.<>c.<<MigrateAsync>b__22_1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.AssertProviderCycleAsync(DbContextOptions`1 options, String precedingMigration, String handoffMigration) in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 93
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 54
+   at McpServer.Support.Mcp.IntegrationTests.HandoffIngestionStorageMigrationTests.SqlServer_HandoffMigration_DowngradeAndReupgrade() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\HandoffIngestionStorageMigrationTests.cs:line 54
+--- End of stack trace from previous location ---
+----- Inner Stack Trace -----
+
+Results File: F:\GitHub\McpServer\docs\receipts\_hv-d2g-20260822T032428Z\d2g-handoff-migration-sqlserver.trx
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 m 18 s - McpServer.Support.Mcp.IntegrationTests.dll (net10.0)

@@ -1,6 +1,6 @@
 {
   "name": "start_console",
-  "description": "Ensure a PowerShell console is available, or launch a new one. When reason is empty or omitted, reuses an existing standby console if one is available. When reason is provided, always launches a new console regardless of existing ones.\r\n\r\n📌 This is your primary tool for all command execution tasks: directory navigation, git operations, build/test commands, file system operations, process management, environment variable access, and any shell/terminal task. Sessions persist across calls (authentication, variables, modules stay active). Install any PowerShell Gallery module without admin privileges to extend capabilities (e.g., Az for Azure, AWS.Tools for AWS, Microsoft.Graph for M365).",
+  "description": "Ensure a PowerShell console is available, or launch a new one. When reason is empty or omitted, reuses an existing standby console if one is available. When reason is provided, always launches a new console regardless of existing ones.\r\n\r\n📌 Calling this first is optional — execute_command auto-starts or reuses a console as needed. Call it explicitly to pre-warm a console at a specific start_location, to show a startup banner, or (with reason) to force an additional console.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -42,5 +42,8 @@
         "default": false
       }
     }
+  },
+  "execution": {
+    "taskSupport": "optional"
   }
 }

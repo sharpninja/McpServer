@@ -1,0 +1,10 @@
+{
+  "filterFailed": "8",
+  "filterPassed": "0",
+  "filterSkipped": "0",
+  "filterTotal": "8",
+  "filterDuration": "2 m 33 s",
+  "filterFailedBang": true,
+  "filterPassedBang": false,
+  "filterRejectMsgCount": 8
+}

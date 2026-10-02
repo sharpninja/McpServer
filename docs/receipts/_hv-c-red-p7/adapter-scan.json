@@ -1,0 +1,85 @@
+{
+  "NamedTestPresent": true,
+  "IsTheory": true,
+  "SkipAttributeOnTheory": false,
+  "SkipLiteralFactSkip": false,
+  "SkipLiteralTheorySkip": false,
+  "InlineDataCount": 8,
+  "InlineData": [
+    {
+      "HostKind": "Codex",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Copilot",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Grok",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Cline",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClineV2",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "OpenCode",
+      "InlineDataPresent": true
+    }
+  ],
+  "LaunchAsyncThrowsNotImplemented": true,
+  "LaunchAsyncHasOtherReturn": false,
+  "LaunchAsyncStoresRunner": false,
+  "FakeLastRequestPresent": true,
+  "AssertLastRequestNotNull": true,
+  "AssertExpectedExecutable": true,
+  "ExpectedExecutablePwsh": true,
+  "PowerShellHostsIncludeFive": true,
+  "AssertEntrypointInArgs": true,
+  "AssertNoProfile": true,
+  "AssertNonInteractive": true,
+  "AssertFile": true,
+  "AssertStdinExact": true,
+  "AssertWorkingDirectoryPluginRoot": true,
+  "AssertTimeoutForwarded": true,
+  "AssertExitFromFake": true,
+  "AssertStdoutFromFake": true,
+  "AssertStderrFromFake": true,
+  "AssertRequiredEnvPresent": true,
+  "AssertPluginAgentName": true,
+  "AssertPluginRootEnv": true,
+  "P7NameMatchCount": 2,
+  "P7NamePaths": [
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs:5",
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapterTests.cs:27"
+  ],
+  "ForbiddenNamedTests": [
+    {
+      "Name": "Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint",
+      "MatchCount": 0,
+      "Paths": []
+    },
+    {
+      "Name": "Adapter_ClineV1_StdioSessionLogTools",
+      "MatchCount": 0,
+      "Paths": []
+    },
+    {
+      "Name": "Adapter_ClineV2AndOpenCode_UseProductionExport",
+      "MatchCount": 0,
+      "Paths": []
+    }
+  ]
+}

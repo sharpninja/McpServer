@@ -1,0 +1,6 @@
+235:    throw "Unable to resolve the workspace root for the V4 failsafe queue. Set MCP_WORKSPACE_PATH or MCPSERVER_FAILSAFE_DIR."
+288:function Get-McpFailsafeDir {
+296:        {workspace}/.mcpServer/failsafe/{agent}/workspaces/{workspace-key}/pending/.
+297:        MCPSERVER_FAILSAFE_DIR and MCP_FAILSAFE_DIR override for tests and recovery.
+304:    if ($env:MCPSERVER_FAILSAFE_DIR) { return $env:MCPSERVER_FAILSAFE_DIR }
+305:    if ($env:MCP_FAILSAFE_DIR) { return $env:MCP_FAILSAFE_DIR }

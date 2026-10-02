@@ -1,0 +1,573 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p15\\trx-p15-hv\\p15-filter.trx",
+  "outcome": "Failed",
+  "total": "24",
+  "executed": "24",
+  "passed": "0",
+  "failed": "24",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 24,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)"
+  ],
+  "passedNames": [],
+  "skippedNames": [],
+  "failedMessages": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+      "message": "OpenCode did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+      "message": "Codex did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+      "message": "ClineV2 did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+      "message": "Grok did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+      "message": "Cline did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+      "message": "ClaudeCowork did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+      "message": "Copilot did not verify the V4 failsafe pending path."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)",
+      "message": "ClaudeCode did not verify the V4 failsafe pending path."
+    }
+  ],
+  "p14Count": 0,
+  "p15Count": 24,
+  "p15SuccessCount": 8,
+  "p15SuccessFailed": 8,
+  "p15SuccessPassed": 0,
+  "p15FailedSubmitCount": 8,
+  "p15FailedSubmitFailed": 8,
+  "p15FailedSubmitPassed": 0,
+  "p15RetryCount": 8,
+  "p15RetryFailed": 8,
+  "p15RetryPassed": 0,
+  "p15Passed": 0,
+  "p15Failed": 24,
+  "p15Skipped": 0,
+  "p16Count": 0,
+  "failsafeVerifiedFalseMessageCount": 8,
+  "executeFailedNotImplementedCount": 8,
+  "retryNotImplementedCount": 8,
+  "p15SuccessByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "Codex did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "ClaudeCode did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "ClaudeCowork did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "Copilot did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "Grok did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "Cline did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "ClineV2 did not verify the V4 failsafe pending path."
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "OpenCode did not verify the V4 failsafe pending path."
+      ]
+    }
+  ],
+  "p15FailedSubmitByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented."
+      ]
+    }
+  ],
+  "p15RetryByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented."
+      ]
+    }
+  ],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot)",
+      "outcome": "Failed",
+      "duration": "00:00:08.5404150",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Copilot)",
+      "outcome": "Failed",
+      "duration": "00:00:08.9732614",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode)",
+      "outcome": "Failed",
+      "duration": "00:00:12.4437794",
+      "message": "OpenCode did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex)",
+      "outcome": "Failed",
+      "duration": "00:00:12.4883218",
+      "message": "Codex did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2)",
+      "outcome": "Failed",
+      "duration": "00:00:12.6662247",
+      "message": "ClineV2 did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCode)",
+      "outcome": "Failed",
+      "duration": "00:00:09.8370359",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok)",
+      "outcome": "Failed",
+      "duration": "00:00:11.4119124",
+      "message": "Grok did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: OpenCode)",
+      "outcome": "Failed",
+      "duration": "00:00:08.7430902",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Cline)",
+      "outcome": "Failed",
+      "duration": "00:00:08.5610468",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Codex)",
+      "outcome": "Failed",
+      "duration": "00:00:11.4488413",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Cline)",
+      "outcome": "Failed",
+      "duration": "00:00:17.7124308",
+      "message": "Cline did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClineV2)",
+      "outcome": "Failed",
+      "duration": "00:00:09.6179159",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork)",
+      "outcome": "Failed",
+      "duration": "00:00:09.1765839",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode)",
+      "outcome": "Failed",
+      "duration": "00:00:09.6634119",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork)",
+      "outcome": "Failed",
+      "duration": "00:00:20.6500877",
+      "message": "ClaudeCowork did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: ClaudeCowork)",
+      "outcome": "Failed",
+      "duration": "00:00:09.4139648",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClineV2)",
+      "outcome": "Failed",
+      "duration": "00:00:08.3315306",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: OpenCode)",
+      "outcome": "Failed",
+      "duration": "00:00:08.8591069",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline)",
+      "outcome": "Failed",
+      "duration": "00:00:08.6276011",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex)",
+      "outcome": "Failed",
+      "duration": "00:00:09.3545854",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok)",
+      "outcome": "Failed",
+      "duration": "00:00:07.8591915",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.ExecuteFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 202\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 240\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 247\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(hostKind: Grok)",
+      "outcome": "Failed",
+      "duration": "00:00:09.2826855",
+      "message": "System.InvalidOperationException : PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync is not implemented.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapter.RetryFailedSubmitAsync(PluginSessionLogScenario scenario, PluginIntegrationServerFixture fixture, CancellationToken cancellationToken) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs:line 220\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 269\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 278\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot)",
+      "outcome": "Failed",
+      "duration": "00:00:12.1667758",
+      "message": "Copilot did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode)",
+      "outcome": "Failed",
+      "duration": "00:00:14.4343371",
+      "message": "ClaudeCode did not verify the V4 failsafe pending path.",
+      "stack": "   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 213\r\n   at McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind) in F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs:line 218\r\n--- End of stack trace from previous location ---"
+    }
+  ]
+}

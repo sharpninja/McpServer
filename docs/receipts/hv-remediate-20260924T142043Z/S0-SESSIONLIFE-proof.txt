@@ -1,0 +1,23 @@
+﻿Verdict=PROVEN
+TimestampUtc=20260924T142045Z
+Method=MCP workflow.requirements via grok repl-invoke
+HealthStorage=reachable
+--- FR ---
+FR=FR-MCP-SESSIONLIFE-001 status=pending source=mcp-getFr-FR-MCP-SESSIONLIFE-001.txt
+FR=FR-MCP-SESSIONLIFE-002 status=pending source=mcp-getFr-FR-MCP-SESSIONLIFE-002.txt
+FR=FR-MCP-SESSIONLIFE-003 status=pending source=mcp-getFr-FR-MCP-SESSIONLIFE-003.txt
+FR=FR-MCP-SESSIONLIFE-004 status=pending source=mcp-getFr-FR-MCP-SESSIONLIFE-004.txt
+FR=FR-MCP-SESSIONLIFE-005 status=pending source=mcp-getFr-FR-MCP-SESSIONLIFE-005.txt
+--- TR ---
+TR=TR-MCP-SESSIONLIFE-001 status=pending source=mcp-getTr-TR-MCP-SESSIONLIFE-001.txt
+TR=TR-MCP-SESSION-LIFE-001 status= source=mcp-getTr-TR-MCP-SESSION-LIFE-001.txt
+TR=TR-MCP-SESSIONLIFE-002 status=pending source=mcp-getTr-TR-MCP-SESSIONLIFE-002.txt
+TR=TR-MCP-SESSIONLIFE-003 status=pending source=mcp-getTr-TR-MCP-SESSIONLIFE-003.txt
+TR=TR-MCP-SESSIONLIFE-004 status=pending source=mcp-getTr-TR-MCP-SESSIONLIFE-004.txt
+TR=TR-MCP-SESSIONLIFE-005 status=pending source=mcp-getTr-TR-MCP-SESSIONLIFE-005.txt
+--- TEST ---
+TEST=TEST-MCP-SESSIONLIFE-001 status=pending source=mcp-getTest-TEST-MCP-SESSIONLIFE-001.txt
+TEST=TEST-MCP-SESSIONLIFE-002 status=pending source=mcp-getTest-TEST-MCP-SESSIONLIFE-002.txt
+TEST=TEST-MCP-SESSIONLIFE-003 status=pending source=mcp-getTest-TEST-MCP-SESSIONLIFE-003.txt
+TEST=TEST-MCP-SESSIONLIFE-004 status=pending source=mcp-getTest-TEST-MCP-SESSIONLIFE-004.txt
+TEST=TEST-MCP-SESSIONLIFE-005 status=pending source=mcp-getTest-TEST-MCP-SESSIONLIFE-005.txt

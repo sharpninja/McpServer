@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T02:52:49.1313275Z",
+  "candidatePath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs",
+  "originalSourcePath": "F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs",
+  "originalSourceTouched": false,
+  "expectedSelectedSha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+  "engine": {
+    "path": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+    "argument": "--codex-run-as-apply-patch",
+    "transport": "PowerShell.Mcp isolated subagent console; literal patch injected as $var1"
+  },
+  "history": [
+    {
+      "step": "noncompliant hunk selection",
+      "method": "Remove-LinesFromFile lines 18-29",
+      "resultSha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "disclosure": "Preserved in source-scope-classification.json; not rewritten."
+    },
+    {
+      "step": "initial apply_patch reconstitution",
+      "deleteExit": 0,
+      "addExit": 0,
+      "resultSha256": "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+      "accepted": false,
+      "diagnosis": "The first literal extraction yielded an empty add body; resulting file contained one LF byte."
+    },
+    {
+      "step": "corrective apply_patch reconstitution",
+      "deleteExit": 0,
+      "addExit": 0,
+      "resultSha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+      "accepted": true,
+      "contentSource": "Exact pre-delete reviewed bytes retained in isolated PowerShell console variable."
+    }
+  ],
+  "final": {
+    "sha256": "FE0471FDD1647D7AFCA8250028C40CCBA9DB029C95490E03BFA1E5EE8EC2EEF2",
+    "hashUnchanged": true,
+    "primaryRepositoryRootHits": 0,
+    "siblingPluginParentHits": 2,
+    "behaviorChanged": false
+  }
+}

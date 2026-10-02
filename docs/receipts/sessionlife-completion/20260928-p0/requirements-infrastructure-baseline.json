@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T02:18:54.7475704+00:00",
+  "workspace": "F:\\GitHub\\McpServer",
+  "source": "live MCP requirements query before additive P1 report-plumbing AC",
+  "plan": {
+    "path": "docs/plans/sessionlife-batch-completion-20260927.md",
+    "sha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12"
+  },
+  "records": {
+    "functional": {
+      "priority": "medium",
+      "area": "MCP",
+      "createdAt": "2026-09-28T02:17:33.1868623+00:00",
+      "updatedAt": "2026-09-28T02:17:33.1868824+00:00",
+      "status": "pending",
+      "description": "MCP Server must support an audited consolidation plan that inventories outstanding work from a long session, separates validated changes from unresolved dirty work, and sequences completion through Byrd gates before deploy or publish.",
+      "acceptanceCriteria": [],
+      "id": "FR-MCP-107",
+      "title": "Outstanding session work consolidation",
+      "scopeStartLayerKey": "layer-1"
+    },
+    "technical": {
+      "createdAt": "2026-09-28T02:16:20.0532272+00:00",
+      "priority": "medium",
+      "area": "MCP",
+      "subarea": "PLAN",
+      "updatedAt": "2026-09-28T02:16:20.0532480+00:00",
+      "status": "pending",
+      "description": "Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.",
+      "acceptanceCriteria": [],
+      "id": "TR-MCP-PLAN-001",
+      "title": "Safe session wrap-up and deploy sequencing",
+      "scopeStartLayerKey": "layer-1"
+    },
+    "testing": {
+      "testType": "unit",
+      "priority": "medium",
+      "area": "MCP",
+      "createdAt": "2026-09-28T02:16:22.1957831+00:00",
+      "updatedAt": "2026-09-28T02:16:22.1958032+00:00",
+      "status": "pending",
+      "description": "Validate that outstanding-session consolidation creates MCP-backed requirements and TODO traceability, inventories dirty workspaces, preserves unrelated changes, blocks unsafe deploys, and records zero-failure zero-skip validation gates before completion.",
+      "acceptanceCriteria": [],
+      "id": "TEST-MCP-143",
+      "title": "Test TEST-MCP-143",
+      "scopeStartLayerKey": "layer-1"
+    },
+    "mappings": [
+      {
+        "trId": "TR-MCP-PLAN-001",
+        "createdAt": "2026-09-28T02:05:33.0317060+00:00",
+        "frId": "FR-MCP-107"
+      },
+      {
+        "testId": "TEST-MCP-143",
+        "createdAt": "2026-09-28T02:05:33.0317477+00:00",
+        "frId": "FR-MCP-107"
+      }
+    ]
+  },
+  "recordHashes": {
+    "functional": "37DD373761F767F0FA08B3FA19B66C620F04C1A7E77882E912C9632F6CBE5409",
+    "technical": "0D680C64A62F449F850A391135B3CFF8CEB18FF8868041993F848D137D67A453",
+    "testing": "105222DAB854F5F3D785090D8D2673D548FBB2E9A8B1EC24F8520D9C879C1B56",
+    "mappings": "6CEA23BB238C3ADA9422F2E43D2DEA2E724887D7A408BDFE2F7AE19EBD5C95C4"
+  }
+}

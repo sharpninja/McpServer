@@ -32,6 +32,8 @@ partial class Build
     public Target SyncAgentPlugins => _ => _
         .Executes(() =>
         {
+            AssertPluginPromotionAllowed();
+
             var syncScript = RootDirectory / "plugins" / "core" / "sync" / "sync-plugin-core.ps1";
             if (!File.Exists(syncScript.ToString()))
                 throw new FileNotFoundException("Plugin core sync script was not found.", syncScript.ToString());
@@ -454,7 +456,7 @@ partial class Build
         var content = File.ReadAllText(fullPath);
         return Regex.IsMatch(
             content,
-            @"(\bbash\b|\blib-sh\b|\blib-node\b|\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
+            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
             RegexOptions.IgnoreCase);
     }
 

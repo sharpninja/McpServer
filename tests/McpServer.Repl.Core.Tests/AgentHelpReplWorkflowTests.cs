@@ -15,7 +15,7 @@ public sealed class AgentHelpReplWorkflowTests
     {
         yield return [AgentHelpCommandShapes.CreateSessionMethod, new Dictionary<string, object?>
         {
-            ["workspacePath"] = "F:\\GitHub\\McpServer",
+            ["workspacePath"] = "Q:\\__mcp_unit_test__\\McpServer",
             ["topic"] = "marker trust",
             ["callerAgent"] = "Codex",
             ["issueSummary"] = "Marker signature mismatch after service restart.",
@@ -183,7 +183,7 @@ public sealed class AgentHelpReplWorkflowTests
 
     private static bool MatchesCreateSessionRequest(AgentHelpSessionCreateRequest? request)
         => request is not null
-           && request.WorkspacePath == "F:\\GitHub\\McpServer"
+           && request.WorkspacePath == "Q:\\__mcp_unit_test__\\McpServer"
            && request.Topic == "marker trust"
            && request.CallerAgent == "Codex"
            && request.IssueSummary == "Marker signature mismatch after service restart."

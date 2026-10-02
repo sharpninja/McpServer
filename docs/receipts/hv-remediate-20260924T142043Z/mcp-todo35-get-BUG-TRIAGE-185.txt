@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142307Z-f9f1
+  result:
+    id: BUG-TRIAGE-185
+    title: Plugin complete/update/append omit required planFile and todoId
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Codex plugin workflow.sessionlog.completeTurn, updateTurn, and appendActions persist through Invoke-ReplPersistTurn without PlanFile/TodoId. beginTurn stores those fields on current-turn cache and passes them on first persist, including the 'None' default. completeTurn (repl-invoke.ps1 ~2011-2013), updateTurn (~1967-1969), appendActions (~1811-1813), failTurn, and supersede omit them. PersistTurn then defaults both to empty strings (~1250-1251) and still forwards them (~1270). The upsert DTO omits blank values, so later operations neither send the required metadata nor recover it from cache. That matches the TruckMate stop-gate block (completeTurn failed, turn left in_progress) and the identical child append failure, while a separate native sessionlog_submit that included planFile and todoId succeeded. This is a plugin payload/cache-closure defect, not an MCP outage. Shared cached audit must be reconciled, not erased.
+    - 'Triage group: triage-group-d9949a83fb997ad2'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- workflow.sessionlog.completeTurn on a plan-backed in_progress turn persists status completed with the same planFile and todoId that beginTurn stored (or None when none was supplied) and stop-gate.ps1 no longer returns decision:block for missing plan metadata.'
+    - '- workflow.sessionlog.updateTurn and appendActions persist without dropping planFile/todoId; current-turn cache still has those fields after a successful append or update.'
+    - '- Incomplete cached turns and preserved failsafe records (including req-20260908T140505Z-prompt-c4b5 and the 20260908T225559Z / 20260908T225747Z session_submit files) can be reconciled through the supported sessionlog persist/drain path without deleting shared cache audit entries or marking the cache terminal.'
+    - 'Implementation notes:'
+    - '- In plugins/core/lib-ps/repl-invoke.ps1, read planFile and todoId from current-turn cache (written by Invoke-WorkflowBeginTurn) and pass -PlanFile/-TodoId into Invoke-ReplPersistTurn from Invoke-WorkflowCompleteTurn, Invoke-WorkflowUpdateTurn, Invoke-WorkflowAppendActions, Invoke-WorkflowFailTurn, and Invoke-ReplSupersedeCurrentTurnIfInProgress.'
+    - '- If cache lacks the fields, default to None the same way beginTurn does for a new turn; do not rely on empty-string defaults. Empty values are omitted from New-McpPluginTurnUpsertRequest, so the server never receives the required metadata on later upserts.'
+    - '- Keep the beginTurn reopen path that omits unbound PlanFile/TodoId so a reopen cannot clobber server values; that omit-to-preserve behavior is not a substitute for complete/update/append, which must send the cached values.'
+    - '- Reconcile the saved incomplete plugin-session turns via supported persist/failsafe drain only. Do not wipe shared cached audit state or mark it terminal as part of the fix.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

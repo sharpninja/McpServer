@@ -1,0 +1,118 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p5-p6\\dotnet-pluginintegration-all.trx",
+  "outcome": "Completed",
+  "total": "14",
+  "executed": "14",
+  "passed": "14",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 14,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+    "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds"
+  ],
+  "skippedNames": [],
+  "adapterNames": [],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0034606",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort",
+      "outcome": "Passed",
+      "duration": "00:00:13.0588102",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup",
+      "outcome": "Passed",
+      "duration": "00:00:18.5666491",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase",
+      "outcome": "Passed",
+      "duration": "00:00:11.1928550",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled",
+      "outcome": "Passed",
+      "duration": "00:00:00.0178492",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+      "outcome": "Passed",
+      "duration": "00:00:00.0738017",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "outcome": "Passed",
+      "duration": "00:00:00.0025407",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "outcome": "Passed",
+      "duration": "00:00:00.0021857",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust",
+      "outcome": "Passed",
+      "duration": "00:00:11.2362284",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "outcome": "Passed",
+      "duration": "00:00:00.0017315",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout",
+      "outcome": "Passed",
+      "duration": "00:00:01.0810792",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_HealthReady_ExposesTrustedMarkerAndClient",
+      "outcome": "Passed",
+      "duration": "00:00:12.9686632",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker",
+      "outcome": "Passed",
+      "duration": "00:00:11.6306762",
+      "message": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "outcome": "Passed",
+      "duration": "00:00:00.1173175",
+      "message": null
+    }
+  ]
+}

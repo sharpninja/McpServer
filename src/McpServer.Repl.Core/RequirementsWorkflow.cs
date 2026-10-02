@@ -717,6 +717,43 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     }
 
     /// <inheritdoc />
+    public Task<RequirementsRecoveryResult> PlanRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return TranslateRecoveryAsync(() => _client.PlanRecoveryAsync(request, cancellationToken));
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementsRecoveryResult> ApplyRecoveryAsync(RequirementsRecoveryRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return TranslateRecoveryAsync(() => _client.ApplyRecoveryAsync(request, cancellationToken));
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementsRecoveryResult> GetRecoveryAsync(string idempotencyKey, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(idempotencyKey);
+        return TranslateRecoveryAsync(() => _client.GetRecoveryAsync(idempotencyKey, cancellationToken));
+    }
+
+    private static async Task<RequirementsRecoveryResult> TranslateRecoveryAsync(Func<Task<RequirementsRecoveryResult>> action)
+    {
+        try
+        {
+            return await action().ConfigureAwait(false);
+        }
+        catch (McpValidationException ex)
+        {
+            throw new ArgumentException(ex.Message, ex);
+        }
+        catch (McpNotFoundException ex)
+        {
+            throw new KeyNotFoundException(ex.Message, ex);
+        }
+    }
+
+    /// <inheritdoc />
     public IRequirementsSelectionState? CurrentSelection()
     {
         return _selection;

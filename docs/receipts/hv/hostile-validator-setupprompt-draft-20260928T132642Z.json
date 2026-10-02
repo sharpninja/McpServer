@@ -1,0 +1,664 @@
+{
+  "RecordType": "hostile_validation_verdict",
+  "TimestampUtc": "2026-09-28T13:40:43.3856082Z",
+  "ValidatorIdentity": "Codex",
+  "WorkClass": "Project documentation draft review",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 12,
+    "FAIL": 4,
+    "UNKNOWN": 0,
+    "Total": 16
+  },
+  "Accuracy": {
+    "Score": 96,
+    "Threshold": 98,
+    "Rationale": "Strict predicate correct in isolation but literal advertised verification cannot compile"
+  },
+  "Completeness": {
+    "Score": 96,
+    "Threshold": 98,
+    "Rationale": "Full required behavioral verification cannot execute; isolated passing fragments do not close it"
+  },
+  "ModelProof": {
+    "Rollout": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\28\\rollout-2026-09-28T08-26-42-01a0e832-41b0-7bd0-900f-371622d503fd.jsonl",
+    "Line": 8,
+    "Timestamp": "2026-09-28T13:26:45.437Z",
+    "ThreadId": "01a0e832-41b0-7bd0-900f-371622d503fd",
+    "TurnId": "01a0e832-42a8-7780-8ea5-dc6cfc7673d0",
+    "Model": "gpt-6-astra",
+    "Effort": "xhigh",
+    "SettingsModel": "gpt-6-astra",
+    "SettingsEffort": "xhigh",
+    "CliVersion": "0.155.0-alpha.16.4"
+  },
+  "RequestMatchLines": [
+    9
+  ],
+  "Candidate": {
+    "Path": "F:\\github\\McpServer\\docs\\setup\\2026-09-28-frontier-agent-setup-prompt.DRAFT.md",
+    "Sha256": "759C8DF47850A503D4727864742C9832A4767748D91BA8054745FD00D9C79D30",
+    "GitHead": "6a565d8762072ed040469047791a57c80dbf1e88"
+  },
+  "Profile": {
+    "Executed": true,
+    "FileCount": 19,
+    "FirstAttempt": "skill read; sandbox launch failed",
+    "PrivateBodiesPublished": false
+  },
+  "Claims": [
+    {
+      "Surface": "Prerequisites",
+      "Evidence": "add-profile first attempted task; 19 full non-skill Markdown reads",
+      "Status": "PASS",
+      "Id": "P1"
+    },
+    {
+      "Surface": "Prerequisites",
+      "Evidence": "Live turn_context line 8; exact request match line 9",
+      "Status": "PASS",
+      "Id": "P2"
+    },
+    {
+      "Surface": "Prerequisites",
+      "Evidence": "Receipt-only authored writes; no MCP log or TODO mutation",
+      "Status": "PASS",
+      "Id": "P3"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "W05: literal verification block cannot parse",
+      "Status": "FAIL",
+      "Id": "A1"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "Draft 15-19,35-76 intake",
+      "Status": "PASS",
+      "Id": "A2"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "Draft 179-354 scenarios and explicit stops",
+      "Status": "PASS",
+      "Id": "A3"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "Draft 5,78-175; SessionLogWorkflow 74-86",
+      "Status": "PASS",
+      "Id": "A4"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "W05: Windows verification block invalid; Linux explicitly blocked",
+      "Status": "FAIL",
+      "Id": "A5"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "Draft 356-373 conflict/refuse/caution handling",
+      "Status": "PASS",
+      "Id": "A6"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "W05: prose criteria retained but literal verifier unexecutable",
+      "Status": "FAIL",
+      "Id": "A7"
+    },
+    {
+      "Surface": "A",
+      "Evidence": "Source-backed package, provider and approved deploy paths",
+      "Status": "PASS",
+      "Id": "A8"
+    },
+    {
+      "Surface": "B",
+      "Evidence": "W04: attempted local runner before MCP; process never started",
+      "Status": "FAIL",
+      "Id": "B1"
+    },
+    {
+      "Surface": "B",
+      "Evidence": "Credential redaction; private profile excluded from receipts",
+      "Status": "PASS",
+      "Id": "B2"
+    },
+    {
+      "Surface": "B",
+      "Evidence": "Codex plugin trust true; MCP tool read-only queries",
+      "Status": "PASS",
+      "Id": "B3"
+    },
+    {
+      "Surface": "C",
+      "Evidence": "Effective layer-1: 341 FR,465 TR,495 TEST,341 mappings; no setup-specific match; draft scope only",
+      "Status": "PASS",
+      "Id": "C1"
+    },
+    {
+      "Surface": "D",
+      "Evidence": "Live TODO Done=false; inventory and two dry-runs open",
+      "Status": "PASS",
+      "Id": "D1"
+    }
+  ],
+  "Failures": [
+    {
+      "Id": "W05",
+      "Severity": "high",
+      "Scope": "Document",
+      "Checks": [
+        "A1",
+        "A5",
+        "A7"
+      ],
+      "Path": "F:\\github\\McpServer\\docs\\setup\\2026-09-28-frontier-agent-setup-prompt.DRAFT.md",
+      "Line": 643,
+      "Title": "Literal Windows verification fence contains a PowerShell parse error",
+      "Evidence": [
+        {
+          "Scope": "Windows verify literal code fence",
+          "DraftLines": "630-662",
+          "ErrorId": "UnexpectedToken",
+          "DraftErrorLine": 643,
+          "BlockErrorLine": 14,
+          "ErrorColumn": 85,
+          "Message": "Unexpected token 'exe`\"' in expression or statement."
+        }
+      ],
+      "Remediation": "Fix throw-message quote escaping, preserve strict regex, and rerun entire unmodified fence"
+    },
+    {
+      "Id": "W04",
+      "Severity": "medium",
+      "Scope": "Reviewer execution",
+      "Checks": [
+        "B1"
+      ],
+      "Title": "Initial shell route attempt bypassed PowerShell.MCP",
+      "Evidence": "tools.exec_command attempted pwsh profile skill read; sandbox helper os error 206 prevented execution; all successful commands used PowerShell.MCP",
+      "Remediation": "Use discovered PowerShell.MCP from the first invocation on future reviews"
+    }
+  ],
+  "Unknowns": [],
+  "LiteralVerification": {
+    "SourceLines": "630-662",
+    "Code": "$name = 'McpServer'    # manifest.service.name\r\n$port = 7147           # manifest.endpoint.port\r\n$install = 'C:\\ProgramData\\McpServer'\r\n\r\n$svc = Get-Service -Name $name -ErrorAction Stop\r\nif ($svc.Status -ne 'Running') { throw \"Service status=$($svc.Status)\" }\r\n$wmi = Get-CimInstance Win32_Service -Filter \"Name='$name'\"\r\n$expectedExe = [IO.Path]::GetFullPath((Join-Path $install 'McpServer.Support.Mcp.exe'))\r\n$expectedUrls = \"http://+:$port\"\r\n# Strict canonical UpdateService ImagePath: BOTH exe and --urls value fully quoted, balanced, no trailing junk.\r\n# Rejects unbalanced quotes, unquoted paths with spaces, .exe.old, 71470, exe-as-later-arg, duplicate --urls.\r\n$actual = $wmi.PathName.Trim()\r\n$m = [regex]::Match($actual, '^\"(?<exe>[^\"]+\\.exe)\"\\s+--urls\\s+\"(?<urls>[^\"]+)\"\\s*$', 'IgnoreCase')\r\nif (-not $m.Success) { throw \"ImagePath must be fully quoted UpdateService form: `\\\"exe`\" --urls `\"http://+:port`\\\"; got: $actual\" }\r\n$actualExe = [IO.Path]::GetFullPath($m.Groups['exe'].Value)\r\n$actualUrls = $m.Groups['urls'].Value\r\nif (-not $actualExe.Equals($expectedExe, [StringComparison]::OrdinalIgnoreCase)) { throw \"ImagePath exe mismatch: $actualExe\" }\r\nif (-not $actualUrls.Equals($expectedUrls, [StringComparison]::OrdinalIgnoreCase)) { throw \"ImagePath --urls mismatch: $actualUrls\" }\r\n$canonical = '\"{0}\" --urls \"{1}\"' -f $expectedExe, $expectedUrls\r\n$normalized = '\"{0}\" --urls \"{1}\"' -f $actualExe, $actualUrls\r\nif (-not $normalized.Equals($canonical, [StringComparison]::OrdinalIgnoreCase)) { throw \"ImagePath canonical mismatch\" }\r\n$startOk = @('LocalSystem','NT AUTHORITY\\SYSTEM','.\\LocalSystem') -contains $wmi.StartName\r\nif (-not $startOk) { throw \"StartName=$($wmi.StartName) not LocalSystem\" }\r\nif ($wmi.ProcessId -le 0) { throw 'Service ProcessId missing' }\r\nif (-not (Test-Path $expectedExe)) { throw 'exe missing' }\r\nif (-not (Test-Path \"$install\\.mcpservice-deployment.json\")) { throw 'deployment manifest missing' }\r\nif (-not (Test-Path \"$install\\appsettings.yaml\")) { throw 'appsettings.yaml missing' }\r\n# Provider/DB: require resolved identity with provenance; yaml alone insufficient (incl. SQLite ConnectionString vs DataSource)\r\n$listeners = @(Get-NetTCPConnection -LocalPort $port -State Listen -EA SilentlyContinue | Where-Object OwningProcess -eq $wmi.ProcessId)\r\nif ($listeners.Count -lt 1) { throw \"No listener on $port owned by PID $($wmi.ProcessId)\" }\r\n# Evidence: assert reject for unbalanced quotes, unquoted Program Files path, .exe.old, http://+:71470, exe-as-later-arg.\r\n# Accept only fully quoted canonical form matching UpdateService GetServiceImagePath.\r\n# Trust/nonce against endpoint.baseUrl; per-agent smokes (Phase 4)",
+    "ParseErrors": [
+      {
+        "Scope": "Windows verify literal code fence",
+        "DraftLines": "630-662",
+        "ErrorId": "UnexpectedToken",
+        "DraftErrorLine": 643,
+        "BlockErrorLine": 14,
+        "ErrorColumn": 85,
+        "Message": "Unexpected token 'exe`\"' in expression or statement."
+      }
+    ],
+    "Cases": [
+      {
+        "Id": "canonical",
+        "Expected": true,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "malformed-exe-open",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "malformed-exe-close",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "malformed-url-open",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "malformed-url-close",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "unquoted-spaces",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "exe-old-quoted",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "exe-old-unquoted",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "port-prefix",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "later-exe",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "duplicate-urls",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "trailing-arg",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "exe-unquoted",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "url-unquoted",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "both-unquoted",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "canonical-spaces",
+        "Expected": true,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "wrong-exe",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "wrong-host",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      },
+      {
+        "Id": "embedded-quote",
+        "Expected": false,
+        "Status": "BlockedByParseError",
+        "BehaviorTestExecuted": false
+      }
+    ],
+    "BehavioralCasesExecuted": 0
+  },
+  "IsolatedImagePath": {
+    "Pattern": "^\"(?<exe>[^\"]+\\.exe)\"\\s+--urls\\s+\"(?<urls>[^\"]+)\"\\s*$",
+    "Passed": 19,
+    "Failed": 0,
+    "Results": [
+      {
+        "Id": "canonical",
+        "Expected": true,
+        "Accepted": true,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "malformed-exe-open",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "malformed-exe-close",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "malformed-url-open",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "malformed-url-close",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "unquoted-spaces",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "C:\\Program Files\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "exe-old-quoted",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe.old\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "exe-old-unquoted",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe.old --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "port-prefix",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:71470\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "later-exe",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\Bad\\other.exe\" --target \"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "duplicate-urls",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "trailing-arg",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\" --other",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "exe-unquoted",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "url-unquoted",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "both-unquoted",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "canonical-spaces",
+        "Expected": true,
+        "Accepted": true,
+        "Pass": true,
+        "ImagePath": "\"C:\\Program Files\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "wrong-exe",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\Bad\\other.exe\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "wrong-host",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://localhost:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      },
+      {
+        "Id": "embedded-quote",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "ImagePath": "\"C:\\ProgramData\\\"McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"",
+        "Scope": "Extracted regex plus exe and URL comparisons only"
+      }
+    ],
+    "Harness": "\n$script:hvCases=@(\n [pscustomobject]@{Id='canonical';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"';Expected=$true;Install='C:\\ProgramData\\McpServer'},\n [pscustomobject]@{Id='malformed-exe-open';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147';Expected=$false},\n [pscustomobject]@{Id='malformed-exe-close';ImagePath='C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147';Expected=$false},\n [pscustomobject]@{Id='malformed-url-open';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147';Expected=$false},\n [pscustomobject]@{Id='malformed-url-close';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='unquoted-spaces';ImagePath='C:\\Program Files\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147';Expected=$false;Install='C:\\Program Files\\McpServer'},\n [pscustomobject]@{Id='exe-old-quoted';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe.old\" --urls \"http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='exe-old-unquoted';ImagePath='C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe.old --urls http://+:7147';Expected=$false},\n [pscustomobject]@{Id='port-prefix';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:71470\"';Expected=$false},\n [pscustomobject]@{Id='later-exe';ImagePath='\"C:\\Bad\\other.exe\" --target \"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='duplicate-urls';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\" --urls \"http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='trailing-arg';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\" --other';Expected=$false},\n [pscustomobject]@{Id='exe-unquoted';ImagePath='C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls \"http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='url-unquoted';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls http://+:7147';Expected=$false},\n [pscustomobject]@{Id='both-unquoted';ImagePath='C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147';Expected=$false},\n [pscustomobject]@{Id='canonical-spaces';ImagePath='\"C:\\Program Files\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"';Expected=$true;Install='C:\\Program Files\\McpServer'},\n [pscustomobject]@{Id='wrong-exe';ImagePath='\"C:\\Bad\\other.exe\" --urls \"http://+:7147\"';Expected=$false},\n [pscustomobject]@{Id='wrong-host';ImagePath='\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://localhost:7147\"';Expected=$false},\n [pscustomobject]@{Id='embedded-quote';ImagePath='\"C:\\ProgramData\\\"McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"';Expected=$false}\n)\n$script:hvLiteralResults=foreach($case in $script:hvCases) {\n try { $null=[scriptblock]::Create($script:hvVerifyCode); $state='CompiledUnexpectedly' }\n catch { $state='BlockedByParseError' }\n [pscustomobject]@{Id=$case.Id;Expected=$case.Expected;Status=$state;BehaviorTestExecuted=$false}\n}\n$matchLine=($script:hvVerifyCode -split '\\r?\\n' | Where-Object {$_ -match '^\\$m = '})\n$script:hvPattern=[regex]::Matches($matchLine,\"'([^']*)'\")[0].Groups[1].Value\n$script:hvPredicateResults=foreach($case in $script:hvCases) {\n $root=if($case.Install){$case.Install}else{'C:\\ProgramData\\McpServer'}\n $expectedExe=[IO.Path]::GetFullPath((Join-Path $root 'McpServer.Support.Mcp.exe'))\n $m=[regex]::Match($case.ImagePath.Trim(),$script:hvPattern,'IgnoreCase')\n $accepted=$m.Success\n if($accepted){$accepted=[IO.Path]::GetFullPath($m.Groups['exe'].Value).Equals($expectedExe,[StringComparison]::OrdinalIgnoreCase) -and $m.Groups['urls'].Value.Equals('http://+:7147',[StringComparison]::OrdinalIgnoreCase)}\n [pscustomobject]@{Id=$case.Id;Expected=$case.Expected;Accepted=$accepted;Pass=($accepted -eq $case.Expected);ImagePath=$case.ImagePath;Scope='Extracted regex plus exe and URL comparisons only'}\n}\n$script:hvPredicateResults | ConvertTo-Json -Depth 4\n[pscustomobject]@{LiteralCases=$script:hvLiteralResults.Count;LiteralBehaviorExecuted=0;LiteralParseBlocked=$script:hvLiteralResults.Count;IsolatedPredicatePass=@($script:hvPredicateResults|Where-Object Pass).Count;IsolatedPredicateFail=@($script:hvPredicateResults|Where-Object {-not $_.Pass}).Count;Pattern=$script:hvPattern}|ConvertTo-Json\n"
+  },
+  "IsolatedService": {
+    "Passed": 10,
+    "Failed": 0,
+    "Code": "$name = 'McpServer'    # manifest.service.name\r\n$port = 7147           # manifest.endpoint.port\r\n$install = 'C:\\ProgramData\\McpServer'\r\n\r\n$svc = Get-Service -Name $name -ErrorAction Stop\r\nif ($svc.Status -ne 'Running') { throw \"Service status=$($svc.Status)\" }\r\n$wmi = Get-CimInstance Win32_Service -Filter \"Name='$name'\"\r\n$expectedExe = [IO.Path]::GetFullPath((Join-Path $install 'McpServer.Support.Mcp.exe'))\r\n$expectedUrls = \"http://+:$port\"\r\n$startOk = @('LocalSystem','NT AUTHORITY\\SYSTEM','.\\LocalSystem') -contains $wmi.StartName\r\nif (-not $startOk) { throw \"StartName=$($wmi.StartName) not LocalSystem\" }\r\nif ($wmi.ProcessId -le 0) { throw 'Service ProcessId missing' }\r\nif (-not (Test-Path $expectedExe)) { throw 'exe missing' }\r\nif (-not (Test-Path \"$install\\.mcpservice-deployment.json\")) { throw 'deployment manifest missing' }\r\nif (-not (Test-Path \"$install\\appsettings.yaml\")) { throw 'appsettings.yaml missing' }\r\n# Provider/DB: require resolved identity with provenance; yaml alone insufficient (incl. SQLite ConnectionString vs DataSource)\r\n$listeners = @(Get-NetTCPConnection -LocalPort $port -State Listen -EA SilentlyContinue | Where-Object OwningProcess -eq $wmi.ProcessId)\r\nif ($listeners.Count -lt 1) { throw \"No listener on $port owned by PID $($wmi.ProcessId)\" }",
+    "Results": [
+      {
+        "Id": "healthy-local-system",
+        "Expected": true,
+        "Accepted": true,
+        "Pass": true,
+        "Reason": null,
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "healthy-system-alias",
+        "Expected": true,
+        "Accepted": true,
+        "Pass": true,
+        "Reason": null,
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "wrong-account",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "StartName=NT AUTHORITY\\NetworkService not LocalSystem",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "stopped",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "Service status=Stopped",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "wrong-listener-pid",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "No listener on 7147 owned by PID 12345",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "zero-service-pid",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "Service ProcessId missing",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "missing-exe",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "exe missing",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "missing-manifest",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "deployment manifest missing",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "missing-yaml",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "appsettings.yaml missing",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      },
+      {
+        "Id": "no-listener",
+        "Expected": false,
+        "Accepted": false,
+        "Pass": true,
+        "Reason": "No listener on 7147 owned by PID 12345",
+        "Scope": "Unchanged service/file/listener subfragment only, mock data"
+      }
+    ],
+    "Harness": "\n$lines=$script:hvDraftRaw -split '\\r?\\n'\n$fragment=(@($lines[629..637]) + @($lines[650..658])) -join [Environment]::NewLine\n$script:hvServiceFragment=$fragment\n$block=[scriptblock]::Create($fragment)\n$cases=@(\n [pscustomobject]@{Id='healthy-local-system';Expected=$true},\n [pscustomobject]@{Id='healthy-system-alias';StartName='NT AUTHORITY\\SYSTEM';Expected=$true},\n [pscustomobject]@{Id='wrong-account';StartName='NT AUTHORITY\\NetworkService';Expected=$false},\n [pscustomobject]@{Id='stopped';Status='Stopped';Expected=$false},\n [pscustomobject]@{Id='wrong-listener-pid';ListenerPid=54321;Expected=$false},\n [pscustomobject]@{Id='zero-service-pid';ServicePid=0;Expected=$false},\n [pscustomobject]@{Id='missing-exe';Missing='McpServer.Support.Mcp.exe';Expected=$false},\n [pscustomobject]@{Id='missing-manifest';Missing='.mcpservice-deployment.json';Expected=$false},\n [pscustomobject]@{Id='missing-yaml';Missing='appsettings.yaml';Expected=$false},\n [pscustomobject]@{Id='no-listener';NoListener=$true;Expected=$false}\n)\n$script:hvServiceResults=foreach($case in $cases){\n & {\n param($case,$block)\n function Get-Service {param($Name,$ErrorAction) [pscustomobject]@{Status=$(if($case.Status){$case.Status}else{'Running'})}}\n function Get-CimInstance {param($ClassName,$Filter) [pscustomobject]@{StartName=$(if($case.StartName){$case.StartName}else{'LocalSystem'});ProcessId=$(if($case.PSObject.Properties['ServicePid']){$case.ServicePid}else{12345})}}\n function Test-Path {param($Path) -not ($case.Missing -and $Path.EndsWith($case.Missing))}\n function Get-NetTCPConnection {param($LocalPort,$State,$EA) if(-not $case.NoListener){[pscustomobject]@{OwningProcess=$(if($case.ListenerPid){$case.ListenerPid}else{12345})}}}\n $accepted=$true; $reason=$null\n try {& $block} catch {$accepted=$false; $reason=$_.Exception.Message}\n [pscustomobject]@{Id=$case.Id;Expected=$case.Expected;Accepted=$accepted;Pass=($accepted -eq $case.Expected);Reason=$reason;Scope='Unchanged service/file/listener subfragment only, mock data'}\n } $case $block\n}\n$script:hvServiceResults|ConvertTo-Json -Depth 4\n$parseTokens=$null;$parseProblems=$null\n$null=[Management.Automation.Language.Parser]::ParseInput($script:hvVerifyCode,[ref]$parseTokens,[ref]$parseProblems)\n$script:hvDocParseEvidence=@($parseProblems|ForEach-Object{[pscustomobject]@{Scope='Windows verify literal code fence';DraftLines='630-662';ErrorId=$_.ErrorId;DraftErrorLine=$_.Extent.StartLineNumber+629;BlockErrorLine=$_.Extent.StartLineNumber;ErrorColumn=$_.Extent.StartColumnNumber;Message=$_.Message}})\n$prompt=[IO.File]::ReadAllText('F:\\github\\McpServer\\docs\\receipts\\hv\\20260928T132642Z-setupprompt-draft.prompt.txt')\n$script:hvRequestMatches=@()\n$stream=[IO.File]::Open($script:hvRollout,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::ReadWrite)\n$reader=[IO.StreamReader]::new($stream)\ntry {$script:hvRuntime=$reader.ReadToEnd()} finally {$reader.Dispose()}\n$lineNumber=0\nforeach($row in $script:hvRuntime -split '\\r?\\n'){\n $lineNumber++\n if([string]::IsNullOrWhiteSpace($row)){continue}\n try {$evt=$row|ConvertFrom-Json -ErrorAction Stop} catch {continue}\n if($evt.type -eq 'turn_context'){ $script:hvRuntimeProof=[pscustomobject]@{Rollout=$script:hvRollout;Line=$lineNumber;Timestamp=$evt.timestamp;ThreadId=$script:hvSessionMeta.id;TurnId=$evt.payload.turn_id;Model=$evt.payload.model;Effort=$evt.payload.effort;SettingsModel=$evt.payload.collaboration_mode.settings.model;SettingsEffort=$evt.payload.collaboration_mode.settings.reasoning_effort;CliVersion=$script:hvSessionMeta.cli_version}}\n if($evt.type -eq 'response_item' -and $evt.payload.role -eq 'user') {\n  foreach($c in $evt.payload.content){\n   if($c.text -and $c.text.Trim() -ceq $prompt.Trim()){ $script:hvRequestMatches += $lineNumber }\n  }\n }\n}\n$script:hvRuntimeProof|ConvertTo-Json\n'EXACT_REQUEST_MATCH_LINES '+($script:hvRequestMatches -join ',')\nGet-FileHash -Algorithm SHA256 -LiteralPath $script:hvDraftPath | Format-List\ngit diff --stat\ngit rev-parse HEAD\n"
+  },
+  "RequirementsEvidence": {
+    "Source": "mcp__mcpserver__requirements_effective",
+    "Workspace": "F:\\github\\McpServer",
+    "ProductScope": "local",
+    "Layer": "layer-1",
+    "Functional": 341,
+    "Technical": 465,
+    "Testing": 495,
+    "Mappings": 341,
+    "Search": "SETUPPROMPT|frontier.agent.setup|setup.prompt",
+    "SearchMatches": 0,
+    "ScopeCaveat": "No claim that differently worded related requirements cannot exist"
+  },
+  "TodoEvidence": {
+    "Id": "MCP-SETUPPROMPT-001",
+    "Title": "Setup prompt for obtaining, installing, and configuring MCP Server by a frontier agent",
+    "Section": "Docs",
+    "Priority": "high",
+    "Done": false,
+    "Estimate": "1d",
+    "Note": null,
+    "Description": [
+      "Deliver a reusable frontier-agent setup prompt (and supporting checklist) that obtains, installs, and configures MCP Server so a fresh agent can reach a verified working host without operator tribal knowledge.",
+      "The prompt MUST interactively gather environment specifics before acting: agents in use, development process (BDPv4 or user-owned process), storage backend (MSSQL, PostgreSQL, SQLite), and service installation target (Windows Service, systemd, or other).",
+      "The prompt MUST give concrete handling guidance for each intake scenario (and common combinations), not only ask questions: what to install, which plugin/identity path, how to wire storage, how to register the service, verify, and what to do on failure.",
+      "Session log is NOT available during setup. After intake, the agent MUST write (1) a setup choices manifest capturing answers and selected playbook IDs, and (2) an implementation plan derived from those choices, before performing obtain/install/configure. Later steps and verify read that manifest/plan, not a session log.",
+      "Scope: Windows lab host (PAYTON-LEGION2 pattern) first as a reference path; branch install/configure steps from the gathered answers. Document extension points for other hosts.",
+      "Out of scope for v1: production multi-tenant deploy, public publishing of add-profile/operator profile, and process-drift enforcement (MCP-PROCESS-001)."
+    ],
+    "TechnicalDetails": [
+      "Artifact target: docs prompt under mcpserver (or plugin docs) plus a copy-paste agent prompt block; prefer PowerShell-only steps where the host is Windows; note shell equivalents when target is systemd/other.",
+      "Interactive intake (required before obtain/install): (1) agents used; (2) process: BDPv4 vs custom; (3) storage: MSSQL | PostgreSQL | SQLite; (4) service target: Windows Service | systemd | other.",
+      "Scenario playbooks: per-agent (plugin/identity/skill/invoke); per-process (BDPv4 vs custom); per-storage (config/prereqs/bootstrap/smoke); per-service-target (install/start/stop/logs/health). Conflicts refuse or redirect with remediation.",
+      "Post-intake artifacts (required, no session log): setup-choices.manifest (YAML or JSON) with answers, playbook IDs, timestamp, host notes; setup-implementation.plan with ordered steps, branched commands, verify criteria, and stop conditions. Path convention documented in the prompt (e.g. under workspace docs/setup/ or operator-chosen path).",
+      "Obtain/install/configure/verify MUST load the manifest and follow the plan; verify asserts manifest fields match the live host and that plan steps were completed.",
+      "Invoke path after install: host-matched plugin via lib/repl-invoke.ps1 / skills/*/scripts/invoke.ps1; identity from manifest. Do not default to raw :7147 REST or broken box connectors.",
+      "Success = smoke type:result for sessionlog bootstrap, todo query, memory list/get against chosen storage/service, plus confirmation that verify matched the written manifest/plan."
+    ],
+    "ImplementationTasks": [
+      {
+        "Task": "Inventory current install surfaces: McpServer repo, NuGet/tooling, UpdateService, plugin repos (grok/codex), local skill mirrors under ~/.grok/skills",
+        "Done": false
+      },
+      {
+        "Task": "Design interactive intake questionnaire: agents, BDP vs own process, storage, service target; define required follow-up fields per answer",
+        "Done": true
+      },
+      {
+        "Task": "Write scenario playbooks: per-agent, per-process, per-storage, per-service-target handling guidance",
+        "Done": true
+      },
+      {
+        "Task": "Document conflict/unsupported combinations and stop/remediation guidance",
+        "Done": true
+      },
+      {
+        "Task": "Define setup-choices.manifest and setup-implementation.plan schemas, paths, and write/load rules (no session log dependency)",
+        "Done": true
+      },
+      {
+        "Task": "Write obtain/install/configure sections that load manifest and execute the plan",
+        "Done": true
+      },
+      {
+        "Task": "Write verify section that asserts live host matches manifest and plan completion criteria",
+        "Done": true
+      },
+      {
+        "Task": "Add frontier-agent prompt block: intake first, write manifest+plan, then execute; stop conditions and receipt format from those files",
+        "Done": true
+      },
+      {
+        "Task": "Add host matrix + non-goals; link MCP-PROCESS-001 without blocking v1 setup",
+        "Done": true
+      },
+      {
+        "Task": "Dry-run on Legion with at least two intake variants; confirm manifest/plan artifacts and verify; revise gaps",
+        "Done": false
+      }
+    ],
+    "CompletedDate": null,
+    "DoneSummary": null,
+    "Remaining": "Draft prompt written at docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md. Next: refine playbooks from inventory, add concrete install commands per storage/service, Legion dry-runs with two intake variants.",
+    "PriorityNote": null,
+    "Reference": null,
+    "Phase": null,
+    "DependsOn": null,
+    "FunctionalRequirements": null,
+    "TechnicalRequirements": null,
+    "IdempotencyKey": null
+  },
+  "MCP": {
+    "Trust": true,
+    "TrustTimestampUtc": "2026-09-28T13:32:18.1162368Z",
+    "SessionLogsWritten": false,
+    "TodoMutated": false
+  },
+  "FullReceiptMarkdown": "# Hostile validation: setup-prompt draft, strict ImagePath remediation\n\nTimestampUtc: 2026-09-28T13:40:43.3856082Z\nValidatorIdentity: Codex\nWork class: Project documentation draft review. MCP-SETUPPROMPT-001 completion is neither claimed nor authorized.\n\nOverallVerdict: **DISAGREE**\nChecks: **12 PASS / 4 FAIL / 0 UNKNOWN** (16 claim groups).\nDistinct findings: one blocking document defect and one reviewer routing deviation.\nAccuracy: **96/100**. Completeness: **96/100**. Both fail the required 98 threshold.\n\nAccuracy rationale: The revised regex enforces quotes and the isolated predicate produces all 19 expected outcomes. Phase 4 agrees with the canonical deployer. However, the literal verification code is invalid PowerShell, so the advertised copy-paste behavior is false.\nCompleteness rationale: Prior intake, provider, plugin, blocked Linux, and fail-closed requirements remain. The required literal ACCEPT/REJECT behavioral run cannot execute because the block cannot compile. Passing extracted fragments cannot close that gap. These are reviewer assessments of the draft, not measured percentages or a production readiness claim.\n\n## Full FAIL list\n\n### W05 [high] Strict ImagePath remediation introduces a parse error\n\nAffected checks: A1, A5, A7.\nEvidence: docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md:643.\n\nThe exact Windows verify fence at lines 630-662 was extracted without edits. PowerShell 7.6.6 Parser.ParseInput reports one UnexpectedToken at block line 14, column 85 (draft line 643): Unexpected token 'exe followed by backtick and double quote' in expression or statement. ScriptBlock.Create also throws before any command can execute. The exact parser message, source block, and per-case records are in the JSON twin and response JSONL.\n\nThe error message combines backtick and backslash quote escaping. PowerShell uses the backtick, not C-style backslash escaping; the resulting string terminates incorrectly. This also contradicts AGENTS-README-FIRST.yaml:262.\n\nRequired ACCEPT case:\n```text\n\"C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe\" --urls \"http://+:7147\"\n```\nResult from the literal block: **cannot execute, parse error**. This is not an accepted case. All 19 full-block case attempts stop at compilation; zero behavioral cases execute. Malformed inputs blocked by a parse error are not counted as successful rejection tests.\n\nRequired remediation: fix only the throw-message quoting while preserving the strict regex, then rerun the entire unmodified draft fence against canonical, malformed, and prior regression cases. Do not report the extracted-regex results as proof that the full fence runs.\n\n### W04 [medium] Reviewer initially selected the wrong shell route\n\nAffected check: B1. This is my deviation, not a document defect.\n\nThe first tool orchestration discovered PowerShell.MCP but also attempted tools.exec_command with shell pwsh.exe for the add-profile skill read. The sandbox helper failed before the shell command executed (os error 206). I then used PowerShell.MCP for every successful shell command. No escalated retry or successful unmanaged shell was used.\n\nThe attempted route did not follow the requested first-command preference and the workspace mandatory routing rule at AGENTS-README-FIRST.yaml:252-261. It is scored conservatively as FAIL rather than claiming flawless routing. No Python was used.\n\nScore-gate failures: accuracy 96 < 98 and completeness 96 < 98. Either independently blocks AGREE; these are not additional claim rows.\n\n## Literal versus isolated evidence\n\n- Literal full fence: 1 parser error; 19 compilation-blocked cases; 0 behavioral cases executed.\n- Extracted regex plus exact executable/URL comparisons only: **19 PASS / 0 FAIL**.\n- Unchanged service/status/files/listener subfragment with in-memory mocks: **10 PASS / 0 FAIL**.\n- No draft patch or hypothetical repaired full block was executed.\n- No Windows service, file ACL, installation, database, Linux lifecycle, or agent UI activation was changed.\n\nThe isolated predicate ACCEPTS the fully quoted canonical command and its correctly quoted Program Files equivalent. It REJECTS all four prior unbalanced opening/closing quote cases, the unquoted Program Files case, quoted and unquoted .exe.old, port 71470, exe-as-later-arg, duplicate --urls, a trailing argument, unquoted exe only, unquoted URL only, both tokens unquoted, wrong executable, wrong URL host, and an embedded quote.\n\nThe regex at line 642 requires both quotes around both captured tokens. Phase 4 at line 415 states the same rule. build/WindowsServiceHelper.cs:485-488 generates the quoted executable and quoted URL. W01's regex defect is corrected in isolation, but W05 prevents accepting the remediation as runnable documentation.\n\nThe service subfragment accepts LocalSystem and NT AUTHORITY\\SYSTEM and rejects wrong account, stopped state, mismatched listener PID, zero service PID, missing executable/manifest/YAML, and no listener. These results preserve prior LocalSystem/PID protections in isolation, not full-block success.\n\n## A-D claim results\n\n- P1 PASS: add-profile was the first attempted task; all 19 dynamically discovered non-skill profile Markdown files were read in full before claim checks. Truncated reads were completed. Routing is separately scored B1.\n- P2 PASS: live model/effort verified as gpt-6-astra / xhigh and bound to the exact request.\n- P3 PASS: authored writes limited to this review's receipts; no MCP session-log/TODO/requirements mutation, deployment, commit, or done-state claim.\n- A1 FAIL: copy-paste verification suitability is disproved by W05.\n- A2 PASS: pre-action intake covers agents, process, storage, service, host/workspace/plugin roots and endpoint (draft:15-19,35-76).\n- A3 PASS for draft scope: per-family playbooks and explicit unsupported/blocked branches remain (draft:179-354). No unsupported host activation is claimed verified.\n- A4 PASS: typed manifest/plan, multi-agent array, write/load order, and no-session-log dependency remain (draft:5,78-175). SessionLogWorkflow.cs:74-86 confirms bootstrap is an idempotent no-op.\n- A5 FAIL: Linux is honestly blocked; Windows literal verify cannot compile (W05).\n- A6 PASS: refuse/caution/redirect and bounded stop guidance remains; SQLite multi-agent is a topology-dependent caution (draft:356-373).\n- A7 FAIL: DB identity and service criteria are explicit, but the verification example cannot execute (W05).\n- A8 PASS: provider branches, actual package/command names, and approved deployment paths remain source-backed.\n- B1 FAIL: draft retains mandatory PowerShell.MCP/no Python; reviewer initially attempted the wrong runner (W04).\n- B2 PASS: API credential redacted from marker output by exact-value replacement; no credentials or private profile bodies in authored receipts. Manifest secrets remain references/placeholders.\n- B3 PASS: host-matched plugin guidance remains. Read-only MCP queries followed a successful Codex plugin trust bootstrap; no raw API storage access.\n- C1 PASS for draft scope: live effective layer-1 has 341 FR, 465 TR, 495 TEST and 341 mappings. No SETUPPROMPT/frontier-agent-setup/setup-prompt matches; TODO has no linked FR/TR. This is not acceptance of implementation traceability.\n- D1 PASS for draft scope: live MCP-SETUPPROMPT-001 is Done=false. Inventory and at least two Legion intake-variant dry-runs remain open. Checked drafting subtasks do not satisfy those exit criteria.\n\nSurface totals: P 3 PASS; A 5 PASS / 3 FAIL; B 2 PASS / 1 FAIL; C 1 PASS; D 1 PASS. UNKNOWN 0 within this draft-review scope. Unexecuted deployment, actual resolved DB identity, Linux lifecycle, UI activation, and product suites are not claimed passing. Byrd phase order was not inferred from file timestamps.\n\n## Prior remediation audit\n\n- F01 held: correct SharpNinja.McpServer.Repl package versus mcpserver-repl command; draft:384-387 and Repl.Host.csproj:12-13.\n- F02 held as deployment guidance: approved UpdateService, real binary, preserved configuration before startup, rollback; draft:322-336,393-404. Build.UpdateService.cs:156-174 restores config, registers, writes manifest, then starts. WindowsServiceDeploymentGuard.cs:18-88 requires YAML, approved generator and executable hashes.\n- F03 held: systemd and linux-publish-swap explicitly blocked (draft:64-65,338-348,493-515). Source/build search for sd_notify/UseSystemd/AddSystemd/Type=notify has no matches, exit 1.\n- F04 held: provider-specific keys and SQL Server aliases match resolver source, including empty SQL Server primary-key behavior (resolver:148-168).\n- F05 held for draft scope: GET search versus POST bucket install is correct (ToolRegistryController.cs:34,189). Codex Status is not claimed to expose trust fields (plugin mcp-status.ps1:84-101). Cline has npm ci/build, absolute dist/index.js, UI evidence or stop (draft:231-233; package/server manifests inspected).\n- F06 held: typed host/port/version, per-agent playbooks and populated plan are retained (draft:78-175).\n- F07 held in draft: mandatory PowerShell.MCP and no Python (draft:20,520); reviewer deviation separately reported.\n- F08 remains blocked by W05 for executable verification; its prior prose remediations are retained. Resolved provider/database identity and active-override provenance are mandatory for every provider, including SQLite, or VERIFY_EVIDENCE_UNAVAILABLE (draft:420-424,657). Resolver:96-114,192-203 and Program.cs:100-104 confirm override risk; StorageConnectivityHealthCheck.cs:45-54 proves connectivity only.\n- F09 held: no chown of shared /opt; dedicated-directory guidance remains (draft:508).\n- Fresh-workspace guidance remains: RepoRoot and primary/enabled Workspaces entry before startup; plugin environment alone does not register a server workspace (draft:164,402,425; WorkspaceService.cs:519-546).\n- LocalSystem, service Running, required files and PID/listener join remain and pass the isolated fragment checks above.\n\n## Model, scope and artifact proof\n\n- Live runtime: gpt-6-astra / xhigh. Both payload.model/effort and collaboration_mode.settings.model/reasoning_effort agree.\n- Source: C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\28\\rollout-2026-09-28T08-26-42-01a0e832-41b0-7bd0-900f-371622d503fd.jsonl:8.\n- turn_context timestamp: 2026-09-28T13:26:45.437Z.\n- Thread: 01a0e832-41b0-7bd0-900f-371622d503fd. Turn: 01a0e832-42a8-7780-8ea5-dc6cfc7673d0. CLI: 0.155.0-alpha.16.4.\n- Runtime user message at line 9 matches the supplied .prompt.txt exactly after trimming. This proves recorded live configuration, not independent backend attestation.\n- Candidate SHA-256: **759C8DF47850A503D4727864742C9832A4767748D91BA8054745FD00D9C79D30**; unchanged throughout checks.\n- Git HEAD: 6a565d8762072ed040469047791a57c80dbf1e88. Tracked diff empty; pre-existing untracked work untouched.\n- PowerShell.MCP 1.14.0 / pwsh 7.6.6. Codex plugin 1.107.0 Invoke-FullBootstrap returned true at 2026-09-28T13:32:18.1162368Z.\n- User's explicit no-session-log instruction overrides skill/profile logging requirements. No sessionId or MCP turn persistence is claimed.\n- Skill applied: C:\\Users\\kingd\\.grok\\skills\\hostile-validator\\SKILL.md; add-profile: C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md.\n- No product fix was authored. Fixing the draft belongs to the implementing agent.\n\n## Durable response boundary\n\nRequest: docs/receipts/hv/20260928T132642Z-setupprompt-draft.request.jsonl, with matching .prompt.txt.\nResponse: docs/receipts/hv/20260928T132642Z-setupprompt-draft.response.jsonl.\nMarkdown: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T132642Z.md.\nJSON twin: docs/receipts/hv/hostile-validator-setupprompt-draft-20260928T132642Z.json.\n\nThe response contains a sanitized public runtime projection through its recorded cutoff, exact verification evidence, and the full verdict. Private reasoning, system/developer instructions, profile/memory/skill bodies, and credential values are excluded or explicitly withheld. It is not represented as a byte-identical raw CLI stream. Future completion events cannot be included at the time of writing and are not fabricated. Runtime-managed transcripts/output caches are not authored repository changes.\n\nOverallVerdict: **DISAGREE**.\n"
+}

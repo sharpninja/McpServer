@@ -41,8 +41,8 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         _db = new McpDbContext(dbOptions);
         _db.Database.EnsureCreated();
 
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
-        var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = TestWorkspacePaths.UnusedRepoRoot };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var chunker = new Chunker();
@@ -120,7 +120,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     [Fact]
     public async Task GetActiveTodo_DelegatesToExecutionService()
     {
-        _todoExecutionService.GetActiveTodoAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        _todoExecutionService.GetActiveTodoAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoResult
             {
                 TodoId = "TODO-201",
@@ -129,7 +129,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
                 NextAction = "Define unit tests"
             });
 
-        var json = await _tools.GetActiveTodo(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.GetActiveTodo(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<ActiveTodoResult>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         Assert.NotNull(result);
@@ -233,7 +233,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         var json = await _tools.TodoMove(
                 "TODO-TXN-STDIO-MOVE-001",
                 ".",
-                @"F:\GitHub\McpServer.Target", cancellationToken: TestContext.Current.CancellationToken)
+                @"Q:\__mcp_unit_test__\McpServer.Target", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -241,7 +241,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         await _todoMutations.Received(1)
             .MoveAsync(
                 "TODO-TXN-STDIO-MOVE-001",
-                Arg.Is<TodoMoveRequest>(request => request != null && request.TargetWorkspacePath == @"F:\GitHub\McpServer.Target"),
+                Arg.Is<TodoMoveRequest>(request => request != null && request.TargetWorkspacePath == @"Q:\__mcp_unit_test__\McpServer.Target"),
                 Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
@@ -261,7 +261,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         var json = await _tools.TodoMove(
                 "TODO-TXN-STDIO-MOVE-002",
                 ".",
-                @"F:\GitHub\McpServer.Target", cancellationToken: TestContext.Current.CancellationToken)
+                @"Q:\__mcp_unit_test__\McpServer.Target", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -279,7 +279,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task CreateTodosFromPlan_DelegatesToExecutionService()
     {
         _todoExecutionService.CreateTodosFromPlanAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 Arg.Any<CreateTodosFromPlanRequest>(),
                 Arg.Any<CancellationToken>())
             .Returns(new CreateTodosFromPlanResult
@@ -289,7 +289,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.CreateTodosFromPlan(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "PHASE-001",
             "PLAN-001",
             [
@@ -307,7 +307,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         Assert.Equal("PHASE-001", result!.PhaseId);
         Assert.Equal(2, result.TodoIds.Count);
         await _todoExecutionService.Received(1).CreateTodosFromPlanAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             Arg.Is<CreateTodosFromPlanRequest>(request => request != null
                 && request.PhaseId == "PHASE-001"
                 && request.PlanId == "PLAN-001"),
@@ -322,7 +322,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task GetTodoExecutionContext_DelegatesToExecutionService()
     {
         _todoExecutionService.GetExecutionContextAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 3,
                 2,
@@ -337,7 +337,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
                 RelevantFiles = ["src/McpServer.Services/Services/TodoExecutionService.cs"]
             });
 
-        var json = await _tools.GetTodoExecutionContext(@"F:\GitHub\McpServer", "TODO-201", 3, 2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.GetTodoExecutionContext(@"Q:\__mcp_unit_test__\McpServer", "TODO-201", 3, 2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<ActiveTodoContext>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         Assert.NotNull(result);
@@ -354,7 +354,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task SetTodoTestPlan_DelegatesToExecutionService()
     {
         _todoExecutionService.SetTestPlanAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 Arg.Any<SetTodoTestPlanRequest>(),
                 Arg.Any<CancellationToken>())
@@ -365,7 +365,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.SetTodoTestPlan(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "TODO-201",
             unitTestsDefined: true,
             testFilePaths: ["tests/TodoExecutionServiceTests.cs"],
@@ -375,7 +375,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         Assert.NotNull(result);
         Assert.Equal(TodoExecutionStatus.TestReady, result!.Status);
         await _todoExecutionService.Received(1).SetTestPlanAsync(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "TODO-201",
             Arg.Is<SetTodoTestPlanRequest>(request => request != null
                 && request.UnitTestsDefined
@@ -392,7 +392,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task UpdateTodoStatus_DelegatesToExecutionService()
     {
         _todoExecutionService.UpdateStatusAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 Arg.Any<UpdateTodoStatusRequest>(),
                 Arg.Any<CancellationToken>())
@@ -404,7 +404,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.UpdateTodoStatus(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "TODO-201",
             TodoExecutionStatus.Implementing,
             "Unit tests are defined", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -422,7 +422,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task AppendTodoCheckpoint_DelegatesToExecutionService()
     {
         _todoExecutionService.AppendCheckpointAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 Arg.Any<AppendTodoCheckpointRequest>(),
                 Arg.Any<CancellationToken>())
@@ -433,7 +433,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.AppendTodoCheckpoint(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "TODO-201",
             TodoCheckpointKind.ImplementationProgress,
             "Implemented execution gating.",
@@ -454,7 +454,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task RecordTodoValidationResult_DelegatesToExecutionService()
     {
         _todoExecutionService.RecordValidationResultAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 "TODO-201",
                 Arg.Any<RecordTodoValidationResultRequest>(),
                 Arg.Any<CancellationToken>())
@@ -469,7 +469,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.RecordTodoValidationResult(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "TODO-201",
             "pass",
             summary: "Validation succeeded.",
@@ -490,7 +490,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     [Fact]
     public async Task GetNextReadyTodo_DelegatesToExecutionService()
     {
-        _todoExecutionService.GetNextReadyTodoAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
+        _todoExecutionService.GetNextReadyTodoAsync(@"Q:\__mcp_unit_test__\McpServer", Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoResult
             {
                 TodoId = "TODO-202",
@@ -499,7 +499,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
                 NextAction = "Run device validation"
             });
 
-        var json = await _tools.GetNextReadyTodo(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.GetNextReadyTodo(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<ActiveTodoResult>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         Assert.NotNull(result);
@@ -515,7 +515,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     public async Task AdbStep_DelegatesToExecutionService()
     {
         _todoExecutionService.AdbStepAsync(
-                @"F:\GitHub\McpServer",
+                @"Q:\__mcp_unit_test__\McpServer",
                 Arg.Any<AdbStepRequest>(),
                 Arg.Any<CancellationToken>())
             .Returns(new AdbStepResult
@@ -528,7 +528,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             });
 
         var json = await _tools.AdbStep(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             AdbStepAction.Screenshot,
             captureScreenshot: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<AdbStepResult>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

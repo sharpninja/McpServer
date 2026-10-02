@@ -1,0 +1,35 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142310Z-b4df
+  result:
+    id: BUG-TRIAGE-198
+    title: Do not rebind recovered in-progress turns to a post-restart session
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - After a server restart, current-turn.yaml can still hold an in-progress requestId on the pre-restart session while session-state.yaml has a newly minted sessionId. Assert-ReplCurrentTurnFresh (TR-MCP-PLUGIN-012) treats that as session rotation and rewrites current-turn.yaml sessionId to the new session before persist. workflow.sessionlog.appendDialog then POSTs AppendDialogAsync with the new sessionId plus the old requestId and fails HTTP 404 because that requestId does not exist on the new session. Get-ReplCompleteTurnPersistSessionId already prefers the current-turn sessionId, but the freshness rewrite runs first and makes that helper see only the rebound id.
+    - 'Triage group: triage-group-3a0027b60ca949cd'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Given current-turn.yaml with sessionId A, in_progress requestId R, and session-state.yaml with a different post-restart sessionId B, workflow.sessionlog.appendDialog persists dialog against session A and request R, not session B.'
+    - '- current-turn.yaml sessionId remains A after appendDialog when R was created under A and still exists on the server.'
+    - '- appendDialog does not return HTTP 404 / not_found for a recovered requestId that still exists on the original session.'
+    - '- Marker-path or marker-timestamp drift (wrong workspace) is still rejected and does not persist against the recovered turn.'
+    - 'Implementation notes:'
+    - '- The destructive rewrite is in plugins/core/lib-ps/repl-invoke.ps1 Assert-ReplCurrentTurnFresh: a sessionId-only mismatch logs a re-bind and writes current-turn.yaml sessionId to the active session-state.yaml value before any persist call.'
+    - '- Invoke-WorkflowAppendDialog calls Assert-ReplCurrentTurnFresh first, then Get-ReplSessionMeta, which uses Get-ReplCompleteTurnPersistSessionId on the already-rebound turn value, so persist always targets the new session.'
+    - '- Same freshness gate is used by appendActions, completeTurn, and updateTurn, so the 404 is not unique to appendDialog.'
+    - '- TR-MCP-PLUGIN-012 was written for Start-PluginSession rotation of an unbound local cache; recovered persisted turns after restart need the opposite policy: keep the original sessionId, or restore session-state.yaml from current-turn.yaml instead of minting a new session.'
+    - '- The appendDialog 404 path already treats not_found as non-retryable and does not write failsafe, so the rebound cache is left pointing at a session that cannot accept R.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

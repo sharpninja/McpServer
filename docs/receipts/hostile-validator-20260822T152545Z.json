@@ -1,0 +1,83 @@
+{
+  "TimestampUtc": "2026-08-22T15:25:45Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 1,
+  "Phase": "G-RED",
+  "AddProfile": {
+    "executed": true,
+    "profileMarkdownFilesRead": 18,
+    "excluded": ["add-profile.grok.md"],
+    "hostileValidatorSkillRead": true
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "PlanSection": 11,
+  "RequirementIds": [
+    "FR-MCP-WIKIEXPORT-003",
+    "FR-MCP-WIKIEXPORT-004",
+    "FR-MCP-WIKIEXPORT-005",
+    "TR-MCP-WIKIEXPORT-003",
+    "TR-MCP-WIKIEXPORT-004",
+    "TR-MCP-WIKIEXPORT-005",
+    "TEST-MCP-WIKIEXPORT-003",
+    "TEST-MCP-WIKIEXPORT-004",
+    "TEST-MCP-WIKIEXPORT-005"
+  ],
+  "Worktree": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033",
+  "Trust": {
+    "MarkerSignatureOk": true,
+    "HealthNonce": "b0e083c1a711474f986212582d190b14",
+    "HealthNonceOk": true,
+    "HealthStatus": "Healthy",
+    "PluginVersion": "1.105.0"
+  },
+  "Session": {
+    "IntendedSessionId": "GrokSubagentHostile-20260822T152013Z-g-red-hostile",
+    "PersistedSessionId": "GrokCode-20260822T152016Z-plugin-session",
+    "RequestId": "req-20260822T152013Z-001-g-red-hostile-validate",
+    "QueryHistoryTitle": "Hostile G-red validation Phase G named tests",
+    "QueryHistoryTurnCount": 1,
+    "QueryHistoryLastUpdatedUtc": "2026-08-22T15:24:13Z",
+    "LocalTurnStatus": "completed"
+  },
+  "IndependentTest": {
+    "BuildExit": 0,
+    "TestExit": 1,
+    "TrxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hostile-g-red-20260822T151548Z\\hostile-g-red.trx",
+    "LogPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_hostile-g-red-20260822T151548Z\\hostile-dotnet-test.txt",
+    "Counters": {
+      "total": 12,
+      "executed": 12,
+      "passed": 0,
+      "failed": 12,
+      "skipped": 0,
+      "notExecuted": 0
+    }
+  },
+  "Todos": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-WIKIEXPORT-001": false
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "result": "PASS", "text": "All 11 section-11 named tests plus CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest exist" },
+    { "id": "A2", "surface": "A", "result": "PASS", "text": "Independent rebuild+rerun Failed 12 Passed 0 Skipped 0" },
+    { "id": "A3", "surface": "A", "result": "PASS", "text": "No dump/import product code under src/; Dump and includeDump still unbound" },
+    { "id": "A4", "surface": "A", "result": "PASS", "text": "PLAN-PLUGINHANDOFF-001 and MCP-WIKIEXPORT-001 remain done:false" },
+    { "id": "A5", "surface": "A", "result": "PASS", "text": "FederationClient.RegisterWorkspaceAsync is not the hydration bind" },
+    { "id": "B1", "surface": "B", "result": "PASS", "text": "Byrd v4 G-RED phase: requirements exist, tests exist and fail, no dump/import implementation" },
+    { "id": "B2", "surface": "B", "result": "PASS", "text": "Independent receipts" },
+    { "id": "B3", "surface": "B", "result": "PASS", "text": "MCP-only TODO/requirements reads" },
+    { "id": "B4", "surface": "B", "result": "PASS", "text": "PowerShell only, no Python" },
+    { "id": "B5", "surface": "B", "result": "PASS", "text": "Implementer counts match independent TRX" },
+    { "id": "C", "surface": "C", "result": "PASS", "text": "FR/TR/TEST 003-005 exist with AC and mappings; named tests cover AC" },
+    { "id": "D", "surface": "D", "result": "PASS", "text": "G-RED step DoD only; plan not complete; TODOs not done" }
+  ],
+  "FailList": [],
+  "UnknownList": [],
+  "PassCount": 12,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 95,
+  "CompletenessRating": 94,
+  "ReceiptMd": "docs/receipts/hostile-validator-20260822T152545Z.md"
+}

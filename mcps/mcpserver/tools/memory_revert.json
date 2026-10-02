@@ -1,0 +1,27 @@
+{
+  "name": "memory_revert",
+  "description": "Revert a memory to a prior version when the current content is wrong and a snapshot should be restored. History is preserved.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "id": {
+        "description": "Memory id",
+        "type": "string"
+      },
+      "versionNumber": {
+        "description": "Snapshot number to restore",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "workspacePath",
+      "id",
+      "versionNumber"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "TestsFileExists": true,
+  "AdapterFileExists": true,
+  "P11MethodPresent": true,
+  "P11InlineDataCount": 8,
+  "InlineDataHostKinds": [
+    {
+      "HostKind": "Codex",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Copilot",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Grok",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "Cline",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "ClineV2",
+      "InlineDataPresent": true
+    },
+    {
+      "HostKind": "OpenCode",
+      "InlineDataPresent": true
+    }
+  ],
+  "AllEightInlinePresent": true,
+  "TheoryTimeoutMs": 120000,
+  "TheoryTimeoutIs120000": true,
+  "SkipAttributeOnTheory": false,
+  "SkipAttributeOnFact": false,
+  "AssertSkipPresent": false,
+  "StartsFixture": true,
+  "AwaitsStartAsync": true,
+  "AssertsPortNot7147": true,
+  "CallsExecuteCanonicalTurnAsync": true,
+  "CollectionPluginSessionLog": true,
+  "AdapterThrowsInvalidOperation": true,
+  "AdapterThrowContainsNotImplemented": true,
+  "AdapterThrowExact": true,
+  "AdapterHasLaunchLogic": false,
+  "AdapterLineCount": 27,
+  "P11HitsTestsSrcCount": 2,
+  "P11HitPaths": [
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs"
+  ],
+  "P12HitsTestsSrcCount": 0,
+  "P12HitPaths": [],
+  "P13HitsTestsSrcCount": 0,
+  "P13HitPaths": [],
+  "P12TheoryBraceHits": 0,
+  "P13TheoryBraceHits": 0,
+  "EmDashTests": false,
+  "EnDashTests": false,
+  "EmDashAdapter": false,
+  "EnDashAdapter": false
+}

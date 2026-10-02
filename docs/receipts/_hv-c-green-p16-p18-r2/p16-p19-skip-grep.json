@@ -1,0 +1,232 @@
+{
+  "TimestampUtc": "2026-08-22T08:33:25.2774834Z",
+  "SkipHitCount": 0,
+  "SkipHits": [],
+  "P16AiTheoryHitCount": 1,
+  "P16AiTheoryHits": [
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 26,
+      "Text": "public async Task AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)"
+    }
+  ],
+  "P17RejectsHitCount": 1,
+  "P17RejectsHits": [
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 46,
+      "Text": "public async Task AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure()"
+    }
+  ],
+  "P18NukeSkipHitCount": 1,
+  "P18NukeSkipHits": [
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 77,
+      "Text": "public void NukeTarget_SkipIsFailure()"
+    }
+  ],
+  "P19HitCount": 0,
+  "P19Hits": [],
+  "EvaluateHitCount": 13,
+  "EvaluateHits": [
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 7,
+      "Text": "/// Deterministic failures (invalid JSON, missing fields, contradictions, deterministicFailure=true)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 20,
+      "Text": "public static Task<AiStrategyEvaluation> EvaluateAsync(string redactedReceipt, CancellationToken cancellationToken = default)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 47,
+      "Text": "var deterministicFailure = root.TryGetProperty(\"deterministicFailure\", out var flag)"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 50,
+      "Text": "var valid = missing.Count == 0 && contradictions.Count == 0 && !deterministicFailure;"
+    },
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 64,
+      "Text": "Contradictions = [\"invalid-json\"],"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 33,
+      "Text": "var evaluation = await AiStrategyFixture.EvaluateAsync(redactedReceipt, TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 43,
+      "Text": "/// P17 green: invalid JSON and deterministicFailure=true stay Valid=false. AI output never overrides deterministic failure."
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 46,
+      "Text": "public async Task AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure()"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 48,
+      "Text": "var invalid = await AiStrategyFixture.EvaluateAsync(\"{not-json\", TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 51,
+      "Text": "Assert.Contains(\"invalid-json\", invalid.Contradictions);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 53,
+      "Text": "var missing = await AiStrategyFixture.EvaluateAsync(\"{\\\"agent\\\":\\\"Codex\\\"}\", TestContext.Current.CancellationToken);"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 59,
+      "Text": "var deterministic = await AiStrategyFixture.EvaluateAsync("
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 60,
+      "Text": "\"{\\\"agent\\\":\\\"Codex\\\",\\\"cacheFolder\\\":\\\"codex\\\",\\\"entrypoint\\\":\\\"Invoke-CodexMcpPlugin.ps1\\\",\\\"status\\\":\\\"completed\\\",\\\"deterministicFailure\\\":true}\","
+    }
+  ],
+  "PreflightHitCount": 15,
+  "PreflightHits": [
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 85,
+      "Text": "Build.FailIfPluginSessionLogSkipped(green);"
+    },
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 89,
+      "Text": "var ex = Assert.Throws<InvalidOperationException>(() => Build.FailIfPluginSessionLogSkipped(skipped));"
+    },
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 92,
+      "Text": "Build.PreflightPluginSessionLogAiUnitStrategy(FindRepositoryRoot());"
+    },
+    {
+      "File": "PluginSessionLogIntegrationTargetTests.cs",
+      "Line": 94,
+      "Text": "Assert.ThrowsAny<Exception>(() => Build.PreflightPluginSessionLogAiUnitStrategy(missing));"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 22,
+      "Text": "PreflightPluginSessionLogAiUnitStrategy(RootDirectory);"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 31,
+      "Text": ".SetFilter(\"PluginInt=Deterministic\")"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 34,
+      "Text": "FailIfPluginSessionLogSkipped(resultsDir / deterministicTrx);"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 40,
+      "Text": ".SetFilter(\"PluginInt=AI\")"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 43,
+      "Text": "FailIfPluginSessionLogSkipped(resultsDir / aiTrx);"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 50,
+      "Text": "internal static void PreflightPluginSessionLogAiUnitStrategy(string repositoryRoot)"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 54,
+      "Text": "if (!File.Exists(csproj) || !File.ReadAllText(csproj).Contains(\"SharpNinja.aiUnit\", StringComparison.Ordinal))"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 56,
+      "Text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: SharpNinja.aiUnit is not referenced.\");"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 66,
+      "Text": "if (!json.Contains(\"\\\"ActiveStrategy\\\"\", StringComparison.Ordinal)"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 70,
+      "Text": "throw new InvalidOperationException(\"PluginSessionLogIntegration aiUnit preflight failed: ActiveStrategy is not available.\");"
+    },
+    {
+      "File": "Build.PluginSessionLogIntegration.cs",
+      "Line": 79,
+      "Text": "internal static void FailIfPluginSessionLogSkipped(string trxPath)"
+    }
+  ],
+  "TraitHitCount": 6,
+  "TraitHits": [
+    {
+      "File": "PluginHostProcessAdapterTests.cs",
+      "Line": 11,
+      "Text": "[Trait(\"PluginInt\", \"Deterministic\")]"
+    },
+    {
+      "File": "PluginIntegrationProjectTests.cs",
+      "Line": 10,
+      "Text": "[Trait(\"PluginInt\", \"Deterministic\")]"
+    },
+    {
+      "File": "PluginIntegrationServerFixtureTests.cs",
+      "Line": 9,
+      "Text": "[Trait(\"PluginInt\", \"Deterministic\")]"
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 10,
+      "Text": "[Trait(\"PluginInt\", \"AI\")]"
+    },
+    {
+      "File": "PluginSessionLogCatalogTests.cs",
+      "Line": 9,
+      "Text": "[Trait(\"PluginInt\", \"Deterministic\")]"
+    },
+    {
+      "File": "PluginSessionLogWorkflowAdapterTests.cs",
+      "Line": 10,
+      "Text": "[Trait(\"PluginInt\", \"Deterministic\")]"
+    }
+  ],
+  "BuildTargetHasAiUnit": true,
+  "BuildTargetHasSharpNinjaAiUnit": true,
+  "BuildTargetHasTrait": true,
+  "BuildTargetHasDeterministicFilter": true,
+  "BuildTargetHasAiFilter": true,
+  "BuildTargetHasFailIfSkipped": true,
+  "BuildTargetFailIfSkippedCallCount": 3,
+  "BuildTargetHasDotNetTest": true,
+  "BuildTargetDotNetTestCount": 2,
+  "BuildTargetHasPreflight": true,
+  "BuildTargetPreflightCallCount": 2,
+  "BuildTargetHasActiveStrategy": true,
+  "BuildTargetHasStrategies": true,
+  "BuildTargetHasGrokBuild": true,
+  "BuildTargetHasAppsettingsAiunit": true,
+  "BuildTargetLength": 4840,
+  "CsprojHasSharpNinjaAiUnit": true,
+  "AiunitHasActiveStrategy": true,
+  "AiunitHasStrategies": true,
+  "AiunitHasGrokBuild": true,
+  "NukeTestCallsPreflight": true,
+  "NukeTestCallsFailIfSkipped": true
+}

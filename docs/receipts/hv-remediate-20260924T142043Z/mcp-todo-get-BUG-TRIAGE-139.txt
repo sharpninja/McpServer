@@ -1,0 +1,1144 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142205Z-880e
+  result:
+    id: BUG-TRIAGE-139
+    title: usecase_create fails with an unclassified EF save error and persists no rows
+    section: Backlog
+    priority: high
+    done: true
+    note: 2026-09-16T01:34Z GET-then-PUT Done=true after skeptic-gap remediations. Freeze G1RepairSha 21e5b43f3bdc049f6a47a76eb0f85628d0754d8e G1RepairTree 6dd7e0229b906b62a7d6275683b454a28acafc08 on grok/g1-repair-20260911. Native-ext4 git checkout /home/bug139/McpServer-G1-Repair .git dir. C10 Sol HV 20260916T004102Z thread 01a0a7a8-f556-7f43-9b21-ad8480b524ee AGREE 100/100 (nonroot 22/0/0 SHA-256 B781CFAF..., shared 1/0/0 SHA-256 527B7167..., mount 5/0/0 SHA-256 F6DFCA00... unshare UID=0). C7d Debug Sol HV 20260916T012824Z thread 01a0a7d4-4ffb-7181-9dea-abd7abe8d7ba AGREE 99/99 TRX SHA-256 9984818A... 147/0/0. Do not reuse gitless 203524Z or C7d 063332Z. Overlay/QuadBrain on develop left dirty.
+    description:
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - All seven NinjaTrader usecase_create calls hit CreateUseCaseCommandHandler.SaveChanges and returned a generic Entity Framework persistence message with no UseCases rows created. The handler inserts UseCaseEntity with a required FK to Workspaces, but unlike requirements ingest it never ensures a Workspaces parent row for the resolved workspace path (tests seed that row first). Any DbUpdateException is swallowed as Result.Failure(ex.Message), so SerializeResult cannot classify it as not_found/validation/conflict and McpToolErrors never sees the exception or the inner SQLite/FK/schema cause.
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Triage group: triage-group-0c1b4fed35c7c183'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - 'Acceptance criteria:'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A valid usecase_create against a registered workspace path that has no pre-seeded Workspaces row either auto-creates that parent row and persists the use case, or returns a classified not_found/validation error that names the missing workspace instead of a raw EF save message.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - '- A successful usecase_create returns a detail payload with a positive useCaseId, and usecase_list for that workspace includes the new title.'
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - "- When SaveChanges throws DbUpdateException, the tool/API error includes a classified code and the inner provider message rather than only 'An error occurred while saving the entity changes. See the inner exception for details.'"
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - '- Existing create-success tests stay green; a regression test covers create without a pre-seeded Workspaces row and covers classified persistence-failure output.'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - 'Implementation notes:'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - '- Primary path: CreateUseCaseCommandHandler.HandleAsync in src/McpServer.Services/UseCases/Commands/CreateUseCaseCommand.cs. First SaveChanges inserts UseCaseEntity; catch (Exception ex) returns Result.Failure(ex.Message, ex) and drops the inner provider error.'
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - "- UseCaseEntity is configured with a required FK to WorkspaceEntity (McpDbContext UseCaseEntity mapping, Restrict). ResolveWorkspaceId only overrides CurrentWorkspaceId; it does not insert a Workspaces row. Model seed only includes WorkspaceId ''. RequirementsDatabaseDocumentService.EnsureWorkspaceRowAsync already upserts the parent row."
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Mirror EnsureWorkspaceRowAsync (or equivalent) in CreateUseCaseCommandHandler and CreateUseCaseFromFrCommandHandler before the first UseCases insert.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Classify DbUpdateException (missing parent, constraint, missing table) with UseCaseResultCodes plus inner exception text. FwhMcpTools.UseCases.SerializeResult only strips not_found/validation/conflict prefixes; swallowed Result failures never reach McpToolErrors.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    - '- Do not treat this as backend_unavailable unless StorageBackendUnavailability.IsBackendUnavailable is actually true. Schema drift (missing UseCases table) is a secondary possibility if migrations were not applied; the same unclassified wrapper would hide that too.'
+    implementationTasks:
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: false
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED A/E: add DurableIdentifierTwelfthProviderTests covering SQLite, SQL Server, PostgreSQL dash identity/replay and scoped SQLite timeout restoration plus a subsequent contended write.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: false
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED B/D: add RequirementsTwelfthAdversarialReviewTests covering handle-bound reads/writes under alias swaps and file-count, byte, aggregate, depth, streaming, and cancellation limits.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: false
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED C: add WorkspaceIdentityTwelfthCancellationTests with deterministic injected resolver cancellation/timeout and migration-loop async source contract.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: false
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: 'RED F/G: add BugTriage139TwelfthRepositoryAuditTests covering exact review SHA, explicit root, bounded process kill, both named files, .runsettings/final newline, corrected receipt, formal trailers, and historical migration hashes.'
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: false
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: Persist raw focused RED console and TRX evidence under docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-red and create a signed test-only RED commit.
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: false
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: false
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: 'GREEN: implement durable identifier exemptions, secure contained I/O, bounded async identity resolution, streaming disk-backed snapshots, SQLite timeout restoration, hermetic repository support, and EOL/receipt corrections.'
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: false
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: false
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: Run focused and complete provider/current-plus-prior gates with zero failures and zero skips, retain evidence, create signed GREEN/evidence commits, and leave the TODO open.
+      done: true
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 1: physical workspace identity alias and mount-swap safety, bounded public completion, truthful worker lifetime, Windows cancellation timing, and async-only consumer path; preserve consumer and real Windows/Linux boundary evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 2: SQLite physical-alias/check-to-open races, finite cleanup, no Thread.Interrupt dependency, exact lifecycle/causality, and real Linux delayed FUSE evidence with accurate worker/handle counts.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 3: caller-causal PostgreSQL cancellation marker with mocked contract coverage and fresh PostgreSQL statement-timeout/caller-cancel race evidence.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 4: replace source-pass and silent platform fallbacks with applicable executable discovery/inventory; require exact Windows and Linux/FUSE/non-root counts and zero skips.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 5: require successful contained read/write operations during alias swaps, narrowly classify transients, and prove deterministic total rejection fails.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH RED/GREEN 6: close Windows process-start/job-assignment descendant race with an immediate-descendant helper while retaining finite non-Windows process-group cleanup.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    - task: 'SIXTEENTH EVIDENCE 7: supersede rejected receipts, replace indirect command cells, retest the immutable exact final candidate, independently reconcile hashes/mappings/TRX/classifications, run every mandatory gate from C:-physical outputs, map seven current and ten prior findings, clean all helpers/providers/mounts, commit signed increments, and leave TODO open for independent approval.'
+      done: false
+    doneSummary: Historical H-done validation and fifteenth-review evidence are retained but superseded by the sixteenth independent NOT APPROVED verdict. This TODO is not complete and awaits remediation plus a new independent approval.
+    remaining: Resolve and rerun full Build.Tests failed/hung gate using exact candidate and BDPv4; complete SQLite/SQLServer/PostgreSQL plus integration, native-ext4 Linux, traceability/config/evidence and independent hostile approval before protected integration. Preserve approved migrations and truthful historical attribution. Current Windows unit scope is proven green, not whole-program completion.
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-TRIAGE-002
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-015
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    - FR-MCP-USECASE-017
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-TRIAGE-004
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-017
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+    - TR-MCP-USECASE-019
+  deprecated: true
+
+---
+

@@ -1,0 +1,563 @@
+{
+  "TimestampUtc": "2026-09-28T11:48:43.5558593Z",
+  "ValidatorIdentity": "Codex",
+  "Role": "Independent hostile validator",
+  "WorkClass": "Project documentation draft review; not ops-only and not TODO completion",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 8,
+    "FAIL": 7,
+    "UNKNOWN": 1,
+    "Total": 16
+  },
+  "CountDefinition": "16 prerequisite/surface checks: 8 PASS, 7 FAIL, 1 UNKNOWN. Nine distinct defects can affect multiple failed claims; score gates are separate.",
+  "AccuracyScore": 70,
+  "CompletenessScore": 60,
+  "ScoreBasis": "Reviewer estimates of claimed copy-paste suitability, not empirical percentages or confidence that a DRAFT file exists.",
+  "AccuracyRationale": "Intake, DRAFT status, provider existence, secret discipline and deferred BDPv4 policy are accurate. Wrong package identity, incompatible service examples, storage-key mismatch and shell guidance prevent reliable execution.",
+  "CompletenessRationale": "All major headings exist but several agent branches, provider wiring, typed artifact fields and live comparison procedures are unresolved. Inventory and two intake-variant dry-runs remain open. Those open tasks are not falsely scored as completed implementation.",
+  "ScoreGateFailures": [
+    "Accuracy 70 < required 98",
+    "Completeness 60 < required 98"
+  ],
+  "AddProfile": {
+    "executed": true,
+    "firstAction": true,
+    "skill": "C:\\Users\\kingd\\.codex\\skills\\add-profile\\SKILL.md",
+    "profileRoot": "C:\\Users\\kingd\\.claude\\profile",
+    "excludedPattern": "add-profile*.md",
+    "filesReadInFull": 19,
+    "completedBeforeClaimChecks": true,
+    "note": "Initial shell launch failed before executing; full skill/profile reads succeeded through PowerShell MCP. All truncated reads were repeated in smaller ranges."
+  },
+  "ModelProof": {
+    "status": "PASS",
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "threadId": "01a0e7cb-ee33-7d23-989f-682b67a09c52",
+    "turnId": "01a0e7cb-ef85-76d2-859c-ee7356e67610",
+    "turnContextTimestamp": "2026-09-28T11:35:02.104Z",
+    "rolloutPath": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\28\\rollout-2026-09-28T06-34-56-01a0e7cb-ee33-7d23-989f-682b67a09c52.jsonl",
+    "line": 8,
+    "fields": [
+      "payload.model=gpt-6-astra",
+      "payload.effort=xhigh",
+      "payload.collaboration_mode.settings.model=gpt-6-astra",
+      "payload.collaboration_mode.settings.reasoning_effort=xhigh"
+    ],
+    "binding": "session_meta cwd and exact opening public assistant message match this live review",
+    "limit": "Proof of recorded live Codex turn configuration; not independent backend hardware/provider attestation."
+  },
+  "Artifact": {
+    "path": "F:\\GitHub\\McpServer\\docs\\setup\\2026-09-28-frontier-agent-setup-prompt.DRAFT.md",
+    "sha256": "9AE78BEA67D2A86A1E996522E9C50651140EDD4F00061A95FD461D096C1CE8A2",
+    "gitHead": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "changedByReviewer": false
+  },
+  "McpReadEvidence": {
+    "pluginRoot": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.107.0",
+    "wrapper": "C:\\Users\\kingd\\.codex\\plugins\\cache\\mcpserver-codex-plugin\\mcpserver\\1.107.0\\Invoke-CodexMcpPlugin.ps1",
+    "trustMethod": "Invoke-FullBootstrap from host-matched marker-resolver.ps1",
+    "signatureAndHealthNonce": true,
+    "todoRequestId": "req-20260928T114019Z-d717",
+    "todoDone": false,
+    "openTasks": [
+      "Inventory current install surfaces: McpServer repo, NuGet/tooling, UpdateService, plugin repos (grok/codex), local skill mirrors under ~/.grok/skills",
+      "Dry-run on Legion with at least two intake variants; confirm manifest/plan artifacts and verify; revise gaps"
+    ],
+    "remaining": "Draft prompt written at docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md. Next: refine playbooks from inventory, add concrete install commands per storage/service, Legion dry-runs with two intake variants.",
+    "linkedFrCount": 0,
+    "linkedTrCount": 0,
+    "effectiveRequestId": "req-20260928T114036Z-60e0",
+    "activeLayer": "layer-1",
+    "effectiveFrCount": 341,
+    "effectiveTrCount": 465,
+    "effectiveTestCount": 495,
+    "setupSpecificMatches": 0,
+    "searchExpression": "SETUPPROMPT|frontier.agent.setup|setup.choices.manifest|setup.implementation.plan",
+    "allFrTrQueries": [
+      {
+        "method": "workflow.requirements.listFr",
+        "type": "result",
+        "requestId": "req-20260928T114127Z-b0fc",
+        "count": 341,
+        "reportedTotal": 341,
+        "exactMatches": [],
+        "nearTitles": [
+          {
+            "id": "FR-MCP-063",
+            "title": "Workspace GitHub OAuth Bootstrap, Token Lifecycle, and Actions Control",
+            "status": "pending"
+          },
+          {
+            "id": "FR-MCP-076",
+            "title": "Marker File Trust Bootstrap and Session Authenticity Validation",
+            "status": "pending"
+          },
+          {
+            "id": "FR-MCP-HELP-005",
+            "title": "Corpus bootstrap and outcome analysis",
+            "status": "completed"
+          },
+          {
+            "id": "FR-MCP-QBAGENT-001",
+            "title": "QBAgent marker-driven QuadBrain-only bootstrap",
+            "status": "pending"
+          },
+          {
+            "id": "FR-MCP-REPL-004",
+            "title": "Trust Bootstrap and Auth Rotation",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "method": "workflow.requirements.listTr",
+        "type": "result",
+        "requestId": "req-20260928T114132Z-60b7",
+        "count": 465,
+        "reportedTotal": 465,
+        "exactMatches": [],
+        "nearTitles": [
+          {
+            "id": "TR-MCP-AGENT-014",
+            "title": "PowerShell McpSession Trust Bootstrap Parity",
+            "status": "pending"
+          },
+          {
+            "id": "TR-MCP-GH-001",
+            "title": "GitHub OAuth Bootstrap Configuration Contract",
+            "status": "pending"
+          },
+          {
+            "id": "TR-MCP-HELP-006",
+            "title": "Stub corpus bootstrap",
+            "status": "completed"
+          },
+          {
+            "id": "TR-MCP-QBAGENT-001",
+            "title": "QBAgent marker bootstrap and graceful no-marker exit",
+            "status": "pending"
+          },
+          {
+            "id": "TR-MCP-REPL-006",
+            "title": "Trust Bootstrap and Token Validation",
+            "status": "pending"
+          },
+          {
+            "id": "TR-MCP-SEC-003",
+            "title": "Signed Marker Bootstrap and Health Nonce Verification",
+            "status": "pending"
+          },
+          {
+            "id": "TR-MCP-TODO-008",
+            "title": "Workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap",
+            "status": "pending"
+          }
+        ]
+      }
+    ],
+    "qualification": "No linked or query-discoverable setup-prompt-specific FR/TR/TEST found. This does not prove no vaguely worded or differently named requirement could apply."
+  },
+  "Claims": [
+    {
+      "id": "P1",
+      "surface": "Prerequisites",
+      "claim": "Run add-profile before validation and fully read all non-skill profile Markdown",
+      "status": "PASS",
+      "evidence": "First tool attempted the mandated skill read; sandbox os error 206 prevented launch. PowerShell MCP then read the skill and all 19 discovered files in full. Truncated reads were repeated in bounded ranges before claim checks."
+    },
+    {
+      "id": "P2",
+      "surface": "Prerequisites",
+      "claim": "Live turn uses requested model and effort",
+      "status": "PASS",
+      "evidence": "Own rollout session_meta and matching public messages bind thread 01a0e7cb-ee33-7d23-989f-682b67a09c52 to this review. turn_context at 2026-09-28T11:35:02.104Z records model gpt-6-astra, effort xhigh and matching collaboration settings."
+    },
+    {
+      "id": "P3",
+      "surface": "Prerequisites",
+      "claim": "Read-only review, receipts only, no product or TODO mutation",
+      "status": "PASS",
+      "evidence": "Only review receipts authored; MCP calls limited to plugin trust/status and read-only TODO/requirements queries. No install, deployment, build, tests, product edits, TODO state change, or session-log write. Tool-managed caches/output files may be created by the runtime."
+    },
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "Draft exists and is suitable as copy-paste frontier-agent setup prompt",
+      "status": "FAIL",
+      "findings": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09"
+      ],
+      "evidence": "File exists and is explicitly DRAFT; suitability fails on reproducible source mismatches and gaps."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "Mandatory pre-obtain/install intake covers agents, process, storage, service",
+      "status": "PASS",
+      "evidence": "draft:15-19,35-72,226. All four axes and pre-action ordering are explicit."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "Concrete scenario handling for every intake axis",
+      "status": "FAIL",
+      "findings": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06"
+      ],
+      "evidence": "Some guidance exists, but several supported choices need undisclosed host/configuration/command decisions."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "Session-log exclusion plus usable post-intake artifact schemas",
+      "status": "FAIL",
+      "findings": [
+        "F06"
+      ],
+      "evidence": "Exclusion, filenames, paths, write-before-install and load rules PASS (draft:5,15-33,74-116). Bootstrap is a current no-op (SessionLogWorkflow.cs:74-86), not evidence of a log write. Combined claim FAILs on ambiguous artifact shapes/multi-agent mapping."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "claim": "Windows and Linux examples have comparable actionable depth",
+      "status": "FAIL",
+      "findings": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F07",
+        "F09"
+      ],
+      "evidence": "Both have obtain/configure/service/verify sections, so structural parity exists. Neither supplies a correct complete fresh-host installation recipe."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "claim": "Accurate refuse/redirect guidance for conflicts and unsupported combinations",
+      "status": "UNKNOWN",
+      "evidence": "draft:213-222 provides concrete OS/plugin/provider/secret redirects. No source evidence found for categorical SQLITE_MULTI_AGENT rejection. Multiple agents talking to one server is not itself proof of multiple independent SQLite writers; intended topology/load limits require clarification or evidence. No SQLite stress test executed."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "claim": "Clear honest verify/stop criteria and repository-matching commands",
+      "status": "FAIL",
+      "findings": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F08"
+      ],
+      "evidence": "Stop headings and criteria exist, but wrong commands and unspecified live comparisons defeat copy-paste verification."
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "claim": "No invented unsupported storage/service paths or plugin-hardcoded BDPv4",
+      "status": "FAIL",
+      "findings": [
+        "F02",
+        "F03",
+        "F04"
+      ],
+      "evidence": "All three DB providers exist (McpDatabaseProviderFactory.cs:11-20). BDPv4 is explicitly recorded/deferred and must not be hard-coded (draft:154-168), which PASSes. Service/config recipes do not match inspected implementation."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Prompt follows PowerShell-only/no-Python workspace guidance",
+      "status": "FAIL",
+      "findings": [
+        "F07"
+      ],
+      "evidence": "No-Python text PASSes, but PowerShell-only guidance fails. Review execution used pwsh.exe and no Python."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "No secrets in manifest/plan and no private profile publication",
+      "status": "PASS",
+      "evidence": "draft:23,54-62,92-94,222,267,296,554 prohibits secrets/private profiles; inspected template contains placeholders, not credentials. Receipt stream redacts private profile material and marker credentials."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "Host-matched plugin invoke rather than raw REST by default",
+      "status": "PASS",
+      "evidence": "draft:21,128-144,132,273,427-440,556-568 prefers host plugin; any REST fallback requires explicit operator approval. Do not interpret that as pre-authorizing a bypass of workspace rules."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "Discover FR/TR and assess draft versus production-ready requirement status",
+      "status": "PASS",
+      "evidence": "Live TODO has empty FR/TR links. Effective layer-1 query returned 341 FR, 465 TR, 495 TEST; full FR/TR queries returned 341/465, zero setup-specific matches. Export searches likewise found none. Draft labeling is acceptable; no production-ready or completed implementation acceptance is granted."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "Holistic TODO remains open until inventory, refinements and two dry-runs",
+      "status": "PASS",
+      "evidence": "workflow.todo.get req-20260928T114019Z-d717: done=false; inventory and Legion two-variant dry-run tasks false; remaining explicitly requires concrete install commands. Eight other task checkboxes are draft progress, not independent proof of validated quality. draft:312 requires revision after dry-runs. No TODO update made."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F01",
+      "severity": "high",
+      "title": "Wrong NuGet package in both obtain examples",
+      "claims": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "evidence": [
+        "draft:345",
+        "draft:489",
+        "src/McpServer.Repl.Host/McpServer.Repl.Host.csproj:12-13",
+        "README.md:79-84"
+      ],
+      "observation": "Both examples install -g mcpserver-repl. The repo defines ToolCommandName=mcpserver-repl and PackageId=SharpNinja.McpServer.Repl. The executable name is not this product package ID.",
+      "impact": "A fresh agent cannot obtain the intended REPL from the provided install command.",
+      "remediation": "Use the repository-supported InstallReplTool target or the verified SharpNinja.McpServer.Repl package with a compatible .NET/version/source policy."
+    },
+    {
+      "id": "F02",
+      "severity": "high",
+      "title": "Windows service recipe bypasses the approved deployment path",
+      "claims": [
+        "A1",
+        "A3",
+        "A5",
+        "A7",
+        "A8"
+      ],
+      "evidence": [
+        "draft:195-198",
+        "draft:239-248",
+        "draft:513-530",
+        "draft:536",
+        "build/Build.UpdateService.cs:11-24,35-40,158-178",
+        "src/McpServer.Support.Mcp/Program.cs:97,1122-1130",
+        "src/McpServer.Support.Mcp/Services/WindowsServiceDeploymentGuard.cs:18-44",
+        "README.md:170"
+      ],
+      "observation": "The concrete example creates/starts a service using publish/McpServer.exe. The actual binary is McpServer.Support.Mcp.exe. Windows service startup enforces appsettings.yaml plus an approved deployment manifest and executable hashes. sc.exe alone does not produce those. Nuke is only preferred in the draft although repository policy requires it. Install examples also start before Phase 3 storage configuration.",
+      "impact": "Even correcting the executable name leaves a service rejected by the deployment guard; configuration/order and rollback are unresolved.",
+      "remediation": "Inventory and document the supported elevated ./build.ps1 UpdateService path, real parameters and generated manifest, approved configuration staging before startup, and rollback. Do not offer raw sc.exe as the normal alternative."
+    },
+    {
+      "id": "F03",
+      "severity": "high",
+      "title": "Linux systemd unit is incompatible with the inspected server",
+      "claims": [
+        "A1",
+        "A3",
+        "A5",
+        "A7",
+        "A8"
+      ],
+      "evidence": [
+        "draft:360-361",
+        "draft:367-398",
+        "src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj:1-29",
+        "src/McpServer.Support.Mcp/Program.cs:96-112",
+        "rg -n Systemd|sd_notify|NOTIFY_SOCKET src --glob *.cs --glob *.csproj: no matches, exit 1"
+      ],
+      "observation": "The unit uses Type=notify without repository notification wiring, ExecStart targets publish/McpServer.dll instead of McpServer.Support.Mcp.dll, and User/Group=mcpserver are used without an account-creation step. There is no exact publish/config-copy recipe. Illustrative/adjust comments do not make this actionable.",
+      "impact": "A fresh installation can fail on missing user/binary; even after those edits, notify readiness is unsubstantiated and likely times out. This is a static finding, not an executed Linux failure.",
+      "remediation": "Provide a tested repository-specific publish/service recipe with the actual assembly, service account/permissions/config layout, and a service type supported by the application; otherwise explicitly block that branch pending validation."
+    },
+    {
+      "id": "F04",
+      "severity": "high",
+      "title": "Storage playbooks omit actual provider configuration and mislead on SQL Server key",
+      "claims": [
+        "A1",
+        "A3",
+        "A5",
+        "A7",
+        "A8"
+      ],
+      "evidence": [
+        "draft:174-189",
+        "draft:245-247",
+        "draft:423-424",
+        "draft:554",
+        "src/McpServer.Support.Mcp/appsettings.yaml:46-75",
+        "src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:77-87,96-168"
+      ],
+      "observation": "No playbook maps the chosen provider to Mcp:Database:Provider and its provider-specific connection settings. The generic Windows reference env:ConnectionStrings__Mcp is a PostgreSQL fallback; SQL Server resolves ConnectionStrings:McpSqlServer or its explicit SqlServer keys. A connection secret alone does not select the provider, and defaults select SQLite.",
+      "impact": "An agent can leave the default provider active or use the wrong connection key while read-only smoke calls succeed.",
+      "remediation": "Supply non-secret per-provider mappings, supported configuration precedence, secret binding under the actual service identity, startup migration behavior, and a live provider/database identity check."
+    },
+    {
+      "id": "F05",
+      "severity": "medium",
+      "title": "Several selected agent families have no executable playbook",
+      "claims": [
+        "A1",
+        "A3"
+      ],
+      "evidence": [
+        "draft:41-42",
+        "draft:126-150",
+        "AGENTS-README-FIRST.yaml:78-190,203-204,245-260"
+      ],
+      "observation": "Claude Code/Cowork/Cline/Copilot/OpenCode are collapsed into clone the matching repo if present. Cursor/other are intake options without a matching playbook or explicit unsupported disposition. The prompt does not supply exact acquisition sources, activation/hook checks or per-host invoke procedures for those choices, and accepts preferred identities without pinning truthful host identity.",
+      "impact": "A fresh frontier agent must invent host integration decisions and cannot consistently verify all selected agents.",
+      "remediation": "Inventory supported hosts; document verified acquisition, canonical identity, activation and smoke steps per family, with an explicit stop/redirect for unsupported families."
+    },
+    {
+      "id": "F06",
+      "severity": "medium",
+      "title": "Manifest and plan cannot unambiguously round-trip multi-agent and host choices",
+      "claims": [
+        "A1",
+        "A3",
+        "A4"
+      ],
+      "evidence": [
+        "draft:41",
+        "draft:63-70",
+        "draft:74-116",
+        "draft:122",
+        "draft:146-150",
+        "draft:448",
+        "draft:578"
+      ],
+      "observation": "Intake is multi-select but playbooks.agent is one scalar and instructions require exactly one playbook per axis; agent-multi does not identify each selected family playbook. Host OS is inferred from service kind, which is ambiguous for other, and has no defined typed field. Examples reference a port from the manifest with no port field. Storage/service details are untyped empty objects and the plan has only a prose outline, no worked populated branch/evidence example.",
+      "impact": "Later steps cannot reliably load a complete and consistent choice-to-command mapping without adding unstated conventions.",
+      "remediation": "Define per-agent playbook IDs plus combination guidance, explicit host/port/version and conditional storage/service fields, and a populated plan showing deterministic statuses, evidence, verification and remediation."
+    },
+    {
+      "id": "F07",
+      "severity": "high",
+      "title": "Prompt violates the requested PowerShell-only operating rule",
+      "claims": [
+        "B1",
+        "A1",
+        "A5"
+      ],
+      "evidence": [
+        "draft:20",
+        "draft:232",
+        "draft:328-354",
+        "draft:392-448",
+        "AGENTS.md:21",
+        "AGENTS-README-FIRST.yaml:252-266",
+        ".github/copilot-instructions.md:15"
+      ],
+      "observation": "PowerShell is merely preferred; bash is explicitly allowed for ordinary apt/systemd/journalctl operations and used throughout Linux examples. PowerShell.MCP routing is absent. The live TODO wording allows shell equivalents, but this review brief explicitly requires PowerShell-only guidance and current workspace rules require it.",
+      "impact": "An agent following the prompt violates the active shell/tool contract.",
+      "remediation": "Use PowerShell 7 and PowerShell.MCP for normal Windows and Linux automation, including invoking native Linux utilities; retain only the explicitly allowed pre-PowerShell installation exception."
+    },
+    {
+      "id": "F08",
+      "severity": "high",
+      "title": "Verification does not specify how to prove the selected deployment",
+      "claims": [
+        "A1",
+        "A7"
+      ],
+      "evidence": [
+        "draft:251-275",
+        "draft:442-449",
+        "draft:571-585",
+        "src/McpServer.Repl.Core/SessionLogWorkflow.cs:74-86",
+        "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs:9-14"
+      ],
+      "observation": "The prompt says assert workspace/identity/storage/service match, but gives no concrete evidence source/comparison for those assertions, selected build or every agent. Read-only todo/memory success plus Running does not prove the desired DB/provider or a newly installed target; bootstrap is a verified no-op. Listener examples inspect the fixed default port and Linux masks listener failure with || true. Trust verification and actionable rollback/retry detail are missing.",
+      "impact": "A wrong provider, stale workspace/endpoint or only one working agent can produce the stated smoke receipts. Completion depends on invented checks.",
+      "remediation": "Specify trusted marker/nonce verification and per-selected-agent checks against the exact endpoint, resolved provider/database/workspace and service executable/config; make expected evidence and fail-closed comparisons explicit, with bounded remediation."
+    },
+    {
+      "id": "F09",
+      "severity": "high",
+      "title": "Linux example changes ownership outside the chosen installation",
+      "claims": [
+        "A1",
+        "A5"
+      ],
+      "evidence": [
+        "draft:339-342"
+      ],
+      "observation": "sudo chown \"$USER:$USER\" /opt changes ownership of the shared /opt directory, not just the selected McpServer/plugin directories.",
+      "impact": "A setup run unnecessarily grants the operator ownership of a global installation directory and affects unrelated software.",
+      "remediation": "Create and grant ownership only on the approved dedicated installation directories; do not chown /opt itself."
+    }
+  ],
+  "Unknowns": [
+    {
+      "id": "U01",
+      "claim": "A6",
+      "description": "The SQLite multi-agent prohibition is not substantiated by repository evidence inspected. Supported topology/load limits and concurrency behavior were not tested."
+    }
+  ],
+  "Validation": {
+    "performed": [
+      "Read entire 586-line draft with source anchors",
+      "Read 19 profile files in full after mandatory skill",
+      "Live recorded model/effort verification",
+      "Source inspection of package, Windows deploy guard, DB provider resolver, systemd wiring search, bootstrap no-op",
+      "Trusted host-matched plugin read-only TODO/requirements queries",
+      "SHA-256 before/after and tracked git diff"
+    ],
+    "notPerformed": [
+      "No dependency install, service change, deployment, dry-run, build, unit/integration tests or SQLite concurrency stress test"
+    ],
+    "rationale": "Documentation-only hostile review; executing install snippets would violate the read-only product scope. Static source mismatches are sufficient to reject suitability.",
+    "errorsRecovered": [
+      "Initial exec_command could not launch sandbox helper: os error 206; switched to existing PowerShell MCP",
+      "Large tool outputs were truncated; profile/draft reads retried in bounded ranges",
+      "ReadLines could not open live rollout; used read-only FileShare.ReadWrite",
+      "One PowerShell console-start attempt failed; existing console recovered by get_current_location"
+    ],
+    "existingPluginStatus": "available; pre-existing failsafeCount=14. No queue drain, repair or attribution to this draft."
+  },
+  "Scope": {
+    "authoredPaths": [
+      "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-draft-20260928T113325Z.md",
+      "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-draft-20260928T113325Z.json",
+      "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T113325Z-setupprompt-draft.response.jsonl"
+    ],
+    "noProductChanges": true,
+    "noTodoChanges": true,
+    "noRequirementChanges": true,
+    "noSessionLogWrites": true,
+    "sessionLogException": "Latest user instruction explicitly limits writes to HV receipts. This overrides standing skill/profile instructions to create a reviewer MCP turn. No sessionId/turn persistence is claimed; live Codex thread/turn IDs above are not MCP log IDs.",
+    "otherEffects": "PowerShell/plugin runtime may write its normal caches or bounded-output capture files. No product mutation commands were issued."
+  },
+  "PublicStream": {
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T113325Z-setupprompt-draft.response.jsonl",
+    "format": "Native-object JSONL of public assistant commentary and tool events through stated cutoff, followed by complete review verdict and receipt body",
+    "redactions": "Private profile/memory reads and marker-containing tool batches are redacted; marker credential values scrubbed. Hidden reasoning/system/developer content excluded.",
+    "limitation": "Sanitized public review stream, not a claim of a byte-identical private launcher transcript; excludes future transport events after capture.",
+    "captureCutoffUtc": "2026-09-28T11:50:38.7195393Z"
+  },
+  "Paths": {
+    "requestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T113325Z-setupprompt-draft.request.jsonl",
+    "responseJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20260928T113325Z-setupprompt-draft.response.jsonl",
+    "markdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-draft-20260928T113325Z.md",
+    "json": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\hostile-validator-setupprompt-draft-20260928T113325Z.json"
+  },
+  "Decision": "Retain DRAFT and MCP-SETUPPROMPT-001 open. Correct the listed defects, finish inventory and dry-runs, establish requirement/acceptance mappings before any production-ready claim, and obtain a new independent review."
+}

@@ -73,12 +73,12 @@ public sealed class TodoDocumentMetadata_CompositePkTests
 
         ctx.TodoDocumentMetadata.Add(new TodoDocumentMetadataEntity
         {
-            WorkspaceId = "F:\\GitHub\\A",
+            WorkspaceId = "Q:\\__mcp_unit_test__\\A",
             SingletonId = 1,
         });
         ctx.TodoDocumentMetadata.Add(new TodoDocumentMetadataEntity
         {
-            WorkspaceId = "F:\\GitHub\\B",
+            WorkspaceId = "Q:\\__mcp_unit_test__\\B",
             SingletonId = 1,
         });
         ctx.SaveChanges();

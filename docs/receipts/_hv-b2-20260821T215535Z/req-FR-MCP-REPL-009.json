@@ -1,0 +1,38 @@
+{
+  "id": "FR-MCP-REPL-009",
+  "title": "Degraded session-log persistence isolation",
+  "body": "The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.",
+  "workspaceId": "F:\\GitHub\\McpServer",
+  "priority": "critical",
+  "status": "pending",
+  "notes": null,
+  "acceptanceCriteria": [
+    {
+      "id": "FR-MCP-REPL-009-AC001",
+      "text": "Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC002",
+      "text": "The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC003",
+      "text": "completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC004",
+      "text": "Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.",
+      "isSatisfied": false,
+      "evidence": null
+    }
+  ],
+  "scopeStartLayerKey": "layer-1",
+  "scopeEndLayerKey": null,
+  "linkedUseCases": []
+}

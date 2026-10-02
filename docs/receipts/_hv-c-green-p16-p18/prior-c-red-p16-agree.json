@@ -1,0 +1,14 @@
+{
+  "MdExists": true,
+  "MdLastWriteTimeUtc": "2026-08-22T07:37:37.1953111Z",
+  "MdHasAgree": true,
+  "MdHasDisagree": false,
+  "JsonExists": true,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0,
+  "JsonPhase": "C-red-P16",
+  "FilterTrxFailed": "8",
+  "FilterTrxPassed": "0",
+  "EvaluateAsyncImplemented": false,
+  "P17NamedTestsPresent": false
+}

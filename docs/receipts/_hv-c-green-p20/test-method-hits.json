@@ -1,0 +1,8 @@
+{
+  "harnessMethod": true,
+  "promotionMethod": true,
+  "factCount": 2,
+  "skipFactCount": 0,
+  "theoryCount": 0,
+  "ignoreCount": 0
+}

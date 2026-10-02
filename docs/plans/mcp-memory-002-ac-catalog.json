@@ -1,0 +1,1986 @@
+{
+  "total": 283,
+  "acceptanceCriteria": [
+    {
+      "id": "AC-FR-MCP-MEMORY-010-01",
+      "stmt": "memory_remember with valid payload returns 200/201 and a MEMORY-* id.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRememberTests.Remember_ValidPayload_ReturnsMemoryId",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-02",
+      "stmt": "Persisted row includes Title, optional Summary, Content, Type in {fact,decision,preference,procedure,entity,other}, Tags, Confidence in [0,1], optional SourceKind/SourceRef.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.PersistsMultiLayerFields",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-03",
+      "stmt": "Effective list order remains Global then Workspace for the calling workspace.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryListEffectiveTests.OrdersGlobalThenWorkspace",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-04",
+      "stmt": "Compat memory_add|list|update|remove still works for pre-migration rows (legacy text mapped to Content).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryCompatCrudTests.LegacyRows_ListUpdateRemove_StillWork",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-05",
+      "stmt": "Existing secrets/policy rejection behavior is unchanged (no weaker policy).",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryPolicyTests.SecretsPolicy_Unchanged",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-06",
+      "stmt": "Soft-deleted memories are omitted from default list and recall.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryListEffectiveTests.OmitsSoftDeleted",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-07",
+      "stmt": "Null request body on remember/add returns 400 with validation FailureKind.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRememberTests.NullBody_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-08",
+      "stmt": "Empty Content (and empty legacy text) returns 400 validation.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.EmptyContent_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-09",
+      "stmt": "Whitespace-only Content returns 400 validation.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.WhitespaceOnlyContent_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-10",
+      "stmt": "Content with internal newlines and punctuation round-trips exactly.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.NewlinesPunctuation_RoundTripExact",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-11",
+      "stmt": "Unicode (BMP + supplementary plane emoji) in Title/Content round-trips exactly.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.Unicode_RoundTripExact",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-12",
+      "stmt": "Invalid Type enum value returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.InvalidType_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-13",
+      "stmt": "Confidence < 0 returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.ConfidenceBelowZero_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-14",
+      "stmt": "Confidence > 1 returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.ConfidenceAboveOne_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-15",
+      "stmt": "Confidence omitted defaults to a documented value in [0,1].",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.ConfidenceOmitted_UsesDefault",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-16",
+      "stmt": "Tags empty array is accepted; null Tags treated as empty.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.NullOrEmptyTags_Accepted",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-17",
+      "stmt": "Duplicate tag values are de-duplicated or rejected consistently (documented); behavior is stable across REST and MCP.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.DuplicateTags_StableBehavior",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-18",
+      "stmt": "Tag longer than configured max length returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.TagTooLong_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-19",
+      "stmt": "Title longer than configured max length returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.TitleTooLong_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-20",
+      "stmt": "Content longer than configured max length returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.ContentTooLong_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-21",
+      "stmt": "Explicit client-supplied MEMORY-* id that already exists as active returns 409 Conflict.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRememberTests.DuplicateActiveId_Returns409",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-22",
+      "stmt": "Invalid MEMORY-* id format when client-supplied returns 400.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRememberTests.InvalidIdFormat_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-23",
+      "stmt": "Default scope when omitted is Workspace.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.DefaultScope_IsWorkspace",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-24",
+      "stmt": "Scope=Global stores without owning workspace stamp; visible to all workspaces.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.GlobalScope_VisibleEverywhere",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-25",
+      "stmt": "Workspace-scoped memory is invisible to a different workspace get/list/recall.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryIsolationTests.WorkspaceMemory_HiddenFromOtherWorkspace",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-26",
+      "stmt": "Read-only API key cannot remember/add/update/remove (403 or documented read-only failure).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.ReadOnlyKey_CannotMutate",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-27",
+      "stmt": "Full-access key can mutate; get after add returns the same id and Content.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.FullKey_MutateThenGet",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-28",
+      "stmt": "Get unknown id returns 404.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryGetTests.UnknownId_Returns404",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-29",
+      "stmt": "Get soft-deleted id returns 404 (not the tombstone payload) for normal callers.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryGetTests.SoftDeleted_Returns404",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-30",
+      "stmt": "Update unknown id returns 404.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryUpdateTests.UnknownId_Returns404",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-31",
+      "stmt": "Remove unknown id returns 404.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRemoveTests.UnknownId_Returns404",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-32",
+      "stmt": "Remove is idempotent for already soft-deleted: second remove returns 404 or documented no-op success consistently.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryRemoveTests.SecondRemove_StableBehavior",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-33",
+      "stmt": "Update can change Scope Global\u2194Workspace under validated rules; invalid transition returns 400.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.ScopeTransition_Validated",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-34",
+      "stmt": "Within each scope group, list sorts by Id ascending (ordinal).",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryListEffectiveTests.WithinScope_SortsByIdOrdinal",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-35",
+      "stmt": "CreatedAt/UpdatedAt are set on create; UpdatedAt advances on content update; CreatedAt is stable.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.Timestamps_CreateAndUpdate",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-36",
+      "stmt": "Author/updatedBy attribution is recorded on create and update.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.Attribution_Recorded",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-37",
+      "stmt": "Mutating remember/add/update/remove appends a sessionlog action when a turn is open (or documents no-turn behavior).",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemorySessionLogTests.Mutations_AppendActionWhenTurnOpen",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-38",
+      "stmt": "Transaction gating: mutation without required turn transaction fails closed per host policy.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryTxnTests.MissingTurn_FailsClosed",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-39",
+      "stmt": "Partial update: omitted optional Summary does not clear existing Summary unless explicit null/clear is defined.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryModelTests.PartialUpdate_DoesNotClearSummary",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-40",
+      "stmt": "Category (legacy) still accepted and round-trips; maps into Type or preserved field per docs.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryCompatCrudTests.LegacyCategory_RoundTrips",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-41",
+      "stmt": "Keyword list filter (compat) is case-insensitive substring over Content/Title.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryListEffectiveTests.KeywordFilter_CaseInsensitive",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-42",
+      "stmt": "Concurrent updates to same id: last-write-wins or version conflict is documented and stable (409 on stale base version if optimistic).",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryConcurrencyTests.ConcurrentUpdate_DocumentedSemantics",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-43",
+      "stmt": "CancellationToken mid-write does not leave a half-written active row observable via get/list.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryConcurrencyTests.CancelMidWrite_NoPartialVisible",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-44",
+      "stmt": "REQUIRED MEMORIES injection still uses Content (or legacy text) raw; Summary/confidence/tags never appear in the injected block.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryInjectionTests.RequiredBlock_RawContentOnly",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-45",
+      "stmt": "Empty Effective set still renders REQUIRED MEMORIES / - None contract unchanged.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryInjectionTests.EmptySet_RendersNone",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-46",
+      "stmt": "Product membership does not auto-share memories across member workspaces.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryIsolationTests.ProductMembership_DoesNotShareMemories",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-47",
+      "stmt": "memory_list with invalid scope query returns 400.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryListTests.InvalidScopeQuery_Returns400",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-010-48",
+      "stmt": "Remember via MCP tool and REST produce equivalent stored fields for the same payload.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemorySurfaceParityTests.McpAndRest_EquivalentStore",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-01",
+      "stmt": "Empty query returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.EmptyQuery_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-02",
+      "stmt": "Whitespace-only query returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.WhitespaceQuery_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-03",
+      "stmt": "Null query returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.NullQuery_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-04",
+      "stmt": "Seeded fixture: exact token query returns target in top-N with score \u2265 minScore.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.ExactToken_ReturnsTargetInTopN",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-05",
+      "stmt": "Seeded fixture: paraphrase/semantic query returns target in top-N with score \u2265 minScore.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.Paraphrase_ReturnsTargetInTopN",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-06",
+      "stmt": "Tag filter excludes non-matching tags.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TagFilter_ExcludesOthers",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-07",
+      "stmt": "Type filter excludes non-matching types.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TypeFilter_ExcludesOthers",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-08",
+      "stmt": "Scope filter honors Global vs Workspace visibility.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.ScopeFilter_HonorsVisibility",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-09",
+      "stmt": "No matches returns 200 with empty items (not 404).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.NoMatches_ReturnsEmpty200",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-10",
+      "stmt": "Soft-deleted memories never appear in recall results.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.SoftDeleted_NeverReturned",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-11",
+      "stmt": "Other-workspace Workspace memories never appear in recall.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.ForeignWorkspace_NeverReturned",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-12",
+      "stmt": "Global memories can appear in recall for any workspace.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.Global_VisibleToAllWorkspaces",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-13",
+      "stmt": "minScore=0 includes all scored hits up to topN.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.MinScoreZero_IncludesAllHits",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-14",
+      "stmt": "minScore=1 returns only perfect-score hits (or empty).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.MinScoreOne_OnlyPerfect",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-15",
+      "stmt": "minScore < 0 or > 1 returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.MinScoreOutOfRange_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-16",
+      "stmt": "topN omitted uses documented default.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TopNOmitted_UsesDefault",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-17",
+      "stmt": "topN=0 or negative returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TopNNonPositive_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-18",
+      "stmt": "topN above configured max is clamped or 400 (documented); behavior stable.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TopNAboveMax_StableBehavior",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-19",
+      "stmt": "Results are ordered by descending score; ties broken by Id ascending.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.OrderedByScoreThenId",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-20",
+      "stmt": "Each hit includes id, score, and enough fields to open the memory without a second round-trip (id minimum).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.HitIncludesIdAndScore",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-21",
+      "stmt": "Query longer than configured max returns 400.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.QueryTooLong_Returns400",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-22",
+      "stmt": "Combined tag+type+scope filters AND together.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.CombinedFilters_AndSemantics",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-23",
+      "stmt": "Unindexed (EmbeddingStatus pending/failed) memories are excluded from vector path but may still BM25-match if FTS ready; documented.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.Unindexed_DocumentedBehavior",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-24",
+      "stmt": "After content update, recall eventually reflects new content (index refresh within documented bound or sync in test host).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.AfterUpdate_IndexReflectsNewContent",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-25",
+      "stmt": "Recall does not return memories from sessionlog; only Memory store.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.DoesNotSearchSessionLog",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-26",
+      "stmt": "Read-only API key may recall/list.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.ReadOnlyKey_CanRecall",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-27",
+      "stmt": "Unicode query tokens match unicode Content.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.UnicodeQuery_MatchesContent",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-011-28",
+      "stmt": "Identical scores: deterministic ordering across two consecutive recalls.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.TieBreak_Deterministic",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-01",
+      "stmt": "Given explicit edge A\u2192B, explore(A) includes B with weight and EdgeType.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.ExplicitEdge_ReturnedWithWeight",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-02",
+      "stmt": "With Hebbian Enabled=false (default), explore never returns co-retrieved-only edges.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.HebbianOff_NoCoRetrievedOnlyEdges",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-03",
+      "stmt": "With Hebbian enabled, co-retrieval can create/strengthen co-retrieved edges without changing recall ranking path.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.HebbianOn_StrengthensCoRetrieved",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-04",
+      "stmt": "Unknown seed memory id returns 404.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.UnknownSeed_Returns404",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-05",
+      "stmt": "Explore results confined to caller workspace Effective set (no cross-workspace leakage).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.NoCrossWorkspaceLeakage",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-06",
+      "stmt": "Soft-deleted seed returns 404.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.SoftDeletedSeed_Returns404",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-07",
+      "stmt": "Soft-deleted neighbor is omitted from explore results.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.SoftDeletedNeighbor_Omitted",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-08",
+      "stmt": "depth=1 returns only direct neighbors; depth>1 returns transitive up to depth (capped).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.Depth_ControlsHops",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-09",
+      "stmt": "depth=0 or negative returns 400.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.DepthNonPositive_Returns400",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-10",
+      "stmt": "depth above max returns 400 or clamps (documented).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.DepthAboveMax_StableBehavior",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-11",
+      "stmt": "Self-loop edges are rejected on create (400) or never returned.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.SelfLoop_RejectedOrAbsent",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-12",
+      "stmt": "Duplicate explicit edge (same From,To,EdgeType) is idempotent upsert or 409 (documented).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryEdgeTests.DuplicateExplicit_StableBehavior",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-13",
+      "stmt": "Explore with query seed (no id) returns neighborhood around top recall hit or documented empty.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.QuerySeed_UsesTopRecallOrEmpty",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-14",
+      "stmt": "Edge weight outside allowed range rejected on create.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryEdgeTests.WeightOutOfRange_Returns400",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-15",
+      "stmt": "Invalid EdgeType rejected on create.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryEdgeTests.InvalidEdgeType_Returns400",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-16",
+      "stmt": "Hebbian off\u2192on\u2192off: while off, explore ignores previously created co-retrieved edges unless explicitly kept (documented).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.HebbianToggle_DocumentedVisibility",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-17",
+      "stmt": "Explore does not mutate memories' Content.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.DoesNotMutateContent",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-18",
+      "stmt": "Bidirectional: A\u2192B does not imply B\u2192A unless a reverse edge exists.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.Directed_NoImpliedReverse",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-19",
+      "stmt": "maxNeighbors truncates result set; stable order by weight desc then id.",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryExploreTests.MaxNeighbors_TruncatesStable",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-012-20",
+      "stmt": "Creating edge to foreign-workspace memory id fails closed (400/403/404).",
+      "test": "TEST-MCP-MEMORY-012",
+      "method": "MemoryEdgeTests.ForeignTarget_FailsClosed",
+      "slice": "S3"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-01",
+      "stmt": "dry-run=true returns a merge plan and writes zero row mutations.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.DryRun_NoMutations",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-02",
+      "stmt": "dry-run=false on two near-duplicate facts leaves exactly one surviving MEMORY-* with lineage via versions/edges.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.WriteMode_MergesNearDuplicates",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-03",
+      "stmt": "Consolidate never hard-deletes unless AllowHardDelete (or equivalent) is true.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.HardDelete_OnlyWhenConfigured",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-04",
+      "stmt": "Per-workspace lock: concurrent consolidate returns busy/conflict without corrupting rows.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.LockContention_BusyError",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-05",
+      "stmt": "Successful write-mode consolidate emits SSE memory.consolidated (or documented event).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.EmitsConsolidatedEvent",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-06",
+      "stmt": "dry-run is the default when the flag is omitted.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.DryRunDefaultTrue",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-07",
+      "stmt": "Empty workspace (no memories) dry-run returns empty plan 200.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.EmptyWorkspace_EmptyPlan",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-08",
+      "stmt": "Single memory dry-run returns empty merge plan (nothing to merge).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.SingleMemory_NoMerge",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-09",
+      "stmt": "Three near-duplicates collapse to one survivor in write mode.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.ThreeWay_CollapsesToOne",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-10",
+      "stmt": "Survivor Content/Summary is non-empty after merge.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.Survivor_NonEmptyContent",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-11",
+      "stmt": "Merged-away ids become soft-deleted (or redirected) and disappear from default list/recall.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.MergedAway_HiddenFromListRecall",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-12",
+      "stmt": "Get on merged-away id returns 404 or redirect payload per docs (stable).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.GetMergedAway_StableBehavior",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-13",
+      "stmt": "Consolidate never merges across workspaces.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.NeverMergesAcrossWorkspaces",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-14",
+      "stmt": "Consolidate never merges Global into Workspace-owned without explicit policy (default: only same-scope pairs).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.SameScopeOnly_ByDefault",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-15",
+      "stmt": "Decay: low-confidence stale items are flagged/decayed per policy without unauthorized hard-delete.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.Decay_FlagsWithoutHardDelete",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-16",
+      "stmt": "Read-only API key cannot run write-mode consolidate.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.ReadOnlyKey_CannotConsolidateWrite",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-17",
+      "stmt": "Plan items include candidate ids and similarity score.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.PlanItems_IncludeIdsAndScore",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-18",
+      "stmt": "Similarity threshold below 0 or above 1 returns 400.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.ThresholdOutOfRange_Returns400",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-19",
+      "stmt": "Cancel during write-mode leaves store consistent (no half-merged graph).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.CancelMidRun_ConsistentStore",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-013-20",
+      "stmt": "After merge, explore edges are rewired to survivor or documented equivalent.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateTests.Edges_RewiredToSurvivor",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-01",
+      "stmt": "Updating Content increments VersionNumber and stores a snapshot.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.Update_AppendsVersion",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-02",
+      "stmt": "GET versions returns versions ordered ascending by VersionNumber.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.List_OrderedAscending",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-03",
+      "stmt": "Revert to N restores Content (and declared mutable fields) to snapshot N.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.Revert_RestoresSnapshot",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-04",
+      "stmt": "Revert itself appends a new version (history preserved).",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.Revert_AppendsNewVersion",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-05",
+      "stmt": "Revert to missing N returns 400/404.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.RevertMissing_Returns400Or404",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-06",
+      "stmt": "Initial create yields VersionNumber=1 (or documented initial).",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.Create_InitialVersion",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-07",
+      "stmt": "Update that does not change Content does not append a duplicate version (or appends no-op per docs).",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.NoOpUpdate_VersionPolicy",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-08",
+      "stmt": "Versions for soft-deleted memory are not listed to normal callers (404 on parent).",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.SoftDeletedParent_VersionsHidden",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-09",
+      "stmt": "Foreign-workspace cannot list versions of a Workspace memory.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.ForeignWorkspace_CannotListVersions",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-10",
+      "stmt": "Revert to current N is idempotent content-wise and still appends or no-ops per docs.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.RevertToCurrent_Stable",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-11",
+      "stmt": "Version snapshot includes Content and Title at minimum.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.Snapshot_IncludesContentAndTitle",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-12",
+      "stmt": "Version list pagination (if any) is stable; without pagination returns full history up to configured cap.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.List_PaginationOrFullCap",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-13",
+      "stmt": "Read-only key can list versions but cannot revert.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.ReadOnlyKey_CanListVersionsNotRevert",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-14",
+      "stmt": "After revert, recall/index refresh reflects reverted Content.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.AfterRevert_IndexReflectsContent",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-014-15",
+      "stmt": "Version numbers are contiguous positive integers with no gaps after successful updates.",
+      "test": "TEST-MCP-MEMORY-014",
+      "method": "MemoryVersionTests.VersionNumbers_Contiguous",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-01",
+      "stmt": "Promote from sessionlog action/dialog creates memory with SourceKind=sessionlog and SourceRef set.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.FromSessionLog_SetsProvenance",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-02",
+      "stmt": "Promote from context chunk creates memory with SourceKind=context and SourceRef set.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.FromContext_SetsProvenance",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-03",
+      "stmt": "After promote, referenced sessionlog rows are byte-identical (no silent rewrite).",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.SessionLogRows_Unchanged",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-04",
+      "stmt": "Missing/invalid source ref returns 400.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.InvalidRef_Returns400",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-05",
+      "stmt": "Promoting a source from another workspace returns 403/404.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.CrossWorkspace_Forbidden",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-06",
+      "stmt": "Null body returns 400.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.NullBody_Returns400",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-07",
+      "stmt": "Unsupported SourceKind returns 400.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.UnsupportedSourceKind_Returns400",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-08",
+      "stmt": "Promote does not auto-run on sessionlog complete; only explicit promote API/tool.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.NoAutoPromote_OnTurnComplete",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-09",
+      "stmt": "Promoted Content is taken from source text without summarization unless caller supplies Summary.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.Content_FromSourceRaw",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-10",
+      "stmt": "Double promote of same SourceRef creates two memories or idempotent same id (documented); never corrupts source.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.DoublePromote_Stable",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-11",
+      "stmt": "Read-only key cannot promote.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryAuthTests.ReadOnlyKey_CannotPromote",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-12",
+      "stmt": "Promote result includes new MEMORY-* id and provenance fields.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.Result_IncludesIdAndProvenance",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-13",
+      "stmt": "Promote of deleted/missing session turn returns 404.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.MissingTurn_Returns404",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-015-14",
+      "stmt": "Context source promote does not copy sibling product-requirement chunks from other workspaces.",
+      "test": "TEST-MCP-MEMORY-015",
+      "method": "MemoryPromoteTests.ContextPromote_NoSiblingLeak",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-01",
+      "stmt": "Search UI lists only active-workspace Effective memories.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.Search_OnlyActiveWorkspace",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-02",
+      "stmt": "Edit persists via the same CQRS update path as REST.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.Edit_UsesSameCqrsPath",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-03",
+      "stmt": "Version view lists ordered versions; revert completes in \u22643 UI actions.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.Revert_WithinThreeActions",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-04",
+      "stmt": "Opening another workspace's memory id fails closed.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.ForeignMemory_FailClosed",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-05",
+      "stmt": "Empty state shows a clear no-memories message (not a blank crash).",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.EmptyState_Message",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-06",
+      "stmt": "Search box with no hits shows empty results, not an error toast claiming server failure.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.NoHits_EmptyNotError",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-07",
+      "stmt": "Soft-deleted memories are not listed in the default UI view.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.SoftDeleted_NotListed",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-08",
+      "stmt": "Creating via UI requires non-empty Content; client-side or server 400 surfaced.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.CreateEmpty_Blocked",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-09",
+      "stmt": "UI does not display raw API keys or workspace secrets.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.NoSecretsInDom",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-10",
+      "stmt": "Recall/search from UI respects tag chips/filters when present.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.Filters_Respected",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-11",
+      "stmt": "Keyboard: Escape closes detail/version panel without navigation errors.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.Escape_ClosesPanel",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-016-12",
+      "stmt": "UI calls only /mcpserver/memory* REST (no direct DB, no undocumented admin routes).",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.CallsOnlyPublicRest",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-01",
+      "stmt": "New memory verbs appear in /mcpserver/tools search.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryToolsDiscoveryTests.NewVerbs_AppearInToolsSearch",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-02",
+      "stmt": "Committed .mcp.json / docs examples for /mcp-transport and STDIO include the new verbs.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryOnboardingDocsTests.Examples_ListNewVerbs",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-03",
+      "stmt": "Plugin sync order is **grok first**, then the remaining seven (claude-code, claude-cowork, cline, cline-v2, codex, copilot, opencode) only after Grok H7 value gate AGREE. Each plugin eventually exposes skill/descriptor/shim for new verbs; Grok is the pilot lane.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryPluginSyncTests.GrokFirst_ThenOthersAfterValueGate",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-04",
+      "stmt": "One-prompt give-yourself-memory sample exists in docs with real tool names.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryOnboardingDocsTests.GiveYourselfMemory_SampleExists",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-05",
+      "stmt": "Tool descriptions are agent-oriented (say when to remember vs recall vs promote) not only schema echoes.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryToolsDiscoveryTests.Descriptions_AgentOriented",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-06",
+      "stmt": "Compat verbs memory_add|list|update|remove remain listed alongside new verbs.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryToolsDiscoveryTests.CompatVerbs_StillListed",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-07",
+      "stmt": "Marker template MCP Memories section documents new verbs without removing old ones.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryOnboardingDocsTests.MarkerTemplate_DocumentsNewAndOld",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-08",
+      "stmt": "Plugin validation fails CI if a synced skill omits a required new verb (checklist/guard).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryPluginSyncTests.MissingVerb_FailsValidation",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-09",
+      "stmt": "STDIO and Streamable HTTP both advertise the same verb set for memory.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryToolsDiscoveryTests.StdioAndHttp_SameVerbSet",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-10",
+      "stmt": "REPL exposes typed methods for remember/recall/explore/consolidate/promote/revert.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryReplTests.TypedMethods_Present",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-11",
+      "stmt": "Invalid REPL memory method returns method-not-found envelope without crashing.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryReplTests.InvalidMethod_NoCrash",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-12",
+      "stmt": "S5 checklist receipt has an explicit pass/fail row for **grok** before other plugins are required; full eight-row checklist is required only after Grok value gate (H7a) AGREE.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryPluginSyncTests.ChecklistReceipt_GrokBeforeOthers",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-01",
+      "stmt": "Migrations apply cleanly on SQLite, PostgreSQL, and SQL Server test hosts.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.Applies_OnAllProviders",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-02",
+      "stmt": "Backfill sets Content from legacy text/guidance for all pre-existing rows.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.Backfill_ContentFromLegacyText",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-03",
+      "stmt": "Unique (FromMemoryId, ToMemoryId, EdgeType) enforced at DB layer.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryEdgeTests.UniqueFromToType_Enforced",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-04",
+      "stmt": "MemoryVersion table FK to Memory cascades or restricts per documented policy; orphan versions impossible.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.VersionFk_NoOrphans",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-05",
+      "stmt": "Soft-delete column/filter remains enforced by default queries.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.SoftDeleteFilter_Default",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-06",
+      "stmt": "Down migration (if supported) or forward-only policy is documented; test host can recreate schema.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.SchemaRecreate_Works",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-07",
+      "stmt": "Indexes exist for (WorkspaceId, Scope), EmbeddingStatus, and FTS/HNSW side tables as applicable.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.Indexes_Present",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-08",
+      "stmt": "Column lengths match validated max lengths in API (no silent truncate).",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.ColumnLengths_MatchValidation",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-09",
+      "stmt": "Provider-specific types (uuid/jsonb/nvarchar) do not break round-trip of Tags JSON/array.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.TagsRoundTrip_AllProviders",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-MODEL-002-10",
+      "stmt": "Audit/append-only expectations for versions hold under concurrent inserts.",
+      "test": "TEST-MCP-MEMORY-010",
+      "method": "MemoryMigrationTests.VersionInsert_ConcurrentSafe",
+      "slice": "S1"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-01",
+      "stmt": "Indexing a memory flips EmbeddingStatus to ready (or failed with reason).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.ReadyOrFailedStatus",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-02",
+      "stmt": "Startup/consolidate reconcile repairs stale EmbeddingStatus vs row hash.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.Reconcile_RepairsStale",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-03",
+      "stmt": "Fusion weights from config change fixture ordering in a documented way.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.FusionWeights_AffectOrdering",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-04",
+      "stmt": "Rerank remains off unless Mcp:Memory:Rerank:Enabled=true.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryRecallTests.Rerank_DefaultOff",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-05",
+      "stmt": "Failed embedding does not crash the host; memory remains listable via CRUD.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.FailedEmbed_StillListable",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-06",
+      "stmt": "Re-index after Content change updates vector/FTS; old vector not returned for obsolete text queries exclusively.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.Reindex_AfterContentChange",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-07",
+      "stmt": "HNSW/FTS side tables are workspace-safe (no cross-workspace ANN leakage).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.Ann_NoCrossWorkspaceLeak",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-08",
+      "stmt": "Indexer respects CancellationToken and leaves status failed/pending not half-ready.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.Cancel_LeavesSafeStatus",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-09",
+      "stmt": "Local ONNX path works without cloud credentials in test host.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.OnnxLocal_NoCloudRequired",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-10",
+      "stmt": "Cloud embedding path is opt-in and fails closed when disabled.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.CloudOptIn_FailsClosedWhenOff",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-11",
+      "stmt": "Empty Content cannot reach ready status (validation precedes index).",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.EmptyContent_NeverReady",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-SEARCH-002-12",
+      "stmt": "Batch index of N fixtures completes with all ready or explicit failures counted.",
+      "test": "TEST-MCP-MEMORY-011",
+      "method": "MemoryIndexerTests.BatchIndex_AllTerminal",
+      "slice": "S2"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-01",
+      "stmt": "Job respects per-workspace lock (GraphRAG-like).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.PerWorkspaceLock",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-02",
+      "stmt": "dry-run default is true unless explicitly overridden.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.DryRunDefaultTrue",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-03",
+      "stmt": "Event payload includes workspace id and consolidate run id.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.EventIncludesWorkspaceAndRunId",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-04",
+      "stmt": "Job can be disabled via config without affecting CRUD.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.Disabled_NoEffectOnCrud",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-05",
+      "stmt": "Overlapping scheduled ticks for same workspace do not double-apply merges.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.OverlappingTicks_NoDoubleApply",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-06",
+      "stmt": "Job logs structured start/end/error without writing secrets.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.Logs_NoSecrets",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-07",
+      "stmt": "Lock TTL/expiry recovers from crashed holder (documented test).",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.LockExpiry_Recovers",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-JOBS-002-08",
+      "stmt": "Stats endpoint reflects last run time and last dry-run vs write mode.",
+      "test": "TEST-MCP-MEMORY-013",
+      "method": "MemoryConsolidateJobTests.Stats_ReflectLastRun",
+      "slice": "S4"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-01",
+      "stmt": "Controllers/MCP/REPL/plugins/MemoryClient only dispatch CQRS handlers (no parallel domain service API).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryCqrsSurfaceTests.Adapters_DispatchHandlersOnly",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-02",
+      "stmt": "Error responses use existing envelope (type/title/status/detail pattern) for new endpoints.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryErrorEnvelopeTests.UsesStandardEnvelope",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-03",
+      "stmt": "Compat memory_add|list|update|remove remain registered.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryCompatCrudTests.ToolsStillRegistered",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-04",
+      "stmt": "OpenAPI/swagger lists new routes under /mcpserver/memory.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryOpenApiTests.NewRoutes_Listed",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-05",
+      "stmt": "MemoryClient methods mirror REST 1:1 for remember/recall/explore/consolidate/promote/revert/versions.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryClientTests.Methods_MirrorRest",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-06",
+      "stmt": "MCP tool input schemas reject unknown required-breaking fields per schema (additionalProperties policy documented).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryMcpSchemaTests.UnknownFields_Policy",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-07",
+      "stmt": "Optional context pack source memories is off unless requested; when on, only Effective memories of caller.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryContextSourceTests.MemoriesSource_OptInAndScoped",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-08",
+      "stmt": "SSE subscription for memory.* does not leak events across workspaces.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemorySseTests.NoCrossWorkspaceEvents",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-09",
+      "stmt": "All mutating new endpoints honor transaction gating consistently with CRUD.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryTxnTests.NewMutations_HonorGating",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-API-002-10",
+      "stmt": "Idempotency-Key header if supported is documented; if not supported, duplicate posts create duplicates predictably.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryApiIdempotencyTests.DocumentedBehavior",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-01",
+      "stmt": "UI is served at /memory/ from packaged static assets.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.ServedAtMemoryPath",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-02",
+      "stmt": "Deploy docs name Nuke UpdateService as the ship path.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiDeployDocsTests.NamesUpdateService",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-03",
+      "stmt": "UI calls only public REST memory endpoints (no direct DB).",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiTests.CallsOnlyPublicRest",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-04",
+      "stmt": "Static assets are included in publish output / Linux service package.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.Assets_InPublishOutput",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-05",
+      "stmt": "Deep link /memory/{id} opens detail or fails closed for unknown id.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.DeepLink_DetailOrFailClosed",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-06",
+      "stmt": "UI works behind the same API-key auth as other /mcpserver pages (or documented cookie bridge).",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.Auth_SameAsMcpserver",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-07",
+      "stmt": "Content-Security / no inline-eval policy matches sibling static UIs (Use Case Manager pattern).",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.Csp_MatchesSiblingUis",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-UI-002-08",
+      "stmt": "404 for /memory/unknown-asset does not serve index with 200 incorrectly for missing hashed bundles.",
+      "test": "TEST-MCP-MEMORY-017",
+      "method": "MemoryUiHostingTests.MissingAsset_NotFalse200",
+      "slice": "S6"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-01",
+      "stmt": "Canonical prompt fixture pack lives at docs/benchmarks/memory-prompt-pack-v1.yaml (or .json) and is versioned in git.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPackTests.PackFile_ExistsAndVersioned",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-02",
+      "stmt": "Pack defines \u22658 prompts spanning: preference, decision, fact-paraphrase, procedure, multi-fact, negative-absent, conflict-stale-vs-new, refuse-invented-secret.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPackTests.CoversEightPromptClasses",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-03",
+      "stmt": "Each prompt entry has: id, class, user_text, gold_answer_rubric, seeded_memories[], forbidden_claims[], scoring (exact|contains|rubric).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPackTests.EntrySchema_Complete",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-04",
+      "stmt": "Each prompt declares paired conditions: without_memory and with_memory (same user_text).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPackTests.PairedConditions",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-05",
+      "stmt": "without_memory condition: Effective memory set empty OR injection suppressed AND memory_recall tools unavailable/stubbed per harness mode \u2014 documented and enforced.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.WithoutMemory_NoEffectiveInjectionOrTools",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-06",
+      "stmt": "with_memory condition: seeded_memories loaded into workspace; REQUIRED MEMORIES injection enabled on hosts that support it; memory_recall/remember tools available.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.WithMemory_SeededAndToolsAvailable",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-07",
+      "stmt": "Harness supports all eight plugins, but **default/required CI path runs Grok first**. Other plugins are opt-in until Grok with/without token bench + integration tests prove performance and value (H7a AGREE).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.GrokFirst_OthersOptInUntilValueGate",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-08",
+      "stmt": "Per plugin \u00d7 prompt \u00d7 condition, harness records: transcript, tool calls, injected block presence, **tokens_in, tokens_out, tokens_total** (primary metric), latency_ms (secondary), score, pass/fail (correctness gate), notes.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.RecordsPerCellMetrics_IncludingTokens",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-09",
+      "stmt": "Results artifact docs/benchmarks/results/memory-bench-<utc>.json includes per-cell token fields and a summary markdown table of tokens by plugin \u00d7 condition.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.WritesResultArtifacts_WithTokenSummary",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-10",
+      "stmt": "Scoring is deterministic for exact/contains rubrics; subjective rubric prompts use a fixed checklist (\u22652 independent raters or locked auto-rubric) documented in the pack.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchScoringTests.DeterministicOrDocumentedRubric",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-11",
+      "stmt": "Primary efficacy metric is tokens: for each plugin, report mean and median tokens_total (and tokens_in/tokens_out) across pack prompts under with_memory vs without_memory; correctness pass/fail is a gate, not the primary comparison.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.ReportsMeanMedianTokens_ByPluginAndCondition",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-12",
+      "stmt": "On negative-absent prompts: with_memory must not invent seeded-looking facts; without_memory must not claim remembered preferences \u2014 both conditions forbid hallucination per forbidden_claims.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchSafetyTests.NegativePrompts_NoHallucinatedMemory",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-13",
+      "stmt": "On conflict-stale-vs-new: with_memory prefers the newer/higher-confidence seeded memory per pack gold; without_memory does not assert the seeded newer fact.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchConflictTests.PrefersNewerSeeded",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-14",
+      "stmt": "when injection is supported, with_memory transcripts include the REQUIRED MEMORIES header contract; without_memory transcripts do not include seeded memory text.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchInjectionTests.InjectionPresentOnlyWithMemory",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-15",
+      "stmt": "When tools are the recall path (no injection host): with_memory runs show memory_recall (or list) tool use before answering gold; without_memory shows no successful recall of seeded ids.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchToolUseTests.RecallUsedWhenNoInjection",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-16",
+      "stmt": "Plugin `grok` **must** complete the full pack under both conditions without harness crash; cell results including tokens_* present for every prompt id. Required before other plugins.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.Grok_CompletesFullPack_Required",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-17",
+      "stmt": "Plugin `claude-code` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.ClaudeCode_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-18",
+      "stmt": "Plugin `claude-cowork` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.ClaudeCowork_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-19",
+      "stmt": "Plugin `cline` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.Cline_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-20",
+      "stmt": "Plugin `cline-v2` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.ClineV2_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-21",
+      "stmt": "Plugin `codex` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.Codex_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-22",
+      "stmt": "Plugin `copilot` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.Copilot_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-23",
+      "stmt": "Plugin `opencode` completes the full pack under both conditions after Grok H7a value gate AGREE; until then this AC is tracked but not gating H-done (gated by H7b instead).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPluginTests.Opencode_CompletesFullPack_AfterGrokValueGate",
+      "slice": "S7b"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-24",
+      "stmt": "Cross-plugin summary compares with_memory vs without_memory pass-rate per plugin and overall macro average.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchReportTests.SummaryComparesConditions",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-25",
+      "stmt": "Benchmark does not require network cloud models when a recorded/stub agent mode is selected; live mode is opt-in and documented.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.StubMode_NoCloudRequired",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-26",
+      "stmt": "Live mode (optional) uses the same pack and scoring; results tagged mode=live|stub|recorded.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.LiveMode_Tagged",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-27",
+      "stmt": "Seeded memories for the pack use only Workspace scope in a disposable bench workspace; Global seeds are explicit and cleaned up.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.Seeds_WorkspaceScopedCleanup",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-28",
+      "stmt": "Bench workspace isolation: pack run cannot read or mutate the operator's primary workspace memories.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchIsolationTests.NoPrimaryWorkspaceBleed",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-29",
+      "stmt": "Failing a lift threshold in CI is configurable: default report-only on first land; gate mode fails S7/H7 when Memory:Bench:Gate=true.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchCiTests.GateMode_Configurable",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-30",
+      "stmt": "Pack prompts are free of real secrets; fixtures use synthetic tokens like BENCH-PREF-EDITOR=neovim.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchPackTests.NoRealSecretsInFixtures",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-31",
+      "stmt": "Re-run of stub/recorded mode on same commit produces identical pass/fail vector (byte-stable scores for exact/contains).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchHarnessTests.Rerun_DeterministicStub",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-32",
+      "stmt": "docs/benchmarks/README.md documents how to run pack for one plugin and for all eight, with and without memory.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchDocsTests.Readme_RunInstructions",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-33",
+      "stmt": "USER-GUIDE or MCP-SERVER links to the benchmark pack as the standard memory efficacy check for plugins.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchDocsTests.UserGuide_LinksPack",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-01",
+      "stmt": "Harness is pwsh and/or dotnet test + plugin bats/node runners only (no Python product path).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.NoPythonProductPath",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-02",
+      "stmt": "Harness invokes each plugin through its supported validation entrypoint (bats/ts/REPL) with a documented adapter interface.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.PluginAdapterInterface",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-03",
+      "stmt": "Result schema is JSON-schema validated before write.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.ResultSchema_Validated",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-04",
+      "stmt": "Pack schema is JSON-schema/YAML-schema validated in CI.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.PackSchema_Validated",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-05",
+      "stmt": "Bench can suppress injection and tool registration independently to form without_memory matrix cells.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.IndependentSuppressionFlags",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-06",
+      "stmt": "Timing metrics captured but not used as sole pass/fail unless pack marks latency_budget_ms.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.Latency_OptionalBudget",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-07",
+      "stmt": "Nuke/CI target `BenchMemory` (or equivalent) runs stub mode for all plugins.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.CiTarget_BenchMemory",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-08",
+      "stmt": "Artifacts are gitignored under docs/benchmarks/results/* except committed baselines/golden stub vectors if any.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.Results_GitignorePolicy",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-34",
+      "stmt": "Token accounting uses the plugin host's reported usage when available; otherwise a documented tokenizer estimate (named model/encoding) with estimator_id recorded on the cell.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.Source_HostReportedOrDocumentedEstimator",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-35",
+      "stmt": "tokens_in counts prompt/system/injection/tool-result tokens attributable to the turn; tokens_out counts completion tokens; tokens_total = tokens_in + tokens_out.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.Defines_InOutTotal",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-36",
+      "stmt": "REQUIRED MEMORIES injection (with_memory) is included in tokens_in when present; without_memory cells must not charge injection tokens for suppressed memory.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.Injection_CountedOnlyWithMemory",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-37",
+      "stmt": "Tool-call payloads and tool results in the turn are included in tokens_in per host accounting rules (documented); both conditions use the same rules.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.ToolPayloads_CountedConsistently",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-38",
+      "stmt": "Summary table columns include at least: plugin, condition, prompts_n, tokens_total_sum, tokens_total_mean, tokens_total_median, tokens_in_mean, tokens_out_mean, pass_rate.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchReportTests.SummaryTable_TokenColumns",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-39",
+      "stmt": "Per-prompt delta row: tokens_total(with_memory) - tokens_total(without_memory) for the same plugin and prompt id (can be positive when injection adds context).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.PerPrompt_TokenDelta",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-40",
+      "stmt": "Macro metric: mean tokens_total across all plugins for with_memory vs without_memory; reported as primary headline numbers in the summary markdown.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchReportTests.Headline_MacroMeanTokens",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-41",
+      "stmt": "Correctness gate: preference/decision/fact with_memory cells must pass gold rubric; failures invalidate using that cell in optional efficiency ratios but tokens are still recorded.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.CorrectnessGate_TokensStillRecorded",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-42",
+      "stmt": "Optional efficiency ratio tokens_total / max(pass,\u03b5) may be reported but must be labeled secondary; never replace raw tokens as the primary metric.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.EfficiencyRatio_SecondaryOnly",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-43",
+      "stmt": "Stub/recorded mode still emits token fields (from recording or estimator); missing tokens_* fails the cell schema.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.StubMode_RequiresTokenFields",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-44",
+      "stmt": "NEG/SAFE prompts still record tokens under both conditions; safety pass/fail remains mandatory alongside token capture.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTokenTests.SafetyPrompts_TokensAndPassFail",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-45",
+      "stmt": "Benchmark README states that tokens used is the primary metric; pass/fail is correctness/safety.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchDocsTests.Readme_TokensArePrimaryMetric",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-09",
+      "stmt": "Result JSON schema requires integers tokens_in, tokens_out, tokens_total \u2265 0 and string token_source \u2208 {host,estimator,recorded}.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.ResultSchema_RequiresTokenFields",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-10",
+      "stmt": "Harness refuses to finalize a run if any cell lacks token fields (hard fail, not warn).",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.MissingTokens_HardFail",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-11",
+      "stmt": "Estimator implementations are pure and versioned (estimator_id + estimator_version) for deterministic stub re-runs.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.Estimator_VersionedDeterministic",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-12",
+      "stmt": "CI BenchMemory summary prints token means by plugin \u00d7 condition as the first metrics block.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.CiSummary_TokensFirst",
+      "slice": "S7"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-46",
+      "stmt": "Integration tests for memory (*.IntegrationTests and plugin-host integration) use the **Grok** agent/plugin lane as the pilot host before other agents.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryIntegrationTests.UseGrokLane_AsPilot",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-47",
+      "stmt": "Grok value gate (H7a): after Grok with/without token bench + Grok integration tests, operator/hostile AGREE that token metrics and correctness demonstrate performance and value sufficient to proceed to other plugins.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchValueGateTests.GrokH7a_RequiresAgreeBeforeOtherPlugins",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-48",
+      "stmt": "Until H7a AGREE, CI must not require non-Grok plugin bench cells to be green; running them is optional/experimental.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchCiTests.NonGrok_OptionalUntilH7a",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-49",
+      "stmt": "Live or stub Grok bench mode records tokens as primary metric; Grok integration tests assert end-to-end remember\u2192recall (or injection) path on the Grok plugin.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryIntegrationTests.Grok_RememberRecall_EndToEnd",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-018-50",
+      "stmt": "H7b (remaining seven plugins) is blocked until H7a AGREE; H-done may proceed after H7a if remaining plugins are explicitly deferred in doneSummary \u2014 OR H-done waits for H7b when operator demands full eight. Default: **H-done requires H7a; H7b is a follow-on TODO/slice unless operator expands scope.**",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchValueGateTests.HDone_DefaultRequiresH7a_H7bFollowOn",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-13",
+      "stmt": "Implement **mcpserver-grok-plugin** memory surfaces (skill/descriptor/shim for new verbs + injection/fallback) in S5 before any other plugin sync work starts.",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryPluginSyncTests.ImplementGrokPlugin_BeforeOthers",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-FR-MCP-MEMORY-017-14",
+      "stmt": "Non-Grok plugin sync PRs/checklists are not merged for MCP-MEMORY-002 until Grok H7a value gate AGREE (documentation of deferral allowed).",
+      "test": "TEST-MCP-MEMORY-016",
+      "method": "MemoryPluginSyncTests.NonGrok_BlockedUntilH7a",
+      "slice": "S5"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-13",
+      "stmt": "BenchMemory default `-Plugin grok` (or equivalent); `-Plugin all` is explicit and post-H7a.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchTechTests.DefaultPlugin_IsGrok",
+      "slice": "S7a"
+    },
+    {
+      "id": "AC-TR-MCP-MEMORY-BENCH-002-14",
+      "stmt": "Grok integration test project/host wiring is documented in docs/benchmarks/README.md as the pilot validation path.",
+      "test": "TEST-MCP-MEMORY-018",
+      "method": "MemoryBenchDocsTests.Readme_GrokIsPilot",
+      "slice": "S7a"
+    }
+  ]
+}

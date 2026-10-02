@@ -1,0 +1,90 @@
+[
+  "RUN mcpserver-codex-plugin Pester -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-codex-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-codex-plugin",
+    "nativeSuite": "Pester",
+    "failed": 2,
+    "skipped": 0,
+    "passed": 16,
+    "logFile": "mcpserver-codex-plugin-before.log",
+    "exitCode": 1,
+    "discoveryFileCount": 6
+  },
+  "RUN mcpserver-claude-code-plugin Pester -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-claude-code-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-claude-code-plugin",
+    "nativeSuite": "Pester",
+    "failed": 2,
+    "skipped": 0,
+    "passed": 23,
+    "logFile": "mcpserver-claude-code-plugin-before.log",
+    "exitCode": 1,
+    "discoveryFileCount": 10
+  },
+  "RUN mcpserver-claude-cowork-plugin Pester -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-claude-cowork-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-claude-cowork-plugin",
+    "nativeSuite": "Pester",
+    "failed": 2,
+    "skipped": 0,
+    "passed": 16,
+    "logFile": "mcpserver-claude-cowork-plugin-before.log",
+    "exitCode": 1,
+    "discoveryFileCount": 6
+  },
+  "RUN mcpserver-copilot-plugin Pester -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-copilot-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-copilot-plugin",
+    "nativeSuite": "Pester",
+    "failed": 2,
+    "skipped": 0,
+    "passed": 16,
+    "logFile": "mcpserver-copilot-plugin-before.log",
+    "exitCode": 1,
+    "discoveryFileCount": 6
+  },
+  "RUN mcpserver-grok-plugin Pester -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-grok-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-grok-plugin",
+    "nativeSuite": "Pester",
+    "failed": 2,
+    "skipped": 0,
+    "passed": 16,
+    "logFile": "mcpserver-grok-plugin-before.log",
+    "exitCode": 1,
+    "discoveryFileCount": 6
+  },
+  "RUN mcpserver-cline-plugin Jest -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-cline-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-cline-plugin",
+    "nativeSuite": "Jest",
+    "failed": 0,
+    "skipped": 0,
+    "passed": 15,
+    "logFile": "mcpserver-cline-plugin-before.log",
+    "exitCode": 0,
+    "discoveryFileCount": 3
+  },
+  "RUN mcpserver-cline-v2-plugin Jest -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-cline-v2-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-cline-v2-plugin",
+    "nativeSuite": "Jest",
+    "failed": 0,
+    "skipped": 0,
+    "passed": 10,
+    "logFile": "mcpserver-cline-v2-plugin-before.log",
+    "exitCode": 0,
+    "discoveryFileCount": 2
+  },
+  "RUN mcpserver-opencode-plugin Jest -> F:\\GitHub\\McpServer\\docs\\receipts\\_p19-work-20260822T103838Z\\mcpserver-opencode-plugin-before.log",
+  {
+    "repositoryName": "mcpserver-opencode-plugin",
+    "nativeSuite": "Jest",
+    "failed": 0,
+    "skipped": 0,
+    "passed": 33,
+    "logFile": "mcpserver-opencode-plugin-before.log",
+    "exitCode": 0,
+    "discoveryFileCount": 2
+  }
+]

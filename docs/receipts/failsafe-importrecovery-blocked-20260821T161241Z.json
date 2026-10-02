@@ -1,0 +1,28 @@
+{
+  "utc": "2026-08-21T16:13:14Z",
+  "blocked": [
+    {
+      "file": "019d6472-5ba7-77d0-9b90-ee0d3f99599a.3fe421946dfc1353.importRecovery.yaml",
+      "jsonlMissing": true,
+      "httpSubmit": 400,
+      "reason": "GUID sessionId; HTTP Submit validates IDs unless sourceFilePath is set; JSONL missing so ingest persist cannot run"
+    },
+    {
+      "file": "019d6481-c77a-74b3-8bd7-103167e0e0bb.b8611bc5364bf417.importRecovery.yaml",
+      "jsonlMissing": true,
+      "httpSubmit": 400,
+      "reason": "GUID sessionId; HTTP Submit validates IDs unless sourceFilePath is set; JSONL missing so ingest persist cannot run"
+    }
+  ],
+  "counts": {
+    "grokLive": 0,
+    "grokQ": 0,
+    "grokPending": 0,
+    "codexLive": 0,
+    "codexQ": 0,
+    "codexPending": 2,
+    "claudeQ": 0
+  },
+  "jsonlSearch": "no-matching-jsonl under McpServer and FunWasHad transcript trees",
+  "priorItemizedPosted": "docs/receipts/failsafe-continue-itemized-20260821T155934Z.json"
+}

@@ -406,7 +406,7 @@ function New-McpPluginTurnUpsertRequest {
         [Parameter(Mandatory)][string]$SessionId,
         [Parameter(Mandatory)][string]$RequestId,
         [Parameter(Mandatory)][string]$Timestamp,
-        [Parameter(Mandatory)][string]$QueryText,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$QueryText,
         [AllowEmptyString()][string]$Title = '',
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
@@ -425,11 +425,13 @@ function New-McpPluginTurnUpsertRequest {
     $turn = [ordered]@{
         requestId = $RequestId
         timestamp = $Timestamp
-        queryText = $QueryText
         response = $ResponseText
         status = $Status
         model = $Model
         tokenCount = $TokenCount
+    }
+    if (-not [string]::IsNullOrWhiteSpace($QueryText)) {
+        $turn.queryText = $QueryText
     }
 
     # TR-MCP-REPL-015: include queryTitle only when a title is actually supplied.

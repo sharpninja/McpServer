@@ -1,0 +1,45 @@
+{
+  "TimestampUtc": "2026-08-21T20:51:14Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "addProfile": { "executed": true, "profileFilesRead": 18 },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "RepoPlan": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+  "PriorDisagree": "docs/receipts/hostile-validator-20260821T204434Z.md",
+  "OverallVerdict": "AGREE",
+  "PassCount": 13,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "Accuracy": 98,
+  "Completeness": 96,
+  "FailList": [],
+  "SessionId": "GrokSubagentHostile-20260821T205114Z-p0b-fidelity-r2",
+  "RequestId": "req-20260821T205114Z-001-hostile-p0b-todo-fidelity",
+  "TurnId": 42741,
+  "HealthNonce": "bcae718d4fef4486962cde2915d1c9cd",
+  "HealthEchoed": true,
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "Done": false,
+  "TaskDiffs": [],
+  "TrCount": 30,
+  "RequiredTrPresent": [
+    "TR-MCP-PLUGINCORE-005",
+    "TR-MCP-REPL-011",
+    "TR-MCP-REPL-013"
+  ],
+  "EqualJoinLfNoTrailVsPlan": true,
+  "PlanSha256": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E",
+  "Audit": [
+    { "AuditId": 14357, "Version": 1, "Action": "created", "RecordedAtUtc": "2026-08-21T20:36:37.6624242Z" },
+    { "AuditId": 14358, "Version": 2, "Action": "updated", "RecordedAtUtc": "2026-08-21T20:48:45.9510484Z" }
+  ],
+  "CollectorDir": "docs/receipts/_hv-p0b-20260821-r2",
+  "SessionQuery": {
+    "totalCount": 1,
+    "turnStatus": "completed",
+    "actionCount": 5,
+    "designDecisionCount": 2,
+    "processingDialogCount": 4
+  }
+}

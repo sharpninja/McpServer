@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142116Z-4252
+  result:
+    id: TR-MCP-SESSIONLIFE-002
+    title: Metadata durability and freshness rebind
+    description: Snapshot cached metadata before replacing turn state. Same-request beginTurn is omit-unbound only when durable. Assert-ReplCurrentTurnFresh must not rewrite a cached session id. Three documentation files state ordinary rejection, supersede None, and durable reopen omission.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SESSIONLIFE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:17.3249522+00:00
+    updatedAt: 2026-09-24T14:21:17.3250554+00:00
+  deprecated: true
+
+---
+

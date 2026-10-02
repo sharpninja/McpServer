@@ -1,0 +1,3 @@
+PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods=0
+ProcessingLease_RenewsAndFencesTerminalUpdates=0
+Provenance_IncludesEffectiveCustomPromptIdentityAndVersion=0

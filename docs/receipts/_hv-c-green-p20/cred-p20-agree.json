@@ -1,0 +1,13 @@
+{
+  "mdExists": true,
+  "jsonExists": true,
+  "mdOverallVerdict": "AGREE",
+  "jsonOverallVerdict": "AGREE",
+  "jsonFailCount": 0,
+  "jsonPassCount": 16,
+  "workClass": "project implementation PLAN-PLUGINHANDOFF-001 Phase C-red-P20 only",
+  "a2Red": "PASS",
+  "a3GreenAbsent": "PASS",
+  "namedFailed": 2,
+  "namedPassed": 0
+}

@@ -19,6 +19,9 @@ public enum AgentPoolOneShotContext
 
     /// <summary>TR-HANDOFF-AGENT-001: Extract a structured MCP TODO draft from a handoff document.</summary>
     HandoffTodoDraft,
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-002: Protected one-shot context for hostile-review dispatch.</summary>
+    HostileReview,
 }
 
 /// <summary>
@@ -182,6 +185,12 @@ public sealed record AgentPoolEnqueueResult : AgentPoolMutationResult
 
     /// <summary>Resolved agent model identifier when known.</summary>
     public string? Model { get; init; }
+
+    /// <summary>Effective prompt version used for provenance and replay identity.</summary>
+    public string? PromptVersion { get; init; }
+
+    /// <summary>Effective prompt template id resolved by the pool.</summary>
+    public string? PromptTemplateId { get; init; }
 }
 
 /// <summary>
@@ -263,6 +272,9 @@ public sealed record AgentPoolPromptResolutionResult : AgentPoolMutationResult
 
     /// <summary>Resolved template identifier when template mode is used.</summary>
     public string? TemplateId { get; init; }
+
+    /// <summary>Effective prompt version when the context or template supplies one.</summary>
+    public string? PromptVersion { get; init; }
 
     /// <summary>Indicates whether template resolution was used.</summary>
     public bool TemplateResolved { get; init; }

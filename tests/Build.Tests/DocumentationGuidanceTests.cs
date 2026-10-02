@@ -33,21 +33,24 @@ public sealed class DocumentationGuidanceTests
 
     /// <summary>
     /// TEST-MCP-188: Verifies the marker template pins PowerShell and Node
-    /// execution to PowerShell.Mcp and names the Byrd process source document.
+    /// execution to PowerShell.MCP 1.14 reuse/session routing and names the
+    /// Byrd process source document.
     /// </summary>
     [Fact]
     public async Task MarkerTemplate_DefinesPowerShellMcpAndByrdProcessGuidance()
     {
         var text = await ReadRepositoryTextAsync(Path.Combine("templates", "prompt-templates.yaml")).ConfigureAwait(true);
 
-        Assert.Contains("PowerShell.Mcp", text, StringComparison.Ordinal);
+        Assert.Contains("PowerShell.MCP", text, StringComparison.Ordinal);
         Assert.Contains("PSGallery", text, StringComparison.Ordinal);
         Assert.Contains("For every PowerShell Core (`pwsh`) invocation on every operating system", text, StringComparison.Ordinal);
-        Assert.Contains("keep one `PowerShell.Mcp` session open for the workspace", text, StringComparison.Ordinal);
-        Assert.Contains("route all `node` invocations through the open `PowerShell.Mcp` session", text, StringComparison.Ordinal);
-        Assert.Contains("Do not create fresh Node sessions or one-off Node shells per Node call", text, StringComparison.Ordinal);
+        Assert.Contains("execute_command", text, StringComparison.Ordinal);
+        Assert.Contains("Calling `start_console` first is optional", text, StringComparison.Ordinal);
+        Assert.Contains("omit `reason` when reuse is preferred", text, StringComparison.Ordinal);
+        Assert.Contains("wait_for_completion", text, StringComparison.Ordinal);
+        Assert.Contains("reuse one session for the workspace and route `node` invocations through it as well", text, StringComparison.Ordinal);
         Assert.Contains("`Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process`", text, StringComparison.Ordinal);
-        Assert.Contains(@"F:\GitHub\McpServer\docs\Development-Process-draft-v4.md", text, StringComparison.Ordinal);
+        Assert.Contains("Development-Process-draft-v4.md", text, StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -57,9 +60,9 @@ public sealed class DocumentationGuidanceTests
     [Fact]
     public async Task PipelineGuidance_ReferencesExistingPipelineFiles()
     {
-        var root = FindRepositoryRoot();
-        Assert.True(File.Exists(Path.Combine(root, "azure-pipelines.yml")), "Missing root azure-pipelines.yml.");
-        Assert.True(File.Exists(Path.Combine(root, ".github", "workflows", "build.yml")), "Missing GitHub Actions workflow.");
+        var resources = typeof(DocumentationGuidanceTests).Assembly.GetManifestResourceNames();
+        Assert.Contains("Repository.azure-pipelines.yml", resources);
+        Assert.Contains("Repository.github.workflows.build.yml", resources);
 
         var readme = await ReadRepositoryTextAsync("README.md").ConfigureAwait(true);
         Assert.Contains("azure-pipelines.yml", readme, StringComparison.OrdinalIgnoreCase);
@@ -73,9 +76,7 @@ public sealed class DocumentationGuidanceTests
     [Fact]
     public void RequirementsWiki_AzureAndGitHubOutputsHaveExpectedFiles()
     {
-        var root = FindRepositoryRoot();
-        var azureRoot = Path.Combine(root, "docs", "Project", "wiki", "azure");
-        var githubRoot = Path.Combine(root, "docs", "Project", "wiki", "github");
+        var resources = typeof(DocumentationGuidanceTests).Assembly.GetManifestResourceNames();
 
         var requiredFiles = new[]
         {
@@ -90,13 +91,13 @@ public sealed class DocumentationGuidanceTests
 
         foreach (var file in requiredFiles)
         {
-            Assert.True(File.Exists(Path.Combine(azureRoot, file)), $"Missing Azure wiki file: {file}");
-            Assert.True(File.Exists(Path.Combine(githubRoot, file)), $"Missing GitHub wiki file: {file}");
+            Assert.Contains("Repository.wiki.azure." + file, resources);
+            Assert.Contains("Repository.wiki.github." + file, resources);
         }
 
-        Assert.True(File.Exists(Path.Combine(azureRoot, ".order")), "Missing Azure wiki .order file.");
-        Assert.True(File.Exists(Path.Combine(githubRoot, "_Sidebar.md")), "Missing GitHub wiki _Sidebar.md file.");
-        Assert.True(File.Exists(Path.Combine(githubRoot, "_Footer.md")), "Missing GitHub wiki _Footer.md file.");
+        Assert.Contains("Repository.wiki.azure..order", resources);
+        Assert.Contains("Repository.wiki.github._Sidebar.md", resources);
+        Assert.Contains("Repository.wiki.github._Footer.md", resources);
     }
 
     /// <summary>
@@ -141,8 +142,12 @@ public sealed class DocumentationGuidanceTests
 
     private static async Task<string> ReadRepositoryTextAsync(string relativePath)
     {
-        var path = Path.Combine(FindRepositoryRoot(), relativePath);
-        return await File.ReadAllTextAsync(path, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var resourceName = "Repository." + relativePath.Replace('\\', '.').Replace('/', '.');
+        using var resource = typeof(DocumentationGuidanceTests).Assembly
+            .GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Missing embedded source resource {resourceName}.");
+        using var reader = new StreamReader(resource);
+        return await reader.ReadToEndAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     private static void AssertContainsAll(string text, params string[] requiredText)
@@ -151,21 +156,5 @@ public sealed class DocumentationGuidanceTests
         {
             Assert.Contains(value, text, StringComparison.OrdinalIgnoreCase);
         }
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.slnx.");
     }
 }

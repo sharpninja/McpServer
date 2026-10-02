@@ -62,6 +62,79 @@ public sealed class ReplMcpErrorClassifierTests
         Assert.True(classified.Retryable);
     }
 
+    /// <summary>TR-MCP-TRIAGESTORE-002: a longer Submit storage command budget is still backend_unavailable.</summary>
+    [Fact]
+    public void FromException_SubmitStorageCommandBudget_IsBackendUnavailable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(
+            new InvalidOperationException("The storage backend did not respond within the 30 second storage command budget."));
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
+    /// <summary>TR-MCP-TRIAGESTORE-002: a deadlocked session-graph load is retryable backend_unavailable.</summary>
+    [Fact]
+    public void FromException_GraphMaterializationDeadlock_IsBackendUnavailable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(
+            new StorageGraphMaterializationException(
+                "The storage backend deadlocked while loading the session graph (SQL 1205). The session was not treated as missing."));
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
+    /// <summary>Stand-in whose type name matches the server graph-load failure.</summary>
+    private sealed class StorageGraphMaterializationException : Exception
+    {
+        /// <summary>Initializes the stand-in.</summary>
+        /// <param name="message">Failure text.</param>
+        public StorageGraphMaterializationException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    /// <summary>HTTP 503 with persistence_error envelope stays non-retryable (schema pending migration).</summary>
+    [Fact]
+    public void FromException_503PersistenceErrorEnvelope_IsNonRetryablePersistenceError()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(new McpServer.Client.McpServerException(
+            "SessionLogs schema is pending migration.",
+            503,
+            errorCode: "persistence_error",
+            retryable: false));
+
+        Assert.Equal("persistence_error", classified.Code);
+        Assert.False(classified.Retryable);
+        Assert.Equal("persistence_error", classified.Details!["reason"]);
+    }
+
+    /// <summary>HTTP 503 with backend_unavailable envelope stays retryable.</summary>
+    [Fact]
+    public void FromException_503BackendUnavailableEnvelope_IsRetryable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(new McpServer.Client.McpServerException(
+            "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+            503,
+            errorCode: "backend_unavailable",
+            retryable: true));
+
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
+    /// <summary>HTTP 503 without an envelope code defaults to retryable backend_unavailable.</summary>
+    [Fact]
+    public void FromException_503Unknown_DefaultsBackendUnavailableRetryable()
+    {
+        var classified = ReplMcpErrorClassifier.FromException(new McpServer.Client.McpServerException(
+            "HTTP 503: unavailable",
+            503));
+
+        Assert.Equal("backend_unavailable", classified.Code);
+        Assert.True(classified.Retryable);
+    }
+
     /// <summary>TimeoutException is retryable timeout.</summary>
     [Fact]
     public void FromException_Timeout_IsRetryableTimeout()

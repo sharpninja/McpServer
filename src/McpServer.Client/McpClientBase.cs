@@ -619,40 +619,75 @@ public abstract class McpClientBase
 
     private static void ThrowForStatus(HttpStatusCode statusCode, string content)
     {
-        var message = TryExtractError(content) ?? $"HTTP {(int)statusCode}: {content}";
+        var envelope = TryParseErrorEnvelope(content);
+        var message = envelope.Message ?? $"HTTP {(int)statusCode}: {content}";
         throw statusCode switch
         {
-            HttpStatusCode.BadRequest => new McpValidationException(message),
-            HttpStatusCode.Unauthorized => new McpUnauthorizedException(message),
-            HttpStatusCode.NotFound => new McpNotFoundException(message),
-            HttpStatusCode.Conflict => new McpConflictException(message),
-            _ => new McpServerException(message, (int)statusCode),
+            HttpStatusCode.BadRequest => new McpValidationException(message, envelope.Code, envelope.Retryable),
+            HttpStatusCode.Unauthorized => new McpUnauthorizedException(message, envelope.Code, envelope.Retryable),
+            HttpStatusCode.NotFound => new McpNotFoundException(message, envelope.Code, envelope.Retryable),
+            HttpStatusCode.Conflict => new McpConflictException(message, envelope.Code, envelope.Retryable),
+            _ => new McpServerException(message, (int)statusCode, envelope.Code, envelope.Retryable),
         };
     }
 
-    private static string? TryExtractError(string content)
+    private static ErrorEnvelope TryParseErrorEnvelope(string content)
     {
         try
         {
             using var doc = JsonDocument.Parse(content);
-            var stage = doc.RootElement.TryGetProperty("stage", out var stageProperty)
+            var root = doc.RootElement;
+            var stage = root.TryGetProperty("stage", out var stageProperty)
                 ? stageProperty.GetString()
                 : null;
+
+            string? code = null;
+            if (root.TryGetProperty("code", out var codeProp) && codeProp.ValueKind == JsonValueKind.String)
+                code = codeProp.GetString();
+            else if (root.TryGetProperty("error", out var errorAsCode)
+                     && errorAsCode.ValueKind == JsonValueKind.String
+                     && LooksLikeErrorCode(errorAsCode.GetString()))
+            {
+                code = errorAsCode.GetString();
+            }
+
             string? message = null;
-            if (doc.RootElement.TryGetProperty("error", out var err))
-                message = err.GetString();
-            else if (doc.RootElement.TryGetProperty("errorMessage", out var errMsg))
+            if (root.TryGetProperty("message", out var messageProp) && messageProp.ValueKind == JsonValueKind.String)
+                message = messageProp.GetString();
+            else if (root.TryGetProperty("detail", out var detailProp) && detailProp.ValueKind == JsonValueKind.String)
+                message = detailProp.GetString();
+            else if (root.TryGetProperty("errorMessage", out var errMsg) && errMsg.ValueKind == JsonValueKind.String)
                 message = errMsg.GetString();
+            else if (root.TryGetProperty("error", out var err) && err.ValueKind == JsonValueKind.String && !LooksLikeErrorCode(err.GetString()))
+                message = err.GetString();
 
             if (!string.IsNullOrWhiteSpace(message) && !string.IsNullOrWhiteSpace(stage))
-                return $"{message} (stage: {stage})";
-            if (!string.IsNullOrWhiteSpace(message))
-                return message;
+                message = $"{message} (stage: {stage})";
+
+            bool? retryable = null;
+            if (root.TryGetProperty("retryable", out var retryProp)
+                && (retryProp.ValueKind is JsonValueKind.True or JsonValueKind.False))
+            {
+                retryable = retryProp.GetBoolean();
+            }
+
+            return new ErrorEnvelope(
+                string.IsNullOrWhiteSpace(message) ? null : message,
+                string.IsNullOrWhiteSpace(code) ? null : code,
+                retryable);
         }
         catch (JsonException)
         {
-            // Not JSON — use raw content.
+            // Not JSON - use raw content.
         }
-        return null;
+
+        return new ErrorEnvelope(null, null, null);
     }
+
+    private static bool LooksLikeErrorCode(string? value)
+        => !string.IsNullOrWhiteSpace(value)
+           && value.IndexOf(' ') < 0
+           && value.All(ch => char.IsAsciiLetterLower(ch) || ch is '_' or '-' || char.IsAsciiDigit(ch));
+
+    private readonly record struct ErrorEnvelope(string? Message, string? Code, bool? Retryable);
 }

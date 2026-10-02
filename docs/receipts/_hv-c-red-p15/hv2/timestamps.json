@@ -1,0 +1,68 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T044818Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T04:49:43.5921513Z",
+    "Length": 17244
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T044818Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T04:49:43.5916400Z",
+    "Length": 4607
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T050748Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:08:53.9385300Z",
+    "Length": 15792
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T050748Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:10:24.5662681Z",
+    "Length": 4733
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 9878
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 15230
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowResult.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 1549
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "Length": 68486
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\resolve-cache-dir.ps1",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T22:31:34.2620934Z",
+    "Length": 17753
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixture.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+    "Length": 20101
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:48:14.5453983Z",
+    "Length": 8594
+  }
+]

@@ -1,0 +1,37 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142155Z-c860
+  result:
+    id: BUG-TRIAGE-085
+    title: Plugin sessionId uses lowercase agent 'default' and openSession is a no-op
+    section: Backlog
+    priority: high
+    done: true
+    note: DONE (D3, plugin core 1.74.0). Canonical agent resolver maps 'default'->Default, claude-code/claudecode->ClaudeCode, codex->Codex, grok->GrokCode; New-ReplPluginSessionId composes PascalCase ids matching the server regex; workflow.sessionlog.openSession persists an explicit sessionId to session-state.yaml. SessionIdCanonicalAgent.Tests.ps1 green. TR-MCP-REPL-011 + TEST-MCP-REPL-026.
+    description:
+    - "Plugin 1.72.0 composes sessionId from agent identity that defaults to lowercase 'default' (repl-invoke.ps1 AgentName, resolve-cache-dir.ps1 Get-McpCacheAgentKey, lib-node repl-bridge.ts), producing ids like default-20260713T174855Z-plugin-session. Server SessionLogIdentifierValidator correctly rejects these under the normative regex ^[A-Z][A-Za-z0-9]*-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$ (docs/context/session-log-schema.md), returning HTTP 400 Invalid sessionId for beginTurn/appendDialog/appendActions/completeTurn. Separately, workflow.sessionlog.openSession in plugins/core/lib-ps/repl-invoke.ps1 is a pure success no-op (documented in GAPS.md), so an explicit valid sessionId never updates session-state.yaml and cannot recover a bad local id. Fix is in the plugin: emit PascalCase agent/sourceType when composing sessionId, and make openSession persist explicit sessionId into session-state.yaml. Do not relax server validation."
+    - 'Triage group: triage-group-c9f52514d2684adb'
+    - 'Reports: 2'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Fresh plugin bootstrap/session-state write uses an agent segment matching ^[A-Z][A-Za-z0-9]*$ and a sessionId matching the normative regex (not default-<ts>-plugin-session).'
+    - '- workflow.sessionlog.beginTurn against a live server succeeds for a newly bootstrapped plugin session without HTTP 400 Invalid sessionId.'
+    - '- workflow.sessionlog.openSession with an explicit valid sessionId updates session-state.yaml; subsequent beginTurn/append*/completeTurn use that sessionId.'
+    - '- sourceType/agent prefix on submits is case-sensitive and matches the sessionId agent segment (server ValidateSessionId prefix check).'
+    - '- After fix, failsafe replay can drain pending session_submit failsafe YAMLs under .mcpServer/<agent>/failsafe without reintroducing the invalid id.'
+    - 'Implementation notes:'
+    - "- Primary defect: plugins/core/lib-ps/repl-invoke.ps1 New-ReplPluginSessionId formats '{AgentName}-{timestamp}-{suffix}' while $script:AgentName falls back to 'default'; mirror in plugins/core/lib-node/src/transport/repl-bridge.ts (MCP_AGENT_NAME chain ends in 'default')."
+    - '- Get-McpCacheAgentKey intentionally lowercases cache path keys (claude/codex/grok); keep cache dir keys separate from session log agent/sourceType, which must be PascalCase (e.g. Claude, Codex, Grok, Default only if capitalized).'
+    - "- openSession: replace pure no-op at Invoke-ReplMethod 'workflow.sessionlog.openSession' with logic that reads params, validates sessionId regex, writes session-state.yaml (sessionId + agent/sourceType), and returns success/failure honestly."
+    - '- Server code (SessionLogIdentifierValidator, SessionLogController) is behaving to spec; no server relaxation. Regression tests should cover default env unset path and openSession persistence (extend PluginPowerShellRuntime.Tests.ps1 patterns that already use Codex-*-plugin-session).'
+    - '- Observed on plugin 1.72.0 / workspace F:\GitHub\EternalReddit / server PAYTON-LEGION2:7147; four failsafe captures under .mcpServer/default/failsafe.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

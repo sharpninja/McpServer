@@ -1,0 +1,31 @@
+2026-09-28T23:48:01.2024716Z - Independent Codex BDPv4 planning review
+OverallVerdict: AGREE. Accuracy99 percent; completeness99 percent.7 PASS/0 FAIL/0 UNKNOWN at the planning gate only.
+Classification: class1 project implementation planning. Operator explicitly requested cross-platform UpdateService and continued the task. No implementation, red/green test gate or deployment is approved as completed by this verdict. add-profile rerun: all19 current global non-skill profile files read; private content excluded from receipts.
+
+PASS A1: Scope matches request. Existing UpdateService detects Windows/Linux, preserves Windows defaults/launcher/lifecycle and adds Linux existing-unit update with x64/arm64 apphost. First-time provisioning, SQL export, automatic binary rollback and unsupported OS/config variants are explicitly outside this bounded operation. No unrelated source edits precede the plan gate.
+PASS C1: Authoritative effective MCP records exist in active layer1: FR-MCP-SERVICEUPDATE-001,TR-MCP-SERVICEUPDATE-001,TEST-MCP-SERVICEUPDATE-001. All four acceptance criteria platform,preserve,lifecycle,validation are present and unsatisfied, status pending. FR mapping points to exact TR and TEST. TODO IMPL-SERVICEUPDATE-001 exists with four pending tasks. Five required project projections now contain these IDs, derived from typed server records; no premature done-state found.
+PASS A2: Preservation and failure contracts are decision-complete. Shared live appsettings.yaml plus root DataFolder/legacy DataDirectory policy, legacy install-root fallback, private metadata-preserving retained tar, loaded unit/drop-ins/environment files, no secret output, no unsupported configuration precedence ambiguity. Linux preflight rejects overlays/data/instance/content-root overrides rather than backing up incorrect live data. Archive create/list/hash verification precedes replacement; metadata restored before start. Failure stops/restores preserved state and retains evidence, without falsely promising binary/database rollback.
+PASS A3: Linux effect boundaries and safety are explicit. EffectiveUID0, installed service identity and working-directory/apphost checks, pre-stop staging/ELF/architecture validation, shell-free bounded process arguments, exclusive per-service lock, no symlink roots/ancestors, no link-following cleanup/copy, protected preservation roots, executable mode and apphost identity verification. Unit/account/arguments/boot policy retained rather than rewritten.
+PASS A4: Strict Linux health closes existing false-success paths. Existing CheckWorkspaceHealth can return0/0/0 on failed auth or registry; amended plan rejects unavailable/malformed/empty results and requires Checked>0,Healthy>0,Failed==0 while retaining Windows compatibility. New helper/API records and injected runner/actions have explicit signatures and test seams.
+PASS D1: Tests-first and full-gate plan is adequate. Named tests cover platform,paths,unit parsing,backup ordering/failures,health unavailable,symlink handling and concurrency. Mocks-first then actual expected red gate precede production implementation. Full Build.Tests applicable unit scope plus repository Nuke Test scope require zero failures/skips and nonzero execution. Existing plugin prerequisite failures remain failures until resolved in an isolated genuine validation environment; no selective exclusion of failed tests. Real tar smoke checks bytes/modes/symlinks/ACLs. Nuke Test does not emit TRX by default; parent explicitly commits to structured runner counts or supported TRX configuration for every project before accepting that gate.
+PASS B1/D2: Workspace and holistic rollout requirements remain intact. Only PowerShell and required Codex wrapper were used for this review. XML documentation,source build checks,phase reviews,retained receipts and exact runtime verification are in plan. One elevated script invokes the new Nuke target after applicable gates; no manual-copy deployment substitute. Native-agent checks stay waived as previously instructed. No commit/push implied. Full review body is stored in dialog and completion response with exact typed-client readback.
+
+Resolved during review: strict unavailable workspace-health handling; effective data-path override handling/fail-closed boundary; symlink-safe replacement; exclusive updater lock; locked API signatures and exact gate commands; archive verification; missing five requirement projections. No outstanding planning FAIL/UNKNOWN remains. Later code/test/deployment behavior still requires its own evidence and independent gates.
+Accuracy rationale: direct plan/source inspection plus fresh effective MCP requirements/mapping and local projection diffs support the planning claims. Completeness rationale: applicable requested behavior,workspace rules,requirements and holistic plan surfaces are covered; no future test results are fabricated.
+Session:Codex-20260928T232037Z-bdp-review
+Turn:req-20260928T233836Z-serviceupdate-plan
+Receipts:/home/sharpninja/github/McpServer/docs/receipts/hv/20260928-serviceupdate-plan.request.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260928-serviceupdate-plan.response.jsonl ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260928-serviceupdate-plan.verdict.txt ; /home/sharpninja/github/McpServer/docs/receipts/hv/20260928-serviceupdate-plan.session-readback.json
+=== VERDICT JSON ==={
+  "sessionId": "Codex-20260928T232037Z-bdp-review",
+  "completeness": 99,
+  "failures": [],
+  "pass": 7,
+  "scope": "BDPv4 planning gate only",
+  "fail": 0,
+  "classification": 1,
+  "OverallVerdict": "AGREE",
+  "requestId": "req-20260928T233836Z-serviceupdate-plan",
+  "unknowns": [],
+  "unknown": 0,
+  "accuracy": 99
+}

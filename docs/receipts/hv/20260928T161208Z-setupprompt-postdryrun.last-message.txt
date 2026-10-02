@@ -1,0 +1,22 @@
+2026-09-28T16:29:44Z
+
+**OverallVerdict: AGREE**  
+**DraftScopeVerdict: AGREE**
+
+- **Accuracy: 99%.** Current source supports the scoped draft claims.
+- **Completeness: 99%.** All requested A-D surfaces and remediation themes reviewed.
+- **Draft:** 26 PASS / 0 FAIL / 0 UNKNOWN.
+- **ReviewerOnly:** 7 PASS / 0 FAIL / 0 UNKNOWN.
+- **Full FAIL list:** none in either scope.
+- **ImagePath:** 28/28 behavioral cases passed. Literal fence: zero parser errors; `ScriptBlock.Create` succeeded.
+- **Encoding:** zero non-ASCII codepoints; strict regex and throw fix preserved.
+- **Themes:** G1 PASS; G2 PASS; G3 PASS; G4 PASS; D1 PASS; D2 PASS; D3 PASS.
+- **Model proof:** live `turn_context` confirms **gpt-6-astra / xhigh**.
+- **Credential hygiene:** PASS; zero live credential echoes or unredacted query credentials.
+
+Draft unchanged; candidate SHA-256 still matches. Known live ImagePath drift remains outside draft scope. No MCP logs, TODO changes, commits, pushes, or service mutations.
+
+Artifacts verified: [Markdown receipt](F:/github/McpServer/docs/receipts/hv/hostile-validator-setupprompt-postdryrun-20260928T161208Z.md), [JSON twin](F:/github/McpServer/docs/receipts/hv/hostile-validator-setupprompt-postdryrun-20260928T161208Z.json), [request JSONL](F:/github/McpServer/docs/receipts/hv/20260928T161208Z-setupprompt-postdryrun.request.jsonl), [response JSONL](F:/github/McpServer/docs/receipts/hv/20260928T161208Z-setupprompt-postdryrun.response.jsonl). Response snapshot is verified; runner replacement with the complete stream occurs after exit.
+
+MCP-SETUPPROMPT-001 remains open.
+

@@ -36,7 +36,7 @@ public sealed class TriageControllerTests
             Status = "grouped",
             Title = "Plugin wrapper failure",
             Summary = "Plugin wrapper failure",
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
         };
         var run = new TriageResearchRunDetail
         {
@@ -54,7 +54,7 @@ public sealed class TriageControllerTests
                 {
                     TodoId = "BUG-TRIAGE-001",
                     CreatedAtUtc = DateTimeOffset.UtcNow,
-                    WorkspacePath = "F:\\GitHub\\McpServer",
+                    WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                     GroupId = group.GroupId,
                     RunId = run.RunId,
                     GroupStatus = "completed",
@@ -74,15 +74,15 @@ public sealed class TriageControllerTests
                 QuietDeadlineUtc = group.QuietDeadlineUtc,
             });
         service.GetReportAsync(report.ReportId, Arg.Any<CancellationToken>()).Returns(report);
-        service.QueryGroupsAsync("failed", "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+        service.QueryGroupsAsync("failed", "Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>())
             .Returns(new TriageGroupQueryResult { Items = [group], TotalCount = 1 });
-        service.GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+        service.GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>())
             .Returns(new TriageDashboardResult { TriageQueue = [group], TotalGroupCount = 1 });
         service.GetGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
-        service.QueryRunsAsync("processing", group.GroupId, "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+        service.QueryRunsAsync("processing", group.GroupId, "Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>())
             .Returns(new TriageRunQueryResult { Items = [run], TotalCount = 1 });
         service.GetRunAsync(run.RunId, Arg.Any<CancellationToken>()).Returns(run);
-        service.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(createdTodos);
+        service.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>()).Returns(createdTodos);
         service.FlushGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
         service.RetryGroupAsync(group.GroupId, true, Arg.Any<CancellationToken>()).Returns(group);
         service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
@@ -100,12 +100,12 @@ public sealed class TriageControllerTests
 
         await controller.SubmitReportAsync(new TriageReportRequest { Title = "Bug", Summary = "Summary" }, CancellationToken.None);
         await controller.GetReportAsync(report.ReportId, CancellationToken.None);
-        await controller.QueryGroupsAsync("failed", "F:\\GitHub\\McpServer", CancellationToken.None);
-        await controller.GetDashboardAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.QueryGroupsAsync("failed", "Q:\\__mcp_unit_test__\\McpServer", CancellationToken.None);
+        await controller.GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", CancellationToken.None);
         await controller.GetGroupAsync(group.GroupId, CancellationToken.None);
-        await controller.QueryRunsAsync("processing", group.GroupId, "F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.QueryRunsAsync("processing", group.GroupId, "Q:\\__mcp_unit_test__\\McpServer", CancellationToken.None);
         await controller.GetRunAsync(run.RunId, CancellationToken.None);
-        await controller.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\McpServer", CancellationToken.None);
         await controller.FlushGroupAsync(group.GroupId, CancellationToken.None);
         await controller.RetryGroupAsync(group.GroupId, force: true, CancellationToken.None);
         await controller.CreateGroupFromSelectionAsync(selection, CancellationToken.None);
@@ -137,7 +137,7 @@ public sealed class TriageControllerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 QuietDeadlineUtc = quietDeadline,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
             });
 
         var controller = new TriageController(service);
@@ -204,7 +204,7 @@ public sealed class TriageControllerTests
             GroupId = "triage-group-001",
             Status = "collecting",
             ReportCount = 2,
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
             Title = "Wrapper bug",
             Summary = "Plugin wrapper bug",
             QuietDeadlineUtc = DateTimeOffset.UtcNow,
@@ -231,7 +231,7 @@ public sealed class TriageControllerTests
             GroupId = "triage-group-001",
             Status = "collecting",
             ReportCount = 2,
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
             QuietDeadlineUtc = DateTimeOffset.UtcNow,
         };
         service.RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>()).Returns(group);
@@ -330,13 +330,13 @@ public sealed class TriageControllerTests
             TotalGroupCount = 1,
             TotalRunCount = 1,
         };
-        service.GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(dashboard);
+        service.GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>()).Returns(dashboard);
 
-        var action = await new TriageController(service).GetDashboardAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+        var action = await new TriageController(service).GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         Assert.Same(dashboard, ok.Value);
-        await service.Received(1).GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+        await service.Received(1).GetDashboardAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>());
     }
 
     /// <summary>TEST-TRIAGE-001: run-history query endpoint returns current AI triage run statuses.</summary>
@@ -359,13 +359,13 @@ public sealed class TriageControllerTests
             ],
             TotalCount = 1,
         };
-        service.QueryRunsAsync("failed", "triage-group-001", "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+        service.QueryRunsAsync("failed", "triage-group-001", "Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>())
             .Returns(query);
 
         var action = await new TriageController(service).QueryRunsAsync(
             "failed",
             "triage-group-001",
-            "F:\\GitHub\\McpServer",
+            "Q:\\__mcp_unit_test__\\McpServer",
             CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(action.Result);
@@ -385,7 +385,7 @@ public sealed class TriageControllerTests
                 {
                     TodoId = "BUG-TRIAGE-001",
                     CreatedAtUtc = new DateTimeOffset(2026, 6, 25, 5, 3, 0, TimeSpan.Zero),
-                    WorkspacePath = "F:\\GitHub\\McpServer",
+                    WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                     GroupId = "triage-group-001",
                     RunId = "triage-run-001",
                     GroupStatus = "completed",
@@ -394,15 +394,15 @@ public sealed class TriageControllerTests
             ],
             TotalCount = 1,
         };
-        service.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(query);
+        service.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>()).Returns(query);
 
         var action = await new TriageController(service).QueryCreatedTodosAsync(
-            "F:\\GitHub\\McpServer",
+            "Q:\\__mcp_unit_test__\\McpServer",
             CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         Assert.Same(query, ok.Value);
-        await service.Received(1).QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+        await service.Received(1).QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\McpServer", Arg.Any<CancellationToken>());
     }
 
     /// <summary>TEST-TRIAGE-001: run detail endpoint returns not-found envelopes for missing runs.</summary>
