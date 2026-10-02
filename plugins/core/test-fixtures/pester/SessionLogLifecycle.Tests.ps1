@@ -204,6 +204,7 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 degraded = $false
+                auditDialog = 0
                 queryText = 'keep me'
                 markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
                 markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
@@ -212,9 +213,12 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             $never | Should -BeFalse
             $script:PersistCallCount | Should -Be 0
             @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -Be 0
-                        $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'message')
+            $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'message')
             if ([string]::IsNullOrWhiteSpace($msg)) { $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'Message') }
             $msg | Should -Match 'failsafe not used'
+            $msg | Should -Match 'turn not found'
+            $msg | Should -Match 'retryable false'
+            (Read-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml'))['auditDialog'] | Should -Be 0
         } finally {
             $script:PersistRecoveryReturnsFalse = $false
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
