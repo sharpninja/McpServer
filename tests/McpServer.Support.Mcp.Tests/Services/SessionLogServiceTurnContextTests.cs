@@ -84,6 +84,150 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
             _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string planFile inserts no turn row.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-emptyplan";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.UpsertTurnAsync(
+            "Cursor",
+            sessionId,
+            new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260304T113904Z-emptyplan",
+                PlanFile = string.Empty,
+                TodoId = "MCP-SESSIONLOG-002",
+            },
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: omitted todoId with a valid planFile inserts no turn row.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-nulltodo";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.UpsertTurnAsync(
+            "Cursor",
+            sessionId,
+            new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260304T113905Z-nulltodo",
+                PlanFile = "docs/plans/foo.md",
+                TodoId = null,
+            },
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string todoId with a valid planFile inserts no turn row.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-emptytodo";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.UpsertTurnAsync(
+            "Cursor",
+            sessionId,
+            new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260304T113906Z-emptytodo",
+                PlanFile = "docs/plans/foo.md",
+                TodoId = string.Empty,
+            },
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: whitespace todoId with a valid planFile inserts no turn row.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-wstodo";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.UpsertTurnAsync(
+            "Cursor",
+            sessionId,
+            new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260304T113907Z-wstodo",
+                PlanFile = "docs/plans/foo.md",
+                TodoId = "  ",
+            },
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
+
+        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: canceled supersession may omit the pair and stores exact None.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_CanceledOmission_StoresExactNone()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-canceled";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.UpsertTurnAsync("Cursor", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113908Z-canceled",
+            Status = "canceled",
+        }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogTurns.SingleAsync(t => t.RequestId == "req-20260304T113908Z-canceled", TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("None", stored.PlanFile);
+        Assert.Equal("None", stored.TodoId);
+        Assert.Equal("canceled", stored.Status);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: cancelled supersession may omit the pair and stores exact None.</summary>
+    [Fact]
+    public async Task UpsertTurnAsync_CancelledOmission_StoresExactNone()
+    {
+        var sessionId = "Cursor-20260304T113901Z-ctx-cancelled";
+        await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.UpsertTurnAsync("Cursor", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113909Z-cancelled",
+            Status = "cancelled",
+        }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogTurns.SingleAsync(t => t.RequestId == "req-20260304T113909Z-cancelled", TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("None", stored.PlanFile);
+        Assert.Equal("None", stored.TodoId);
+        Assert.Equal("cancelled", stored.Status);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: interactive submit with an empty planFile and a valid todoId inserts no turn.</summary>
+    [Fact]
+    public async Task SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn()
+    {
+        var dto = CreateSession("Cursor-20260304T113901Z-ctx-subempty");
+        dto.Turns!.First().PlanFile = string.Empty;
+        dto.Turns!.First().TodoId = "MCP-SESSIONLOG-002";
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Equal(0, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: interactive submit with a valid planFile and omitted todoId inserts no turn.</summary>
+    [Fact]
+    public async Task SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn()
+    {
+        var dto = CreateSession("Cursor-20260304T113901Z-ctx-subtodo");
+        dto.Turns!.First().PlanFile = "docs/plans/foo.md";
+        dto.Turns!.First().TodoId = null;
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Equal(0, await _db.SessionLogTurns.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-002: None/None persists as None.</summary>
     [Fact]
     public async Task UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone()

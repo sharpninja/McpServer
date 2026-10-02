@@ -228,6 +228,101 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             [string](Get-ReplObjectValue -InputObject $Receipt -Name 'sessionId') | Should -Be $SessionId
             [string](Get-ReplObjectValue -InputObject $Receipt -Name 'requestId') | Should -Be ''
         }
+
+        function Initialize-P2VerifiedSession {
+            param($Layout)
+            $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+            Write-McpYamlObject -Path (Join-Path $Layout.Cache 'session-state.yaml') -Document ([ordered]@{
+                sessionId = $Layout.SessionId
+                status = 'verified'
+                agent = 'Codex'
+                workspacePath = $Layout.Workspace
+                timestamp = $now
+                lastUpdated = $now
+                markerFilePath = [string]$Layout.Snapshot.markerFilePath
+                markerLastWriteUtc = [string]$Layout.Snapshot.markerLastWriteUtc
+            })
+        }
+
+        function Invoke-P2Hook {
+            param(
+                $Layout,
+                [Parameter(Mandatory)][string]$HookName,
+                [string]$StdinJson = '',
+                [ValidateSet('primary', 'queued', 'lost')][string]$Mode = 'primary'
+            )
+            $hook = Join-Path $script:RepoRoot 'plugins\core\lib-ps\plugin-hook.ps1'
+            $log = Join-Path $Layout.Root 'hook-repl-log.txt'
+            $state = Join-Path $Layout.Root 'hook-server-state.txt'
+            $psi = [System.Diagnostics.ProcessStartInfo]::new()
+            $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
+            foreach ($arg in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $hook, '-HookName', $HookName)) {
+                $psi.ArgumentList.Add($arg)
+            }
+            $psi.WorkingDirectory = $Layout.Workspace
+            $psi.UseShellExecute = $false
+            $psi.RedirectStandardInput = $true
+            $psi.RedirectStandardOutput = $true
+            $psi.RedirectStandardError = $true
+            $toRemove = @($psi.Environment.Keys | Where-Object { $_ -match 'GROK|PLUGIN_AGENT|MCP_AGENT|MCP_SESSION|MCP_CACHE|MCP_WORKSPACE|MCPSERVER|MCP_PLUGIN_PERSIST|MCP_PLUGIN_REPL|^P2_' })
+            foreach ($k in $toRemove) { [void]$psi.Environment.Remove($k) }
+            $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $Layout.Cache
+            $psi.Environment['MCPSERVER_FAILSAFE_DIR'] = $Layout.Failsafe
+            $psi.Environment['MCP_WORKSPACE_PATH'] = $Layout.Workspace
+            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $Layout.Workspace
+            $psi.Environment['MCP_PLUGIN_HOST'] = 'codex'
+            $psi.Environment['MCP_AGENT_NAME'] = 'Codex'
+            $psi.Environment['PLUGIN_AGENT_NAME'] = 'Codex'
+            $psi.Environment['MCP_REPL_EXECUTABLE'] = $script:FakeRepl
+            $psi.Environment['P2_REPL_MODE'] = $Mode
+            $psi.Environment['P2_REPL_LOG'] = $log
+            $psi.Environment['P2_SERVER_STATE'] = $state
+            $psi.Environment['MCP_AGENT_EXECUTABLE_VERSION'] = 'codex-test-1'
+            $proc = [System.Diagnostics.Process]::Start($psi)
+            if ($StdinJson) { $proc.StandardInput.Write($StdinJson) }
+            $proc.StandardInput.Close()
+            $stdout = $proc.StandardOutput.ReadToEndAsync()
+            $stderr = $proc.StandardError.ReadToEndAsync()
+            if (-not $proc.WaitForExit(60000)) {
+                try { $proc.Kill($true) } catch { }
+                throw "timed out waiting for hook $HookName"
+            }
+            $receiptPath = Join-Path $Layout.Cache 'session-verb-outcome.yaml'
+            $receipt = $null
+            if (Test-Path -LiteralPath $receiptPath) { $receipt = Read-McpYamlObject -Path $receiptPath }
+            [pscustomobject]@{
+                ExitCode = $proc.ExitCode
+                Stdout = [string]$stdout.Result
+                Stderr = [string]$stderr.Result
+                Receipt = $receipt
+                ServerState = if (Test-Path -LiteralPath $state) { [System.IO.File]::ReadAllText($state) } else { '' }
+            }
+        }
+
+        function Get-P2ServerTurns {
+            param([string]$ServerState)
+            $turns = @()
+            foreach ($line in ([string]$ServerState -split "\r?\n")) {
+                $trim = $line.Trim().TrimStart([char]0xFEFF)
+                if (-not $trim.StartsWith('{')) { continue }
+                $doc = $trim | ConvertFrom-Json
+                $sessionLog = $doc.payload.params.sessionLog
+                if ($sessionLog -and $sessionLog.turns) {
+                    foreach ($turn in @($sessionLog.turns)) { $turns += $turn }
+                }
+            }
+            return $turns
+        }
+
+        function Assert-P2FullCache {
+            param($Turn, [string]$QueryText, [string]$PlanFile, [string]$TodoId)
+            [string]$Turn.queryText | Should -Be $QueryText
+            [string]$Turn.queryTitle | Should -Not -BeNullOrEmpty
+            [string]$Turn.planFile | Should -Be $PlanFile
+            [string]$Turn.todoId | Should -Be $TodoId
+            [string]$Turn.openedAt | Should -Not -BeNullOrEmpty
+            [string]$Turn.turnRequestId | Should -Not -BeNullOrEmpty
+        }
     }
 
     AfterAll {
@@ -1208,6 +1303,184 @@ Write-Output ("agent=" + $script:AgentName)
         $after2 = Read-McpYamlObject -Path $turnPath2
         [string]$after2.sessionId | Should -Be 'Codex-20260930T000000Z-sessiona'
         [string]$after2.planFile | Should -Be 'docs/plans/bound.md'
+    }
+
+    It 'fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact' {
+        $primary = New-P2Layout -Name 'hook-open-primary'
+        Initialize-P2VerifiedSession -Layout $primary
+        $opened = Invoke-P2Hook -Layout $primary -HookName 'user-prompt-submit' -StdinJson '{"prompt":"fresh primary prompt"}' -Mode 'primary'
+        if ([string]::IsNullOrWhiteSpace($opened.Stdout)) { throw "primary hook stdout empty; stderr=$($opened.Stderr)" }
+        $opened.Stdout | Should -Match 'turn-opened'
+        $opened.Stdout | Should -Not -Match 'turn-opened-degraded'
+        $opened.Stdout | Should -Not -Match 'turn-open-failed'
+        $opened.Stdout | Should -Not -Match 'turn-already-open'
+        $opened.Stdout | Should -Not -Match 'recoveryArtifactPath'
+        $opened.Stdout | Should -Not -Match 'server-persisted'
+        [string](Get-ReplObjectValue -InputObject $opened.Receipt -Name 'code') | Should -Be 'persisted'
+        [string](Get-ReplObjectValue -InputObject $opened.Receipt -Name 'persisted') | Should -Match '^(?i:true|1)$'
+        $opened.ServerState | Should -Match 'fresh primary prompt'
+        $primaryTurn = Read-McpYamlObject -Path (Join-Path $primary.Cache 'current-turn.yaml')
+        [string]$primaryTurn.queryText | Should -Be 'fresh primary prompt'
+        if ($primaryTurn.Contains('degraded')) { [string]$primaryTurn.degraded | Should -Not -Match '^(?i:true|1)$' }
+
+        $degraded = New-P2Layout -Name 'hook-open-degraded'
+        Initialize-P2VerifiedSession -Layout $degraded
+        $queued = Invoke-P2Hook -Layout $degraded -HookName 'user-prompt-submit' -StdinJson '{"prompt":"fresh queued prompt"}' -Mode 'queued'
+        if ([string]::IsNullOrWhiteSpace($queued.Stdout)) { throw "queued hook stdout empty; stderr=$($queued.Stderr)" }
+        $queued.Stdout | Should -Match 'turn-opened-degraded'
+        $queued.Stdout | Should -Match 'recoveryArtifactPath'
+        $queued.Stdout | Should -Not -Match 'server-persisted'
+        $queued.Stdout | Should -Not -Match 'turn-open-failed'
+        [string](Get-ReplObjectValue -InputObject $queued.Receipt -Name 'persisted') | Should -Not -Match '^(?i:true|1)$'
+        [string](Get-ReplObjectValue -InputObject $queued.Receipt -Name 'code') | Should -Be 'queued'
+        $queued.ServerState | Should -Be ''
+        $queuedDoc = $queued.Stdout | ConvertFrom-Json
+        $artifact = [string]$queuedDoc.hookSpecificOutput.recoveryArtifactPath
+        $artifact | Should -Not -BeNullOrEmpty
+        Test-Path -LiteralPath $artifact | Should -BeTrue
+        $queuedTurn = Read-McpYamlObject -Path (Join-Path $degraded.Cache 'current-turn.yaml')
+        [string]$queuedTurn.queryText | Should -Be 'fresh queued prompt'
+        [string]$queuedTurn.degraded | Should -Match '^(?i:true|1)$'
+        [string]$queuedTurn.failsafePath | Should -Be $artifact
+    }
+
+    It 'prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence' {
+        $layout = New-P2Layout -Name 'hook-consumers'
+        Initialize-P2VerifiedSession -Layout $layout
+        $begin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: same prompt`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'queued'
+        $begin.ExitCode | Should -Be 0
+        $turnPath = Join-Path $layout.Cache 'current-turn.yaml'
+        $seed = Read-McpYamlObject -Path $turnPath
+        $seed['openedAt'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        Write-McpYamlObject -Path $turnPath -Document $seed
+
+        $prompt = Invoke-P2Hook -Layout $layout -HookName 'user-prompt-submit' -StdinJson '{"prompt":"same prompt"}' -Mode 'queued'
+        if ([string]::IsNullOrWhiteSpace($prompt.Stdout)) { throw "consumer hook stdout empty; stderr=$($prompt.Stderr)" }
+        $prompt.Stdout | Should -Match 'turn-already-open'
+        $prompt.Stdout | Should -Match 'recoveryArtifactPath'
+        $prompt.Stdout | Should -Not -Match 'server-persisted'
+        $afterPrompt = Read-McpYamlObject -Path $turnPath
+        Assert-P2FullCache -Turn $afterPrompt -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+
+        Remove-Item -LiteralPath (Join-Path $layout.Root 'server-state.txt') -ErrorAction SilentlyContinue
+        $update = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "queryText: `"`"`nresponse: noted`n" -Mode 'queued'
+        $update.ExitCode | Should -Be 0
+        [string](Get-ReplObjectValue -InputObject $update.Receipt -Name 'persisted') | Should -Not -Match '^(?i:true|1)$'
+        [string](Get-ReplObjectValue -InputObject $update.Receipt -Name 'code') | Should -Be 'queued'
+        $update.ServerState | Should -Be ''
+        $update.Stderr | Should -Not -Match 'server-persisted'
+        $afterUpdate = Read-McpYamlObject -Path $turnPath
+        Assert-P2FullCache -Turn $afterUpdate -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+
+        $dialog = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: kept`n    category: reasoning`n" -Mode 'queued'
+        $dialog.ExitCode | Should -Be 0
+        [string](Get-ReplObjectValue -InputObject $dialog.Receipt -Name 'persisted') | Should -Not -Match '^(?i:true|1)$'
+        [string](Get-ReplObjectValue -InputObject $dialog.Receipt -Name 'code') | Should -Be 'queued'
+        $dialog.ServerState | Should -Be ''
+        $afterDialog = Read-McpYamlObject -Path $turnPath
+        Assert-P2FullCache -Turn $afterDialog -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+
+        $afterDialog['auditActions'] = 2
+        Write-McpYamlObject -Path $turnPath -Document $afterDialog
+        $stop = Invoke-P2Hook -Layout $layout -HookName 'stop-gate' -Mode 'queued'
+        $stop.Stdout | Should -Not -Match 'server-persisted'
+        [string](Get-ReplObjectValue -InputObject $stop.Receipt -Name 'persisted') | Should -Not -Match '^(?i:true|1)$'
+        $afterStop = Read-McpYamlObject -Path $turnPath
+        Assert-P2FullCache -Turn $afterStop -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+
+        $payloadLayout = New-P2Layout -Name 'empty-query-payload'
+        $null = Invoke-P2Verb -Layout $payloadLayout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+        Remove-Item -LiteralPath (Join-Path $payloadLayout.Root 'server-state.txt') -Force
+        $primaryUpdate = Invoke-P2Verb -Layout $payloadLayout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "queryText: `"`"`nresponse: noted`n" -Mode 'primary'
+        $primaryUpdate.ExitCode | Should -Be 0
+        $sent = @(Get-P2ServerTurns -ServerState $primaryUpdate.ServerState)
+        $sent.Count | Should -BeGreaterThan 0
+        [string]$sent[-1].queryText | Should -Be 'keep me'
+        $primaryUpdate.ServerState | Should -Not -Match '"queryText"\s*:\s*""'
+        $kept = Read-McpYamlObject -Path (Join-Path $payloadLayout.Cache 'current-turn.yaml')
+        [string]$kept.queryText | Should -Be 'keep me'
+    }
+
+    It 'missing-turn dialog recovery stays bounded and does not claim server persistence' {
+        $layout = New-P2Layout -Name 'dialog-missing'
+        Test-Path -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') | Should -BeFalse
+        $dialog = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n  - role: model`n    content: orphan`n    category: reasoning`n" -Mode 'primary'
+        $dialog.ExitCode | Should -Not -Be 0
+        Assert-P2Receipt -Receipt $dialog.Receipt -Method 'workflow.sessionlog.appendDialog' -RequestId '' -Code 'lost'
+        [string](Get-ReplObjectValue -InputObject $dialog.Receipt -Name 'persisted') | Should -Not -Match '^(?i:true|1)$'
+        $dialog.ServerState | Should -Be ''
+        $dialog.Stderr | Should -Match 'current-turn.yaml'
+        $dialog.Stderr | Should -Not -Match 'server-persisted'
+        Test-Path -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') | Should -BeFalse
+    }
+
+    It 'asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset' {
+        if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
+        $env:MCP_PLUGIN_PERSIST_LOG | Should -BeNullOrEmpty
+        $layout = New-P2Layout -Name 'complete-payload'
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+        $result.ExitCode | Should -Be 0
+        $env:MCP_PLUGIN_PERSIST_LOG | Should -BeNullOrEmpty
+        $cached = Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')
+        Assert-P2FullCache -Turn $cached -QueryText 'keep me' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+        [string]$cached.queryTitle | Should -Be 'kept title'
+        $sent = @(Get-P2ServerTurns -ServerState $result.ServerState)
+        $sent.Count | Should -Be 1
+        [string]$sent[0].queryText | Should -Be 'keep me'
+        [string]$sent[0].queryTitle | Should -Be 'kept title'
+        [string]$sent[0].planFile | Should -Be 'docs/plans/p2.md'
+        [string]$sent[0].todoId | Should -Be 'BUG-TRIAGE-246'
+        [string]$sent[0].requestId | Should -Be 'req-p2-verb'
+    }
+
+    It 'rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row' {
+        $cases = @(
+            @{ Name = 'null-todo'; Yaml = "requestId: req-null-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: null`n" },
+            @{ Name = 'empty-todo'; Yaml = "requestId: req-empty-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: `"`"`n" },
+            @{ Name = 'whitespace-todo'; Yaml = "requestId: req-ws-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: `"  `"`n" },
+            @{ Name = 'empty-plan'; Yaml = "requestId: req-empty-plan`nqueryTitle: t`nqueryText: q`nplanFile: `"`"`ntodoId: BUG-TRIAGE-246`n" }
+        )
+        foreach ($case in $cases) {
+            $layout = New-P2Layout -Name $case.Name
+            $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $case.Yaml -Mode 'primary'
+            $result.ExitCode | Should -Not -Be 0
+            Assert-P2Receipt -Receipt $result.Receipt -Method 'workflow.sessionlog.beginTurn' -RequestId ($case.Yaml.Split("`n")[0] -replace 'requestId:\s*','') -Code 'rejected'
+            $result.ServerState | Should -Be ''
+            Test-Path -LiteralPath (Join-Path $layout.Cache 'current-turn.yaml') | Should -BeFalse
+        }
+    }
+
+    It 'stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled' {
+        $layout = New-P2Layout -Name 'supersede-omit'
+        Write-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml') -Document ([ordered]@{
+            turnRequestId = 'req-p2-old'
+            sessionId = $layout.SessionId
+            status = 'in_progress'
+            queryText = 'old query'
+            queryTitle = 'old title'
+            openedAt = '2026-09-30T00:00:00Z'
+            markerFilePath = $layout.Snapshot.markerFilePath
+            markerLastWriteUtc = $layout.Snapshot.markerLastWriteUtc
+        })
+        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-new`nqueryTitle: next`nqueryText: next text`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+        $result.ExitCode | Should -Be 0
+        $turns = @(Get-P2ServerTurns -ServerState $result.ServerState)
+        $canceled = @($turns | Where-Object { [string]$_.requestId -eq 'req-p2-old' })
+        $canceled.Count | Should -Be 1
+        [string]$canceled[0].status | Should -Be 'canceled'
+        [string]$canceled[0].planFile | Should -Be 'None'
+        [string]$canceled[0].todoId | Should -Be 'None'
+
+        $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $env:MCP_CACHE_DIR_OVERRIDE = $layout.Cache
+        try {
+            $built = Invoke-ReplTurnUpsertParams -SourceType 'Codex' -SessionId $layout.SessionId -RequestId 'req-p2-old' -Title 'old title' -Status 'cancelled' -PlanFile '' -TodoId ''
+            [string]$built.turn.status | Should -Be 'canceled'
+            if ($built.turn.Contains('planFile')) { [string]$built.turn.planFile | Should -Be 'None' }
+            if ($built.turn.Contains('todoId')) { [string]$built.turn.todoId | Should -Be 'None' }
+        } finally {
+            if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+        }
     }
 
 }
