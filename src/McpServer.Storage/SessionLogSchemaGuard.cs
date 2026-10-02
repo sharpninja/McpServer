@@ -38,6 +38,16 @@ public static class SessionLogSchemaGuard
         if (IsInMemory(db))
             return;
 
+        // Each SQLite :memory: connection is its own database. The connection
+        // string is identical, so a ready database must not skip the probe on
+        // a different missing-column database.
+        if (IsSqliteMemory(db))
+        {
+            if (!Probe(db))
+                throw new SessionLogSchemaPendingMigrationException();
+            return;
+        }
+
         var cacheKey = db.Database.GetConnectionString() ?? db.Database.ProviderName ?? "default";
         lock (CacheLock)
         {
@@ -95,6 +105,13 @@ public static class SessionLogSchemaGuard
     {
         var provider = db.Database.ProviderName ?? string.Empty;
         return provider.Contains("InMemory", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsSqliteMemory(McpDbContext db)
+    {
+        var connectionString = db.Database.GetConnectionString() ?? string.Empty;
+        return connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase)
+            || connectionString.Contains("Mode=Memory", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool ProbeSqlite(McpDbContext db)
