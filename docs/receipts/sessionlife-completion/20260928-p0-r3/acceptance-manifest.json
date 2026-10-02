@@ -319,7 +319,8 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -333,10 +334,7 @@
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
@@ -614,7 +612,21 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
-        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone"
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
@@ -1689,7 +1701,8 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1704,11 +1717,8 @@
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
-        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
@@ -1746,7 +1756,8 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1760,9 +1771,8 @@
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
-        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
@@ -1998,7 +2008,21 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
-        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone"
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession",
@@ -2588,7 +2612,8 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2607,12 +2632,9 @@
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
-        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.DegradedCompletePreservesFullTurn",
@@ -2654,7 +2676,8 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2668,9 +2691,7 @@
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
@@ -2817,7 +2838,21 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
-        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone"
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
@@ -4116,7 +4151,21 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
-        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone"
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
