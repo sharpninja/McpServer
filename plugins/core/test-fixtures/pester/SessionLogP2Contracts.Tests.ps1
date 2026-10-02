@@ -37,6 +37,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 '    $omitIds = ($null -eq $sessionId -and $null -eq $requestId)'
                 '    $lines = [System.Collections.Generic.List[string]]::new(); $lines.Add(''type: result''); $lines.Add(''payload:''); $lines.Add(''  result:'')'
                 '    if ($stdin -match ''SetTurnTitleAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add((''    retitled: '' + $retitled)); $lines.Add(''    turnId: 1'') }'
+                '    elseif ($stdin -match ''SetSessionTitleAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add((''    retitled: '' + $retitled)) }'
                 '    elseif ($stdin -match ''AppendDialogAsync'') { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add(''    totalDialogCount: 1'') }'
                 '    else { if (-not $omitIds) { $lines.Add((''    sessionId: '' + $sessionId)); $lines.Add((''    requestId: '' + $requestId)) }; $lines.Add(''    persisted: true''); $lines.Add(''    degraded: false'') }'
                 '    $out = ($lines -join [Environment]::NewLine); [Console]::Out.Write($out + [Environment]::NewLine)'
@@ -208,6 +209,25 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
             [string](Get-ReplObjectValue -InputObject $Receipt -Name 'requestId') | Should -Be $RequestId
             [string](Get-ReplObjectValue -InputObject $Receipt -Name 'message') | Should -Not -BeNullOrEmpty
         }
+
+        function Assert-P2PrimaryEnvelope {
+            param([string]$Stdout, [string]$Method)
+            $text = [string]$Stdout
+            $text | Should -Not -Match '(?m)^(True|False)\s*$'
+            $documents = @(ConvertFrom-Yaml -Yaml $text -AllDocuments)
+            $documents.Count | Should -Be 1
+            [string]$documents[0].type | Should -Be 'result'
+            $node = $documents[0].payload.result
+            [string](Get-ReplObjectValue -InputObject $node -Name 'code') | Should -Be 'persisted'
+            [string](Get-ReplObjectValue -InputObject $node -Name 'method') | Should -Be $Method
+        }
+
+        function Assert-P2SessionTitleBinding {
+            param($Receipt, [string]$Verb, [string]$SessionId)
+            if ($Verb -ne 'workflow.sessionlog.setSessionTitle') { return }
+            [string](Get-ReplObjectValue -InputObject $Receipt -Name 'sessionId') | Should -Be $SessionId
+            [string](Get-ReplObjectValue -InputObject $Receipt -Name 'requestId') | Should -Be ''
+        }
     }
 
     AfterAll {
@@ -235,11 +255,13 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                     $layout = New-P2Layout -Name ($name -replace '[^A-Za-z0-9]+', '-')
                     if ($verb.NeedsTurn) { Write-P2Turn -Layout $layout }
                     $result = Invoke-P2Verb -Layout $layout -Method $verb.Verb -ParamsYaml $verb.Yaml -Mode $(if ($mode -eq 'lost') { 'queued' } else { $mode }) -BreakFailsafe:($mode -eq 'lost')
-                    $requestId = if ($verb.Verb -eq 'workflow.sessionlog.setSessionTitle') { $layout.SessionId } else { $layout.RequestId }
+                    $requestId = if ($verb.Verb -eq 'workflow.sessionlog.setSessionTitle') { '' } else { $layout.RequestId }
+                    $identityNeedle = if ($verb.Verb -eq 'workflow.sessionlog.setSessionTitle') { $layout.SessionId } else { $requestId }
                     if ($mode -eq 'primary') {
                         $result.ExitCode | Should -Be 0
-                        $result.Stdout.Trim() | Should -Be ''
+                        Assert-P2PrimaryEnvelope -Stdout $result.Stdout -Method $verb.Verb
                         Assert-P2Receipt -Receipt $result.Receipt -Method $verb.Verb -RequestId $requestId -Code 'persisted'
+                        Assert-P2SessionTitleBinding -Receipt $result.Receipt -Verb $verb.Verb -SessionId $layout.SessionId
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'persisted')) | Should -BeTrue
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'queued')) | Should -BeFalse
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'degraded')) | Should -BeFalse
@@ -251,6 +273,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                     } elseif ($mode -eq 'queued') {
                         $result.ExitCode | Should -Be 0
                         Assert-P2Receipt -Receipt $result.Receipt -Method $verb.Verb -RequestId $requestId -Code 'queued'
+                        Assert-P2SessionTitleBinding -Receipt $result.Receipt -Verb $verb.Verb -SessionId $layout.SessionId
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'persisted')) | Should -BeFalse
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'degraded')) | Should -BeTrue
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'queued')) | Should -BeTrue
@@ -258,7 +281,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                         $result.ServerState | Should -Be ''
                         $kept = @(Get-ChildItem -LiteralPath $layout.Failsafe -Filter '*.yaml' -File -ErrorAction SilentlyContinue)
                         $kept.Count | Should -BeGreaterThan 0
-                        [System.IO.File]::ReadAllText($kept[0].FullName).Contains($requestId) | Should -BeTrue
+                        [System.IO.File]::ReadAllText($kept[0].FullName).Contains($identityNeedle) | Should -BeTrue
                         if ($verb.Verb -eq 'workflow.sessionlog.completeTurn') {
                             [string](Read-McpYamlObject -Path (Join-Path $layout.Cache 'current-turn.yaml')).status | Should -Be 'in_progress'
                         }
@@ -268,6 +291,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                     } else {
                         $result.ExitCode | Should -Not -Be 0
                         Assert-P2Receipt -Receipt $result.Receipt -Method $verb.Verb -RequestId $requestId -Code 'lost'
+                        Assert-P2SessionTitleBinding -Receipt $result.Receipt -Verb $verb.Verb -SessionId $layout.SessionId
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'persisted')) | Should -BeFalse
                         (ConvertTo-P2Bool (Get-ReplObjectValue -InputObject $result.Receipt -Name 'queued')) | Should -BeFalse
                         [string](Get-ReplObjectValue -InputObject $result.Receipt -Name 'childStderr') | Should -Not -BeNullOrEmpty
