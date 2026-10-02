@@ -32,8 +32,14 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             $script:LastPersistInterpretation = $Interpretation
             $script:LastPersistTags = @($Tags)
             $script:LastPersistContext = @($ContextList)
+            $disposition = if ($script:PersistOk) { 'primary' } elseif ($script:PersistQueued) { 'queued' } else { 'rejected' }
+            [void](Publish-ReplSessionVerbReceipt -Receipt (New-ReplSessionVerbReceipt -Disposition $disposition -Method $script:ReplPersistVerbMethod -RequestId $RequestId))
             return $script:PersistOk
         }
+    }
+
+    BeforeEach {
+        $script:PersistQueued = $false
     }
 
     It 'appendActions refuses a request id that does not match the cached turn' {
@@ -72,7 +78,7 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         $env:MCP_WORKSPACE_PATH = $script:RepoRoot
         $script:PersistCalls = 0
         $script:PersistOk = $false
-        $script:LastReplPersistenceDetails = [ordered]@{ queued = $false; persisted = $false }
+        $script:PersistQueued = $false
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260923T205606Z-life'
@@ -103,7 +109,7 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         $env:MCP_WORKSPACE_PATH = $script:RepoRoot
         $script:PersistCalls = 0
         $script:PersistOk = $false
-        $script:LastReplPersistenceDetails = [ordered]@{ queued = $true; persisted = $false; degraded = $true; failsafePath = (Join-Path $dir 'pending.yaml') }
+        $script:PersistQueued = $true
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260923T205606Z-life'
@@ -134,7 +140,7 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         $env:MCP_WORKSPACE_PATH = $script:RepoRoot
         $script:PersistCalls = 0
         $script:PersistOk = $false
-        $script:LastReplPersistenceDetails = [ordered]@{ queued = $true; persisted = $false }
+        $script:PersistQueued = $true
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260923T205606Z-life'

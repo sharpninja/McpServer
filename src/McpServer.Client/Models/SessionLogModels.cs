@@ -522,4 +522,8 @@ public sealed class SessionLogMutationResult
     /// <summary>True when a session, turn, or item was deleted.</summary>
     [JsonPropertyName("deleted")]
     public bool Deleted { get; set; }
+
+    /// <summary>True when the server confirms that a session or turn title was updated.</summary>
+    [JsonPropertyName("retitled")]
+    public bool Retitled { get; set; }
 }

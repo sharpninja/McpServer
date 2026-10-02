@@ -1,0 +1,17 @@
+{
+  "Utc": "2026-10-02T01:03:01.1861116Z",
+  "SessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "RequestId": "req-20261002T005924Z-red-gate-recheck",
+  "Model": "gpt-6-astra",
+  "Status": "completed",
+  "FullVerdictReadback": true,
+  "Equality": "Ordinal equality after CRLF-to-LF and trailing whitespace normalization only",
+  "ResponseCharacters": 7436,
+  "ExpectedSha256": "D25B775EA87715551CB5B9F5E244484A36FBF0C6BA32E39E912A162E91678132",
+  "ActualSha256": "D25B775EA87715551CB5B9F5E244484A36FBF0C6BA32E39E912A162E91678132",
+  "Actions": 1,
+  "Decisions": 2,
+  "Dialogs": 1,
+  "Receipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-recheck-sa-ef70105b.json",
+  "Method": "client.SessionLog.QueryAsync"
+}

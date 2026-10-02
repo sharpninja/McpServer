@@ -309,18 +309,39 @@
   - [ ] Replay and fanout tests prove signed envelopes are verified before local apply.
 - TEST-MCP-137: Given templates/prompt-templates.yaml, when the marker-template contract tests run, then default-marker-prompt contains the frontier-to-implementation planning guidance, explicit requirements capture guidance, and TDD unit-test planning guidance.
   Scope: layer-1+
-- TEST-MCP-138: Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
+- TEST-MCP-138: Unit and provider tests must fail red until WorkspaceService is database-authoritative and DbFkContractTests prove every WorkspaceId entity has a canonical Workspaces FK with non-cascade delete behavior. Non-memory FKs are required; MemoryEntity and MemoryIndexEntity use optional FKs because Global scope stores null WorkspaceId. Provider tests must prove the same physical constraints.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] DbFkContractTests fails when a non-memory WorkspaceId entity lacks a required non-cascade Workspaces FK.
+  - [ ] Memory relationship tests prove optional Workspaces FKs accept Global null, reject orphan non-null workspace IDs, and preserve parent/index ownership consistency.
+  - [ ] SQLite, PostgreSQL, and SQL Server migrated physical schemas expose the expected FK nullability and delete action with existing rows preserved.
 - TEST-MCP-139: Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] A negative-control model with Cascade fails the memory relationship contract; the real EF model uses Restrict or NoAction.
+  - [ ] Provider tests soft-delete a memory and prove its version and index rows remain queryable for audit and recovery.
+  - [ ] Migrated SQLite, PostgreSQL, and SQL Server schemas have non-cascade MemoryId FKs and preserve seeded row counts.
 - TEST-MCP-140: Unit and provider tests must fail red until TODO requirement links and requirement traceability links enforce FKs, missing requirements are backfilled, and SQLite, SQL Server, and PostgreSQL migrations preserve data.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Unit tests fail when TODO requirement links omit a durable TODO or Requirements FK.
+  - [ ] Unit tests fail when FR/TR/TEST traceability links omit source or target Requirements FKs.
+  - [ ] Provider migrations backfill missing requirement anchors and preserve existing TODO, requirement, and traceability rows.
+  - [ ] SQLite, SQL Server, and PostgreSQL migrations enforce the physical FKs without data loss.
 - TEST-MCP-141: Add or update a documentation contract test proving docs/Development-Process-draft-v3.md captures the plan creation requirements for decision-complete frontier-model handoff plans, FR/TR/TEST traceability, TDD-first red/green behavior, and zero-failure zero-skip Byrd gates.
   Scope: layer-1+
 - TEST-MCP-142: Bats coverage must prove workflow.requirements.updateFr, updateTr, and updateTest accept priority changes and do not fail inside the Codex plugin wrapper.
   Scope: layer-1+
 - TEST-MCP-143: Validate that outstanding-session consolidation creates MCP-backed requirements and TODO traceability, inventories dirty workspaces, preserves unrelated changes, blocks unsafe deploys, and records zero-failure zero-skip validation gates before completion.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Build.Tests red cases verify a fresh run with a unique run ID accepts exactly the Nuke-emitted selected-project inventory and one fresh per-project TRX for every expected unit and provider project.
+  - [ ] Build.Tests red cases independently reject a missing expected project report and a duplicate project report.
+  - [ ] Build.Tests red cases reject stale reports from a prior run and reports whose run-start, source-file manifest, tool-version manifest, or candidate-source hashes do not match the current candidate.
+  - [ ] Build.Tests red cases reject total zero, zero discovery, executed less than total, failed greater than zero, skipped greater than zero, and notExecuted greater than zero.
+  - [ ] Build.Tests red cases reject Pester failed blocks or containers even when individual test counters appear green.
+  - [ ] Build.Tests red cases prove an earlier Pester, Nuke Test, or Build.Tests command failure blocks the gate even when a later command exits zero.
+  - [ ] Proposed concrete cases include SessionLifeUnitGateTests.Validator_AcceptsFreshRunInventoryAndCompleteReports, RejectsMissingExpectedProjectReport, RejectsDuplicateProjectReport, RejectsStaleReportFromPriorRun, RejectsZeroDiscoveryOrEmptyReport, RejectsSkippedOrNotExecutedTests, RejectsPesterFailedBlocksOrContainers, RejectsCandidateSourceManifestDrift, and RejectsEarlierCommandFailureEvenWhenLaterCommandSucceeds; names remain proposed until the P1 red-test review accepts them.
 - TEST-MCP-144: Given a TODO description containing Markdown headings, lists, code fences, blank lines, leading indentation, and trailing content, create, update, read, audit, and projection paths preserve the exact meaningful formatting with zero failures and zero skips.
   Scope: layer-1+
 - TEST-MCP-145: Automated tests shall verify client request serialization, controller mixed-batch acceptance and whole-batch rejection, repository transaction rollback, and REPL schema validation for requirements batch commands.
@@ -404,7 +425,8 @@
 - TEST-MCP-164: aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PLAN-TURNTRANSACTIONS-001 and fail on critical/high findings.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] `PlanTransactionReviewTests` validates `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`, reviewed scope, pass status, and absence of critical/high findings.
+  - [x] PlanTransactionReviewTests validates the original committed aiUnit JSON run log for PLAN-TURNTRANSACTIONS-001, its reviewed scope, pass status, and absence of critical or high findings. (evidence: Git commit dd502e001f4ea9c4b7c175cee9d8c0b27b7b56cf blob 8f046a33caf8c0e04d74ac7f67628df5e86145e1; tests/McpServer.PlanReview.Tests/TestResults/original-runlog-green.trx (1 passed, 0 failed, 0 skipped))
+  - [x] The byte-identical original run log is copied as a test resource and read from test output; running the test does not use a repository path or write docs/reviews. (evidence: tests/McpServer.PlanReview.Tests/Fixtures/README.md; SHA-256 D826A458802C3252EEE88D898D633E610331506D186350D54E71573686B51878; original-runlog-green.trx)
 - TEST-MCP-165: Imported diagram preservation tests SHALL validate all six imported Mermaid diagrams, stable IDs, imported source references, and repo annotations.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -560,6 +582,12 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] The aiUnit review can be invoked directly through the AiWarningSuppressionReview NUKE target. (evidence: build/Build.AiWarningSuppressionReview.cs)
   - [ ] A completed warning remediation closeout must include the aiUnit review result or documented blocker before PLAN-WARNREMEDIATION-001 is marked done.
   - [ ] Named tests exist: Build_HasNormalizeGeneratedMigrationObsoletePragmasTarget; NormalizeGeneratedMigrationTarget_UsesMockCatalogAndAtomicWriter; NormalizeGeneratedMigrationObsoletePragmas_ReplacesOnlyExactPairsWithBlankLines; NormalizeGeneratedMigrationObsoletePragmas_IgnoresNonGeneratedAndNonMigrationFiles; NormalizeGeneratedMigrationObsoletePragmas_IsIdempotent; ValidateWarningSuppressions_GeneratedMigrationPragmas_FailsReadOnlyWithoutMutation.
+- TEST-MCP-AUDIT-001: AuditPayloadMigrationTests and AuditPayloadProviderMigrationTests apply the real SQLite, PostgreSQL, and SQL Server migrations in scratch databases, verify legacy text reads and all four compressed payload round trips, and confirm the new migration ID is applied.
+  Scope: layer-1+
+- TEST-MCP-AUDIT-002: DbFkBehaviorTests reject tracked audit updates. SqlServerAuditPayloadMigrationTests assert seven SQL Server runtime-role DENY permissions. AuditPayloadMigrationTests verify AutoMigrate false rejects pending schema and accepts migrated schema.
+  Scope: layer-1+
+- TEST-MCP-AUDIT-003: FederationStateAdapterRegistryTests verify TODO snapshots omit audit history; WikiDumpG7OverlayTests verify both audit tables are marked OMIT-LOCAL and audit sentinels are absent from exported payloads.
+  Scope: layer-1+
 - TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -779,6 +807,7 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
   - [x] The focused target and each plugin native suite complete with zero failures and zero skips. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
   - [x] Retain P1-P20 names from the incorporated catalog. Eight production-entrypoint rows and eight real aiUnit rows are discovered. Failed and skipped counts are zero. Direct-client-only or prewritten-success fixtures fail the gate. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
+  - [ ] All eight production-entrypoint rows execute a dense existing-session update and an induced retryable persistence failure followed by recovery, assert the same normalized outcome fields, and independently prove either exact durable readback or retained then drained recovery work with zero failures and zero skips.
 - TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1076,8 +1105,26 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-REQEXPORT-003: Verifies generateDocument accepts format=markdown for docType=matrix (and other non-wiki docTypes) without a format rejection at the schema, validator, and workflow layers. Validates TR-MCP-REQEXPORT-003 / BUG-TRIAGE-074.
   Scope: layer-1+
+- TEST-MCP-REQRECOVERY-001: Provider-backed and production-entrypoint tests must prove deterministic dry-run, atomic mixed apply, rollback, stale-precondition rejection, idempotent replay, concurrency safety, exact audit readback, and synchronized supported-plugin behavior.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] A mixed create, update, delete, acceptance-criteria, mapping-upsert, and mapping-delete plan commits once and exact post-query state and counts match the approved dry-run.
+  - [ ] Injected validation and persistence failures at each operation class leave the effective requirements, criteria, mappings, idempotency state, and audit state byte-equivalent to the pre-state.
+  - [ ] Stale pre-state hash, duplicate operations, missing references, and idempotency-key content mismatch are rejected before mutation with stable classified errors.
+  - [ ] Dry-run is mutation-free, identical replay returns the original receipt, and repeated post-state queries contain no duplicates or drift.
+  - [ ] Two concurrent plans using the same pre-state prove that at most one commits and the loser receives a stale-precondition outcome without partial state.
+  - [ ] All supported production plugin entrypoints that advertise requirements operations execute the canonical dry-run and apply fixtures with identical normalized results, zero failures, and zero skips.
+  - [ ] A zero-skip matrix executes mixed commit, validation rollback, persistence rollback, stale precondition, idempotent replay, and concurrent-plan cases against SQLite, SQL Server, and PostgreSQL. Every provider row proves exact raw and effective post-state plus audit and idempotency state.
+  - [ ] Layered fixtures containing inherited, shadowed, and out-of-bounds records prove that dry-run binds every scope and layer field, apply writes only the target layer, and any change to bound raw state, effective state, layer metadata, or scope bounds produces a no-mutation stale-precondition result.
 - TEST-MCP-REQWS-001: Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
   Scope: layer-1+
+- TEST-MCP-SERVICEUPDATE-001: Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+  - [ ] Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+  - [ ] Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+  - [ ] Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
 - TEST-MCP-SESSIONATTR-001: Unit tests prove filesModified or commit paths outside the workspace root are rejected or stored only with a foreign marker. Validates TR-MCP-SESSIONATTR-001 / BUG-TRIAGE-108.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1086,6 +1133,40 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Named tests cover TEST-MCP-SESSIONEND-001 acceptance criteria
+- TEST-MCP-SESSIONLIFE-001: SessionLogLifecycle.Tests.ps1 covers retained fields, hook status, 404 recovery, empty-query verbs, and same-request degraded beginTurn.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.
+  - [ ] At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.
+  - [ ] The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.
+- TEST-MCP-SESSIONLIFE-002: SessionLogLifecycleMetadata, quarantine repair, audit reconcile, child deadline, and stop-hook pin tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.
+  - [ ] Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.
+  - [ ] Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.
+  - [ ] The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.
+- TEST-MCP-SESSIONLIFE-003: Reuse TransactionGatedSessionLogServiceTests bypass coverage and add query plus repeated additive complete proofs under FR-MCP-173.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.
+  - [ ] Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.
+  - [ ] The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.
+- TEST-MCP-SESSIONLIFE-004: Schema guard, DbUpdateException details.inner, uniqueness retry, contention versus outage, dialog classification, and ImportRecoveryEnvelopeTests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Named C# tests cover schema predecessor detection, credential-safe provider details.inner, the bounded same-turn unique race retry, contention versus outage including health.storage=unreachable only for actual storage outage, and dialog storage classification.
+  - [ ] Import recovery tests start from canonical and reconstructed bundles and cover missing source, traversal, reparse escape, malformed schema, size bounds, cancellation, concurrent replay, content-hash drift, and delete-only-after-verified-persistence.
+  - [ ] Provider-specific uniqueness and schema tests use disposable databases and leave no remnant; an approved prior migration is not reopened solely because infrastructure is degraded.
+  - [ ] The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.
+  - [ ] Provider-backed tests seed a dense session graph, update it through SubmitAsync, and prove bounded completion, exact child-collection readback, and no Cartesian query shape. Concurrent same-session submissions prove bounded retry or classified retryable failure with no partial or duplicate rows.
+  - [ ] A zero-skip matrix executes dense SubmitAsync and concurrent same-session updates against SQLite, SQL Server, and PostgreSQL. The SQL Server row covers error 1205 deadlock and five-second command-budget expiry, proves one normalized retryable outcome without false primary success or partial state, then proves exact readback after successful retry.
+- TEST-MCP-SESSIONLIFE-005: Existing PluginPowerShellRuntime drain-timeout coverage and session_dialog method dispatch. Not expected red. Governed by FR-MCP-REPL-011.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Existing PluginPowerShellRuntime coverage proves drain SubmitAsync uses a 120-second default and honors a larger REPL_TIMEOUT instead of the ordinary two-second nested helper budget, automatic nested drain defers while a REPL call is active, and timeout leaves attempt and latch state unchanged.
+  - [ ] Existing dispatch coverage proves retained dialog recovery records use method client.SessionLog.AppendDialogAsync and preserve exact workspace, agent, session, and request identity.
+  - [ ] This proof-first scope stays green and does not authorize rewriting already-correct timeout behavior without a newly accepted failing real-code test.
 - TEST-MCP-SESSIONLOG-001: Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError and SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-002: Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
@@ -1134,6 +1215,13 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
+- TEST-MCP-TESTRESOURCE-001: Tests prove packaged fixture inputs and isolated generated artifacts work without repository-root lookup, while source-contract tests retain live-source validation. Run focused mock-validation, real-red/real-green, and applicable full suites.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Focused fixture tests run from test output with the checkout root unavailable and still load exact packaged bytes.
+  - [ ] Writer tests use an injected disposable output directory and prove no generated file appears under repository docs/reviews or fixture source paths.
+  - [ ] A source inventory finds no remaining fixture-input or generated-output path that walks to the repository root in applicable test code.
+  - [ ] Focused build/source-contract tests still validate current repository and sibling plugin source, including checksum drift when present.
 - TEST-MCP-TODO-CLOSE-001: Unit tests cover REST and typed client close-by-id behavior, including timestamp creation and missing item failure.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1288,10 +1376,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
-- TEST-MCP-TRIAGESTORE-007: Triage intake and session-log replace/section SaveChanges fail within about 5 seconds as backend_unavailable when storage is unreachable. Session-log Submit honors Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30) and still classifies expiry as backend_unavailable. A Submit save longer than 5 seconds completes under the default budget. Dense FindExistingSession materialization uses split queries, and budget expiry or SQL 1205 fails retryable without persisting or reporting the session missing.
+- TEST-MCP-TRIAGESTORE-007: Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Triage intake and session-log replace/section SaveChanges fail within about 5 seconds as backend_unavailable when storage is unreachable. Session-log Submit honors Mcp:SessionLog:SubmitCommandBudgetSeconds (default 30) and still classifies expiry as backend_unavailable. A Submit save longer than 5 seconds completes under the default budget. Dense FindExistingSession materialization uses split queries, and budget expiry or SQL 1205 fails retryable without persisting or reporting the session missing.
+  - [ ] Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
 - TEST-MCP-TRIAGETODO-001: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1300,6 +1388,13 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+- TEST-MCP-TRIM-001: ProcessRunnerDependencyTests verifies all five public runner types belong to McpServer.Common.AgentCli; QBAgent runtime dependency graph excludes McpServer.Services, McpServer.Storage and Entity Framework; Services type forwards preserve old qualified names. Existing mocked git/bash and full unit suites remain passing. Trim analysis records only the actual remaining client-side warnings, with no added suppression.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Runner implementation, options, interface, request and result reside in Common.AgentCli with unchanged namespaces and signatures.
+  - [ ] QBAgent dependency graph excludes server Services, Storage and EF assemblies.
+  - [ ] Services forwards all moved public types, and existing mock-backed process/tool unit tests remain green.
+  - [ ] Trim inventory is reduced from verified diagnostics only, with no new suppression or relaxed assertions.
 - TEST-MCP-USECASE-001: Unit tests cover schema creation, workspace isolation, soft-delete hide, FR string FK link uniqueness, and handler CRUD/link behaviors with zero skips in the executed gate scope.
   Scope: layer-1+
 - TEST-MCP-USECASE-002: Controller unit tests for UseCasesController. Acceptance: Controller tests green 0 skip.
@@ -1597,31 +1692,3 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] Exceeded hourly cap fails enqueue in API test, not only UI.
   - [ ] Clearing cap allows enqueue.
-
-## TEST-MCP-SERVICEUPDATE-001 - Cross-platform service update regression and Linux smoke
-
-Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
-
-Status: pending
-
-Acceptance criteria:
-
-- [ ] platform: UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
-- [ ] preserve: Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
-- [ ] lifecycle: Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
-- [ ] validation: Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
-
-
-
-## TEST-MCP-REQRECOVERY-001 - Atomic requirements recovery
-
-SQLite tests cover dry-run with no run row, apply of create and update, replay without rewrite, 409 on payload mismatch, 400 on an invalid second item with zero rows, rollback when SaveChanges throws, and a hung save classified as retryable 503. Controller tests map those statuses. Migration discovery covers SQLite, SQL Server, and PostgreSQL. REPL workflow tests call planRecovery, applyRecovery, and getRecovery.
-
-Status: pending
-
-Acceptance criteria:
-
-- [ ] RequirementsRecoveryTests passes with zero rows after validation and save failures.
-- [ ] RequirementsRecoveryControllerTests maps 200, 400, 409, 404, and 503.
-- [ ] RequirementsRecoveryMigrationTests finds 20260929020000_AddRequirementsRecoveryRuns on three providers.
-- [ ] RequirementsRecoveryWorkflowTests posts dry-run and apply and classifies 404, 409, and 503.

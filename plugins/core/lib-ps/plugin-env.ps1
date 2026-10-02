@@ -91,7 +91,8 @@ $env:MCP_HOOK_OUTPUT_MODE = $outputMode
 if (-not $env:MCP_PLUGIN_ROOT -or -not (Test-Path -LiteralPath $env:MCP_PLUGIN_ROOT -PathType Container)) {
     $resolvedRoot = $rootChain | Where-Object { $_ -and (Test-Path -LiteralPath $_ -PathType Container) } | Select-Object -First 1
     if (-not $resolvedRoot) {
-        $cacheHome = Join-Path $env:USERPROFILE '.claude\plugins\cache'
+        $profileRoot = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { [Environment]::GetFolderPath('UserProfile') }
+        $cacheHome = Join-Path $profileRoot '.claude\plugins\cache'
         if (Test-Path -LiteralPath $cacheHome -PathType Container) {
             $resolvedRoot = Get-ChildItem -LiteralPath $cacheHome -Directory -ErrorAction SilentlyContinue |
                 Where-Object { $_.Name -like 'mcpserver*' -or $_.Name -like 'f--github-mcpserver*' } |

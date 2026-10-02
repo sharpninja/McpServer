@@ -28,7 +28,9 @@ Describe 'FR-MCP-SESSIONLIFE-005 audit dialog reconcile' {
                 [AllowEmptyString()][string]$Title = '',
                 [string]$Status = '',
                 [string]$ResponseText = '',
-                [string]$ActionsYaml = ''
+                [string]$ActionsYaml = '',
+                [string]$PlanFile,
+                [string]$TodoId
             )
             return $true
         }

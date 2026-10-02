@@ -1,0 +1,139 @@
+{
+  "Utc": "2026-10-02T01:01:57.7851283Z",
+  "Gate": "BUG-UNITFAIL-001 corrected regression red gate",
+  "OverallVerdict": "DISAGREE",
+  "AccuracyScore": 98,
+  "CompletenessScore": 96,
+  "MinimumApprovalScore": 98,
+  "ScoreRationale": "The red counts and failure reasons are verified; R1 and typed-client coverage gaps are addressed. R2 remains incomplete because the dialog retention assertion observes an unrelated file, not actual queued recovery payload.",
+  "Reviewer": {
+    "ConsoleAgentId": "sa-ef70105b",
+    "Model": "gpt-6-astra",
+    "SameReviewer": true,
+    "AdditionalAgents": 0,
+    "Effort": "xhigh",
+    "Agent": "Codex"
+  },
+  "Scope": "Read-only corrected red-gate review. No production changes or test runs by reviewer; no operator-action review.",
+  "Pester": {
+    "Skipped": 0,
+    "Total": 27,
+    "Failed": 25,
+    "Evidence": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\final-red-results.xml",
+    "NotRun": 0,
+    "Passed": 2
+  },
+  "Client": {
+    "Failures": "Both title client tests fail with KeyNotFoundException at the new retitled reserialization assertion.",
+    "Skipped": 0,
+    "Total": 2,
+    "Failed": 2,
+    "Evidence": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\client-retitle-red.trx",
+    "Passed": 0
+  },
+  "Findings": [
+    {
+      "Id": "R2-residual",
+      "Severity": "P2",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1",
+      "Line": 77,
+      "EndLine": 89,
+      "Title": "Dialog retention assertion hashes an unrelated file",
+      "Evidence": "The test creates retained-dialog.yaml directly under ReviewCache and hashes it, but never supplies that path to Write-ReplFailsafe, Find-ReplFailsafeByFingerprint, or a queued receipt. Real appendDialog recovery uses those helpers at repl-invoke.ps1:2543-2556. Therefore the tested file is not established as the workflow recovery payload.",
+      "Impact": "The test can pass even if actual dialog recovery data is deleted or replaced, because the orphan file is untouched by the workflow.",
+      "Remedy": "First queue the same dialog using the real handler and failsafe writer in a test-isolated failsafe directory. Capture the queued receipt failsafePath and its hash, seed stale success, then retry with Success=true and empty Output. Require rejection/current identity, non-success, and unchanged bytes at that exact actual recovery path. Restore any modified environment in finally.",
+      "Requirement": "FR-MCP-SESSIONLIFE-003-AC006; prior R2"
+    }
+  ],
+  "Claims": [
+    {
+      "Id": "RC01",
+      "Claim": "Pester red counters and failures",
+      "Status": "PASS",
+      "Evidence": "All 27 XML test-case entries read: 25 intended failures and 2 positive controls; no skips/notrun."
+    },
+    {
+      "Id": "RC02",
+      "Claim": "R1 actual wrapper-process coverage",
+      "Status": "PASS",
+      "Evidence": "Both real generic and sibling Codex wrappers run with isolated child environment, copied real handlers/dispatcher, transport/session boundary stubs and all five dispositions. Tests assert process exit, one typed YAML result, identity/method and durability flags."
+    },
+    {
+      "Id": "RC03",
+      "Claim": "Typed-client retitled round-trip coverage",
+      "Status": "PASS",
+      "Evidence": "Both existing Client HTTP mock tests now deserialize through SessionLogClient and reserialize the typed result, preserving retitled=true as asserted. Session-only response has no requestId. Both new assertions fail in supplied TRX for missing property."
+    },
+    {
+      "Id": "RC04",
+      "Claim": "Empty turn-title caller and stale-result coverage improved",
+      "Status": "PASS",
+      "Evidence": "Turn-title test invokes the real workflow and connects its precreated file through mocked Write-ReplFailsafe; asserts retained bytes and rejected receipt. Dialog test now reaches real caller and seeds stale success, exposing binding failure, but retention proof remains defective."
+    },
+    {
+      "Id": "RC05",
+      "Claim": "R2 actual dialog recovery retention proof",
+      "Status": "FAIL",
+      "Evidence": "R2-residual: orphan retained-dialog.yaml is not connected to recovery machinery."
+    },
+    {
+      "Id": "RC06",
+      "Claim": "Production review snapshot and read-only boundary",
+      "Status": "PASS",
+      "Evidence": "All four canonical reconciled script hashes still match initial review. Reviewer only read source/evidence and wrote own review receipts/session logs."
+    }
+  ],
+  "ClaimCounts": {
+    "PASS": 5,
+    "UNKNOWN": 0,
+    "FAIL": 1
+  },
+  "ArtifactHashes": [
+    {
+      "Path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1",
+      "Sha256": "B68EC9B53A4E48960F59C8D0C2C178F4298E74019B2B69FDAEAA1659B8C2395C"
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\SessionLogWrapperHarness.ps1",
+      "Sha256": "DD5D1B1EF9B4F33DFA64CD778153D126FAF7B217E36BB174FD10B55F17390264"
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Client.Tests\\SessionLogClientRequestBodyTests.cs",
+      "Sha256": "F6813FE19D19E587FFF872E5B7A583DFB62FB4A5A6EF24D1ADC808769B7C9CA6"
+    },
+    {
+      "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\final-red-results.xml",
+      "Sha256": "44C21F2168DAE4A5F11221A0722D95A9D139ADDF4BE8EA045554160412B8BAF6"
+    },
+    {
+      "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\client-retitle-red.trx",
+      "Sha256": "E985D3305BD67DC6B16100C4F77B522AEE57B1F93C977FA065CF14150C2A0F37"
+    }
+  ],
+  "CanonicalScriptComparison": [
+    {
+      "Path": "plugins/core/lib-ps/plugin-env.ps1",
+      "MatchesInitialReview": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "MatchesInitialReview": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "MatchesInitialReview": true
+    },
+    {
+      "Path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "MatchesInitialReview": true
+    }
+  ],
+  "McpSessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "McpRequestId": "req-20261002T005924Z-red-gate-recheck",
+  "OriginalReviewReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.json",
+  "PreviousRedGateReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-review-sa-ef70105b.json",
+  "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.request.jsonl",
+  "NativeTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\01\\rollout-2026-10-01T19-12-47-01a0f9f4-d605-7301-9b42-d8955d664e56.jsonl",
+  "ReadbackReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-recheck-sa-ef70105b.readback.json",
+  "Conclusion": "Only the R2-residual fixture correction remains before this bounded red gate can be accepted. This review does not approve production repair completion or change BUG-UNITFAIL-001 state."
+}
