@@ -1,0 +1,42 @@
+{
+  "TimestampUtc": "2026-10-02T21:03:37.0261244+00:00",
+  "ReceiptTimestampUtc": "2026-10-02T16:02:50.7031288-05:00",
+  "Head": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+  "ProfileCount": 21,
+  "Pass": 15,
+  "Fail": 4,
+  "Unknown": 2,
+  "ApplicableCriteria": 40,
+  "AdequatelyMapped": 28,
+  "FrozenManifestHash": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+  "Files": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T203600Z.md",
+      "bytes": 30390,
+      "sha256": "BF456CF54222E98F510C03A10D2277FB6ABABC77CD652DC2A2168CBA77C8ADE5",
+      "jsonlLines": 0,
+      "invalidJsonlLines": 0
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T203600Z.json",
+      "bytes": 174221,
+      "sha256": "C6062B5B49F4F2F07E9320D41B560C610BE3C3FB14971FBB22E36FA0E5A3CC49",
+      "jsonlLines": 0,
+      "invalidJsonlLines": 0
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "bytes": 9730,
+      "sha256": "85C084851D0936C65E15A3EB81F51009B58C0FD59C552498F1FBD81C53CEEE59",
+      "jsonlLines": 2,
+      "invalidJsonlLines": 0
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "bytes": 809095,
+      "sha256": "BBFC50B4F58A3AD868E792C9646AA5F14DBA81BAE7D5D62D75E7A0B4C96FA5FB",
+      "jsonlLines": 109,
+      "invalidJsonlLines": 0
+    }
+  ]
+}

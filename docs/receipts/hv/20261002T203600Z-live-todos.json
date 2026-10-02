@@ -1,0 +1,572 @@
+{
+  "TimestampUtc": "2026-10-02T20:47:37.3083589+00:00",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Tool": "mcp__mcpserver__todo_list",
+  "RequestedIds": [
+    "BUG-TRIAGE-165",
+    "BUG-TRIAGE-170",
+    "BUG-TRIAGE-171",
+    "BUG-TRIAGE-172",
+    "BUG-TRIAGE-173",
+    "BUG-TRIAGE-175",
+    "BUG-TRIAGE-180",
+    "BUG-TRIAGE-181",
+    "BUG-TRIAGE-182",
+    "BUG-TRIAGE-184",
+    "BUG-TRIAGE-185",
+    "BUG-TRIAGE-186",
+    "BUG-TRIAGE-198",
+    "BUG-TRIAGE-199",
+    "BUG-TRIAGE-200",
+    "BUG-TRIAGE-202",
+    "BUG-TRIAGE-204",
+    "BUG-TRIAGE-205",
+    "BUG-TRIAGE-208",
+    "BUG-TRIAGE-210",
+    "BUG-TRIAGE-213",
+    "BUG-TRIAGE-214",
+    "BUG-TRIAGE-221",
+    "BUG-TRIAGE-226",
+    "BUG-TRIAGE-229",
+    "BUG-TRIAGE-232",
+    "BUG-TRIAGE-234",
+    "BUG-TRIAGE-236",
+    "BUG-TRIAGE-239",
+    "BUG-TRIAGE-240",
+    "BUG-TRIAGE-241",
+    "BUG-TRIAGE-243",
+    "BUG-TRIAGE-244",
+    "BUG-TRIAGE-245",
+    "BUG-TRIAGE-246"
+  ],
+  "items": [
+    {
+      "Id": "BUG-TRIAGE-170",
+      "Title": "Failsafe drain hardcodes a 2s SubmitAsync timeout and aborts the queue",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-172",
+        "FR-MCP-REPL-011"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-PERSIST-003",
+        "TR-MCP-REPL-012"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-171",
+      "Title": "SessionLog SubmitAsync 503 burst after large failsafe replay; 2s drain cannot recover",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-004"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-004"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-180",
+      "Title": "Codex prompt hook reports turn-opened for a store-missing requestId",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-181",
+      "Title": "Codex CompleteTurn fails when current-turn.yaml lacks queryText",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-182",
+      "Title": "Plugin appendActions rebinds plugin-session and SubmitAsync omits planFile",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-002"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-002"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-184",
+      "Title": "Codex updateTurn rejects active turn when cached QueryText is empty",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-185",
+      "Title": "Plugin complete/update/append omit required planFile and todoId",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-002"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-002"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-186",
+      "Title": "appendActions submits cached turn and omits required planFile",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-198",
+      "Title": "Do not rebind recovered in-progress turns to a post-restart session",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-002"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-002"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-199",
+      "Title": "Session-log appendActions returns HTTP 500 and rolls back after subscriber commit failure",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-200",
+      "Title": "Valid sessionlog appendDialog returns HTTP 500 after subscriber commit rollback",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-202",
+      "Title": "Codex updateTurn persist fails after local cache write",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-204",
+      "Title": "Codex session-log wrappers fail with generic exit 1 after partial persist",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-205",
+      "Title": "Degraded beginTurn caches an uncommitted turn; appendDialog 404 refuses failsafe",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-208",
+      "Title": "Do not expose a locally active turn after degraded beginTurn the server cannot update",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-210",
+      "Title": "appendActions 500: sessionlog.submit subscriber rollback stale turn",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-214",
+      "Title": "updateTurn persist fails on empty QueryText binding",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-221",
+      "Title": "Codex user-prompt-submit hangs after session_submit failsafe write",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-004"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-004"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-226",
+      "Title": "sessionlog_complete_turn subscriber commit fails on post-compaction additive reopen",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-229",
+      "Title": "sessionlog_begin_turn SaveChanges fails after successful sessionlog_open",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-005"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-005"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-232",
+      "Title": "sessionlog_begin_turn rolls back when subscriber commit fails",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-234",
+      "Title": "Stop gate blocks completed turns on a stale session-state timestamp",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-005"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-005"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-236",
+      "Title": "sessionlog_begin_turn rolls back after subscriber commit failure",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-173"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-TXNKEY-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-239",
+      "Title": "Session log persist omits planFile after recovered-session rebind",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-002"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-002"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-245",
+      "Title": "Degraded Codex beginTurn drops query text and blocks updateTurn",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-165",
+      "Title": "appendDialog POST returns internal_server_error while sibling session-log writes succeed",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-170"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-PERSIST-001",
+        "TR-MCP-PERSIST-004"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-172",
+      "Title": "Repair three unpostable Codex failsafe SessionLog.SubmitAsync quarantine records",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-004"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-004"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-173",
+      "Title": "Codex pending importRecovery YAML has no replay path besides SessionLog.SubmitAsync",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-004"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-004"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-175",
+      "Title": "beginTurn degrade path clobbers current-turn.yaml after SubmitAsync timeout",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-001"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-001"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-213",
+      "Title": "Do not exit 1 when updateTurn queues a session_submit failsafe",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-240",
+      "Title": "appendDialog persist failure exits 1 with empty stdout and a queued failsafe",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-241",
+      "Title": "Session-log wrapper exits 1 with no diagnostic when appendDialog/completeTurn persist is queued",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-243",
+      "Title": "sessionlog updateTurn persist timeout exits 1 with empty body",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-244",
+      "Title": "updateTurn persist degrade exits 1 with empty stderr",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-003"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-003"
+      ]
+    },
+    {
+      "Id": "BUG-TRIAGE-246",
+      "Title": "Degraded beginTurn recovery omits planFile and todoId and gets HTTP 400",
+      "Done": false,
+      "CompletedDate": null,
+      "DoneSummary": null,
+      "FunctionalRequirements": [
+        "FR-MCP-TRIAGE-002",
+        "FR-MCP-SESSIONLIFE-002"
+      ],
+      "TechnicalRequirements": [
+        "TR-MCP-TRIAGE-004",
+        "TR-MCP-SESSIONLIFE-002"
+      ]
+    }
+  ]
+}

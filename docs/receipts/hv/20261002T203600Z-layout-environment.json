@@ -1,0 +1,498 @@
+{
+  "TimestampUtc": "2026-10-02T20:50:56.6638973+00:00",
+  "junctions": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin",
+      "type": "Junction",
+      "target": "F:\\GitHub\\mcpserver-codex-plugin",
+      "resolved": "F:\\GitHub\\mcpserver-codex-plugin"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin",
+      "type": "Junction",
+      "target": "F:\\GitHub\\mcpserver-claude-code-plugin",
+      "resolved": "F:\\GitHub\\mcpserver-claude-code-plugin"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin",
+      "type": "Junction",
+      "target": "F:\\GitHub\\mcpserver-copilot-plugin",
+      "resolved": "F:\\GitHub\\mcpserver-copilot-plugin"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin",
+      "type": "Junction",
+      "target": "F:\\GitHub\\mcpserver-cline-plugin",
+      "resolved": "F:\\GitHub\\mcpserver-cline-plugin"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin",
+      "type": "Junction",
+      "target": "F:\\GitHub\\mcpserver-grok-plugin",
+      "resolved": "F:\\GitHub\\mcpserver-grok-plugin"
+    }
+  ],
+  "checksums": [
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "agent-runtime-header.ps1",
+      "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\agent-runtime-header.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "cache-manager.ps1",
+      "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\cache-manager.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "classified-error.ps1",
+      "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\classified-error.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "ensure-repl.ps1",
+      "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\ensure-repl.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "final-response.ps1",
+      "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\final-response.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "Invoke-McpPlugin.ps1",
+      "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\Invoke-McpPlugin.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "marker-resolver.ps1",
+      "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\marker-resolver.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "mcp-status.ps1",
+      "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\mcp-status.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "plugin-env.ps1",
+      "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\plugin-env.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "plugin-hook.ps1",
+      "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\plugin-hook.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "repl-invoke.ps1",
+      "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\repl-invoke.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "resolve-cache-dir.ps1",
+      "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\resolve-cache-dir.ps1"
+    },
+    {
+      "plugin": "mcpserver-codex-plugin",
+      "name": "yaml-object-mutation.ps1",
+      "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\yaml-object-mutation.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "agent-runtime-header.ps1",
+      "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\agent-runtime-header.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "cache-manager.ps1",
+      "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\cache-manager.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "classified-error.ps1",
+      "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\classified-error.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "ensure-repl.ps1",
+      "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\ensure-repl.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "final-response.ps1",
+      "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\final-response.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "Invoke-McpPlugin.ps1",
+      "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\Invoke-McpPlugin.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "marker-resolver.ps1",
+      "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\marker-resolver.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "mcp-status.ps1",
+      "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\mcp-status.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "plugin-env.ps1",
+      "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\plugin-env.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "plugin-hook.ps1",
+      "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\plugin-hook.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "repl-invoke.ps1",
+      "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\repl-invoke.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "resolve-cache-dir.ps1",
+      "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\resolve-cache-dir.ps1"
+    },
+    {
+      "plugin": "mcpserver-claude-code-plugin",
+      "name": "yaml-object-mutation.ps1",
+      "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\yaml-object-mutation.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "agent-runtime-header.ps1",
+      "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\agent-runtime-header.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "cache-manager.ps1",
+      "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\cache-manager.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "classified-error.ps1",
+      "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\classified-error.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "ensure-repl.ps1",
+      "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\ensure-repl.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "final-response.ps1",
+      "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\final-response.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "Invoke-McpPlugin.ps1",
+      "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\Invoke-McpPlugin.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "marker-resolver.ps1",
+      "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\marker-resolver.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "mcp-status.ps1",
+      "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\mcp-status.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "plugin-env.ps1",
+      "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\plugin-env.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "plugin-hook.ps1",
+      "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\plugin-hook.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "repl-invoke.ps1",
+      "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\repl-invoke.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "resolve-cache-dir.ps1",
+      "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\resolve-cache-dir.ps1"
+    },
+    {
+      "plugin": "mcpserver-copilot-plugin",
+      "name": "yaml-object-mutation.ps1",
+      "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\yaml-object-mutation.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "agent-runtime-header.ps1",
+      "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\agent-runtime-header.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "cache-manager.ps1",
+      "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\cache-manager.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "classified-error.ps1",
+      "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\classified-error.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "ensure-repl.ps1",
+      "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\ensure-repl.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "final-response.ps1",
+      "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\final-response.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "Invoke-McpPlugin.ps1",
+      "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\Invoke-McpPlugin.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "marker-resolver.ps1",
+      "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\marker-resolver.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "mcp-status.ps1",
+      "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\mcp-status.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "plugin-env.ps1",
+      "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\plugin-env.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "plugin-hook.ps1",
+      "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\plugin-hook.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "repl-invoke.ps1",
+      "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\repl-invoke.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "resolve-cache-dir.ps1",
+      "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\resolve-cache-dir.ps1"
+    },
+    {
+      "plugin": "mcpserver-cline-plugin",
+      "name": "yaml-object-mutation.ps1",
+      "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\yaml-object-mutation.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "agent-runtime-header.ps1",
+      "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\agent-runtime-header.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "cache-manager.ps1",
+      "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\cache-manager.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "classified-error.ps1",
+      "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\classified-error.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "ensure-repl.ps1",
+      "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\ensure-repl.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "final-response.ps1",
+      "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\final-response.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "Invoke-McpPlugin.ps1",
+      "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "marker-resolver.ps1",
+      "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "mcp-status.ps1",
+      "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\mcp-status.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "plugin-env.ps1",
+      "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\plugin-env.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "plugin-hook.ps1",
+      "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\plugin-hook.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "repl-invoke.ps1",
+      "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\repl-invoke.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "resolve-cache-dir.ps1",
+      "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\resolve-cache-dir.ps1"
+    },
+    {
+      "plugin": "mcpserver-grok-plugin",
+      "name": "yaml-object-mutation.ps1",
+      "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\yaml-object-mutation.ps1"
+    }
+  ],
+  "environmentProbe": {
+    "removeReturned": true,
+    "sourceHasRoot": false,
+    "freshCopyHasRoot": true,
+    "correctedCopyHasRoot": false
+  }
+}
