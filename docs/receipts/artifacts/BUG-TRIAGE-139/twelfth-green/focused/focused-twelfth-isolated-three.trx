@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="21c206b3-57cf-4045-b963-b291262a8b37" name="SYSTEM@PAYTON-LEGION2 2026-09-03 20:28:43" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-03T20:28:43.9050474-05:00" queuing="2026-09-03T20:28:43.9050477-05:00" start="2026-09-03T20:28:41.0482071-05:00" finish="2026-09-03T20:28:43.9098155-05:00" />
+  <TestSettings name="default" id="f90b97ae-2f83-4847-9693-9a90adfac0e2">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-03_20_28_43" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="36dcf41c-99e0-46f4-be87-447472fe82f5" testId="b8c028db-8bbe-0385-5d77-17f738617bec" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests.GetStorageKeyAsync_InjectedBlockingResolver_ThrowsBoundedTimeout" computerName="PAYTON-LEGION2" duration="00:00:00.1023295" startTime="2026-09-03T20:28:43.3390490-05:00" endTime="2026-09-03T20:28:43.4414636-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="36dcf41c-99e0-46f4-be87-447472fe82f5" />
+    <UnitTestResult executionId="30fc5270-c4a9-42a2-a219-9fecf6d4d0e5" testId="e13727fb-757a-f10c-43af-42938674344d" testName="McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject" computerName="PAYTON-LEGION2" duration="00:00:00.5798345" startTime="2026-09-03T20:28:43.1894796-05:00" endTime="2026-09-03T20:28:43.7765683-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30fc5270-c4a9-42a2-a219-9fecf6d4d0e5" />
+    <UnitTestResult executionId="893413a9-47ff-48ef-bcf5-a05e6ab9223d" testId="6919e181-f758-1576-287c-d72e40bf3377" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests.GetStorageKeyAsync_InjectedBlockingResolver_ObservesCallerCancellation" computerName="PAYTON-LEGION2" duration="00:00:00.1264643" startTime="2026-09-03T20:28:43.1894796-05:00" endTime="2026-09-03T20:28:43.3274682-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="893413a9-47ff-48ef-bcf5-a05e6ab9223d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="e13727fb-757a-f10c-43af-42938674344d">
+      <Execution id="30fc5270-c4a9-42a2-a219-9fecf6d4d0e5" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests" name="OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests.GetStorageKeyAsync_InjectedBlockingResolver_ObservesCallerCancellation" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="6919e181-f758-1576-287c-d72e40bf3377">
+      <Execution id="893413a9-47ff-48ef-bcf5-a05e6ab9223d" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests" name="GetStorageKeyAsync_InjectedBlockingResolver_ObservesCallerCancellation" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests.GetStorageKeyAsync_InjectedBlockingResolver_ThrowsBoundedTimeout" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="b8c028db-8bbe-0385-5d77-17f738617bec">
+      <Execution id="36dcf41c-99e0-46f4-be87-447472fe82f5" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityTwelfthCancellationTests" name="GetStorageKeyAsync_InjectedBlockingResolver_ThrowsBoundedTimeout" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b8c028db-8bbe-0385-5d77-17f738617bec" executionId="36dcf41c-99e0-46f4-be87-447472fe82f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e13727fb-757a-f10c-43af-42938674344d" executionId="30fc5270-c4a9-42a2-a219-9fecf6d4d0e5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6919e181-f758-1576-287c-d72e40bf3377" executionId="893413a9-47ff-48ef-bcf5-a05e6ab9223d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.30]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.32]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.58]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:02.25]   Finished:    McpServer.Support.Mcp.Tests (ID = '49c64e8b9f14a534e582fae1cd8ff8a32cc46f1642a12507249b9aa0e8525416')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

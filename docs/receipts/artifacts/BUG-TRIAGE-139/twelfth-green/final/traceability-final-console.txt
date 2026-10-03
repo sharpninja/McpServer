@@ -1,0 +1,17 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+Telemetry v1
+------------
+NUKE collects anonymous usage data in order to help us improve your experience.
+Read more about scope, data points, and opt-out: https://nuke.build/telemetry
+
+Press <Enter> to create awareness cookie for '_build' ...
+TRACEABILITY_EXIT=-1

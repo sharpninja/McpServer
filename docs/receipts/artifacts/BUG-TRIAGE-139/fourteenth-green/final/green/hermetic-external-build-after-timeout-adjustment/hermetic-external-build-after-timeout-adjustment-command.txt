@@ -1,0 +1,1 @@
+& 'C:\Program Files\dotnet\dotnet.exe' 'build' 'tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj' '-c' 'Release' '--no-restore' '--artifacts-path' 'C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts' '-maxcpucount:1' '/p:UseSharedCompilation=false' '/p:TreatWarningsAsErrors=true'

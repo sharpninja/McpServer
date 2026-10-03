@@ -1,0 +1,7 @@
+Classification: GREEN
+Exit code: 0
+Provider scope: real SQLite, SQL Server LocalDB, and healthy external PostgreSQL.
+Counts: 39 passed, 0 failed, 0 skipped, 39 total.
+Duration reported by test runner: 51 seconds.
+TRX: results\affected-providers-final2.trx
+Hang collector: all tests finished; no sequence file generated.

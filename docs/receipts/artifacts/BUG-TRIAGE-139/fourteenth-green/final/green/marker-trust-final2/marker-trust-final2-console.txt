@@ -1,0 +1,7 @@
+xUnit.net v3 In-Process Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+  Discovering: McpServer.Repl.IntegrationTests
+  Discovered:  McpServer.Repl.IntegrationTests
+  Starting:    McpServer.Repl.IntegrationTests
+  Finished:    McpServer.Repl.IntegrationTests (ID = '4d6c02553aa35f4554dd3b84d59f8aed4157767627401f68e454028b6f45a83c')
+=== TEST EXECUTION SUMMARY ===
+   McpServer.Repl.IntegrationTests  Total: 24, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.962s

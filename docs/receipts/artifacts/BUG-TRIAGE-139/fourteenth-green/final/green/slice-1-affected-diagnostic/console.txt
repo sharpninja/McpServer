@@ -1,0 +1,5 @@
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-1-focused-diagnostic\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-1-affected-diagnostic\results\slice-1-affected-green.trx
+
+Passed!  - Failed:     0, Passed:    28, Skipped:     0, Total:    28, Duration: 2 s - McpServer.Support.Mcp.Tests.dll (net10.0)

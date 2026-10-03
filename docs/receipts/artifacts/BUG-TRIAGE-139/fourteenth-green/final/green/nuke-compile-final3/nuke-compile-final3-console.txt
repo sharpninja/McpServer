@@ -1,0 +1,532 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+05:27:57 [INF] > "C:\Program Files\dotnet\dotnet.exe" restore F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\McpServer.sln
+05:27:58 [DBG]   Determining projects to restore...
+05:28:00 [DBG]   All projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+05:28:00 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:11 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:11 [DBG] 
+05:28:11 [DBG] Build succeeded.
+05:28:11 [DBG]     0 Warning(s)
+05:28:11 [DBG]     0 Error(s)
+05:28:11 [DBG] 
+05:28:11 [DBG] Time Elapsed 00:00:09.79
+05:28:11 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:12 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:12 [DBG] 
+05:28:12 [DBG] Build succeeded.
+05:28:12 [DBG]     0 Warning(s)
+05:28:12 [DBG]     0 Error(s)
+05:28:12 [DBG] 
+05:28:12 [DBG] Time Elapsed 00:00:00.95
+05:28:13 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:14 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:14 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs.Mvvm\debug\McpServer.Cqrs.Mvvm.dll
+05:28:14 [DBG] 
+05:28:14 [DBG] Build succeeded.
+05:28:14 [DBG]     0 Warning(s)
+05:28:14 [DBG]     0 Error(s)
+05:28:14 [DBG] 
+05:28:14 [DBG] Time Elapsed 00:00:01.32
+05:28:14 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs\McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:15 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:15 [DBG] 
+05:28:15 [DBG] Build succeeded.
+05:28:15 [DBG]     0 Warning(s)
+05:28:15 [DBG]     0 Error(s)
+05:28:15 [DBG] 
+05:28:15 [DBG] Time Elapsed 00:00:00.72
+05:28:15 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.GraphRag\McpServer.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:17 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:17 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:17 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:17 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:18 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:18 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:19 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:24 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:28:25 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+05:28:25 [DBG] 
+05:28:25 [DBG] Build succeeded.
+05:28:25 [DBG]     0 Warning(s)
+05:28:25 [DBG]     0 Error(s)
+05:28:25 [DBG] 
+05:28:25 [DBG] Time Elapsed 00:00:09.63
+05:28:25 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.KeyServer\McpServer.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:27 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:28 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:28:28 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.KeyServer\debug\McpServer.KeyServer.dll
+05:28:28 [DBG] 
+05:28:28 [DBG] Build succeeded.
+05:28:28 [DBG]     0 Warning(s)
+05:28:28 [DBG]     0 Error(s)
+05:28:28 [DBG] 
+05:28:28 [DBG] Time Elapsed 00:00:02.49
+05:28:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Launcher\McpServer.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:30 [DBG]   McpServer.Launcher -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Launcher\debug\McpServer.Launcher.dll
+05:28:30 [DBG] 
+05:28:30 [DBG] Build succeeded.
+05:28:30 [DBG]     0 Warning(s)
+05:28:30 [DBG]     0 Error(s)
+05:28:30 [DBG] 
+05:28:30 [DBG] Time Elapsed 00:00:01.22
+05:28:30 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent.SampleHost\McpServer.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:31 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:31 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:32 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:32 [DBG]   McpServer.McpAgent.SampleHost -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent.SampleHost\debug\McpServer.McpAgent.SampleHost.dll
+05:28:32 [DBG] 
+05:28:32 [DBG] Build succeeded.
+05:28:32 [DBG]     0 Warning(s)
+05:28:32 [DBG]     0 Error(s)
+05:28:32 [DBG] 
+05:28:32 [DBG] Time Elapsed 00:00:01.93
+05:28:33 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent\McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:34 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:34 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:34 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:34 [DBG] 
+05:28:34 [DBG] Build succeeded.
+05:28:34 [DBG]     0 Warning(s)
+05:28:34 [DBG]     0 Error(s)
+05:28:34 [DBG] 
+05:28:34 [DBG] Time Elapsed 00:00:01.07
+05:28:34 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:35 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Skills\debug\McpServer.QBAgent.Skills.dll
+05:28:35 [DBG] 
+05:28:35 [DBG] Build succeeded.
+05:28:35 [DBG]     0 Warning(s)
+05:28:35 [DBG]     0 Error(s)
+05:28:35 [DBG] 
+05:28:35 [DBG] Time Elapsed 00:00:00.76
+05:28:35 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:36 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:36 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Skills\debug\McpServer.QBAgent.Skills.dll
+05:28:36 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:36 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:36 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:36 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:37 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:37 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:37 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:28:37 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Tools\debug\McpServer.QBAgent.Tools.dll
+05:28:38 [DBG] 
+05:28:38 [DBG] Build succeeded.
+05:28:38 [DBG]     0 Warning(s)
+05:28:38 [DBG]     0 Error(s)
+05:28:38 [DBG] 
+05:28:38 [DBG] Time Elapsed 00:00:02.13
+05:28:38 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent\McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:39 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:39 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:39 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:39 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Skills\debug\McpServer.QBAgent.Skills.dll
+05:28:39 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:39 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:39 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:39 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:40 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:28:40 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Tools\debug\McpServer.QBAgent.Tools.dll
+05:28:40 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent\debug\McpServer.QBAgent.dll
+05:28:40 [DBG] 
+05:28:40 [DBG] Build succeeded.
+05:28:40 [DBG]     0 Warning(s)
+05:28:40 [DBG]     0 Error(s)
+05:28:40 [DBG] 
+05:28:40 [DBG] Time Elapsed 00:00:02.43
+05:28:40 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:41 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:42 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:42 [DBG] 
+05:28:42 [DBG] Build succeeded.
+05:28:42 [DBG]     0 Warning(s)
+05:28:42 [DBG]     0 Error(s)
+05:28:42 [DBG] 
+05:28:42 [DBG] Time Elapsed 00:00:00.90
+05:28:42 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Host\McpServer.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:43 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:28:43 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:43 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:43 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Host\debug\McpServer.Repl.Host.dll
+05:28:43 [DBG] 
+05:28:43 [DBG] Build succeeded.
+05:28:43 [DBG]     0 Warning(s)
+05:28:43 [DBG]     0 Error(s)
+05:28:43 [DBG] 
+05:28:43 [DBG] Time Elapsed 00:00:01.48
+05:28:44 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:45 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:45 [DBG] 
+05:28:45 [DBG] Build succeeded.
+05:28:45 [DBG]     0 Warning(s)
+05:28:45 [DBG]     0 Error(s)
+05:28:45 [DBG] 
+05:28:45 [DBG] Time Elapsed 00:00:00.74
+05:28:45 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\McpServer.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:46 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:46 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:28:46 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:46 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:46 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:28:46 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:46 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:28:46 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:28:46 [DBG] 
+05:28:46 [DBG] Build succeeded.
+05:28:46 [DBG]     0 Warning(s)
+05:28:46 [DBG]     0 Error(s)
+05:28:46 [DBG] 
+05:28:46 [DBG] Time Elapsed 00:00:01.48
+05:28:47 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:48 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+05:28:48 [DBG] 
+05:28:48 [DBG] Build succeeded.
+05:28:48 [DBG]     0 Warning(s)
+05:28:48 [DBG]     0 Error(s)
+05:28:48 [DBG] 
+05:28:48 [DBG] Time Elapsed 00:00:00.82
+05:28:48 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:49 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:49 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:49 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:49 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:51 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+05:28:51 [DBG] 
+05:28:51 [DBG] Build succeeded.
+05:28:51 [DBG]     0 Warning(s)
+05:28:51 [DBG]     0 Error(s)
+05:28:51 [DBG] 
+05:28:51 [DBG] Time Elapsed 00:00:02.95
+05:28:51 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:52 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:52 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:52 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:52 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:54 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+05:28:54 [DBG] 
+05:28:54 [DBG] Build succeeded.
+05:28:54 [DBG]     0 Warning(s)
+05:28:54 [DBG]     0 Error(s)
+05:28:54 [DBG] 
+05:28:54 [DBG] Time Elapsed 00:00:03.02
+05:28:54 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:55 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:55 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:56 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:56 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:58 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+05:28:58 [DBG] 
+05:28:58 [DBG] Build succeeded.
+05:28:58 [DBG]     0 Warning(s)
+05:28:58 [DBG]     0 Error(s)
+05:28:58 [DBG] 
+05:28:58 [DBG] Time Elapsed 00:00:02.90
+05:28:58 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpServer.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:28:59 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:28:59 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:28:59 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:28:59 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:28:59 [DBG] 
+05:28:59 [DBG] Build succeeded.
+05:28:59 [DBG]     0 Warning(s)
+05:28:59 [DBG]     0 Error(s)
+05:28:59 [DBG] 
+05:28:59 [DBG] Time Elapsed 00:00:01.12
+05:28:59 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Subscriber\McpServer.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:00 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:00 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:01 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Subscriber\debug\McpServer.Subscriber.dll
+05:29:01 [DBG] 
+05:29:01 [DBG] Build succeeded.
+05:29:01 [DBG]     0 Warning(s)
+05:29:01 [DBG]     0 Error(s)
+05:29:01 [DBG] 
+05:29:01 [DBG] Time Elapsed 00:00:01.35
+05:29:01 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:02 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:29:02 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:02 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+05:29:02 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:29:02 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:02 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:02 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:03 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:29:03 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:29:03 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+05:29:03 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+05:29:03 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+05:29:03 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:29:03 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+05:29:06 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+05:29:06 [DBG] 
+05:29:06 [DBG] Build succeeded.
+05:29:06 [DBG]     0 Warning(s)
+05:29:06 [DBG]     0 Error(s)
+05:29:06 [DBG] 
+05:29:06 [DBG] Time Elapsed 00:00:04.67
+05:29:06 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:07 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:07 [DBG] 
+05:29:07 [DBG] Build succeeded.
+05:29:07 [DBG]     0 Warning(s)
+05:29:07 [DBG]     0 Error(s)
+05:29:07 [DBG] 
+05:29:07 [DBG] Time Elapsed 00:00:00.62
+05:29:07 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Acid.IntegrationTests\McpServer.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:08 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:08 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:08 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:08 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.KeyServer\debug\McpServer.KeyServer.dll
+05:29:08 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Subscriber\debug\McpServer.Subscriber.dll
+05:29:09 [DBG]   McpServer.Acid.IntegrationTests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Acid.IntegrationTests\debug\McpServer.Acid.IntegrationTests.dll
+05:29:09 [DBG] 
+05:29:09 [DBG] Build succeeded.
+05:29:09 [DBG]     0 Warning(s)
+05:29:09 [DBG]     0 Error(s)
+05:29:09 [DBG] 
+05:29:09 [DBG] Time Elapsed 00:00:01.58
+05:29:09 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:10 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:10 [DBG]   McpServer.Client.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client.Tests\debug\McpServer.Client.Tests.dll
+05:29:10 [DBG] 
+05:29:10 [DBG] Build succeeded.
+05:29:10 [DBG]     0 Warning(s)
+05:29:10 [DBG]     0 Error(s)
+05:29:10 [DBG] 
+05:29:10 [DBG] Time Elapsed 00:00:01.35
+05:29:10 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Context.Validation\McpServer.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:12 [DBG]   McpServer.Context.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Context.Validation\debug\McpServer.Context.Validation.dll
+05:29:12 [DBG] 
+05:29:12 [DBG] Build succeeded.
+05:29:12 [DBG]     0 Warning(s)
+05:29:12 [DBG]     0 Error(s)
+05:29:12 [DBG] 
+05:29:12 [DBG] Time Elapsed 00:00:00.89
+05:29:12 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Cqrs.Tests\McpServer.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:13 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:29:13 [DBG]   McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs.Mvvm\debug\McpServer.Cqrs.Mvvm.dll
+05:29:13 [DBG]   McpServer.Cqrs.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs.Tests\debug\McpServer.Cqrs.Tests.dll
+05:29:13 [DBG] 
+05:29:13 [DBG] Build succeeded.
+05:29:13 [DBG]     0 Warning(s)
+05:29:13 [DBG]     0 Error(s)
+05:29:13 [DBG] 
+05:29:13 [DBG] Time Elapsed 00:00:01.44
+05:29:14 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.GitHub.Validation\McpServer.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:15 [DBG]   McpServer.GitHub.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GitHub.Validation\debug\McpServer.GitHub.Validation.dll
+05:29:15 [DBG] 
+05:29:15 [DBG] Build succeeded.
+05:29:15 [DBG]     0 Warning(s)
+05:29:15 [DBG]     0 Error(s)
+05:29:15 [DBG] 
+05:29:15 [DBG] Time Elapsed 00:00:01.12
+05:29:15 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Launcher.Tests\McpServer.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:16 [DBG]   McpServer.Launcher -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Launcher\debug\McpServer.Launcher.dll
+05:29:17 [DBG]   McpServer.Launcher.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Launcher.Tests\debug\McpServer.Launcher.Tests.dll
+05:29:17 [DBG] 
+05:29:17 [DBG] Build succeeded.
+05:29:17 [DBG]     0 Warning(s)
+05:29:17 [DBG]     0 Error(s)
+05:29:17 [DBG] 
+05:29:17 [DBG] Time Elapsed 00:00:01.13
+05:29:17 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.McpAgent.Tests\McpServer.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:18 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:18 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:18 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:29:19 [DBG]   McpServer.McpAgent.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent.Tests\debug\McpServer.McpAgent.Tests.dll
+05:29:19 [DBG] 
+05:29:19 [DBG] Build succeeded.
+05:29:19 [DBG]     0 Warning(s)
+05:29:19 [DBG]     0 Error(s)
+05:29:19 [DBG] 
+05:29:19 [DBG] Time Elapsed 00:00:01.71
+05:29:19 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.PlanReview.Tests\McpServer.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:20 [DBG]   McpServer.PlanReview.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.PlanReview.Tests\debug\McpServer.PlanReview.Tests.dll
+05:29:20 [DBG] 
+05:29:20 [DBG] Build succeeded.
+05:29:20 [DBG]     0 Warning(s)
+05:29:20 [DBG]     0 Error(s)
+05:29:20 [DBG] 
+05:29:20 [DBG] Time Elapsed 00:00:01.00
+05:29:20 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.QBAgent.Tests\McpServer.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:22 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Skills\debug\McpServer.QBAgent.Skills.dll
+05:29:22 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:29:22 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:22 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:29:22 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:22 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:22 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:29:22 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:29:22 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:29:22 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Tools\debug\McpServer.QBAgent.Tools.dll
+05:29:23 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent\debug\McpServer.QBAgent.dll
+05:29:24 [DBG]   McpServer.QBAgent.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Tests\debug\McpServer.QBAgent.Tests.dll
+05:29:24 [DBG] 
+05:29:24 [DBG] Build succeeded.
+05:29:24 [DBG]     0 Warning(s)
+05:29:24 [DBG]     0 Error(s)
+05:29:24 [DBG] 
+05:29:24 [DBG] Time Elapsed 00:00:03.02
+05:29:24 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:25 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:25 [DBG]   McpServer.Todo.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Todo.Validation\debug\McpServer.Todo.Validation.dll
+05:29:25 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:26 [DBG]   McpServer.Repl.Core.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core.Tests\debug\McpServer.Repl.Core.Tests.dll
+05:29:26 [DBG] 
+05:29:26 [DBG] Build succeeded.
+05:29:26 [DBG]     0 Warning(s)
+05:29:26 [DBG]     0 Error(s)
+05:29:26 [DBG] 
+05:29:26 [DBG] Time Elapsed 00:00:01.91
+05:29:26 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:27 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:27 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:27 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:27 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Host\debug\McpServer.Repl.Host.dll
+05:29:28 [DBG]   McpServer.Repl.IntegrationTests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.IntegrationTests\debug\McpServer.Repl.IntegrationTests.dll
+05:29:28 [DBG] 
+05:29:28 [DBG] Build succeeded.
+05:29:28 [DBG]     0 Warning(s)
+05:29:28 [DBG]     0 Error(s)
+05:29:28 [DBG] 
+05:29:28 [DBG] Time Elapsed 00:00:01.75
+05:29:28 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repo.Validation\McpServer.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:29 [DBG]   McpServer.Repo.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repo.Validation\debug\McpServer.Repo.Validation.dll
+05:29:29 [DBG] 
+05:29:29 [DBG] Build succeeded.
+05:29:29 [DBG]     0 Warning(s)
+05:29:29 [DBG]     0 Error(s)
+05:29:29 [DBG] 
+05:29:29 [DBG] Time Elapsed 00:00:00.90
+05:29:29 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Review.Tests\McpServer.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:30 [DBG]   McpServer.Review.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Review.Tests\debug\McpServer.Review.Tests.dll
+05:29:30 [DBG] 
+05:29:30 [DBG] Build succeeded.
+05:29:30 [DBG]     0 Warning(s)
+05:29:30 [DBG]     0 Error(s)
+05:29:30 [DBG] 
+05:29:30 [DBG] Time Elapsed 00:00:00.90
+05:29:31 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.SessionLog.Validation\McpServer.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:32 [DBG]   McpServer.SessionLog.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Validation\debug\McpServer.SessionLog.Validation.dll
+05:29:32 [DBG] 
+05:29:32 [DBG] Build succeeded.
+05:29:32 [DBG]     0 Warning(s)
+05:29:32 [DBG]     0 Error(s)
+05:29:32 [DBG] 
+05:29:32 [DBG] Time Elapsed 00:00:00.98
+05:29:32 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:33 [DBG]   McpServer.QBAgent.Skills -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Skills\debug\McpServer.QBAgent.Skills.dll
+05:29:33 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:33 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:29:33 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+05:29:33 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:29:33 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:33 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:33 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:34 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:29:34 [DBG]   McpServer.Repl.Host -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Host\debug\McpServer.Repl.Host.dll
+05:29:34 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:29:34 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+05:29:34 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:29:34 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+05:29:34 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+05:29:34 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+05:29:34 [DBG]   McpServer.QBAgent.Tools -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent.Tools\debug\McpServer.QBAgent.Tools.dll
+05:29:35 [DBG]   McpServer.QBAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.QBAgent\debug\McpServer.QBAgent.dll
+05:29:35 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+05:29:36 [DBG]   McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.IntegrationTests\debug\McpServer.Support.Mcp.IntegrationTests.dll
+05:29:36 [DBG] 
+05:29:36 [DBG] Build succeeded.
+05:29:36 [DBG]     0 Warning(s)
+05:29:36 [DBG]     0 Error(s)
+05:29:36 [DBG] 
+05:29:36 [DBG] Time Elapsed 00:00:04.27
+05:29:36 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:38 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+05:29:38 [DBG]   McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+05:29:38 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:38 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+05:29:38 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+05:29:38 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:38 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:38 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+05:29:38 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+05:29:38 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+05:29:38 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+05:29:38 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+05:29:38 [DBG]   McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+05:29:39 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+05:29:39 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+05:29:43 [DBG]   McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll
+05:29:43 [DBG] 
+05:29:43 [DBG] Build succeeded.
+05:29:43 [DBG]     0 Warning(s)
+05:29:43 [DBG]     0 Error(s)
+05:29:43 [DBG] 
+05:29:43 [DBG] Time Elapsed 00:00:05.98
+05:29:43 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Todo.Validation\McpServer.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:44 [DBG]   McpServer.Todo.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Todo.Validation\debug\McpServer.Todo.Validation.dll
+05:29:44 [DBG] 
+05:29:44 [DBG] Build succeeded.
+05:29:44 [DBG]     0 Warning(s)
+05:29:44 [DBG]     0 Error(s)
+05:29:44 [DBG] 
+05:29:44 [DBG] Time Elapsed 00:00:00.68
+05:29:44 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.ToolRegistry.Validation\McpServer.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:45 [DBG]   McpServer.ToolRegistry.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ToolRegistry.Validation\debug\McpServer.ToolRegistry.Validation.dll
+05:29:45 [DBG] 
+05:29:45 [DBG] Build succeeded.
+05:29:45 [DBG]     0 Warning(s)
+05:29:45 [DBG]     0 Error(s)
+05:29:45 [DBG] 
+05:29:45 [DBG] Time Elapsed 00:00:00.92
+05:29:45 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.TransactionSecurity.IntegrationTests\McpServer.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:46 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+05:29:46 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+05:29:46 [DBG]   McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+05:29:46 [DBG]   McpServer.Subscriber -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Subscriber\debug\McpServer.Subscriber.dll
+05:29:46 [DBG]   McpServer.KeyServer -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.KeyServer\debug\McpServer.KeyServer.dll
+05:29:47 [DBG]   McpServer.TransactionSecurity.IntegrationTests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity.IntegrationTests\debug\McpServer.TransactionSecurity.IntegrationTests.dll
+05:29:47 [DBG] 
+05:29:47 [DBG] Build succeeded.
+05:29:47 [DBG]     0 Warning(s)
+05:29:47 [DBG]     0 Error(s)
+05:29:47 [DBG] 
+05:29:47 [DBG] Time Elapsed 00:00:01.83
+05:29:47 [INF] > "C:\Program Files\dotnet\dotnet.exe" build F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Workspace.Validation\McpServer.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.26 --property:Version=1.4.26 --property:InformationalVersion=1.4.26
+05:29:48 [DBG]   McpServer.Workspace.Validation -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Workspace.Validation\debug\McpServer.Workspace.Validation.dll
+05:29:48 [DBG] 
+05:29:48 [DBG] Build succeeded.
+05:29:48 [DBG]     0 Warning(s)
+05:29:48 [DBG]     0 Error(s)
+05:29:48 [DBG] 
+05:29:48 [DBG] Time Elapsed 00:00:00.98
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:03
+Compile            Succeeded       1:48
+───────────────────────────────────────
+Total                              1:51
+═══════════════════════════════════════
+​
+Build succeeded on 9/4/2026 5:29:49 AM. ＼（＾ᴗ＾）／

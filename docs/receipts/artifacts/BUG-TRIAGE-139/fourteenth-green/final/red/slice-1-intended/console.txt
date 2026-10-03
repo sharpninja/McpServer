@@ -1,0 +1,41 @@
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.15]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel [FAIL]
+[xUnit.net 00:00:02.16]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary [FAIL]
+[xUnit.net 00:00:02.16]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound [FAIL]
+[xUnit.net 00:00:02.82]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf [FAIL]
+  Failed McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel [669 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 59
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary [4 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "using System.Buffers;\nusing System.Security.Crypto"···
+Not found: "WorkspaceContainedFileSystem.DeleteFileIfExists"
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 32
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound [1 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "using System.ComponentModel;\r\nusing System.Runtime"···
+Not found: "UnixOpenNonBlock"
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 182
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf [667 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                       ↓ (pos 22854)
+String: ···"t))\r\n                    Directory.CreateDirectory"···
+Found:  "Directory.CreateDirectory(current)"
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 137
+--- End of stack trace from previous location ---
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1-intended\results\slice-1-intended-red.trx
+
+Failed!  - Failed:     4, Passed:     0, Skipped:     0, Total:     4, Duration: 1 s - McpServer.Support.Mcp.Tests.dll (net10.0)

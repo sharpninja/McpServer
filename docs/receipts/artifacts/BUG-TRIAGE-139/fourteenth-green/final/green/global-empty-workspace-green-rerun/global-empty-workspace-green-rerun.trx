@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="be709ed0-898d-48c1-a0cd-b52763654f94" name="SYSTEM@PAYTON-LEGION2 2026-09-04 04:05:20" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T04:05:20.9492967-05:00" queuing="2026-09-04T04:05:20.9492969-05:00" start="2026-09-04T04:05:17.1585023-05:00" finish="2026-09-04T04:05:24.1134370-05:00" />
+  <TestSettings name="default" id="c4613b5b-1882-4c35-96d7-28177e21673c">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_04_05_20" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d44955cb-2d35-4116-b57a-96cc35c79c6d" testId="41a1fa87-796d-fe3d-7338-026195080f39" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" computerName="PAYTON-LEGION2" duration="00:00:04.5489989" startTime="2026-09-04T04:05:19.4487716-05:00" endTime="2026-09-04T04:05:23.9978848-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d44955cb-2d35-4116-b57a-96cc35c79c6d" />
+    <UnitTestResult executionId="169d829d-8c52-41a4-b5da-b5b2e6da6f87" testId="953420ae-ef9a-374d-2b7e-23ac0da2fc92" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" computerName="PAYTON-LEGION2" duration="00:00:00.0205171" startTime="2026-09-04T04:05:19.4125247-05:00" endTime="2026-09-04T04:05:19.4428118-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="169d829d-8c52-41a4-b5da-b5b2e6da6f87" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" storage="f:\github\mcpserver\.mcpserver\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="953420ae-ef9a-374d-2b7e-23ac0da2fc92">
+      <Execution id="169d829d-8c52-41a4-b5da-b5b2e6da6f87" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests" name="ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" storage="f:\github\mcpserver\.mcpserver\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="41a1fa87-796d-fe3d-7338-026195080f39">
+      <Execution id="d44955cb-2d35-4116-b57a-96cc35c79c6d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests" name="SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="41a1fa87-796d-fe3d-7338-026195080f39" executionId="d44955cb-2d35-4116-b57a-96cc35c79c6d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="953420ae-ef9a-374d-2b7e-23ac0da2fc92" executionId="169d829d-8c52-41a4-b5da-b5b2e6da6f87" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.36]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.44]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.68]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:06.35]   Finished:    McpServer.Support.Mcp.Tests (ID = 'e0b5835d67f02754768e0d37044040213a8002c4afa4e8f13cbfe1fb452a18b3')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

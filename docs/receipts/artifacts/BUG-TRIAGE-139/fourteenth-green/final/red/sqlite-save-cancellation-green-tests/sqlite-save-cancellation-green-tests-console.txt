@@ -1,0 +1,30 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+failed McpServer.Support.Mcp.Tests.Storage.SqliteUseCaseFifthProviderTests.BlockingLock_ObservesCancellation (7s 792ms)
+  Assert.Same() Failure: Values are not the same instance
+  Expected: Task<Result<UseCaseDetailDto>> { Status = Canceled }
+  Actual:   Task { Status = RanToCompletion }
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:385
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:386
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:386
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:387
+    --- End of stack trace from previous location ---
+failed McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly (2s 603ms)
+  Assert.Same() Failure: Values are not the same instance
+  Expected: Task<Result<UseCaseDetailDto>> { Status = Canceled }
+  Actual:   Task { Status = RanToCompletion }
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:260
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    --- End of stack trace from previous location ---
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\sqlite-save-cancellation-green-tests\sqlite-save-cancellation-green-tests.trx
+
+Test run summary: Failed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 2
+  failed: 2
+  succeeded: 0
+  skipped: 0
+  duration: 10s 921ms

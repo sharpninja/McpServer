@@ -1,0 +1,211 @@
+=== RESTORE ===
+  Determining projects to restore...
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Subscriber\McpServer.Subscriber.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\McpServer.Client.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repo.Validation\McpServer.Repo.Validation.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj (in 1.28 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\build\_build.csproj (in 1.34 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 13 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 1.34 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.GitHub.Validation\McpServer.GitHub.Validation.csproj (in 15 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpServer.Storage.csproj (in 1.34 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 20 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.SessionLog.Validation\McpServer.SessionLog.Validation.csproj (in 19 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Launcher\McpServer.Launcher.csproj (in 4 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 22 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Review.Tests\McpServer.Review.Tests.csproj (in 24 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Host\McpServer.Repl.Host.csproj (in 26 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Launcher.Tests\McpServer.Launcher.Tests.csproj (in 104 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.KeyServer\McpServer.KeyServer.csproj (in 42 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Workspace.Validation\McpServer.Workspace.Validation.csproj (in 41 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\Build.Tests\Build.Tests.csproj (in 126 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.PlanReview.Tests\McpServer.PlanReview.Tests.csproj (in 21 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj (in 11 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 63 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 78 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.TransactionSecurity.IntegrationTests\McpServer.TransactionSecurity.IntegrationTests.csproj (in 100 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Cqrs.Tests\McpServer.Cqrs.Tests.csproj (in 34 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Context.Validation\McpServer.Context.Validation.csproj (in 27 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.ToolRegistry.Validation\McpServer.ToolRegistry.Validation.csproj (in 13 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.McpAgent.Tests\McpServer.McpAgent.Tests.csproj (in 69 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent.SampleHost\McpServer.McpAgent.SampleHost.csproj (in 1.55 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\McpServer.Services.csproj (in 1.55 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Todo.Validation\McpServer.Todo.Validation.csproj (in 14 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 200 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent\McpServer.QBAgent.csproj (in 1.55 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj (in 15 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.QBAgent.Tests\McpServer.QBAgent.Tests.csproj (in 224 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj (in 234 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 256 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj (in 232 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj (in 92 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 1.58 sec).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Acid.IntegrationTests\McpServer.Acid.IntegrationTests.csproj (in 40 ms).
+=== BUILD src/McpServer.Client/McpServer.Client.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:18.53
+=== BUILD src/McpServer.Repl.Host/McpServer.Repl.Host.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.Repl.Host -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Host\release\McpServer.Repl.Host.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:09.47
+=== BUILD src/McpServer.Storage/McpServer.Storage.csproj ===
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:09.70
+=== BUILD src/McpServer.Services/McpServer.Services.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.McpAgent\release\McpServer.McpAgent.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Cqrs\release\McpServer.Cqrs.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Services\release\McpServer.Services.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:14.48
+=== BUILD src/McpServer.GraphRag/McpServer.GraphRag.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.McpAgent\release\McpServer.McpAgent.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Cqrs\release\McpServer.Cqrs.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Services\release\McpServer.Services.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.GraphRag\release\McpServer.GraphRag.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.47
+=== BUILD src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj ===
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqliteMigrations\release\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\release\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqlServerMigrations\release\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.McpAgent\release\McpServer.McpAgent.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Cqrs\release\McpServer.Cqrs.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Services\release\McpServer.Services.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.SessionLog.Transcripts\release\McpServer.SessionLog.Transcripts.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.GraphRag\release\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp\release\McpServer.Support.Mcp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:30.71
+=== BUILD src/McpServer.Storage.SqliteMigrations/McpServer.Storage.SqliteMigrations.csproj ===
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqliteMigrations\release\McpServer.Storage.SqliteMigrations.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.30
+=== BUILD src/McpServer.Storage.SqlServerMigrations/McpServer.Storage.SqlServerMigrations.csproj ===
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqlServerMigrations\release\McpServer.Storage.SqlServerMigrations.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.33
+=== BUILD src/McpServer.Storage.PostgreSqlMigrations/McpServer.Storage.PostgreSqlMigrations.csproj ===
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\release\McpServer.Storage.PostgreSqlMigrations.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.38
+=== BUILD tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj ===
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqliteMigrations\release\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\release\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Storage.SqlServerMigrations\release\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.McpAgent\release\McpServer.McpAgent.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Cqrs\release\McpServer.Cqrs.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Services\release\McpServer.Services.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.SessionLog.Transcripts\release\McpServer.SessionLog.Transcripts.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.GraphRag\release\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp\release\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:13.03
+=== BUILD tests/McpServer.Repl.IntegrationTests/McpServer.Repl.IntegrationTests.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.Repl.Host -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.Host\release\McpServer.Repl.Host.dll
+  McpServer.Repl.IntegrationTests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Repl.IntegrationTests\release\McpServer.Repl.IntegrationTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.84
+=== BUILD tests/McpServer.Client.Tests/McpServer.Client.Tests.csproj ===
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Client.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Client.Tests\release\McpServer.Client.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.29

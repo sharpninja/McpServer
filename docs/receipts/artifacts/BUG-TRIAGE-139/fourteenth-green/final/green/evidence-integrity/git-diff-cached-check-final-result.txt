@@ -1,0 +1,4 @@
+exit_code=0
+diagnostics=0
+classification=passed
+raw_console_policy=preserved bytes via scoped -diff attributes

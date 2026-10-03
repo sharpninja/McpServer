@@ -1,0 +1,3 @@
+$root = 'docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final'
+For every non-command/non-environment output file below $root, walk to $root and require a *command*.txt file in the run directory or an ancestor run directory.
+Report files, outputs examined, and unmapped outputs.

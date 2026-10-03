@@ -1,0 +1,55 @@
+<TestRun id="38a94b26-8006-4544-96bd-201cb61f2f4b" name="SYSTEM@PAYTON-LEGION2 2026-09-04T03:07:03.5423264-05:00" runUser="SYSTEM" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T03:07:03.5423264-05:00" queuing="2026-09-04T03:07:03.5423264-05:00" start="2026-09-04T03:07:03.5423264-05:00" finish="2026-09-04T08:07:14.0612788+00:00" />
+  <TestSettings name="default" id="6c4d5628-128d-4c3b-a1a4-ab366a4594ad" />
+  <Results>
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Storage.SqliteUseCaseFifthProviderTests.BlockingLock_ObservesCancellation" outcome="Failed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0fab19c1-8753-4bbf-aaeb-f8314f93359e" executionId="0fab19c1-8753-4bbf-aaeb-f8314f93359e" computerName="PAYTON-LEGION2" duration="00:00:07.7920842" startTime="2026-09-04T08:07:03.6144136+00:00" endTime="2026-09-04T08:07:11.4322637+00:00">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Same() Failure: Values are not the same instance
+Expected: Task&lt;Result&lt;UseCaseDetailDto&gt;&gt; { Status = Canceled }
+Actual:   Task { Status = RanToCompletion }</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:line 385
+   at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:line 386
+   at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:line 386
+   at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:line 387
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly" outcome="Failed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="84be9631-d658-4bd0-8507-8b653815523e" executionId="84be9631-d658-4bd0-8507-8b653815523e" computerName="PAYTON-LEGION2" duration="00:00:02.6034576" startTime="2026-09-04T08:07:11.4567290+00:00" endTime="2026-09-04T08:07:14.0612788+00:00">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Same() Failure: Values are not the same instance
+Expected: Task&lt;Result&lt;UseCaseDetailDto&gt;&gt; { Status = Canceled }
+Actual:   Task { Status = RanToCompletion }</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:line 260
+   at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:line 261
+   at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:line 261
+   at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:line 261
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteUseCaseFifthProviderTests.BlockingLock_ObservesCancellation" id="0fab19c1-8753-4bbf-aaeb-f8314f93359e" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="0fab19c1-8753-4bbf-aaeb-f8314f93359e" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Storage.SqliteUseCaseFifthProviderTests" name="BlockingLock_ObservesCancellation" adapterTypeName="executor://38a94b26-8006-4544-96bd-201cb61f2f4b/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly" id="84be9631-d658-4bd0-8507-8b653815523e" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="84be9631-d658-4bd0-8507-8b653815523e" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests" name="CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly" adapterTypeName="executor://38a94b26-8006-4544-96bd-201cb61f2f4b/xunit.v3/3.2.2" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0fab19c1-8753-4bbf-aaeb-f8314f93359e" executionId="0fab19c1-8753-4bbf-aaeb-f8314f93359e" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="84be9631-d658-4bd0-8507-8b653815523e" executionId="84be9631-d658-4bd0-8507-8b653815523e" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="0" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>

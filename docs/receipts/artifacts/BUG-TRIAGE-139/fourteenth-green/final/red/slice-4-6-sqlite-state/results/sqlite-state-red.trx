@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="da1bc3df-292a-40a3-a710-e9f964e51cee" name="SYSTEM@PAYTON-LEGION2 2026-09-04 01:42:31" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T01:42:31.0641197-05:00" queuing="2026-09-04T01:42:31.0641201-05:00" start="2026-09-04T01:41:41.6966759-05:00" finish="2026-09-04T01:42:35.3117273-05:00" />
+  <TestSettings name="default" id="d76fade4-8e1a-49d7-8b5e-c8131297a173">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_01_42_31" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a12f5671-834f-4e3c-bf76-8dfc0badeed3" testId="b120ec4a-738f-ad9f-0e30-622d2f46e824" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure" computerName="PAYTON-LEGION2" duration="00:00:00.0050424" startTime="2026-09-04T01:42:35.1827546-05:00" endTime="2026-09-04T01:42:35.1956888-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a12f5671-834f-4e3c-bf76-8dfc0badeed3">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: Exception type was not an exact match&#xD;
+Expected: typeof(Microsoft.Data.Sqlite.SqliteException)&#xD;
+Actual:   typeof(System.OperationCanceledException)&#xD;
+---- System.OperationCanceledException : The operation was canceled.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 163&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 165&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 165&#xD;
+--- End of stack trace from previous location ---&#xD;
+----- Inner Stack Trace -----&#xD;
+   at McpServer.Support.Mcp.Services.FederationTopologyService.ExecuteProviderCancelableAsync[T](Func`1 operation, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\Services\FederationTopologyService.cs:line 910</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1dd105a7-edc9-4b38-a878-71f24bb05ef7" testId="6e2c2993-7bb9-d5e7-66bc-0796c64fe8a4" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationOpen_SuccessAndRepeat_PreserveExactConnectionState" computerName="PAYTON-LEGION2" duration="00:00:02.3397463" startTime="2026-09-04T01:42:31.0214835-05:00" endTime="2026-09-04T01:42:33.3621716-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1dd105a7-edc9-4b38-a878-71f24bb05ef7" />
+    <UnitTestResult executionId="9b3b496d-ef98-450a-8eb9-d4e2cff55489" testId="aec787a7-5e91-4755-5405-160e1a0afeed" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState" computerName="PAYTON-LEGION2" duration="00:00:01.8160266" startTime="2026-09-04T01:42:33.3644148-05:00" endTime="2026-09-04T01:42:35.1810706-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b3b496d-ef98-450a-8eb9-d4e2cff55489">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: 7777&#xD;
+Actual:   5000</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 47&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 47&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 47&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="53eb442f-b828-41c4-a70a-c31deb2e77f1" testId="63c3d57a-132f-bb03-cfee-3370bec58e92" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention" computerName="PAYTON-LEGION2" duration="00:00:47.1299531" startTime="2026-09-04T01:41:43.8442582-05:00" endTime="2026-09-04T01:42:31.0111956-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="53eb442f-b828-41c4-a70a-c31deb2e77f1">
+      <Output>
+        <ErrorInfo>
+          <Message>The custom SQLite busy handler was replaced during the federation read.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 125&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 125&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 134&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 134&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 139&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 139&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-6-sqlite-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="aec787a7-5e91-4755-5405-160e1a0afeed">
+      <Execution id="9b3b496d-ef98-450a-8eb9-d4e2cff55489" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-6-sqlite-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationOpen_SuccessAndRepeat_PreserveExactConnectionState" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-6-sqlite-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="6e2c2993-7bb9-d5e7-66bc-0796c64fe8a4">
+      <Execution id="1dd105a7-edc9-4b38-a878-71f24bb05ef7" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-6-sqlite-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="FederationOpen_SuccessAndRepeat_PreserveExactConnectionState" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-6-sqlite-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="b120ec4a-738f-ad9f-0e30-622d2f46e824">
+      <Execution id="a12f5671-834f-4e3c-bf76-8dfc0badeed3" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-6-sqlite-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="ProviderCancellationClassifier_PreservesRealSqliteFailure" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-6-sqlite-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="63c3d57a-132f-bb03-cfee-3370bec58e92">
+      <Execution id="53eb442f-b828-41c4-a70a-c31deb2e77f1" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-6-sqlite-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b120ec4a-738f-ad9f-0e30-622d2f46e824" executionId="a12f5671-834f-4e3c-bf76-8dfc0badeed3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e2c2993-7bb9-d5e7-66bc-0796c64fe8a4" executionId="1dd105a7-edc9-4b38-a878-71f24bb05ef7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aec787a7-5e91-4755-5405-160e1a0afeed" executionId="9b3b496d-ef98-450a-8eb9-d4e2cff55489" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="63c3d57a-132f-bb03-cfee-3370bec58e92" executionId="53eb442f-b828-41c4-a70a-c31deb2e77f1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="4" executed="4" passed="1" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.37]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.37]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.60]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:48.85]       The custom SQLite busy handler was replaced during the federation read.&#xD;
+[xUnit.net 00:00:48.85]       Stack Trace:&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(125,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(125,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(134,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(134,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(139,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(139,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention()&#xD;
+[xUnit.net 00:00:48.85]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:53.01]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:53.01]       Expected: 7777&#xD;
+[xUnit.net 00:00:53.01]       Actual:   5000&#xD;
+[xUnit.net 00:00:53.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:53.01]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(47,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:53.01]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(47,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:53.01]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(47,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:53.01]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:53.02]       Assert.Throws() Failure: Exception type was not an exact match&#xD;
+[xUnit.net 00:00:53.02]       Expected: typeof(Microsoft.Data.Sqlite.SqliteException)&#xD;
+[xUnit.net 00:00:53.02]       Actual:   typeof(System.OperationCanceledException)&#xD;
+[xUnit.net 00:00:53.02]       ---- System.OperationCanceledException : The operation was canceled.&#xD;
+[xUnit.net 00:00:53.02]       Stack Trace:&#xD;
+[xUnit.net 00:00:53.02]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(163,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure()&#xD;
+[xUnit.net 00:00:53.02]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(165,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure()&#xD;
+[xUnit.net 00:00:53.02]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(165,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure()&#xD;
+[xUnit.net 00:00:53.02]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:53.02]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:53.02]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\Services\FederationTopologyService.cs(910,0): at McpServer.Support.Mcp.Services.FederationTopologyService.ExecuteProviderCancelableAsync[T](Func`1 operation, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:53.04]   Finished:    McpServer.Support.Mcp.Tests (ID = '276f8b840887107f1c7eb490e4de416b43615733d3707c56d5af35b49c083e06')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:42:31.0209224-05:00">
+        <Text>[xUnit.net 00:00:48.85]     McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesCustomNativeBusyHandlerUnderRealContention [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:42:35.1822331-05:00">
+        <Text>[xUnit.net 00:00:53.01]     McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.FederationRead_PreservesIndependentManagedEfConnectionAndNativeTimeoutState [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:42:35.1965609-05:00">
+        <Text>[xUnit.net 00:00:53.02]     McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.ProviderCancellationClassifier_PreservesRealSqliteFailure [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
