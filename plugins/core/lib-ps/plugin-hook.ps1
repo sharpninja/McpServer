@@ -1064,25 +1064,26 @@ function Get-PluginTurnPersistenceProof {
     try {
         $raw = @(Invoke-PluginRepl -Method 'client.SessionLog.GetAsync' -ParamsYaml $paramsYaml)
     } catch {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+        # No proof document. Keep the historical stale pin instead of inventing a server outcome.
+        return [pscustomobject]@{ Kind = 'Active' }
     }
 
     $text = ($raw | ForEach-Object { [string]$_ }) -join "`n"
     if ([string]::IsNullOrWhiteSpace($text)) {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+        return [pscustomobject]@{ Kind = 'Active' }
     }
 
     $document = $null
     try {
         $document = ConvertFrom-Yaml -Yaml $text -Ordered -ErrorAction Stop
     } catch {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+        return [pscustomobject]@{ Kind = 'Active' }
     }
 
     $payload = Get-PluginMapValue -Map $document -Key 'payload'
     $result = Get-PluginMapValue -Map $payload -Key 'result'
     if ($null -eq $result) {
-        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+        return [pscustomobject]@{ Kind = 'Active' }
     }
 
     $proofWorkspace = [string](Get-PluginMapValue -Map $result -Key 'workspacePath')

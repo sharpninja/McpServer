@@ -75,9 +75,17 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
     It 'appendActions refuses a request id that does not match the cached turn' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-meta-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $true
         try {
@@ -90,14 +98,17 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "requestId: req-other`nactions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
             $script:PersistCalls | Should -Be 0
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -105,9 +116,17 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
     It 'appendActions returns false when persist fails and nothing is queued' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-nq-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $false
@@ -121,8 +140,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
@@ -130,7 +149,10 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $script:LastInvokeReplMethodSuccess | Should -BeFalse
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -138,9 +160,17 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
     It 'appendActions wrapper treats a retained failsafe as success and does not claim primary persistence' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-q-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $true
@@ -154,8 +184,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -163,7 +193,10 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
             $script:LastReplPersistenceDetails.queued | Should -BeTrue
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -171,9 +204,17 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
     It 'updateTurn sends response interpretation tags and contextList and treats a retained failsafe as success' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-upd-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $true
@@ -187,8 +228,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/McpServer.Services/Services/SessionLogService.cs`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -199,19 +240,26 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             $script:LastPersistContext | Should -Contain 'src/McpServer.Services/Services/SessionLogService.cs'
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 
     It 'stop gate blocks an in-progress turn when timestamp is stale even if lastUpdated is fresh' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-stop-' + [guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $dir 'ws'
         $cache = Join-Path $dir '.mcpServer\grok'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         [void][System.IO.Directory]::CreateDirectory($cache)
         $priorCache = $env:MCP_CACHE_DIR_OVERRIDE
         $priorHost = $env:MCP_PLUGIN_HOST
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $cache
         $env:MCP_PLUGIN_HOST = 'grok'
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $old = (Get-Date).ToUniversalTime().AddHours(-30).ToString('o')
         $fresh = (Get-Date).ToUniversalTime().ToString('o')
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
@@ -226,13 +274,14 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             status = 'in_progress'
             queryText = 'real work'
             auditActions = 2
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
         try {
-            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
+            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $workspace | Out-String
             $output | Should -Match 'stale cached session cannot be reused'
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
             if ($null -eq $priorHost) { Remove-Item Env:MCP_PLUGIN_HOST -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_HOST = $priorHost }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
@@ -241,12 +290,16 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
 
     It 'stop gate does not block a completed turn only because both timestamps are stale' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-done-' + [guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $dir 'ws'
         $cache = Join-Path $dir '.mcpServer\grok'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         [void][System.IO.Directory]::CreateDirectory($cache)
         $priorCache = $env:MCP_CACHE_DIR_OVERRIDE
         $priorHost = $env:MCP_PLUGIN_HOST
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $cache
         $env:MCP_PLUGIN_HOST = 'grok'
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $old = (Get-Date).ToUniversalTime().AddHours(-30).ToString('o')
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
             status = 'verified'
@@ -261,13 +314,14 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             queryText = 'finished'
             auditActions = 1
             codeEdits = 0
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
         try {
-            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
+            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $workspace | Out-String
             $output | Should -Not -Match 'stale cached session cannot be reused'
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
             if ($null -eq $priorHost) { Remove-Item Env:MCP_PLUGIN_HOST -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_HOST = $priorHost }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
