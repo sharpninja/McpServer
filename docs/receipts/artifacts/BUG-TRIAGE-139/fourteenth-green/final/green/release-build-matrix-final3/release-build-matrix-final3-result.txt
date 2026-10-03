@@ -1,0 +1,7 @@
+restore_exit=0
+projects_succeeded=12
+projects_total=12
+failed_project=
+classification=passed
+physical_artifact_target=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts
+runtime_temp=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp

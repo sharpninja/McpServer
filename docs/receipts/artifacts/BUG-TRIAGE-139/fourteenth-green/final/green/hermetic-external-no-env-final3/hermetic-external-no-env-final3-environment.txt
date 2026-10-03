@@ -1,0 +1,1 @@
+MCP_REPOSITORY_ROOT absent for the child process. Updated runner and all assemblies loaded from the true external C: artifact tree. TEMP and TMP were C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp. No repository-root environment injection was used.

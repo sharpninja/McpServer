@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a3c5e09f-9552-461b-9add-c26e79cc2f38" name="SYSTEM@PAYTON-LEGION2 2026-09-04 00:13:32" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T00:13:32.5428111-05:00" queuing="2026-09-04T00:13:32.5428114-05:00" start="2026-09-04T00:13:29.2134553-05:00" finish="2026-09-04T00:13:32.5491471-05:00" />
+  <TestSettings name="default" id="16bd121f-f566-489b-a491-01cfc61e9563">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_00_13_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="488880f4-020c-43a8-88eb-9e8bf3430834" testId="42e1c9aa-8250-a1da-322a-01b7798a0484" testName="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound" computerName="PAYTON-LEGION2" duration="00:00:00.0010161" startTime="2026-09-04T00:13:31.7746502-05:00" endTime="2026-09-04T00:13:31.7759786-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="488880f4-020c-43a8-88eb-9e8bf3430834">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Sub-string not found&#xD;
+String:    "using System.ComponentModel;\r\nusing System.Runtime"···&#xD;
+Not found: "UnixOpenNonBlock"</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 182&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b8aafd5-b3a9-4f16-8c70-b7c511cb2295" testId="d30a88bf-67ba-b714-59f1-6f12835269e4" testName="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary" computerName="PAYTON-LEGION2" duration="00:00:00.0049545" startTime="2026-09-04T00:13:31.7690437-05:00" endTime="2026-09-04T00:13:31.7743032-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b8aafd5-b3a9-4f16-8c70-b7c511cb2295">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Sub-string not found&#xD;
+String:    "using System.Buffers;\nusing System.Security.Crypto"···&#xD;
+Not found: "WorkspaceContainedFileSystem.DeleteFileIfExists"</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 32&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="324a28e0-ab8c-4ce9-8536-2e3bc76900cd" testId="8d4983b3-b7f0-6a85-0060-4670507c7a04" testName="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf" computerName="PAYTON-LEGION2" duration="00:00:00.6672175" startTime="2026-09-04T00:13:31.7762940-05:00" endTime="2026-09-04T00:13:32.4456298-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="324a28e0-ab8c-4ce9-8536-2e3bc76900cd">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.DoesNotContain() Failure: Sub-string found&#xD;
+                                       ↓ (pos 22854)&#xD;
+String: ···"t))\r\n                    Directory.CreateDirectory"···&#xD;
+Found:  "Directory.CreateDirectory(current)"</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 137&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f57a8af1-eb74-4f43-8174-997382d5f959" testId="5e2c3692-4769-24c1-17b5-109c09a3809c" testName="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel" computerName="PAYTON-LEGION2" duration="00:00:00.6696388" startTime="2026-09-04T00:13:31.0687988-05:00" endTime="2026-09-04T00:13:31.7626719-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f57a8af1-eb74-4f43-8174-997382d5f959">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs:line 59&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-1\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="42e1c9aa-8250-a1da-322a-01b7798a0484">
+      <Execution id="488880f4-020c-43a8-88eb-9e8bf3430834" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests" name="OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-1\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="d30a88bf-67ba-b714-59f1-6f12835269e4">
+      <Execution id="0b8aafd5-b3a9-4f16-8c70-b7c511cb2295" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests" name="TransactionalRollback_UsesContainedDeletionBoundary" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-1\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="5e2c3692-4769-24c1-17b5-109c09a3809c">
+      <Execution id="f57a8af1-eb74-4f43-8174-997382d5f959" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests" name="DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-1\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="8d4983b3-b7f0-6a85-0060-4670507c7a04">
+      <Execution id="324a28e0-ab8c-4ce9-8536-2e3bc76900cd" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-1\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests" name="EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="42e1c9aa-8250-a1da-322a-01b7798a0484" executionId="488880f4-020c-43a8-88eb-9e8bf3430834" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d30a88bf-67ba-b714-59f1-6f12835269e4" executionId="0b8aafd5-b3a9-4f16-8c70-b7c511cb2295" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d4983b3-b7f0-6a85-0060-4670507c7a04" executionId="324a28e0-ab8c-4ce9-8536-2e3bc76900cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e2c3692-4769-24c1-17b5-109c09a3809c" executionId="f57a8af1-eb74-4f43-8174-997382d5f959" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="4" executed="4" passed="0" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.29]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.18]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.38]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:02.15]       Assert.NotNull() Failure: Value is null&#xD;
+[xUnit.net 00:00:02.15]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.15]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs(59,0): at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel()&#xD;
+[xUnit.net 00:00:02.15]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.16]       Assert.Contains() Failure: Sub-string not found&#xD;
+[xUnit.net 00:00:02.16]       String:    "using System.Buffers;\nusing System.Security.Crypto"···&#xD;
+[xUnit.net 00:00:02.16]       Not found: "WorkspaceContainedFileSystem.DeleteFileIfExists"&#xD;
+[xUnit.net 00:00:02.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.16]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs(32,0): at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary()&#xD;
+[xUnit.net 00:00:02.16]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.16]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.16]       Assert.Contains() Failure: Sub-string not found&#xD;
+[xUnit.net 00:00:02.16]       String:    "using System.ComponentModel;\r\nusing System.Runtime"···&#xD;
+[xUnit.net 00:00:02.16]       Not found: "UnixOpenNonBlock"&#xD;
+[xUnit.net 00:00:02.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.16]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs(182,0): at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound()&#xD;
+[xUnit.net 00:00:02.16]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.82]       Assert.DoesNotContain() Failure: Sub-string found&#xD;
+[xUnit.net 00:00:02.82]                                              ↓ (pos 22854)&#xD;
+[xUnit.net 00:00:02.82]       String: ···"t))\r\n                    Directory.CreateDirectory"···&#xD;
+[xUnit.net 00:00:02.82]       Found:  "Directory.CreateDirectory(current)"&#xD;
+[xUnit.net 00:00:02.82]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.82]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\RequirementsFourteenthAdversarialReviewTests.cs(137,0): at McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf()&#xD;
+[xUnit.net 00:00:02.82]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.84]   Finished:    McpServer.Support.Mcp.Tests (ID = '19681a58eab0cfa9c9f5c5761b9e7767f7188ae8dc97937936fc27594f855942')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T00:13:31.7697442-05:00">
+        <Text>[xUnit.net 00:00:02.15]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.DeleteFileIfExists_RollbackDirectorySwap_NeverDeletesExternalSentinel [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T00:13:31.7804684-05:00">
+        <Text>[xUnit.net 00:00:02.16]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.TransactionalRollback_UsesContainedDeletionBoundary [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T00:13:31.7814937-05:00">
+        <Text>[xUnit.net 00:00:02.16]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T00:13:32.4466714-05:00">
+        <Text>[xUnit.net 00:00:02.82]     McpServer.Support.Mcp.Tests.Services.RequirementsFourteenthAdversarialReviewTests.EnsureDirectory_DirectorySwap_NeverCreatesExternalLeaf [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

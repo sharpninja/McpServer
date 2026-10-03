@@ -1,0 +1,49 @@
+  McpServer.Cqrs -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+  McpServer.Client -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.60]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution [FAIL]
+[xUnit.net 00:00:02.90]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope [FAIL]
+  Failed McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution [20 ms]
+  Error Message:
+   System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')
+  Stack Trace:
+     at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)
+   at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)
+   at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs:line 471
+   at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs:line 134
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 157
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope [1 s]
+  Error Message:
+   System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')
+  Stack Trace:
+     at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)
+   at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)
+   at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs:line 471
+   at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs:line 134
+   at McpServer.Support.Mcp.Storage.McpDbContext.EnsureWorkspaceRowsAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1498
+   at McpServer.Support.Mcp.Storage.McpDbContext.PrepareDbFkChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1429
+   at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1159
+   at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1179
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 189
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 197
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 197
+--- End of stack trace from previous location ---
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\global-empty-workspace-red\global-empty-workspace-red.trx
+
+Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 1 s - McpServer.Support.Mcp.Tests.dll (net10.0)

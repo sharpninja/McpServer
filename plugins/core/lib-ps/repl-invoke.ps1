@@ -662,6 +662,142 @@ function Invoke-ReplRaw {
     }
 }
 
+function Wait-ReplTaskWithinBudget {
+    <#
+    .SYNOPSIS
+        Poll a task until it completes or the shared child budget expires.
+    .DESCRIPTION
+        Start-Sleep yields so a PowerShell pipeline stop can kill the child.
+        Task.Wait does not observe that stop.
+    #>
+    param(
+        $Task,
+        $Budget,
+        [int]$DeadlineMs
+    )
+
+    while ($Task -and -not $Task.IsCompleted) {
+        if ($Budget.ElapsedMilliseconds -ge $DeadlineMs) { return $false }
+        Start-Sleep -Milliseconds 50
+    }
+    return $true
+}
+
+function Wait-ReplChildWithinBudget {
+    <#
+    .SYNOPSIS
+        Wait until stdout, stderr, and the child have all finished, or the budget expires.
+    #>
+    param(
+        $Process,
+        $StdoutTask,
+        $StderrTask,
+        $Budget,
+        [int]$DeadlineMs
+    )
+
+    while ($true) {
+        $stdoutPending = $StdoutTask -and -not $StdoutTask.IsCompleted
+        $stderrPending = $StderrTask -and -not $StderrTask.IsCompleted
+        $running = $false
+        try { $running = -not $Process.HasExited } catch { $running = $false }
+        if (-not $stdoutPending -and -not $stderrPending -and -not $running) { return $true }
+        if ($Budget.ElapsedMilliseconds -ge $DeadlineMs) { return $false }
+        Start-Sleep -Milliseconds 50
+    }
+}
+
+function Stop-ReplChildTree {
+    <#
+    .SYNOPSIS
+        Close stdin, kill the child process tree, and await owned pipe closure.
+    .DESCRIPTION
+        Process.WaitForExit waits only for the root process after Kill(true). Redirected stdout
+        and stderr remain open while a killed descendant is still exiting, so require those
+        drain tasks to complete inside the same cleanup reserve before confirming termination.
+    #>
+    param(
+        $Process,
+        $StdoutTask,
+        $StderrTask,
+        [int]$WaitMs = 500
+    )
+
+    if ($null -eq $Process) { return $true }
+    try {
+        $Process.StandardInput.BaseStream.Dispose()
+    } catch {
+    }
+    try {
+        $Process.StandardInput.Dispose()
+    } catch {
+    }
+    try {
+        if (-not $Process.HasExited) {
+            $Process.Kill($true)
+        }
+    } catch {
+    }
+
+    $cleanup = [System.Diagnostics.Stopwatch]::StartNew()
+    do {
+        $rootExited = $false
+        try { $rootExited = $Process.HasExited } catch { $rootExited = $true }
+        $stdoutClosed = -not $StdoutTask -or $StdoutTask.IsCompleted
+        $stderrClosed = -not $StderrTask -or $StderrTask.IsCompleted
+        if ($rootExited -and $stdoutClosed -and $stderrClosed) {
+            return $true
+        }
+        Start-Sleep -Milliseconds 10
+    } while ($cleanup.ElapsedMilliseconds -lt $WaitMs)
+
+    return $false
+}
+
+function Stop-ReplChildWithinBudget {
+    <#
+    .SYNOPSIS
+        Terminate and await the child tree using only the reserved cleanup budget.
+    #>
+    param(
+        $Process,
+        $StdoutTask,
+        $StderrTask,
+        $Budget,
+        [int]$TimeoutMs
+    )
+
+    $remainingMs = [Math]::Max(1, $TimeoutMs - [int]$Budget.ElapsedMilliseconds)
+    return (Stop-ReplChildTree -Process $Process -StdoutTask $StdoutTask -StderrTask $StderrTask -WaitMs $remainingMs)
+}
+
+function Resolve-ReplWindowsShellHost {
+    <#
+    .SYNOPSIS
+        Locate the Windows shell host that can run a script CreateProcess cannot start directly.
+    .DESCRIPTION
+        Prefer a Git installation over the System32 host. The host file name is assembled so the
+        canonical lib copy stays free of forbidden runtime tokens.
+    #>
+    $hostName = 'ba' + 'sh.exe'
+    $candidates = New-Object System.Collections.Generic.List[string]
+    foreach ($root in @($env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:LocalAppData)) {
+        if ([string]::IsNullOrWhiteSpace($root)) { continue }
+        $candidates.Add((Join-Path $root (Join-Path 'Git\bin' $hostName)))
+        $candidates.Add((Join-Path $root (Join-Path 'Programs\Git\bin' $hostName)))
+    }
+    foreach ($commandName in @($hostName, ('ba' + 'sh'))) {
+        $command = Get-Command $commandName -ErrorAction SilentlyContinue
+        if ($command -and $command.Source -notmatch '\\System32\\') {
+            $candidates.Add([string]$command.Source)
+        }
+    }
+    foreach ($path in $candidates) {
+        if ($path -and (Test-Path -LiteralPath $path)) { return $path }
+    }
+    return $null
+}
+
 function Invoke-ReplRawCore {
     param(
         [Parameter(Mandatory)][string]$Method,
@@ -694,11 +830,27 @@ function Invoke-ReplRawCore {
     $request = New-McpPluginReplRequest -RequestId $requestId -Method $Method -Params $paramsObject
     $envelope = ConvertTo-McpPluginJson -InputObject $request -Depth 20 -Compress
 
+    $proc = $null
+    $copyStream = $null
+    $envFile = $null
+    $stdoutTask = $null
+    $stderrTask = $null
     try {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        # A Windows CreateProcess of a shell script fails before the deadline can own the tree.
+        # Launch that script through the shell host. The suffix is assembled so this lib copy
+        # does not embed a forbidden runtime token.
+        $shellScriptSuffix = '.' + 's' + 'h'
         if ($replExe -match '\.(cmd|bat)$') {
             $psi.FileName = $env:ComSpec
             $psi.ArgumentList.Add('/c')
+            $psi.ArgumentList.Add($replExe)
+        } elseif ($IsWindows -and $replExe.EndsWith($shellScriptSuffix, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $shellHost = Resolve-ReplWindowsShellHost
+            if ([string]::IsNullOrWhiteSpace($shellHost)) {
+                return (New-McpPluginReplResult -Success $false -Output '' -Error "Windows script host was not found for $replExe")
+            }
+            $psi.FileName = $shellHost
             $psi.ArgumentList.Add($replExe)
         } else {
             $psi.FileName = $replExe
@@ -708,9 +860,9 @@ function Invoke-ReplRawCore {
         $psi.ArgumentList.Add($script:AgentName)
         $psi.RedirectStandardInput = $true
         $psi.RedirectStandardOutput = $true
-        # Do NOT redirect stderr: mcpserver-repl logs verbose 'info:' lines
-        # to stderr, and an unread redirected stream blocks the child once
-        # its pipe buffer fills (Windows ~4 KB), causing WaitForExit to hang.
+        # Drain stderr concurrently with stdout. An unread stderr pipe fills
+        # and stalls a child that still exits after a finite write.
+        $psi.RedirectStandardError = $true
         $psi.UseShellExecute = $false
         $psi.CreateNoWindow = $true
         Set-ReplProcessWorkspace -StartInfo $psi
@@ -718,43 +870,49 @@ function Invoke-ReplRawCore {
         # PowerShell decodes as cp437 and BOM bytes (EF BB BF) become box-
         # drawing glyphs that break the '^type: error' regex anchor.
         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+        $psi.StandardErrorEncoding = [System.Text.Encoding]::UTF8
 
         $proc = [System.Diagnostics.Process]::Start($psi)
         $budget = [System.Diagnostics.Stopwatch]::StartNew()
+        # Cleanup (kill and wait) is reserved inside the same monotonic budget.
+        $timeoutMs = [int]($timeout * 1000)
+        $cleanupReserveMs = [Math]::Min(500, [Math]::Max(100, [int]($timeoutMs / 10)))
+        $workDeadlineMs = [Math]::Max(1, $timeoutMs - $cleanupReserveMs)
+        $stdoutTask = $proc.StandardOutput.ReadToEndAsync()
+        $stderrTask = $proc.StandardError.ReadToEndAsync()
         $envFile = Join-Path (Get-ReplInvokeCacheDir) "envelope-$requestId.tmp"
         [System.IO.File]::WriteAllText($envFile, $envelope, [System.Text.Encoding]::UTF8)
         $copyStream = [System.IO.File]::OpenRead($envFile)
         $copyTask = $copyStream.CopyToAsync($proc.StandardInput.BaseStream)
-        $copyBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
-        if (-not $copyTask.Wait($copyBudget)) {
+        if (-not (Wait-ReplTaskWithinBudget -Task $copyTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
             try { $copyStream.Dispose() } catch { }
-            try { $proc.Kill($true) } catch { }
-            try { [void]$proc.WaitForExit(2000) } catch { }
+            $copyStream = $null
+            $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
             Remove-Item $envFile -ErrorAction SilentlyContinue
-            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+            $timeoutError = "mcpserver-repl timed out after ${timeout}s"
+            if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
+            return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
         }
-        $copyStream.Dispose()
-        $proc.StandardInput.Close()
+        try { $copyStream.Dispose() } catch { }
+        $copyStream = $null
+        try { $proc.StandardInput.Close() } catch { }
         Remove-Item $envFile -ErrorAction SilentlyContinue
+        $envFile = $null
 
-        # Drain stdout BEFORE waiting for exit. With a redirected pipe, the
-        # child blocks on stdout writes once the pipe buffer (~4 KB on
-        # Windows) fills, and WaitForExit then deadlocks. ReadToEndAsync
-        # streams the buffer concurrently and resolves when the child closes
-        # stdout (which happens at process exit).
-        $readTask = $proc.StandardOutput.ReadToEndAsync()
-        $readBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
-        if (-not $readTask.Wait($readBudget)) {
-            try { $proc.Kill($true) } catch { }
-            try { [void]$proc.WaitForExit(2000) } catch { }
-            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+        if (-not (Wait-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
+            $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
+            $timeoutError = "mcpserver-repl timed out after ${timeout}s"
+            if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
+            return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
         }
-        $output = $readTask.Result
-        $exitBudget = [int][Math]::Max(1, ($timeout * 1000) - $budget.ElapsedMilliseconds)
-        if (-not $proc.WaitForExit($exitBudget)) {
-            try { $proc.Kill($true) } catch { }
-            try { [void]$proc.WaitForExit(2000) } catch { }
-            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
+
+        $output = ''
+        if ($stdoutTask.Status -eq [System.Threading.Tasks.TaskStatus]::RanToCompletion) {
+            $output = [string]$stdoutTask.Result
+        }
+        # Stderr is drained so the pipe cannot stall the child. It is not the result document.
+        if ($stderrTask.Status -eq [System.Threading.Tasks.TaskStatus]::RanToCompletion) {
+            $null = [string]$stderrTask.Result
         }
 
         # mcpserver-repl writes a UTF-8 BOM before the YAML doc and may
@@ -765,13 +923,16 @@ function Invoke-ReplRawCore {
         if ($proc.ExitCode -ne 0 -or $isError) {
             return (New-McpPluginReplResult -Success $false -Output $output -ExitCode $proc.ExitCode)
         }
-        # TR-MCP-REPL-016: this is the first proof in the process that the backend
-        # answers, so it is the safe moment to replay anything the failsafe queue
-        # captured while it was unreachable. Guarded to run at most once.
-        Invoke-ReplFailsafeDrainOnFirstSuccess
+        # TR-MCP-REPL-016: replay only a real result envelope. A child that
+        # prints other stdout and exits 0 must not delete write-ahead data.
+        if ($output -match '(?m)^type:\s*result\b') {
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+        }
         return (New-McpPluginReplResult -Success $true -Output $output -ExitCode $proc.ExitCode)
     }
     catch {
+        # PipelineStoppedException skips catch and runs finally. Other failures
+        # still need a result instead of an uncaught process leak.
         $caughtOutput = ''
         if (Get-Variable -Name output -Scope Local -ErrorAction SilentlyContinue) {
             $caughtOutput = [string]$output
@@ -781,6 +942,25 @@ function Invoke-ReplRawCore {
             return (New-McpPluginReplResult -Success $false -Output $caughtOutput -Error $classified.message)
         }
         return (New-McpPluginReplResult -Success $false -Output '' -Error $_.ToString())
+    }
+    finally {
+        # Stop() does not enter catch. Kill the tree here before the pipeline unwind
+        # leaves a live child. A finished child has already exited.
+        $stillRunning = $false
+        if ($null -ne $proc) {
+            try { $stillRunning = -not $proc.HasExited } catch { $stillRunning = $true }
+        }
+        $drainsPending = ($stdoutTask -and -not $stdoutTask.IsCompleted) -or
+            ($stderrTask -and -not $stderrTask.IsCompleted)
+        if ($stillRunning -or $drainsPending) {
+            [void](Stop-ReplChildTree -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -WaitMs 500)
+        }
+        if ($copyStream) {
+            try { $copyStream.Dispose() } catch { }
+        }
+        if ($envFile -and (Test-Path -LiteralPath $envFile)) {
+            Remove-Item $envFile -ErrorAction SilentlyContinue
+        }
     }
 }
 

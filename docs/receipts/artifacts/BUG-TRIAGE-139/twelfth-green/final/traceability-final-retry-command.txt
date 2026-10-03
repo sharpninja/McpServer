@@ -1,0 +1,2 @@
+$env:NUKE_TELEMETRY_OPTOUT='1'
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 ValidateTraceability

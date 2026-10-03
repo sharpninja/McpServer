@@ -1,0 +1,147 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-twelfth-20260903T201419Z/provider-temp/mcp-test-pgdata-90b3d5fe8b9c42f0a67e59ad1e3a50a2 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"C^:^\Users^\kingd^\AppData^\Local^\Temp^\BUG^-TRIAGE^-139^-twelfth^-20260903T201419Z^\provider^-temp^\mcp^-test^-pgdata^-90b3d5fe8b9c42f0a67e59ad1e3a50a2^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-twelfth-20260903T201419Z/provider-temp/mcp-test-pgdata-f14f2d565ebe4a4abf8db343a439ec5f ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"C^:^\Users^\kingd^\AppData^\Local^\Temp^\BUG^-TRIAGE^-139^-twelfth^-20260903T201419Z^\provider^-temp^\mcp^-test^-pgdata^-f14f2d565ebe4a4abf8db343a439ec5f^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-twelfth-20260903T201419Z/provider-temp/mcp-test-pgdata-583de9db2bb44eeaa451ddbc75a48fea ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"C^:^\Users^\kingd^\AppData^\Local^\Temp^\BUG^-TRIAGE^-139^-twelfth^-20260903T201419Z^\provider^-temp^\mcp^-test^-pgdata^-583de9db2bb44eeaa451ddbc75a48fea^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-twelfth-20260903T201419Z/provider-temp/mcp-test-pgdata-d1e3517d2e6742dc877d342353d67596 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"C^:^\Users^\kingd^\AppData^\Local^\Temp^\BUG^-TRIAGE^-139^-twelfth^-20260903T201419Z^\provider^-temp^\mcp^-test^-pgdata^-d1e3517d2e6742dc877d342353d67596^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-twelfth-20260903T201419Z/provider-temp/mcp-test-pgdata-060a92dd13ef4a2b863998aeb15d7e25 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"C^:^\Users^\kingd^\AppData^\Local^\Temp^\BUG^-TRIAGE^-139^-twelfth^-20260903T201419Z^\provider^-temp^\mcp^-test^-pgdata^-060a92dd13ef4a2b863998aeb15d7e25^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\final-gate\usecase-authoritative-mtp-final.trx
+
+Test run summary: Passed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 252
+  failed: 0
+  succeeded: 252
+  skipped: 0
+  duration: 3m 28s 213ms

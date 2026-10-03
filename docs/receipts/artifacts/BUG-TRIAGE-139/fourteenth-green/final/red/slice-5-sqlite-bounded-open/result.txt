@@ -1,0 +1,10 @@
+Classification: RED (compile failure; no tests executed)
+Exit code: 1
+Observed: CS0103 at eight planned consumer assertions because SqliteBoundedConnectionOpener did not yet exist.
+Counts: 0 executed; no TRX was produced.
+This is test-first compile RED, not a passing or conclusive runtime gate.
+
+Real-service/adversarial RED already captured before the opener implementation:
+C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-4-6-sqlite-regression-rerun7\results\sqlite-regression-rerun7.trx
+Observed: 1 executed, 0 passed, 1 failed, 0 skipped. The real shared-cache SQLite lock remained blocked beyond the 10-second cancellation bound (Assert.Same failure).
+Although stored under an earlier green-attempt directory, this result is classified as RED/failing evidence and is not claimed as GREEN.

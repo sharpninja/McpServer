@@ -1,0 +1,2 @@
+docs/receipts/artifacts/BUG-TRIAGE-139/twelfth-green/final/client-usecase-xunit-final-stdout.txt:312: new blank line at EOF.
+DIFF_CHECK_EXIT=2
