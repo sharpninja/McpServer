@@ -93,9 +93,15 @@ internal static class OfficialPluginCoreSyncTestSupport
                     continue;
                 }
 
+                var canonicalBytes = await File.ReadAllBytesAsync(
+                    canonicalFile,
+                    cancellationToken).ConfigureAwait(true);
+                var generatedBytes = await File.ReadAllBytesAsync(
+                    generatedFile,
+                    cancellationToken).ConfigureAwait(true);
                 if (!CryptographicOperations.FixedTimeEquals(
-                        SHA256.HashData(await File.ReadAllBytesAsync(canonicalFile, cancellationToken).ConfigureAwait(true)),
-                        SHA256.HashData(await File.ReadAllBytesAsync(generatedFile, cancellationToken).ConfigureAwait(true))))
+                        SHA256.HashData(canonicalBytes),
+                        SHA256.HashData(generatedBytes)))
                 {
                     mismatches.Add("checksum drift " + name);
                 }
