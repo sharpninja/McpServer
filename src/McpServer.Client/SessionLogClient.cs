@@ -84,6 +84,22 @@ public sealed class SessionLogClient : McpClientBase
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
 
+    /// <summary>
+    /// FR-MCP-SESSIONLIFE-004: Fetches one session log by exact agent and session id
+    /// from <c>GET /mcpserver/sessionlog/{agent}/{sessionId}</c>.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The session log for that exact identity.</returns>
+    public Task<UnifiedSessionLogDto> GetAsync(
+        string agent,
+        string sessionId,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}";
+        return GetAsync<UnifiedSessionLogDto>(path, cancellationToken);
+    }
 
     /// <summary>Ingests a server-local transcript file or folder through the session-log ingestion pipeline.</summary>
     public async Task<TranscriptIngestRunResponse> IngestTranscriptPathAsync(
