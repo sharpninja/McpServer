@@ -334,7 +334,7 @@
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
@@ -613,8 +613,8 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
@@ -1717,8 +1717,8 @@
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
@@ -1771,8 +1771,8 @@
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.missing-turn dialog recovery stays bounded and does not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
@@ -2009,8 +2009,8 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
@@ -2632,9 +2632,9 @@
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.missing-turn dialog recovery stays bounded and does not claim server persistence"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.DegradedCompletePreservesFullTurn",
@@ -2691,7 +2691,7 @@
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
       "criterionSpecificExistingTests": [
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset"
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset"
       ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
@@ -2839,8 +2839,8 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
@@ -4152,8 +4152,8 @@
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
         "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
-        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
         "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
