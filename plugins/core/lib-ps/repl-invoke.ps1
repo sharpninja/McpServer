@@ -710,25 +710,65 @@ function Wait-ReplChildWithinBudget {
 function Stop-ReplChildTree {
     <#
     .SYNOPSIS
-        Kill the child process tree and wait for it to exit.
+        Close stdin, kill the child process tree, and await owned pipe closure.
+    .DESCRIPTION
+        Process.WaitForExit waits only for the root process after Kill(true). Redirected stdout
+        and stderr remain open while a killed descendant is still exiting, so require those
+        drain tasks to complete inside the same cleanup reserve before confirming termination.
     #>
     param(
         $Process,
+        $StdoutTask,
+        $StderrTask,
         [int]$WaitMs = 500
     )
 
     if ($null -eq $Process) { return $true }
+    try {
+        $Process.StandardInput.BaseStream.Dispose()
+    } catch {
+    }
+    try {
+        $Process.StandardInput.Dispose()
+    } catch {
+    }
     try {
         if (-not $Process.HasExited) {
             $Process.Kill($true)
         }
     } catch {
     }
-    try {
-        return [bool]$Process.WaitForExit($WaitMs)
-    } catch {
-        return $false
-    }
+
+    $cleanup = [System.Diagnostics.Stopwatch]::StartNew()
+    do {
+        $rootExited = $false
+        try { $rootExited = $Process.HasExited } catch { $rootExited = $true }
+        $stdoutClosed = -not $StdoutTask -or $StdoutTask.IsCompleted
+        $stderrClosed = -not $StderrTask -or $StderrTask.IsCompleted
+        if ($rootExited -and $stdoutClosed -and $stderrClosed) {
+            return $true
+        }
+        Start-Sleep -Milliseconds 10
+    } while ($cleanup.ElapsedMilliseconds -lt $WaitMs)
+
+    return $false
+}
+
+function Stop-ReplChildWithinBudget {
+    <#
+    .SYNOPSIS
+        Terminate and await the child tree using only the reserved cleanup budget.
+    #>
+    param(
+        $Process,
+        $StdoutTask,
+        $StderrTask,
+        $Budget,
+        [int]$TimeoutMs
+    )
+
+    $remainingMs = [Math]::Max(1, $TimeoutMs - [int]$Budget.ElapsedMilliseconds)
+    return (Stop-ReplChildTree -Process $Process -StdoutTask $StdoutTask -StderrTask $StderrTask -WaitMs $remainingMs)
 }
 
 function Resolve-ReplWindowsShellHost {
@@ -793,6 +833,8 @@ function Invoke-ReplRawCore {
     $proc = $null
     $copyStream = $null
     $envFile = $null
+    $stdoutTask = $null
+    $stderrTask = $null
     try {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
         # A Windows CreateProcess of a shell script fails before the deadline can own the tree.
@@ -845,7 +887,7 @@ function Invoke-ReplRawCore {
         if (-not (Wait-ReplTaskWithinBudget -Task $copyTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
             try { $copyStream.Dispose() } catch { }
             $copyStream = $null
-            $confirmed = Stop-ReplChildTree -Process $proc -WaitMs $cleanupReserveMs
+            $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
             Remove-Item $envFile -ErrorAction SilentlyContinue
             $timeoutError = "mcpserver-repl timed out after ${timeout}s"
             if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
@@ -858,7 +900,7 @@ function Invoke-ReplRawCore {
         $envFile = $null
 
         if (-not (Wait-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
-            $confirmed = Stop-ReplChildTree -Process $proc -WaitMs $cleanupReserveMs
+            $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
             $timeoutError = "mcpserver-repl timed out after ${timeout}s"
             if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
             return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
@@ -908,8 +950,10 @@ function Invoke-ReplRawCore {
         if ($null -ne $proc) {
             try { $stillRunning = -not $proc.HasExited } catch { $stillRunning = $true }
         }
-        if ($stillRunning) {
-            [void](Stop-ReplChildTree -Process $proc -WaitMs 500)
+        $drainsPending = ($stdoutTask -and -not $stdoutTask.IsCompleted) -or
+            ($stderrTask -and -not $stderrTask.IsCompleted)
+        if ($stillRunning -or $drainsPending) {
+            [void](Stop-ReplChildTree -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -WaitMs 500)
         }
         if ($copyStream) {
             try { $copyStream.Dispose() } catch { }
