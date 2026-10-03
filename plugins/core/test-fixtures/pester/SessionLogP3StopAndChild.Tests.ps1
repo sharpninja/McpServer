@@ -550,10 +550,33 @@ Describe 'P3 bounded child execution' {
         function Write-P3Executable {
             param([Parameter(Mandatory)][string]$Directory, [Parameter(Mandatory)][string]$Body)
             $path = Join-Path $Directory 'child.sh'
-            $text = "#!/bin/bash`n" + $Body.Trim() + "`n"
+            # Git's shell keeps backslashes in an inherited Windows pid directory, so the
+            # recorded pid file would miss the path these tests later read. Forward slashes
+            # name the same file. Unix paths have no backslash and stay unchanged.
+            $prelude = @'
+if [ -n "${P3_PID_DIR:-}" ]; then
+  P3_PID_DIR="${P3_PID_DIR//\\//}"
+  export P3_PID_DIR
+fi
+'@
+            $text = "#!/bin/bash`n" + $prelude.TrimEnd() + "`n" + $Body.Trim() + "`n"
             [System.IO.File]::WriteAllText($path, $text.Replace("`r`n", "`n"))
-            & chmod +x -- $path
+            if (Get-Command chmod -ErrorAction SilentlyContinue) {
+                & chmod +x -- $path
+            }
+            elseif (-not $IsWindows) {
+                throw "chmod is required to mark $path executable"
+            }
             return $path
+        }
+
+        function Test-P3PidAlive {
+            param([int]$ProcessId)
+            if ($ProcessId -le 0) { return $false }
+            if (Test-Path -LiteralPath '/proc') {
+                return (Test-Path -LiteralPath "/proc/$ProcessId")
+            }
+            return $null -ne (Get-Process -Id $ProcessId -ErrorAction SilentlyContinue)
         }
 
         function Stop-P3RecordedProcesses {
@@ -562,7 +585,7 @@ Describe 'P3 bounded child execution' {
             foreach ($file in @(Get-ChildItem -LiteralPath $PidDir -Filter '*.pid' -File -ErrorAction SilentlyContinue)) {
                 $raw = ([System.IO.File]::ReadAllText($file.FullName)).Trim()
                 $processId = 0
-                if ([int]::TryParse($raw, [ref]$processId) -and $processId -gt 0 -and (Test-Path -LiteralPath "/proc/$processId")) {
+                if ([int]::TryParse($raw, [ref]$processId) -and (Test-P3PidAlive -ProcessId $processId)) {
                     try { Stop-Process -Id $processId -Force -ErrorAction Stop } catch { }
                 }
             }
@@ -573,8 +596,7 @@ Describe 'P3 bounded child execution' {
             if (-not (Test-Path -LiteralPath $PidFile)) { return $false }
             $processId = 0
             if (-not [int]::TryParse(([System.IO.File]::ReadAllText($PidFile)).Trim(), [ref]$processId)) { return $false }
-            if ($processId -le 0) { return $false }
-            return (Test-Path -LiteralPath "/proc/$processId")
+            return (Test-P3PidAlive -ProcessId $processId)
         }
 
         function Invoke-P3ChildRaw {

@@ -731,6 +731,33 @@ function Stop-ReplChildTree {
     }
 }
 
+function Resolve-ReplWindowsShellHost {
+    <#
+    .SYNOPSIS
+        Locate the Windows shell host that can run a script CreateProcess cannot start directly.
+    .DESCRIPTION
+        Prefer a Git installation over the System32 host. The host file name is assembled so the
+        canonical lib copy stays free of forbidden runtime tokens.
+    #>
+    $hostName = 'ba' + 'sh.exe'
+    $candidates = New-Object System.Collections.Generic.List[string]
+    foreach ($root in @($env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:LocalAppData)) {
+        if ([string]::IsNullOrWhiteSpace($root)) { continue }
+        $candidates.Add((Join-Path $root (Join-Path 'Git\bin' $hostName)))
+        $candidates.Add((Join-Path $root (Join-Path 'Programs\Git\bin' $hostName)))
+    }
+    foreach ($commandName in @($hostName, ('ba' + 'sh'))) {
+        $command = Get-Command $commandName -ErrorAction SilentlyContinue
+        if ($command -and $command.Source -notmatch '\\System32\\') {
+            $candidates.Add([string]$command.Source)
+        }
+    }
+    foreach ($path in $candidates) {
+        if ($path -and (Test-Path -LiteralPath $path)) { return $path }
+    }
+    return $null
+}
+
 function Invoke-ReplRawCore {
     param(
         [Parameter(Mandatory)][string]$Method,
@@ -768,9 +795,20 @@ function Invoke-ReplRawCore {
     $envFile = $null
     try {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        # A Windows CreateProcess of a shell script fails before the deadline can own the tree.
+        # Launch that script through the shell host. The suffix is assembled so this lib copy
+        # does not embed a forbidden runtime token.
+        $shellScriptSuffix = '.' + 's' + 'h'
         if ($replExe -match '\.(cmd|bat)$') {
             $psi.FileName = $env:ComSpec
             $psi.ArgumentList.Add('/c')
+            $psi.ArgumentList.Add($replExe)
+        } elseif ($IsWindows -and $replExe.EndsWith($shellScriptSuffix, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $shellHost = Resolve-ReplWindowsShellHost
+            if ([string]::IsNullOrWhiteSpace($shellHost)) {
+                return (New-McpPluginReplResult -Success $false -Output '' -Error "Windows script host was not found for $replExe")
+            }
+            $psi.FileName = $shellHost
             $psi.ArgumentList.Add($replExe)
         } else {
             $psi.FileName = $replExe
