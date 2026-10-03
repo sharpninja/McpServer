@@ -5,6 +5,36 @@
 
 Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     BeforeAll {
+    function Get-TestMarkerSnapshot {
+        # HV15: never handwrite AGENTS-README-FIRST.yaml at the repository root.
+        # RepoRoot is read-only (marker must already exist). Isolated fixture
+        # workspaces may create the marker via Write-McpYamlObject.
+        param([string]$Workspace = $script:RepoRoot)
+        if ([string]::IsNullOrWhiteSpace($Workspace)) {
+            throw 'Get-TestMarkerSnapshot requires a Workspace path.'
+        }
+        $resolved = [System.IO.Path]::GetFullPath($Workspace)
+        $repo = [System.IO.Path]::GetFullPath([string]$script:RepoRoot)
+        $isRepoRoot = ($resolved.TrimEnd('\','/') -eq $repo.TrimEnd('\','/'))
+        $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            if ($isRepoRoot) {
+                throw 'Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.'
+            }
+            $yamlLib = Join-Path $script:RepoRoot 'plugins\core\lib-ps\yaml-object-mutation.ps1'
+            . $yamlLib
+            if (Get-Command Import-McpYamlSerializer -ErrorAction SilentlyContinue) {
+                Import-McpYamlSerializer
+            }
+            Write-McpYamlObject -Path $marker -Document ([ordered]@{
+                workspacePath = $Workspace
+                apiKey = 'test'
+            })
+        }
+        return Get-MarkerFileSnapshot -StartDir $Workspace
+    }
+
+
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         $script:ReplScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1'
         . $script:ReplScript
@@ -24,6 +54,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 [string]$PlanFile,
                 [string]$TodoId
             )
+            if ($null -eq $script:PersistCallCount) { $script:PersistCallCount = 0 }
+            $script:PersistCallCount++
             $script:LastPersistBoundPlan = $PSBoundParameters.ContainsKey('PlanFile')
             $script:LastPersistPlan = $PlanFile
             $script:LastPersistTodo = $TodoId
@@ -34,6 +66,9 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                     queued = $true
                     failsafePath = ''
                 }
+                return $false
+            }
+            if ($script:PersistRecoveryReturnsFalse) {
                 return $false
             }
             return $true
@@ -81,6 +116,15 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
+                queryText = 'cached query text'
+                queryTitle = 'kept title'
+                openedAt = '2026-09-23T20:00:00Z'
+            })
+            $fromQuery = Invoke-ReplTurnUpsertParams -SourceType 'GrokCode' -SessionId 's' -RequestId 'r' -Title '' -Status 'completed'
+            $fromQuery.turn.queryText | Should -Be 'cached query text'
+            $fromQuery.turn.Contains('queryTitle') | Should -BeFalse
+
+            Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
                 queryTitle = 'kept title'
                 openedAt = '2026-09-23T20:00:00Z'
             })
@@ -125,6 +169,12 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
         $env:MCP_WORKSPACE_PATH = $script:RepoRoot
         $script:DialogResult = @{ Success = $false; Output = 'HTTP 404'; Error = 'not_found' }
+        $script:PersistCallCount = 0
+        $script:PersistRecoveryReturnsFalse = $true
+        if (Get-Command Get-McpFailsafeDir -ErrorAction SilentlyContinue) {
+            $fs = Get-McpFailsafeDir
+            if (Test-Path -LiteralPath $fs) { Remove-Item -LiteralPath $fs -Recurse -Force -ErrorAction SilentlyContinue }
+        }
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'GrokCode-20260923T205606Z-life'
@@ -136,13 +186,41 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 status = 'in_progress'
                 degraded = $true
                 queryText = 'keep me'
+                queryTitle = 'kept title'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
             $ok | Should -BeTrue
+            $script:PersistCallCount | Should -Be 1
             $script:LastReplPersistenceDetails.queued | Should -BeTrue
             $script:LastReplPersistenceDetails.message | Should -Not -Match 'failsafe not used'
-            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -BeGreaterThan 0
+            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -Be 1
+
+            Remove-Item -LiteralPath (Get-McpFailsafeDir) -Recurse -Force -ErrorAction SilentlyContinue
+            $script:PersistCallCount = 0
+            Write-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260923T205606Z-001-life'
+                sessionId = 'GrokCode-20260923T205606Z-life'
+                status = 'in_progress'
+                degraded = $false
+                auditDialog = 0
+                queryText = 'keep me'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+            })
+            $never = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: never`n"
+            $never | Should -BeFalse
+            $script:PersistCallCount | Should -Be 0
+            @(Get-ChildItem -LiteralPath (Get-McpFailsafeDir) -Filter '*session_dialog*' -ErrorAction SilentlyContinue).Count | Should -Be 0
+            $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'message')
+            if ([string]::IsNullOrWhiteSpace($msg)) { $msg = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'Message') }
+            $msg | Should -Match 'failsafe not used'
+            $msg | Should -Match 'turn not found'
+            $msg | Should -Match 'retryable false'
+            (Read-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml'))['auditDialog'] | Should -Be 0
         } finally {
+            $script:PersistRecoveryReturnsFalse = $false
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
@@ -168,6 +246,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 planFile = 'docs/plans/kept.md'
                 todoId = 'BUG-TRIAGE-245'
                 queryText = 'keep me'
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $ok = Invoke-WorkflowBeginTurn -ParamsYaml "requestId: req-20260923T205606Z-001-life`nqueryText: keep me`nqueryTitle: kept`n"
             $ok | Should -BeTrue
@@ -183,13 +263,37 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
 
     It 'a child that does not exit is killed inside the REPL timeout' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-child-' + [guid]::NewGuid().ToString('N'))
-        [void][System.IO.Directory]::CreateDirectory($dir)
-        $bat = Join-Path $dir 'sleep.cmd'
-        Set-Content -LiteralPath $bat -Value "@echo off`r`nping -n 40 127.0.0.1 >nul`r`n" -Encoding ascii
+        $workspace = Join-Path $dir 'ws'
+        $cache = Join-Path $dir 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cache)
+        $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($marker, "workspacePath: $workspace`napiKey: child-timeout`n")
+        $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
+        Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'Codex-20260930T000000Z-child'
+            agent = 'Codex'
+            markerFilePath = $snapshot.markerFilePath
+            markerLastWriteUtc = $snapshot.markerLastWriteUtc
+        })
+        $sleeper = if ($IsWindows) { Join-Path $dir 'sleep.cmd' } else { Join-Path $dir 'sleep.sh' }
+        if ($IsWindows) {
+            Set-Content -LiteralPath $sleeper -Value "@echo off`r`nping -n 40 127.0.0.1 >nul`r`n" -Encoding ascii
+        } else {
+            Set-Content -LiteralPath $sleeper -Value "#!/bin/bash`nsleep 30`n" -Encoding ascii
+            chmod +x $sleeper
+        }
         $priorExe = $env:MCP_REPL_EXECUTABLE
         $priorTimeout = $env:REPL_TIMEOUT
-        $env:MCP_REPL_EXECUTABLE = $bat
+        $priorCache = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
+        $env:MCP_REPL_EXECUTABLE = $sleeper
         $env:REPL_TIMEOUT = '2'
+        $env:MCP_CACHE_DIR_OVERRIDE = $cache
+        $env:MCP_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
         $clock = [System.Diagnostics.Stopwatch]::StartNew()
         try {
             $result = Invoke-ReplRawCore -Method 'client.Health.GetAsync' -ParamsYaml ''
@@ -198,8 +302,11 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             $result.Error | Should -Match 'timed out'
             $clock.Elapsed.TotalSeconds | Should -BeLessThan 12
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $priorExe) { Remove-Item Env:MCP_REPL_EXECUTABLE -ErrorAction SilentlyContinue } else { $env:MCP_REPL_EXECUTABLE = $priorExe }
             if ($null -eq $priorTimeout) { Remove-Item Env:REPL_TIMEOUT -ErrorAction SilentlyContinue } else { $env:REPL_TIMEOUT = $priorTimeout }
+            if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

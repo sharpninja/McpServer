@@ -1,0 +1,1506 @@
+{
+  "TimestampUtc": "2026-09-30T17:24:41.3879208+00:00",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh",
+  "WorkClass": "project implementation (P2 SessionLife contracts)",
+  "Workspace": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+  "Branch": "cursor/sessionlife-p2-contracts-5cb2",
+  "TipSha": "340d40a6a1986f35b06c153bccaae981eab8da82",
+  "RunId": "p2-unit-legion-20260930T1619Z",
+  "AddProfile": {
+    "Executed": true,
+    "ResumeReload": true,
+    "ProfileFileCount": 21,
+    "SkillPath": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "ProfileRoot": "C:\\Users\\kingd\\.claude\\profile",
+    "TruncationRecovered": true
+  },
+  "OverridesApplied": [
+    "For this resume on PAYTON-LEGION2, Windows PowerShell 5.1 is an approved evidence shell when Codex remaps pwsh or pwsh is unavailable. No B2 failure solely for 5.1. Prefer available pwsh.",
+    "MCP session-log persistence is waived for this Astra HV pass. Receipt-only JSONL and markdown/JSON suffice. Missing marker or MCP turn is not a B3 failure.",
+    "Runner proof model=gpt-6-astra, effort=xhigh, cli_version=0.158.0-alpha.2.1, originator=codex_exec, cwd=worktree is accepted and was independently confirmed in this exact thread.",
+    "Review only; no merge, remediation, commit/push, or TODO/goal completion. AGREE requires all applicable A-D PASS and accuracy/completeness >=98."
+  ],
+  "ModelEffortProof": {
+    "events": [
+      {
+        "line": 1,
+        "type": "session_meta",
+        "id": "01a0f335-f03c-7d21-93b4-6e9f78e1a6d6",
+        "originator": "codex_exec",
+        "cli_version": "0.158.0-alpha.2.1",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 8,
+        "type": "turn_context",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "reasoning_effort": null,
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 164,
+        "type": "turn_context",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "reasoning_effort": null,
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      }
+    ],
+    "path": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T11-46-33-01a0f335-f03c-7d21-93b4-6e9f78e1a6d6.jsonl"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 93,
+  "Confidence": 99,
+  "ScoreRationale": "Reviewer assessment, not measured product correctness: accuracy 99 for native counters, hashes, exact-source probes and explicit limits; completeness 93 because exhaustive executed AC mapping and historical compliance/phase evidence remain unproven. Material FAILs independently forbid AGREE even without the sub-98 completeness score.",
+  "Claims": [
+    {
+      "id": "A1",
+      "claim": "P2 cache/identity/metadata/outcome and BUG-246 contracts complete at tip",
+      "status": "FAIL",
+      "evidence": "F1-F8 reproduce or directly establish unsatisfied P2 behavior. The real-function probes execute current source with explicit in-memory boundaries.",
+      "surface": "A"
+    },
+    {
+      "id": "A2",
+      "claim": "Historical RunId native counts and normalized validator acceptance",
+      "status": "PASS",
+      "evidence": "Parsed every actual test-result row: Pester 193/0/0, seven Nuke projects 4250/0/0, Build.Tests 321/0/0. Command exits all 0. Direct current compiled-validator invocation accepts normalized reports at 16:19:22Z start. Fresh exact-tip source binding is separately scored under A4.",
+      "surface": "A"
+    },
+    {
+      "id": "A3",
+      "claim": "PluginIntegration deliberately excluded from unit inventory and retained for P6",
+      "status": "PASS",
+      "evidence": "Build.Test.cs:18-19 excludes IntegrationTests and PluginIntegration; the same testProjects array feeds inventory and execution. Actual inventory has seven projects and no PI. Build.Tests/PluginSessionLogIntegrationTargetTests.cs:38 assertion is Passed in native TRX. Plan P6 still names PluginSessionLogIntegration.",
+      "surface": "A"
+    },
+    {
+      "id": "A4",
+      "claim": "Gate plumbing provides complete fresh candidate binding at 340d40a6",
+      "status": "FAIL",
+      "evidence": "F9. Producers and UTC conversion exist and normalized reports accept, but the source policy omits critical P2 inputs and tip orchestration has no new full run. Initial validate.log retains its stale-pester-report failure; it was not rewritten into evidence of success.",
+      "surface": "A"
+    },
+    {
+      "id": "A5",
+      "claim": "Frozen history-r1 and inherited P1 validator stack preserved",
+      "status": "PASS",
+      "evidence": "Frozen manifest SHA256 B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4 and all five archive file hashes match. P1 validator/delegation production is unchanged from f80e9af6; only test temp-root handling changes. Native TRX has all 95 P1 gate tests Passed; one additional exclusion fact makes audit subset 96/0.",
+      "surface": "A"
+    },
+    {
+      "id": "B1",
+      "claim": "Mandatory add-profile first on resume",
+      "status": "PASS",
+      "evidence": "Re-read Claude add-profile skill and all 21 non-skill profile Markdown files in full before substantive evidence work. Truncated PROFILE.md was re-read alone in full. Latest overrides take precedence.",
+      "surface": "B"
+    },
+    {
+      "id": "B2",
+      "claim": "Approved evidence-shell rule on this resume",
+      "status": "PASS",
+      "evidence": "PAYTON-LEGION2 confirmed. Initial reads used operator-approved remapped PowerShell 5.1. Artifact manifest revealed the actual runtime pwsh path; executable version 7.6.5 confirmed, and all counterexample/audit scripts executed there. No Python or Bash was executed by this reviewer.",
+      "surface": "B"
+    },
+    {
+      "id": "B3",
+      "claim": "Receipt-only audit under operator exception",
+      "status": "PASS",
+      "evidence": "MCP persistence explicitly waived. New Markdown/JSON plus public JSONL evidence are provided under docs/receipts/hv. No missing-marker or absent-session-log failure is assigned. Runner emits its complete CLI response stream after this turn exits.",
+      "surface": "B"
+    },
+    {
+      "id": "B4",
+      "claim": "Actual Astra/xhigh validator identity",
+      "status": "PASS",
+      "evidence": "Exact thread 01a0f335-f03c-7d21-93b4-6e9f78e1a6d6: session_meta line 1 gives codex_exec, cli_version 0.158.0-alpha.2.1 and worktree cwd; turn_context lines 8 and 164 give model gpt-6-astra, effort xhigh.",
+      "surface": "B"
+    },
+    {
+      "id": "B5",
+      "claim": "No invented prior HV acceptance or hidden future-phase completion",
+      "status": "PASS",
+      "evidence": "P2 verdict explicitly accepted=false, phaseComplete=false and hvAgreeClaimed=false. Historical red receipts remain historical; green native counts were independently parsed. P3-P7 and durable integration readback remain open.",
+      "surface": "B"
+    },
+    {
+      "id": "B6",
+      "claim": "Historical implementation automation fully complied with no-Python/MCP-only storage rules",
+      "status": "UNKNOWN",
+      "evidence": "p2-contracts-verdict.json and p2-unit-gate-failures.json self-identify Python json serialization, conflicting with the rule. Original author command trace was not independently established. This is a disclosed historical compliance uncertainty, not a B2 failure for the approved evidence shell or a B3 logging failure.",
+      "surface": "B"
+    },
+    {
+      "id": "B7",
+      "claim": "Required P2 inter-phase red-test review established",
+      "status": "UNKNOWN",
+      "evidence": "Plan P2 item 6 requires red-test review. No P2 red-review receipt was located in the tracked P2/HV evidence, and no such link appears in the P2 plan. P1 receipts explicitly bound narrower P1 work. This is an evidence gap, not FR-createdAt versus file-time archaeology.",
+      "surface": "B"
+    },
+    {
+      "id": "B8",
+      "claim": "This reviewer preserved review-only scope",
+      "status": "PASS",
+      "evidence": "Only receipt/evidence files under docs/receipts/hv were written. No product remediation, full-gate staging, deletion, merge, commit, push, TODO/goal change or direct requirements-store edit. Pre-existing build.schema and two benchmark modifications preserved.",
+      "surface": "B"
+    },
+    {
+      "id": "C1",
+      "claim": "Governing structured requirements and mapping snapshot exists",
+      "status": "PASS",
+      "evidence": "P0 R3 acceptance manifest contains FR/TR/TEST families, explicit AC and mappingFreeze; BUG-246 maps FR-SESSIONLIFE-002, TR-002, TEST-002 and AC001/002/005. This is verified snapshot content, not a claim of fresh MCP store readback.",
+      "surface": "C"
+    },
+    {
+      "id": "C2",
+      "claim": "P2 AC coverage and concrete test mappings are complete",
+      "status": "FAIL",
+      "evidence": "F1-F7,F9,F10. Planned mappings have not been replaced with executed criterion-specific evidence; the submitted 13 P2 facts omit reproduced identity, malformed-receipt, metadata and recovery cases. Green suite is not AC coverage.",
+      "surface": "C"
+    },
+    {
+      "id": "C3",
+      "claim": "BUG-246 three-document proof fulfills its accepted test contract",
+      "status": "FAIL",
+      "evidence": "F8. Full JSON-fence parser fails at module-bootstrap line 64 while the submitted line-only proof passes. P0 R3 requires every supported fence to parse and discovery failures to fail.",
+      "surface": "C"
+    },
+    {
+      "id": "D1",
+      "claim": "Holistic P2 items 1-5 and ordered clarification are satisfied",
+      "status": "FAIL",
+      "evidence": "Identity/omission/outcomes, request mismatch, additive dedupe, recovery and document defects remain. P2 cannot be accepted by its last green micro-claim.",
+      "surface": "D"
+    },
+    {
+      "id": "D2",
+      "claim": "P2 exit criteria are satisfied",
+      "status": "FAIL",
+      "evidence": "P2 items 6-7 require reviewed tests/implementation and a complete bound cumulative gate. B7 is unresolved, F9 invalidates complete input binding, and this independent review finds material defects. No phase exit is authorized.",
+      "surface": "D"
+    },
+    {
+      "id": "D3",
+      "claim": "Later phase obligations are left open without incorrectly failing P2 for them",
+      "status": "PASS",
+      "evidence": "P3 deadline/Stop, P4 recovery/provider work, P5 plugin sync, P6 PluginIntegration/exact server-readback, P7 integration/deployment/individual closure remain deferred. No full batch or all-35 acceptance is inferred.",
+      "surface": "D"
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F1",
+      "severity": "high",
+      "title": "Unproven persistence becomes primary success and destroys recovery",
+      "evidence": "plugins/core/lib-ps/repl-invoke.ps1:1558-1590 defaults missing result/persisted to true and clears the failsafe. Native-function probes empty-success-envelope, unrelated-success-envelope, wrong-identity-success and persisted-and-degraded each return true/code=persisted and clear the only recovery record.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-003-AC001",
+        "FR-MCP-SESSIONLIFE-003-AC002",
+        "FR-MCP-SESSIONLIFE-003-AC006"
+      ],
+      "impact": "An empty, unrelated, wrong-identity or contradictory successful child reply can erase the only recoverable payload and report a durable write. This failure needs no P6 server-readback requirement to establish it."
+    },
+    {
+      "id": "F2",
+      "severity": "high",
+      "title": "Deduplication drops another session payload and changed dialog content",
+      "evidence": "repl-invoke.ps1:1466-1489 omits sourceType/sessionId/workspace and ProcessingDialog from the fingerprint. The real Find-ReplFailsafeByFingerprint matches method/hash only. cross-session-queue-dedupe retains only session-A, makes one remote call across A+B, and reports B queued using A recovery. changed-processing-dialog-dedupe makes only one remote call for different dialog payloads.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-002-AC004",
+        "FR-MCP-SESSIONLIFE-003-AC005",
+        "FR-MCP-SESSIONLIFE-003-AC006"
+      ],
+      "impact": "Distinct logical writes can be suppressed as unchanged or falsely represented as retained. A shared workspace/agent failsafe directory does not make session/request identity interchangeable."
+    },
+    {
+      "id": "F3",
+      "severity": "high",
+      "title": "beginTurn rebinds session A to B and infers durability from a missing flag",
+      "evidence": "repl-invoke.ps1:1953,1973-1975,1993,2045-2055. begin-rebinds-local-turn-without-durability-proof starts with cached session-A/req-R and session-state B; actual begin function rewrites the turn to B and submits with neither PlanFile nor TodoId bound.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-001-AC005",
+        "FR-MCP-SESSIONLIFE-002-AC003",
+        "FR-MCP-SESSIONLIFE-002-AC004"
+      ],
+      "impact": "A local matching request plus absent degraded flag is treated as a durable reopen, without proof of the exact bound identity. This violates immutable identity and first-persistence metadata rules."
+    },
+    {
+      "id": "F4",
+      "severity": "high",
+      "title": "updateTurn and appendDialog ignore conflicting caller request IDs",
+      "evidence": "repl-invoke.ps1:2184-2228 and 2274-2333 use the cached request without rejecting a supplied different request. update-ignores-caller-request-and-explicit-metadata writes the caller response to req-R and mutates cache after req-OTHER was supplied. dialog-ignores-caller-request calls the remote boundary for req-R and increments auditDialog to 1 after req-OTHER.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-003-AC003"
+      ],
+      "impact": "The appendActions-only mismatch test does not establish the all-mutation AC. Wrong-turn writes remain possible."
+    },
+    {
+      "id": "F5",
+      "severity": "high",
+      "title": "Explicit update metadata is ignored at cache and payload boundaries",
+      "evidence": "repl-invoke.ps1:2284-2333 never reads planFile/todoId from updateTurn parameters. The update probe sends plan-NEW/todo-NEW, retains plan-A/todo-A, and calls persistence with both metadata parameters unbound.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-002-AC001",
+        "FR-MCP-SESSIONLIFE-002-AC003"
+      ],
+      "impact": "The explicit-to-cache-to-None contract is not implemented across the claimed update path."
+    },
+    {
+      "id": "F6",
+      "severity": "medium",
+      "title": "Degraded missing-turn dialog skips the required recovery attempt",
+      "evidence": "repl-invoke.ps1:2234-2265 directly queues the dialog after degraded 404. degraded-404-no-recovery-submit observes one AppendDialog call, zero recovery Submit calls, and one retained dialog record. Existing SessionLogLifecycle.Tests.ps1:121 only asserts queuing.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-001-AC004",
+        "TR-MCP-SESSIONLIFE-001-AC003"
+      ],
+      "impact": "The bounded recovery-submit behavior required by the plan and criterion is absent; queuing alone does not prove it."
+    },
+    {
+      "id": "F7",
+      "severity": "medium",
+      "title": "Degraded prompt-hook output omits the retained recovery path",
+      "evidence": "plugins/core/lib-ps/plugin-hook.ps1:903-916 emits status, turnRequestId and additionalContext, with no recovery-artifact path. This file is unchanged by P2. The governing FR-001 AC002 explicitly requires identifying the retained artifact.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-001-AC002",
+        "TR-MCP-SESSIONLIFE-001-AC002"
+      ],
+      "impact": "The required diagnostic contract is incomplete even though the degraded status string exists."
+    },
+    {
+      "id": "F8",
+      "severity": "medium",
+      "title": "BUG-TRIAGE-246 JSON example is malformed and its proof bypasses the defect",
+      "evidence": "docs/context/module-bootstrap.md:64-68 places explanatory Markdown inside the JSON fence. Full-fence parsing fails: Additional text encountered after finished reading JSON content. SessionLogP2Contracts.Tests.ps1:511-517 parses only individual method lines; lines 526-535 regex-match YAML text instead of fully parsing fenced examples.",
+      "requirements": [
+        "FR-MCP-SESSIONLIFE-002-AC005",
+        "TEST-MCP-SESSIONLIFE-002-AC001",
+        "BUG-TRIAGE-246"
+      ],
+      "impact": "The amended documents contain the expected words, but one executable example is invalid. The P0 R3 acceptance row required exhaustive fenced-example parsing and parse errors to fail."
+    },
+    {
+      "id": "F9",
+      "severity": "high",
+      "title": "Gate source binding omits the P2 runtime, orchestration and contract documents",
+      "evidence": "build/SessionLifeUnitGateManifest.cs:19-23 includes only build,src,tests,plugins/core/test-fixtures/pester. The actual 2198-entry manifest omits repl-invoke, McpPluginShim, plugin-hook, resolve-cache-dir, Invoke-SessionLifeUnitGate and all three BUG-246 docs. All included hashes match, but omitted input changes cannot invalidate the gate.",
+      "requirements": [
+        "Plan section 5 Machine-Readable Unit Gate",
+        "Plan section 7 Evidence and Gate Rules",
+        "P2 item 7"
+      ],
+      "impact": "The native counts are genuine; they do not form the required complete candidate-content binding. e9932a49 to 340d40a6 changes the orchestration script plus the receipt only. Old test results do not prove a fresh end-to-end run of the new tip orchestration."
+    },
+    {
+      "id": "F10",
+      "severity": "medium",
+      "title": "Per-AC acceptance mapping remains planned and the new tests miss material AC branches",
+      "evidence": "20260928-p0-r3/acceptance-manifest.json has 35 FR/TR/TEST-SESSIONLIFE-001..003 rows, including 16 FR rows; zero criterionSpecificExistingTests, planned names and not-accepted state. P2 adds 13 facts in SessionLogP2Contracts.Tests.ps1 without an updated concrete per-AC mapping. The negative branches reproduced by F1-F8 pass outside the submitted proof coverage.",
+      "requirements": [
+        "TEST-MCP-SESSIONLIFE-001-AC003",
+        "TEST-MCP-SESSIONLIFE-002-AC003",
+        "Plan section 7 Baseline and Traceability"
+      ],
+      "impact": "Requirements and structured AC exist; their existence and a green suite do not establish complete AC coverage. Later P3/P4/P6 obligations are not counted as present P2 failures."
+    }
+  ],
+  "ExplicitFailList": [
+    "F1: Unproven persistence becomes primary success and destroys recovery",
+    "F2: Deduplication drops another session payload and changed dialog content",
+    "F3: beginTurn rebinds session A to B and infers durability from a missing flag",
+    "F4: updateTurn and appendDialog ignore conflicting caller request IDs",
+    "F5: Explicit update metadata is ignored at cache and payload boundaries",
+    "F6: Degraded missing-turn dialog skips the required recovery attempt",
+    "F7: Degraded prompt-hook output omits the retained recovery path",
+    "F8: BUG-TRIAGE-246 JSON example is malformed and its proof bypasses the defect",
+    "F9: Gate source binding omits the P2 runtime, orchestration and contract documents",
+    "F10: Per-AC acceptance mapping remains planned and the new tests miss material AC branches",
+    "Completeness 93 is below the required 98 threshold."
+  ],
+  "UnknownList": [
+    "B6: p2-contracts-verdict.json and p2-unit-gate-failures.json self-identify Python json serialization, conflicting with the rule. Original author command trace was not independently established. This is a disclosed historical compliance uncertainty, not a B2 failure for the approved evidence shell or a B3 logging failure.",
+    "B7: Plan P2 item 6 requires red-test review. No P2 red-review receipt was located in the tracked P2/HV evidence, and no such link appears in the P2 plan. P1 receipts explicitly bound narrower P1 work. This is an evidence gap, not FR-createdAt versus file-time archaeology."
+  ],
+  "Counts": {
+    "PASS": 11,
+    "FAIL": 6,
+    "UNKNOWN": 2,
+    "CountMeaning": "19 primary claim rows. Ten defect findings are separately enumerated and may support more than one claim."
+  },
+  "NativeAudit": {
+    "TimestampUtc": "2026-09-30T12:09:54.0395806-05:00",
+    "RunId": "p2-unit-legion-20260930T1619Z",
+    "Shell": "7.6.5",
+    "Reports": [
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\build-tests\\Build.Tests.trx",
+        "sha256": "E7A25B9676240A514A91E21EAEC9C3B482AC457851EE9CC7EDE79CE13934ECC6",
+        "outcome": "Completed",
+        "total": 321,
+        "executed": 321,
+        "passed": 321,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 321,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:59.0578831-05:00",
+        "finish": "2026-09-30T11:31:30.1194198-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "sha256": "9EB9192E742AE429BC421587A9D024F7CF84A58DB283E84A3277FA5DBF254FA5",
+        "outcome": "Completed",
+        "total": 301,
+        "executed": 301,
+        "passed": 301,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 301,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:27.8132363-05:00",
+        "finish": "2026-09-30T11:28:30.4013149-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "sha256": "DEAEBE7D99D44330C6704F7A0E3685576FF8501814F5138387079A7739F02A09",
+        "outcome": "Completed",
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 33,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:31.5558286-05:00",
+        "finish": "2026-09-30T11:28:33.39264-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "sha256": "20B2E827FB3C0BBE250DB043A3E746FA95FAD1B408D3DDFC07A990F74D78EF4F",
+        "outcome": "Completed",
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 20,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:34.4493735-05:00",
+        "finish": "2026-09-30T11:28:35.9600799-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "sha256": "871E39F2B5DFAB24C02F0263C4250B8CF8F0565F2FA631E148DAFA7DDFBECA7A",
+        "outcome": "Completed",
+        "total": 63,
+        "executed": 63,
+        "passed": 63,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 63,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:37.0066624-05:00",
+        "finish": "2026-09-30T11:28:46.4069899-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "sha256": "5F1DBDA23A39A5637B33C94120F333D3AC0E5FA7545D8F3A3A8DEFBB6950F37D",
+        "outcome": "Completed",
+        "total": 90,
+        "executed": 90,
+        "passed": 90,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 90,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:52.246718-05:00",
+        "finish": "2026-09-30T11:28:54.4591638-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "sha256": "64A42EDEFF29403F3858ADF84AF20F0E61178B320FE1C564110EEFAC5FF865CA",
+        "outcome": "Completed",
+        "total": 866,
+        "executed": 866,
+        "passed": 866,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 866,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:28:47.6216146-05:00",
+        "finish": "2026-09-30T11:28:50.7852536-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "sha256": "DC20A54EAA6F0D3B2F6D428ED4079945B968EEAB2C76A6A872BA3DF10AC9E636",
+        "outcome": "Completed",
+        "total": 2877,
+        "executed": 2877,
+        "passed": 2877,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 2877,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T11:26:05.0115624-05:00",
+        "finish": "2026-09-30T11:28:25.8680178-05:00"
+      }
+    ],
+    "ManifestSources": 2198,
+    "P1Results": [
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StaleBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterNativeResult)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_AcceptsValidUnitArtifacts",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ReportWrittenAfterManifest_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidUnitArtifacts_DoNotRequireProviderLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterNativeCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NotRunPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NonPassingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterContainers)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidProviderArtifacts_DoNotRequireUnitLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterBlocks)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: InconclusivePesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      }
+    ],
+    "Pester": {
+      "total": 193,
+      "actualCases": 193,
+      "nonSuccess": 0,
+      "date": "2026-09-30",
+      "time": "16:19:24",
+      "native": {
+        "RunId": "p2-unit-legion-20260930T1619Z",
+        "ExecutedAt": "2026-09-30T11:19:22.690116-05:00",
+        "Total": 193,
+        "Passed": 193,
+        "Failed": 0,
+        "Skipped": 0,
+        "Inconclusive": 0,
+        "NotRun": 0,
+        "FailedBlocks": 0,
+        "FailedContainers": 0
+      },
+      "sha256": "5466DB9EF8838027AD8F634AD0141DEA955CFC12C354F2B3DCD94E117BB5374A",
+      "P2Cases": [
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects an absent current-turn cache without a server write",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refreshes same-path marker drift without rewriting the bound session",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "result": "Success"
+        }
+      ]
+    },
+    "CommandResults": {
+      "schemaVersion": 1,
+      "runId": "p2-unit-legion-20260930T1619Z",
+      "scope": "unit",
+      "commands": [
+        {
+          "name": "pester",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T11:19:22.690116-05:00",
+          "finishedAtUtc": "2026-09-30T11:23:15.4377692-05:00"
+        },
+        {
+          "name": "nuke-test",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T11:23:15.4427769-05:00",
+          "finishedAtUtc": "2026-09-30T11:28:55.785827-05:00"
+        },
+        {
+          "name": "build-tests",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T11:28:55.7970656-05:00",
+          "finishedAtUtc": "2026-09-30T11:31:30.2358743-05:00"
+        }
+      ]
+    },
+    "SourceMismatches": [],
+    "OmittedCriticalInputs": [
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "inManifest": false,
+        "currentSha256": "165ADFC1C4310769679F1C684F476D8546BE853AADA32C966023F00012A05A50"
+      },
+      {
+        "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+        "inManifest": false,
+        "currentSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375"
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "inManifest": false,
+        "currentSha256": "261375290B766FC161A20108C508C32C981AD7BAE3C0BE0F486C712D7AA93FE3"
+      },
+      {
+        "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+        "inManifest": false,
+        "currentSha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405"
+      },
+      {
+        "path": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+        "inManifest": false,
+        "currentSha256": "B26FD1BD1E8BBC2573F44665610F74C460006B7D5D05FAAB9808CA40F29B1CB8"
+      },
+      {
+        "path": "docs/context/module-bootstrap.md",
+        "inManifest": false,
+        "currentSha256": "E14D9ADADB616F37BA0C45605786646DDA9C89CACFF299ECA14AB5AFAE0534F6"
+      },
+      {
+        "path": "docs/REPL-USER-GUIDE.md",
+        "inManifest": false,
+        "currentSha256": "D80D6074FF21BBDC1AFD57AC90D642E4C36F4A4E8C4A5707556DFC34D3AD24B9"
+      },
+      {
+        "path": "docs/context/repl-yaml-message.schema.json",
+        "inManifest": false,
+        "currentSha256": "FABCF8D539D1CCE2D3EE1CCE0D1573E654E6642D628A3ECFF1E46CF12F57A031"
+      }
+    ],
+    "ArtifactHashes": [
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\command-results.json",
+        "length": 669,
+        "sha256": "03FE506C5A68AC28673E2CD2E4B22BB67B3D12F75700DEC7A94E7701829735C8"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\source-manifest.json",
+        "length": 575955,
+        "sha256": "8CC1A37F9FFC6EB22EAA866A2A1DEC7D686636F9932EE9D309D38F0991E2AAB3"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\build-tests\\Build.Tests.trx",
+        "length": 455434,
+        "sha256": "E7A25B9676240A514A91E21EAEC9C3B482AC457851EE9CC7EDE79CE13934ECC6"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\build-tests.log",
+        "length": 792,
+        "sha256": "80871523E4D0BF6DD81A91A3B2DBEAB6D6122359C3771636EC32E9AE01B06BEF"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\capture-manifest.log",
+        "length": 3703,
+        "sha256": "C464C9AC0F2585D91848C7E0F52065D65F20F7E50F9C58825E171F1D57A0B830"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\nuke-test.log",
+        "length": 719411,
+        "sha256": "81750E1E7263F942BD7499C2CAA35EBD3B2EC0D940F9D15E399005B198B4C3A8"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\logs\\validate.log",
+        "length": 5559,
+        "sha256": "F896CBCE87B64EB80D002547DEDB0EE6BF6930400AC3908955C1077A8808F070"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\pester\\native-run.json",
+        "length": 258,
+        "sha256": "24615AC1A6441143EAF8F95246D71EB5259EA2308598BA64535EE858DD686CF1"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\pester\\results.xml",
+        "length": 79995,
+        "sha256": "5466DB9EF8838027AD8F634AD0141DEA955CFC12C354F2B3DCD94E117BB5374A"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\selected-projects.json",
+        "length": 1759,
+        "sha256": "12888342F0866D8F27CF36A45B1003F4AC1655469E475D99DA6FCF977DED9E93"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "length": 425697,
+        "sha256": "9EB9192E742AE429BC421587A9D024F7CF84A58DB283E84A3277FA5DBF254FA5"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "length": 46202,
+        "sha256": "DEAEBE7D99D44330C6704F7A0E3685576FF8501814F5138387079A7739F02A09"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "length": 30732,
+        "sha256": "20B2E827FB3C0BBE250DB043A3E746FA95FAD1B408D3DDFC07A990F74D78EF4F"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "length": 96112,
+        "sha256": "871E39F2B5DFAB24C02F0263C4250B8CF8F0565F2FA631E148DAFA7DDFBECA7A"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "length": 130319,
+        "sha256": "5F1DBDA23A39A5637B33C94120F333D3AC0E5FA7545D8F3A3A8DEFBB6950F37D"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "length": 1297942,
+        "sha256": "64A42EDEFF29403F3858ADF84AF20F0E61178B320FE1C564110EEFAC5FF865CA"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T1619Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "length": 4422940,
+        "sha256": "DC20A54EAA6F0D3B2F6D428ED4079945B968EEAB2C76A6A872BA3DF10AC9E636"
+      }
+    ],
+    "HistoryManifestSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+    "HistoryFiles": [
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+        "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+        "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+        "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+        "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+        "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "match": true
+      }
+    ],
+    "ValidatorAssemblySha256": "99E2E232F1B7E63174AB9CB40A9969DF325BC2943675FE0FE03ADBC429D0C1A5",
+    "IndependentValidatorResult": {
+      "status": "ACCEPTED",
+      "method": "SessionLifeUnitGateValidator.Validate",
+      "artifactMutation": false,
+      "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+    },
+    "ModelProof": {
+      "events": [
+        {
+          "line": 1,
+          "type": "session_meta",
+          "id": "01a0f335-f03c-7d21-93b4-6e9f78e1a6d6",
+          "originator": "codex_exec",
+          "cli_version": "0.158.0-alpha.2.1",
+          "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+        },
+        {
+          "line": 8,
+          "type": "turn_context",
+          "model": "gpt-6-astra",
+          "effort": "xhigh",
+          "reasoning_effort": null,
+          "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+        },
+        {
+          "line": 164,
+          "type": "turn_context",
+          "model": "gpt-6-astra",
+          "effort": "xhigh",
+          "reasoning_effort": null,
+          "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+        }
+      ],
+      "path": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T11-46-33-01a0f335-f03c-7d21-93b4-6e9f78e1a6d6.jsonl"
+    }
+  },
+  "Counterexamples": {
+    "TimestampUtc": "2026-09-30T12:11:16.7951581-05:00",
+    "Shell": "7.6.5",
+    "Tip": "340d40a6a1986f35b06c153bccaae981eab8da82",
+    "Observations": [
+      {
+        "id": "DOC246-FULL-FENCE",
+        "data": [
+          {
+            "fenceLine": 48,
+            "parse": "PASS"
+          },
+          {
+            "fenceLine": 64,
+            "parse": "FAIL",
+            "error": "Conversion from JSON failed with error: Additional text encountered after finished reading JSON content: `. Path '', line 3, position 0."
+          }
+        ]
+      },
+      {
+        "id": "SOURCE-FUNCTIONS",
+        "data": {
+          "sha256": "165ADFC1C4310769679F1C684F476D8546BE853AADA32C966023F00012A05A50",
+          "path": "plugins/core/lib-ps/repl-invoke.ps1",
+          "loaded": [
+            "Invoke-ReplPersistTurn",
+            "Get-ReplStableFingerprint",
+            "New-ReplSessionVerbReceipt",
+            "Find-ReplFailsafeByFingerprint",
+            "Invoke-WorkflowBeginTurn",
+            "Invoke-WorkflowAppendDialog",
+            "Invoke-WorkflowUpdateTurn",
+            "Get-ReplDialogItemsFromParams"
+          ]
+        }
+      },
+      {
+        "id": "empty-success-envelope",
+        "data": {
+          "remoteCalls": 1,
+          "failsafesRemaining": 0,
+          "return": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "Session log persist confirmed a durable write for request 'req-R'.",
+            "childStderr": ""
+          },
+          "failsafesCleared": 1
+        }
+      },
+      {
+        "id": "unrelated-success-envelope",
+        "data": {
+          "remoteCalls": 1,
+          "failsafesRemaining": 0,
+          "return": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "Session log persist confirmed a durable write for request 'req-R'.",
+            "childStderr": ""
+          },
+          "failsafesCleared": 1
+        }
+      },
+      {
+        "id": "wrong-identity-success",
+        "data": {
+          "remoteCalls": 1,
+          "failsafesRemaining": 0,
+          "return": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "Session log persist confirmed a durable write for request 'req-R'.",
+            "childStderr": ""
+          },
+          "failsafesCleared": 1
+        }
+      },
+      {
+        "id": "persisted-and-degraded",
+        "data": {
+          "remoteCalls": 1,
+          "failsafesRemaining": 0,
+          "return": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "Session log persist confirmed a durable write for request 'req-R'.",
+            "childStderr": ""
+          },
+          "failsafesCleared": 1
+        }
+      },
+      {
+        "id": "cross-session-queue-dedupe",
+        "data": {
+          "firstReceipt": {
+            "code": "queued",
+            "retryable": true,
+            "persisted": false,
+            "degraded": true,
+            "queued": true,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "memory-failsafe/0.yaml",
+            "message": "Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.",
+            "childStderr": "HTTP 503 backend_unavailable "
+          },
+          "secondReturn": false,
+          "remoteCalls": 1,
+          "retainedRecordCount": 1,
+          "secondReceipt": {
+            "code": "queued",
+            "retryable": true,
+            "persisted": false,
+            "degraded": true,
+            "queued": true,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "memory-failsafe/0.yaml",
+            "message": "unchanged session payload reused the retained failsafe requestId=req-R",
+            "childStderr": "duplicate failsafe suppressed"
+          },
+          "firstReturn": false,
+          "retainedSessions": [
+            "session-A"
+          ]
+        }
+      },
+      {
+        "id": "changed-processing-dialog-dedupe",
+        "data": {
+          "secondReceipt": {
+            "code": "unchanged",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "client.SessionLog.SubmitAsync",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "unchanged session payload did not create duplicate recovery work requestId=req-R",
+            "childStderr": ""
+          },
+          "remoteCalls": 1
+        }
+      },
+      {
+        "id": "begin-rebinds-local-turn-without-durability-proof",
+        "data": {
+          "beforeSession": "session-A",
+          "return": true,
+          "payload": {
+            "planBound": false,
+            "sessionId": "session-B",
+            "todoBound": false,
+            "requestId": "req-R"
+          },
+          "afterSession": "session-B",
+          "degradedFlagPresent": false
+        }
+      },
+      {
+        "id": "update-ignores-caller-request-and-explicit-metadata",
+        "data": {
+          "cachedResponse": "wrong caller write",
+          "cachedTodo": "todo-A",
+          "return": true,
+          "payload": {
+            "planBound": false,
+            "sessionId": "session-A",
+            "todoBound": false,
+            "requestId": "req-R"
+          },
+          "submitCalls": 1,
+          "cachedPlan": "plan-A"
+        }
+      },
+      {
+        "id": "dialog-ignores-caller-request",
+        "data": {
+          "auditDialog": 1,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "appendDialog persisted requestId=req-R",
+            "childStderr": ""
+          },
+          "return": true,
+          "remoteCalls": 1,
+          "cachedRequest": "req-R"
+        }
+      },
+      {
+        "id": "degraded-404-no-recovery-submit",
+        "data": {
+          "recoverySubmitCalls": 0,
+          "appendDialogCalls": 1,
+          "return": true,
+          "receipt": {
+            "code": "queued",
+            "retryable": true,
+            "persisted": false,
+            "degraded": true,
+            "queued": true,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "memory-failsafe/0.yaml",
+            "message": "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=req-R",
+            "childStderr": "HTTP 404 not_found missing turn"
+          },
+          "retainedRecordCount": 1
+        }
+      }
+    ]
+  },
+  "TipReconciliation": {
+    "NativeRunClaimedTip": "e9932a49",
+    "TipUnderReview": "340d40a6a1986f35b06c153bccaae981eab8da82",
+    "GitDelta": [
+      "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+      "docs/receipts/sessionlife-completion/20260930-p2-unit-no-pi/p2-unit-legion-20260930T1619Z.md"
+    ],
+    "Explanation": "Native tests ran before 340d40a6. That commit changes UTC normalization and a receipt, with no P2 runtime or unit-test delta from e9932a49. Existing NUnit root now records 16:19:24 UTC versus native Pester start 16:19:22.690Z. Original validate.log records stale-pester-report; normalization scripts show how the report was converted. Reviewer did not modify it and independently observed current validator ACCEPTED. This preserves the historical counts but is not a new full run of tip orchestration. The source-manifest omission prevents complete tested-input binding."
+  },
+  "P2DoD": [
+    {
+      "evidence": "F3/F5: local state misclassified as durable; update metadata omitted despite explicit values.",
+      "item": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "F3/F4: session rebinding and unguarded update/dialog request mismatch; normal Codex/Grok isolation test does pass.",
+      "item": 2,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "F1/F4: false primary and wrong-turn writes; 24 happy matrix combinations are insufficient.",
+      "item": 3,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "F2: different session/dialog writes incorrectly deduplicated. P6 actual server readback is explicitly deferred, not failed here.",
+      "item": 4,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "F8: BUG-246 malformed fenced JSON and insufficient parser proof.",
+      "item": 5,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "No reviewable P2 red-test gate found. No timestamp chronology inferred.",
+      "item": 6,
+      "status": "UNKNOWN"
+    },
+    {
+      "evidence": "Counts and normalized validator accept, but F9 leaves critical input drift unguarded; current HV DISAGREE.",
+      "item": 7,
+      "status": "FAIL"
+    }
+  ],
+  "RequirementsScopeNotes": [
+    "All 16 governing FR-SESSIONLIFE-001..003 AC were inspected in the approved snapshot; traceability review also inspected associated TR/TEST rows.",
+    "FR-001 AC003 query fallback/empty omission has real builder proof in existing Pester tests. Normal degraded metadata preservation and valid metadata paths also have passing proof.",
+    "Raw first-persistence validator and SessionLogServiceTurnContext native tests establish several rejection/preservation paths. No claim of exhaustive provider or both-spelling raw integration coverage.",
+    "FR-003 AC004 exact durable server readback is a later integration obligation per P2 item 4; TR-003 deadline and TEST-002 Stop/quarantine subscenarios belong to later phases. They are not invented P2 failures.",
+    "Exported docs/Project files do not contain the SESSIONLIFE family; the P0 R3 structured snapshot is the reviewable requirement evidence. No authoritative live requirement-state assertion is made."
+  ],
+  "ValidationLimits": [
+    "Counterexample harness extracts unchanged function ASTs from the current product file. Remote/cache/filesystem boundaries are explicit in-memory doubles; this is behavioral unit evidence, not a live MCP integration claim.",
+    "No fresh full suite was executed. Every existing native TRX/NUnit result and selected inventory was re-parsed, all 2198 included source hashes were rechecked, and the compiled current validator was invoked read-only with its real tool probe.",
+    "The compiled validator binary was not rebuilt by this review; its hash is recorded. Its relevant source is unchanged from the tested run.",
+    "The gate orchestrator writes staged plugins and rewrites/removes TestResults. It was not launched under receipt-only review scope.",
+    "The runner writes its CLI response JSONL only after process exit. This receipt includes an immediately durable public evidence stream and full verdict; it does not claim the runner file was already finalized."
+  ],
+  "HistoricalBlockedReceipts": [
+    {
+      "path": "docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.md",
+      "sha256": "96BD51A5C73DECF4D943DCCAFCCF99AF88E38446A363FE6CD0F78F60284D033A",
+      "preserved": true
+    },
+    {
+      "path": "docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.json",
+      "sha256": "A92EB5FE4DF26BC48BE5931AE9D4149EB82A9C81DD72BF0DC60034D02284889D",
+      "preserved": true
+    }
+  ],
+  "ReceiptPaths": {
+    "markdown": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T165647Z-resume.md",
+    "json": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T165647Z-resume.json",
+    "originalRequestJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T164250Z-sessionlife-p2-contracts-hv.request.jsonl",
+    "resumeRequestJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.request.jsonl",
+    "responseEvidenceJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.evidence.jsonl",
+    "runnerResponseJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.response.jsonl",
+    "nativeAudit": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-native-audit.json",
+    "probes": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-probes.json"
+  },
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 99,
+    "completeness": 93,
+    "confidence": 99,
+    "failList": [
+      "F1: Unproven persistence becomes primary success and destroys recovery",
+      "F2: Deduplication drops another session payload and changed dialog content",
+      "F3: beginTurn rebinds session A to B and infers durability from a missing flag",
+      "F4: updateTurn and appendDialog ignore conflicting caller request IDs",
+      "F5: Explicit update metadata is ignored at cache and payload boundaries",
+      "F6: Degraded missing-turn dialog skips the required recovery attempt",
+      "F7: Degraded prompt-hook output omits the retained recovery path",
+      "F8: BUG-TRIAGE-246 JSON example is malformed and its proof bypasses the defect",
+      "F9: Gate source binding omits the P2 runtime, orchestration and contract documents",
+      "F10: Per-AC acceptance mapping remains planned and the new tests miss material AC branches",
+      "Completeness 93 is below the required 98 threshold."
+    ],
+    "passCount": 11,
+    "failCount": 6,
+    "unknownCount": 2,
+    "tipSha": "340d40a6a1986f35b06c153bccaae981eab8da82",
+    "receiptPaths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T165647Z-resume.md",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T165647Z-resume.json",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T164250Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.request.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.evidence.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-contracts-hv-resume.response.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-native-audit.json",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T165647Z-sessionlife-p2-probes.json"
+    ],
+    "overridesApplied": [
+      "For this resume on PAYTON-LEGION2, Windows PowerShell 5.1 is an approved evidence shell when Codex remaps pwsh or pwsh is unavailable. No B2 failure solely for 5.1. Prefer available pwsh.",
+      "MCP session-log persistence is waived for this Astra HV pass. Receipt-only JSONL and markdown/JSON suffice. Missing marker or MCP turn is not a B3 failure.",
+      "Runner proof model=gpt-6-astra, effort=xhigh, cli_version=0.158.0-alpha.2.1, originator=codex_exec, cwd=worktree is accepted and was independently confirmed in this exact thread.",
+      "Review only; no merge, remediation, commit/push, or TODO/goal completion. AGREE requires all applicable A-D PASS and accuracy/completeness >=98."
+    ]
+  }
+}

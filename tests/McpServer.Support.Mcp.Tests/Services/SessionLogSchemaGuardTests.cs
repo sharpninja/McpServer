@@ -52,6 +52,45 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
         Assert.DoesNotContain("Invalid column name", ex.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>A ready :memory: database must not mark a different :memory: database migrated.</summary>
+    [Fact]
+    public void EnsureAgentSessionHeaderColumns_ReadyMemoryDatabase_DoesNotSkipMissingDatabase()
+    {
+        using var readyConnection = new SqliteConnection("Data Source=:memory:");
+        readyConnection.Open();
+        var readyOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(readyConnection)
+            .Options;
+        using (var ready = new McpDbContext(readyOptions))
+        {
+            ready.Database.EnsureCreated();
+            SessionLogSchemaGuard.EnsureAgentSessionHeaderColumns(ready);
+        }
+
+        using var missingConnection = new SqliteConnection("Data Source=:memory:");
+        missingConnection.Open();
+        using (var cmd = missingConnection.CreateCommand())
+        {
+            cmd.CommandText = """
+                CREATE TABLE SessionLogs (
+                    Id INTEGER PRIMARY KEY,
+                    WorkspaceId TEXT NOT NULL,
+                    SourceType TEXT NOT NULL,
+                    SessionId TEXT NOT NULL
+                );
+                """;
+            cmd.ExecuteNonQuery();
+        }
+
+        var missingOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(missingConnection)
+            .Options;
+        using var missing = new McpDbContext(missingOptions);
+        var ex = Assert.Throws<SessionLogSchemaPendingMigrationException>(
+            () => SessionLogSchemaGuard.EnsureAgentSessionHeaderColumns(missing));
+        Assert.Contains("pending-migration", ex.Message, StringComparison.Ordinal);
+    }
+
     /// <summary>QueryAsync on a missing-column store fails closed without SQL Invalid column name.</summary>
     [Fact]
     public async Task QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError()

@@ -1,0 +1,20 @@
+{
+  "timestampUtc": "2026-10-03T01:36:11.8551190+00:00",
+  "localTip": "a5f93023dc10018630ac555929550790ab2880b5",
+  "pr": {
+    "baseRefName": "develop",
+    "headRefName": "cursor/sessionlife-p2-contracts-5cb2",
+    "headRefOid": "d396b3c37e79039aa761d168099b8ebdf49af762",
+    "isDraft": true,
+    "mergedAt": null,
+    "number": 72,
+    "state": "OPEN",
+    "url": "https://github.com/sharpninja/McpServer/pull/72"
+  },
+  "trackedDirty": [
+    ".nuke/build.schema.json",
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "gateLogHash": "AF3DD50B27729D0DF8B49963C051BD96A9802ED4CA40E067B614D11045A6577A"
+}

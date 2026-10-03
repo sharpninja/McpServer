@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-29T23:46:26.869812Z",
+  "gate": "P1 delegation Red",
+  "accepted": true,
+  "phaseComplete": false,
+  "OverallVerdict": "AGREE",
+  "counts": {
+    "PASS": 12,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "accuracy": {
+    "score": 99,
+    "rationale": "The source contains one direct call, and four restored mutations made both consumer facts fail for a missing call, a repeated call, a value-equal copy, and a different validator. An independent SDK 10.0.401 rerun on 94cc642 reproduced the published 95/2/93/0 classification and the 88/5 behavior split with zero setup failures. history-r1 hashes match the manifest. The one-point holdback is that the author's gitignored TRX hash was not rehashed: the reviewer TRX has the same length 409322 and a different hash. Assert.Empty on the test-local unused substitute is not a reachable probe."
+  },
+  "completeness": {
+    "score": 99,
+    "rationale": "The authorized delegation contract is pinned and mutation-checked. R4 shape, the NotImplementedException scaffold, the frozen r1 archive, and the exclusion of producers, orchestration, Green, and TODO closure are all present in the diff. The one-point holdback is that a second call to a file-level decoy the tests do not hold, made in addition to the correct injected call, still passes both facts. The reviewed source does not make that extra call, and the four named failure modes do fail. Deferred behavior Green is not penalized."
+  },
+  "reviewResponse": "docs/receipts/hv/20260929T234626Z-sessionlife-p1-delegation-red.response.jsonl",
+  "reviewResponseSha256": "057C772C5A22123E4EFDC8B915F8FC9C98D2E2160DC3FEA64DD402CB4F000C44",
+  "reviewRequest": "docs/receipts/hv/20260929T234626Z-sessionlife-p1-delegation-red.request.jsonl",
+  "reviewRequestSha256": "1514132E6E765BE8CD1CE74DC812164EE796B7A35B036114DE9B4DD09FDF1DE9",
+  "reviewedTip": "94cc64200c0d3dc376a4a2cf412ca562651b96df",
+  "findings": [],
+  "openFindingIds": [],
+  "nextBoundary": "Accepted minimal exactly-once same-request delegation only. A separate change may implement validator behavior limited to the accepted fixtures. This receipt does not authorize producers, orchestration, P1 exit, or TODO closure. Preserve history-r1.",
+  "reviewer": {
+    "agent": "GrokCode",
+    "name": "Grok Bot",
+    "model": "Grok 4.7"
+  },
+  "structuredSerialization": "Python json module serializing native objects"
+}

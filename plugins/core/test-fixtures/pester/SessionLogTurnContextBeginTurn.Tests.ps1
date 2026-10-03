@@ -71,16 +71,27 @@ Describe 'MCP-SESSIONLOG-002 workflow.sessionlog.beginTurn planFile/todoId' {
 
             $log = Join-Path $CacheDir 'repl.log'
             $session = Join-Path $CacheDir 'session-state.yaml'
-            @(
-                'status: verified'
-                'sessionId: ClaudeCode-20260304T113901Z-plugin'
-                'agent: ClaudeCode'
-                'timestamp: 2026-08-12T19:00:00Z'
-            ) | Set-Content -LiteralPath $session -Encoding utf8
+            $workspace = Join-Path $script:Work 'marker-ws'
+            if (-not (Test-Path -LiteralPath $workspace)) {
+                [void][System.IO.Directory]::CreateDirectory($workspace)
+            }
+            $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+            if (-not (Test-Path -LiteralPath $marker)) {
+                [System.IO.File]::WriteAllText($marker, "workspacePath: $workspace`napiKey: turn-context`n")
+            }
+            $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
+            Write-McpYamlObject -Path $session -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'ClaudeCode-20260304T113901Z-plugin'
+                agent = 'ClaudeCode'
+                timestamp = '2026-08-12T19:00:00Z'
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
+            })
 
             $psi = [System.Diagnostics.ProcessStartInfo]::new()
             $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
-            foreach ($a in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $script:HookScript, '-HookName', 'user-prompt-submit', '-WorkspacePath', $script:RepoRoot)) {
+            foreach ($a in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $script:HookScript, '-HookName', 'user-prompt-submit', '-WorkspacePath', $workspace)) {
                 $psi.ArgumentList.Add($a)
             }
             $psi.WorkingDirectory = $script:RepoRoot
@@ -93,8 +104,8 @@ Describe 'MCP-SESSIONLOG-002 workflow.sessionlog.beginTurn planFile/todoId' {
             $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $CacheDir
             $psi.Environment['MCP_PLUGIN_REPL_LOG'] = $log
             $psi.Environment['MCP_PLUGIN_REPL_RESPONSE'] = 'ok'
-            $psi.Environment['MCP_WORKSPACE_PATH'] = $script:RepoRoot
-            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $script:RepoRoot
+            $psi.Environment['MCP_WORKSPACE_PATH'] = $workspace
+            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspace
             if ($ToolInput) { $psi.Environment['TOOL_INPUT'] = $ToolInput }
 
             $p = [System.Diagnostics.Process]::Start($psi)

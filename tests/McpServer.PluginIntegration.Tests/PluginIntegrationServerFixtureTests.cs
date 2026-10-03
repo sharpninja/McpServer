@@ -7,6 +7,7 @@ namespace McpServer.PluginIntegration.Tests;
 /// </summary>
 [Collection("PluginSessionLog")]
 [Trait("PluginInt", "Deterministic")]
+[Trait("Category", "Integration")]
 public sealed class PluginIntegrationServerFixtureTests
 {
     /// <summary>P5: fixture selects a free loopback port, not 7147 by default.</summary>

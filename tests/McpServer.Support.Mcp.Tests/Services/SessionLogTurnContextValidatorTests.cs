@@ -35,11 +35,35 @@ public sealed class SessionLogTurnContextValidatorTests
         Assert.Contains("planFile", ex.Message, StringComparison.Ordinal);
     }
 
-    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty todoId is rejected.</summary>
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: whitespace todoId is rejected. Two spaces are not an omitted or empty value.</summary>
     [Fact]
     public void ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => SessionLogTurnContextValidator.ValidateForNewEntry("None", "  "));
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string planFile is rejected.</summary>
+    [Fact]
+    public void ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException()
+    {
+        var ex = Assert.Throws<ArgumentException>(() => SessionLogTurnContextValidator.ValidateForNewEntry(string.Empty, "None"));
+        Assert.Contains("planFile", ex.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: omitted todoId is rejected when planFile is valid.</summary>
+    [Fact]
+    public void ValidateForNewEntry_NullTodoId_ThrowsArgumentException()
+    {
+        var ex = Assert.Throws<ArgumentException>(() => SessionLogTurnContextValidator.ValidateForNewEntry("docs/plans/foo.md", null));
+        Assert.Contains("todoId", ex.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string todoId is rejected when planFile is valid.</summary>
+    [Fact]
+    public void ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException()
+    {
+        var ex = Assert.Throws<ArgumentException>(() => SessionLogTurnContextValidator.ValidateForNewEntry("docs/plans/foo.md", string.Empty));
+        Assert.Contains("todoId", ex.Message, StringComparison.Ordinal);
     }
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: whitespace planFile is rejected.</summary>

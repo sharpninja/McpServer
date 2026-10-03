@@ -248,11 +248,14 @@
                 "properties": {
                   "params": {
                     "type": "object",
+                    "description": "State-dependent planFile and todoId rules, not a wire discriminator. Ordinary first persistence requires both fields and rejects missing, null, empty, or whitespace values. When no plan or todo is known the stored value is exact None. Supersession accepts both canceled and cancelled and may omit either field, which stores exact None. Same-request durable reopen omits an absent field so the stored value is preserved. Explicit values update the cache and the outgoing payload.",
                     "required": ["requestId", "queryTitle", "queryText"],
                     "properties": {
                       "requestId": { "type": "string", "minLength": 1 },
                       "queryTitle": { "type": "string", "minLength": 1 },
-                      "queryText": { "type": "string", "minLength": 1 }
+                      "queryText": { "type": "string", "minLength": 1 },
+                      "planFile": { "type": "string", "minLength": 1 },
+                      "todoId": { "type": "string", "minLength": 1 }
                     },
                     "additionalProperties": true
                   }

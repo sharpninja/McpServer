@@ -688,6 +688,19 @@ public sealed class CliBrainSlotStrategyTests
             };
             foreach (var argument in source.ArgumentList)
                 copy.ArgumentList.Add(argument);
+            // A fresh ProcessStartInfo inherits the current process environment.
+            // Copying source entries does not drop keys the product removed
+            // (GROK_PLUGIN_ROOT / GROK_HOME). Record the source environment only.
+            var sourceKeys = new HashSet<string>(source.Environment.Keys, StringComparer.OrdinalIgnoreCase);
+            var inherited = new List<string>();
+            foreach (var key in copy.Environment.Keys)
+            {
+                if (!sourceKeys.Contains(key))
+                    inherited.Add(key);
+            }
+
+            foreach (var key in inherited)
+                copy.Environment.Remove(key);
             foreach (var (key, value) in source.Environment)
                 copy.Environment[key] = value;
             return copy;

@@ -16,6 +16,19 @@ partial class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     public readonly string Configuration = IsLocalBuild ? "Debug" : "Release";
 
+    /// <summary>
+    /// FR-MCP-107 / TR-MCP-PLAN-001: Unique session-life gate run identifier.
+    /// When set, Test and MigrationIntegrationTests write the lane inventory and per-project TRX files.
+    /// </summary>
+    [Parameter("Session-life gate run id. Test and MigrationIntegrationTests then write TestResults/<id> inventory and per-project TRX files.")]
+    readonly string TestRunId = string.Empty;
+
+    /// <summary>
+    /// FR-MCP-107 / TR-MCP-PLAN-001: UTC instant when the session-life gate orchestration started.
+    /// </summary>
+    [Parameter("UTC timestamp when the session-life gate started, used to reject stale reports.")]
+    readonly string GateStartedAtUtc = string.Empty;
+
     [Solution(SuppressBuildProjectCheck = true)]
     readonly Solution Solution = null!;
 

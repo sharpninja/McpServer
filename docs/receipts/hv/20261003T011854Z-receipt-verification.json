@@ -1,0 +1,36 @@
+{
+  "TimestampUtc": "2026-10-03T01:45:13.7575810+00:00",
+  "tipSha": "a5f93023dc10018630ac555929550790ab2880b5",
+  "markdownMatchesJsonBody": true,
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "profileCount": 21,
+  "passCount": 19,
+  "failCount": 0,
+  "unknownIds": [
+    "B7",
+    "B8"
+  ],
+  "credited": 40,
+  "deferred": 3,
+  "requestRecords": 2,
+  "checkpointRecords": 69,
+  "checkpointLastType": "complete_verdict_checkpoint",
+  "runnerResponseCurrentlyExists": false,
+  "trackedDirty": [
+    ".nuke/build.schema.json",
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "receiptHashes": [
+    {
+      "Path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261003T011854Z.md",
+      "Hash": "3FABA92D7B91C1CCD98491BB0967956158508AFB79A772014EB5C3139D8ECD12"
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261003T011854Z.json",
+      "Hash": "E51E07542CDDEF419028EA854ED5D05D5C69BB01FB545B473AFEBD75A1B604A0"
+    }
+  ],
+  "verificationCommandCorrections": "Initial receipt-check command had a missing parenthesis; next hash expression concatenated two paths. Both were validator-command errors only. Corrected literal path hashes now succeed; receipt content and semantic results unchanged."
+}

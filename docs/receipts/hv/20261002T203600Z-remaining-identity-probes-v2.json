@@ -1,0 +1,1689 @@
+{
+  "timestampUtc": "2026-10-02T15:42:25.2900773-05:00",
+  "tipSha": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+  "work": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2",
+  "boundary": "Actual production functions and YAML IO, immediate transport double only; no server persistence claim",
+  "cases": [
+    {
+      "name": "updateTurn-exact",
+      "return": true,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:25.5194961-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:25Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "must match exact identity",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:25.5194961-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:25.5194961-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-exact\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:25.4870274Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": "true",
+        "response": "must match exact identity",
+        "lastPersistFingerprint": "3E5A138C8AAFCBCB76E6C29BE8B190748961F009F45E72E2EDD3483E9C723B87"
+      },
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "queue": [],
+      "extra": {
+        "expectedPrimary": true,
+        "beforeHash": "B6FF0C98013E69DCEFCFE1FD6828A85E3726DE300D0FA97E39F5754580ADB5B2",
+        "afterHash": "2B02D80C208B4B355EEF209D5E39030E159ADD7194DAA0E3E986B06F5DD30B05"
+      }
+    },
+    {
+      "name": "updateTurn-case-session",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:26.1893861-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:26Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "must match exact identity",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:26.1893861-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:26.1893861-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:26.1834406Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "response": "must match exact identity"
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204226Z-session_submit-6798.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204226Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:26.1893861-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:26Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "must match exact identity",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:26.1893861-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "C3DA385B84E2C461030A644BEB78D0D1354C093945720DA86846A9566E610933"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "C1480521EAC290D5660DB2DAF828CF90DEE96EFAAE6500C76A9949D2D6C861CD",
+        "afterHash": "DA040DBB728EB8EFCA9D325024A0CFD5A9242C9FEEC17494E123915AE479390D"
+      }
+    },
+    {
+      "name": "updateTurn-case-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:26.4726607-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:26Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "must match exact identity",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:26.4726607-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:26.4726607-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:26.4672335Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "response": "must match exact identity"
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204226Z-session_submit-fe3e.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204226Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:26.4726607-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:26Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "must match exact identity",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:26.4726607-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "0C669E1B1A9CA96A0721B5E0310036F906CD6D9968284682C389F19AE318EE80"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "E96627AC766919311EF3104B3144C68A1535549A0CBB9326B00085C2224485FC",
+        "afterHash": "291BFD7BAA5AA91A499AC92FB6579D5E3090AB3E761D4BE6ED2F50750461A2EC"
+      }
+    },
+    {
+      "name": "updateTurn-wrong-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:26.7582341-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:26Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "must match exact identity",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:26.7582341-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:26.7582341-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:26.7527467Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "response": "must match exact identity"
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204226Z-session_submit-d844.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204226Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:26.7582341-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:26Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "must match exact identity",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:26.7582341-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "49BC8FEE6921DCF6A537DFC7F75916EB61A85AA2B350FB7765D031B87792960A"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "5B712287551A3B23CA562570B9EDC9F1A59424E23F3339DEFBC3374F68F514C0",
+        "afterHash": "67DE87E23EB6453BBDFC61B2D1F704C61EA2FCED52FDA1A708F5CE66709B1504"
+      }
+    },
+    {
+      "name": "appendActions-exact",
+      "return": true,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:27.0434265-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:27Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "Actions appended.",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:27.0434265-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:27.0434265-05:00",
+        "auditActions": 4,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-exact\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:27.0371086Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": "true",
+        "auditDecisions": 1,
+        "lastPersistFingerprint": "6BD1E8ABDE61C06246282118C4C8B9344824D90491DA368FAB8FDABB306FD06B"
+      },
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "queue": [],
+      "extra": {
+        "expectedPrimary": true,
+        "beforeHash": "C0B1ADB66B7652C77C6C82595ED7498288A0E0CB8A7689DDB5DDAA77B760864A",
+        "afterHash": "0F237B2D70231ABDC1CD8349062B6A525C0DBE761D8FBFD1B35E0F574431C509"
+      }
+    },
+    {
+      "name": "appendActions-case-session",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:27.4318911-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:27Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "Actions appended.",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:27.4318911-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:27.4318911-05:00",
+        "auditActions": 4,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:27.4253183Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "auditDecisions": 1
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204227Z-session_submit-705e.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204227Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:27.4318911-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:27Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "Actions appended.",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:27.4318911-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "2496D1456BF43BE6BD6D514E9FF276B1CFE5CCDA93F6FC9F9E156B54C00A04EF"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "8D7C11204D5735BE1B40379693FE4844859BACB7BBEDF10819D5DE731FA4EEBE",
+        "afterHash": "692DF907CD04F441910440DA47C9B534A7B7FE37991FA3C39B886CC579785875"
+      }
+    },
+    {
+      "name": "appendActions-case-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:27.768119-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:27Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "Actions appended.",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:27.768119-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:27.768119-05:00",
+        "auditActions": 4,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:27.7631226Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "auditDecisions": 1
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204227Z-session_submit-66fb.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204227Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:27.768119-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:27Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "Actions appended.",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:27.768119-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "31EF8F2F9FDF0DD0A1E96A96EE26B929C4725B35A59A4DB786D9230AD84A32B9"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "787A081AF8269E39B59F1638C2F9B16A74BC2518325A52066CCA84784B7EEE58",
+        "afterHash": "AA603D69B469072F94711F308FA5567A083D1E7E6AC25E2E0E9C238F1C0B6BAA"
+      }
+    },
+    {
+      "name": "appendActions-wrong-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:28.0616433-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:28Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "Actions appended.",
+                  "status": "in_progress",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:28.0616433-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:28.0616433-05:00",
+        "auditActions": 4,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:28.0546491Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true,
+        "auditDecisions": 1
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204228Z-session_submit-6d68.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204228Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:28.0616433-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:28Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "Actions appended.",
+                    "status": "in_progress",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:28.0616433-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "2B755914C3D3B04D17BF6FAFD7C9EFEA92C258B93396E0C66BB7B71BD8C9F3E7"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "BD8BDE435DA45BF71E954892F61FE53AEDB05236F27C5F84A57571E1678A464D",
+        "afterHash": "2E680D718C6B80F84210CE3E6AF4520145E3CD517D70578A1E54A51108B82E55"
+      }
+    },
+    {
+      "name": "completeTurn-exact",
+      "return": true,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:28.3589726-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:28Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "must match exact identity",
+                  "status": "completed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:28.3589726-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        },
+        {
+          "params": {
+            "agent": "Codex",
+            "limit": 25
+          },
+          "method": "client.SessionLog.QueryAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "completed",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:28.3589726-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-exact\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:28.3525345Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": "true",
+        "lastPersistFingerprint": "08159941498AB73504818389FDF59C4E7E3593258EEB5D95FE3E715723D7DB91"
+      },
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "queue": [],
+      "extra": {
+        "expectedPrimary": true,
+        "beforeHash": "C80F39AB395B67CF68979D3A169B7D10793E3F8B41310963FF0F969C5230805A",
+        "afterHash": "ED41042A13599DA6A81F6D386E69782C2935DD707F2F8695E58E2B3E7798A3EC"
+      }
+    },
+    {
+      "name": "completeTurn-case-session",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:28.6683536-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:28Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "must match exact identity",
+                  "status": "completed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:28.6683536-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:28.6683536-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:28.6622635Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204228Z-session_submit-8316.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204228Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:28.6683536-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:28Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "must match exact identity",
+                    "status": "completed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:28.6683536-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "91A6FE3570B7B75FCA7EC4DBA3046C047F61238F4E4E862797F246B73A0CAAAC"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "2EB299639F2F45D248B3BFD8BCB89DADD63B91E44923125476390A1AB3F5282D",
+        "afterHash": "2EB299639F2F45D248B3BFD8BCB89DADD63B91E44923125476390A1AB3F5282D"
+      }
+    },
+    {
+      "name": "completeTurn-case-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:28.9107848-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:29Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "must match exact identity",
+                  "status": "completed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:28.9107848-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:28.9107848-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:28.9056504Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204229Z-session_submit-a8a2.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204229Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:28.9107848-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:29Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "must match exact identity",
+                    "status": "completed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:28.9107848-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "9369ADA2210159B2248A76BF47941FC53DC8D6BC1696DA571C5767981596D274"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "81BF83825FAB45AA9431EF25DCDC109D1409F98ED904D0F27CFFBCEE434F6388",
+        "afterHash": "81BF83825FAB45AA9431EF25DCDC109D1409F98ED904D0F27CFFBCEE434F6388"
+      }
+    },
+    {
+      "name": "completeTurn-wrong-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:29.1619661-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:29Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "actions": [
+                    {
+                      "type": "design_decision",
+                      "description": "identity evidence"
+                    }
+                  ],
+                  "response": "must match exact identity",
+                  "status": "completed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:29.1619661-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:29.1619661-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:29.1548083Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204229Z-session_submit-72b4.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204229Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:29.1619661-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:29Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "actions": [
+                      {
+                        "type": "design_decision",
+                        "description": "identity evidence"
+                      }
+                    ],
+                    "response": "must match exact identity",
+                    "status": "completed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:29.1619661-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "4D86E7766C8219418A12395A3740FBD59CE458286B7A034DFF5B5E21D31BDA44"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "950660B611486995CC522DD15723FEEE180B96E8FF101E741DDF882341871F9A",
+        "afterHash": "950660B611486995CC522DD15723FEEE180B96E8FF101E741DDF882341871F9A"
+      }
+    },
+    {
+      "name": "failTurn-exact",
+      "return": true,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:29.3948351-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:29Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "failure",
+                  "status": "failed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:29.3948351-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": null,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "queue": [],
+      "extra": {
+        "expectedPrimary": true,
+        "beforeHash": "4853536F0CBEEE82B829235E61529DC1D47C0889FF3E4C27427C6BD8D4768BD4",
+        "afterHash": "removed"
+      }
+    },
+    {
+      "name": "failTurn-case-session",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:29.6645313-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:29Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "failure",
+                  "status": "failed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:29.6645313-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:29.6645313-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:29.6584101Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204229Z-session_submit-0795.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204229Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:29.6645313-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:29Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "failure",
+                    "status": "failed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:29.6645313-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "8288712FA25A1EEFCE9205A6D79D4653C7308ED81C8563F97325217F359F0128"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "5B3D40782FC55CC1793354FE4F38E19653C2D5562730D96FA54F0D2E61C1E0B2",
+        "afterHash": "5B3D40782FC55CC1793354FE4F38E19653C2D5562730D96FA54F0D2E61C1E0B2"
+      }
+    },
+    {
+      "name": "failTurn-case-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:29.8860927-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:30Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "failure",
+                  "status": "failed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:29.8860927-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:29.8860927-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:29.8785441Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204230Z-session_submit-e03f.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204230Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:29.8860927-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:30Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "failure",
+                    "status": "failed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:29.8860927-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "4537D5BBFA40D02F83153E12E36D06FCDBF5F4BCC17FF3D93DC64EB2833B3E4F"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "285043306863DD2D47A41B02FA6312B7B9960534B4D5441F8DE9C5AAA65F49D9",
+        "afterHash": "285043306863DD2D47A41B02FA6312B7B9960534B4D5441F8DE9C5AAA65F49D9"
+      }
+    },
+    {
+      "name": "failTurn-wrong-request",
+      "return": false,
+      "calls": [
+        {
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "started": "2026-10-02T15:42:30.0983699-05:00",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "lastUpdated": "2026-10-02T20:42:30Z",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "status": "in_progress",
+              "model": "codex",
+              "agentExecutableVersion": "codex-cli 0.159.3",
+              "turns": [
+                {
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "original query",
+                  "response": "failure",
+                  "status": "failed",
+                  "requestId": "req-20261001T000000Z-casea",
+                  "timestamp": "2026-10-02T15:42:30.0983699-05:00"
+                }
+              ]
+            }
+          },
+          "method": "client.SessionLog.SubmitAsync"
+        }
+      ],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:30.0983699-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:30.0928514Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'."
+      },
+      "queue": [
+        {
+          "name": "20261002T204230Z-session_submit-8999.yaml",
+          "contents": {
+            "method": "client.SessionLog.SubmitAsync",
+            "label": "session_submit",
+            "timestamp": "20261002T204230Z",
+            "params": {
+              "sessionLog": {
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "started": "2026-10-02T15:42:30.0983699-05:00",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "lastUpdated": "2026-10-02T20:42:30Z",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "status": "in_progress",
+                "model": "codex",
+                "agentExecutableVersion": "codex-cli 0.159.3",
+                "turns": [
+                  {
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryText": "original query",
+                    "response": "failure",
+                    "status": "failed",
+                    "requestId": "req-20261001T000000Z-casea",
+                    "timestamp": "2026-10-02T15:42:30.0983699-05:00"
+                  }
+                ]
+              }
+            },
+            "payloadFingerprint": "4E72D0BDD1AD1DCE0F724B66F4A9CC3FFB4C60BAF7621311AFC71DACFD6F7387"
+          }
+        }
+      ],
+      "extra": {
+        "expectedPrimary": false,
+        "beforeHash": "21A32B1652D0561587C69D68D5189C52F742BE5EEF8C66FC0C5462B5F0A4CFA0",
+        "afterHash": "21A32B1652D0561587C69D68D5189C52F742BE5EEF8C66FC0C5462B5F0A4CFA0"
+      }
+    },
+    {
+      "name": "begin-case-request-server-reject",
+      "return": false,
+      "calls": [],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:30.3551795-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\begin-case-request-server-reject\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:30.3471982Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+        "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+      },
+      "queue": [],
+      "extra": {
+        "expected": "Case-different IDs must not use durable reopen omission or overwrite the existing durable binding",
+        "beforeHash": "9811188F5AFACD86390ADAEF5E6863A3F4A359116D397AA4CDF1D1B4319C3292",
+        "afterHash": "9811188F5AFACD86390ADAEF5E6863A3F4A359116D397AA4CDF1D1B4319C3292"
+      }
+    },
+    {
+      "name": "begin-case-session-server-reject",
+      "return": false,
+      "calls": [],
+      "currentTurn": {
+        "turnRequestId": "req-20261001T000000Z-casea",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "status": "in_progress",
+        "queryText": "original query",
+        "queryTitle": "original title",
+        "openedAt": "2026-10-02T15:42:30.4730821-05:00",
+        "auditActions": 3,
+        "auditDialog": 2,
+        "lastBuildStatus": "succeeded",
+        "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\begin-case-session-server-reject\\ws\\AGENTS-README-FIRST.yaml",
+        "markerLastWriteUtc": "2026-10-02T20:42:30.4680188Z",
+        "planFile": "docs/plans/p2.md",
+        "todoId": "BUG-TRIAGE-246",
+        "persisted": true
+      },
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+        "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+      },
+      "queue": [],
+      "extra": {
+        "expected": "Case-different IDs must not use durable reopen omission or overwrite the existing durable binding",
+        "beforeHash": "A4B1014339F1766C68A58E3D75565C93312B1259F0755FED0D88AED36485F899",
+        "afterHash": "A4B1014339F1766C68A58E3D75565C93312B1259F0755FED0D88AED36485F899"
+      }
+    }
+  ]
+}

@@ -57,16 +57,20 @@ public sealed class RealPluginProcessRunner : IPluginProcessRunner
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutCts.CancelAfter(request.Timeout);
+        var timedOut = false;
         try
         {
             await process.WaitForExitAsync(timeoutCts.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
+            timedOut = true;
             TryKill(process);
             try
             {
-                await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                using var exitWait = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                using var linkedExit = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, exitWait.Token);
+                await process.WaitForExitAsync(linkedExit.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -77,13 +81,20 @@ public sealed class RealPluginProcessRunner : IPluginProcessRunner
         string stderr;
         try
         {
-            stdout = await stdoutTask.ConfigureAwait(false);
-            stderr = await stderrTask.ConfigureAwait(false);
+            // After Kill, pipes can stay open if a grandchild ignores SIGKILL semantics on Windows.
+            // Bound the drain so a dead child cannot wedge the unit gate with near-zero CPU.
+            using var drainCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            drainCts.CancelAfter(TimeSpan.FromSeconds(timedOut ? 3 : 30));
+            var drain = Task.WhenAll(stdoutTask, stderrTask);
+            await drain.WaitAsync(drainCts.Token).ConfigureAwait(false);
+            stdout = stdoutTask.Result;
+            stderr = stderrTask.Result;
         }
         catch (OperationCanceledException)
         {
             stdout = string.Empty;
-            stderr = "process-timeout";
+            stderr = timedOut ? "process-timeout" : "process-output-drain-timeout";
+            TryKill(process);
         }
 
         var exit = process.HasExited ? process.ExitCode : -1;
