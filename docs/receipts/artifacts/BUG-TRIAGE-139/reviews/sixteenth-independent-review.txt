@@ -1,0 +1,95 @@
+## Findings
+
+1. **High — product: physical workspace identity is still not reliably bounded.** Linux mount policy classifies only the lexical path using `Path.GetFullPath` before physical resolution at [BoundedFileSystemPolicy.cs:75](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/BoundedFileSystemPolicy.cs:75). A safe-filesystem path containing a symlink to FUSE/NFS—or swapped after classification—passes policy before `realpath` follows it at [WorkspaceIdentityPath.cs:254](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:254). If cancellation cannot kill a blocked helper, cleanup times out but the active-worker counter is still decremented at [WorkspaceIdentityPath.cs:321](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:321). Windows similarly loops until native completion, ignores `CancelSynchronousIo` failure, and performs an unbounded join at [WorkspaceIdentityPath.cs:438](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:438) and [WorkspaceIdentityPath.cs:565](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:565). Additionally, synchronous public identity APIs still perform uncancellable physical traversal at [WorkspaceIdentityPath.cs:55](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:55) and [WorkspaceIdentityPath.cs:1098](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:1098), including from nominally asynchronous use-case paths at [UseCaseCqrsHelpers.cs:65](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Services/UseCases/UseCaseCqrsHelpers.cs:65).
+
+2. **High — product: SQLite pre-handle opening remains unbounded through safe-link and check-to-open races.** Data-source validation applies the same lexical mount check at [SqliteBoundedConnectionOpener.cs:194](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:194). Once a worker starts, timeout/cancellation loops until it finishes and then joins without a cleanup deadline at [SqliteBoundedConnectionOpener.cs:125](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:125) and [SqliteBoundedConnectionOpener.cs:186](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:186). Linux `Thread.Interrupt` cannot stop native filesystem I/O before handle publication. The Linux test uses a database path directly beneath the FUSE mount at [BugTriage139FifteenthNativeTests.cs:341](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:341), proving direct-mount rejection but not a local symlink or mount swap into that FUSE filesystem.
+
+3. **Medium — product: PostgreSQL cancellation classification is not causal.** [FederationTopologyService.cs:848](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Services/Services/FederationTopologyService.cs:848) classifies any `PostgresException` with SQLSTATE `57014` as caller cancellation whenever the token is concurrently cancelled. That SQLSTATE also represents server-side statement cancellation/timeouts. A direct probe of the compiled candidate classified a concrete `PostgresException` whose message was “canceling statement due to statement timeout” as `false` with an uncancelled token and `true` with a concurrently cancelled token. Existing PostgreSQL coverage only obtains an unrelated missing-table exception at [SqliteStateFourteenthTests.cs:535](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/SqliteStateFourteenthTests.cs:535), so the 42-test provider gate does not exercise this race.
+
+4. **Medium — test harness: unsupported platform behavior can still become a passing source-inspection test.** The two principal native tests fall back to checking source strings when FUSE prerequisites or supported platforms are absent at [BugTriage139FifteenthNativeTests.cs:89](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:89) and [BugTriage139FifteenthNativeTests.cs:117](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:117). The Linux FIFO test similarly source-passes on other platforms at [RequirementsFourteenthAdversarialReviewTests.cs:162](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Services/RequirementsFourteenthAdversarialReviewTests.cs:162). The meta-test only searches for platform strings and one old return pattern at [BugTriage139FifteenthHarnessTests.cs:100](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:100).
+
+5. **Medium — test harness: containment race tests still swallow every relevant failure without requiring a successful operation.** The read and write loops accept every `IOException` and `UnauthorizedAccessException` across all 500 attempts at [RequirementsTwelfthAdversarialReviewTests.cs:120](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:120) and [RequirementsTwelfthAdversarialReviewTests.cs:173](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:173). Both pass if the production boundary rejects every operation.
+
+6. **Medium — test harness: Windows descendant cleanup has a process-start/job-assignment race.** The process starts before job assignment at [RepositoryEvidenceTestSupport.cs:191](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:191). A fast child can create a descendant before `AssignProcessToJobObject`; that existing descendant is not captured by later parent assignment. The quick-process test uses `git` with no descendant, while the descendant test uses slow PowerShell startup at [BugTriage139FourteenthHarnessTests.cs:103](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:103).
+
+7. **Medium — evidence: the receipt still overclaims resolution and exact-final-HEAD proof.** The receipt says all seven findings are remediated and claims bounded identity/SQLite/platform coverage at [BUG-TRIAGE-139-fifteenth-remediation.md:5](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-fifteenth-remediation.md:5), [line 35](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-fifteenth-remediation.md:35), and [line 43](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-fifteenth-remediation.md:43). The file labeled current-HEAD actually tested parent `f81ac5b0`, not candidate `f410963f`, at [current-head-verification.txt:2](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/artifacts/BUG-TRIAGE-139/fifteenth-remediation/final/current-head-verification.txt:2); `f410963f` subsequently changed 25 evidence files. Also, despite the receipt’s exact-command claim at line 70, map rows F17, G37, and G38 contain only indirections rather than invocations at [command-output-map.tsv:18](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/artifacts/BUG-TRIAGE-139/fifteenth-remediation/final/command-output-map.tsv:18) and [line 55](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/artifacts/BUG-TRIAGE-139/fifteenth-remediation/final/command-output-map.tsv:55).
+
+## Reviewed identity and scope
+
+- Base: `210cb223d81dac6b4045b868e4d7b2712d08b752`
+- Candidate/HEAD: `f410963f94d75064197ff576de3ee163a5f10f90`
+- Branch: `codex/bug-triage-139-remediation`
+- Base is an ancestor; range contains 26 commits.
+- Final porcelain-v2 status: 0 entries, clean.
+- Exact diff: 445 files—14 production, 23 test/project, 407 receipt/evidence, and `.gitattributes`; no `docs/Project` requirement files changed.
+- `git diff --check`: exit 0, zero diagnostics.
+- TODO query through the supported surface found BUG-TRIAGE-139 still open; no TODO or session state was changed.
+
+## Seven fifteenth-finding dispositions
+
+1. **RESOLVED** — Linux directory creation now uses owner `0700`; real non-root nested restoration passed 1/1 without swallowing I/O/authorization failures.
+2. **PARTIAL** — direct unsafe mounts and the Windows timing gap received coverage, but safe-link/mount-swap, failed native cancellation, synchronous callers, and abandoned-helper accounting remain.
+3. **PARTIAL** — direct FUSE data sources are rejected before a worker, but safe-link/check-to-open races still reach the unbounded worker/join path.
+4. **RESOLVED** — the original SQLite `IOException`/`ObjectDisposedException` masking is fixed and exact lifecycle outcomes passed. The separate PostgreSQL causal-classification defect remains.
+5. **RESOLVED** — deterministic external 20/20 and Agent Help 18/18 passed independently from C: with no root override.
+6. **PARTIAL** — the two original silent returns were removed, but unsupported/FUSE-unavailable branches now source-pass.
+7. **PARTIAL** — byte hashes, file mappings, and TRX counters reconcile, but resolution claims, three indirect command cells, and exact-final-HEAD labeling remain defective.
+
+## Ten prior-finding dispositions
+
+1. **RESOLVED** — rollback creation, writes, replacement, and deletion use pinned/relative native boundaries.
+2. **RESOLVED** — Unicode dashes normalize before persistence and hashing; provider tests pass.
+3. **PARTIAL** — async consumers were added, but synchronous physical callers, lexical mount identity, and unbounded cleanup remain.
+4. **RESOLVED** — SQLite managed, EF, connection-string, native busy-timeout, and custom-handler state coverage passed.
+5. **PARTIAL** — direct pre-handle unsafe-mount rejection works; safe-link/race and worker-drain guarantees do not.
+6. **PARTIAL** — SQLite unrelated failures are preserved, but PostgreSQL `57014` remains causally ambiguous.
+7. **RESOLVED** — Linux FIFO/special-file opens use nonblocking/no-follow metadata checks; applicable Linux path passed.
+8. **RESOLVED** — deterministic external root/fixture scopes pass 20/20 and 18/18.
+9. **PARTIAL** — drains share a deadline and jobs/groups were added, but Windows start-before-job assignment can lose a descendant.
+10. **PARTIAL** — historical evidence was superseded and mechanically reconciles, but the current receipt still overclaims.
+
+## Independent execution
+
+All generated artifacts are under [BUG-TRIAGE-139-sixteenth-review](C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-sixteenth-review/).
+
+- Deterministic Release build, `ContinuousIntegrationBuild=true`, warnings as errors, no `MCP_REPOSITORY_ROOT`, external C: artifacts: exit 0, 0 warnings, 0 errors.
+- External seven-class executable scope from an external C: working directory: 20 total, 20 passed, 0 failed/skipped/aborted/inconclusive.
+- Agent Help external scope: 18/18, zero failed/skipped/aborted/inconclusive.
+- Initial Windows focused invocation: 15/15 tests passed, but runner exit 9 because minimum 19 was not met. Rejected as failed evidence.
+- Corrected Windows scope: 19/19, zero failed/skipped/aborted/inconclusive.
+- SQLite/LocalDB/fresh PostgreSQL provider scope: 42/42, zero failed/skipped/aborted/inconclusive. Fresh PostgreSQL initialization/start/stop is present in output.
+- Exact-candidate repository/history/EOL scope: 18/18, zero failed/skipped/aborted/inconclusive.
+- Linux long C-path attempt: 19 executed, 14 passed, 5 failed; retained as failed.
+- Linux `/proc/self/fd` attempt: 19 executed, 11 passed, 8 failed; retained as failed.
+- Linux native ext4/FUSE-applicable scope: 19/19, zero skipped; post-run FUSE/helper counts both zero.
+- Real non-root Linux nested restoration: 1/1, zero skipped; post-run FUSE/helper counts both zero.
+- Across the ten independent TRX files: 190 executed, 177 passed, 13 failed, 0 skipped/not-executed/errors/aborted/inconclusive, plus the separate 15-of-minimum-19 command-gate failure. Counts overlap and are not unique coverage totals.
+
+No further privileged workaround was attempted during this continuation.
+
+## Evidence, history, and gate verification
+
+- SHA-256 manifests: fifteenth 116/116, fourteenth 170/170, twelfth 93/93; aggregate 379/379 matched, with zero malformed, duplicate, escaping, missing, unlisted, or mismatched entries.
+- The external and committed fifteenth-review copies both hash to the receipt’s `D2227DB3...A504AB1`.
+- File mapping: 55 rows, 82 mapped outputs, 82 unique, 82 actual; zero duplicate, missing, or unmapped files.
+- Command classifications: 38 passed, 11 failed, 2 failed-minimum, 1 setup failure, 1 command-construction failure, 1 timeout-with-zero-tests, and 1 invalidated intermediate.
+- Committed TRX: 18 green files total 361/361; 9 non-green files total 137 with 119 passed and 18 failed. All have zero not-executed, error, aborted, and inconclusive counters. All 27 TRX/map counts matched; 26 console summaries parsed mechanically and the marker console independently matched 24/24.
+- Full BDPv4 evidence parses to 3,331/3,331 across seven assemblies: `2049 + 294 + 33 + 20 + 63 + 822 + 50`, with zero failures and zero skips. Compile and traceability evidence succeeded.
+- Release matrix: restore plus 12/12 Release projects; all 12 report build success, zero warnings, and zero errors.
+- History: 26/26 range commits have exactly one adjacent terminal `AI-Signature`/`AI-Confidence` pair; all seven documented rewrite pairs have identical tree objects.
+- Unicode-dash conclusion is supportable only within local/current remote-tracking refs and retained evidence: the rejected commit is contained only by the local remediation branch, has no upstream, is absent from local remote/tag refs, and is not an ancestor of the current `origin/main` or `origin/develop` tracking refs. No retained deployment/push command was found. This does not prove anything about unrecorded or unfetched external systems; the receipt appropriately states that limitation.
+- SQL Server’s 300-second historical migration allowance remains confined to `UseCaseIdentityMigrationProviderTests.cs`.
+- No deliberate numerical weakening of production timeouts or assertions was found. The defects above arise because cleanup waits defeat the advertised finite deadlines, not because timeout values were relaxed.
+
+## Cleanup and environment
+
+- Final worktree remains clean at the candidate SHA.
+- Review-scoped non-infrastructure processes: 0.
+- `testhost`/VSTest processes: 0.
+- MSBuild node-reuse processes: 0.
+- Review-created PostgreSQL processes: 0; the seven PostgreSQL service processes present before review remain unchanged.
+- LocalDB state: `Stopped`.
+- Running WSL distributions: none; therefore no review mount, FUSE helper, `realpath`, or Linux test worker remains.
+- The pre-existing SQL Server service process remains unchanged.
+
+VERDICT: NOT APPROVED
