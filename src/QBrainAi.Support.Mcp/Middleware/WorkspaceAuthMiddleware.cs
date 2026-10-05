@@ -1,4 +1,5 @@
 using System.Text.Json;
+using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace QBrainAi.Support.Mcp.Middleware;
 
 /// <summary>
-/// Pipeline middleware that enforces authentication on all <c>/qbrainai/*</c> routes.
+/// Pipeline middleware that enforces authentication on <c>/qbrainai/*</c> and 1.x <c>/mcpserver/*</c> routes.
 /// Two authentication mechanisms are supported, evaluated in this order:
 /// <list type="number">
 ///   <item><description><strong>JWT Bearer</strong> — a valid OIDC token grants full access.
@@ -20,7 +21,7 @@ namespace QBrainAi.Support.Mcp.Middleware;
 ///     Full-access keys (from marker files) grant unrestricted access. Default keys
 ///     (from <c>GET /api-key</c>) grant read-only access only.</description></item>
 /// </list>
-/// Non-<c>/qbrainai/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
+/// Routes outside the product API (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
 public sealed class WorkspaceAuthMiddleware
 {
@@ -65,8 +66,8 @@ public sealed class WorkspaceAuthMiddleware
     {
         var path = context.Request.Path;
 
-        // Only protect /qbrainai/* API routes; /mcp-transport and other non-/qbrainai/ routes pass through.
-        if (!path.HasValue || !path.Value.StartsWith("/qbrainai/", StringComparison.OrdinalIgnoreCase))
+        // Protect /qbrainai/* and the 1.x /mcpserver/* aliases. /mcp-transport and other routes pass through.
+        if (!ProductApiPaths.IsProductApi(path))
         {
             await _next(context).ConfigureAwait(false);
             return;
@@ -239,7 +240,7 @@ public sealed class WorkspaceAuthMiddleware
 
     private static bool IsAgentMutationRoute(PathString path, string method)
     {
-        if (!path.StartsWithSegments("/qbrainai/agents", StringComparison.OrdinalIgnoreCase))
+        if (!ProductApiPaths.StartsWithProductSuffix(path.Value ?? string.Empty, "agents"))
             return false;
 
         return !s_readOnlyMethods.Contains(method);
@@ -255,7 +256,7 @@ public sealed class WorkspaceAuthMiddleware
 
         var path = context.Request.Path.Value ?? string.Empty;
         return HttpMethods.IsPost(context.Request.Method)
-            && path.Equals("/qbrainai/memory/recall", StringComparison.OrdinalIgnoreCase);
+            && ProductApiPaths.EqualsProductPath(path, "memory/recall");
     }
 
     /// <summary>

@@ -49,13 +49,23 @@ partial class Build
                 UpdateLinuxService(platform);
                 return;
             }
+            var installIdentity = ServiceUpdatePlatform.ResolveExistingWindowsInstall(
+                ServiceName,
+                InstallPath,
+                WindowsServiceHelper.ServiceExists("QBrainAi"),
+                WindowsServiceHelper.ServiceExists("McpServer"),
+                Directory.Exists(@"C:\ProgramData\QBrainAi"),
+                Directory.Exists(@"C:\ProgramData\McpServer"));
+            var serviceName = installIdentity.ServiceName;
+            var installPath = installIdentity.InstallPath;
+            var mainExeName = installIdentity.ExecutableName;
+            var serviceProcessName = WindowsServiceHelper.SelectStopProcessName(serviceName);
             var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmssfff");
             var backupDir = Path.Combine(Path.GetTempPath(), $"QBrainAi-update-backup-{timestamp}");
             var archiveDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "QBrainAi-Backups");
             var archivePath = Path.Combine(archiveDir, $"QBrainAi-backup-{timestamp}.zip");
-            var serviceProcessName = MainExeName.Replace(".exe", "");
 
             // Step 0: Assert elevated
             WindowsServiceHelper.AssertElevated();
@@ -75,15 +85,15 @@ partial class Build
             }
 
             // Step 2: Stop service
-            Log.Information(">> 1/{Total}  Stopping service '{ServiceName}' ...", 8, ServiceName);
-            WindowsServiceHelper.StopService(ServiceName, serviceProcessName);
+            Log.Information(">> 1/{Total}  Stopping service '{ServiceName}' ...", 8, serviceName);
+            WindowsServiceHelper.StopService(serviceName, serviceProcessName);
 
             var deploymentVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
             Log.Information("  Deployment version: {Version}", deploymentVersion);
 
             // Step 3: Backup config and data
             Log.Information(">> 2/{Total}  Backing up config and data files ...", 8);
-            var backup = WindowsServiceHelper.BackupPreservedState(InstallPath, backupDir, archivePath);
+            var backup = WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);
 
             // Step 4: Publish new build
             Log.Information(">> 3/{Total}  Publishing new build ...", 8);
@@ -147,12 +157,12 @@ partial class Build
 
             // Remove stale files and copy
             Log.Information("  Cleaning stale files before copy ...");
-            WindowsServiceHelper.RemoveStaleInstallContent(InstallPath, stageDir);
-            WindowsServiceHelper.CopyDirectory(stageDir, InstallPath);
-            CopyBrainSlotRuntimeConfig(RootDirectory, InstallPath);
+            WindowsServiceHelper.RemoveStaleInstallContent(installPath, stageDir);
+            WindowsServiceHelper.CopyDirectory(stageDir, installPath);
+            CopyBrainSlotRuntimeConfig(RootDirectory, installPath);
 
             // Verify launcher sidecar
-            var launcherPath = Path.Combine(InstallPath, LauncherExeName);
+            var launcherPath = Path.Combine(installPath, LauncherExeName);
             if (File.Exists(launcherPath))
                 Log.Information("  Launcher sidecar present: {Path}", launcherPath);
 
@@ -164,18 +174,18 @@ partial class Build
 
             // Step 5: Restore config and data
             Log.Information(">> 4/{Total}  Restoring config and data files ...", 8);
-            WindowsServiceHelper.RestorePreservedState(backupDir, InstallPath);
+            WindowsServiceHelper.RestorePreservedState(backupDir, installPath);
 
             // Step 6: Ensure service registration
             Log.Information(">> 5/{Total}  Ensuring service registration ...", 9);
-            WindowsServiceHelper.EnsureServiceRegistration(ServiceName, InstallPath, MainExeName, Port);
+            WindowsServiceHelper.EnsureServiceRegistration(serviceName, installPath, mainExeName, Port);
 
             // Step 7: Write deployment manifest
-            WindowsServiceHelper.WriteDeploymentManifest(InstallPath, ServiceName, MainExeName, Port, "update");
+            WindowsServiceHelper.WriteDeploymentManifest(installPath, serviceName, mainExeName, Port, "update");
 
             // Step 8: Start service and verify health
-            Log.Information(">> 6/{Total}  Starting service '{ServiceName}' ...", 9, ServiceName);
-            WindowsServiceHelper.StartService(ServiceName);
+            Log.Information(">> 6/{Total}  Starting service '{ServiceName}' ...", 9, serviceName);
+            WindowsServiceHelper.StartService(serviceName);
 
             Log.Information(">> 7/{Total}  Verifying health on port {Port} ...", 9, Port);
             var health = WindowsServiceHelper.CheckHealth(Port);
@@ -184,7 +194,7 @@ partial class Build
 
             // Step 9: Workspace health
             Log.Information(">> 8/{Total}  Verifying workspace health checks from deployed config ...", 9);
-            var wsHealth = WindowsServiceHelper.CheckWorkspaceHealth(InstallPath, Port);
+            var wsHealth = WindowsServiceHelper.CheckWorkspaceHealth(installPath, Port);
 
             // Step 10: Cleanup
             Log.Information(">> 9/{Total}  Cleanup ...", 9);
@@ -197,8 +207,8 @@ partial class Build
             // Summary
             Log.Information("");
             Log.Information("=== Update complete ===");
-            Log.Information("  Service : {Name} (Running)", ServiceName);
-            Log.Information("  Path    : {Path}", InstallPath);
+            Log.Information("  Service : {Name} (Running)", serviceName);
+            Log.Information("  Path    : {Path}", installPath);
             Log.Information("  Health  : OK");
             Log.Information("  WSHealth: OK ({Healthy}/{Checked})", wsHealth.Healthy, wsHealth.Checked);
             Log.Information("  Config  : {Restored} restored, {BackedUp} backed up",

@@ -61,6 +61,43 @@ public sealed class ServiceUpdateTests
         Assert.Equal(service, Property(Call("ServiceUpdatePlatform", "ParameterDefaults", null, linux), "DefaultServiceName"));
     }
 
+    /// <summary>TR-MCP-QBRAIN-006: default Windows parameters update an existing McpServer install in place.</summary>
+    [Fact]
+    public void WindowsInstall_UsesLegacyServiceWhenCanonicalRegistrationIsAbsent()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "QBrainAi", @"C:\ProgramData\QBrainAi", false, true, false, true);
+        Assert.Equal("McpServer", Property(identity, "ServiceName"));
+        Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
+        Assert.Equal("QBrainAi.Support.Mcp.exe", Property(identity, "ExecutableName"));
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: an explicit service name is not redirected onto the legacy registration.</summary>
+    [Fact]
+    public void WindowsInstall_KeepsExplicitServiceName()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "Custom", @"D:\services\custom", false, true, false, true);
+        Assert.Equal("Custom", Property(identity, "ServiceName"));
+        Assert.Equal(@"D:\services\custom", Property(identity, "InstallPath"));
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: a preserved Linux unit that still starts McpServer.Support.Mcp is retargeted.</summary>
+    [Fact]
+    public void LinuxUpdate_LegacyExecStartIsRetargeted()
+    {
+        using var f = new Fixture();
+        var legacy = Path.Combine(f.Install, "McpServer.Support.Mcp");
+        f.UnitExecutable = legacy;
+        var unitPath = Path.Combine(f.Root, "example.service");
+        File.WriteAllText(unitPath, "ExecStart=" + legacy + "\n");
+        f.Update();
+        var text = File.ReadAllText(unitPath);
+        Assert.Contains("QBrainAi.Support.Mcp", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("McpServer.Support.Mcp", text, StringComparison.Ordinal);
+        Assert.Contains("daemon-reload", f.Events);
+    }
+
     /// <summary>Quoted relative YAML and legacy fallback resolve to the actual preserved data root.</summary>
     [Theory]
     [InlineData("DataFolder: '../data'\nMcp:\n  DataDirectory: ignored\n")]

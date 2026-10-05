@@ -26,7 +26,7 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                     FirstReportAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     LastReportAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     QuietDeadlineUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    IsQBrainAiRelated = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsMcpServerRelated = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedTodoId = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
                     LastError = table.Column<string>(type: "TEXT", nullable: true),
                     DeleteReason = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: true),

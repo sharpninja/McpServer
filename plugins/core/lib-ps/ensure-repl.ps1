@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 
 if (Get-Command qbrain-ai-repl -ErrorAction SilentlyContinue) { exit 0 }
+if (Get-Command mcpserver-repl -ErrorAction SilentlyContinue) { exit 0 }
 
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     Write-Error "gh CLI not found. Install GitHub CLI to auto-install qbrain-ai-repl."

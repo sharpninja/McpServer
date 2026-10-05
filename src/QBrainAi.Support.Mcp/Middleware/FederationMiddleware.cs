@@ -1,3 +1,4 @@
+using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Options;
@@ -16,8 +17,6 @@ namespace QBrainAi.Support.Mcp.Middleware;
 /// </summary>
 public sealed class FederationMiddleware
 {
-    private const string FederationManagementPrefix = "/qbrainai/federation";
-
     /// <summary>
     /// Path prefixes that are always handled locally — never proxied via federation.
     /// These are server-infrastructure endpoints (auth proxy, OIDC discovery, health, Swagger)
@@ -34,7 +33,6 @@ public sealed class FederationMiddleware
         "/api-key",              // Local workspace token issuance
         "/server-startup-utc",   // Local server metadata
         "/marker-file-timestamp", // Local marker file state
-        "/qbrainai/workspace",  // Workspace list/info is always local
     ];
 
     private readonly RequestDelegate _next;
@@ -67,7 +65,7 @@ public sealed class FederationMiddleware
     public async Task InvokeAsync(HttpContext context, WorkspaceContext workspaceContext)
     {
         // Management API and infrastructure endpoints are always served locally
-        if (context.Request.Path.StartsWithSegments(FederationManagementPrefix, StringComparison.OrdinalIgnoreCase) ||
+        if (ProductApiPaths.StartsWithProductSuffix(context.Request.Path.Value ?? string.Empty, "federation") ||
             IsLocalOnlyPath(context.Request.Path, _registry.EffectiveRole))
         {
             await _next(context).ConfigureAwait(false);
@@ -117,6 +115,9 @@ public sealed class FederationMiddleware
     {
         if (path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase))
             return role != FederationRole.LocalProxy;
+
+        if (ProductApiPaths.StartsWithProductSuffix(path.Value ?? string.Empty, "workspace"))
+            return true;
 
         foreach (var prefix in LocalOnlyPrefixes)
         {

@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
@@ -1432,13 +1433,7 @@ public sealed class TriageService : ITriageService
     }
 
     private static bool IsQBrainAiWorkspace(WorkspaceDto workspace)
-    {
-        if (string.Equals(workspace.Name, "QBrainAi", StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        var name = Path.GetFileName(workspace.WorkspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-        return string.Equals(name, "QBrainAi", StringComparison.OrdinalIgnoreCase);
-    }
+        => ProductWorkspaceIdentity.IsProductWorkspace(workspace.Name, workspace.WorkspacePath);
 
     private static bool IsQBrainAiRelated(TriageReportRequest request)
     {

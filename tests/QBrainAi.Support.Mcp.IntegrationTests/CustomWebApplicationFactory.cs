@@ -84,6 +84,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
         builder.ConfigureAppConfiguration(config =>
         {
             config.AddYamlFile(_appSettingsPath, optional: false, reloadOnChange: false);
+            McpInstanceResolver.ProjectCanonicalSectionOverLegacy(config);
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 { "DataFolder", _dataPath },

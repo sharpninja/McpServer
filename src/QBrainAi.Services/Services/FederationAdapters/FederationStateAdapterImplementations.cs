@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
@@ -567,7 +568,7 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
     private static string? ResolveTodoId(FederationStateOperation operation)
     {
         if (!string.IsNullOrWhiteSpace(operation.ResourceId) &&
-            !operation.ResourceId.StartsWith("/qbrainai/todo", StringComparison.OrdinalIgnoreCase))
+            !ProductApiPaths.StartsWithProductSuffix(operation.ResourceId, "todo"))
         {
             return operation.ResourceId.Trim();
         }
@@ -579,11 +580,9 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
             return null;
 
         var pathOnly = path.Split('?', 2)[0].TrimEnd('/');
-        var marker = "/qbrainai/todo/";
-        var markerIndex = pathOnly.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-        return markerIndex < 0
-            ? null
-            : Uri.UnescapeDataString(pathOnly[(markerIndex + marker.Length)..]);
+        return ProductApiPaths.TryTakeResourceTail(pathOnly, "todo", out var tail) && !string.IsNullOrWhiteSpace(tail)
+            ? tail
+            : null;
     }
 }
 
@@ -887,7 +886,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
     private static string ResolveMemoryId(FederationStateOperation operation)
     {
         if (!string.IsNullOrWhiteSpace(operation.ResourceId) &&
-            !operation.ResourceId.StartsWith("/qbrainai/memory", StringComparison.OrdinalIgnoreCase))
+            !ProductApiPaths.StartsWithProductSuffix(operation.ResourceId, "memory"))
         {
             return NormalizeId(operation.ResourceId);
         }
@@ -899,11 +898,9 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
             return string.Empty;
 
         var pathOnly = path.Split('?', 2)[0].TrimEnd('/');
-        var marker = "/qbrainai/memory/";
-        var markerIndex = pathOnly.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-        return markerIndex < 0
-            ? string.Empty
-            : NormalizeId(Uri.UnescapeDataString(pathOnly[(markerIndex + marker.Length)..]));
+        return ProductApiPaths.TryTakeResourceTail(pathOnly, "memory", out var tail)
+            ? NormalizeId(tail)
+            : string.Empty;
     }
 
     private static bool IsDeleted(McpDbContext db, MemoryEntity entity)

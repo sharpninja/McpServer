@@ -26,7 +26,7 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     FirstReportAtUtc = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastReportAtUtc = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     QuietDeadlineUtc = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    IsQBrainAiRelated = table.Column<bool>(type: "bit", nullable: false),
+                    IsMcpServerRelated = table.Column<bool>(type: "bit", nullable: false),
                     CreatedTodoId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     LastError = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeleteReason = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),

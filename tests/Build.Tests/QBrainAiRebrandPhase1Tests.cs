@@ -200,6 +200,26 @@ public sealed class QBrainAiRebrandPhase1Tests
         Assert.Contains("/opt/mcp" + "server", installer, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TR-MCP-QBRAIN-003: Shipped triage migrations keep the original column, and a later migration renames it.
+    /// The checkout workspace path stays the McpServer folder.
+    /// </summary>
+    [Fact]
+    public void ReviewAliases_KeepLegacyColumnAndCheckoutPath()
+    {
+        var root = FindRepositoryRoot();
+        var appsettings = File.ReadAllText(Path.Combine(root, "appsettings.yaml"));
+        Assert.Contains(@"E:\github\McpServer", appsettings, StringComparison.Ordinal);
+        Assert.DoesNotContain(@"E:\github\QBrainAi", appsettings, StringComparison.Ordinal);
+        var create = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations", "Migrations", "20260625061830_AddTriageStorage.cs"));
+        Assert.Contains("IsMcpServerRelated", create, StringComparison.Ordinal);
+        Assert.DoesNotContain("IsQBrainAiRelated", create, StringComparison.Ordinal);
+        var rename = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations", "Migrations", "20261005170000_RenameTriageIsMcpServerRelatedColumn.cs"));
+        Assert.Contains("newName: \"IsQBrainAiRelated\"", rename, StringComparison.Ordinal);
+        var ensure = File.ReadAllText(Path.Combine(root, "plugins", "core", "lib-sh", "ensure-repl.sh"));
+        Assert.Contains("mcpserver-repl", ensure, StringComparison.Ordinal);
+    }
+
     private static string FindFile(string root, string fileName)
     {
         var match = Directory.EnumerateFiles(root, fileName, SearchOption.AllDirectories)

@@ -2487,7 +2487,7 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsQBrainAiRelated")
+                    b.Property<bool>("IsMcpServerRelated")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastError")

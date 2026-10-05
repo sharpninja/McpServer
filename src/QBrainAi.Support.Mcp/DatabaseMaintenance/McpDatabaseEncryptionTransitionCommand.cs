@@ -307,6 +307,7 @@ internal static class McpDatabaseEncryptionTransitionCommand
             builder.Configuration.AddCommandLine(configurationArguments.ToArray());
         }
 
+        McpInstanceResolver.ProjectCanonicalSectionOverLegacy(builder.Configuration);
         return builder.Configuration;
     }
 

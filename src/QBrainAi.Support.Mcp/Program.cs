@@ -83,6 +83,24 @@ bool IsStdioTransportRequested(string[] a)
     return false;
 }
 
+static string ResolveWindowsServiceName(string[] a)
+{
+    for (var i = 0; i < a.Length; i++)
+    {
+        const string prefix = "--service-name=";
+        if (a[i].StartsWith(prefix, StringComparison.OrdinalIgnoreCase) && a[i].Length > prefix.Length)
+            return a[i][prefix.Length..];
+        if (string.Equals(a[i], "--service-name", StringComparison.OrdinalIgnoreCase)
+            && i + 1 < a.Length
+            && !string.IsNullOrWhiteSpace(a[i + 1]))
+        {
+            return a[i + 1];
+        }
+    }
+
+    return "QBrainAi";
+}
+
 // When launched by Windows Service Control Manager, the process starts with
 // CurrentDirectory=System32. Host.UseWindowsService() fixes ContentRootPath
 // later, but AddYamlFile below resolves against the ConfigurationBuilder's
@@ -102,12 +120,13 @@ builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.Environment
 // Re-apply operational overrides after YAML so env vars and CLI args beat repo defaults.
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddCommandLine(args);
+McpInstanceResolver.ProjectCanonicalSectionOverLegacy(builder.Configuration);
 
 if (OperatingSystem.IsWindows())
 {
     builder.Host.UseWindowsService(options =>
     {
-        options.ServiceName = "QBrainAi";
+        options.ServiceName = ResolveWindowsServiceName(args);
     });
 }
 

@@ -1,5 +1,6 @@
 using QBrainAi.Client;
 using Microsoft.Agents.AI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace QBrainAi.McpAgent;
@@ -13,6 +14,29 @@ public sealed class McpAgentOptions
     /// Configuration section name reserved for the MCP Agent integration.
     /// </summary>
     public const string SectionName = "QBrainAi:McpAgent";
+
+    /// <summary>1.x section used before the product root was QBrainAi.</summary>
+    public const string LegacyServerSectionName = "McpServer:McpAgent";
+
+    /// <summary>1.x section under the Mcp configuration root.</summary>
+    public const string LegacyProductSectionName = "Mcp:McpAgent";
+
+    /// <summary>
+    /// TR-MCP-QBRAIN-005: Selects the first present section in canonical, then McpServer, then Mcp order.
+    /// </summary>
+    /// <param name="configuration">Application configuration.</param>
+    /// <returns>The section name to bind, or null when none of the aliases exist.</returns>
+    public static string? SelectSectionName(IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        if (configuration.GetSection(SectionName).Exists())
+            return SectionName;
+        if (configuration.GetSection(LegacyServerSectionName).Exists())
+            return LegacyServerSectionName;
+        if (configuration.GetSection(LegacyProductSectionName).Exists())
+            return LegacyProductSectionName;
+        return null;
+    }
 
     /// <summary>
     /// Base URL for the target QBrain.AI workspace host.

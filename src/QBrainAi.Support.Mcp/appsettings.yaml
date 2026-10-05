@@ -100,7 +100,7 @@ QBrainAi:
     EnhanceContextSearch: true
     RootPath: mcp-data/graphrag
     GlobalRootPath: graphrag-global
-    CanonicalSourceWorkspacePath: F:\GitHub\QBrainAi
+    CanonicalSourceWorkspacePath: F:\GitHub\McpServer
     SeedCanonicalDocsOnStartup: true
     IndexGlobalCorpusOnStartup: true
     DefaultQueryMode: local
@@ -224,7 +224,7 @@ QBrainAi:
     ApiResourceName: mcp-server-api
   PairingUsers: []
   Workspaces:
-    - WorkspacePath: F:\GitHub\QBrainAi\src\QBrainAi.Support.Mcp
+    - WorkspacePath: F:\GitHub\McpServer\src\QBrainAi.Support.Mcp
       Name: QBrainAi.Support.Mcp
       TodoPath: docs/Project/TODO.yaml
       IsPrimary: true
@@ -272,7 +272,7 @@ QBrainAi:
         UtcTicks: 639194092079164212
         TimeOfDay: 23:26:47.9164212
         Year: 2026
-    - WorkspacePath: F:\GitHub\QBrainAi\.mcpServer\codex\throwaway-host-root
+    - WorkspacePath: F:\GitHub\McpServer\.mcpServer\codex\throwaway-host-root
       Name: throwaway-host-root
       TodoPath: docs/Project/TODO.yaml
       IsPrimary: true

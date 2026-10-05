@@ -2454,7 +2454,7 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsQBrainAiRelated")
+                    b.Property<bool>("IsMcpServerRelated")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastError")

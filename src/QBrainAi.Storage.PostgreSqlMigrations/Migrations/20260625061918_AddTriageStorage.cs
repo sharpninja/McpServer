@@ -26,7 +26,7 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     FirstReportAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastReportAtUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     QuietDeadlineUtc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    IsQBrainAiRelated = table.Column<bool>(type: "boolean", nullable: false),
+                    IsMcpServerRelated = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedTodoId = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     LastError = table.Column<string>(type: "text", nullable: true),
                     DeleteReason = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),

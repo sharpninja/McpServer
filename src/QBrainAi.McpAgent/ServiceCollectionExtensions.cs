@@ -2,6 +2,7 @@ using QBrainAi.McpAgent.Hosting;
 using QBrainAi.Client;
 using QBrainAi.Repl.Core;
 using Microsoft.Agents.AI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -35,6 +36,18 @@ public static class ServiceCollectionExtensions
             ServiceDescriptor.Singleton<IValidateOptions<McpAgentOptions>, McpAgentOptionsValidator>());
 
         services.AddOptions<McpAgentOptions>()
+            .Configure<IServiceProvider>(static (options, serviceProvider) =>
+            {
+                var configuration = serviceProvider.GetService<IConfiguration>();
+                if (configuration is null)
+                    return;
+
+                var sectionName = McpAgentOptions.SelectSectionName(configuration);
+                if (sectionName is null)
+                    return;
+
+                configuration.GetSection(sectionName).Bind(options);
+            })
             .ValidateOnStart();
 
         services.AddOptions<QBrainAiClientOptions>()
@@ -102,9 +115,9 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configure);
 
+        services.AddQBrainAiMcpAgent();
         services.AddOptions<McpAgentOptions>()
             .Configure(configure);
-
-        return services.AddQBrainAiMcpAgent();
+        return services;
     }
 }

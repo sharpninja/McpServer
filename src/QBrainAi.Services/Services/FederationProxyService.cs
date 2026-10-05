@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using QBrainAi.Support.Mcp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using QBrainAi.Support.Mcp.Options;
@@ -347,7 +348,7 @@ public sealed class FederationProxyService
             "todo" => IsTodoReplayPath(request.Method, path),
             "memory" => IsMemoryReplayPath(request.Method, path, bodyCapture.Body),
             "session_log" => HttpMethods.IsPost(request.Method) &&
-                             string.Equals(path, "/qbrainai/sessionlog", StringComparison.OrdinalIgnoreCase),
+                             ProductApiPaths.EqualsProductPath(path, "sessionlog"),
             "workspace" => IsWorkspaceReplayPath(request.Method, path),
             _ => false,
         };
@@ -356,38 +357,30 @@ public sealed class FederationProxyService
     private static bool IsTodoReplayPath(string method, string path)
     {
         if (HttpMethods.IsPost(method))
-            return string.Equals(path, "/qbrainai/todo", StringComparison.OrdinalIgnoreCase);
+            return ProductApiPaths.EqualsProductPath(path, "todo");
 
         if (!HttpMethods.IsPut(method) && !HttpMethods.IsPatch(method) && !HttpMethods.IsDelete(method))
             return false;
 
-        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        return segments.Length == 3 &&
-               string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) &&
-               string.Equals(segments[1], "todo", StringComparison.OrdinalIgnoreCase) &&
-               !string.IsNullOrWhiteSpace(segments[2]);
+        return ProductApiPaths.TryReadResourceId(path, "todo", out _);
     }
 
     private static bool IsWorkspaceReplayPath(string method, string path)
     {
         if (HttpMethods.IsPost(method))
-            return string.Equals(path, "/qbrainai/workspace", StringComparison.OrdinalIgnoreCase);
+            return ProductApiPaths.EqualsProductPath(path, "workspace");
 
         if (!HttpMethods.IsPut(method) && !HttpMethods.IsDelete(method))
             return false;
 
-        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        return segments.Length == 3 &&
-               string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) &&
-               string.Equals(segments[1], "workspace", StringComparison.OrdinalIgnoreCase) &&
-               !string.IsNullOrWhiteSpace(segments[2]);
+        return ProductApiPaths.TryReadResourceId(path, "workspace", out _);
     }
 
     private static bool IsMemoryReplayPath(string method, string path, byte[]? body)
     {
         if (HttpMethods.IsPost(method))
         {
-            return string.Equals(path, "/qbrainai/memory", StringComparison.OrdinalIgnoreCase) &&
+            return ProductApiPaths.EqualsProductPath(path, "memory") &&
                    TryReadMemoryId(body, out var id) &&
                    IsValidMemoryId(id);
         }
@@ -447,27 +440,27 @@ public sealed class FederationProxyService
     private static string InferDomain(PathString path)
     {
         var value = path.Value ?? string.Empty;
-        if (value.StartsWith("/qbrainai/todo", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "todo"))
             return "todo";
-        if (value.StartsWith("/qbrainai/memory", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "memory"))
             return "memory";
-        if (value.StartsWith("/qbrainai/sessionlog", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "sessionlog"))
             return "session_log";
-        if (value.StartsWith("/qbrainai/requirements", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "requirements"))
             return "requirements";
-        if (value.StartsWith("/qbrainai/context", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "context"))
             return "context_metadata";
-        if (value.StartsWith("/qbrainai/tools", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "tools"))
             return "tools_buckets";
-        if (value.StartsWith("/qbrainai/agents", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "agents"))
             return "agents";
-        if (value.StartsWith("/qbrainai/gh", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "gh"))
             return "github_metadata";
-        if (value.StartsWith("/qbrainai/repo", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "repo"))
             return "repo_file_changes";
         if (value.StartsWith("/marker-file-timestamp", StringComparison.OrdinalIgnoreCase))
             return "marker_state";
-        if (value.StartsWith("/qbrainai/workspace", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(value, "workspace"))
             return "workspace";
         if (value.StartsWith("/mcp-transport", StringComparison.OrdinalIgnoreCase))
             return "mcp_transport";
@@ -478,7 +471,7 @@ public sealed class FederationProxyService
     private static string? InferResourceId(HttpRequest request, RequestBodyCapture bodyCapture)
     {
         var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
-        if (path.StartsWith("/qbrainai/memory", StringComparison.OrdinalIgnoreCase))
+        if (ProductApiPaths.StartsWithProductSuffix(path, "memory"))
         {
             if (HttpMethods.IsPost(request.Method) && TryReadMemoryId(bodyCapture.Body, out var bodyId))
                 return NormalizeMemoryId(bodyId);
@@ -520,16 +513,10 @@ public sealed class FederationProxyService
     private static bool TryReadMemoryPathId(string path, out string? id)
     {
         id = null;
-        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        if (segments.Length != 3 ||
-            !string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) ||
-            !string.Equals(segments[1], "memory", StringComparison.OrdinalIgnoreCase) ||
-            string.IsNullOrWhiteSpace(segments[2]))
-        {
+        if (!ProductApiPaths.TryReadResourceId(path, "memory", out var resourceId))
             return false;
-        }
 
-        id = NormalizeMemoryId(Uri.UnescapeDataString(segments[2]));
+        id = NormalizeMemoryId(resourceId);
         return !string.IsNullOrWhiteSpace(id);
     }
 

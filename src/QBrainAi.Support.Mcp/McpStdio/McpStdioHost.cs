@@ -41,6 +41,7 @@ public static class McpStdioHost
     public static async Task RunAsync(string[] args, CancellationToken cancellationToken = default)
     {
         var builder = Host.CreateApplicationBuilder(args);
+        McpInstanceResolver.ProjectCanonicalSectionOverLegacy(builder.Configuration);
         var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
         McpInstanceResolver.ValidateInstances(builder.Configuration);
         McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);

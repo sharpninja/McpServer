@@ -2657,7 +2657,7 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsQBrainAiRelated")
+                    b.Property<bool>("IsMcpServerRelated")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastError")

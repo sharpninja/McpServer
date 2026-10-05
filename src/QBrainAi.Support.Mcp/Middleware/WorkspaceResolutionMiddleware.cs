@@ -1,3 +1,4 @@
+using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.Extensions.Logging;
@@ -29,31 +30,26 @@ public sealed class WorkspaceResolutionMiddleware
     /// Requests to these routes pass through with an empty <see cref="WorkspaceContext"/>
     /// when no header or API key identifies a workspace.
     /// </summary>
-    private static readonly HashSet<string> WorkspaceIndependentPrefixes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "/qbrainai/workspace",
-        "/qbrainai/todo",
-        "/qbrainai/sessionlog",
-        "/qbrainai/requirements",
-        "/qbrainai/repo",
-        "/qbrainai/tools",
-        "/qbrainai/tunnel",
-        "/qbrainai/federation",
-        "/qbrainai/diagnostic",
-        "/qbrainai/events",
-        "/qbrainai/gh",
-        "/qbrainai/context",
-        "/qbrainai/configuration",
-        "/qbrainai/voice",
-        "/mcp-transport",
-    };
+    private static readonly HashSet<string> WorkspaceIndependentPrefixes = ProductApiPaths.ExpandSuffixes(
+        "/workspace",
+        "/todo",
+        "/sessionlog",
+        "/requirements",
+        "/repo",
+        "/tools",
+        "/tunnel",
+        "/federation",
+        "/diagnostic",
+        "/events",
+        "/gh",
+        "/context",
+        "/configuration",
+        "/voice");
 
-    private static readonly HashSet<string> BearerWorkspaceIndependentPrefixes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "/qbrainai/workspace",
-        "/qbrainai/tools",
-        "/qbrainai/configuration",
-    };
+    private static readonly HashSet<string> BearerWorkspaceIndependentPrefixes = ProductApiPaths.ExpandSuffixes(
+        "/workspace",
+        "/tools",
+        "/configuration");
 
     private readonly RequestDelegate _next;
     private readonly ILogger<WorkspaceResolutionMiddleware> _logger;
@@ -86,8 +82,8 @@ public sealed class WorkspaceResolutionMiddleware
             return;
         }
 
-        // Only resolve for /qbrainai/* and /mcp-transport routes.
-        if (!path.StartsWithSegments("/mcpserver", StringComparison.OrdinalIgnoreCase)
+        // Resolve /qbrainai/*, the 1.x /mcpserver/* aliases, and /mcp-transport.
+        if (!ProductApiPaths.IsProductApi(path)
             && !path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase))
         {
             await _next(context).ConfigureAwait(false);
@@ -231,13 +227,16 @@ public sealed class WorkspaceResolutionMiddleware
         if (!HttpMethods.IsPost(request.Method))
             return false;
 
-        var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
-        return path.Equals("/qbrainai/memory", StringComparison.OrdinalIgnoreCase)
-            || path.Equals("/qbrainai/memory/remember", StringComparison.OrdinalIgnoreCase);
+        var path = request.Path.Value ?? string.Empty;
+        return ProductApiPaths.EqualsProductPath(path, "memory")
+            || ProductApiPaths.EqualsProductPath(path, "memory/remember");
     }
 
     private static bool IsWorkspaceIndependent(PathString path, bool hasBearerToken)
     {
+        if (path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase) && !hasBearerToken)
+            return true;
+
         var prefixes = hasBearerToken ? BearerWorkspaceIndependentPrefixes : WorkspaceIndependentPrefixes;
         foreach (var prefix in prefixes)
         {

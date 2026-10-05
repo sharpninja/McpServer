@@ -47,7 +47,7 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
   "mcpServers": {
     "fwh-mcp": {
       "command": "dotnet",
-      "args": ["run", "--project", "E:\\github\\QBrainAi\\src\\QBrainAi.Support.Mcp", "--", "--transport", "stdio"]
+      "args": ["run", "--project", "E:\\github\\McpServer\\src\\QBrainAi.Support.Mcp", "--", "--transport", "stdio"]
     }
   }
 }

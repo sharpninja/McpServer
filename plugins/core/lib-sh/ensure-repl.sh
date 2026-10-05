@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Check if already installed
-if command -v qbrain-ai-repl >/dev/null 2>&1; then
+# Check if already installed. The 1.x tool name remains valid until a QBrainAI.Repl release exists.
+if command -v qbrain-ai-repl >/dev/null 2>&1 || command -v mcpserver-repl >/dev/null 2>&1; then
     exit 0
 fi
 

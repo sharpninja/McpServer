@@ -8,7 +8,10 @@ partial class Build
     [Parameter("Package version for NuGet pack (defaults to GitVersion output)")]
     readonly string PackageVersion = string.Empty;
 
-    /// <summary>Pack public QBrainAi libraries as NuGet packages.</summary>
+    /// <summary>
+    /// Packs public QBrainAI.* libraries. QBrainAi.Common.AgentCli is embedded in QBrainAI.Repl.Core
+    /// and is not packed on its own. SharpNinja.McpServer.* facades stay unpackaged in Phase 1.
+    /// </summary>
     public Target PackNuGet => _ => _
         .DependsOn(Compile)
         .Executes(() =>

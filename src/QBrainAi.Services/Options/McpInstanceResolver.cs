@@ -32,6 +32,29 @@ public static class McpInstanceResolver
     }
 
     /// <summary>
+    /// TR-MCP-QBRAIN-005: Copies the effective QBrainAi section onto Mcp as the last source added so far.
+    /// Mcp-only keys remain. Sources added after this call still win, so tests can override Mcp after the projection.
+    /// </summary>
+    /// <param name="builder">Configuration builder that already exposes the sources added so far.</param>
+    public static void ProjectCanonicalSectionOverLegacy(IConfigurationBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        if (builder is not IConfiguration current)
+            throw new ArgumentException("The configuration builder must expose the sources added so far.", nameof(builder));
+
+        var canonical = current.GetSection("QBrainAi");
+        if (!canonical.Exists())
+            return;
+
+        var overlay = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+        CopySection(canonical, "Mcp", overlay);
+        if (overlay.Count == 0)
+            return;
+
+        builder.AddInMemoryCollection(overlay);
+    }
+
+    /// <summary>
     /// TR-MCP-QBRAIN-005: Builds a configuration whose root is the product section.
     /// Keys from Mcp are copied first. QBrainAi keys overwrite them.
     /// </summary>

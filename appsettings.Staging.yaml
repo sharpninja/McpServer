@@ -21,8 +21,8 @@ QBrainAi:
     Provider: sqlite
     SqliteDataSource: mcp.db
   Workspaces:
-    - WorkspacePath: E:\github\QBrainAi
-      Name: QBrainAi
+    - WorkspacePath: E:\github\McpServer
+      Name: McpServer
       TodoPath: docs/Project/TODO.yaml
       DateTimeCreated: 2026-02-21T00:00:00+00:00
       DateTimeModified: 2026-02-23T00:00:00+00:00
