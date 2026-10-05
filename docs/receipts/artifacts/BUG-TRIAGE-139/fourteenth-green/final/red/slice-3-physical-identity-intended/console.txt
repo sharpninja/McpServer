@@ -1,0 +1,64 @@
+  Determining projects to restore...
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\McpServer.Client.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 386 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpServer.Storage.csproj (in 482 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 482 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 482 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 482 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 544 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 545 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\McpServer.Services.csproj (in 545 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 546 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj (in 546 ms).
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.64]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.AsyncConsumers_AwaitBoundedPhysicalIdentityResolution [FAIL]
+[xUnit.net 00:00:02.52]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeWindowsResolver_RepeatedUncCallsLeaveNoActiveWorkers [FAIL]
+[xUnit.net 00:00:02.54]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution [FAIL]
+  Failed McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.AsyncConsumers_AwaitBoundedPhysicalIdentityResolution [19 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "using System.Data;\r\nusing System.Diagnostics.CodeA"···
+Not found: "await PrepareDbFkChangesAsync(cancellationToken)"
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.AsyncConsumers_AwaitBoundedPhysicalIdentityResolution() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 34
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeWindowsResolver_RepeatedUncCallsLeaveNoActiveWorkers [881 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveCounter(String name) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 151
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeWindowsResolver_RepeatedUncCallsLeaveNoActiveWorkers() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 123
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution [5 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveCounter(String name) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 151
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 62
+--- End of stack trace from previous location ---
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-3-physical-identity-intended\results\slice-3-physical-identity-intended-red.trx
+
+Failed!  - Failed:     3, Passed:     0, Skipped:     0, Total:     3, Duration: 945 ms - McpServer.Support.Mcp.Tests.dll (net10.0)

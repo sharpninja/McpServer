@@ -1,0 +1,8 @@
+exit_code=0
+classification=passed
+started_utc=2026-09-04T10:27:52.6842868+00:00
+finished_utc=2026-09-04T10:29:49.1127389+00:00
+duration_seconds=116.428
+physical_artifact_target=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\nested-logical-artifacts-target
+runtime_temp=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp
+repository_root_injected=false

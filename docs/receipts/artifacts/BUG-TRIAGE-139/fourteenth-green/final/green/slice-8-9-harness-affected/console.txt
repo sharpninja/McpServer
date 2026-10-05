@@ -1,0 +1,38 @@
+  Determining projects to restore...
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\McpServer.Client.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 417 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj (in 418 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpServer.Storage.csproj (in 501 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 501 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 501 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 501 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 623 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\McpServer.Services.csproj (in 624 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 624 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 625 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj (in 627 ms).
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\results\slice-8-9-harness-affected.trx
+
+Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 2 s - McpServer.Support.Mcp.Tests.dll (net10.0)

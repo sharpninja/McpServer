@@ -1,0 +1,11 @@
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.Repl.Host -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Repl.Host\release\McpServer.Repl.Host.dll
+  McpServer.Repl.IntegrationTests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Repl.IntegrationTests\release\McpServer.Repl.IntegrationTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.29

@@ -1,0 +1,2 @@
+Get-FileHash -Algorithm SHA256 -LiteralPath 'C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-thirteenth-review.txt','docs/receipts/artifacts/BUG-TRIAGE-139/reviews/thirteenth-independent-review.txt'
+Require the two SHA-256 values to be identical.

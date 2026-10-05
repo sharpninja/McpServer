@@ -165,9 +165,17 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     It 'degraded 404 queues a session_dialog failsafe and does not say failsafe not used' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-d-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:DialogResult = @{ Success = $false; Output = 'HTTP 404'; Error = 'not_found' }
         $script:PersistCallCount = 0
         $script:PersistRecoveryReturnsFalse = $true
@@ -187,8 +195,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 degraded = $true
                 queryText = 'keep me'
                 queryTitle = 'kept title'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
             $ok | Should -BeTrue
@@ -206,8 +214,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 degraded = $false
                 auditDialog = 0
                 queryText = 'keep me'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             $never = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: never`n"
             $never | Should -BeFalse
@@ -221,7 +229,10 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             (Read-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml'))['auditDialog'] | Should -Be 0
         } finally {
             $script:PersistRecoveryReturnsFalse = $false
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -229,9 +240,17 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
     It 'same-request degraded beginTurn sends cached planFile and todoId' {
         $dir = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-re-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($dir)
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $priorServerWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+        $priorLocation = (Get-Location).Path
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $env:MCPSERVER_WORKSPACE_PATH = $workspace
+        Set-Location -LiteralPath $workspace
+        $markerSnapshot = Get-TestMarkerSnapshot -Workspace $workspace
         $script:ForceDegradedPersist = $true
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
@@ -246,8 +265,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 planFile = 'docs/plans/kept.md'
                 todoId = 'BUG-TRIAGE-245'
                 queryText = 'keep me'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $markerSnapshot.markerFilePath
+                markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowBeginTurn -ParamsYaml "requestId: req-20260923T205606Z-001-life`nqueryText: keep me`nqueryTitle: kept`n"
             $ok | Should -BeTrue
@@ -256,7 +275,10 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             $script:LastPersistTodo | Should -Be 'BUG-TRIAGE-245'
         } finally {
             $script:ForceDegradedPersist = $false
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
+            if ($null -eq $priorServerWorkspace) { Remove-Item Env:MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCPSERVER_WORKSPACE_PATH = $priorServerWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

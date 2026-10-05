@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3d025139-b6a6-4f9a-bdc8-23c5e1af13c8" name="SYSTEM@PAYTON-LEGION2 2026-09-04 01:28:46" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T01:28:46.6720043-05:00" queuing="2026-09-04T01:28:46.6720046-05:00" start="2026-09-04T01:28:43.1450419-05:00" finish="2026-09-04T01:28:47.3838059-05:00" />
+  <TestSettings name="default" id="c765636f-8bce-497b-b472-279942b7a9e2">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_01_28_46" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f151dd18-625e-40ea-b568-a1489104f3c4" testId="6b7b37bd-0e37-8c05-9b2f-557782200ad7" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" computerName="PAYTON-LEGION2" duration="00:00:02.0897163" startTime="2026-09-04T01:28:45.2135710-05:00" endTime="2026-09-04T01:28:47.3034584-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f151dd18-625e-40ea-b568-a1489104f3c4" />
+    <UnitTestResult executionId="b25ec5a9-13ae-4c25-9144-eea37a3db631" testId="9e4c9d33-5a0c-c4dd-ff3c-081f92a83b83" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" computerName="PAYTON-LEGION2" duration="00:00:00.0018077" startTime="2026-09-04T01:28:45.2099245-05:00" endTime="2026-09-04T01:28:45.2119716-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b25ec5a9-13ae-4c25-9144-eea37a3db631" />
+    <UnitTestResult executionId="78840fe4-06a3-4bb7-acbe-4b86d90a782e" testId="370135b9-9c88-a3c5-efad-5da12a0e0041" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" computerName="PAYTON-LEGION2" duration="00:00:00.0157805" startTime="2026-09-04T01:28:45.1639063-05:00" endTime="2026-09-04T01:28:45.1910251-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78840fe4-06a3-4bb7-acbe-4b86d90a782e" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\green\slice-8-9-harness-affected\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="370135b9-9c88-a3c5-efad-5da12a0e0041">
+      <Execution id="78840fe4-06a3-4bb7-acbe-4b86d90a782e" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\green\slice-8-9-harness-affected\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="9e4c9d33-5a0c-c4dd-ff3c-081f92a83b83">
+      <Execution id="b25ec5a9-13ae-4c25-9144-eea37a3db631" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRootConsumers_DelegateToSharedResolver" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\green\slice-8-9-harness-affected\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="6b7b37bd-0e37-8c05-9b2f-557782200ad7">
+      <Execution id="f151dd18-625e-40ea-b568-a1489104f3c4" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\green\slice-8-9-harness-affected\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6b7b37bd-0e37-8c05-9b2f-557782200ad7" executionId="f151dd18-625e-40ea-b568-a1489104f3c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e4c9d33-5a0c-c4dd-ff3c-081f92a83b83" executionId="b25ec5a9-13ae-4c25-9144-eea37a3db631" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="370135b9-9c88-a3c5-efad-5da12a0e0041" executionId="78840fe4-06a3-4bb7-acbe-4b86d90a782e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.25]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.47]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:03.73]   Finished:    McpServer.Support.Mcp.Tests (ID = '381676c96d17a72e1ba7d30b8ccf66c4be3f25256dbdc1a8c02f501ffb1397f9')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

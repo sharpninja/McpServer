@@ -1,0 +1,10 @@
+exit_code=0
+minimum_expected=17
+total=17
+passed=17
+failed=0
+not_executed_or_skipped=0
+aborted=0
+inconclusive=0
+classification=passed
+trx=rest-mcp-usecase-final3.trx

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="08256654-a6a1-46e4-85be-f7af0cef0c53" name="SYSTEM@PAYTON-LEGION2 2026-09-03 21:45:58" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-03T21:45:58.1195662-05:00" queuing="2026-09-03T21:45:58.1195666-05:00" start="2026-09-03T21:45:46.5208900-05:00" finish="2026-09-03T21:46:18.3597980-05:00" />
+  <TestSettings name="default" id="8eecd1b9-2c9f-4abb-8c83-fd56c0e54f7d">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-03_21_45_58" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a8df26ba-18aa-4744-be1c-364e2a9eec28" testId="7bd438c6-2e24-c7c2-a141-acb6df4bedf0" testName="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests.FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" computerName="PAYTON-LEGION2" duration="00:00:03.9199155" startTime="2026-09-03T21:46:14.3261948-05:00" endTime="2026-09-03T21:46:18.2462074-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8df26ba-18aa-4744-be1c-364e2a9eec28" />
+    <UnitTestResult executionId="b36624e6-4805-481d-87a0-66ec9b557b7c" testId="869518be-dd50-c3c3-c63c-4ab6f6112e88" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests.FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" computerName="PAYTON-LEGION2" duration="00:00:02.5621504" startTime="2026-09-03T21:46:05.5653078-05:00" endTime="2026-09-03T21:46:08.1276143-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b36624e6-4805-481d-87a0-66ec9b557b7c" />
+    <UnitTestResult executionId="d06102eb-f6e2-4079-8d91-ed1b44226de0" testId="e84c6092-1e59-9418-7777-b1d0acbef0dd" testName="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" computerName="PAYTON-LEGION2" duration="00:00:05.9010953" startTime="2026-09-03T21:46:08.4240473-05:00" endTime="2026-09-03T21:46:14.3252374-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d06102eb-f6e2-4079-8d91-ed1b44226de0" />
+    <UnitTestResult executionId="c109fa8a-dd1f-4dff-ad8a-5ff817c88c52" testId="e9afd7db-bebe-c7cc-722b-522e04a36a9c" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" computerName="PAYTON-LEGION2" duration="00:00:06.0429292" startTime="2026-09-03T21:45:59.5191905-05:00" endTime="2026-09-03T21:46:05.5626783-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c109fa8a-dd1f-4dff-ad8a-5ff817c88c52" />
+    <UnitTestResult executionId="81f5463c-cbc2-42b6-935b-63478d660c06" testId="3e40b5cb-6f2f-021b-c4ad-bcd90eef7261" testName="McpServer.Support.Mcp.Tests.Storage.SqliteFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" computerName="PAYTON-LEGION2" duration="00:00:07.8819734" startTime="2026-09-03T21:45:49.1192268-05:00" endTime="2026-09-03T21:45:57.0223291-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="81f5463c-cbc2-42b6-935b-63478d660c06" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="e84c6092-1e59-9418-7777-b1d0acbef0dd">
+      <Execution id="d06102eb-f6e2-4079-8d91-ed1b44226de0" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests" name="EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="e9afd7db-bebe-c7cc-722b-522e04a36a9c">
+      <Execution id="c109fa8a-dd1f-4dff-ad8a-5ff817c88c52" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests" name="EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests.FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="869518be-dd50-c3c3-c63c-4ab6f6112e88">
+      <Execution id="b36624e6-4805-481d-87a0-66ec9b557b7c" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlFederationEleventhProviderTests" name="FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests.FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="7bd438c6-2e24-c7c2-a141-acb6df4bedf0">
+      <Execution id="a8df26ba-18aa-4744-be1c-364e2a9eec28" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqlServerFederationEleventhProviderTests" name="FederationCollisionPreflight_OverBatchSize_StagesAndMigrates" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteFederationEleventhProviderTests.EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="3e40b5cb-6f2f-021b-c4ad-bcd90eef7261">
+      <Execution id="81f5463c-cbc2-42b6-935b-63478d660c06" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteFederationEleventhProviderTests" name="EnsureFederatedWorkspaceRow_BlockedRead_CancelsNatively" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="7bd438c6-2e24-c7c2-a141-acb6df4bedf0" executionId="a8df26ba-18aa-4744-be1c-364e2a9eec28" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="869518be-dd50-c3c3-c63c-4ab6f6112e88" executionId="b36624e6-4805-481d-87a0-66ec9b557b7c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e84c6092-1e59-9418-7777-b1d0acbef0dd" executionId="d06102eb-f6e2-4079-8d91-ed1b44226de0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e9afd7db-bebe-c7cc-722b-522e04a36a9c" executionId="c109fa8a-dd1f-4dff-ad8a-5ff817c88c52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3e40b5cb-6f2f-021b-c4ad-bcd90eef7261" executionId="81f5463c-cbc2-42b6-935b-63478d660c06" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.37]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.51]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.90]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:31.22]   Finished:    McpServer.Support.Mcp.Tests (ID = '49c64e8b9f14a534e582fae1cd8ff8a32cc46f1642a12507249b9aa0e8525416')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

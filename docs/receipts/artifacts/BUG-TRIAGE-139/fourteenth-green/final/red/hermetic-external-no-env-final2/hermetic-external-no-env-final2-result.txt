@@ -1,0 +1,10 @@
+exit_code=2
+minimum_expected=20
+total=20
+passed=19
+failed=1
+not_executed_or_skipped=0
+aborted=0
+inconclusive=0
+classification=failed-or-inconclusive
+trx=hermetic-external-no-env-final2.trx

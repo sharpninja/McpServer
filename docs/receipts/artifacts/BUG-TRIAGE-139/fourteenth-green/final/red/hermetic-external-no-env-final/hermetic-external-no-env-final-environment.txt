@@ -1,0 +1,1 @@
+MCP_REPOSITORY_ROOT absent for the child test process. TEMP and TMP were set to C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp. Build output used C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts.

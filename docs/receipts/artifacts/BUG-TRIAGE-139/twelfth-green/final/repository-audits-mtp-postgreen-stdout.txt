@@ -1,0 +1,18 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+failed McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.FeatureHistory_ContainsExactlyOneFormalAdjacentAiTrailerPairPerCommit (3s 159ms)
+  Malformed formal trailers:
+  bdeade9355942572017284c80099b0a111cd3b2c: signature=0, confidence=1, adjacent=0
+    at McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.FeatureHistory_ContainsExactlyOneFormalAdjacentAiTrailerPairPerCommit() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139EleventhRepositoryAuditTests.cs:97
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\final-gate\repository-audits-mtp-postgreen.trx
+
+Test run summary: Failed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 10
+  failed: 1
+  succeeded: 9
+  skipped: 0
+  duration: 12s 617ms
