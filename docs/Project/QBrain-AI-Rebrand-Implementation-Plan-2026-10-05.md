@@ -3,9 +3,10 @@
 - Date: 2026-10-05
 - Author context: cloud plan for operator Payton
 - Status: Draft pending approval
-- Process: planning artifact for a Byrd Development Process v4 requirement-change approval (`docs/Development-Process-draft-v4.md`). This file is not an implementation slice.
+- Process: this file is the Byrd Development Process v4 Planning artifact (`docs/Development-Process-draft-v4.md`). It is not an implementation slice. Phase 1 is not approved.
+- Requirements in this draft: branding and product identity are functional requirements `FR-MCP-QBRAIN-001` through `FR-MCP-QBRAIN-005`. Namespace, repository, package, path, and string renames, and the migration mechanics, are technical requirements `TR-MCP-QBRAIN-001` through `TR-MCP-QBRAIN-008`. These IDs are assigned here and are not yet copied into `docs/Project/Functional-Requirements.md`, `docs/Project/Technical-Requirements.md`, the traceability matrix, or the requirements store.
 - Source checkout for the name map: `sharpninja/McpServer` at the `main` commit this plan was written from. Sibling repositories were not cloned in this run.
-- This pull request: add this plan only. It does not rename namespaces, packages, assemblies, routes, or GitHub repositories, and it does not start Phase 1.
+- This pull request: revise this plan only. It does not rename namespaces, packages, assemblies, routes, or GitHub repositories, and it does not approve or start Phase 1.
 
 ## 1. Goal and non-goals
 
@@ -39,9 +40,233 @@ In-scope repositories for the overall effort:
 - Renaming the machine `PAYTON-LEGION2` or the lab name `LAB-OMARCHY`.
 - Deploying to Legion or LAB-OMARCHY in Phases 0 through 4. Those hosts are a later operator step, written below as Phase 4-L, and they do not run until Payton explicitly starts that step.
 - Opening SessionLife / P3 work, or any unfinished SessionLife gate, as part of this rebrand.
-- Minting FR/TR/TEST rows in this plan PR. Register those through the requirements workflow after this plan is approved.
+- Treating this draft as store registration. Copying these FR and TR records into the requirements documents is a later step that waits for Payton's approval. This revision does not approve Phase 1.
+- Assigning TEST IDs in this draft. BDPv4 still requires testing requirements before implementation code. After approval, each slice registers its TEST records, then writes failing tests. No `TEST-MCP-QBRAIN-*` id is reserved here.
 
-## 2. Locked naming convention
+## 2. BDPv4 planning frame
+
+BDPv4 Planning produces functional requirements, technical requirements, testing requirements, and iterative phases before implementation code (`docs/Development-Process-draft-v4.md`, Planning). This draft completes the FR set, the TR set, and the phase sequence. It does not complete testing requirements and it does not enter Implementation.
+
+Viable and valuable: one product identity, QBrain.AI, is valuable to operators and agents who currently meet several spellings of the same product. The change is viable only if the Model Context Protocol, QuadBrain, QBAgent, historical receipts, and existing requirement IDs stay distinguishable, and if 1.x callers keep working. If either viability or value fails, the scope is wrong and Phase 1 does not start.
+
+Requirement split, which the name map must not collapse:
+
+- Functional requirements say what a person or agent must be able to recognize: the product brand, what is not the product, and what history and compatibility must still show.
+- Technical requirements say how a rename or migration is performed: namespaces, repositories, packages, paths, strings, aliases, type-forwards, inventory rules, and the BDPv4 execution gate.
+- When an FR and a TR disagree, the FR wins for what must be observable. The TR is corrected. The locked name map changes only if that correction cannot be expressed with the current tokens.
+
+Implementation, after a future approval and not before, follows the BDPv4 cycle inside each phase: write a failing test for the next acceptance criterion, validate it against mocks where the production type is not the subject, make it pass, then refactor. Leaving a slice requires the unit suite for that slice and prior slices to finish with zero failures and zero skips. Deferred work stays in TODO or requirement state. Skipped tests are not a planning device. SessionLife work is not added to make a gate look finished.
+
+Validation is the hostile or regression gate in Phase 5, plus the per-slice unit gate. Deployment in BDPv4 is Development, then Staging, then Production. Cloud phases in this plan stop at reviewable pull requests and package-feed edits. They are not a Staging or Production deploy onto PAYTON-LEGION2 or LAB-OMARCHY. That cutover is Phase 4-L and starts only when Payton says so.
+
+These records are Draft pending approval. Acceptance checkboxes are open. No evidence path is cited as proof of implementation, because nothing has been renamed.
+
+### Functional requirements (branding and product identity)
+
+#### FR-MCP-QBRAIN-001 Product display brand is QBrain.AI
+
+Where this product is named for a person, the display brand is QBrain.AI. That includes the README title, live documentation titles, the Windows service DisplayName, and other human-readable product titles. It does not by itself rename a namespace, a package id, a path, or a repository.
+
+**Status:** Draft pending approval
+
+**Acceptance criteria:**
+
+- [ ] A reader of the live README title sees QBrain.AI.
+- [ ] The Windows service DisplayName is QBrain.AI where the service is installed under the new name.
+- [ ] Live product titles no longer use "MCP Server" for this product.
+- [ ] Historical receipts are not rewritten to satisfy this requirement.
+
+**Satisfied by:** TR-MCP-QBRAIN-001, TR-MCP-QBRAIN-006, TR-MCP-QBRAIN-007
+
+#### FR-MCP-QBRAIN-002 Product identity stays distinct from the Model Context Protocol
+
+The open protocol remains the Model Context Protocol. Protocol wording and the protocol endpoint stay recognizable as MCP. The product rename must not make agents treat `/mcp-transport` or MCP JSON-RPC as a retired product name.
+
+**Status:** Draft pending approval
+
+**Acceptance criteria:**
+
+- [ ] Live docs that describe the wire protocol still say Model Context Protocol where they mean the protocol.
+- [ ] `/mcp-transport` remains the MCP endpoint and is not redirected onto a QBrain.AI path.
+- [ ] Bare "MCP" in protocol sentences is classified and left in place. It is not bulk-replaced.
+
+**Satisfied by:** TR-MCP-QBRAIN-005, TR-MCP-QBRAIN-007
+
+#### FR-MCP-QBRAIN-003 Product identity stays distinct from QuadBrain and QBAgent
+
+QuadBrain remains the four-role feature. QBAgent remains the agent tool. The command `qbagent` remains `qbagent`. The product brand QBrain.AI must not absorb those names, and those names must not be rewritten into QBrain.AI.
+
+**Status:** Draft pending approval
+
+**Acceptance criteria:**
+
+- [ ] Live docs still describe QuadBrain as the feature and QBrain.AI as the product.
+- [ ] The tool command `qbagent` still exists.
+- [ ] The namespace segment `QBAgent` remains `QBAgent` after the product root changes.
+
+**Satisfied by:** TR-MCP-QBRAIN-001, TR-MCP-QBRAIN-002
+
+#### FR-MCP-QBRAIN-004 1.x callers keep a working product identity
+
+Through the 1.x line, a caller that still uses the old product route, the old config section, the old product environment variables, or the old NuGet package ids can still operate. At 2.0 those aliases end. This is the continuity requirement. How the aliases are built is a technical requirement.
+
+**Status:** Draft pending approval
+
+**Acceptance criteria:**
+
+- [ ] A 1.x request to the old product HTTP prefix still succeeds for the representative route covered by tests.
+- [ ] A 1.x configuration that contains only the old config section still boots.
+- [ ] A 1.x package reference to each published `SharpNinja.McpServer.*` id still compiles against the moved public types via the type-forward package.
+- [ ] 2.0 is the version where those aliases are allowed to stop. They are not removed inside 1.x.
+
+**Satisfied by:** TR-MCP-QBRAIN-003, TR-MCP-QBRAIN-005
+
+#### FR-MCP-QBRAIN-005 Historical identity and host names stay
+
+People can still read historical receipts, existing requirement IDs, and the host names PAYTON-LEGION2 and LAB-OMARCHY as they were written. The rebrand does not rewrite that history and does not rename those machines or that lab.
+
+**Status:** Draft pending approval
+
+**Acceptance criteria:**
+
+- [ ] `docs/receipts/**` is unchanged by rename commits, except a new inventory receipt added by a later approved phase.
+- [ ] Existing `FR-MCP-*`, `TR-MCP-*`, and `TEST-MCP-*` IDs are not renamed. The new IDs in this plan are additions.
+- [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
+
+**Satisfied by:** TR-MCP-QBRAIN-007, TR-MCP-QBRAIN-004, TR-MCP-QBRAIN-006
+
+### Technical requirements (rename and migration)
+
+#### TR-MCP-QBRAIN-001 Locked identifier tokens
+
+Use one token per surface class. Display text uses `QBrain.AI`. PascalCase identifiers use `QBrainAi`. The lowercase single token that replaces `mcpserver` is `qbrainai`. Already-hyphenated slugs use `qbrain-ai`. NuGet ids use `SharpNinja.QBrainAi.<Component>`. Do not mix these forms. Do not replace the `QBAgent` segment or the `qbagent` command.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-003
+
+**Acceptance criteria:**
+
+- [ ] A review of the rename diff finds no `QBrainAI`, no `QBrain.AI` inside a C# namespace, and no `QBrain` product root that dropped `Ai`.
+- [ ] Plugin repository names and the container image use `qbrain-ai`.
+- [ ] The HTTP product prefix, systemd unit, Linux account, and `/opt` path use `qbrainai` when those surfaces are renamed.
+- [ ] `QBAgent` and `qbagent` are unchanged apart from a leading `McpServer` root becoming `QBrainAi`.
+
+#### TR-MCP-QBRAIN-002 Namespace, assembly, project, and solution rename
+
+Replace the root token `McpServer` with `QBrainAi` in namespaces, assembly names, project folders, `InternalsVisibleTo`, and `McpServer.sln`. Keep every segment after the root, including `.Mcp`, `.McpAgent`, and `.QBAgent`. Preserve RootNamespace exceptions: Storage, Services, and GraphRag stay under `QBrainAi.Support.Mcp`; migration projects keep their provider suffix; `tests/Build.Tests` stays `NukeBuild.Tests`; `_build` stays `_build`.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-003
+
+**Acceptance criteria:**
+
+- [ ] The solution file and project paths use `QBrainAi` as the root token.
+- [ ] No public namespace still starts with `McpServer.`.
+- [ ] `QBrainAi.QBAgent` exists and `QBrainAi.QBrainAi` does not.
+- [ ] `NukeBuild.Tests` and `_build` are not renamed into `QBrainAi`.
+
+#### TR-MCP-QBRAIN-003 Package and tool migration
+
+Move published package ids from `SharpNinja.McpServer.<Component>` to `SharpNinja.QBrainAi.<Component>` for Client, Cqrs, Cqrs.Mvvm, McpAgent, Repl.Core, Repl, and QBAgent. Ship type-forward facades under the old ids through 1.x. Rename `ToolCommandName` `mcpserver-repl` to `qbrain-ai-repl` and keep the old command available from the deprecated package. Rename `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core`, and `@sharpninja/mcp-repl` to the `qbrain-ai` npm names, with a deprecated old name through 1.x. Do not push the new ids to nuget.org before Phase 4.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-004
+
+**Acceptance criteria:**
+
+- [ ] Each new package id packs.
+- [ ] Each old package id packs as a type-forward facade that depends on the new package.
+- [ ] `qbrain-ai-repl` is the new tool command and `mcpserver-repl` still installs from the deprecated package through 1.x.
+- [ ] Phase 1 CI does not push `SharpNinja.QBrainAi.*` to nuget.org.
+
+#### TR-MCP-QBRAIN-004 Repository rename sequence
+
+Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3, in this order: `McpServerTools` to `QBrainAiTools`, `McpServerManager` to `QBrainAiManager`, each `mcpserver-*-plugin` to `qbrain-ai-*-plugin`, and `McpServer` to `QBrainAi` last. After each rename, update `RepositoryUrl` and live clone URLs. Tool-bucket rows accept `McpServerTools` and `QBrainAiTools` through 1.x. The data migration that writes `QBrainAiTools` runs after that repository exists and is reversible until 2.0. Do not rewrite historical receipt URLs.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-005
+
+**Acceptance criteria:**
+
+- [ ] No cloud phase renames a GitHub repository.
+- [ ] Phase 2 pull requests merge under the old repository names.
+- [ ] After Phase 3, the old repository URL redirects and the new URL returns the same file.
+- [ ] A database row `McpServerTools` still resolves until the migration runs.
+
+#### TR-MCP-QBRAIN-005 Route, config, and environment migration
+
+Add product HTTP prefix `/qbrainai/*` and keep `/mcpserver/*` through 1.x. Leave `/mcp-transport` unchanged. Configuration root becomes `QBrainAi:`. If only `Mcp:` is present, bind it. If both are present, `QBrainAi:` wins and startup logs one warning. Product `MCP_*` variables listed in the name map are read when the matching `QBRAINAI_*` variable is unset; when both are set, `QBRAINAI_*` wins. Do not rename the sentinel `MCP_UNTRUSTED` through 1.x.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-004
+
+**Acceptance criteria:**
+
+- [ ] One representative product route answers on both `/qbrainai/...` and `/mcpserver/...`.
+- [ ] `/mcp-transport` is still mapped and is not an alias of the product prefix.
+- [ ] Config and environment alias precedence matches the two rules above.
+- [ ] `MCP_UNTRUSTED` remains the literal sentinel.
+
+#### TR-MCP-QBRAIN-006 Install path, service, container, and feed migration
+
+Docker image, container, network, and volume use `qbrain-ai`. Windows service name becomes `QBrainAi`, DisplayName becomes QBrain.AI, and the default install path becomes `C:\ProgramData\QBrainAi`, with an override that can still target the old service and path. MSIX identity becomes `QBrainAi.Support.Mcp`. Octopus project string becomes `QBrainAi` only after that project exists. The pipeline must not call `octopus release deploy` during cloud phases. Linux paths, the `qbrainai` account, and `qbrainai.service` are Phase 4-L text until Payton starts that step. Do not rename database `McpServer_Omarchy` or login `mcpserver_omarchy` in Phases 0 through 4. Do not rename host PAYTON-LEGION2.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-005
+
+**Acceptance criteria:**
+
+- [ ] Compose and Dockerfile names in git match the `qbrain-ai` forms when Phase 1 edits them.
+- [ ] Service script defaults in git match `QBrainAi` and `C:\ProgramData\QBrainAi`, and the old names remain available as parameters.
+- [ ] No cloud-phase log shows an Octopus deploy to PAYTON-LEGION2.
+- [ ] `McpServer_Omarchy` and `PAYTON-LEGION2` remain in the files that identify that database and that host.
+
+#### TR-MCP-QBRAIN-007 Inventory before edit, and persisted state that stays
+
+Before any replace, write a classification TSV for the patterns in section 5. Allowed classes and actions are those listed there. Do not edit `docs/receipts/**` except to add the new TSV. Do not hand-edit `docs/Project/wiki/**`. Do not rename `mcp.db`, `.mcpServer`, the class `McpDbContext`, or EF table names. Do not emit a migration whose only effect is a context or table rename.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-005
+
+**Acceptance criteria:**
+
+- [ ] The TSV exists before the first rename commit of an approved slice, and every hit has a class.
+- [ ] No `product-brand` row is still open at the end of the slice that claimed it.
+- [ ] `mcp.db`, `.mcpServer`, and `McpDbContext` remain the persisted-state names.
+- [ ] The EF model diff for the slice contains no table rename.
+
+#### TR-MCP-QBRAIN-008 BDPv4 slice gate
+
+An implementation slice starts only after this plan is approved and only for the phase Payton has opened. The first commit of that slice registers the FR and TR ids it cites into the requirements workflow if they are not already stored. The next commit adds failing tests for that slice's acceptance criteria. Production edits come after those tests fail for the intended reason. The slice ends only when its unit scope and prior unit scope report zero failures and zero skips. SessionLife tests are out of scope. This draft does not open that gate.
+
+**Status:** Draft pending approval
+
+**Covers:** FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-003, FR-MCP-QBRAIN-004, FR-MCP-QBRAIN-005
+
+**Acceptance criteria:**
+
+- [ ] No rename commit exists on this branch before approval.
+- [ ] After approval, a slice cites stored FR and TR ids before it changes product code.
+- [ ] The slice receipt shows a red test run before the green run.
+- [ ] The exit log shows zero failures and zero skips for the executed unit scope.
+
+### Trace map
+
+- FR-MCP-QBRAIN-001 is implemented by TR-MCP-QBRAIN-001, TR-MCP-QBRAIN-006, and TR-MCP-QBRAIN-007.
+- FR-MCP-QBRAIN-002 is implemented by TR-MCP-QBRAIN-005 and TR-MCP-QBRAIN-007.
+- FR-MCP-QBRAIN-003 is implemented by TR-MCP-QBRAIN-001 and TR-MCP-QBRAIN-002.
+- FR-MCP-QBRAIN-004 is implemented by TR-MCP-QBRAIN-003 and TR-MCP-QBRAIN-005.
+- FR-MCP-QBRAIN-005 is implemented by TR-MCP-QBRAIN-004, TR-MCP-QBRAIN-006, and TR-MCP-QBRAIN-007.
+- TR-MCP-QBRAIN-008 is the execution gate for every FR above. It does not add behavior of its own.
+
+## 3. Locked naming convention
 
 Verified pattern in this repo: the product root is the PascalCase token `McpServer` (namespaces, project folders, solution, Windows service name, `C:\ProgramData\McpServer`). The same word in lowercase concatenation is `mcpserver` (HTTP prefix, systemd unit, Linux account, `/opt/mcpserver`). Docker already uses a hyphen (`mcp-server`). Plugin repositories already use `{lowercase-token}-{role}` (`mcpserver-grok-plugin`). NuGet IDs keep the vendor prefix `SharpNinja.` plus the product root (`SharpNinja.McpServer.Client`).
 
@@ -58,9 +283,11 @@ Use the forms below everywhere in later phases. Do not mix them.
 
 Filesystem checkout folders follow the GitHub repo name (`F:\GitHub\McpServer` becomes `F:\GitHub\QBrainAi`; `F:\github\mcpserver-grok-plugin` becomes `F:\github\qbrain-ai-grok-plugin`). Updating local clones is an operator step after Phase 3.
 
-## 3. Canonical name map
+## 4. Canonical name map
 
-Old values were read from this checkout. "New" is the approved target. Alias behavior is in section 7. Do not apply the new column in this PR.
+Old values were read from this checkout. "New" is the target a later approval would use. Alias behavior is FR-MCP-QBRAIN-004, implemented in section 7. Do not apply the new column in this PR.
+
+The map is a lookup, not a second requirements list. Display and title rows are FR-MCP-QBRAIN-001. Rows that stay because they are the protocol are FR-MCP-QBRAIN-002. Rows that stay because they are QuadBrain or QBAgent are FR-MCP-QBRAIN-003. Rows that stay because they are history or host names are FR-MCP-QBRAIN-005. Every old-to-new namespace, repository, package, path, and product string is a technical rename under TR-MCP-QBRAIN-001 through TR-MCP-QBRAIN-007.
 
 ### Brand and identifiers
 
@@ -202,7 +429,7 @@ Phase 2 re-runs the inventory in each plugin repo and adds any `MCP_*` keys this
 | Protocol endpoint | `/mcp-transport` | Unchanged. |
 | QuadBrain / QBAgent | feature names and `qbagent` | Unchanged, except the product root in front of `QBAgent`. |
 
-## 4. Inventory method
+## 5. Inventory method
 
 Phase 1 starts with a classification pass and a committed receipt of dispositions. No replacement runs before that receipt exists. The receipt is a new file under `docs/receipts/` created by that later phase. This plan does not add it. Existing files under `docs/receipts/` are not edited.
 
@@ -229,7 +456,7 @@ Classes and the only allowed action for each:
 - `feature-quadbrain`: leave `QuadBrain`, `QBAgent`, and `qbagent` except where `McpServer` is the product root in front of them.
 - `host-or-lab`: leave `PAYTON-LEGION2`, `LAB-OMARCHY`, and `PAYTON-OMARCHY`. List `McpServer_Omarchy`, `mcpserver_omarchy`, `/opt/mcpserver`, and `mcpserver.service` in the receipt and mark them Phase 4-L, not Phase 1.
 - `persisted-state`: leave `.mcpServer`, `mcp.db`, and `McpDbContext` as decided above.
-- `ambiguous`: do not edit until the disposition in section 4.1 is applied.
+- `ambiguous`: do not edit until the disposition in section 5.1 is applied.
 
 Exclude from automated replace, even when a pattern matches:
 
@@ -240,7 +467,7 @@ Exclude from automated replace, even when a pattern matches:
 
 The classifier is a dry run. Its TSV is the Phase 1 review artifact. A second person or a hostile pass can reject a row before edits. String replacement is not allowed to be a blind `McpServer` → `QBrainAi` substitute.
 
-### 4.1 Ambiguous cases
+### 5.1 Ambiguous cases
 
 - **MCP Server versus Model Context Protocol.** "MCP Server" as a product title becomes "QBrain.AI". "Model Context Protocol" stays. A bare "MCP" in prose is ambiguous: if the sentence is about JSON-RPC, tools/list, or `/mcp-transport`, it stays; if it is this product, it becomes QBrain.AI. The inventory TSV decides each bare "MCP" hit. There is no bulk replace of `\bMCP\b`.
 - **`/mcpserver/*` versus `/mcp-transport`.** Controllers use routes such as `mcpserver/todo`, `mcpserver/sessionlog`, and `mcpserver/requirements`. That prefix is the product API. It gains a `/qbrainai/*` canonical prefix and keeps `/mcpserver/*` as an alias through 1.x. `/mcp-transport` (`app.MapMcp("/mcp-transport")`) is the protocol endpoint and is not aliased or renamed.
@@ -254,29 +481,32 @@ The classifier is a dry run. Its TSV is the Phase 1 review artifact. A second pe
 - **`docs/Development-Process-draft-v4.md` product sentences.** The process doc links the product as "MCP Server" and to `https://github.com/sharpninja/mcpserver` and `mcpservermanager`. Those product references are live docs and are in Phase 1. The process name Byrd Development Process v4 stays.
 - **Public blob URLs that embed `McpServer`.** After Phase 3, GitHub usually redirects old repo URLs. Historical receipts keep the old URL text. Live docs update to the new repo after the rename is confirmed. Phase 5 records whether a sample pre-rename SHA URL still resolves.
 
-## 5. Phased execution
+## 6. Phased execution
 
-Phases are sequential. A phase does not start until the previous phase's acceptance criteria pass and, where noted, Payton has approved the gate. Execution is cloud-only through Phase 4. No SSH, WinRM, Octopus deploy, systemd, or filesystem change on PAYTON-LEGION2 or LAB-OMARCHY.
+Phases are the BDPv4 iterative breakdown of TR-MCP-QBRAIN-008. They are sequential. A phase does not start until the previous phase's acceptance criteria pass and Payton has approved that gate. This draft opens Phase 0 only. Phase 1 is written here so the approval can see it, and Phase 1 is not approved. Execution is cloud-only through Phase 4. No SSH, WinRM, Octopus deploy, systemd, or filesystem change on PAYTON-LEGION2 or LAB-OMARCHY.
 
-Work follows BDPv4 once implementation starts: acceptance tests for the slice go red first, then implementation, then refactor, and the unit suite for the current and previous iterations finishes with zero failures and zero skips. Deferred behavior is a requirement or TODO, not a skipped test. Do not add SessionLife tests to these slices.
+After approval, work follows TR-MCP-QBRAIN-008: acceptance tests for the slice go red first, then implementation, then refactor, and the unit suite for the current and previous iterations finishes with zero failures and zero skips. Deferred behavior is a requirement or TODO, not a skipped test. Do not add SessionLife tests to these slices.
 
 ### Phase 0 — this plan and the approval gate
 
-Work: this markdown file and a draft PR on `sharpninja/McpServer`. No other product edits. `docs/Project` has no index that lists plans. `docs/Project/wiki/*/Documentation-Index.md` is generated wiki output and is not hand-edited here.
+Requirements: this phase records FR-MCP-QBRAIN-001 through FR-MCP-QBRAIN-005 and TR-MCP-QBRAIN-001 through TR-MCP-QBRAIN-008. It does not implement them.
 
-Gate: Payton approves or rejects the locked convention, the alias duration (through 1.x, removed at 2.0), the repo rename list, and the rule that Legion and LAB-OMARCHY deploys wait for Phase 4-L.
+Work: this markdown file and a draft PR on `sharpninja/McpServer`. No other product edits. `docs/Project` has no index that lists plans. `docs/Project/wiki/*/Documentation-Index.md` is generated wiki output and is not hand-edited here. The canonical requirement documents are not updated in this phase.
+
+Gate: Payton approves or rejects the FR set, the TR set, the locked convention, the alias duration (through 1.x, removed at 2.0), the repo rename list, and the rule that Legion and LAB-OMARCHY deploys wait for Phase 4-L. Approval of this gate is not approval of Phase 1.
 
 Rollback: close the draft PR. No runtime state changed.
 
 Acceptance:
 
 - The only product diff is this file.
+- The file contains the five FR records and eight TR records in section 2, and the trace map matches those ids.
 - The name map matches the old identifiers cited from this repo, or the PR discussion corrects a cited identifier before approval.
-- Status remains Draft until Payton's approval comment. Approval flips status in a follow-up commit on this file. That commit is still Phase 0.
+- Status remains Draft pending approval until Payton's approval comment. That comment is still Phase 0. It does not authorize namespace, package, or repository renames.
 
 ### Phase 1 — McpServer code, tests, and live docs (cloud PR series on the current repo)
 
-Do this only after Phase 0 approval. Land as sequential PRs on the existing `McpServer` repository, not on a renamed remote.
+Not approved. Do this only after a later Phase 0 approval that explicitly opens Phase 1. The requirements are TR-MCP-QBRAIN-002, TR-MCP-QBRAIN-003 (facades built, not published), TR-MCP-QBRAIN-005, TR-MCP-QBRAIN-007, and the live-doc half of FR-MCP-QBRAIN-001. Land as sequential PRs on the existing `McpServer` repository, not on a renamed remote. TR-MCP-QBRAIN-008 requires the cited ids to be stored before product code changes.
 
 Order inside the phase:
 
@@ -297,7 +527,7 @@ Acceptance:
 
 - Solution builds with `./build.ps1 Compile`.
 - `./build.ps1 Test` reports zero failures and zero skips for the unit scope that target already runs.
-- `./build.ps1 ValidateConfig` and `./build.ps1 ValidateTraceability` pass. New public APIs have XML docs. Requirement IDs cited by new code already exist or were registered through the requirements workflow in this phase; this plan does not pre-assign an ID.
+- `./build.ps1 ValidateConfig` and `./build.ps1 ValidateTraceability` pass. New public APIs have XML docs. Before product renames, the slice registers FR-MCP-QBRAIN-001 through FR-MCP-QBRAIN-005 and TR-MCP-QBRAIN-001 through TR-MCP-QBRAIN-008 through the requirements workflow if approval has stored them. This draft does not register them and does not start that slice.
 - `/mcp-transport` still maps, and a test covers that the path string did not change.
 - A test covers `GET` or the existing health/todo route on both `/qbrainai/...` and `/mcpserver/...` for one representative controller, plus the config binder accepting `Mcp:` when `QBrainAi:` is absent and preferring `QBrainAi:` when both are present.
 - `mcp.db`, `.mcpServer`, and `McpDbContext` still appear as the persisted-state names. A test or snapshot diff shows no EF table rename migration from this phase.
@@ -308,7 +538,7 @@ Acceptance:
 
 ### Phase 2 — one cloud PR per sibling repo
 
-Start only after Phase 1 acceptance. Each PR merges to that repo's default branch under the **old** GitHub name. Remote rename is Phase 3.
+Not approved. Requirements: TR-MCP-QBRAIN-004 (pull requests still use the old repository names), TR-MCP-QBRAIN-007 in each sibling tree, and FR-MCP-QBRAIN-001 for display strings. Start only after Phase 1 acceptance. Each PR merges to that repo's default branch under the **old** GitHub name. Remote rename is Phase 3.
 
 Order:
 
@@ -331,7 +561,7 @@ Acceptance, per repo:
 
 ### Phase 3 — GitHub repository renames and remote URL updates
 
-This phase is operator-started. Cloud agents do not rename GitHub repositories. Payton renames, in order:
+Not approved. This phase implements TR-MCP-QBRAIN-004. It is operator-started. Cloud agents do not rename GitHub repositories. Payton renames, in order:
 
 1. `McpServerTools` → `QBrainAiTools`
 2. `McpServerManager` → `QBrainAiManager`
@@ -354,7 +584,7 @@ Acceptance:
 
 ### Phase 4 — package feeds, Octopus project string, deploy scripts (cloud edits; no host deploy)
 
-Cloud PRs may edit feed and script **text** in git. They do not install services, create Octopus releases, or push to a machine.
+Not approved. This phase implements the publish half of TR-MCP-QBRAIN-003 and the in-git half of TR-MCP-QBRAIN-006. Cloud PRs may edit feed and script text in git. They do not install services, create Octopus releases, or push to a machine.
 
 Work:
 
@@ -376,7 +606,7 @@ Acceptance:
 
 ### Phase 4-L — later operator step (not in the first waves)
 
-Payton starts this explicitly. It is not scheduled by merging Phase 4.
+Not approved. This phase is the host half of TR-MCP-QBRAIN-006. Payton starts it explicitly. It is not scheduled by merging Phase 4.
 
 - Windows: stop service `McpServer`, install service `QBrainAi` at `C:\ProgramData\QBrainAi`, copy preserved state (`mcp.db`, keys, `appsettings` secrets) from `C:\ProgramData\McpServer`. Keep the old directory until the new service passes `/health`.
 - Octopus: rename or recreate project `QBrainAi`, then allow the pipeline step to create a release. Target names that are the machine `PAYTON-LEGION2` stay.
@@ -392,7 +622,7 @@ Acceptance:
 
 ### Phase 5 — verification and hostile gate
 
-Run after Phase 4's cloud edits merge. Re-run the parts that touch a host only after Phase 4-L if that step happened.
+Not approved. This phase is the BDPv4 validation gate for FR-MCP-QBRAIN-001 through FR-MCP-QBRAIN-005. Run after Phase 4's cloud edits merge. Re-run the parts that touch a host only after Phase 4-L if that step happened.
 
 Checks:
 
@@ -415,7 +645,9 @@ Rollback of a failed gate: do not start Phase 4-L. Revert the failing phase's PR
 
 Acceptance: the receipt for Phase 5 lists each check above as pass or fail with the command output path. The gate passes only when every check passes. A skip is a fail.
 
-## 6. Compatibility policy
+## 7. Compatibility policy
+
+This section is the migration mechanic for FR-MCP-QBRAIN-004. TR-MCP-QBRAIN-003 and TR-MCP-QBRAIN-005 own the package, route, config, and environment aliases. TR-MCP-QBRAIN-007 owns the persisted names that are not aliased because they do not change.
 
 Aliases are required. They last through the 1.x line and are removed at 2.0. `README.md` currently states GitVersion's next version is 1.4.39, so this rebrand stays inside 1.x. Removal means the 2.0 packages, routes, and config binder stop accepting the old names. Already published 1.x packages stay on the feed.
 
@@ -433,7 +665,7 @@ Not aliased, because they are persisted state and stay put through 1.x: `mcp.db`
 
 Not aliased in cloud phases, because changing them is a host migration: Windows service name, `C:\ProgramData` path, systemd unit, Linux account, Omarchy SQL database and login, Keycloak client id. Phase 4-L is the cutover, with the old path kept on disk until health passes.
 
-## 7. Risks
+## 8. Risks
 
 - **Plugins break** if Phase 2 lands before Phase 1 aliases, or if a plugin is renamed in GitHub before its manifests exist in `McpServerTools`. The phase order is the mitigation.
 - **NuGet consumers** fail to compile if public types move without type-forward packages, or if Phase 1 merges to `main` and the workflow pushes new IDs early. The publish gate is the mitigation.
@@ -450,7 +682,7 @@ Not aliased in cloud phases, because changing them is a host migration: Windows 
 - **Wiki drift.** Hand-editing `docs/Project/wiki` would diverge from the generator. Live docs change in Phase 1; generated wiki changes only through the existing export path.
 - **Stale pipeline paths** (`McpServer.Director`, `McpServer.UI.Core`, `McpServer.Web`) can hide a trigger mistake if they are rewritten as if those projects exist.
 
-## 8. Out of scope
+## 9. Out of scope
 
 - Historical receipts under `docs/receipts/`, including SessionLife receipts and hostile-validator transcripts.
 - Chat logs and stored session-log bodies.
@@ -460,19 +692,19 @@ Not aliased in cloud phases, because changing them is a host migration: Windows 
 - Deploying or restarting services on Legion or LAB-OMARCHY during Phases 0 through 4.
 - Renaming QuadBrain, QBAgent, or the `qbagent` command.
 - Renaming the Model Context Protocol or `/mcp-transport`.
-- Renaming `FR-MCP-*`, `TR-MCP-*`, or `TEST-MCP-*`.
+- Renaming existing `FR-MCP-*`, `TR-MCP-*`, or `TEST-MCP-*` ids. The QBRAIN ids in section 2 are new draft records, not renames of those ids.
 - Renaming `mcp.db`, `.mcpServer`, `McpDbContext`, or EF tables in the 1.x rebrand.
 - This run: any Phase 1 code rename, any GitHub repository rename, any merge.
 
-## 9. Path and approval
+## 10. Path and approval
 
 File path: `docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md`.
 
 Dated documents already in `docs/Project` use a Title Case name and a `YYYY-MM-DD` suffix (`Documentation-Audit-2026-05-27.md`, `Dependency-Vulnerability-Audit-2026-04-25.md`). This file follows that pattern. A `YYYY-MM-DD-` prefix is used under `docs/setup/`, not for these project documents. There is no `docs/Project` index of plans to update. The generated wiki documentation index is not a plan catalog and is not edited in the Phase 0 PR.
 
-Approval means a comment from Payton that accepts sections 2, 6, and the phase order, or a short list of edits. After that comment, a follow-up commit changes Status from "Draft pending approval" to "Approved" and records the comment date. Implementation PRs cite this path. They do not start from an unapproved draft.
+Approval means a comment from Payton that accepts section 2 (the FR and TR records), section 3 (the locked tokens), section 7 (the alias duration), and the phase order, or a short list of edits. This revision is not that approval. Status stays Draft pending approval. After that comment, a follow-up commit changes Status to Approved and records the comment date. That commit still does not start Phase 1 unless the comment opens Phase 1. Implementation PRs cite this path and the FR and TR ids. They do not start from an unapproved draft.
 
-## 10. Evidence used for the old column
+## 11. Evidence used for the old column
 
 These paths were read or searched while writing the old column. They are not a complete hit list; Phase 1's TSV is that list.
 
