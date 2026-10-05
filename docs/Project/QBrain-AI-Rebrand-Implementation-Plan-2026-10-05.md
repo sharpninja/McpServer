@@ -129,7 +129,7 @@ People can still read historical receipts, existing requirement IDs, and the hos
 
 **Acceptance criteria:**
 
-- [ ] `docs/receipts/**` is unchanged by rename commits, except a new inventory receipt added by a later approved phase.
+- [ ] Existing files under `docs/receipts/**` are not rewritten. New inventory and hostile-validation receipts may be added. They do not replace historical receipt bodies.
 - [ ] Existing `FR-MCP-*`, `TR-MCP-*`, and `TEST-MCP-*` IDs are not renamed. The new IDs in this plan are additions.
 - [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
 
@@ -229,7 +229,7 @@ Docker image, container, network, and volume use `qbrain-ai`. Windows service na
 
 #### TR-MCP-QBRAIN-007 Inventory before edit, and persisted state that stays
 
-Before any replace, write a classification TSV for the patterns in section 5. Allowed classes and actions are those listed there. Do not edit `docs/receipts/**` except to add the new TSV. Do not hand-edit `docs/Project/wiki/**`. Do not rename `mcp.db`, `.mcpServer`, the class `McpDbContext`, or EF table names. Do not emit a migration whose only effect is a context or table rename.
+Before any replace, write a classification TSV for the patterns in section 5. Allowed classes and actions are those listed there. Do not rewrite existing files under `docs/receipts/**`. New files are limited to the inventory TSV and to hostile-validation receipts under `docs/receipts/hv/`. Do not hand-edit `docs/Project/wiki/**`. Do not rename `mcp.db`, `.mcpServer`, the class `McpDbContext`, or EF table names. Do not emit a migration whose only effect is a context or table rename.
 
 **Status:** Draft pending approval
 
@@ -244,7 +244,7 @@ Before any replace, write a classification TSV for the patterns in section 5. Al
 
 #### TR-MCP-QBRAIN-008 BDPv4 slice gate
 
-An implementation slice starts only after this plan is approved and only for the phase Payton has opened. The first commit of that slice registers the FR and TR ids it cites into the requirements workflow if they are not already stored. The next commit adds failing tests for that slice's acceptance criteria. Production edits come after those tests fail for the intended reason. The slice ends only when its unit scope and prior unit scope report zero failures and zero skips. SessionLife tests are out of scope. This draft does not open that gate.
+An implementation slice starts only after this plan is approved and only for the phase Payton has opened. The first commit of that slice registers the FR and TR ids it cites into the requirements workflow if they are not already stored. The next commit adds failing tests for that slice's acceptance criteria. Production edits come after those tests fail for the intended reason. The slice ends only when its unit scope and prior unit scope report zero failures and zero skips, and only after the hostile-validation checkpoint for that phase returns OverallVerdict AGREE from `gpt-6-astra` at reasoning effort `xhigh`. Operator shorthand `astra-6-xhigh` means that model and that effort. No other model satisfies the checkpoint. SessionLife tests are out of scope. This draft does not open that gate.
 
 **Status:** Draft pending approval
 
@@ -256,6 +256,7 @@ An implementation slice starts only after this plan is approved and only for the
 - [ ] After approval, a slice cites stored FR and TR ids before it changes product code.
 - [ ] The slice receipt shows a red test run before the green run.
 - [ ] The exit log shows zero failures and zero skips for the executed unit scope.
+- [ ] The phase receipt under `docs/receipts/hv/` records OverallVerdict AGREE from `gpt-6-astra` at effort `xhigh` before anyone marks the phase done.
 
 ### Trace map
 
@@ -487,6 +488,8 @@ Phases are the BDPv4 iterative breakdown of TR-MCP-QBRAIN-008. They are sequenti
 
 After approval, work follows TR-MCP-QBRAIN-008: acceptance tests for the slice go red first, then implementation, then refactor, and the unit suite for the current and previous iterations finishes with zero failures and zero skips. Deferred behavior is a requirement or TODO, not a skipped test. Do not add SessionLife tests to these slices.
 
+Hostile validation is a done-gate on every phase, including Phase 0 and Phase 4-L. Passing the phase acceptance list does not mark the phase done. Done requires a receipt from Codex running `gpt-6-astra` at reasoning effort `xhigh` (`astra-6-xhigh`). Grok, a Cursor cloud agent, or any other model is not that checkpoint. A missing receipt, a NOT RUN receipt, or OverallVerdict DISAGREE leaves the phase not done. The receipt path is `docs/receipts/hv/<yyyyMMddTHHmmssZ>-qbrain-ai-rebrand-phase-<phase>-hv.md` plus the request and response jsonl from that Codex run. The receipt records OverallVerdict, Accuracy, and Completeness. Phase 5 product regression checks stay. They do not replace this model-locked checkpoint.
+
 ### Phase 0 — this plan and the approval gate
 
 Requirements: this phase records FR-MCP-QBRAIN-001 through FR-MCP-QBRAIN-005 and TR-MCP-QBRAIN-001 through TR-MCP-QBRAIN-008. It does not implement them.
@@ -499,10 +502,18 @@ Rollback: close the draft PR. No runtime state changed.
 
 Acceptance:
 
-- The only product diff is this file.
+- The product diff is this plan plus new files under `docs/receipts/hv/` for the plan review. No namespace, package, or repository rename is in the diff.
 - The file contains the five FR records and eight TR records in section 2, and the trace map matches those ids.
 - The name map matches the old identifiers cited from this repo, or the PR discussion corrects a cited identifier before approval.
 - Status remains Draft pending approval until Payton's approval comment. That comment is still Phase 0. It does not authorize namespace, package, or repository renames.
+- Phases 0, 1, 2, 3, 4, 4-L, and 5 each contain a hostile-validation checkpoint that names `gpt-6-astra` and effort `xhigh`.
+
+#### Hostile validation checkpoint (required before Phase 0 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Subject: this plan file, not a product rename.
+- Claims the reviewer scores: status is still Draft pending approval; Phase 1 is not approved; FR-MCP-QBRAIN-001 through 005 are branding and identity; TR-MCP-QBRAIN-001 through 008 are rename and migration; the name map in section 4 matches section 3; every phase below has its own checkpoint with the same model lock; this cloud agent's receipt is not itself an AGREE.
+- Done rule: Phase 0 is not done until that run's receipt says OverallVerdict AGREE. Payton's approval comment does not replace the receipt.
 
 ### Phase 1 — McpServer code, tests, and live docs (cloud PR series on the current repo)
 
@@ -535,6 +546,13 @@ Acceptance:
 - `git diff` against Phase 0 does not modify `docs/receipts/` except the new inventory TSV.
 - `PAYTON-LEGION2` and `McpServer_Omarchy` still occur where they are host and database identities.
 - NuGet push log for this phase, if CI runs, shows the push step skipped or `--skip-duplicate` on unchanged old IDs only. No `SharpNinja.QBrainAi.*` package is on nuget.org yet.
+- New receipts under `docs/receipts/hv/` for this phase do not rewrite older receipt bodies.
+
+#### Hostile validation checkpoint (required before Phase 1 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Claims the reviewer scores against the merged Phase 1 tree: root namespaces are `QBrainAi` with `.Mcp`, `.McpAgent`, and `.QBAgent` segments kept; `/mcp-transport` is unchanged; `/mcpserver/*` still answers; `QBrainAi:` wins when both config sections exist; `mcp.db`, `.mcpServer`, and `McpDbContext` are unchanged; unit scope is zero failures and zero skips; nuget.org has no `SharpNinja.QBrainAi.*` package from this phase; `PAYTON-LEGION2` was not deployed.
+- Done rule: Phase 1 is not done until that receipt says OverallVerdict AGREE. This draft does not start Phase 1.
 
 ### Phase 2 — one cloud PR per sibling repo
 
@@ -559,6 +577,12 @@ Acceptance, per repo:
 - Old plugin manifest names still exist in `McpServerTools` at the end of item 1.
 - No PR in this phase changes GitHub repository settings or the `PAYTON-LEGION2` hostname.
 
+#### Hostile validation checkpoint (required before Phase 2 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Claims the reviewer scores: one merged PR per in-scope sibling repo that exists; pull requests used the old GitHub names; `McpServerTools` still contains the old `mcpserver-*-plugin` manifest names; QuadBrain and `qbagent` were not renamed; a missing `mcpserver-grok-bot-plugin` remote is recorded rather than invented.
+- Done rule: Phase 2 is not done until that receipt says OverallVerdict AGREE. A missing repo stops only that slice.
+
 ### Phase 3 — GitHub repository renames and remote URL updates
 
 Not approved. This phase implements TR-MCP-QBRAIN-004. It is operator-started. Cloud agents do not rename GitHub repositories. Payton renames, in order:
@@ -582,6 +606,12 @@ Acceptance:
 - Clone instructions in live README files use the new repo name.
 - `PAYTON-LEGION2` is unchanged.
 
+#### Hostile validation checkpoint (required before Phase 3 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Claims the reviewer scores: rename order was Tools, Manager, plugins, then `McpServer` last; the operator performed the GitHub renames; old repo URLs redirect; live clone URLs use the new names; tool-bucket rows still accept `McpServerTools` until the reversible migration runs; historical receipt URL text was not rewritten; the hostname `PAYTON-LEGION2` is unchanged.
+- Done rule: Phase 3 is not done until that receipt says OverallVerdict AGREE. A cloud agent renaming a GitHub repository fails this checkpoint.
+
 ### Phase 4 — package feeds, Octopus project string, deploy scripts (cloud edits; no host deploy)
 
 Not approved. This phase implements the publish half of TR-MCP-QBRAIN-003 and the in-git half of TR-MCP-QBRAIN-006. Cloud PRs may edit feed and script text in git. They do not install services, create Octopus releases, or push to a machine.
@@ -604,6 +634,12 @@ Acceptance:
 - The Octopus deploy step's log for the merge that updates scripts shows it did not run, or Payton has already completed the project rename and the log shows project `QBrainAi` and host `PAYTON-LEGION2` unchanged.
 - No Phase 4 PR diff changes the hostname `PAYTON-LEGION2`.
 
+#### Hostile validation checkpoint (required before Phase 4 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Claims the reviewer scores: nuget.org has `SharpNinja.QBrainAi.*` and type-forward builds of the old ids; `qbrain-ai-repl` and `mcpserver-repl` both install; script defaults in git use the new service name and path and still accept the old parameters; no Phase 4 command deployed to PAYTON-LEGION2 or LAB-OMARCHY; `McpServer_Omarchy` is unchanged.
+- Done rule: Phase 4 is not done until that receipt says OverallVerdict AGREE. Package publish without this receipt is not phase completion.
+
 ### Phase 4-L — later operator step (not in the first waves)
 
 Not approved. This phase is the host half of TR-MCP-QBRAIN-006. Payton starts it explicitly. It is not scheduled by merging Phase 4.
@@ -619,6 +655,12 @@ Acceptance:
 - The previous install directory still exists until Payton deletes it.
 - `PAYTON-LEGION2` as a hostname still resolves to the same machine.
 - LAB-OMARCHY is unchanged unless this phase's separate approval includes it.
+
+#### Hostile validation checkpoint (required before Phase 4-L is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- Claims the reviewer scores: the new Windows service answers `/health`; `C:\ProgramData\McpServer` still exists until Payton deletes it; the hostname is still `PAYTON-LEGION2`; LAB-OMARCHY changed only if a separate written approval names that host; database `McpServer_Omarchy` was not renamed unless that same approval says so.
+- Done rule: Phase 4-L is not done until that receipt says OverallVerdict AGREE. Merging Phase 4 does not open this checkpoint.
 
 ### Phase 5 — verification and hostile gate
 
@@ -644,6 +686,13 @@ Checks:
 Rollback of a failed gate: do not start Phase 4-L. Revert the failing phase's PR. Aliases keep old clients working while the fix is prepared.
 
 Acceptance: the receipt for Phase 5 lists each check above as pass or fail with the command output path. The gate passes only when every check passes. A skip is a fail.
+
+#### Hostile validation checkpoint (required before Phase 5 is done)
+
+- Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
+- This checkpoint reviews the Phase 5 command receipt. It is not a substitute for those commands, and those commands are not a substitute for this checkpoint.
+- Claims the reviewer scores: every Phase 5 check has a command and an output path; failed and skipped counts are zero; `/mcp-transport` was not retargeted; old and new product prefixes both answered; QuadBrain, `qbagent`, existing `FR-MCP-` ids, and `PAYTON-LEGION2` remain; historical receipt bodies match the pinned pre-rebrand SHA except added inventory and HV files.
+- Done rule: Phase 5 is not done, and the rebrand is not done, until that receipt says OverallVerdict AGREE.
 
 ## 7. Compatibility policy
 
