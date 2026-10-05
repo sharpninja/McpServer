@@ -32,35 +32,35 @@ public static class McpInstanceResolver
     }
 
     /// <summary>
-    /// TR-MCP-QBRAIN-005: Copies the effective QBrainAi section onto Mcp as the last source added so far.
-    /// Mcp-only keys remain. Sources added after this call still win, so tests can override Mcp after the projection.
+    /// TR-MCP-QBRAIN-005: Projects QBrainAi and Mcp onto the Mcp section with live precedence.
+    /// Command line wins over environment, which wins over file QBrainAi, which wins over file Mcp.
+    /// Within a layer, QBrainAi wins per key. Sources added after this call still override projected keys.
+    /// The projection recomputes when providers reload, so API writes are visible without a process restart.
     /// </summary>
-    /// <param name="builder">Configuration builder that already exposes the sources added so far.</param>
+    /// <param name="builder">Configuration root that already exposes the sources added so far.</param>
     public static void ProjectCanonicalSectionOverLegacy(IConfigurationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
-        if (builder is not IConfiguration current)
+        if (builder is not IConfigurationRoot root)
             throw new ArgumentException("The configuration builder must expose the sources added so far.", nameof(builder));
 
-        var canonical = current.GetSection("QBrainAi");
-        if (!canonical.Exists())
+        if (root.Providers.Any(provider => provider is CanonicalSectionProjectionProvider))
             return;
 
-        var overlay = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
-        CopySection(canonical, "Mcp", overlay);
-        if (overlay.Count == 0)
-            return;
-
-        builder.AddInMemoryCollection(overlay);
+        builder.Add(new CanonicalSectionProjectionSource(root));
     }
 
     /// <summary>
-    /// TR-MCP-QBRAIN-005: Builds a configuration whose root is the product section.
-    /// Keys from Mcp are copied first. QBrainAi keys overwrite them.
+    /// TR-MCP-QBRAIN-005: Builds a configuration whose root is the effective product section.
+    /// When projection is installed, the snapshot matches command line, environment, then QBrainAi, then Mcp.
+    /// Without projection, Mcp keys are copied first and QBrainAi keys overwrite them.
     /// </summary>
     public static IConfiguration GetEffectiveProductConfiguration(IConfiguration configuration)
     {
         ArgumentNullException.ThrowIfNull(configuration);
+        if (TryGetProjection(configuration, out var projection))
+            return projection.CreateProductConfiguration();
+
         var merged = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
         CopySection(configuration.GetSection("Mcp"), string.Empty, merged);
         CopySection(configuration.GetSection("QBrainAi"), string.Empty, merged);
@@ -68,12 +68,43 @@ public static class McpInstanceResolver
     }
 
     /// <summary>
-    /// Reads an effective value from either Mcp:Instances:{instance}:{key} or Mcp:{key}.
+    /// Binds a list from the effective product section. Workspace lists use the winning section as a whole
+    /// so a QBrainAi entry cannot keep leftover fields from a different Mcp entry.
+    /// </summary>
+    public static List<T> BindEffectiveList<T>(IConfiguration configuration, string sectionKey)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(sectionKey);
+        if (TryGetProjection(configuration, out _))
+            return GetEffectiveProductConfiguration(configuration).GetSection(sectionKey).Get<List<T>>() ?? [];
+
+        var canonical = configuration.GetSection("QBrainAi:" + sectionKey);
+        if (canonical.Exists())
+            return canonical.Get<List<T>>() ?? [];
+
+        return configuration.GetSection("Mcp:" + sectionKey).Get<List<T>>() ?? [];
+    }
+
+    /// <summary>
+    /// Reads an effective value from the projected Mcp section when projection is installed.
+    /// Otherwise reads Mcp:Instances:{instance}:{key} or Mcp:{key}, preferring QBrainAi when both are set.
     /// </summary>
     public static string? GetEffectiveMcpValue(IConfiguration configuration, string? instanceName, string key)
     {
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentNullException.ThrowIfNull(key);
+
+        if (TryGetProjection(configuration, out var projection))
+        {
+            if (!string.IsNullOrWhiteSpace(instanceName)
+                && projection.TryGetProjected($"Instances:{instanceName}:{key}", out var projectedInstance))
+                return string.IsNullOrWhiteSpace(projectedInstance) ? null : projectedInstance;
+
+            if (projection.TryGetProjected(key, out var projected))
+                return string.IsNullOrWhiteSpace(projected) ? null : projected;
+
+            return null;
+        }
 
         if (!string.IsNullOrWhiteSpace(instanceName))
         {
@@ -224,6 +255,20 @@ public static class McpInstanceResolver
                     "Mcp:Database:Provider is required when Mcp:TodoStorage:Provider is 'database'. " +
                     "Set it to one of: sqlite, sqlserver, postgresql (TR-MCP-CFG-007).");
         }
+    }
+
+    private static bool TryGetProjection(IConfiguration configuration, out CanonicalSectionProjectionProvider projection)
+    {
+        projection = null!;
+        if (configuration is not IConfigurationRoot root)
+            return false;
+
+        var match = root.Providers.OfType<CanonicalSectionProjectionProvider>().LastOrDefault();
+        if (match is null)
+            return false;
+
+        projection = match;
+        return true;
     }
 
     private static void CopySection(IConfigurationSection section, string prefix, IDictionary<string, string?> target)

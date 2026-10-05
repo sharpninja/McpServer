@@ -9,6 +9,8 @@ set -uo pipefail
 # - the real client.* MCP methods exposed by qbrain-ai-repl
 
 REPL_INVOKE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${REPL_INVOKE_SCRIPT_DIR}/repl-bin.sh"
 REPL_INVOKE_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-$(cd "$REPL_INVOKE_SCRIPT_DIR/.." && pwd)}"
 REPL_INVOKE_CACHE_DIR="${REPL_INVOKE_PLUGIN_ROOT}/cache"
 
@@ -693,7 +695,7 @@ _repl_persistent_available() {
     [ "${MCPSERVER_REPL_PERSISTENT:-1}" != "0" ] \
         && command -v node >/dev/null 2>&1 \
         && [ -f "${REPL_INVOKE_SCRIPT_DIR}/repl-daemon.js" ] \
-        && { [ -n "${MCPSERVER_REPL_BIN:-}" ] || command -v qbrain-ai-repl >/dev/null 2>&1; }
+        && repl_bin_installed
 }
 
 _repl_run_request_envelope() {
@@ -703,8 +705,8 @@ _repl_run_request_envelope() {
         local daemon_dir repl_bin
         daemon_dir="${MCPSERVER_REPL_DAEMON_DIR:-${REPL_INVOKE_CACHE_DIR}/daemon}"
         mkdir -p "$daemon_dir" 2>/dev/null || true
-        repl_bin="${MCPSERVER_REPL_BIN:-}"
-        if [ -n "$repl_bin" ] && [ -e "$repl_bin" ]; then
+        repl_bin="$(resolve_repl_bin)" || return 1
+        if [ -e "$repl_bin" ]; then
             repl_bin="$(_repl_persistent_native_path "$repl_bin")"
         fi
 
@@ -725,12 +727,13 @@ _repl_run_request_envelope() {
         return $?
     fi
 
-    if ! command -v qbrain-ai-repl >/dev/null 2>&1; then
-        echo "ERROR: qbrain-ai-repl not found on PATH" >&2
+    local repl_bin
+    if ! repl_bin="$(resolve_repl_bin)"; then
+        echo "ERROR: qbrain-ai-repl or mcpserver-repl not found on PATH" >&2
         return 1
     fi
 
-    _repl_run_repl_with_timeout "$timeout_seconds" qbrain-ai-repl --agent-stdio --agent "$AGENT_NAME"
+    _repl_run_repl_with_timeout "$timeout_seconds" "$repl_bin" --agent-stdio --agent "$AGENT_NAME"
 }
 
 _repl_failsafe_plugin_name() {

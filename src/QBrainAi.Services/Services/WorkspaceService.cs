@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using QBrainAi.Support.Mcp.Notifications;
@@ -518,12 +519,12 @@ public sealed class WorkspaceService : IWorkspaceService
 
     private List<WorkspaceConfigEntry> ReadAll()
     {
-        var configured = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+        var configured = McpInstanceResolver.BindEffectiveList<WorkspaceConfigEntry>(_configuration, "Workspaces");
 
-        // TR-MCP-TODO-008: always consider Mcp:RepoRoot as an implicit workspace so
+        // TR-MCP-TODO-008: always consider the effective RepoRoot as an implicit workspace so
         // legacy deployments and integration-test fixtures (which set RepoRoot but not
-        // Mcp:Workspaces) still have a tenant identity. De-dup against configured entries.
-        var repoRoot = _configuration["Mcp:RepoRoot"];
+        // Workspaces) still have a tenant identity. De-dup against configured entries.
+        var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(_configuration, instanceName: null, "RepoRoot");
         if (!string.IsNullOrWhiteSpace(repoRoot))
         {
             // Resolve relative paths against ContentRoot (not CWD) so the synthesized
@@ -535,7 +536,7 @@ public sealed class WorkspaceService : IWorkspaceService
                 .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             if (!configured.Any(w => string.Equals(NormalizePath(w.WorkspacePath), absolute, StringComparison.OrdinalIgnoreCase)))
             {
-                var todoRel = _configuration["Mcp:TodoFilePath"];
+                var todoRel = McpInstanceResolver.GetEffectiveMcpValue(_configuration, instanceName: null, "TodoFilePath");
                 configured.Insert(0, new WorkspaceConfigEntry
                 {
                     WorkspacePath = absolute,
@@ -560,10 +561,9 @@ public sealed class WorkspaceService : IWorkspaceService
         else
         {
             var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
-            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
-            var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-            mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, McpServicesJsonContext.Default.ListWorkspaceConfigEntry);
-            doc["Mcp"] = mcp;
+            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!.AsObject();
+            var section = ProductSettingsDocument.SelectJsonSection(doc);
+            section["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, McpServicesJsonContext.Default.ListWorkspaceConfigEntry);
             await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         }
 
@@ -583,13 +583,9 @@ public sealed class WorkspaceService : IWorkspaceService
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
             .Build();
 
-        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText);
-        if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
-        {
-            data["Mcp"] = mcpDict = new Dictionary<object, object>();
-        }
-
-        mcpDict["Workspaces"] = workspaces;
+        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText) ?? new Dictionary<string, object>();
+        var section = ProductSettingsDocument.SelectYamlSection(data);
+        section["Workspaces"] = workspaces;
         var output = serializer.Serialize(data);
         await File.WriteAllTextAsync(path, output, ct).ConfigureAwait(false);
     }

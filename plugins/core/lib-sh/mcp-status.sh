@@ -2,6 +2,8 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${SCRIPT_DIR}/repl-bin.sh"
 SCRIPT_PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # Optional host knob defaults; the canonical core never hardcodes a host.
 if [ -f "$SCRIPT_DIR/plugin-env.sh" ]; then
@@ -101,7 +103,7 @@ fi
 
 session_file="$CACHE_DIR/session-state.yaml"
 turn_file="$CACHE_DIR/current-turn.yaml"
-repl_path="$(command -v qbrain-ai-repl 2>/dev/null || true)"
+repl_path="$(resolve_repl_bin 2>/dev/null || true)"
 wrapper_path="${MCP_PS_WRAPPER_PATH:-./lib-ps/${MCP_PS_WRAPPER_NAME}}"
 
 printf '%s:\n' "$MCP_STATUS_LABEL"

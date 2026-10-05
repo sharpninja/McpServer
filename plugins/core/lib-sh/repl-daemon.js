@@ -27,7 +27,29 @@ const path = require("path");
 const os = require("os");
 const { spawn } = require("child_process");
 
-const REPL_BIN = process.env.MCPSERVER_REPL_BIN || "qbrain-ai-repl";
+function resolveReplBin() {
+  const explicit = (process.env.MCPSERVER_REPL_BIN || "").trim();
+  if (explicit) return explicit;
+  const names = ["qbrain-ai-repl", "mcpserver-repl"];
+  const pathEntries = (process.env.PATH || "").split(path.delimiter).filter(Boolean);
+  const extensions = process.platform === "win32" ? [".cmd", ".exe", ".bat", ""] : [""];
+  for (const name of names) {
+    for (const dir of pathEntries) {
+      for (const ext of extensions) {
+        const candidate = path.join(dir, name + ext);
+        try {
+          fs.accessSync(candidate, fs.constants.F_OK);
+          return candidate;
+        } catch {
+          // Try the next PATH entry.
+        }
+      }
+    }
+  }
+  return "qbrain-ai-repl";
+}
+
+const REPL_BIN = resolveReplBin();
 const STATE_DIR = process.env.MCPSERVER_REPL_DAEMON_DIR || os.tmpdir();
 const STATE_FILE = path.join(STATE_DIR, "qbrain-ai-repl-daemon.json");
 const IDLE_SECONDS = parseInt(process.env.MCPSERVER_REPL_IDLE_SECONDS || "300", 10);

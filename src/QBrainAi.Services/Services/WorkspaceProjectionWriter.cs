@@ -74,10 +74,9 @@ public sealed class WorkspaceProjectionWriter : IWorkspaceProjectionWriter
         else
         {
             var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
-            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
-            var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-            mcp["Workspaces"] = JsonSerializer.SerializeToNode(sanitized, McpServicesJsonContext.Default.ListWorkspaceConfigEntry);
-            doc["Mcp"] = mcp;
+            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!.AsObject();
+            var section = ProductSettingsDocument.SelectJsonSection(doc);
+            section["Workspaces"] = JsonSerializer.SerializeToNode(sanitized, McpServicesJsonContext.Default.ListWorkspaceConfigEntry);
             await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         }
 
@@ -118,13 +117,9 @@ public sealed class WorkspaceProjectionWriter : IWorkspaceProjectionWriter
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
             .Build();
 
-        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText);
-        if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
-        {
-            data["Mcp"] = mcpDict = new Dictionary<object, object>();
-        }
-
-        mcpDict["Workspaces"] = workspaces;
+        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText) ?? new Dictionary<string, object>();
+        var section = ProductSettingsDocument.SelectYamlSection(data);
+        section["Workspaces"] = workspaces;
         var output = serializer.Serialize(data);
         await File.WriteAllTextAsync(path, output, ct).ConfigureAwait(false);
     }

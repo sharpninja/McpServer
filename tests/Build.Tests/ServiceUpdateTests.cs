@@ -98,6 +98,26 @@ public sealed class ServiceUpdateTests
         Assert.Contains("daemon-reload", f.Events);
     }
 
+    /// <summary>TR-MCP-QBRAIN-006: a legacy ExecStart that lives only in a systemd drop-in is still retargeted.</summary>
+    [Fact]
+    public void LinuxUpdate_LegacyExecStartInDropInIsRetargeted()
+    {
+        using var f = new Fixture();
+        var legacy = Path.Combine(f.Install, "McpServer.Support.Mcp");
+        f.UnitExecutable = legacy;
+        var unitPath = Path.Combine(f.Root, "example.service");
+        File.WriteAllText(unitPath, "[Service]\nExecStart=/usr/bin/true\n");
+        var dropIn = Path.Combine(f.Root, "override.conf");
+        File.WriteAllText(dropIn, "[Service]\nExecStart=" + legacy + "\n");
+        f.DropIns = dropIn;
+        f.Update();
+        var dropInText = File.ReadAllText(dropIn);
+        Assert.Contains("QBrainAi.Support.Mcp", dropInText, StringComparison.Ordinal);
+        Assert.DoesNotContain("McpServer.Support.Mcp", dropInText, StringComparison.Ordinal);
+        Assert.DoesNotContain("QBrainAi.Support.Mcp", File.ReadAllText(unitPath), StringComparison.Ordinal);
+        Assert.Contains("daemon-reload", f.Events);
+    }
+
     /// <summary>Quoted relative YAML and legacy fallback resolve to the actual preserved data root.</summary>
     [Theory]
     [InlineData("DataFolder: '../data'\nMcp:\n  DataDirectory: ignored\n")]

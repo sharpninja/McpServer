@@ -218,6 +218,21 @@ public sealed class QBrainAiRebrandPhase1Tests
         Assert.Contains("newName: \"IsQBrainAiRelated\"", rename, StringComparison.Ordinal);
         var ensure = File.ReadAllText(Path.Combine(root, "plugins", "core", "lib-sh", "ensure-repl.sh"));
         Assert.Contains("mcpserver-repl", ensure, StringComparison.Ordinal);
+        var replBin = File.ReadAllText(Path.Combine(root, "plugins", "core", "lib-sh", "repl-bin.sh"));
+        Assert.Contains("mcpserver-repl", replBin, StringComparison.Ordinal);
+        Assert.Contains("qbrain-ai-repl", replBin, StringComparison.Ordinal);
+        foreach (var caller in new[]
+        {
+            Path.Combine(root, "plugins", "core", "lib-sh", "repl-invoke.sh"),
+            Path.Combine(root, "plugins", "core", "lib-sh", "repl-persistent.sh"),
+            Path.Combine(root, "plugins", "core", "lib-sh", "hook-lib.sh"),
+            Path.Combine(root, "plugins", "core", "lib-sh", "mcp-status.sh"),
+        })
+        {
+            Assert.Contains("repl-bin.sh", File.ReadAllText(caller), StringComparison.Ordinal);
+        }
+
+        Assert.Contains("mcpserver-repl", File.ReadAllText(Path.Combine(root, "plugins", "core", "lib-ps", "repl-invoke.ps1")), StringComparison.Ordinal);
     }
 
     private static string FindFile(string root, string fileName)

@@ -190,10 +190,10 @@ builder.Services.AddConfiguredMcpDbContext(builder.Configuration, instanceName, 
 
 if (McpInstanceResolver.CanonicalAndLegacySectionsBothPresent(builder.Configuration))
 {
-    Console.Error.WriteLine("Both QBrainAi and Mcp configuration sections are present. QBrainAi values win for each key. The Mcp section remains a 1.x alias.");
+    Console.Error.WriteLine("Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.");
 }
 
-builder.Services.Configure<IngestionOptions>(McpInstanceResolver.GetEffectiveProductConfiguration(builder.Configuration));
+builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
 builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
 builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection(MarkerPromptOptions.SectionName));
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));

@@ -1,4 +1,5 @@
 using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -139,11 +140,10 @@ public sealed class AgentHelpPinnedPathResolver
             // Fall through to configuration-based resolution for unit tests and bare hosts.
         }
 
-        var configuredWorkspaces = _configuration.GetSection("Mcp:Workspaces").GetChildren().ToList();
-        var configuredPrimary = configuredWorkspaces
-            .FirstOrDefault(section => bool.TryParse(section["IsPrimary"], out var isPrimary) && isPrimary)
+        var configuredWorkspaces = McpInstanceResolver.BindEffectiveList<WorkspaceConfigEntry>(_configuration, "Workspaces");
+        var configuredPrimary = configuredWorkspaces.FirstOrDefault(entry => entry.IsPrimary)
             ?? configuredWorkspaces.FirstOrDefault();
-        var configuredPath = configuredPrimary?["WorkspacePath"];
+        var configuredPath = configuredPrimary?.WorkspacePath;
         if (!string.IsNullOrWhiteSpace(configuredPath))
             return NormalizePath(configuredPath);
 

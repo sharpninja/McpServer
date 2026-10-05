@@ -110,7 +110,10 @@ function Invoke-McpReplRaw {
     # Simulate the real bootstrap check that the full implementation performs
     $exe = Get-Command qbrain-ai-repl -ErrorAction SilentlyContinue
     if (-not $exe) {
-        throw "qbrain-ai-repl not found in PATH. Install the QBrainAi.Repl tool or add it to PATH."
+        $exe = Get-Command mcpserver-repl -ErrorAction SilentlyContinue
+    }
+    if (-not $exe) {
+        throw "qbrain-ai-repl not found in PATH. Install the QBrainAI.Repl tool or add mcpserver-repl to PATH."
     }
     # Real path would spawn the process, send YAML via ConvertTo-McpYaml, etc.
     Write-Warning "McpRepl: Real REPL invocation not wired in this published version stub."

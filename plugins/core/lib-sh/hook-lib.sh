@@ -18,6 +18,8 @@
 # on every host (codex deliberately retains it).
 
 HOOK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${HOOK_LIB_DIR}/repl-bin.sh"
 
 # ---------------------------------------------------------------------------
 # Environment / cache-dir initialization
@@ -365,8 +367,8 @@ session_start_main() {
         exit 0
     fi
 
-    # Ensure ensure-repl has run (install qbrain-ai-repl if missing)
-    if ! command -v qbrain-ai-repl >/dev/null 2>&1; then
+    # Install the REPL only when neither the current nor the 1.x command is on PATH.
+    if ! repl_bin_installed; then
         bash "$HOOK_LIB_DIR/ensure-repl.sh" >&2 || true
     fi
 

@@ -185,8 +185,8 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
            || string.Equals(executable, Path.Combine(install, LegacyAppHost), StringComparison.Ordinal);
 
     /// <summary>
-    /// TR-MCP-QBRAIN-006: After files are replaced, a preserved unit that still names McpServer.Support.Mcp
-    /// is retargeted at QBrainAi.Support.Mcp before daemon-reload. The old binary is no longer on disk.
+    /// TR-MCP-QBRAIN-006: After files are replaced, a preserved unit or drop-in that still names McpServer.Support.Mcp
+    /// is retargeted at QBrainAi.Support.Mcp before daemon-reload. The effective ExecStart may live in a drop-in.
     /// </summary>
     private void RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
     {
@@ -199,13 +199,22 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         if (!string.Equals(Decode(executable.Groups[1].Value), legacyPath, StringComparison.Ordinal))
             return;
 
-        var fragment = RequiredUnitFile(Value(unit, "FragmentPath"));
-        var text = File.ReadAllText(fragment);
-        var updated = text.Replace(LegacyAppHost, AppHost, StringComparison.Ordinal);
-        if (updated == text)
-            throw new InvalidOperationException("Legacy ExecStart could not be retargeted to the deployed application host.");
+        var candidates = new List<string> { RequiredUnitFile(Value(unit, "FragmentPath")) };
+        candidates.AddRange(ParseWords(Value(unit, "DropInPaths")).Select(RequiredUnitFile));
+        var replaced = false;
+        foreach (var path in candidates.Distinct(StringComparer.Ordinal))
+        {
+            var text = File.ReadAllText(path);
+            var updated = text.Replace(LegacyAppHost, AppHost, StringComparison.Ordinal);
+            if (updated == text)
+                continue;
 
-        File.WriteAllText(fragment, updated);
+            File.WriteAllText(path, updated);
+            replaced = true;
+        }
+
+        if (!replaced)
+            throw new InvalidOperationException("Legacy ExecStart could not be retargeted to the deployed application host.");
     }
 
     /// <summary>Fails closed when configuration precedence could point preservation at the wrong live data.</summary>
