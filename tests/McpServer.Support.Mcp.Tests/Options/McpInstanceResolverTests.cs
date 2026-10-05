@@ -147,4 +147,91 @@ public sealed class McpInstanceResolverTests
 
         Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
     }
+
+    /// <summary>
+    /// TEST-MCP-QBRAIN-005: When both product sections set RepoRoot, QBrainAi wins.
+    /// Uses an in-memory configuration with Mcp:RepoRoot=legacy and QBrainAi:RepoRoot=canonical.
+    /// </summary>
+    [Fact]
+    public void GetEffectiveMcpValue_PrefersQBrainAiSectionWhenBothPresent()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:RepoRoot"] = "legacy",
+            ["QBrainAi:RepoRoot"] = "canonical",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        var value = McpInstanceResolver.GetEffectiveMcpValue(configuration, null, "RepoRoot");
+
+        Assert.Equal("canonical", value);
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBRAIN-005: A 1.x configuration that only has the Mcp section still resolves.
+    /// Uses an in-memory configuration with Mcp:RepoRoot and no QBrainAi section.
+    /// </summary>
+    [Fact]
+    public void GetEffectiveMcpValue_ReadsLegacySectionWhenCanonicalAbsent()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:RepoRoot"] = "legacy-only",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        var value = McpInstanceResolver.GetEffectiveMcpValue(configuration, null, "RepoRoot");
+
+        Assert.Equal("legacy-only", value);
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBRAIN-005: QBRAINAI_INSTANCE wins over MCP_INSTANCE when both are set.
+    /// Restores both variables after the assertion.
+    /// </summary>
+    [Fact]
+    public void GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable()
+    {
+        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+        try
+        {
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", "from-new");
+            Environment.SetEnvironmentVariable("MCP_INSTANCE", "from-old");
+
+            var value = McpInstanceResolver.GetRequestedInstanceName([]);
+
+            Assert.Equal("from-new", value);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
+            Environment.SetEnvironmentVariable("MCP_INSTANCE", previousLegacy);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBRAIN-005: MCP_INSTANCE still selects the instance when QBRAINAI_INSTANCE is unset.
+    /// Restores both variables after the assertion.
+    /// </summary>
+    [Fact]
+    public void GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable()
+    {
+        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+        try
+        {
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", null);
+            Environment.SetEnvironmentVariable("MCP_INSTANCE", "from-old");
+
+            var value = McpInstanceResolver.GetRequestedInstanceName([]);
+
+            Assert.Equal("from-old", value);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
+            Environment.SetEnvironmentVariable("MCP_INSTANCE", previousLegacy);
+        }
+    }
 }
