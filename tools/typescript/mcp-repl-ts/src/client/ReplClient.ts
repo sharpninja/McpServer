@@ -1,6 +1,7 @@
 import { spawn, ChildProcess } from 'child_process';
 import * as yaml from 'js-yaml';
 import { McpRequest, McpResult, McpError, McpEvent, ReplResponse } from '../types';
+import { resolveReplCommand } from '../repl-command';
 
 /**
  * Shared ReplClient for talking to qbrain-ai-repl --agent-stdio.
@@ -18,7 +19,7 @@ export class ReplClient {
   async connect(): Promise<void> {
     if (this.proc) return;
 
-    this.proc = spawn('qbrain-ai-repl', ['--agent-stdio'], {
+    this.proc = spawn(resolveReplCommand(), ['--agent-stdio'], {
       cwd: this.workspacePath,
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env, MCP_WORKSPACE_PATH: this.workspacePath },

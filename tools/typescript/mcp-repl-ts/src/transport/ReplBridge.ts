@@ -1,6 +1,7 @@
 import { spawn, ChildProcess } from 'child_process';
 import { createInterface } from 'readline';
 import * as yaml from 'js-yaml';
+import { resolveReplCommand } from '../repl-command';
 
 export interface ReplResponse {
   type: 'result' | 'error' | 'event';
@@ -50,7 +51,7 @@ export class ReplBridge {
     if (this.proc && this.proc.exitCode === null && !this.proc.killed) {
       return;
     }
-    this.proc = spawn('qbrain-ai-repl', ['--agent-stdio'], {
+    this.proc = spawn(resolveReplCommand(), ['--agent-stdio'], {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env },
     });

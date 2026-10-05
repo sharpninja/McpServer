@@ -37,6 +37,7 @@ exports.ReplBridge = void 0;
 const child_process_1 = require("child_process");
 const readline_1 = require("readline");
 const yaml = __importStar(require("js-yaml"));
+const repl_command_1 = require("../repl-command");
 /**
  * Persistent bridge to qbrain-ai-repl --agent-stdio.
  * Multiplexes concurrent JSON-over-STDIO requests by requestId.
@@ -69,7 +70,7 @@ class ReplBridge {
         if (this.proc && this.proc.exitCode === null && !this.proc.killed) {
             return;
         }
-        this.proc = (0, child_process_1.spawn)('qbrain-ai-repl', ['--agent-stdio'], {
+        this.proc = (0, child_process_1.spawn)((0, repl_command_1.resolveReplCommand)(), ['--agent-stdio'], {
             stdio: ['pipe', 'pipe', 'pipe'],
             env: { ...process.env },
         });

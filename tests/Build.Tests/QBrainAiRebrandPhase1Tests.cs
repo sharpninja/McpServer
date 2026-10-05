@@ -233,6 +233,42 @@ public sealed class QBrainAiRebrandPhase1Tests
         }
 
         Assert.Contains("mcpserver-repl", File.ReadAllText(Path.Combine(root, "plugins", "core", "lib-ps", "repl-invoke.ps1")), StringComparison.Ordinal);
+        foreach (var relative in new[] { "Dockerfile", "docker-compose.mcp.yml" })
+        {
+            var text = File.ReadAllText(Path.Combine(root, relative));
+            Assert.DoesNotContain("QBrainAi__", text, StringComparison.Ordinal);
+            Assert.Contains("Mcp__RepoRoot=/workspace", text, StringComparison.Ordinal);
+            Assert.Contains("Mcp__Port=7147", text, StringComparison.Ordinal);
+            Assert.Contains("Mcp__DataDirectory=/data", text, StringComparison.Ordinal);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-QBRAIN-005: Node REPL callers accept the installed 1.x command when the new command is absent.
+    /// </summary>
+    [Fact]
+    public void ReplNodeCallers_ResolveLegacyCommand()
+    {
+        var root = FindRepositoryRoot();
+        foreach (var relative in new[]
+        {
+            Path.Combine("plugins", "core", "lib-node", "src", "transport", "repl-bridge.ts"),
+            Path.Combine("tools", "typescript", "mcp-repl-ts", "src", "repl-command.ts"),
+        })
+        {
+            var text = File.ReadAllText(Path.Combine(root, relative));
+            Assert.Contains("mcpserver-repl", text, StringComparison.Ordinal);
+            Assert.Contains("qbrain-ai-repl", text, StringComparison.Ordinal);
+        }
+
+        foreach (var relative in new[]
+        {
+            Path.Combine("tools", "typescript", "mcp-repl-ts", "src", "client", "ReplClient.ts"),
+            Path.Combine("tools", "typescript", "mcp-repl-ts", "src", "transport", "ReplBridge.ts"),
+        })
+        {
+            Assert.Contains("resolveReplCommand()", File.ReadAllText(Path.Combine(root, relative)), StringComparison.Ordinal);
+        }
     }
 
     private static string FindFile(string root, string fileName)

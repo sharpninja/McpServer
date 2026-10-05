@@ -9,10 +9,12 @@
  */
 import { spawn, type ChildProcess } from 'child_process';
 import { EventEmitter } from 'events';
-import { dirname } from 'path';
+import { mkdtempSync, writeFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { dirname, join } from 'path';
 import { PassThrough } from 'stream';
 import * as yaml from 'js-yaml';
-import { ReplBridge, type ReplResponse } from '../src/transport/repl-bridge.js';
+import { ReplBridge, resolveReplCommand, type ReplResponse } from '../src/transport/repl-bridge.js';
 
 jest.mock('child_process', () => ({
   spawn: jest.fn(),
@@ -95,6 +97,9 @@ describe('ReplBridge process launch', () => {
     process.chdir(wrongCurrentDirectory);
     process.env.MCP_WORKSPACE_PATH = workspace;
     process.env.MCP_AGENT_NAME = 'Cline';
+    process.env.PATH = mkdtempSync(join(tmpdir(), 'repl-empty-'));
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
     spawnMock.mockReturnValue(createMockChildProcess());
 
     const bridge = new ReplBridge();
@@ -111,6 +116,40 @@ describe('ReplBridge process launch', () => {
         }),
       }),
     );
+  });
+
+  test('uses mcpserver-repl when qbrain-ai-repl is not installed', async () => {
+    const bin = mkdtempSync(join(tmpdir(), 'repl-legacy-'));
+    writeFileSync(join(bin, 'mcpserver-repl'), '');
+    process.env.PATH = bin;
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
+    spawnMock.mockReturnValue(createMockChildProcess());
+
+    const bridge = new ReplBridge();
+    await bridge.ensure();
+
+    expect(spawnMock).toHaveBeenCalledWith(
+      'mcpserver-repl',
+      expect.any(Array),
+      expect.any(Object),
+    );
+    expect(resolveReplCommand()).toBe('mcpserver-repl');
+  });
+
+  test('prefers qbrain-ai-repl when both REPL commands are installed', async () => {
+    const bin = mkdtempSync(join(tmpdir(), 'repl-both-'));
+    writeFileSync(join(bin, 'mcpserver-repl'), '');
+    writeFileSync(join(bin, 'qbrain-ai-repl'), '');
+    process.env.PATH = bin;
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
+    spawnMock.mockReturnValue(createMockChildProcess());
+
+    const bridge = new ReplBridge();
+    await bridge.ensure();
+
+    expect(spawnMock.mock.calls[0][0]).toBe('qbrain-ai-repl');
   });
 });
 

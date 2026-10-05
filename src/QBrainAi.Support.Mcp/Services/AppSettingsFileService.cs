@@ -157,26 +157,23 @@ public sealed class AppSettingsFileService
             if (resolvedPath.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
             {
                 var data = await LoadYamlCoreAsync(resolvedPath, ct).ConfigureAwait(false);
-                if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
-                    data["Mcp"] = mcpDict = new Dictionary<object, object>();
-
+                var section = ProductSettingsDocument.SelectYamlSection(data);
                 if (template is null)
-                    mcpDict.Remove("MarkerPromptTemplate");
+                    section.Remove("MarkerPromptTemplate");
                 else
-                    mcpDict["MarkerPromptTemplate"] = template;
+                    section["MarkerPromptTemplate"] = template;
 
                 await SaveYamlCoreAsync(data, resolvedPath, ct).ConfigureAwait(false);
             }
             else
             {
                 var document = await LoadJsonCoreAsync(resolvedPath, ct).ConfigureAwait(false);
-                var mcp = document["Mcp"] as JsonObject ?? new JsonObject();
+                var section = ProductSettingsDocument.SelectJsonSection(document);
                 if (template is null)
-                    mcp.Remove("MarkerPromptTemplate");
+                    section.Remove("MarkerPromptTemplate");
                 else
-                    mcp["MarkerPromptTemplate"] = template;
+                    section["MarkerPromptTemplate"] = template;
 
-                document["Mcp"] = mcp;
                 await SaveJsonCoreAsync(document, resolvedPath, ct).ConfigureAwait(false);
             }
 

@@ -22,6 +22,20 @@ internal static class ProductSettingsDocument
         return created;
     }
 
+    /// <summary>Returns the QBrainAi map when present, otherwise the Mcp map, otherwise a new QBrainAi map.</summary>
+    public static IDictionary<object, object> SelectYamlSection(IDictionary<object, object> document)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        if (TryGetObjectSection(document, "QBrainAi", out var canonical))
+            return canonical;
+        if (TryGetObjectSection(document, "Mcp", out var legacy))
+            return legacy;
+
+        var created = new Dictionary<object, object>();
+        document["QBrainAi"] = created;
+        return created;
+    }
+
     /// <summary>Returns the QBrainAi object when present, otherwise the Mcp object, otherwise a new QBrainAi object.</summary>
     public static JsonObject SelectJsonSection(JsonObject document)
     {
@@ -41,6 +55,23 @@ internal static class ProductSettingsDocument
         foreach (var pair in document)
         {
             if (!string.Equals(pair.Key, name, StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (pair.Value is IDictionary<object, object> dictionary)
+            {
+                section = dictionary;
+                return true;
+            }
+        }
+
+        section = new Dictionary<object, object>();
+        return false;
+    }
+
+    private static bool TryGetObjectSection(IDictionary<object, object> document, string name, out IDictionary<object, object> section)
+    {
+        foreach (var pair in document)
+        {
+            if (pair.Key is not string key || !string.Equals(key, name, StringComparison.OrdinalIgnoreCase))
                 continue;
             if (pair.Value is IDictionary<object, object> dictionary)
             {

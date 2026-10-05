@@ -301,6 +301,33 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         Assert.Contains("\"MarkerPromptTemplate\": \"new-template\"", jsonText, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TR-MCP-QBRAIN-005: a canonical QBrainAi document receives the marker prompt and does not gain an Mcp section.
+    /// </summary>
+    [Fact]
+    public async Task UpdateGlobalPromptTemplateAsync_WhenCanonicalYaml_UpdatesQBrainAiOnly()
+    {
+        var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
+        await File.WriteAllTextAsync(
+            yamlPath,
+            """
+            QBrainAi:
+              MarkerPromptTemplate: old-template
+              Port: 7147
+            """,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var configuration = BuildConfiguration(yamlPath);
+        var service = CreateService(configuration);
+
+        await service.UpdateGlobalPromptTemplateAsync("new-template", TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var yamlText = await File.ReadAllTextAsync(yamlPath, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Contains("MarkerPromptTemplate: new-template", yamlText, StringComparison.Ordinal);
+        Assert.DoesNotContain("Mcp:", yamlText, StringComparison.Ordinal);
+        Assert.Equal("new-template", configuration["QBrainAi:MarkerPromptTemplate"]);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {

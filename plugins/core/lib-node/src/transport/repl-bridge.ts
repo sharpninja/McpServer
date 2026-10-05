@@ -1,5 +1,6 @@
 import { spawn, ChildProcess } from 'child_process';
 import { existsSync, statSync } from 'fs';
+import { delimiter, join } from 'path';
 import { createInterface } from 'readline';
 import * as yaml from 'js-yaml';
 
@@ -22,6 +23,24 @@ function isDirectory(path: string): boolean {
   } catch {
     return false;
   }
+}
+
+/** Prefer an explicit override, then qbrain-ai-repl, then the 1.x mcpserver-repl command. */
+export function resolveReplCommand(): string {
+  const explicit = (process.env.MCPSERVER_REPL_BIN || process.env.MCPSERVER_REPL_COMMAND || '').trim();
+  if (explicit) return explicit;
+  return findInstalledRepl('qbrain-ai-repl') || findInstalledRepl('mcpserver-repl') || 'qbrain-ai-repl';
+}
+
+function findInstalledRepl(name: string): string | undefined {
+  const entries = (process.env.PATH || '').split(delimiter).filter(Boolean);
+  const extensions = process.platform === 'win32' ? ['.cmd', '.exe', '.bat', ''] : [''];
+  for (const dir of entries) {
+    for (const ext of extensions) {
+      if (existsSync(join(dir, name + ext))) return name;
+    }
+  }
+  return undefined;
 }
 
 export function resolveReplWorkingDirectory(): string {
@@ -77,7 +96,7 @@ export class ReplBridge {
     if (this.proc && this.proc.exitCode === null && !this.proc.killed) {
       return;
     }
-    const replCommand = process.env.MCPSERVER_REPL_COMMAND || 'qbrain-ai-repl';
+    const replCommand = resolveReplCommand();
     let replArgs = process.env.MCPSERVER_REPL_ARGS
       ? process.env.MCPSERVER_REPL_ARGS.split(' ').filter(Boolean)
       : ['--agent-stdio'];

@@ -14,10 +14,12 @@ services:
       - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - QBrainAi__Port=7147
-      - QBrainAi__RepoRoot=/workspace
-      - QBrainAi__DataSource=mcp.db
-      - QBrainAi__DataDirectory=/data
+      # Mcp__* defaults: a compose override of the same name replaces them.
+      # A canonical environment value still wins that tie.
+      - Mcp__Port=7147
+      - Mcp__RepoRoot=/workspace
+      - Mcp__DataSource=mcp.db
+      - Mcp__DataDirectory=/data
       - VectorIndex__IndexPath=/data/vector.idx
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7147/health"]
