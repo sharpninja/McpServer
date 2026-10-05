@@ -1,7 +1,7 @@
 {
-  "name": "@sharpninja/mcpserver-plugin-core",
+  "name": "@qbrainai/qbrain-ai-plugin-core",
   "version": "0.2.0",
-  "description": "Canonical shared transport, marker-trust, cache, and session-log infrastructure for McpServer Node plugins (cline, cline-v2, opencode).",
+  "description": "Canonical shared transport, marker-trust, cache, and session-log infrastructure for QBrainAi Node plugins (cline, cline-v2, opencode).",
   "license": "MIT",
   "author": "Payton Byrd (The Sharp Ninja)",
   "repository": {

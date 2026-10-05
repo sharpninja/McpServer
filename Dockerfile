@@ -10,10 +10,10 @@ COPY src/ src/
 COPY templates/ templates/
 
 # Restore (cached layer)
-RUN dotnet restore src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
+RUN dotnet restore src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj
 
 # Publish
-RUN dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj \
+RUN dotnet publish src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj \
     -c Release -o /app/publish --no-restore
 
 # Stage 2: Runtime
@@ -32,16 +32,16 @@ EXPOSE 7147
 
 ENV PORT=7147 \
     ASPNETCORE_ENVIRONMENT=Production \
-    Mcp__Port=7147 \
-    Mcp__DataSource=mcp.db \
-    Mcp__DataDirectory=/data \
-    Mcp__RepoRoot=/workspace \
-    Mcp__TodoFilePath=docs/Project/TODO.yaml \
-    Mcp__SessionsPath=docs/sessions \
+    QBrainAi__Port=7147 \
+    QBrainAi__DataSource=mcp.db \
+    QBrainAi__DataDirectory=/data \
+    QBrainAi__RepoRoot=/workspace \
+    QBrainAi__TodoFilePath=docs/Project/TODO.yaml \
+    QBrainAi__SessionsPath=docs/sessions \
     VectorIndex__IndexPath=/data/vector.idx \
     Embedding__AutoDownload=true
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:7147/health || exit 1
 
-ENTRYPOINT ["dotnet", "McpServer.Support.Mcp.dll"]
+ENTRYPOINT ["dotnet", "QBrainAi.Support.Mcp.dll"]

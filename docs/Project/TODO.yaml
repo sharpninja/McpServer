@@ -8,20 +8,20 @@ requirements-management:
     completed: 2026-02-26
     description:
     - 'Create a RequirementsManagementController with REST endpoints for CRUD on Functional Requirements (FR), Technical Requirements (TR), and Testing Requirements (TEST) entries, backed by the four canonical files: Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, and TR-per-FR-Mapping.md.'
-    - Add a document generation endpoint GET /mcpserver/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
+    - Add a document generation endpoint GET /qbrainai/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
     - 'Expose five MCP tools: requirements_generate, requirements_list, requirements_create, requirements_update, requirements_delete - enabling AI agents to manage requirements and generate up-to-date documentation directly from a conversation.'
     - On startup, parse all four document files into a strongly-typed in-memory model and keep it synchronized with file writes on every mutating operation.
     done-summary: Implemented requirements document parsing/rendering service, REST CRUD + generate endpoints, STDIO MCP tools, DI/config wiring, and focused service/controller tests.
     technical-details:
-    - 'New project component: RequirementsManagementController at src/McpServer.Support.Mcp/Controllers/RequirementsController.cs'
+    - 'New project component: RequirementsManagementController at src/QBrainAi.Support.Mcp/Controllers/RequirementsController.cs'
     - 'RequirementsDocumentService - parses Functional-Requirements.md (## FR-{ID}\n\n{title}\n\n{body}), Technical-Requirements.md (## TR-{ID}\n\n**{title}** - {body}), Testing-Requirements.md (bullet list: - TEST-{ID}: {condition} format), and TR-per-FR-Mapping.md (Markdown table). Exposes IRequirementsDocumentService with typed CRUD and generation methods.'
     - IRequirementsRepository - file-backed persistence using SemaphoreSlim for write serialization. Each mutating call updates the in-memory model then atomically writes the affected file via File.WriteAllTextAsync to a temp path followed by File.Replace (atomic swap).
     - RequirementsDocumentRenderer - RenderFunctional(), RenderTechnical(), RenderTesting(), RenderMapping(), RenderAll(). RenderAll() uses System.IO.Compression.ZipArchive to produce a single in-memory ZIP containing all four files with their canonical filenames.
-    - 'Sub-resources: POST/GET /mcpserver/requirements/fr, GET/PUT/DELETE /mcpserver/requirements/fr/{id}; same pattern for /tr/{id} and /test/{id}. GET /mcpserver/requirements/mapping for the full table. GET /mcpserver/requirements/generate?doc= for document output.'
-    - 'MCP tools (added to McpServerMcpTools.cs): requirements_generate(doc), requirements_list(type), requirements_create(type, id, title, body), requirements_update(type, id, title?, body?), requirements_delete(type, id).'
+    - 'Sub-resources: POST/GET /qbrainai/requirements/fr, GET/PUT/DELETE /qbrainai/requirements/fr/{id}; same pattern for /tr/{id} and /test/{id}. GET /qbrainai/requirements/mapping for the full table. GET /qbrainai/requirements/generate?doc= for document output.'
+    - 'MCP tools (added to QBrainAiMcpTools.cs): requirements_generate(doc), requirements_list(type), requirements_create(type, id, title, body), requirements_update(type, id, title?, body?), requirements_delete(type, id).'
     - 'Document file paths resolved relative to RepoRoot via IOptions<RequirementsOptions>. Default paths: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md. Configurable via Mcp:Requirements:* config section.'
     - All public types require XML doc comments (CS1591 enforced as error in this repo).
-    - ApiKeyAuthFilter is no longer used; all /mcpserver/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
+    - ApiKeyAuthFilter is no longer used; all /qbrainai/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
     functional-requirements:
     - 'FR-MCP-040: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
     - 'FR-MCP-041: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
@@ -46,11 +46,11 @@ requirements-management:
       done: true
     - task: '[Phase 2 - Parsing] Implement MappingParser: Markdown table rows | FR-id | TR-ids | with comma-separated TR IDs per cell'
       done: true
-    - task: '[Phase 3 - Renderer] Implement RequirementsDocumentRenderer.RenderFunctional(IEnumerable<FrEntry>): # Functional Requirements (MCP Server)\n\n## {Id}\n\n{Title}\n\n{Body}\n\n'
+    - task: '[Phase 3 - Renderer] Implement RequirementsDocumentRenderer.RenderFunctional(IEnumerable<FrEntry>): # Functional Requirements (QBrain.AI)\n\n## {Id}\n\n{Title}\n\n{Body}\n\n'
       done: true
     - task: '[Phase 3 - Renderer] Implement RenderTechnical(IEnumerable<TrEntry>): ## {Id}\n\n**{Title}** - {Body}\n\n'
       done: true
-    - task: '[Phase 3 - Renderer] Implement RenderTesting(IEnumerable<TestEntry>): # Testing Requirements (MCP Server)\n\n- {Id}: {Condition}\n per entry'
+    - task: '[Phase 3 - Renderer] Implement RenderTesting(IEnumerable<TestEntry>): # Testing Requirements (QBrain.AI)\n\n- {Id}: {Condition}\n per entry'
       done: true
     - task: '[Phase 3 - Renderer] Implement RenderMapping(IEnumerable<FrTrMapping>): | FR | Primary TRs |\n| --- | --- |\n| {FrId} | {TrIds joined by ", "} |'
       done: true
@@ -64,19 +64,19 @@ requirements-management:
       done: true
     - task: '[Phase 4 - Service] Implement GenerateAllAsync(): call RenderAll(), return MemoryStream'
       done: true
-    - task: '[Phase 5 - Controller] Implement RequirementsController: GET/POST /mcpserver/requirements/fr, GET/PUT/DELETE /mcpserver/requirements/fr/{id} (same pattern for /tr and /test)'
+    - task: '[Phase 5 - Controller] Implement RequirementsController: GET/POST /qbrainai/requirements/fr, GET/PUT/DELETE /qbrainai/requirements/fr/{id} (same pattern for /tr and /test)'
       done: true
-    - task: '[Phase 5 - Controller] Add GET /mcpserver/requirements/generate?doc= endpoint: parse enum, call GenerateDocumentAsync or GenerateAllAsync, set Content-Disposition attachment header'
+    - task: '[Phase 5 - Controller] Add GET /qbrainai/requirements/generate?doc= endpoint: parse enum, call GenerateDocumentAsync or GenerateAllAsync, set Content-Disposition attachment header'
       done: true
-    - task: '[Phase 5 - Controller] Add GET /mcpserver/requirements/mapping and PUT /mcpserver/requirements/mapping/{frId} for the TR-per-FR table'
+    - task: '[Phase 5 - Controller] Add GET /qbrainai/requirements/mapping and PUT /qbrainai/requirements/mapping/{frId} for the TR-per-FR table'
       done: true
     - task: '[Phase 5 - Controller] Auth is handled by WorkspaceAuthMiddleware at the pipeline level - no per-action attributes needed'
       done: true
     - task: '[Phase 5 - Controller] Add full XML doc comments on all controller actions and parameters'
       done: true
-    - task: '[Phase 6 - MCP Tools] Add [McpServerTool] requirements_list(string type) to McpServerMcpTools.cs: returns JSON array of matching entries'
+    - task: '[Phase 6 - MCP Tools] Add [McpServerTool] requirements_list(string type) to QBrainAiMcpTools.cs: returns JSON array of matching entries'
       done: true
-    - task: '[Phase 6 - MCP Tools] Add [McpServerTool] requirements_generate(string doc) to McpServerMcpTools.cs: returns Markdown string for specified doc type (all returns concatenated with --- separators)'
+    - task: '[Phase 6 - MCP Tools] Add [McpServerTool] requirements_generate(string doc) to QBrainAiMcpTools.cs: returns Markdown string for specified doc type (all returns concatenated with --- separators)'
       done: true
     - task: '[Phase 6 - MCP Tools] Add [McpServerTool] requirements_create(string type, string id, string title, string body) with XML docs'
       done: true
@@ -92,9 +92,9 @@ requirements-management:
       done: true
     - task: '[Phase 8 - Tests] Unit tests for each renderer: given typed entries, when rendered, then output matches expected Markdown structure exactly (heading level, bold format, bullet syntax)'
       done: true
-    - task: '[Phase 8 - Tests] Integration test: POST /mcpserver/requirements/fr creates entry → GET /mcpserver/requirements/generate?doc=functional contains new entry → DELETE removes it → generate no longer contains it'
+    - task: '[Phase 8 - Tests] Integration test: POST /qbrainai/requirements/fr creates entry → GET /qbrainai/requirements/generate?doc=functional contains new entry → DELETE removes it → generate no longer contains it'
       done: true
-    - task: '[Phase 8 - Tests] Integration test: GET /mcpserver/requirements/generate?doc=all returns 200 application/zip with four entries matching canonical filenames'
+    - task: '[Phase 8 - Tests] Integration test: GET /qbrainai/requirements/generate?doc=all returns 200 application/zip with four entries matching canonical filenames'
       done: true
     - task: '[Phase 8 - Tests] Test atomic write: simulate concurrent mutations, verify file integrity after all complete'
       done: true
@@ -103,19 +103,19 @@ staging-and-infrastructure:
   - id: nuget-client-lib
     title: Create REST client library and NuGet package with publish pipeline
     estimate: 3-5 days
-    note: 'Implemented: McpServer.Client library with 8 sub-clients covering all 52+ API endpoints, typed DTOs, exception hierarchy, DI integration, factory pattern, 35 unit tests, CI pipeline with NuGet publish (main→nuget.org, other→GitHub Packages).'
+    note: 'Implemented: QBrainAi.Client library with 8 sub-clients covering all 52+ API endpoints, typed DTOs, exception hierarchy, DI integration, factory pattern, 35 unit tests, CI pipeline with NuGet publish (main→nuget.org, other→GitHub Packages).'
     done: true
     description:
-    - Create a typed REST client library (McpServer.Client) wrapping all 52 MCP Server API endpoints across 8 controllers
-    - Package as SharpNinja.McpServer.Client for nuget.org distribution
+    - Create a typed REST client library (QBrainAi.Client) wrapping all 52 QBrain.AI API endpoints across 8 controllers
+    - Package as QBrainAI.Client for nuget.org distribution
     - 'Add publish-to-NuGet stage in CI pipeline: main branch publishes to nuget.org, develop/other branches publish to GitHub NuGet repository'
-    - Include DI extension method AddMcpServerClient() for easy ASP.NET Core integration
+    - Include DI extension method AddQBrainAiClient() for easy ASP.NET Core integration
     - Full XML-doc coverage and README with usage examples
     technical-details:
     - 'Target frameworks: net9.0;netstandard2.0 (multi-target for broad compatibility)'
     - 'Dependencies: System.Net.Http.Json, System.Text.Json, Microsoft.Extensions.DependencyInjection.Abstractions, Microsoft.Extensions.Http, Microsoft.Extensions.Options'
-    - 'Project path: src/McpServer.Client/McpServer.Client.csproj'
-    - 'PackageId: SharpNinja.McpServer.Client'
+    - 'Project path: src/QBrainAi.Client/QBrainAi.Client.csproj'
+    - 'PackageId: QBrainAI.Client'
     - 'Version source: .version file + -preview.{buildnumber} suffix for non-main branches'
     - SourceLink enabled via Directory.Build.props (already configured for deterministic builds)
     - HttpClient-based with IHttpClientFactory integration for proper connection pooling
@@ -123,15 +123,15 @@ staging-and-infrastructure:
     - All response types use records for immutability
     - CancellationToken on every async method
     - Nullable reference types enabled
-    - API key passed via X-Api-Key header (configurable via McpServerClientOptions)
+    - API key passed via X-Api-Key header (configurable via QBrainAiClientOptions)
     functional-requirements:
     - 'FR-01: Client must expose typed methods for all 52 API endpoints across 8 controllers'
     - 'FR-02: All methods must be async and accept CancellationToken'
     - 'FR-03: Client must support API key authentication for protected endpoints (tools write operations)'
     - 'FR-04: Client must support configurable base URL for multi-instance deployments'
     - 'FR-05: Client must deserialize all response types to strongly-typed DTOs'
-    - 'FR-06: Client must throw typed exceptions for HTTP error responses (400→McpValidationException with errors dict, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→McpServerException)'
-    - 'FR-07: Client must support both DI (AddMcpServerClient) and manual instantiation (McpServerClientFactory)'
+    - 'FR-06: Client must throw typed exceptions for HTTP error responses (400→McpValidationException with errors dict, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→QBrainAiException)'
+    - 'FR-07: Client must support both DI (AddQBrainAiClient) and manual instantiation (QBrainAiClientFactory)'
     - 'FR-08: Package must work on net9.0 and netstandard2.0 consumers'
     - 'FR-09: CI must publish stable packages to nuget.org from main branch only'
     - 'FR-10: CI must publish preview packages to GitHub Packages from develop/feature branches'
@@ -151,15 +151,15 @@ staging-and-infrastructure:
     - 'TR-13: Unit test coverage >90% on client methods using mocked HttpMessageHandler'
     - 'TR-14: Integration tests gated behind MCP_TEST_BASE_URL environment variable'
     implementation-tasks:
-    - task: '[Phase 1 - Scaffolding] Create src/McpServer.Client/ directory and McpServer.Client.csproj with multi-target net9.0;netstandard2.0'
+    - task: '[Phase 1 - Scaffolding] Create src/QBrainAi.Client/ directory and QBrainAi.Client.csproj with multi-target net9.0;netstandard2.0'
       done: false
-    - task: '[Phase 1 - Scaffolding] Add NuGet metadata: PackageId=SharpNinja.McpServer.Client, Authors, Description, PackageProjectUrl, RepositoryUrl, PackageTags=mcp model-context-protocol rest-client, PackageReadmeFile=README.md, PackageLicenseExpression=MIT'
+    - task: '[Phase 1 - Scaffolding] Add NuGet metadata: PackageId=QBrainAI.Client, Authors, Description, PackageProjectUrl, RepositoryUrl, PackageTags=mcp model-context-protocol rest-client, PackageReadmeFile=README.md, PackageLicenseExpression=MIT'
       done: false
-    - task: '[Phase 1 - Scaffolding] Add project to McpServer.sln in src/ solution folder'
+    - task: '[Phase 1 - Scaffolding] Add project to QBrainAi.sln in src/ solution folder'
       done: false
     - task: '[Phase 1 - Scaffolding] Add PackageReference entries to Directory.Packages.props for new dependencies'
       done: false
-    - task: '[Phase 1 - Scaffolding] Create src/McpServer.Client/README.md with usage examples (included in NuGet package)'
+    - task: '[Phase 1 - Scaffolding] Create src/QBrainAi.Client/README.md with usage examples (included in NuGet package)'
       done: false
     - task: '[Phase 1 - Scaffolding] Configure GenerateDocumentationFile=true, verify dotnet build and dotnet pack succeed locally'
       done: false
@@ -185,7 +185,7 @@ staging-and-infrastructure:
       done: false
     - task: '[Phase 2 - DTOs] Add XML-doc summaries on every public type and property'
       done: false
-    - task: '[Phase 3 - Clients] Create McpServerClientOptions.cs: BaseUrl (Uri), ApiKey (string?), Timeout (TimeSpan, default 30s)'
+    - task: '[Phase 3 - Clients] Create QBrainAiClientOptions.cs: BaseUrl (Uri), ApiKey (string?), Timeout (TimeSpan, default 30s)'
       done: false
     - task: '[Phase 3 - Clients] Create base McpClientBase.cs: shared HttpClient, JSON serialization, error handling, API key header injection, typed exception mapping'
       done: false
@@ -205,17 +205,17 @@ staging-and-infrastructure:
       done: false
     - task: '[Phase 3 - Clients] SyncClient.cs: RunAsync, GetStatusAsync - 2 methods'
       done: false
-    - task: '[Phase 4 - Facade/DI] Create McpServerClient.cs: facade owning all 8 sub-clients as properties (Workspace, Todo, Tools, SessionLog, Context, GitHub, Repo, Sync)'
+    - task: '[Phase 4 - Facade/DI] Create QBrainAiClient.cs: facade owning all 8 sub-clients as properties (Workspace, Todo, Tools, SessionLog, Context, GitHub, Repo, Sync)'
       done: false
-    - task: '[Phase 4 - Facade/DI] Create ServiceCollectionExtensions.cs: AddMcpServerClient(Action<McpServerClientOptions>) with named HttpClient via IHttpClientFactory'
+    - task: '[Phase 4 - Facade/DI] Create ServiceCollectionExtensions.cs: AddQBrainAiClient(Action<QBrainAiClientOptions>) with named HttpClient via IHttpClientFactory'
       done: false
-    - task: '[Phase 4 - Facade/DI] Create McpServerClientFactory.cs for non-DI scenarios'
+    - task: '[Phase 4 - Facade/DI] Create QBrainAiClientFactory.cs for non-DI scenarios'
       done: false
-    - task: "[Phase 5 - CI Pipeline] Add 'publish-nuget' job to mcp-server-ci.yml, depends on build-test-publish, push-only (no PRs)"
+    - task: "[Phase 5 - CI Pipeline] Add 'publish-nuget' job to qbrain-ai-ci.yml, depends on build-test-publish, push-only (no PRs)"
       done: false
     - task: '[Phase 5 - CI Pipeline] Read version from .version file; set VERSION (stable for main, -preview.{run_number} for other branches)'
       done: false
-    - task: '[Phase 5 - CI Pipeline] dotnet pack McpServer.Client -c Release -p:PackageVersion=$VERSION -o ./nupkg'
+    - task: '[Phase 5 - CI Pipeline] dotnet pack QBrainAi.Client -c Release -p:PackageVersion=$VERSION -o ./nupkg'
       done: false
     - task: '[Phase 5 - CI Pipeline] Main branch: dotnet nuget push to https://api.nuget.org/v3/index.json --api-key secrets.NUGET_API_KEY --skip-duplicate'
       done: false
@@ -223,17 +223,17 @@ staging-and-infrastructure:
       done: false
     - task: '[Phase 5 - CI Pipeline] Upload .nupkg as build artifact; document NUGET_API_KEY secret requirement in README'
       done: false
-    - task: '[Phase 6 - Testing] Create tests/McpServer.Client.Tests/ (xUnit v3, net9.0) with mocked HttpMessageHandler unit tests'
+    - task: '[Phase 6 - Testing] Create tests/QBrainAi.Client.Tests/ (xUnit v3, net9.0) with mocked HttpMessageHandler unit tests'
       done: false
     - task: '[Phase 6 - Testing] Unit tests for each sub-client: URL construction, HTTP method, headers, request serialization, response deserialization'
       done: false
-    - task: '[Phase 6 - Testing] Test error handling: 400→McpValidationException, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→McpServerException'
+    - task: '[Phase 6 - Testing] Test error handling: 400→McpValidationException, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→QBrainAiException'
       done: false
     - task: '[Phase 6 - Testing] Integration smoke tests gated behind MCP_TEST_BASE_URL env var'
       done: false
     - task: '[Phase 7 - Docs/Release] Update root README.md with client library section and install instructions'
       done: false
-    - task: '[Phase 7 - Docs/Release] Write src/McpServer.Client/README.md with installation, quick start, DI setup, all client method listing'
+    - task: '[Phase 7 - Docs/Release] Write src/QBrainAi.Client/README.md with installation, quick start, DI setup, all client method listing'
       done: false
     - task: '[Phase 7 - Docs/Release] Add CHANGELOG.md entry; tag v{version} after first nuget.org publish; verify package on nuget.org'
       done: false
@@ -243,19 +243,19 @@ staging-and-infrastructure:
     note: FRP tunnel provider work was completed, but the Railway deployment strategy is no longer the preferred path for this environment because Railway does not support the required multi-public-port exposure model (7147-7160). Keep FRP support for non-Railway scenarios; use ngrok/cloudflare strategies for this environment.
     done: true
     description:
-    - Use the existing FRP provider (frpc) in McpServer.Support.Mcp and make it production-ready for Railway-hosted frps.
+    - Use the existing FRP provider (frpc) in QBrainAi.Support.Mcp and make it production-ready for Railway-hosted frps.
     - Support a simple MVP deployment path first (HTTP mode), then add hardening and operational visibility.
     - Provide Railway deployment assets and a runbook so a local MCP instance can connect to a self-hosted frps service.
     technical-details:
-    - 'Existing integration points: src/McpServer.Support.Mcp/Services/FrpTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'Existing integration points: src/QBrainAi.Support.Mcp/Services/FrpTunnelProvider.cs, src/QBrainAi.Support.Mcp/Options/TunnelOptions.cs, src/QBrainAi.Support.Mcp/Program.cs.'
     - MVP should preserve backward compatibility with current Mcp:Tunnel:Frp settings (ServerAddress, ServerPort, Token, Subdomain, CustomDomain).
     - 'Add Railway-focused options only as needed (for example: PublicBaseUrl, StartupTimeoutSeconds, ProxyType).'
     - Prefer HTTP proxy mode first because current FrpTunnelProvider.GenerateConfig() already emits FRP HTTP config.
     - Secrets (FRP token) must not be logged or written to committed files.
     implementation-tasks:
-    - task: '[Commit 1 - MVP] Extend FrpTunnelOptions in src/McpServer.Support.Mcp/Options/TunnelOptions.cs with Railway-ready fields (PublicBaseUrl, StartupTimeoutSeconds, ProxyType defaulting to http) while keeping existing options backward compatible'
+    - task: '[Commit 1 - MVP] Extend FrpTunnelOptions in src/QBrainAi.Support.Mcp/Options/TunnelOptions.cs with Railway-ready fields (PublicBaseUrl, StartupTimeoutSeconds, ProxyType defaulting to http) while keeping existing options backward compatible'
       done: true
-    - task: '[Commit 1 - MVP] Update src/McpServer.Support.Mcp/Services/FrpTunnelProvider.cs to prefer PublicBaseUrl when building TunnelStatus.PublicUrl, then fall back to CustomDomain/Subdomain behavior'
+    - task: '[Commit 1 - MVP] Update src/QBrainAi.Support.Mcp/Services/FrpTunnelProvider.cs to prefer PublicBaseUrl when building TunnelStatus.PublicUrl, then fall back to CustomDomain/Subdomain behavior'
       done: true
     - task: '[Commit 1 - MVP] Add startup timeout and clear error reporting in FrpTunnelProvider when frpc does not connect successfully (avoid silent hang/optimistic success)'
       done: true
@@ -275,7 +275,7 @@ staging-and-infrastructure:
       done: true
     - task: '[Commit 3 - Railway Assets] Optional local parity: add infra/frp/local/docker-compose.frps.yml for local frps validation before Railway deployment'
       done: true
-    - task: '[Commit 4 - Tests] Add tests/McpServer.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs covering config generation, PublicUrl precedence (PublicBaseUrl > CustomDomain > Subdomain), and invalid-option validation'
+    - task: '[Commit 4 - Tests] Add tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs covering config generation, PublicUrl precedence (PublicBaseUrl > CustomDomain > Subdomain), and invalid-option validation'
       done: true
     - task: '[Commit 4 - Tests] Add tests for missing frpc binary / startup failure paths and temp config cleanup behavior in FrpTunnelProvider'
       done: true
@@ -289,11 +289,11 @@ staging-and-infrastructure:
     note: ngrok provider already exists (NgrokTunnelProvider). This strategy is the preferred managed-tunnel path when the hosting/network environment does not support exposing multiple public ports.
     done: true
     description:
-    - Use the existing ngrok provider in McpServer.Support.Mcp for the primary MCP host endpoint on port 7147.
+    - Use the existing ngrok provider in QBrainAi.Support.Mcp for the primary MCP host endpoint on port 7147.
     - 'Strategy decision: single-public-port ngrok deployments expose the primary MCP host only (7147). Child workspace listeners (7147+) remain private unless a separate gateway/proxy feature is implemented.'
     - Add operational guidance and validation steps for local/dev and deployed environments, including OIDC proxy endpoints for mobile device-flow auth on the same public hostname.
     technical-details:
-    - 'Existing integration points: src/McpServer.Support.Mcp/Services/NgrokTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'Existing integration points: src/QBrainAi.Support.Mcp/Services/NgrokTunnelProvider.cs, src/QBrainAi.Support.Mcp/Options/TunnelOptions.cs, src/QBrainAi.Support.Mcp/Program.cs.'
     - Current provider starts `ngrok http {Mcp:Tunnel:Port}` and discovers the public URL via the local ngrok API (`http://127.0.0.1:4040/api/tunnels`) using `curl`.
     - 'ngrok auth token handling is already secret-safe in provider startup: token is passed via `NGROK_AUTHTOKEN` environment variable instead of CLI args.'
     - No generic primary-host reverse proxy exists today for child workspace ports; strategy is primary-only public exposure. Use FRP TCP mode for multi-port/child-workspace public access.
@@ -311,11 +311,11 @@ staging-and-infrastructure:
     note: Cloudflare tunnel provider already exists (CloudflareTunnelProvider). This strategy is the preferred no-open-port path when Cloudflare DNS/Tunnel is available.
     done: true
     description:
-    - Use the existing Cloudflare tunnel provider in McpServer.Support.Mcp to expose the primary MCP host endpoint on port 7147.
+    - Use the existing Cloudflare tunnel provider in QBrainAi.Support.Mcp to expose the primary MCP host endpoint on port 7147.
     - 'Strategy decision: single-host Cloudflare Tunnel deployments expose the primary MCP host only (7147). Child workspace listeners (7147+) remain private unless a separate gateway/proxy feature is implemented.'
     - Produce deployment guidance for cloudflared quick tunnels and named tunnels, including credentials/runtime prerequisites and hostname routing responsibilities.
     technical-details:
-    - 'Existing integration points: src/McpServer.Support.Mcp/Services/CloudflareTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'Existing integration points: src/QBrainAi.Support.Mcp/Services/CloudflareTunnelProvider.cs, src/QBrainAi.Support.Mcp/Options/TunnelOptions.cs, src/QBrainAi.Support.Mcp/Program.cs.'
     - Current provider supports quick tunnel mode (`cloudflared tunnel --url http://localhost:{port}`) and named tunnel mode (`cloudflared tunnel run {TunnelName}`); it captures quick-tunnel URLs by parsing stderr.
     - Named tunnel hostnames/DNS routes are managed outside the provider (Cloudflare dashboard or cloudflared commands). `Hostname` is only passed in quick-tunnel mode in the current implementation.
     - 'Document prerequisites: Cloudflare account/zone, cloudflared login + named tunnel creation (for stable hostnames), and credentials/config availability for the runtime account.'
@@ -351,22 +351,22 @@ mvp-app:
   - id: MVP-MCP-001
     title: '[READY] Add notifications about changed context (including session logs) on changes within a workspace'
     estimate: '"8-12 hours AI-assisted"'
-    note: '"Audit 2026-03-01. Infrastructure built: ChannelChangeEventBus.cs exists, EventStreamController.cs exists at /mcpserver/events with SSE streaming. NON-FUNCTIONAL: ChannelChangeEventBus NOT registered in DI (runtime crash), ZERO PublishAsync calls in codebase, no services inject IChangeEventBus. EventStreamController references FR-MCP-031 (Web UI) - needs dedicated FR (FR-MCP-049). 52 mutation points across 12 services need event publishing wired up."'
+    note: '"Audit 2026-03-01. Infrastructure built: ChannelChangeEventBus.cs exists, EventStreamController.cs exists at /qbrainai/events with SSE streaming. NON-FUNCTIONAL: ChannelChangeEventBus NOT registered in DI (runtime crash), ZERO PublishAsync calls in codebase, no services inject IChangeEventBus. EventStreamController references FR-MCP-031 (Web UI) - needs dedicated FR (FR-MCP-049). 52 mutation points across 12 services need event publishing wired up."'
     done: true
     description:
     - Implement a notification/event system that alerts connected agents when workspace context changes
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
-    - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /mcpserver/events SSE), InteractionLoggingMiddleware SSE bypass - all exist but bus is not in DI and nothing publishes events'
+    - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /qbrainai/events SSE), InteractionLoggingMiddleware SSE bypass - all exist but bus is not in DI and nothing publishes events'
     - '52 mutation points across 12 services/controllers need PublishAsync calls: todo(4), session_log(2), repo(1), context(2), tool_registry(4), tool_bucket(3), workspace(7), github(9), marker(2), agent(8), requirements(11)'
     remaining: '"Completed: event bus wiring, workspace mutation publishing coverage, notification tests, requirements traceability updates, and SSE integration validation."'
     technical-details:
-    - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /mcpserver/events?category=xxx. Per-subscriber channels ensure independent consumption.'
+    - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /qbrainai/events?category=xxx. Per-subscriber channels ensure independent consumption.'
     - 'DI REGISTRATION: builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>() in Program.cs - MUST be singleton so all scoped services and the SSE controller share the same bus instance.'
     - 'PUBLISH LOCATION: Service layer (not controllers) for all CRUD operations so internal callers (IssueTodoSyncService, RequirementsService.AnalyzeAsync) also emit events. Controller-only for operations that bypass services (GitHubController gh cli calls, workspace start/stop side effects).'
     - 'UPSERT DETECTION: For upsert methods (SessionLogService.SubmitAsync, AgentService.UpsertDefinitionAsync/UpsertWorkspaceAgentAsync), detect create vs update by checking if entity existed before write, then emit appropriate ChangeEventActions.Created or .Updated.'
     - "NEW CATEGORIES: Add 'agent' and 'requirements' to ChangeEventCategories.cs. These are needed for AgentService (8 mutations) and RequirementsDocumentService (11 mutations)."
     - 'CONSTRUCTOR INJECTION PATTERN: Add IChangeEventBus parameter to service constructors. For TodoService which has 2 constructors (DI + internal test), add to both. For services using primary constructors (like RequirementsService), add parameter to the primary constructor.'
-    - 'FR-MCP-031 FIX: EventStreamController.cs line 8 incorrectly references FR-MCP-031 (McpServer Management Web UI). Change to FR-MCP-045 (new Workspace Change Notifications FR).'
+    - 'FR-MCP-031 FIX: EventStreamController.cs line 8 incorrectly references FR-MCP-031 (QBrainAi Management Web UI). Change to FR-MCP-045 (new Workspace Change Notifications FR).'
     - 'FIRE-AND-FORGET: PublishAsync is synchronous (writes to all subscriber channels via TryWrite), so no need for try/catch or background queueing. However, wrap in try/catch with LogWarning for defensive coding per TR-MCP-LOG-001.'
     - 'RESOURCE URI CONVENTION: mcp://workspace/{category}/{entityId} - e.g. mcp://workspace/todo/MVP-MCP-001, mcp://workspace/sessionlog/Copilot/session-123, mcp://workspace/gh/issues/42.'
     - 'TEST STRATEGY: (1) ChannelChangeEventBusTests - publish/subscribe fan-out, buffer overflow drop-oldest, cancellation, multiple subscribers. (2) Per-service tests verifying PublishAsync is called with correct category/action/entityId after each mutation - use NSubstitute mock of IChangeEventBus. (3) EventStreamController integration test via CustomWebApplicationFactory - register bus, publish event, verify SSE output.'
@@ -381,7 +381,7 @@ mvp-app:
     implementation-tasks:
     - task: Phase 0 - Audit and document current state (ChangeEvent model, ChannelChangeEventBus, EventStreamController, InteractionLoggingMiddleware SSE bypass, SessionLogFileWatcher). Verify all 5 Notifications/ files compile. Verify EventStreamController would crash without DI registration.
       done: true
-    - task: "Phase 1.1 - Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /mcpserver/events endpoint no longer crashes (returns empty SSE stream)."
+    - task: "Phase 1.1 - Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /qbrainai/events endpoint no longer crashes (returns empty SSE stream)."
       done: true
     - task: "Phase 1.2 - Add new ChangeEventCategories: Add public const string Agent = \agent; and public const string Requirements ="
       done: true
@@ -415,17 +415,17 @@ mvp-app:
       done: true
     - task: 'Phase 4.2 - MarkerFileService callers: MarkerFileService is static, so publish from WorkspaceProcessManager or wherever marker writes/deletes are triggered. PublishAsync Category=Marker, Action=Created/Updated on write, Action=Deleted on removal. Identify all call sites in WorkspaceProcessManager and MarkerFileService.WriteAsync/RemoveAsync callers. Wrap in try/catch.'
       done: true
-    - task: 'Phase 5.1 - ChannelChangeEventBusTests (unit test): Create tests/McpServer.Support.Mcp.Tests/Services/ChannelChangeEventBusTests.cs. Test cases: (1) PublishAsync_NoSubscribers_DoesNotThrow, (2) PublishAsync_SingleSubscriber_ReceivesEvent, (3) PublishAsync_MultipleSubscribers_AllReceiveEvent (fan-out), (4) SubscribeAsync_CancellationToken_StopsEnumeration, (5) PublishAsync_BufferFull_DropsOldest (publish 1001+ events to verify), (6) SubscribeAsync_SubscriberRemoved_AfterCancellation. Pattern: sealed class, _sut = new ChannelChangeEventBus(), Assert.*.'
+    - task: 'Phase 5.1 - ChannelChangeEventBusTests (unit test): Create tests/QBrainAi.Support.Mcp.Tests/Services/ChannelChangeEventBusTests.cs. Test cases: (1) PublishAsync_NoSubscribers_DoesNotThrow, (2) PublishAsync_SingleSubscriber_ReceivesEvent, (3) PublishAsync_MultipleSubscribers_AllReceiveEvent (fan-out), (4) SubscribeAsync_CancellationToken_StopsEnumeration, (5) PublishAsync_BufferFull_DropsOldest (publish 1001+ events to verify), (6) SubscribeAsync_SubscriberRemoved_AfterCancellation. Pattern: sealed class, _sut = new ChannelChangeEventBus(), Assert.*.'
       done: true
     - task: 'Phase 5.2 - TodoService event publishing tests: In existing TodoServiceTests.cs (or new file), add tests: (1) CreateAsync_Success_PublishesCreatedEvent, (2) UpdateAsync_Success_PublishesUpdatedEvent, (3) DeleteAsync_Success_PublishesDeletedEvent, (4) CreateAsync_Failure_DoesNotPublish. Mock IChangeEventBus with NSubstitute, verify Received().PublishAsync(Arg.Is<ChangeEvent>(e => e.Category == 	odo && e.Action == created)).'
       done: true
     - task: 'Phase 5.3 - SessionLogService event publishing tests: Add tests to SessionLogServiceTests or new file: (1) SubmitAsync_NewSession_PublishesCreatedEvent, (2) SubmitAsync_ExistingSession_PublishesUpdatedEvent, (3) AppendDialogAsync_Success_PublishesUpdatedEvent. Mock IChangeEventBus, verify category=session_log.'
       done: true
-    - task: 'Phase 5.4 - EventStreamController integration test: Create tests/McpServer.Support.Mcp.Tests/Controllers/EventStreamIntegrationTests.cs. Use CustomWebApplicationFactory with IChangeEventBus registered. Test: (1) GET /mcpserver/events returns text/event-stream content type, (2) publishing an event to the bus produces SSE output with correct event: and data: lines, (3) category filter works. Use HttpClient with SendAsync + HttpCompletionOption.ResponseHeadersRead for streaming.'
+    - task: 'Phase 5.4 - EventStreamController integration test: Create tests/QBrainAi.Support.Mcp.Tests/Controllers/EventStreamIntegrationTests.cs. Use CustomWebApplicationFactory with IChangeEventBus registered. Test: (1) GET /qbrainai/events returns text/event-stream content type, (2) publishing an event to the bus produces SSE output with correct event: and data: lines, (3) category filter works. Use HttpClient with SendAsync + HttpCompletionOption.ResponseHeadersRead for streaming.'
       done: true
     - task: 'Phase 5.5 - Extended service event publishing tests: Add at least one PublishAsync verification test for each of: ToolRegistryService (create publishes tool_registry/created), WorkspaceService (create publishes workspace/created), AgentService (upsert new publishes agent/created, upsert existing publishes agent/updated), RepoFileService (write new file publishes repo/created). NSubstitute mock pattern.'
       done: true
-    - task: Phase 6.1 - Create FR-MCP-062 in Functional-Requirements.md for workspace change notifications with SSE delivery at GET /mcpserver/events.
+    - task: Phase 6.1 - Create FR-MCP-062 in Functional-Requirements.md for workspace change notifications with SSE delivery at GET /qbrainai/events.
       done: true
     - task: Phase 6.2 - Create TR-MCP-EVT-001..005 in Technical-Requirements.md covering bus architecture, service-layer publishing, SSE delivery, event contract, and category coverage.
       done: true
@@ -435,9 +435,9 @@ mvp-app:
       done: true
     - task: Phase 6.5 - Update Requirements-Matrix.md with FR-MCP-062, TR-MCP-EVT-001..005, and TEST-MCP-075..080 statuses.
       done: true
-    - task: 'Phase 7 - Build verification: dotnet build src\McpServer.Support.Mcp -c Debug must pass with zero warnings (TreatWarningsAsErrors). All new public types must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false) on async calls.'
+    - task: 'Phase 7 - Build verification: dotnet build src\QBrainAi.Support.Mcp -c Debug must pass with zero warnings (TreatWarningsAsErrors). All new public types must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false) on async calls.'
       done: true
-    - task: 'Phase 8 - Test execution: dotnet test tests\McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus all new notification tests. Zero regressions. Run with --filter to verify each new test class independently.'
+    - task: 'Phase 8 - Test execution: dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug must pass all existing tests plus all new notification tests. Zero regressions. Run with --filter to verify each new test class independently.'
       done: true
     - task: Phase 9 - SSE smoke validation covered by EventStreamIntegrationTests (stream content-type, todo category filter, and emitted event payload assertions).
       done: true
@@ -465,8 +465,8 @@ mvp-app:
     - CommitTimestamp (not Timestamp) to avoid name collision with base properties
     - 'Migration: 20260302000000_AddSessionLogCommits (CreateTable + FK + indexes on SessionLogEntryId and WorkspaceId)'
     - 'Service: MapCommits, DeserializeStringList, UpdateEntryFromDto, MapSingleEntry, MapEntityToDto, Include chains'
-    - 'Client mirror: SessionLogCommitDto + Commits property in McpServer.Client/Models/SessionLogModels.cs'
-    - 'No new endpoints: commits flow through existing POST /mcpserver/sessionlog'
+    - 'Client mirror: SessionLogCommitDto + Commits property in QBrainAi.Client/Models/SessionLogModels.cs'
+    - 'No new endpoints: commits flow through existing POST /qbrainai/sessionlog'
     - 'No CQRS/Director changes: commits are submitted not queried independently'
     implementation-tasks:
     - task: 'commit-dto: Add SessionLogCommitDto class + Commits property to UnifiedSessionLogDto.cs'
@@ -481,7 +481,7 @@ mvp-app:
       done: false
     - task: 'commit-service-mapping: Add MapCommits, DeserializeStringList, update UpdateEntryFromDto/MapSingleEntry/MapEntityToDto/Include chains'
       done: false
-    - task: 'commit-client-dto: Mirror SessionLogCommitDto + Commits property in McpServer.Client/Models/SessionLogModels.cs'
+    - task: 'commit-client-dto: Mirror SessionLogCommitDto + Commits property in QBrainAi.Client/Models/SessionLogModels.cs'
       done: false
     - task: 'stringlist-entity: Create SessionLogEntryStringListEntity.cs (4NF generic with ListType discriminator)'
       done: false
@@ -526,10 +526,10 @@ mvp-app:
     done-summary: Completed GraphRAG productionization with backend adapter abstraction, stale artifact cleanup, OpenAPI metadata expansion, dedicated MCP transport GraphRAG tool tests, and validated builds/tests for server and client.
     remaining: ''
     technical-details:
-    - 'Code audited for current state: src/McpServer.Support.Mcp/Options/GraphRagOptions.cs, src/McpServer.Support.Mcp/Services/IGraphRagService.cs, src/McpServer.Support.Mcp/Services/GraphRagService.cs, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs, src/McpServer.Support.Mcp/Controllers/ContextController.cs, src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs.'
-    - 'Client and tests audited: src/McpServer.Client/ContextClient.cs, src/McpServer.Client/Models/ContextModels.cs, tests/McpServer.Support.Mcp.Tests/Controllers/GraphRagControllerTests.cs, tests/McpServer.Client.Tests/ContextClientTests.cs.'
+    - 'Code audited for current state: src/QBrainAi.Support.Mcp/Options/GraphRagOptions.cs, src/QBrainAi.Support.Mcp/Services/IGraphRagService.cs, src/QBrainAi.Support.Mcp/Services/GraphRagService.cs, src/QBrainAi.Support.Mcp/Controllers/GraphRagController.cs, src/QBrainAi.Support.Mcp/Controllers/ContextController.cs, src/QBrainAi.Support.Mcp/McpStdio/McpServerMcpTools.cs.'
+    - 'Client and tests audited: src/QBrainAi.Client/ContextClient.cs, src/QBrainAi.Client/Models/ContextModels.cs, tests/QBrainAi.Support.Mcp.Tests/Controllers/GraphRagControllerTests.cs, tests/QBrainAi.Client.Tests/ContextClientTests.cs.'
     - 'Current GraphRagService behavior: IndexAsync marks status as indexed without constructing graph artifacts; QueryAsync always calls IContextSearchService and synthesizes answer/citations; backend command fields are present in options but not executed.'
-    - 'Config defaults currently disable GraphRAG by default and enable context-search enhancement when GraphRAG is enabled: src/McpServer.Support.Mcp/appsettings.json and src/McpServer.Support.Mcp/appsettings.yaml.'
+    - 'Config defaults currently disable GraphRAG by default and enable context-search enhancement when GraphRAG is enabled: src/QBrainAi.Support.Mcp/appsettings.json and src/QBrainAi.Support.Mcp/appsettings.yaml.'
     - 'Key architectural constraint: all GraphRAG filesystem state must remain workspace-local and never leak across workspace boundaries, including status files, intermediate artifacts, caches, and index outputs.'
     - 'Reference planning document: docs/Project/MCP-GRAPHRAG-001-Implementation-Plan.md (needs to stay synchronized with this TODO as execution proceeds).'
     implementation-tasks:
@@ -683,29 +683,29 @@ mvp-app:
   - id: web-ui-oidc-integration
     title: Web UI OIDC integration - full login/logout flow, AuthorizeRouteView, RoleContext, token forwarding, and tests
     estimate: 3-4 days AI-assisted
-    note: 'AUDIT (2026-03-05): McpServer.Web has the OIDC middleware wired in Program.cs (AddAuthentication/AddCookie/AddOpenIdConnect, UseAuthentication/UseAuthorization, AddCascadingAuthenticationState), a correct appsettings.json Authentication section, the AuthConfig read-only display page (Phase 3.1/Phase 5), and service registrations. However the following are MISSING and must be built: (1) Login/Logout/AccessDenied pages (app cannot authenticate at all without these -- requests to /login/logout 404), (2) Routes.razor AuthorizeRouteView upgrade (Authorize attributes are currently ignored), (3) User identity header in MainLayout/NavMenu, (4) WebRoleContext connecting ClaimsPrincipal roles to IAuthorizationPolicyService, (5) WebMcpContext access-token forwarding to the McpServer API, (6) McpServer section in appsettings.json, (7) McpServer.Web.Tests tests. FR-MCP-031 is the primary requirement.'
+    note: 'AUDIT (2026-03-05): QBrainAi.Web has the OIDC middleware wired in Program.cs (AddAuthentication/AddCookie/AddOpenIdConnect, UseAuthentication/UseAuthorization, AddCascadingAuthenticationState), a correct appsettings.json Authentication section, the AuthConfig read-only display page (Phase 3.1/Phase 5), and service registrations. However the following are MISSING and must be built: (1) Login/Logout/AccessDenied pages (app cannot authenticate at all without these -- requests to /login/logout 404), (2) Routes.razor AuthorizeRouteView upgrade (Authorize attributes are currently ignored), (3) User identity header in MainLayout/NavMenu, (4) WebRoleContext connecting ClaimsPrincipal roles to IAuthorizationPolicyService, (5) WebMcpContext access-token forwarding to the QBrainAi API, (6) QBrainAi section in appsettings.json, (7) QBrainAi.Web.Tests tests. FR-MCP-031 is the primary requirement.'
     done: true
     description:
-    - 'Web UI needs a complete OIDC authentication integration: login challenge, logout, access-denied, AuthorizeRouteView, user identity display in nav, WebRoleContext wired to ClaimsPrincipal, bearer token forwarding from the Blazor session to the McpServer API, and end-to-end tests.'
-    - 'AUDIT STATUS (2026-03-05): OIDC middleware is registered in Program.cs and appsettings.json has all required config fields with placeholder values. The following are MISSING and block auth from working: Login page, Logout endpoint, AccessDenied page, AuthorizeRouteView in Routes.razor, user identity display, WebRoleContext, bearer token forwarding, McpServer config section, and Web.Tests content.'
-    - The McpServer.Web project already has AuthConfig display (read-only), Primer CSS layout, all feature pages (Todos/Sessions/Templates/Context/Health/Agents/Workspaces), SSE subscription, and adapter infrastructure. This TODO covers only the remaining auth wiring.
+    - 'Web UI needs a complete OIDC authentication integration: login challenge, logout, access-denied, AuthorizeRouteView, user identity display in nav, WebRoleContext wired to ClaimsPrincipal, bearer token forwarding from the Blazor session to the QBrainAi API, and end-to-end tests.'
+    - 'AUDIT STATUS (2026-03-05): OIDC middleware is registered in Program.cs and appsettings.json has all required config fields with placeholder values. The following are MISSING and block auth from working: Login page, Logout endpoint, AccessDenied page, AuthorizeRouteView in Routes.razor, user identity display, WebRoleContext, bearer token forwarding, QBrainAi config section, and Web.Tests content.'
+    - The QBrainAi.Web project already has AuthConfig display (read-only), Primer CSS layout, all feature pages (Todos/Sessions/Templates/Context/Health/Agents/Workspaces), SSE subscription, and adapter infrastructure. This TODO covers only the remaining auth wiring.
     technical-details:
     - 'DONE - Program.cs: AddAuthentication().AddCookie().AddOpenIdConnect() fully config-driven from Authentication:Schemes section. UseAuthentication() and UseAuthorization() in pipeline. AddCascadingAuthenticationState() registered. Authorization policies (AgentManager/Admin) driven from Authentication:Authorization:Policies.'
     - 'DONE - appsettings.json: full Authentication section with Cookie (CookieName/LoginPath/LogoutPath/AccessDeniedPath), OpenIdConnect (Authority/ClientId/ClientSecret/ResponseType/CallbackPath/SignedOutCallbackPath/MapInboundClaims/GetClaimsFromUserInfoEndpoint/ClaimMapping/Scope), Authorization (RequireAuthenticatedUserByDefault:false, Policies).'
     - 'DONE - Pages/Auth/AuthConfig.razor: read-only display of server OIDC config via AuthConfigViewModel. NavMenu links to /auth/config.'
     - 'DONE - _Imports.razor: imports Microsoft.AspNetCore.Components.Authorization and Microsoft.AspNetCore.Authorization. CascadingAuthenticationState is registered and cascades to all components.'
     - 'DONE - WebServiceRegistration.cs: IAuthConfigApiClient scoped. AddUiCore() fallback registers AllowAllRoleContext and AllowAllAuthorizationPolicyService.'
-    - 'MISSING - Login flow: CookieAuthenticationDefaults.LoginPath=/login but no page exists. Must be a non-interactive Razor Page (not Blazor component) because HttpContext.ChallengeAsync() requires a non-circuit HTTP context. File: src/McpServer.Web/Pages/Auth/Login.cshtml + Login.cshtml.cs. Must add AddRazorPages() + MapRazorPages() to Program.cs.'
-    - 'MISSING - Logout flow: CookieAuthenticationDefaults.LogoutPath=/logout but no page exists. Razor Page that calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme) to trigger provider end_session redirect. File: src/McpServer.Web/Pages/Auth/Logout.cshtml + Logout.cshtml.cs.'
+    - 'MISSING - Login flow: CookieAuthenticationDefaults.LoginPath=/login but no page exists. Must be a non-interactive Razor Page (not Blazor component) because HttpContext.ChallengeAsync() requires a non-circuit HTTP context. File: src/QBrainAi.Web/Pages/Auth/Login.cshtml + Login.cshtml.cs. Must add AddRazorPages() + MapRazorPages() to Program.cs.'
+    - 'MISSING - Logout flow: CookieAuthenticationDefaults.LogoutPath=/logout but no page exists. Razor Page that calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme) to trigger provider end_session redirect. File: src/QBrainAi.Web/Pages/Auth/Logout.cshtml + Logout.cshtml.cs.'
     - 'MISSING - AccessDenied page: AccessDeniedPath=/access-denied but no page exists. A simple Blazor component page (Pages/Auth/AccessDenied.razor) with Primer CSS styling and a link back to dashboard. No HttpContext needed.'
     - 'MISSING - Routes.razor: Uses RouteView which ignores [Authorize] attributes. Must switch to AuthorizeRouteView with a NotAuthorized block that redirects to /login for unauthenticated users and shows access-denied for authenticated-but-unauthorized users.'
     - "MISSING - User identity display: MainLayout.razor and NavMenu.razor have no user identity section. Need an AuthorizeView-based header/nav block showing the logged-in username (from context.User.Identity.Name or 'name' claim) and a logout link when authenticated, plus a login link when anonymous."
-    - 'MISSING - WebRoleContext: ServiceCollectionExtensions.AddUiCore() defaults to AllowAllRoleContext. McpServer.Web must register a concrete WebRoleContext : IRoleContext that reads from IHttpContextAccessor.HttpContext.User (IsAuthenticated, ClaimsPrincipal.IsInRole). File: src/McpServer.Web/Authorization/WebRoleContext.cs. Register before AddUiCore() in WebServiceRegistration.cs via services.AddHttpContextAccessor() + services.TryAddSingleton<IRoleContext, WebRoleContext>().'
-    - "MISSING - WebMcpContext token forwarding: EnsureInitializedAsync currently auto-discovers API key via client.InitializeAsync(). When a user is authenticated, their OIDC access_token (saved via options.SaveTokens=true) should be forwarded as Bearer token to the McpServer API. Inject IHttpContextAccessor, call HttpContext.GetTokenAsync('access_token') on each scoped request, and set client.BearerToken. The BearerToken check in EnsureInitializedAsync already short-circuits initialization if a bearer token is set."
-    - 'MISSING - appsettings.json McpServer section: WebMcpContext reads McpServer:BaseUrl, McpServer:ApiKey, McpServer:WorkspacePath from IConfiguration but appsettings.json has no McpServer section. Add defaults: BaseUrl=http://localhost:7147, ApiKey=(empty), WorkspacePath=(empty).'
+    - 'MISSING - WebRoleContext: ServiceCollectionExtensions.AddUiCore() defaults to AllowAllRoleContext. QBrainAi.Web must register a concrete WebRoleContext : IRoleContext that reads from IHttpContextAccessor.HttpContext.User (IsAuthenticated, ClaimsPrincipal.IsInRole). File: src/QBrainAi.Web/Authorization/WebRoleContext.cs. Register before AddUiCore() in WebServiceRegistration.cs via services.AddHttpContextAccessor() + services.TryAddSingleton<IRoleContext, WebRoleContext>().'
+    - "MISSING - WebMcpContext token forwarding: EnsureInitializedAsync currently auto-discovers API key via client.InitializeAsync(). When a user is authenticated, their OIDC access_token (saved via options.SaveTokens=true) should be forwarded as Bearer token to the QBrainAi API. Inject IHttpContextAccessor, call HttpContext.GetTokenAsync('access_token') on each scoped request, and set client.BearerToken. The BearerToken check in EnsureInitializedAsync already short-circuits initialization if a bearer token is set."
+    - 'MISSING - appsettings.json QBrainAi section: WebMcpContext reads QBrainAi:BaseUrl, QBrainAi:ApiKey, QBrainAi:WorkspacePath from IConfiguration but appsettings.json has no QBrainAi section. Add defaults: BaseUrl=http://localhost:7147, ApiKey=(empty), WorkspacePath=(empty).'
     - 'MISSING - appsettings.Development.json: Create with Authority overriding to http://localhost:7080/realms/mcp (Keycloak dev), ClientId=mcp-web, and RequireAuthenticatedUserByDefault=true for dev.'
-    - 'MISSING - McpServer.Web.Tests: tests/McpServer.Web.Tests/ directory is empty. McpServer.Web.Tests.csproj exists per commit history but has no content. Need WebApplicationFactory-based or Bunit-based tests covering: Login challenge redirect, Logout sign-out, AccessDenied rendering, AuthorizeRouteView blocking, WebRoleContext claim reading, bearer token forwarding.'
-    - 'Build verification: dotnet build src/McpServer.Web -c Debug. Test verification: dotnet test tests/McpServer.Web.Tests -c Debug. Must fix all compilation errors before marking done.'
+    - 'MISSING - QBrainAi.Web.Tests: tests/QBrainAi.Web.Tests/ directory is empty. QBrainAi.Web.Tests.csproj exists per commit history but has no content. Need WebApplicationFactory-based or Bunit-based tests covering: Login challenge redirect, Logout sign-out, AccessDenied rendering, AuthorizeRouteView blocking, WebRoleContext claim reading, bearer token forwarding.'
+    - 'Build verification: dotnet build src/QBrainAi.Web -c Debug. Test verification: dotnet test tests/QBrainAi.Web.Tests -c Debug. Must fix all compilation errors before marking done.'
     - 'Keycloak integration context: Keycloak is on :7080, MCP API on :7147, MCP Web (Blazor) on :7100 or similar separate port. OIDC proxy routes (/auth/config, /auth/device, /auth/token) on the MCP API server are for Android/device-flow clients, not the web browser flow. Web UI uses standard browser-based Authorization Code flow (PKCE optional, code response type already configured).'
     - "Role claim mapping: MapInboundClaims=false, RoleClaimType='role' (per appsettings.json ClaimMapping). Keycloak emits realm roles as 'realm_access.roles' by default. An OnTokenValidated event handler may be needed to flatten realm_access.roles into individual 'role' claims - or configure Keycloak client to include roles as flat claims. This is a Keycloak client mapper configuration concern, but must be tested."
     functional-requirements:
@@ -713,53 +713,53 @@ mvp-app:
     implementation-tasks:
     - task: 'Task A1 - Add Razor Pages infrastructure: in Program.cs add builder.Services.AddRazorPages() BEFORE builder.Build(), and add app.MapRazorPages() AFTER app.UseAuthorization(). This is required to host the non-interactive Login.cshtml and Logout.cshtml pages that need HttpContext.ChallengeAsync/SignOutAsync.'
       done: true
-    - task: "Task A2 - Create src/McpServer.Web/Pages/Auth/Login.cshtml: non-interactive Razor Page. PageModel.OnGet() calls Challenge(new AuthenticationProperties { RedirectUri = returnUrl ?? '/' }, OpenIdConnectDefaults.AuthenticationScheme) and returns the challenge result. Accepts optional 'returnUrl' query param and validates it is local. Add @page '/login' directive."
+    - task: "Task A2 - Create src/QBrainAi.Web/Pages/Auth/Login.cshtml: non-interactive Razor Page. PageModel.OnGet() calls Challenge(new AuthenticationProperties { RedirectUri = returnUrl ?? '/' }, OpenIdConnectDefaults.AuthenticationScheme) and returns the challenge result. Accepts optional 'returnUrl' query param and validates it is local. Add @page '/login' directive."
       done: true
-    - task: 'Task A3 - Create src/McpServer.Web/Pages/Auth/Login.cshtml.cs: LoginModel : PageModel. Inject nothing beyond PageModel. OnGet(string? returnUrl) validates returnUrl is a local URL (Url.IsLocalUrl), constructs AuthenticationProperties with RedirectUri, returns Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme). No Blazor component - must be a pure Razor Page.'
+    - task: 'Task A3 - Create src/QBrainAi.Web/Pages/Auth/Login.cshtml.cs: LoginModel : PageModel. Inject nothing beyond PageModel. OnGet(string? returnUrl) validates returnUrl is a local URL (Url.IsLocalUrl), constructs AuthenticationProperties with RedirectUri, returns Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme). No Blazor component - must be a pure Razor Page.'
       done: true
-    - task: "Task A4 - Create src/McpServer.Web/Pages/Auth/Logout.cshtml: non-interactive Razor Page. PageModel.OnGet() calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). This triggers the provider end_session redirect if configured. Add @page '/logout' directive."
+    - task: "Task A4 - Create src/QBrainAi.Web/Pages/Auth/Logout.cshtml: non-interactive Razor Page. PageModel.OnGet() calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). This triggers the provider end_session redirect if configured. Add @page '/logout' directive."
       done: true
-    - task: "Task A5 - Create src/McpServer.Web/Pages/Auth/Logout.cshtml.cs: LogoutModel : PageModel. OnGetAsync() calls await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then returns await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). Both schemes must be signed out."
+    - task: "Task A5 - Create src/QBrainAi.Web/Pages/Auth/Logout.cshtml.cs: LogoutModel : PageModel. OnGetAsync() calls await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then returns await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). Both schemes must be signed out."
       done: true
-    - task: "Task A6 - Create src/McpServer.Web/Pages/Auth/AccessDenied.razor: standard Blazor @page '/access-denied' component. Shows PrimerBlankslate with Heading='Access Denied' Description='You do not have permission to view this page.' and a link back to /dashboard. No [Authorize] on this page itself (it must be accessible without auth). No code-behind needed."
+    - task: "Task A6 - Create src/QBrainAi.Web/Pages/Auth/AccessDenied.razor: standard Blazor @page '/access-denied' component. Shows PrimerBlankslate with Heading='Access Denied' Description='You do not have permission to view this page.' and a link back to /dashboard. No [Authorize] on this page itself (it must be accessible without auth). No code-behind needed."
       done: true
-    - task: "Task B1 - Update src/McpServer.Web/Routes.razor: change <RouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)' /> to <AuthorizeRouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)'><NotAuthorized><RedirectToLogin /></NotAuthorized></AuthorizeRouteView>. The NotAuthorized block should differentiate: if context.User.Identity?.IsAuthenticated == true redirect to /access-denied else redirect to /login with returnUrl."
+    - task: "Task B1 - Update src/QBrainAi.Web/Routes.razor: change <RouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)' /> to <AuthorizeRouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)'><NotAuthorized><RedirectToLogin /></NotAuthorized></AuthorizeRouteView>. The NotAuthorized block should differentiate: if context.User.Identity?.IsAuthenticated == true redirect to /access-denied else redirect to /login with returnUrl."
       done: true
-    - task: "Task B2 - Create src/McpServer.Web/Components/Auth/RedirectToLogin.razor: a parameter-less component that on OnInitializedAsync calls NavigationManager.NavigateTo('/login?returnUrl=' + Uri.EscapeDataString(NavigationManager.Uri), forceLoad: true). This is required because NavigateTo from inside AuthorizeRouteView must force a full page load to allow the non-circuit Razor Page to execute."
+    - task: "Task B2 - Create src/QBrainAi.Web/Components/Auth/RedirectToLogin.razor: a parameter-less component that on OnInitializedAsync calls NavigationManager.NavigateTo('/login?returnUrl=' + Uri.EscapeDataString(NavigationManager.Uri), forceLoad: true). This is required because NavigateTo from inside AuthorizeRouteView must force a full page load to allow the non-circuit Razor Page to execute."
       done: true
-    - task: "Task C1 - Update src/McpServer.Web/Components/Layout/MainLayout.razor: add <AuthorizeView> block at the top of the shell. In <Authorized> show context.User.Identity?.Name (falling back to 'name' claim) and a link to /logout. In <NotAuthorized> show a login link to /login. Add the new auth header above the <aside>/<main> app-shell structure using Primer CSS d-flex/flex-items-center/Header patterns."
+    - task: "Task C1 - Update src/QBrainAi.Web/Components/Layout/MainLayout.razor: add <AuthorizeView> block at the top of the shell. In <Authorized> show context.User.Identity?.Name (falling back to 'name' claim) and a link to /logout. In <NotAuthorized> show a login link to /login. Add the new auth header above the <aside>/<main> app-shell structure using Primer CSS d-flex/flex-items-center/Header patterns."
       done: true
-    - task: "Task C2 - Update src/McpServer.Web/Components/Layout/NavMenu.razor: add @inject AuthenticationStateProvider AuthStateProvider. Wrap admin-only nav sections (e.g. Auth Config, future admin areas) in <AuthorizeView Roles='admin'> to hide them from non-admin users. Add a top-level user display name and logout link at the bottom of the sidebar using Primer CSS."
+    - task: "Task C2 - Update src/QBrainAi.Web/Components/Layout/NavMenu.razor: add @inject AuthenticationStateProvider AuthStateProvider. Wrap admin-only nav sections (e.g. Auth Config, future admin areas) in <AuthorizeView Roles='admin'> to hide them from non-admin users. Add a top-level user display name and logout link at the bottom of the sidebar using Primer CSS."
       done: true
-    - task: "Task D1 - Create src/McpServer.Web/Authorization/WebRoleContext.cs: public sealed class WebRoleContext : IRoleContext. Inject IHttpContextAccessor. IsAuthenticated returns _accessor.HttpContext?.User.Identity?.IsAuthenticated ?? false. Roles returns (_accessor.HttpContext?.User.Claims.Where(c => c.Type == 'role').Select(c => c.Value) ?? []).ToList(). HasRole(string role) uses case-insensitive Contains on Roles list. Add XML doc comments."
+    - task: "Task D1 - Create src/QBrainAi.Web/Authorization/WebRoleContext.cs: public sealed class WebRoleContext : IRoleContext. Inject IHttpContextAccessor. IsAuthenticated returns _accessor.HttpContext?.User.Identity?.IsAuthenticated ?? false. Roles returns (_accessor.HttpContext?.User.Claims.Where(c => c.Type == 'role').Select(c => c.Value) ?? []).ToList(). HasRole(string role) uses case-insensitive Contains on Roles list. Add XML doc comments."
       done: true
-    - task: 'Task D2 - Update src/McpServer.Web/WebServiceRegistration.cs: add services.AddHttpContextAccessor() and services.TryAddSingleton<IRoleContext, WebRoleContext>() BEFORE the call to services.AddUiCore(). This ensures the real WebRoleContext wins over AllowAllRoleContext from the TryAdd fallback inside AddUiCore. Import McpServer.Web.Authorization and McpServer.UI.Core.Authorization namespaces.'
+    - task: 'Task D2 - Update src/QBrainAi.Web/WebServiceRegistration.cs: add services.AddHttpContextAccessor() and services.TryAddSingleton<IRoleContext, WebRoleContext>() BEFORE the call to services.AddUiCore(). This ensures the real WebRoleContext wins over AllowAllRoleContext from the TryAdd fallback inside AddUiCore. Import QBrainAi.Web.Authorization and QBrainAi.UI.Core.Authorization namespaces.'
       done: true
-    - task: "Task E1 - Create src/McpServer.Web/Authorization/BearerTokenAccessor.cs: internal sealed class BearerTokenAccessor. Inject IHttpContextAccessor. Method: Task<string?> GetAccessTokenAsync(CancellationToken ct) calls await _accessor.HttpContext.GetTokenAsync('access_token') returning null when not authenticated. This isolates the token retrieval from WebMcpContext."
+    - task: "Task E1 - Create src/QBrainAi.Web/Authorization/BearerTokenAccessor.cs: internal sealed class BearerTokenAccessor. Inject IHttpContextAccessor. Method: Task<string?> GetAccessTokenAsync(CancellationToken ct) calls await _accessor.HttpContext.GetTokenAsync('access_token') returning null when not authenticated. This isolates the token retrieval from WebMcpContext."
       done: true
-    - task: 'Task E2 - Update src/McpServer.Web/WebMcpContext.cs: inject BearerTokenAccessor. In EnsureInitializedAsync, before the API key check, try var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken). If non-null/non-whitespace, set client.BearerToken = bearerToken and return (skip InitializeAsync). The existing EnsureInitializedAsync early return for non-empty BearerToken already handles the short-circuit correctly.'
+    - task: 'Task E2 - Update src/QBrainAi.Web/WebMcpContext.cs: inject BearerTokenAccessor. In EnsureInitializedAsync, before the API key check, try var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken). If non-null/non-whitespace, set client.BearerToken = bearerToken and return (skip InitializeAsync). The existing EnsureInitializedAsync early return for non-empty BearerToken already handles the short-circuit correctly.'
       done: true
-    - task: "Task E3 - Update src/McpServer.Web/appsettings.json: add McpServer section at root level: { 'McpServer': { 'BaseUrl': 'http://localhost:7147', 'ApiKey': '', 'WorkspacePath': '' } }. These are development defaults. Production overrides go in environment variables or appsettings.Production.json."
+    - task: "Task E3 - Update src/QBrainAi.Web/appsettings.json: add QBrainAi section at root level: { 'QBrainAi': { 'BaseUrl': 'http://localhost:7147', 'ApiKey': '', 'WorkspacePath': '' } }. These are development defaults. Production overrides go in environment variables or appsettings.Production.json."
       done: true
-    - task: "Task E4 - Create src/McpServer.Web/appsettings.Development.json: override Authentication:Schemes:OpenIdConnect:Authority with 'http://localhost:7080/realms/mcp', ClientId with 'mcp-web', and Authentication:Authorization:RequireAuthenticatedUserByDefault with true. This makes dev require login by default while prod stays false until explicitly configured."
+    - task: "Task E4 - Create src/QBrainAi.Web/appsettings.Development.json: override Authentication:Schemes:OpenIdConnect:Authority with 'http://localhost:7080/realms/mcp', ClientId with 'mcp-web', and Authentication:Authorization:RequireAuthenticatedUserByDefault with true. This makes dev require login by default while prod stays false until explicitly configured."
       done: true
-    - task: 'Task F1 - Create tests/McpServer.Web.Tests/McpServer.Web.Tests.csproj: net9.0 class library targeting McpServer.Web. Add PackageReferences for: Microsoft.AspNetCore.Mvc.Testing (for WebApplicationFactory), xunit, xunit.runner.visualstudio, coverlet.collector, Microsoft.NET.Test.Sdk. Add ProjectReference to src/McpServer.Web/McpServer.Web.csproj.'
+    - task: 'Task F1 - Create tests/QBrainAi.Web.Tests/QBrainAi.Web.Tests.csproj: net9.0 class library targeting QBrainAi.Web. Add PackageReferences for: Microsoft.AspNetCore.Mvc.Testing (for WebApplicationFactory), xunit, xunit.runner.visualstudio, coverlet.collector, Microsoft.NET.Test.Sdk. Add ProjectReference to src/QBrainAi.Web/QBrainAi.Web.csproj.'
       done: true
-    - task: 'Task F2 - Create tests/McpServer.Web.Tests/Auth/LoginPageTests.cs: WebApplicationFactory<Program> test. Test: GET /login returns 302 redirect to OIDC authority (or challenges). Mock the OIDC handler or use TestAuthHandler to simulate the challenge. Verify IActionResult is a ChallengeResult or that Location header points to OIDC authority. Use builder.ConfigureServices() to stub the OIDC metadata.'
+    - task: 'Task F2 - Create tests/QBrainAi.Web.Tests/Auth/LoginPageTests.cs: WebApplicationFactory<Program> test. Test: GET /login returns 302 redirect to OIDC authority (or challenges). Mock the OIDC handler or use TestAuthHandler to simulate the challenge. Verify IActionResult is a ChallengeResult or that Location header points to OIDC authority. Use builder.ConfigureServices() to stub the OIDC metadata.'
       done: true
-    - task: "Task F3 - Create tests/McpServer.Web.Tests/Auth/LogoutPageTests.cs: WebApplicationFactory test. Test: GET /logout when authenticated returns 302 to OIDC provider's end_session endpoint or to /. Verify cookie is cleared (response does not include auth cookie or sets it to empty). Use TestAuthHandler to pre-authenticate the request."
+    - task: "Task F3 - Create tests/QBrainAi.Web.Tests/Auth/LogoutPageTests.cs: WebApplicationFactory test. Test: GET /logout when authenticated returns 302 to OIDC provider's end_session endpoint or to /. Verify cookie is cleared (response does not include auth cookie or sets it to empty). Use TestAuthHandler to pre-authenticate the request."
       done: true
-    - task: "Task F4 - Create tests/McpServer.Web.Tests/Auth/AccessDeniedPageTests.cs: verify GET /access-denied returns 200 and the page contains 'Access Denied' heading without requiring authentication."
+    - task: "Task F4 - Create tests/QBrainAi.Web.Tests/Auth/AccessDeniedPageTests.cs: verify GET /access-denied returns 200 and the page contains 'Access Denied' heading without requiring authentication."
       done: true
-    - task: 'Task F5 - Create tests/McpServer.Web.Tests/Auth/AuthorizeRouteViewTests.cs: Bunit or WebApplicationFactory test. Verify that a page with [Authorize] attribute redirects unauthenticated users to /login and allows authenticated users through. Use TestAuthHandler with pre-seeded ClaimsPrincipal.'
+    - task: 'Task F5 - Create tests/QBrainAi.Web.Tests/Auth/AuthorizeRouteViewTests.cs: Bunit or WebApplicationFactory test. Verify that a page with [Authorize] attribute redirects unauthenticated users to /login and allows authenticated users through. Use TestAuthHandler with pre-seeded ClaimsPrincipal.'
       done: true
-    - task: "Task F6 - Create tests/McpServer.Web.Tests/Authorization/WebRoleContextTests.cs: unit tests. Test IsAuthenticated returns false when IHttpContextAccessor.HttpContext is null. Test IsAuthenticated returns true when HttpContext.User.Identity.IsAuthenticated is true. Test Roles enumerates 'role' typed claims from HttpContext.User. Test HasRole('admin') returns true/false correctly with case-insensitive comparison."
+    - task: "Task F6 - Create tests/QBrainAi.Web.Tests/Authorization/WebRoleContextTests.cs: unit tests. Test IsAuthenticated returns false when IHttpContextAccessor.HttpContext is null. Test IsAuthenticated returns true when HttpContext.User.Identity.IsAuthenticated is true. Test Roles enumerates 'role' typed claims from HttpContext.User. Test HasRole('admin') returns true/false correctly with case-insensitive comparison."
       done: true
-    - task: 'Task F7 - Create tests/McpServer.Web.Tests/WebMcpContextTests.cs: unit tests. Test EnsureInitializedAsync sets client.BearerToken when BearerTokenAccessor returns a non-empty token. Test EnsureInitializedAsync calls InitializeAsync when no token is available. Use fake IConfiguration and mock BearerTokenAccessor.'
+    - task: 'Task F7 - Create tests/QBrainAi.Web.Tests/WebMcpContextTests.cs: unit tests. Test EnsureInitializedAsync sets client.BearerToken when BearerTokenAccessor returns a non-empty token. Test EnsureInitializedAsync calls InitializeAsync when no token is available. Use fake IConfiguration and mock BearerTokenAccessor.'
       done: true
-    - task: "Task G1 - Build verification: run 'dotnet build src/McpServer.Web -c Debug' and 'dotnet build tests/McpServer.Web.Tests -c Debug'. Fix all compilation errors introduced by the new auth pages, WebRoleContext, BearerTokenAccessor, and updated WebMcpContext. Verify no CA/nullable warnings become errors."
+    - task: "Task G1 - Build verification: run 'dotnet build src/QBrainAi.Web -c Debug' and 'dotnet build tests/QBrainAi.Web.Tests -c Debug'. Fix all compilation errors introduced by the new auth pages, WebRoleContext, BearerTokenAccessor, and updated WebMcpContext. Verify no CA/nullable warnings become errors."
       done: true
-    - task: "Task G2 - Test verification: run 'dotnet test tests/McpServer.Web.Tests -c Debug'. All new tests must pass. Fix any test failures."
+    - task: "Task G2 - Test verification: run 'dotnet test tests/QBrainAi.Web.Tests -c Debug'. All new tests must pass. Fix any test failures."
       done: true
   - id: PLAN-NAMINGCONVENTIONS-001
     title: '[DONE] Naming conventions for TODO and session IDs in marker/context artifacts'
@@ -771,19 +771,19 @@ mvp-app:
     - 'Session ID convention target: agent-prefixed stable IDs; request IDs uniquely scoped per session with deterministic timestamp/slug pattern.'
     - Deliverable is a fully testable, non-breaking rollout sequence with integration points identified across YAML and SQLite TODO backends plus session log endpoints.
     technical-details:
-    - 'Primary marker prompt surfaces: src/McpServer.Support.Mcp/Services/MarkerFileService.cs (MarkerFileService.DefaultPromptTemplate const string) and templates/prompt-templates.yaml (template id: default-marker-prompt).'
-    - 'Marker propagation integration point: src/McpServer.Support.Mcp/Services/WorkspaceProcessManager.cs via StartAsync(WorkspaceDto,CancellationToken) and RegenerateAllMarkersAsync(CancellationToken,string?).'
-    - 'TODO API contracts: src/McpServer.Support.Mcp/Services/ITodoService.cs using Task<TodoMutationResult> CreateAsync(TodoCreateRequest,CancellationToken) and Task<TodoMutationResult> UpdateAsync(string,TodoUpdateRequest,CancellationToken).'
-    - 'TODO backend implementations: src/McpServer.Support.Mcp/Services/TodoService.cs and src/McpServer.Support.Mcp/Services/SqliteTodoService.cs (ensure parity between YAML and SQLite providers).'
-    - 'Current validator anchor: src/McpServer.Support.Mcp/Services/TodoValidator.cs; extend with explicit ID format checks instead of duplicating regex logic.'
-    - 'Session log contracts: src/McpServer.Support.Mcp/Models/UnifiedSessionLogDto.cs and src/McpServer.Support.Mcp/Services/ISessionLogService.cs.'
-    - 'Session log entry points: src/McpServer.Support.Mcp/Controllers/SessionLogController.cs methods SubmitAsync(UnifiedSessionLogDto,CancellationToken) and AppendDialogAsync(string,string,string,IReadOnlyList<ProcessingDialogItemDto>,CancellationToken).'
-    - 'Optional validation location: src/McpServer.Support.Mcp/Services/SessionLogService.cs SubmitAsync(...) and/or dedicated shared validator to keep controller/service behavior consistent.'
+    - 'Primary marker prompt surfaces: src/QBrainAi.Support.Mcp/Services/MarkerFileService.cs (MarkerFileService.DefaultPromptTemplate const string) and templates/prompt-templates.yaml (template id: default-marker-prompt).'
+    - 'Marker propagation integration point: src/QBrainAi.Support.Mcp/Services/WorkspaceProcessManager.cs via StartAsync(WorkspaceDto,CancellationToken) and RegenerateAllMarkersAsync(CancellationToken,string?).'
+    - 'TODO API contracts: src/QBrainAi.Support.Mcp/Services/ITodoService.cs using Task<TodoMutationResult> CreateAsync(TodoCreateRequest,CancellationToken) and Task<TodoMutationResult> UpdateAsync(string,TodoUpdateRequest,CancellationToken).'
+    - 'TODO backend implementations: src/QBrainAi.Support.Mcp/Services/TodoService.cs and src/QBrainAi.Support.Mcp/Services/SqliteTodoService.cs (ensure parity between YAML and SQLite providers).'
+    - 'Current validator anchor: src/QBrainAi.Support.Mcp/Services/TodoValidator.cs; extend with explicit ID format checks instead of duplicating regex logic.'
+    - 'Session log contracts: src/QBrainAi.Support.Mcp/Models/UnifiedSessionLogDto.cs and src/QBrainAi.Support.Mcp/Services/ISessionLogService.cs.'
+    - 'Session log entry points: src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs methods SubmitAsync(UnifiedSessionLogDto,CancellationToken) and AppendDialogAsync(string,string,string,IReadOnlyList<ProcessingDialogItemDto>,CancellationToken).'
+    - 'Optional validation location: src/QBrainAi.Support.Mcp/Services/SessionLogService.cs SubmitAsync(...) and/or dedicated shared validator to keep controller/service behavior consistent.'
     - 'Context reference docs to update: docs/context/todo-schema.md and docs/context/session-log-schema.md (add normative naming section with required/invalid examples).'
     - 'Traceability docs if behavior changes: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md.'
-    - 'Test suites to update: tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/McpServer.Support.Mcp.Tests/Services/TodoServiceTests.cs, tests/McpServer.Support.Mcp.Tests/Services/SqliteTodoServiceTests.cs, tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs, tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerTests.cs, tests/McpServer.Support.Mcp.Tests/Controllers/TodoControllerTests.cs.'
-    - 'Prompt-template loading verification path: tests/McpServer.Support.Mcp.Tests/Services/FileMarkerPromptProviderTests.cs for default-marker-prompt retrieval behavior.'
-    - 'Build/test verification commands: dotnet build src\\McpServer.Support.Mcp -c Debug; dotnet build src\\McpServer.Client -c Debug; dotnet test tests\\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\\McpServer.Client.Tests -c Debug.'
+    - 'Test suites to update: tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/TodoServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/SqliteTodoServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerTests.cs, tests/QBrainAi.Support.Mcp.Tests/Controllers/TodoControllerTests.cs.'
+    - 'Prompt-template loading verification path: tests/QBrainAi.Support.Mcp.Tests/Services/FileMarkerPromptProviderTests.cs for default-marker-prompt retrieval behavior.'
+    - 'Build/test verification commands: dotnet build src\\QBrainAi.Support.Mcp -c Debug; dotnet build src\\QBrainAi.Client -c Debug; dotnet test tests\\QBrainAi.Support.Mcp.Tests -c Debug; dotnet test tests\\QBrainAi.Client.Tests -c Debug.'
     implementation-tasks:
     - task: 'Task 01 - Capture baseline: inventory current TODO IDs and sessionId/requestId samples from docs/Project/TODO.yaml and recent session logs to identify existing non-conforming patterns and compatibility constraints.'
       done: true
@@ -793,7 +793,7 @@ mvp-app:
       done: true
     - task: Task 04 - Update templates/prompt-templates.yaml default-marker-prompt content with a new Naming Conventions section that includes strict TODO/session ID examples and anti-examples.
       done: true
-    - task: Task 05 - Mirror the same Naming Conventions section in MarkerFileService.DefaultPromptTemplate in src/McpServer.Support.Mcp/Services/MarkerFileService.cs to preserve fallback behavior.
+    - task: Task 05 - Mirror the same Naming Conventions section in MarkerFileService.DefaultPromptTemplate in src/QBrainAi.Support.Mcp/Services/MarkerFileService.cs to preserve fallback behavior.
       done: true
     - task: Task 06 - Validate marker generation integration by forcing marker regeneration path in WorkspaceProcessManager.RegenerateAllMarkersAsync(...) and confirming rendered AGENTS-README-FIRST.yaml includes naming guidance.
       done: true
@@ -803,7 +803,7 @@ mvp-app:
       done: true
     - task: Task 09 - Decide enforcement mode (documentation-only vs API validation) and log decision in session log with rationale and backward-compatibility impact.
       done: true
-    - task: 'Task 10 - If enforcing, add TodoValidator API: string? ValidateTodoId(string? id) and string? ValidateTodoIds(IEnumerable<string>? ids,string fieldName) in src/McpServer.Support.Mcp/Services/TodoValidator.cs.'
+    - task: 'Task 10 - If enforcing, add TodoValidator API: string? ValidateTodoId(string? id) and string? ValidateTodoIds(IEnumerable<string>? ids,string fieldName) in src/QBrainAi.Support.Mcp/Services/TodoValidator.cs.'
       done: true
     - task: Task 11 - If enforcing, wire TODO ID validation into TodoService.CreateAsync(...) and SqliteTodoService.CreateAsync(...) before duplicate checks; return TodoMutationResult(false,<error>) for invalid IDs.
       done: true
@@ -943,15 +943,15 @@ mvp-mcp:
     title: Move VS2026 extension copilot functions into MCP server as todo endpoints
     done: true
     description:
-    - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcpserver/todo or similar.
+    - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /qbrainai/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new McpServer.UI.Core.Tests project, automated handler contract coverage, broad AreaList/AreaDetail ViewModel behavior coverage, Director exec integration coverage for ToolRegistry/GitHub/Requirements/EventStream/Context/Repo, Director runner cross-platform path fix, and Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265, 38f433a, c873bbb and follow-up local changes in this branch). Manual TUI smoke validation was split into MVP-MCP-011 (medium priority).'
+    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new QBrainAi.UI.Core.Tests project, automated handler contract coverage, broad AreaList/AreaDetail ViewModel behavior coverage, Director exec integration coverage for ToolRegistry/GitHub/Requirements/EventStream/Context/Repo, Director runner cross-platform path fix, and Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265, 38f433a, c873bbb and follow-up local changes in this branch). Manual TUI smoke validation was split into MVP-MCP-011 (medium priority).'
     done: true
     description:
-    - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
+    - Implement complete MCP Director administration coverage through the QBrainAi.UI.Core MVVM/CQRS layer.
     - Every MCP area should have ViewModel coverage, every endpoint should have a handler, and every handler should be callable from an IAsyncRelayCommand.
     - Each tab must include a primary entity list/grid plus detail views for CRUD or read-only detail as applicable.
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
@@ -959,17 +959,17 @@ mvp-mcp:
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
     remaining: Automated closure work is complete. Manual interactive smoke validation scope was moved to MVP-MCP-011 for separate tracking.
     technical-details:
-    - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
+    - 'Scope: all /qbrainai/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
     - 'ViewModel convention: per area ListViewModel + DetailViewModel pair. Both inherit from AreaListViewModelBase<T> or AreaDetailViewModelBase<T>.'
-    - Director shell must consume ViewModels only for migrated tabs; use McpServer.Client adapters behind UI.Core service abstractions.
+    - Director shell must consume ViewModels only for migrated tabs; use QBrainAi.Client adapters behind UI.Core service abstractions.
     - 'RBAC source: JWT realm roles parsed by Director auth (realm_roles/roles). Role tiers: viewer, agent-manager, admin. Already implemented via DirectorRoleContext + DirectorAuthorizationPolicyService.'
     - 'RBAC UX behavior: hide unauthorized tabs and commands; still rely on server-side auth as authority. Already enforced in MainScreen.RebuildTabs().'
     - 'UI.Core existing infrastructure: IRoleContext, IAuthorizationPolicyService, McpArea (17 areas), McpActionKeys (27 keys), McpRoles (3 tiers), AllowAll* defaults, AreaList/DetailViewModelBase.'
     - 'Area API abstractions: 10 of 14 exist. Missing: IAgentApiClient, IToolRegistryApiClient, IGitHubApiClient, IEventStreamApiClient.'
-    - 'McpServer.Client gaps: AgentClient (14 methods), RequirementsClient (20 methods), VoiceClient (6 methods), EventStreamClient (1 SSE method) = 41 missing client methods.'
-    - 'CQRS infrastructure: McpServer.Cqrs provides IDispatcher, IQueryHandler<TQuery,TResult>, ICommandHandler<TCommand,TResult>. McpServer.Cqrs.Mvvm provides CqrsRelayCommand, ViewModelCommandAttribute, IViewModelRegistry.'
-    - 'Testing gap: McpServer.UI.Core has ZERO dedicated tests. Need new test project with handler tests, ViewModel tests, authorization policy tests.'
+    - 'QBrainAi.Client gaps: AgentClient (14 methods), RequirementsClient (20 methods), VoiceClient (6 methods), EventStreamClient (1 SSE method) = 41 missing client methods.'
+    - 'CQRS infrastructure: QBrainAi.Cqrs provides IDispatcher, IQueryHandler<TQuery,TResult>, ICommandHandler<TCommand,TResult>. QBrainAi.Cqrs.Mvvm provides CqrsRelayCommand, ViewModelCommandAttribute, IViewModelRegistry.'
+    - 'Testing gap: QBrainAi.UI.Core has ZERO dedicated tests. Need new test project with handler tests, ViewModel tests, authorization policy tests.'
     - 'Director screens: 9 of 10 use ViewModels. AgentScreen is the sole outlier (uses AgentScreenHandler with direct HTTP calls).'
     - Approximate endpoint coverage target revised from ~78 to 112 based on actual controller audit.
     depends-on:
@@ -992,37 +992,37 @@ mvp-mcp:
       done: true
     - task: 'Phase 2.6-DONE: Complete Sync run/status handlers with list/detail VMs and migrate Sync tab. [GetSyncStatusQueryHandler, RunSyncCommandHandler, SyncStatusViewModel, RunSyncViewModel, SyncScreen migrated]'
       done: true
-    - task: 'Phase 1.1 - Create AgentClient in McpServer.Client: Add src/McpServer.Client/AgentClient.cs extending McpClientBase. Implement 14 methods: ListDefinitionsAsync, GetDefinitionAsync, UpsertDefinitionAsync, DeleteDefinitionAsync, SeedDefaultsAsync, ListWorkspaceAgentsAsync, GetWorkspaceAgentAsync, UpsertWorkspaceAgentAsync, DeleteWorkspaceAgentAsync, BanAgentAsync, UnbanAgentAsync, LogEventAsync, GetEventsAsync, ValidateAsync. Wire into McpServerClient as property Agents. Add AgentClient unit tests in tests/McpServer.Client.Tests/AgentClientTests.cs.'
+    - task: 'Phase 1.1 - Create AgentClient in QBrainAi.Client: Add src/QBrainAi.Client/AgentClient.cs extending McpClientBase. Implement 14 methods: ListDefinitionsAsync, GetDefinitionAsync, UpsertDefinitionAsync, DeleteDefinitionAsync, SeedDefaultsAsync, ListWorkspaceAgentsAsync, GetWorkspaceAgentAsync, UpsertWorkspaceAgentAsync, DeleteWorkspaceAgentAsync, BanAgentAsync, UnbanAgentAsync, LogEventAsync, GetEventsAsync, ValidateAsync. Wire into QBrainAiClient as property Agents. Add AgentClient unit tests in tests/QBrainAi.Client.Tests/AgentClientTests.cs.'
       done: true
-    - task: 'Phase 1.2 - Create RequirementsClient in McpServer.Client: Add src/McpServer.Client/RequirementsClient.cs extending McpClientBase. Implement 20 methods: ListFrAsync, GetFrAsync, CreateFrAsync, UpdateFrAsync, DeleteFrAsync (×4 for TR, Test, Mapping), GenerateAsync. Wire into McpServerClient as property Requirements. Add tests in tests/McpServer.Client.Tests/RequirementsClientTests.cs.'
+    - task: 'Phase 1.2 - Create RequirementsClient in QBrainAi.Client: Add src/QBrainAi.Client/RequirementsClient.cs extending McpClientBase. Implement 20 methods: ListFrAsync, GetFrAsync, CreateFrAsync, UpdateFrAsync, DeleteFrAsync (×4 for TR, Test, Mapping), GenerateAsync. Wire into QBrainAiClient as property Requirements. Add tests in tests/QBrainAi.Client.Tests/RequirementsClientTests.cs.'
       done: true
-    - task: 'Phase 1.3 - Create VoiceClient in McpServer.Client: Add src/McpServer.Client/VoiceClient.cs extending McpClientBase. Implement 6 methods: CreateSessionAsync, SubmitTurnAsync, InterruptAsync, GetStatusAsync, GetTranscriptAsync, DeleteSessionAsync. Wire into McpServerClient as property Voice. Add tests.'
+    - task: 'Phase 1.3 - Create VoiceClient in QBrainAi.Client: Add src/QBrainAi.Client/VoiceClient.cs extending McpClientBase. Implement 6 methods: CreateSessionAsync, SubmitTurnAsync, InterruptAsync, GetStatusAsync, GetTranscriptAsync, DeleteSessionAsync. Wire into QBrainAiClient as property Voice. Add tests.'
       done: true
-    - task: 'Phase 1.4 - Create EventStreamClient in McpServer.Client: Add src/McpServer.Client/EventStreamClient.cs extending McpClientBase. Implement 1 method: SubscribeAsync(category?, ct) returning IAsyncEnumerable<ChangeEvent> using StreamSseAsync. Wire into McpServerClient as property Events. Add tests.'
+    - task: 'Phase 1.4 - Create EventStreamClient in QBrainAi.Client: Add src/QBrainAi.Client/EventStreamClient.cs extending McpClientBase. Implement 1 method: SubscribeAsync(category?, ct) returning IAsyncEnumerable<ChangeEvent> using StreamSseAsync. Wire into QBrainAiClient as property Events. Add tests.'
       done: true
-    - task: 'Phase 2.1 - Create IAgentApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IAgentApiClient.cs with methods matching all 14 AgentController endpoints. Create AgentMessages.cs in Messages/ with query/command records: ListAgentDefinitionsQuery, GetAgentDefinitionQuery, UpsertAgentDefinitionCommand, DeleteAgentDefinitionCommand, SeedAgentDefaultsCommand, ListWorkspaceAgentsQuery, GetWorkspaceAgentQuery, UpsertWorkspaceAgentCommand, DeleteWorkspaceAgentCommand, BanAgentCommand, UnbanAgentCommand, LogAgentEventCommand, GetAgentEventsQuery, ValidateAgentQuery.'
+    - task: 'Phase 2.1 - Create IAgentApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IAgentApiClient.cs with methods matching all 14 AgentController endpoints. Create AgentMessages.cs in Messages/ with query/command records: ListAgentDefinitionsQuery, GetAgentDefinitionQuery, UpsertAgentDefinitionCommand, DeleteAgentDefinitionCommand, SeedAgentDefaultsCommand, ListWorkspaceAgentsQuery, GetWorkspaceAgentQuery, UpsertWorkspaceAgentCommand, DeleteWorkspaceAgentCommand, BanAgentCommand, UnbanAgentCommand, LogAgentEventCommand, GetAgentEventsQuery, ValidateAgentQuery.'
       done: true
-    - task: 'Phase 2.2 - Create IToolRegistryApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IToolRegistryApiClient.cs with methods matching all 12 ToolRegistryController endpoints. Create ToolRegistryMessages.cs in Messages/ with query/command records: ListToolsQuery, SearchToolsQuery, GetToolQuery, CreateToolCommand, UpdateToolCommand, DeleteToolCommand, ListBucketsQuery, AddBucketCommand, RemoveBucketCommand, BrowseBucketQuery, InstallFromBucketCommand, SyncBucketCommand.'
+    - task: 'Phase 2.2 - Create IToolRegistryApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IToolRegistryApiClient.cs with methods matching all 12 ToolRegistryController endpoints. Create ToolRegistryMessages.cs in Messages/ with query/command records: ListToolsQuery, SearchToolsQuery, GetToolQuery, CreateToolCommand, UpdateToolCommand, DeleteToolCommand, ListBucketsQuery, AddBucketCommand, RemoveBucketCommand, BrowseBucketQuery, InstallFromBucketCommand, SyncBucketCommand.'
       done: true
-    - task: 'Phase 2.3 - Create IGitHubApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IGitHubApiClient.cs with methods matching all 13 GitHubController endpoints. Create GitHubMessages.cs in Messages/ with query/command records for issues (list/get/create/update/close/reopen/comment), labels, pulls (list/comment), sync (from-github/to-github/single).'
+    - task: 'Phase 2.3 - Create IGitHubApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IGitHubApiClient.cs with methods matching all 13 GitHubController endpoints. Create GitHubMessages.cs in Messages/ with query/command records for issues (list/get/create/update/close/reopen/comment), labels, pulls (list/comment), sync (from-github/to-github/single).'
       done: true
-    - task: 'Phase 2.4 - Create IEventStreamApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IEventStreamApiClient.cs with SubscribeAsync method. Create EventStreamMessages.cs in Messages/ with SubscribeToEventsQuery record.'
+    - task: 'Phase 2.4 - Create IEventStreamApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IEventStreamApiClient.cs with SubscribeAsync method. Create EventStreamMessages.cs in Messages/ with SubscribeToEventsQuery record.'
       done: true
-    - task: 'Phase 2.5 - Create IRequirementsApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IRequirementsApiClient.cs with methods matching all 20 RequirementsController endpoints. Create RequirementsMessages.cs in Messages/ with query/command records for FR/TR/Test/Mapping CRUD and Generate.'
+    - task: 'Phase 2.5 - Create IRequirementsApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IRequirementsApiClient.cs with methods matching all 20 RequirementsController endpoints. Create RequirementsMessages.cs in Messages/ with query/command records for FR/TR/Test/Mapping CRUD and Generate.'
       done: true
-    - task: 'Phase 2.6 - Create IVoiceApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IVoiceApiClient.cs with methods matching all 6 VoiceController endpoints. Create VoiceMessages.cs in Messages/ with command/query records.'
+    - task: 'Phase 2.6 - Create IVoiceApiClient interface in UI.Core: Add src/QBrainAi.UI.Core/Services/IVoiceApiClient.cs with methods matching all 6 VoiceController endpoints. Create VoiceMessages.cs in Messages/ with command/query records.'
       done: true
-    - task: 'Phase 3.1 - Create AgentApiClientAdapter in Director: Add src/McpServer.Director/AgentApiClientAdapter.cs implementing IAgentApiClient, delegating to McpServerClient.Agents (from McpServer.Client). Register as singleton in InteractiveCommand.cs DI block.'
+    - task: 'Phase 3.1 - Create AgentApiClientAdapter in Director: Add src/QBrainAi.Director/AgentApiClientAdapter.cs implementing IAgentApiClient, delegating to QBrainAiClient.Agents (from QBrainAi.Client). Register as singleton in InteractiveCommand.cs DI block.'
       done: true
-    - task: 'Phase 3.2 - Create ToolRegistryApiClientAdapter in Director: Add src/McpServer.Director/ToolRegistryApiClientAdapter.cs implementing IToolRegistryApiClient, delegating to McpServerClient.Tools. Register in DI.'
+    - task: 'Phase 3.2 - Create ToolRegistryApiClientAdapter in Director: Add src/QBrainAi.Director/ToolRegistryApiClientAdapter.cs implementing IToolRegistryApiClient, delegating to QBrainAiClient.Tools. Register in DI.'
       done: true
-    - task: 'Phase 3.3 - Create GitHubApiClientAdapter in Director: Add src/McpServer.Director/GitHubApiClientAdapter.cs implementing IGitHubApiClient, delegating to McpServerClient.GitHub. Register in DI.'
+    - task: 'Phase 3.3 - Create GitHubApiClientAdapter in Director: Add src/QBrainAi.Director/GitHubApiClientAdapter.cs implementing IGitHubApiClient, delegating to QBrainAiClient.GitHub. Register in DI.'
       done: true
-    - task: 'Phase 3.4 - Create EventStreamApiClientAdapter in Director: Add src/McpServer.Director/EventStreamApiClientAdapter.cs implementing IEventStreamApiClient, delegating to McpServerClient.Events. Register in DI.'
+    - task: 'Phase 3.4 - Create EventStreamApiClientAdapter in Director: Add src/QBrainAi.Director/EventStreamApiClientAdapter.cs implementing IEventStreamApiClient, delegating to QBrainAiClient.Events. Register in DI.'
       done: true
-    - task: 'Phase 3.5 - Create RequirementsApiClientAdapter in Director: Add src/McpServer.Director/RequirementsApiClientAdapter.cs implementing IRequirementsApiClient, delegating to McpServerClient.Requirements. Register in DI.'
+    - task: 'Phase 3.5 - Create RequirementsApiClientAdapter in Director: Add src/QBrainAi.Director/RequirementsApiClientAdapter.cs implementing IRequirementsApiClient, delegating to QBrainAiClient.Requirements. Register in DI.'
       done: true
-    - task: 'Phase 3.6 - Create VoiceApiClientAdapter in Director: Add src/McpServer.Director/VoiceApiClientAdapter.cs implementing IVoiceApiClient, delegating to McpServerClient.Voice. Register in DI.'
+    - task: 'Phase 3.6 - Create VoiceApiClientAdapter in Director: Add src/QBrainAi.Director/VoiceApiClientAdapter.cs implementing IVoiceApiClient, delegating to QBrainAiClient.Voice. Register in DI.'
       done: true
     - task: 'Phase 4.1 - Workspace missing handlers (7): Create handlers in UI.Core/Handlers/ for: CreateWorkspaceCommandHandler, UpdateWorkspaceCommandHandler, DeleteWorkspaceCommandHandler, StartWorkspaceCommandHandler, StopWorkspaceCommandHandler, GetWorkspaceStatusQueryHandler, GetGlobalPromptQueryHandler, UpdateGlobalPromptCommandHandler. Add corresponding messages to WorkspaceMessages.cs. Total: 8 new handlers.'
       done: true
@@ -1040,35 +1040,35 @@ mvp-mcp:
       done: true
     - task: 'Phase 6.2 - ToolRegistry ViewModels: Create ToolListViewModel (AreaListViewModelBase), ToolDetailViewModel (AreaDetailViewModelBase), BucketListViewModel (AreaListViewModelBase), BucketDetailViewModel. Register in AddUiCore().'
       done: true
-    - task: 'Phase 6.3 - Create ToolRegistryScreen in Director: New src/McpServer.Director/Screens/ToolRegistryScreen.cs with TableView for tools list, detail pane for tool CRUD, bucket management sub-view. Wire into MainScreen.RebuildTabs() with McpArea.ToolRegistry auth check.'
+    - task: 'Phase 6.3 - Create ToolRegistryScreen in Director: New src/QBrainAi.Director/Screens/ToolRegistryScreen.cs with TableView for tools list, detail pane for tool CRUD, bucket management sub-view. Wire into MainScreen.RebuildTabs() with McpArea.ToolRegistry auth check.'
       done: true
     - task: 'Phase 7.1 - GitHub handlers (13): Create all 13 handlers in UI.Core/Handlers/: ListIssuesQueryHandler, GetIssueQueryHandler, CreateIssueCommandHandler, UpdateIssueCommandHandler, CloseIssueCommandHandler, ReopenIssueCommandHandler, CommentOnIssueCommandHandler, ListLabelsQueryHandler, ListPullsQueryHandler, CommentOnPullCommandHandler, SyncFromGitHubCommandHandler, SyncToGitHubCommandHandler, SyncSingleIssueCommandHandler. Each injects IGitHubApiClient.'
       done: true
     - task: 'Phase 7.2 - GitHub ViewModels: Create IssueListViewModel (AreaListViewModelBase), IssueDetailViewModel (AreaDetailViewModelBase), PullRequestListViewModel (AreaListViewModelBase), GitHubSyncViewModel. Register in AddUiCore().'
       done: true
-    - task: 'Phase 7.3 - Create GitHubScreen in Director: New src/McpServer.Director/Screens/GitHubScreen.cs with issue list, PR list, detail panes, create/comment actions, sync controls. Wire into MainScreen.RebuildTabs() with McpArea.GitHub auth check.'
+    - task: 'Phase 7.3 - Create GitHubScreen in Director: New src/QBrainAi.Director/Screens/GitHubScreen.cs with issue list, PR list, detail panes, create/comment actions, sync controls. Wire into MainScreen.RebuildTabs() with McpArea.GitHub auth check.'
       done: true
     - task: 'Phase 8.1 - Requirements handlers (20): Create all 20 handlers in UI.Core/Handlers/: CRUD handlers for FR (5), TR (5), Test (5), Mapping (4), plus GenerateRequirementsQueryHandler. Each injects IRequirementsApiClient.'
       done: true
     - task: 'Phase 8.2 - Requirements ViewModels: Create FrListViewModel, FrDetailViewModel, TrListViewModel, TrDetailViewModel, TestListViewModel, TestDetailViewModel, MappingListViewModel, RequirementsGenerateViewModel. Register in AddUiCore().'
       done: true
-    - task: 'Phase 8.3 - Create RequirementsScreen in Director: New src/McpServer.Director/Screens/RequirementsScreen.cs with tabbed sub-views for FR, TR, Test, Mapping lists + detail panes + generate action. Wire into MainScreen.RebuildTabs().'
+    - task: 'Phase 8.3 - Create RequirementsScreen in Director: New src/QBrainAi.Director/Screens/RequirementsScreen.cs with tabbed sub-views for FR, TR, Test, Mapping lists + detail panes + generate action. Wire into MainScreen.RebuildTabs().'
       done: true
     - task: 'Phase 9.1 - EventStream handler (1): Create SubscribeToEventsQueryHandler in UI.Core/Handlers/ injecting IEventStreamApiClient. Create EventStreamViewModel with ObservableCollection<ChangeEvent> and optional category filter.'
       done: true
-    - task: 'Phase 9.2 - Create EventStreamScreen in Director: New src/McpServer.Director/Screens/EventStreamScreen.cs showing live SSE event feed in a scrollable ListView with category filter dropdown. Wire into MainScreen.RebuildTabs() with McpArea.Events auth check.'
+    - task: 'Phase 9.2 - Create EventStreamScreen in Director: New src/QBrainAi.Director/Screens/EventStreamScreen.cs showing live SSE event feed in a scrollable ListView with category filter dropdown. Wire into MainScreen.RebuildTabs() with McpArea.Events auth check.'
       done: true
     - task: 'Phase 9.3 - Voice handlers + ViewModel: Create all 6 handlers in UI.Core/Handlers/: CreateVoiceSessionCommandHandler, SubmitVoiceTurnCommandHandler, InterruptVoiceCommandHandler, GetVoiceStatusQueryHandler, GetVoiceTranscriptQueryHandler, DeleteVoiceSessionCommandHandler. Add VoiceViewModel orchestration for create/submit/interrupt/status/transcript/delete workflows. Each handler injects IVoiceApiClient.'
       done: true
-    - task: 'Phase 10.1 - Create ContextScreen in Director: UI.Core handlers and VMs already exist (4 handlers, 4 VMs: ContextSearchViewModel, ContextPackViewModel, ContextSourcesViewModel, ContextRebuildIndexViewModel). Create src/McpServer.Director/Screens/ContextScreen.cs with search input, results list, sources list, pack viewer, rebuild button. Wire into MainScreen.RebuildTabs() with McpArea.Context auth check.'
+    - task: 'Phase 10.1 - Create ContextScreen in Director: UI.Core handlers and VMs already exist (4 handlers, 4 VMs: ContextSearchViewModel, ContextPackViewModel, ContextSourcesViewModel, ContextRebuildIndexViewModel). Create src/QBrainAi.Director/Screens/ContextScreen.cs with search input, results list, sources list, pack viewer, rebuild button. Wire into MainScreen.RebuildTabs() with McpArea.Context auth check.'
       done: true
-    - task: 'Phase 10.2 - Create RepoScreen in Director: UI.Core handlers and VMs already exist (3 handlers, 2 VMs: RepoListViewModel, RepoFileViewModel + WriteRepoFileViewModel). Create src/McpServer.Director/Screens/RepoScreen.cs with file tree/list, file content viewer, write action. Wire into MainScreen.RebuildTabs() with McpArea.Repo auth check.'
+    - task: 'Phase 10.2 - Create RepoScreen in Director: UI.Core handlers and VMs already exist (3 handlers, 2 VMs: RepoListViewModel, RepoFileViewModel + WriteRepoFileViewModel). Create src/QBrainAi.Director/Screens/RepoScreen.cs with file tree/list, file content viewer, write action. Wire into MainScreen.RebuildTabs() with McpArea.Repo auth check.'
       done: true
     - task: 'Phase 11.1 - Extract tab metadata registry: Create ITabRegistry interface in UI.Core with RegisterTab(McpArea, string displayText, McpRoles requiredRole, Func<IServiceProvider, object> screenFactory). Create TabRegistration record. Move hardcoded tab logic from MainScreen.RebuildTabs() into declarative registrations. MainScreen.RebuildTabs() iterates ITabRegistry entries, checks CanViewArea for each, and adds tabs dynamically.'
       done: true
     - task: 'Phase 12.1 - Ensure Director exec (non-TUI) commands use CQRS: Verify that CLI commands (list, get, create, etc.) dispatch through the same CQRS handlers as the TUI screens. If any CLI command bypasses CQRS and calls McpHttpClient directly, migrate it to use IDispatcher. Check: AgentsCommand, TodoCommand, SessionLogCommand, SyncCommand, HealthCommand, ConfigCommand, ListCommand, AuthCommand.'
       done: true
-    - task: 'Phase 13.1 - Create McpServer.UI.Core.Tests project: Add tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj referencing McpServer.UI.Core, xUnit v3, NSubstitute. Add to McpServer.sln. Create test infrastructure (mock API clients, test helpers).'
+    - task: 'Phase 13.1 - Create QBrainAi.UI.Core.Tests project: Add tests/QBrainAi.UI.Core.Tests/QBrainAi.UI.Core.Tests.csproj referencing QBrainAi.UI.Core, xUnit v3, NSubstitute. Add to QBrainAi.sln. Create test infrastructure (mock API clients, test helpers).'
       done: true
     - task: 'Phase 13.2 - Handler unit tests: For each of the ~33 existing + ~75 new handlers, add at least 1 test verifying: (a) handler calls correct API client method, (b) handler returns expected result type. Group tests by area: TodoHandlerTests, WorkspaceHandlerTests, AgentHandlerTests, ToolRegistryHandlerTests, GitHubHandlerTests, RequirementsHandlerTests, SessionLogHandlerTests, SyncHandlerTests, ContextHandlerTests, RepoHandlerTests, HealthHandlerTests, DiagnosticHandlerTests, AuthConfigHandlerTests, TunnelHandlerTests, EventStreamHandlerTests, VoiceHandlerTests. NSubstitute mock API clients.'
       done: true
@@ -1076,13 +1076,13 @@ mvp-mcp:
       done: true
     - task: 'Phase 13.4 - Authorization policy tests: Test DirectorAuthorizationPolicyService: (a) unauthenticated user gets Viewer access, (b) admin role grants all areas, (c) agent-manager role grants agent areas, (d) viewer role blocked from admin-only areas (Workspaces, Policy). Test McpActionKeys coverage. Minimum 10 tests.'
       done: true
-    - task: 'Phase 13.5 - Director screen tests: Add integration tests to McpServer.Director.Tests for new screens. For each new screen (ToolRegistry, GitHub, Requirements, EventStream, Context, Repo), verify the Director TUI --exec command can exercise the corresponding list/get operations. Minimum 2 tests per new area.'
+    - task: 'Phase 13.5 - Director screen tests: Add integration tests to QBrainAi.Director.Tests for new screens. For each new screen (ToolRegistry, GitHub, Requirements, EventStream, Context, Repo), verify the Director TUI --exec command can exercise the corresponding list/get operations. Minimum 2 tests per new area.'
       done: true
     - task: 'Phase 14.1 - FR/TR updates: Assign FR/TR IDs to MVP-MCP-003. Create FR-MCP-046 (Director MVVM/CQRS Full Endpoint Coverage) if no existing FR covers this. Create TR entries for handler patterns, ViewModel conventions, RBAC tab visibility, tab registry. Update Requirements-Matrix.md and TR-per-FR-Mapping.md.'
       done: true
-    - task: 'Phase 15.1 - Build verification: dotnet build src/McpServer.UI.Core -c Debug, dotnet build src/McpServer.Director -c Debug, dotnet build src/McpServer.Client -c Debug must pass with zero warnings. All public types have XML doc comments.'
+    - task: 'Phase 15.1 - Build verification: dotnet build src/QBrainAi.UI.Core -c Debug, dotnet build src/QBrainAi.Director -c Debug, dotnet build src/QBrainAi.Client -c Debug must pass with zero warnings. All public types have XML doc comments.'
       done: true
-    - task: 'Phase 15.2 - Test execution: dotnet test tests/McpServer.UI.Core.Tests -c Debug, dotnet test tests/McpServer.Client.Tests -c Debug, dotnet test tests/McpServer.Director.Tests -c Debug, dotnet test tests/McpServer.Cqrs.Tests -c Debug must all pass. Zero regressions.'
+    - task: 'Phase 15.2 - Test execution: dotnet test tests/QBrainAi.UI.Core.Tests -c Debug, dotnet test tests/QBrainAi.Client.Tests -c Debug, dotnet test tests/QBrainAi.Director.Tests -c Debug, dotnet test tests/QBrainAi.Cqrs.Tests -c Debug must all pass. Zero regressions.'
       done: true
   - id: MVP-MCP-004
     title: Migrate all templates to YAML files
@@ -1114,11 +1114,11 @@ mvp-mcp:
       done: false
     - task: 'Phase 1.3 - Extract pairing HTML templates: Create templates/pairing-pages.yaml with 3 block scalars: loginPage: |, keyPage: |, notConfiguredPage: |. Copy HTML content from PairingHtml.LoginPage() (~35 lines), PairingHtml.KeyPage() (~50 lines), PairingHtml.NotConfiguredPage() (~25 lines). Convert C# string interpolation variables to named {placeholder} tokens (e.g., {{baseUrl}}, {{apiKey}}, {{errorMessage}}).'
       done: false
-    - task: 'Phase 2.1 - Create ITemplateLoader interface: Create src/McpServer.Support.Mcp/Services/ITemplateLoader.cs with interface ITemplateLoader. Methods: Task<string> LoadMarkerPromptTemplateAsync(CancellationToken ct = default), Task<TodoPromptTemplates> LoadTodoPromptTemplatesAsync(CancellationToken ct = default), Task<PairingPageTemplates> LoadPairingPageTemplatesAsync(CancellationToken ct = default). Create DTO records: TodoPromptTemplates (StatusPrompt, ImplementPrompt, PlanPrompt), PairingPageTemplates (LoginPage, KeyPage, NotConfiguredPage). XML doc comments required (CS1591).'
+    - task: 'Phase 2.1 - Create ITemplateLoader interface: Create src/QBrainAi.Support.Mcp/Services/ITemplateLoader.cs with interface ITemplateLoader. Methods: Task<string> LoadMarkerPromptTemplateAsync(CancellationToken ct = default), Task<TodoPromptTemplates> LoadTodoPromptTemplatesAsync(CancellationToken ct = default), Task<PairingPageTemplates> LoadPairingPageTemplatesAsync(CancellationToken ct = default). Create DTO records: TodoPromptTemplates (StatusPrompt, ImplementPrompt, PlanPrompt), PairingPageTemplates (LoginPage, KeyPage, NotConfiguredPage). XML doc comments required (CS1591).'
       done: false
-    - task: 'Phase 2.2 - Create TemplateOptions: Create src/McpServer.Support.Mcp/Configuration/TemplateOptions.cs with properties: BasePath (string, default "templates"), EnableHotReload (bool, default false). Bind to appsettings.json section Mcp:Templates. Register via builder.Services.Configure<TemplateOptions>(config.GetSection("Mcp:Templates")) in Program.cs.'
+    - task: 'Phase 2.2 - Create TemplateOptions: Create src/QBrainAi.Support.Mcp/Configuration/TemplateOptions.cs with properties: BasePath (string, default "templates"), EnableHotReload (bool, default false). Bind to appsettings.json section Mcp:Templates. Register via builder.Services.Configure<TemplateOptions>(config.GetSection("Mcp:Templates")) in Program.cs.'
       done: false
-    - task: 'Phase 2.3 - Create TemplateFileLoader implementation: Create src/McpServer.Support.Mcp/Services/TemplateFileLoader.cs implementing ITemplateLoader. Constructor injects IOptions<TemplateOptions>, ILogger<TemplateFileLoader>. Private: _cache (ConcurrentDictionary<string, string>), _basePath (resolved from TemplateOptions.BasePath relative to AppContext.BaseDirectory). LoadMarkerPromptTemplateAsync: read templates/default-marker-prompt.hbs.yaml, deserialize with YamlDotNet, extract template key, cache result. On FileNotFoundException: log warning, return MarkerFileService.DefaultPromptTemplate (fallback). LoadTodoPromptTemplatesAsync: read templates/todo-prompts.yaml, deserialize to TodoPromptTemplates. Fallback: return TodoPromptDefaults values. LoadPairingPageTemplatesAsync: read templates/pairing-pages.yaml, deserialize to PairingPageTemplates. Fallback: return PairingHtml inline values. All methods use ConfigureAwait(false).'
+    - task: 'Phase 2.3 - Create TemplateFileLoader implementation: Create src/QBrainAi.Support.Mcp/Services/TemplateFileLoader.cs implementing ITemplateLoader. Constructor injects IOptions<TemplateOptions>, ILogger<TemplateFileLoader>. Private: _cache (ConcurrentDictionary<string, string>), _basePath (resolved from TemplateOptions.BasePath relative to AppContext.BaseDirectory). LoadMarkerPromptTemplateAsync: read templates/default-marker-prompt.hbs.yaml, deserialize with YamlDotNet, extract template key, cache result. On FileNotFoundException: log warning, return MarkerFileService.DefaultPromptTemplate (fallback). LoadTodoPromptTemplatesAsync: read templates/todo-prompts.yaml, deserialize to TodoPromptTemplates. Fallback: return TodoPromptDefaults values. LoadPairingPageTemplatesAsync: read templates/pairing-pages.yaml, deserialize to PairingPageTemplates. Fallback: return PairingHtml inline values. All methods use ConfigureAwait(false).'
       done: false
     - task: 'Phase 2.4 - Register TemplateFileLoader in DI: In Program.cs, add builder.Services.AddSingleton<ITemplateLoader, TemplateFileLoader>() in the service registration block (near other singletons). Add builder.Services.Configure<TemplateOptions>(builder.Configuration.GetSection("Mcp:Templates")).'
       done: false
@@ -1130,7 +1130,7 @@ mvp-mcp:
       done: false
     - task: 'Phase 3.4 - Update appsettings.json with template config: Add Mcp:Templates section to appsettings.json: { "Templates": { "BasePath": "templates", "EnableHotReload": false } }. Document in appsettings comments.'
       done: false
-    - task: 'Phase 4.1 - Unit tests - TemplateFileLoader: Create tests/McpServer.Support.Mcp.Tests/Services/TemplateFileLoaderTests.cs. Test cases: (1) LoadMarkerPromptTemplateAsync_FileExists_ReturnsContent - write temp YAML file, verify loaded content matches. (2) LoadMarkerPromptTemplateAsync_FileMissing_ReturnsFallback - verify DefaultPromptTemplate returned when file absent. (3) LoadTodoPromptTemplatesAsync_FileExists_ReturnsAllThreeTemplates. (4) LoadTodoPromptTemplatesAsync_FileMissing_ReturnsTodoPromptDefaults. (5) LoadPairingPageTemplatesAsync_FileExists_ReturnsAllThreePages. (6) LoadPairingPageTemplatesAsync_FileMissing_ReturnsFallback. (7) LoadMarkerPromptTemplateAsync_CachesResult - second call returns cached (verify file read once). Use temp directory for test files, clean up in Dispose.'
+    - task: 'Phase 4.1 - Unit tests - TemplateFileLoader: Create tests/QBrainAi.Support.Mcp.Tests/Services/TemplateFileLoaderTests.cs. Test cases: (1) LoadMarkerPromptTemplateAsync_FileExists_ReturnsContent - write temp YAML file, verify loaded content matches. (2) LoadMarkerPromptTemplateAsync_FileMissing_ReturnsFallback - verify DefaultPromptTemplate returned when file absent. (3) LoadTodoPromptTemplatesAsync_FileExists_ReturnsAllThreeTemplates. (4) LoadTodoPromptTemplatesAsync_FileMissing_ReturnsTodoPromptDefaults. (5) LoadPairingPageTemplatesAsync_FileExists_ReturnsAllThreePages. (6) LoadPairingPageTemplatesAsync_FileMissing_ReturnsFallback. (7) LoadMarkerPromptTemplateAsync_CachesResult - second call returns cached (verify file read once). Use temp directory for test files, clean up in Dispose.'
       done: false
     - task: 'Phase 4.2 - Unit tests - MarkerFileService with loaded template: In existing MarkerFileServiceTests (or new file), add test: RenderPrompt_UsesLoadedTemplate_NotDefault - mock ITemplateLoader to return custom template string, verify rendered output uses custom template content, not DefaultPromptTemplate.'
       done: false
@@ -1146,9 +1146,9 @@ mvp-mcp:
       done: false
     - task: 'Phase 6.1 - Requirements docs: Create FR-MCP-049 (Template Externalization) in docs/Project/Functional-Requirements.md: The server shall load prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files in a configurable directory, with fallback to embedded defaults. Create TR-MCP-TPL-001 (YAML template file format), TR-MCP-TPL-002 (ITemplateLoader service with caching and fallback), TR-MCP-TPL-003 (configuration precedence: appsettings > file > embedded). Create TEST-MCP-054..057 in Testing-Requirements.md. Update TR-per-FR-Mapping.md and Requirements-Matrix.md.'
       done: false
-    - task: 'Phase 7.1 - Build verification: dotnet build src/McpServer.Support.Mcp -c Debug must pass with zero warnings. All new public types (ITemplateLoader, TemplateFileLoader, TemplateOptions, TodoPromptTemplates, PairingPageTemplates, PairingHtmlRenderer) must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false).'
+    - task: 'Phase 7.1 - Build verification: dotnet build src/QBrainAi.Support.Mcp -c Debug must pass with zero warnings. All new public types (ITemplateLoader, TemplateFileLoader, TemplateOptions, TodoPromptTemplates, PairingPageTemplates, PairingHtmlRenderer) must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false).'
       done: false
-    - task: 'Phase 7.2 - Test execution: dotnet test tests/McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus new template loader tests. Zero regressions. Run with --filter to verify each new test class independently.'
+    - task: 'Phase 7.2 - Test execution: dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug must pass all existing tests plus new template loader tests. Zero regressions. Run with --filter to verify each new test class independently.'
       done: false
     - task: 'Phase 7.3 - Manual smoke test: Start server, verify AGENTS-README-FIRST.yaml marker file is generated correctly using template from YAML file. Modify templates/default-marker-prompt.hbs.yaml, restart server, verify marker file reflects changes. Verify todo prompt endpoints return correct prompts. Verify pairing HTML pages render correctly.'
       done: false
@@ -1177,7 +1177,7 @@ mvp-mcp:
     - 'MARKER FILE INTEGRATION: Modify MarkerFileService.BuildTemplateContext() to include agent-specific additions. When generating AGENTS-README-FIRST.yaml for a workspace, query AgentWorkspaceEntity records for that workspace. For each enabled (non-banned) agent with non-empty MarkerAdditions, append to the marker template context. Add a new Handlebars section: {{#if agentAdditions}}## Agent-Specific Instructions\n{{#each agentAdditions}}### {{this.agentId}}\n{{this.content}}\n{{/each}}{{/if}}. Agents see their own additions because all additions go in one marker file (agents filter relevant sections by their own name).'
     - 'SESSION LOG LINKAGE: (1) Add optional AgentDefinitionId (string, nullable) FK to SessionLogEntity. (2) Add EF migration for the new column. (3) In SessionLogService.SubmitAsync, when SourceType matches a known AgentDefinitionEntity.Id (case-insensitive lookup), populate AgentDefinitionId automatically. (4) Add AgentDefinitionId filter to session log query endpoint. (5) Add navigation property to SessionLogEntity -> AgentDefinitionEntity (optional). This enables queries like: all sessions from agent copilot in workspace X.'
     - 'AGENT HEALTH MONITOR: Create AgentHealthMonitorService as IHostedService (BackgroundService). On a configurable interval (default 30s), iterate all running agent processes. For each: check Process.HasExited. If exited unexpectedly (non-zero exit code or not user-requested stop): log AgentEventLog with EventType=Exit and exit code, apply restart policy (AgentWorkspaceEntity.RestartPolicy: never/on-failure/always). On restart: re-launch with same config. Cap restarts at configurable max (default 3) with exponential backoff. Log all health check results at Debug level, failures at Warning.'
-    - 'NEW AGENT CONTROLLER ENDPOINTS: Add to AgentController: POST /mcpserver/agents/{agentId}/launch?workspace= (launches agent process), POST /mcpserver/agents/{agentId}/stop?workspace= (stops agent process), GET /mcpserver/agents/{agentId}/process-status?workspace= (gets running process info), GET /mcpserver/agents/running?workspace= (lists all running agents in workspace). All require JWT AgentManager policy. Return AgentProcessInfo DTOs.'
+    - 'NEW AGENT CONTROLLER ENDPOINTS: Add to AgentController: POST /qbrainai/agents/{agentId}/launch?workspace= (launches agent process), POST /qbrainai/agents/{agentId}/stop?workspace= (stops agent process), GET /qbrainai/agents/{agentId}/process-status?workspace= (gets running process info), GET /qbrainai/agents/running?workspace= (lists all running agents in workspace). All require JWT AgentManager policy. Return AgentProcessInfo DTOs.'
     - 'NEW AGENT SERVICE METHODS: Add to IAgentService: LaunchAgentAsync(workspacePath, agentId, ct), StopAgentAsync(workspacePath, agentId, ct), GetAgentProcessStatusAsync(workspacePath, agentId, ct), ListRunningAgentsAsync(workspacePath, ct). These delegate to IAgentProcessManager after resolving config from AgentWorkspaceEntity.'
     - 'DI REGISTRATION: Register IAgentProcessManager as singleton (manages cross-request process state). Register IAgentIsolationStrategy implementations as named services or strategy factory. Register AgentHealthMonitorService as hosted service. Register IAgentBranchStrategy implementations similarly.'
     - 'TESTING: (1) AgentProcessManagerTests - mock Process.Start, verify launch/stop/status lifecycle, verify process tracking dictionary. (2) WorktreeIsolationStrategyTests - mock git commands, verify worktree add/remove calls. (3) FeatureBranchStrategyTests - mock git commands, verify branch creation. (4) AgentHealthMonitorTests - mock process status, verify restart logic and backoff. (5) MarkerFileService integration test - verify agentAdditions appear in generated marker. (6) SessionLogService test - verify AgentDefinitionId auto-populated from SourceType. (7) AgentController integration tests - launch/stop/status endpoints.'
@@ -1290,9 +1290,9 @@ mvp-mcp:
     done: true
     description:
     - Global prompt template registry with CRUD operations, Handlebars test/render, and filterable listing.
-    - REST API at /mcpserver/templates (list, get, create, update, delete, test stored, test inline).
+    - REST API at /qbrainai/templates (list, get, create, update, delete, test stored, test inline).
     - '6 MCP tools: prompt_template_list/get/create/update/delete/test.'
-    - 'Client library: TemplateClient sub-client on McpServerClient.'
+    - 'Client library: TemplateClient sub-client on QBrainAiClient.'
     - 'CQRS: 3 query handlers + 3 command handlers, ITemplateApiClient interface.'
     - 'Director: TemplatesScreen tab with TableView, filter bar, detail preview.'
     - 'Authorization: McpArea.Templates, Viewer for reads, Admin for writes.'
@@ -1363,9 +1363,9 @@ mvp-mcp:
       done: false
     - task: 'P5-01: Update .github/copilot-instructions.md to reference new structure, remove duplicated content.'
       done: false
-    - task: 'P6-01: Build dotnet build src/McpServer.Support.Mcp -c Debug - verify MarkerFileService compiles.'
+    - task: 'P6-01: Build dotnet build src/QBrainAi.Support.Mcp -c Debug - verify MarkerFileService compiles.'
       done: false
-    - task: 'P6-02: Run dotnet test tests/McpServer.Support.Mcp.Tests -c Debug - verify existing tests pass.'
+    - task: 'P6-02: Run dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug - verify existing tests pass.'
       done: false
     - task: 'P6-03: Regenerate marker file and verify ~50-80 lines of prompt content.'
       done: false
@@ -1382,20 +1382,20 @@ mvp-mcp:
     technical-details:
     - 'Scope: add first-class website URL ingestion so GraphRAG can index remote pages without pre-staging files in docs/external.'
     - 'API contract: add a typed request/response for URL ingestion (url, includeSubpages, maxPages, maxDepth, maxBytesPerPage, forceRefresh, triggerGraphRagIndex).'
-    - 'Service design: add a WebsiteIngestor in src\\McpServer.Services\\Ingestion using IHttpClientFactory, with canonical URL normalization and deterministic source keys.'
+    - 'Service design: add a WebsiteIngestor in src\\QBrainAi.Services\\Ingestion using IHttpClientFactory, with canonical URL normalization and deterministic source keys.'
     - 'Security: enforce http/https only, block localhost/private/link-local targets, constrain redirects, and cap downloaded bytes/pages to prevent SSRF and resource abuse.'
     - 'Content extraction: parse HTML to text (strip script/style/nav boilerplate), preserve title + headings, and support non-HTML text payloads via content-type fallback.'
     - 'Indexing integration: convert fetched pages to ContextDocument/ContextChunk with SourceType=external-web and upsert via IngestionCoordinator using existing embedding/vector flow.'
     - 'Operational behavior: return per-URL outcome (ingested/skipped/error), total docs/chunks written, and explicit partial-failure diagnostics instead of silent skips.'
     - 'Transport surface: expose capability in both REST and MCP tools so Director/CLI/agents can ingest website URLs directly.'
-    - 'Client surface: extend McpServer.Client ContextClient + models to call the new endpoint and deserialize ingestion results.'
+    - 'Client surface: extend QBrainAi.Client ContextClient + models to call the new endpoint and deserialize ingestion results.'
     - 'Traceability: add/append FR/TR/TEST mappings for website ingestion and include requirement IDs in new code XML docs and tests.'
     - 'Docs: update docs/context and user/API docs with request limits, security behavior, and examples for single-page vs bounded crawl ingestion.'
     - 'Validation: cover unit/integration/client tests and run existing build/tests for Support.Mcp + Client + ingestion-related suites.'
     implementation-tasks:
     - task: Define request/response models for website ingestion and validation rules (URL scheme, limits, crawl options) in Models and controller contracts.
       done: true
-    - task: Add WebsiteIngestor service under src\\McpServer.Services\\Ingestion with URL normalization, HTTP fetch, HTML-to-text extraction, and content hashing.
+    - task: Add WebsiteIngestor service under src\\QBrainAi.Services\\Ingestion with URL normalization, HTTP fetch, HTML-to-text extraction, and content hashing.
       done: true
     - task: Register WebsiteIngestor and dedicated HttpClient in Program.cs with timeout, user-agent, redirect, and max-response safeguards.
       done: true
@@ -1403,23 +1403,23 @@ mvp-mcp:
       done: true
     - task: Add IngestionCoordinator path for on-demand website ingestion that reuses UpsertDocumentAndChunksAsync and emits structured SyncRun-like result data.
       done: true
-    - task: Implement REST endpoint (e.g., POST /mcpserver/context/ingest-website) in ContextController with robust validation and explicit error responses.
+    - task: Implement REST endpoint (e.g., POST /qbrainai/context/ingest-website) in ContextController with robust validation and explicit error responses.
       done: true
-    - task: Expose MCP tool in McpServerMcpTools (e.g., context_ingest_website) mapped to the same coordinator path for agent workflows.
+    - task: Expose MCP tool in QBrainAiMcpTools (e.g., context_ingest_website) mapped to the same coordinator path for agent workflows.
       done: true
-    - task: Extend McpServer.Client ContextModels + ContextClient with WebsiteIngest request/result types and a strongly typed API method.
+    - task: Extend QBrainAi.Client ContextModels + ContextClient with WebsiteIngest request/result types and a strongly typed API method.
       done: true
     - task: Add SSRF-focused guards and tests for blocked targets (localhost, 127.0.0.0/8, RFC1918, link-local) and redirect handling.
       done: true
     - task: Add unit tests for WebsiteIngestor content extraction, size/page limit enforcement, canonical source key generation, and dedup/update behavior.
       done: true
-    - task: Add integration tests for new REST endpoint success and failure paths plus source visibility in /mcpserver/context/sources.
+    - task: Add integration tests for new REST endpoint success and failure paths plus source visibility in /qbrainai/context/sources.
       done: true
     - task: Add MCP transport/tool contract tests validating new tool registration, parameter validation, and serialized result shape.
       done: true
     - task: Update docs/Project requirements + testing mappings and docs/stdio-tool-contract.json / user docs to document the new capability.
       done: true
-    - task: 'Run validation commands: dotnet build src\\McpServer.Support.Mcp, dotnet build src\\McpServer.Client, and targeted ingestion/client tests.'
+    - task: 'Run validation commands: dotnet build src\\QBrainAi.Support.Mcp, dotnet build src\\QBrainAi.Client, and targeted ingestion/client tests.'
       done: true
   medium-priority:
   - id: MVP-MCP-011
@@ -1460,7 +1460,7 @@ infrastructure:
     done: true
     completed: 2026-06-28
     description:
-    - Create a Claude Code plugin at .claude/plugins/mcpserver/ that automates MCP server session bootstrapping and provides skills for common workflows.
+    - Create a Claude Code plugin at .claude/plugins/qbrainai/ that automates MCP server session bootstrapping and provides skills for common workflows.
     - Connects Claude Code to 45 MCP tools via Streamable HTTP at /mcp-transport (no API key needed).
     - Provides bootstrap hook for automatic health verification and context injection.
     - 'User-invoked skills: /mcpserver:status, /mcpserver:todo, /mcpserver:deploy, /mcpserver:tunnel.'
@@ -1571,28 +1571,28 @@ infrastructure:
     - task: Verify plugin loads and all 45 MCP tools appear in Claude Code session
       done: false
   - id: web-ui
-    title: '[READY] McpServer Management Web UI'
-    note: "\"Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor - custom Blazor components wrapping Primer CSS classes directly."
+    title: '[READY] QBrainAi Management Web UI'
+    note: "\"Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (QBrainAi.Web), talks to QBrainAi API via QBrainAi.Client. Reuses QBrainAi.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor - custom Blazor components wrapping Primer CSS classes directly."
     done: true
     description:
-    - Build a web-based management UI for McpServer using Blazor Server + Primer CSS (GitHub's design system)
-    - Separate process (McpServer.Web) communicating with McpServer API via McpServer.Client library over HTTP
-    - Reuses McpServer.UI.Core ViewModels and CQRS handlers - same architecture as Director CLI
+    - Build a web-based management UI for QBrainAi using Blazor Server + Primer CSS (GitHub's design system)
+    - Separate process (QBrainAi.Web) communicating with QBrainAi API via QBrainAi.Client library over HTTP
+    - Reuses QBrainAi.UI.Core ViewModels and CQRS handlers - same architecture as Director CLI
     - Custom Blazor components wrapping Primer CSS classes + Octicons SVG icons - NO third-party component library
     - Open-source .NET OIDC server authentication integrated from day one per FR-MCP-031
     - Aligns with platform-wide Keycloak replacement so API, Director, and Web UI share the same OIDC model
     - SSE real-time updates via EventStream subscription for auto-refresh on server-side changes
     - 'Pages: Dashboard, Workspaces (list+detail), Todos (list+detail+create), Sessions (list+detail), Templates (list+detail+test), Agents, Context Search, Health Dashboard, Auth Config'
     technical-details:
-    - 'PROJECT: src/McpServer.Web/ - Blazor Server (.NET 9), refs McpServer.Client + McpServer.UI.Core + McpServer.Cqrs'
+    - 'PROJECT: src/QBrainAi.Web/ - Blazor Server (.NET 9), refs QBrainAi.Client + QBrainAi.UI.Core + QBrainAi.Cqrs'
     - 'DESIGN: Primer CSS v22 via CDN (cdn.jsdelivr.net/npm/@primer/css@22/dist/primer.min.css) + Octicons SVG from @primer/octicons npm'
     - 'COMPONENTS: 10 custom Primer Blazor wrappers in Components/Primer/ - PrimerButton, PrimerDataTable<T>, PrimerDialog, PrimerFlash, PrimerLabel, PrimerPagination, PrimerForm, PrimerBreadcrumb, PrimerBlankslate, OcticonIcon'
     - 'ADAPTERS: 10 API client adapters mirroring Director pattern - WebMcpContext replaces DirectorMcpContext, scoped per Blazor circuit'
     - 'INTERFACES: ITodoApiClient (9 methods), IWorkspaceApiClient (4), ISessionLogApiClient (1), IHealthApiClient (1), ITemplateApiClient (6), IContextApiClient (4), IRepoApiClient (3), ITunnelApiClient (5), IAuthConfigApiClient (1), IDiagnosticApiClient (2)'
     - 'AUTH: OpenIdConnect middleware + cookie auth. Authority/ClientId/ClientSecret in appsettings.json. Role mapping: agent-manager, admin via provider-neutral claim mapping'
-    - 'SSE: JS interop module subscribes to /mcpserver/events, invokes C# callback via DotNetObjectReference, exponential backoff reconnection'
+    - 'SSE: JS interop module subscribes to /qbrainai/events, invokes C# callback via DotNetObjectReference, exponential backoff reconnection'
     - 'LAYOUT: Primer Header (AppBar) + SideNav (left nav with Octicon icons) + main content area. Dark/light theme via data-color-mode'
-    - 'DI: WebServiceRegistration.cs registers UI.Core (AddUiCore), CQRS Dispatcher+Handlers, 10 API adapters as scoped services, McpServerClient, WebMcpContext'
+    - 'DI: WebServiceRegistration.cs registers UI.Core (AddUiCore), CQRS Dispatcher+Handlers, 10 API adapters as scoped services, QBrainAiClient, WebMcpContext'
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/index.html -> Begin each UI story here to choose the governing shell, shared, and page wireframe before implementation.'
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/shell/app-shell.html -> Build the global header, left navigation, content region, and keyboard-first shell behavior before page-level work.'
     - 'WIREFRAME USAGE: docs/wireframes/web-ui/shell/nav-patterns.html -> Implement reusable sidebar and top-tab components and keep tab placement consistent across detail pages.'
@@ -1625,19 +1625,19 @@ infrastructure:
     - TR-MCP-WEB-003
     - TR-MCP-WEB-004
     implementation-tasks:
-    - task: 'Phase 1.1: Create McpServer.Web.csproj (Blazor Server, net9.0) with refs to McpServer.Client, McpServer.UI.Core, McpServer.Cqrs. Program.cs with builder.Services config, OIDC middleware, Primer CSS CDN in App.razor <head>. appsettings.json with .NET OIDC provider Authentication section + McpServer API base URL.'
+    - task: 'Phase 1.1: Create QBrainAi.Web.csproj (Blazor Server, net9.0) with refs to QBrainAi.Client, QBrainAi.UI.Core, QBrainAi.Cqrs. Program.cs with builder.Services config, OIDC middleware, Primer CSS CDN in App.razor <head>. appsettings.json with .NET OIDC provider Authentication section + QBrainAi API base URL.'
       done: false
-    - task: 'Phase 1.2: Add McpServer.Web project to McpServer.sln (dotnet sln add).'
+    - task: 'Phase 1.2: Add QBrainAi.Web project to QBrainAi.sln (dotnet sln add).'
       done: false
     - task: 'Phase 1.3: Create 10 Primer Blazor wrapper components in Components/Primer/ - PrimerButton (Variant, Size, Disabled, OnClick), PrimerDataTable<T> (Items, Columns, OnSort, OnPageChange, PageSize), PrimerDialog (Title, Visible, OnClose, ChildContent), PrimerFlash (Variant, Message, AutoDismissMs), PrimerLabel (Variant, Text), PrimerPagination (CurrentPage, TotalPages, OnPageChanged), PrimerForm (OnValidSubmit, ChildContent), PrimerBreadcrumb (Items), PrimerBlankslate (IconName, Title, Description, ActionText, OnAction), OcticonIcon (Name, Size with SVG path dictionary).'
       done: false
     - task: 'Phase 1.4: Create layout files - App.razor (Primer CSS CDN link, Octicons, data-color-mode), Routes.razor, _Imports.razor, MainLayout.razor (Primer Header with app title + user menu, SideNav with nav items + Octicon icons for each area), NavMenu.razor.'
       done: false
-    - task: 'Phase 2.1: Create WebMcpContext class - holds McpServerClient instance + ActiveWorkspacePath string. Scoped lifetime (per Blazor circuit). Methods: GetApiClientAsync(), TrySetActiveWorkspace(). Constructor takes API base URL + API key from IConfiguration.'
+    - task: 'Phase 2.1: Create WebMcpContext class - holds QBrainAiClient instance + ActiveWorkspacePath string. Scoped lifetime (per Blazor circuit). Methods: GetApiClientAsync(), TrySetActiveWorkspace(). Constructor takes API base URL + API key from IConfiguration.'
       done: false
-    - task: 'Phase 2.2: Create 10 API client adapter classes mirroring Director pattern - each implements UI.Core interface, receives WebMcpContext, delegates to McpServerClient sub-clients. Files: TodoWebAdapter, WorkspaceWebAdapter, SessionLogWebAdapter, HealthWebAdapter, TemplateWebAdapter, ContextWebAdapter, RepoWebAdapter, TunnelWebAdapter, AuthConfigWebAdapter, DiagnosticWebAdapter.'
+    - task: 'Phase 2.2: Create 10 API client adapter classes mirroring Director pattern - each implements UI.Core interface, receives WebMcpContext, delegates to QBrainAiClient sub-clients. Files: TodoWebAdapter, WorkspaceWebAdapter, SessionLogWebAdapter, HealthWebAdapter, TemplateWebAdapter, ContextWebAdapter, RepoWebAdapter, TunnelWebAdapter, AuthConfigWebAdapter, DiagnosticWebAdapter.'
       done: false
-    - task: 'Phase 2.3: Create WebServiceRegistration.cs - register UI.Core services (AddUiCore extension), CQRS Dispatcher + all handlers, 10 API adapters as scoped, McpServerClient factory, WebMcpContext as scoped. Wire into Program.cs.'
+    - task: 'Phase 2.3: Create WebServiceRegistration.cs - register UI.Core services (AddUiCore extension), CQRS Dispatcher + all handlers, 10 API adapters as scoped, QBrainAiClient factory, WebMcpContext as scoped. Wire into Program.cs.'
       done: false
     - task: "Phase 3.1: Configure .NET OIDC provider OpenIdConnect in Program.cs - AddAuthentication().AddCookie().AddOpenIdConnect() with Authority, ClientId, ClientSecret, ResponseType=code, Scopes=[openid,profile,roles]. MapGet('/login') challenge redirect. MapGet('/logout') signout + discovered end_session endpoint when available. UseAuthentication + UseAuthorization."
       done: false
@@ -1669,11 +1669,11 @@ infrastructure:
       done: false
     - task: 'Phase 6.2: Shared components - StatusBadge.razor (maps status->PrimerLabel variant), ConfirmDialog.razor (PrimerDialog with yes/no, returns bool via TaskCompletionSource), LoadingSpinner.razor (Primer anim-pulse).'
       done: false
-    - task: 'Phase 7.1: SSE real-time - create wwwroot/js/sse.js module. Subscribe to /mcpserver/events?category=todo,session,workspace,template. On event, invoke C# DotNetObjectReference callback. C# handler calls InvokeAsync(StateHasChanged). Exponential backoff reconnection. IAsyncDisposable cleanup.'
+    - task: 'Phase 7.1: SSE real-time - create wwwroot/js/sse.js module. Subscribe to /qbrainai/events?category=todo,session,workspace,template. On event, invoke C# DotNetObjectReference callback. C# handler calls InvokeAsync(StateHasChanged). Exponential backoff reconnection. IAsyncDisposable cleanup.'
       done: false
-    - task: 'Phase 7.2: Build verification - dotnet build src/McpServer.Web, verify all pages render, fix compilation errors, ensure OIDC redirect works, test workspace switching.'
+    - task: 'Phase 7.2: Build verification - dotnet build src/QBrainAi.Web, verify all pages render, fix compilation errors, ensure OIDC redirect works, test workspace switching.'
       done: false
-    - task: 'Phase 7.3: Deployment - Create Update-McpWebService.ps1 script. Register as Windows service (sc.exe create McpServerWeb). Configure port (default 5200). Add to docker-compose.mcp.yml. Add health check at /health.'
+    - task: 'Phase 7.3: Deployment - Create Update-McpWebService.ps1 script. Register as Windows service (sc.exe create QBrainAiWeb). Configure port (default 5200). Add to docker-compose.mcp.yml. Add health check at /health.'
       done: false
     - task: 'Phase 7.4: Requirements - Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
       done: false
@@ -1685,16 +1685,16 @@ infrastructure:
     completed: 2026-03-05T14:19:50.8747006Z
     description:
     - '**NEW** Require Github API Token, integrate as a GitHub Application'
-    - Enhance GitHub integration capabilities for McpServer.
+    - Enhance GitHub integration capabilities for QBrainAi.
     - Support GitHub as Keycloak Identity Provider for user authentication.
     - Integrate GitHub OAuth for agent workspace management and PR workflows.
     - Add GitHub Actions monitoring and control features with auditable operations.
-    done-summary: 'Completed phased implementation for GitHub integration scope: added GitHub options/OAuth bootstrap endpoints, encrypted per-workspace token lifecycle store, policy-governed authenticated gh execution path with token override support, GitHub Actions workflow run APIs (list/detail/rerun/cancel), typed client parity updates, unit+integration coverage, and FR/TR/TEST traceability updates with audit evidence. Validation: McpServer.Support.Mcp.Tests 351 passed; McpServer.Client.Tests 122 passed; McpServer.Support.Mcp.IntegrationTests 144 passed (serial run). Reconciliation update (2026-03-05): audited FR/TR/TEST traceability against code, reconciled partial storage extraction compatibility needed for current worktree verification, and re-ran build/unit/integration suites successfully.'
+    done-summary: 'Completed phased implementation for GitHub integration scope: added GitHub options/OAuth bootstrap endpoints, encrypted per-workspace token lifecycle store, policy-governed authenticated gh execution path with token override support, GitHub Actions workflow run APIs (list/detail/rerun/cancel), typed client parity updates, unit+integration coverage, and FR/TR/TEST traceability updates with audit evidence. Validation: QBrainAi.Support.Mcp.Tests 351 passed; QBrainAi.Client.Tests 122 passed; QBrainAi.Support.Mcp.IntegrationTests 144 passed (serial run). Reconciliation update (2026-03-05): audited FR/TR/TEST traceability against code, reconciled partial storage extraction compatibility needed for current worktree verification, and re-ran build/unit/integration suites successfully.'
     remaining: ''
     technical-details:
     - 'Current baseline: gh CLI issue/PR sync is functional and remains the compatibility path.'
     - 'Execution focus: add OAuth bootstrap contract + secure per-workspace token persistence + authenticated gh execution + Actions controls.'
-    - 'Verification strategy: unit tests in McpServer.Support.Mcp.Tests and integration tests in McpServer.Support.Mcp.IntegrationTests with deterministic fakes.'
+    - 'Verification strategy: unit tests in QBrainAi.Support.Mcp.Tests and integration tests in QBrainAi.Support.Mcp.IntegrationTests with deterministic fakes.'
     - 'Requirements discipline: FR/TR/TEST docs and mapping matrix updated during each design decision, not deferred.'
     functional-requirements:
     - FR-MCP-032
@@ -1706,7 +1706,7 @@ infrastructure:
     - TR-MCP-GH-003
     - TR-MCP-GH-004
     implementation-tasks:
-    - task: 'Phase 1.1 Baseline contract audit: confirm existing /mcpserver/gh endpoint behavior, error modes, and test coverage across server/client/integration suites.'
+    - task: 'Phase 1.1 Baseline contract audit: confirm existing /qbrainai/gh endpoint behavior, error modes, and test coverage across server/client/integration suites.'
       done: true
     - task: 'Phase 1.2 Gap matrix: map remaining github-integration scope to concrete deliverables (OAuth config contract, secure token persistence, authenticated execution path, Actions monitoring/control).'
       done: true
@@ -1718,9 +1718,9 @@ infrastructure:
       done: true
     - task: Phase 3.2 Implement persistent token store using Data Protection at rest with atomic file writes and workspace-key normalization.
       done: true
-    - task: Phase 3.3 Add API endpoints for token status, set token, and revoke token on /mcpserver/gh/auth/* with workspace-context enforcement.
+    - task: Phase 3.3 Add API endpoints for token status, set token, and revoke token on /qbrainai/gh/auth/* with workspace-context enforcement.
       done: true
-    - task: Phase 4.1 Add OAuth app contract endpoints (/mcpserver/gh/oauth/config + authorize-url) for operator/app bootstrap and client UX alignment.
+    - task: Phase 4.1 Add OAuth app contract endpoints (/qbrainai/gh/oauth/config + authorize-url) for operator/app bootstrap and client UX alignment.
       done: true
     - task: Phase 4.2 Validate OAuth config completeness and expose explicit misconfiguration diagnostics to avoid silent auth failures.
       done: true
@@ -1734,13 +1734,13 @@ infrastructure:
       done: true
     - task: Phase 6.2 Implement gh CLI commands + JSON parsing for workflow run APIs with robust null/error handling.
       done: true
-    - task: Phase 6.3 Add REST endpoints under /mcpserver/gh/actions/runs* for list/detail/rerun/cancel with consistent response contracts.
+    - task: Phase 6.3 Add REST endpoints under /qbrainai/gh/actions/runs* for list/detail/rerun/cancel with consistent response contracts.
       done: true
-    - task: Phase 6.4 Extend McpServer.Client GitHub models/client methods for actions + auth endpoints to keep typed-client parity.
+    - task: Phase 6.4 Extend QBrainAi.Client GitHub models/client methods for actions + auth endpoints to keep typed-client parity.
       done: true
-    - task: 'Phase 7.1 Unit tests (McpServer.Support.Mcp.Tests): token store persistence/encryption semantics, GitHubCliService auth-mode selection, and actions command parsing.'
+    - task: 'Phase 7.1 Unit tests (QBrainAi.Support.Mcp.Tests): token store persistence/encryption semantics, GitHubCliService auth-mode selection, and actions command parsing.'
       done: true
-    - task: 'Phase 7.2 Integration tests (McpServer.Support.Mcp.IntegrationTests): auth endpoints + actions endpoints with service overrides/fakes for deterministic behavior.'
+    - task: 'Phase 7.2 Integration tests (QBrainAi.Support.Mcp.IntegrationTests): auth endpoints + actions endpoints with service overrides/fakes for deterministic behavior.'
       done: true
     - task: 'Phase 8.1 Requirements updates: add FR/TR/TEST entries and mapping rows as decisions are finalized; include code coverage references.'
       done: true
@@ -1769,7 +1769,7 @@ infrastructure:
     - Run schema upgrade, YAML bootstrap import, and projection repair behind a one-time asynchronous initialization gate per workspace service instance.
     - Treat a non-empty database as authoritative; only import YAML when the DB is empty and the configured TODO file exists.
     - Surface YAML projection failures explicitly instead of pretending the mutation fully succeeded.
-    - Deliver a GET /mcpserver/todo/{id}/audit endpoint, matching MCP tool support, and typed client support as part of the same feature.
+    - Deliver a GET /qbrainai/todo/{id}/audit endpoint, matching MCP tool support, and typed client support as part of the same feature.
     - Any schema changes must propagate across all implemented DB providers (SQLite, SQL Server, PostgreSQL) via the strategy pattern.
     implementation-tasks:
     - task: 'Phase 0: Finalize contracts - Completed'
@@ -1830,7 +1830,7 @@ Architecture:
     technical-details:
     - 'Directive: DI is the solution to race conditions. Never push data. Notify services that data is available/changed and let them pull for single source of truth, which must live in DI.'
     - 'Example fix: TunnelRegistry refactored from manual Register() calls to constructor-injected IEnumerable<ITunnelProvider> (commit 0c307a9).'
-    - 'Scope includes: all services, registries, managers, and providers across McpServer.Support.Mcp.'
+    - 'Scope includes: all services, registries, managers, and providers across QBrainAi.Support.Mcp.'
     - Check for any remaining patterns where services are created outside DI or data is pushed between components.
     depends-on:
     - plan-audit-di-ssot-execution
@@ -1860,10 +1860,10 @@ Architecture:
     - Treat UI.Core ViewModels as the page orchestration layer and CQRS Dispatcher/handlers as the only command/query execution path.
     - Close remaining compliance gaps with reproducible evidence, targeted tests, and documentation updates so this item can be marked done with confidence.
     - Preserve existing behavior while removing stale TODO assumptions and codifying measurable acceptance criteria.
-    done-summary: 'Closure complete. Evidence summary: (1) re-audit confirmed Web pages are VM-driven with zero page-level I*ApiClient injections and zero page-level dispatcher calls, (2) CQRS/DI routing verified across web host wiring and UI.Core handlers, (3) new Phase 5 tests added in tests/McpServer.UI.Core.Tests for Dashboard/Todo/SessionLog/Template/Context/Health/Auth ViewModels plus handler-to-adapter dispatch mapping, (4) new Phase 6 web tests added in tests/McpServer.Web.Tests for TodoList/SessionLogList/TemplateList render branches plus WorkspacePicker propagation and WebMcpContext workspace routing, (5) validation runs passed: dotnet test tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj -c Debug and dotnet test tests/McpServer.Web.Tests/McpServer.Web.Tests.csproj -c Debug. Decision: split AgentList placeholder into follow-up TODO PLAN-WEBUI-001.'
+    done-summary: 'Closure complete. Evidence summary: (1) re-audit confirmed Web pages are VM-driven with zero page-level I*ApiClient injections and zero page-level dispatcher calls, (2) CQRS/DI routing verified across web host wiring and UI.Core handlers, (3) new Phase 5 tests added in tests/QBrainAi.UI.Core.Tests for Dashboard/Todo/SessionLog/Template/Context/Health/Auth ViewModels plus handler-to-adapter dispatch mapping, (4) new Phase 6 web tests added in tests/QBrainAi.Web.Tests for TodoList/SessionLogList/TemplateList render branches plus WorkspacePicker propagation and WebMcpContext workspace routing, (5) validation runs passed: dotnet test tests/QBrainAi.UI.Core.Tests/QBrainAi.UI.Core.Tests.csproj -c Debug and dotnet test tests/QBrainAi.Web.Tests/QBrainAi.Web.Tests.csproj -c Debug. Decision: split AgentList placeholder into follow-up TODO PLAN-WEBUI-001.'
     remaining: ''
     technical-details:
-    - 'Audit snapshot 2026-03-04: 14 Razor pages under src/McpServer.Web/Pages, 13 pages inject *ViewModel, 0 pages inject I*ApiClient, and 0 page-level DispatchAsync calls (dispatcher orchestration resides in UI.Core ViewModels).'
+    - 'Audit snapshot 2026-03-04: 14 Razor pages under src/QBrainAi.Web/Pages, 13 pages inject *ViewModel, 0 pages inject I*ApiClient, and 0 page-level DispatchAsync calls (dispatcher orchestration resides in UI.Core ViewModels).'
     - 'Verified page examples now VM-driven: Dashboard.razor -> DashboardViewModel.LoadAsync, TodoList.razor -> TodoListViewModel.LoadAsync, SessionLogList.razor -> SessionLogListViewModel.LoadAsync, TemplateList.razor -> TemplateListViewModel.LoadAsync.'
     - 'Verified CQRS backbone exists and is wired in web host DI: WebServiceRegistration.AddWebServices adds AddUiCore and Dispatcher; UI.Core handlers (ListTodosQueryHandler, ListWorkspacesQueryHandler, ListTemplatesQueryHandler, CheckHealthQueryHandler) call host API adapters behind CQRS contracts.'
     - 'Workspace state flow is ViewModel-centric in web components: WorkspacePicker mutates WorkspaceContextViewModel.ActiveWorkspacePath; WebMcpContext subscribes to that state and updates typed client workspace routing.'
@@ -1871,13 +1871,13 @@ Architecture:
     - AgentList page remains a placeholder route (no adapter/viewmodel integration); not a blocker for the original 8-page compliance scope but should be tracked as adjacent architectural debt.
     - Acceptance should require evidence artifacts (search outputs + test results) demonstrating no regression to page-level API orchestration and confirming key page workflows remain VM/CQRS mediated.
     implementation-tasks:
-    - task: 'Phase 0 - Rebaseline evidence: enumerate all Razor pages under src/McpServer.Web/Pages and capture the current inventory in the TODO note.'
+    - task: 'Phase 0 - Rebaseline evidence: enumerate all Razor pages under src/QBrainAi.Web/Pages and capture the current inventory in the TODO note.'
       done: true
     - task: 'Phase 0 - Rebaseline evidence: verify each in-scope page injects a ViewModel (Dashboard, Workspaces, Todos, Sessions, Templates, Context, Health, Auth).'
       done: true
-    - task: 'Phase 0 - Rebaseline evidence: verify there are zero page-level I*ApiClient injections in src/McpServer.Web/Pages.'
+    - task: 'Phase 0 - Rebaseline evidence: verify there are zero page-level I*ApiClient injections in src/QBrainAi.Web/Pages.'
       done: true
-    - task: 'Phase 0 - Rebaseline evidence: verify there are zero page-level dispatcher calls (DispatchAsync/QueryAsync/CommandAsync) in src/McpServer.Web/Pages.'
+    - task: 'Phase 0 - Rebaseline evidence: verify there are zero page-level dispatcher calls (DispatchAsync/QueryAsync/CommandAsync) in src/QBrainAi.Web/Pages.'
       done: true
     - task: 'Phase 0 - Rebaseline evidence: verify the previous audit assumptions (13 page API client injections, 13 local loading states, 13 generic catches) are stale and replaced by current facts.'
       done: true
@@ -1953,7 +1953,7 @@ Architecture:
       done: true
     - task: 'Phase 6 - Web integration confidence: add test for WorkspacePicker change event propagating to WorkspaceContextViewModel and callback consumers.'
       done: true
-    - task: 'Phase 6 - Web integration confidence: run full targeted test suites for McpServer.UI.Core.Tests and any McpServer.Web test project additions.'
+    - task: 'Phase 6 - Web integration confidence: run full targeted test suites for QBrainAi.UI.Core.Tests and any QBrainAi.Web test project additions.'
       done: true
     - task: 'Phase 7 - Documentation and closure: rewrite this TODO note/technical details to reflect post-audit reality rather than obsolete pre-remediation assumptions.'
       done: true
@@ -2095,13 +2095,13 @@ Architecture:
 
       Execution Breakdown (File-Level / API-Level)
 
-      A) Options + validation - Add src/McpServer.Support.Mcp/Options/AgentPoolOptions.cs:
+      A) Options + validation - Add src/QBrainAi.Support.Mcp/Options/AgentPoolOptions.cs:
         * AgentPoolOptions.SectionName = "AgentPool"
         * Agents: List<AgentPoolDefinitionOptions>
-      - Add src/McpServer.Support.Mcp/Options/AgentPoolDefinitionOptions.cs fields:
+      - Add src/QBrainAi.Support.Mcp/Options/AgentPoolDefinitionOptions.cs fields:
         * AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters
         * IsInteractiveDefault, IsTodoPlanDefault, IsTodoStatusDefault, IsTodoImplementDefault
-      - Add src/McpServer.Support.Mcp/Options/AgentPoolOptionsValidator.cs:
+      - Add src/QBrainAi.Support.Mcp/Options/AgentPoolOptionsValidator.cs:
         * Validate unique AgentName (case-insensitive)
         * Validate required AgentPath and AgentName
         * Validate max one default per intent flag
@@ -2124,7 +2124,7 @@ Architecture:
         * turn/stream sends "User is here." after stream open (interactive only)
         * turn/stream sends "User is AFK." on disconnect/cancel (interactive only)
 
-      C) Agent Pool runtime + queue - Add src/McpServer.Support.Mcp/Services/IAgentPoolService.cs - Add src/McpServer.Support.Mcp/Services/AgentPoolService.cs:
+      C) Agent Pool runtime + queue - Add src/QBrainAi.Support.Mcp/Services/IAgentPoolService.cs - Add src/QBrainAi.Support.Mcp/Services/AgentPoolService.cs:
         * Agent registry state (lifecycle/session/last prompt/active links/subscribers)
         * Queue state store (queued/processing/completed/failed/canceled)
         * Queue operations (enqueue/list/cancel/remove/reorder)
@@ -2149,22 +2149,22 @@ Architecture:
         * merge values: workspace/context defaults first, caller values overwrite conflicts
         * inject id into variables for {id} substitution
 
-      E) Controllers / endpoints - Add src/McpServer.Support.Mcp/Controllers/AgentPoolController.cs:
-        * GET /mcpserver/agent-pool/agents
-        * POST /mcpserver/agent-pool/agents/{agentName}/start
-        * POST /mcpserver/agent-pool/agents/{agentName}/stop
-        * POST /mcpserver/agent-pool/agents/{agentName}/recycle
-        * POST /mcpserver/agent-pool/agents/{agentName}/connect
-        * GET /mcpserver/agent-pool/queue
-        * POST /mcpserver/agent-pool/queue/one-shot
-        * POST /mcpserver/agent-pool/queue/{jobId}/cancel
-        * DELETE /mcpserver/agent-pool/queue/{jobId}
-        * POST /mcpserver/agent-pool/queue/{jobId}/move-up
-        * POST /mcpserver/agent-pool/queue/{jobId}/move-down
-        * GET /mcpserver/agent-pool/notifications (SSE)
-        * GET /mcpserver/agent-pool/jobs/{jobId}/stream (SSE)
+      E) Controllers / endpoints - Add src/QBrainAi.Support.Mcp/Controllers/AgentPoolController.cs:
+        * GET /qbrainai/agent-pool/agents
+        * POST /qbrainai/agent-pool/agents/{agentName}/start
+        * POST /qbrainai/agent-pool/agents/{agentName}/stop
+        * POST /qbrainai/agent-pool/agents/{agentName}/recycle
+        * POST /qbrainai/agent-pool/agents/{agentName}/connect
+        * GET /qbrainai/agent-pool/queue
+        * POST /qbrainai/agent-pool/queue/one-shot
+        * POST /qbrainai/agent-pool/queue/{jobId}/cancel
+        * DELETE /qbrainai/agent-pool/queue/{jobId}
+        * POST /qbrainai/agent-pool/queue/{jobId}/move-up
+        * POST /qbrainai/agent-pool/queue/{jobId}/move-down
+        * GET /qbrainai/agent-pool/notifications (SSE)
+        * GET /qbrainai/agent-pool/jobs/{jobId}/stream (SSE)
       - Extend PromptTemplateController:
-        * POST /mcpserver/templates/{id}/resolve
+        * POST /qbrainai/templates/{id}/resolve
         * input: values dictionary
         * output: populated rendered prompt
 
@@ -2177,13 +2177,13 @@ Architecture:
         * Prompt resolve endpoint tests
         * Voice presence signal tests for AFK/here behavior (interactive vs one-shot)
       - Build + test commands:
-        * dotnet build src\McpServer.Support.Mcp -c Debug
-        * dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
+        * dotnet build src\QBrainAi.Support.Mcp -c Debug
+        * dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug
     done: true
     description:
     - Implement pooled agents configured by AgentName/AgentPath/AgentModel/AgentSeed/AgentParameters; route voice and one-shot through pooled voice-launch sessions; add queue management, availability/control APIs, notification SSE, read-only stream fan-out, and Director Agent Pool + queue management UI.
     implementation-tasks:
-    - task: Add McpServer.Client agent-pool API methods for agents, queue operations, lifecycle controls, and SSE subscriptions
+    - task: Add QBrainAi.Client agent-pool API methods for agents, queue operations, lifecycle controls, and SSE subscriptions
       done: true
     - task: Implement Director Agent Pool tab with live agent status, queue list, and action wiring (connect/start/stop/recycle)
       done: true
@@ -2197,7 +2197,7 @@ Architecture:
       done: true
     - task: Update docs/Project/Requirements-Matrix.md entries for FR-MCP-052..058 and TR-MCP-AGENT/API/TPL/VOICE/DIR from Planned to implemented status
       done: true
-    - task: Run validation with dotnet build src\\McpServer.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
+    - task: Run validation with dotnet build src\\QBrainAi.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
       done: true
   - id: plan-audit-di-ssot-execution
     title: '[REFRESHED] Execute full-code DI + SSOT + INotifyPropertyChanged compliance audit (as-built)'
@@ -2207,7 +2207,7 @@ Architecture:
     completed: 2026-03-05T03:22:48.3859900Z
     description:
     - Execute the DI + SSOT + INotifyPropertyChanged compliance audit against current as-built code, then remediate confirmed runtime violations.
-    - 'Primary scope: McpServer.Support.Mcp composition roots and TODO service resolution paths; secondary scope: UI.Core observable state surfaces.'
+    - 'Primary scope: QBrainAi.Support.Mcp composition roots and TODO service resolution paths; secondary scope: UI.Core observable state surfaces.'
     - 'Goal: DI-owned mutable state, notify-then-pull state propagation, and test-backed regression safety.'
     done-summary: Implemented DI-owned ITodoServiceFactory, replaced ActivatorUtilities/new TODO service creation in Program/McpStdioHost/TodoServiceResolver, updated resolver-dependent tests, and passed build plus targeted test suite.
     remaining: ''
@@ -2231,26 +2231,26 @@ Architecture:
       done: true
   - id: ARCH-STORAGE-001
     title: All Storage code should be in a Library
-    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    note: 'Implemented: extracted Storage->QBrainAi.Storage, Services/Models->QBrainAi.Services, GraphRAG->QBrainAi.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
     done: true
     description:
     - Extract all storage-related code into a dedicated library project.
     - Storage abstractions, implementations, and persistence logic should live in a reusable library rather than being embedded in application projects.
   - id: ARCH-SERVICES-001
     title: All Services and Models should be in a Library
-    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    note: 'Implemented: extracted Storage->QBrainAi.Storage, Services/Models->QBrainAi.Services, GraphRAG->QBrainAi.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
     done: true
     description:
     - Extract all services and domain models into a dedicated library project.
-    - Business logic, domain models, and service implementations should live in a reusable library rather than in McpServer.Support.Mcp.
+    - Business logic, domain models, and service implementations should live in a reusable library rather than in QBrainAi.Support.Mcp.
     depends-on:
     - ARCH-STORAGE-001
   - id: ARCH-SUPPORT-001
-    title: McpServer.Support.Mcp should contain only controllers and MCP Framework code
-    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    title: QBrainAi.Support.Mcp should contain only controllers and MCP Framework code
+    note: 'Implemented: extracted Storage->QBrainAi.Storage, Services/Models->QBrainAi.Services, GraphRAG->QBrainAi.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
     done: true
     description:
-    - Slim McpServer.Support.Mcp to only controllers and MCP Framework-specific code.
+    - Slim QBrainAi.Support.Mcp to only controllers and MCP Framework-specific code.
     - 'After Storage, Services, and Models are extracted to libraries, Support.Mcp should host only: REST controllers, MCP transport/middleware, and framework-specific wiring.'
     depends-on:
     - ARCH-STORAGE-001
@@ -2258,7 +2258,7 @@ Architecture:
     - ARCH-GRAPHRAG-001
   - id: ARCH-GRAPHRAG-001
     title: GraphRAG integration should be in a separate Library with CQRS Handlers
-    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    note: 'Implemented: extracted Storage->QBrainAi.Storage, Services/Models->QBrainAi.Services, GraphRAG->QBrainAi.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
     done: true
     description:
     - Extract GraphRAG integration into a dedicated library project.
@@ -2271,9 +2271,9 @@ Architecture:
     done: true
     description:
     - Create a .NET 9 class library that provides an MCP-aware agent for host applications built on Microsoft Agent Framework.
-    - The hosted agent should expose built-in workflow for MCP Server session logging and TODO management so host apps can consume plan, status, and implementation flows directly.
+    - The hosted agent should expose built-in workflow for QBrain.AI session logging and TODO management so host apps can consume plan, status, and implementation flows directly.
     technical-details:
-    - Expose DI-friendly registration and options for MCP Server connectivity, workspace targeting, and host lifecycle integration.
+    - Expose DI-friendly registration and options for QBrain.AI connectivity, workspace targeting, and host lifecycle integration.
     - Reuse existing MCP client, session-log, and TODO abstractions where possible instead of duplicating transport logic.
     - Support session bootstrap, turn creation and update, TODO query and update, and TODO prompt workflows as built-in agent operations.
     functional-requirements:
@@ -2284,7 +2284,7 @@ Architecture:
     implementation-tasks:
     - task: Create the .NET 9 library project and define the public hosting and registration surface.
       done: false
-    - task: Implement the Microsoft Agent Framework agent wrapper and MCP Server connectivity/options model.
+    - task: Implement the Microsoft Agent Framework agent wrapper and QBrain.AI connectivity/options model.
       done: false
     - task: Add built-in session-log workflow operations for bootstrap, turn creation, and turn updates.
       done: false
@@ -2302,10 +2302,10 @@ Architecture:
     description:
     - Implement full web parity for /agents route by integrating AgentDefinition/AgentWorkspace view models and corresponding API adapters.
     - Replace placeholder blankslate with VM-driven list/detail behaviors consistent with Web UI CQRS/MVVM conventions.
-    done-summary: Added web IAgentApiClient adapter and DI registration; replaced /agents placeholder with ViewModel-driven CQRS/MVVM UI for global definitions and workspace assignments; and added bUnit coverage for loading/error/empty/data and detail navigation. Validation passed with dotnet test on McpServer.UI.Core.Tests (226 passed) and McpServer.Web.Tests (30 passed).
+    done-summary: Added web IAgentApiClient adapter and DI registration; replaced /agents placeholder with ViewModel-driven CQRS/MVVM UI for global definitions and workspace assignments; and added bUnit coverage for loading/error/empty/data and detail navigation. Validation passed with dotnet test on QBrainAi.UI.Core.Tests (226 passed) and QBrainAi.Web.Tests (30 passed).
     remaining: ''
     technical-details:
-    - 'Current placeholder route: src/McpServer.Web/Pages/Agents/AgentList.razor.'
+    - 'Current placeholder route: src/QBrainAi.Web/Pages/Agents/AgentList.razor.'
     - 'Target pattern: page -> UI.Core ViewModel -> Dispatcher -> UI.Core handler -> web adapter.'
     - Include web component tests for loading/error/empty/data branches.
     implementation-tasks:
@@ -2344,15 +2344,15 @@ Director:
     completed: 2026-03-03T03:00:55Z
     description:
     - Migrate Agent Pool tab from code-behind runtime orchestration to UI.Core CQRS/MVVM architecture with Director adapter indirection.
-    - Eliminate direct calls from AgentPoolScreen to DirectorMcpContext, AgentScreenHandler, and McpServerClient/AgentPoolClient.
+    - Eliminate direct calls from AgentPoolScreen to DirectorMcpContext, AgentScreenHandler, and QBrainAiClient/AgentPoolClient.
     - Move mutable tab state to DI-owned ViewModel(s) and make screen rendering/presentation-only.
     - Enforce command/query handler boundaries, action-key authorization checks, and test coverage for load/mutation/error/auth paths.
-    done-summary: 'Implemented Agent Pool migration to CQRS/MVVM/SSOT/no-code-behind in Director: added UI.Core services/messages/handlers/viewmodel, added Director API adapters, refactored AgentPoolScreen into passive ViewModel-bound UI, wired DI/MainScreen/InteractiveCommand authorization and action keys, and validated with clean builds (Client/UI.Core/Director) plus passing McpServer.Client tests.'
+    done-summary: 'Implemented Agent Pool migration to CQRS/MVVM/SSOT/no-code-behind in Director: added UI.Core services/messages/handlers/viewmodel, added Director API adapters, refactored AgentPoolScreen into passive ViewModel-bound UI, wired DI/MainScreen/InteractiveCommand authorization and action keys, and validated with clean builds (Client/UI.Core/Director) plus passing QBrainAi.Client tests.'
     remaining: Execution not started. All tasks below are pending and ordered for incremental delivery with rollback-safe checkpoints.
     technical-details:
-    - 'Current non-compliant file: src/McpServer.Director/Screens/AgentPoolScreen.cs (direct API operations in UI code-behind).'
-    - 'Cross-area coupling source: src/McpServer.Director/Handlers/AgentScreenHandler.cs used directly by AgentPoolScreen.'
-    - 'Target pattern baseline files: src/McpServer.UI.Core/Messages/TunnelMessages.cs, src/McpServer.UI.Core/Handlers/TunnelHandlers.cs, src/McpServer.UI.Core/ViewModels/TunnelListViewModel.cs, src/McpServer.Director/Screens/TunnelScreen.cs.'
+    - 'Current non-compliant file: src/QBrainAi.Director/Screens/AgentPoolScreen.cs (direct API operations in UI code-behind).'
+    - 'Cross-area coupling source: src/QBrainAi.Director/Handlers/AgentScreenHandler.cs used directly by AgentPoolScreen.'
+    - 'Target pattern baseline files: src/QBrainAi.UI.Core/Messages/TunnelMessages.cs, src/QBrainAi.UI.Core/Handlers/TunnelHandlers.cs, src/QBrainAi.UI.Core/ViewModels/TunnelListViewModel.cs, src/QBrainAi.Director/Screens/TunnelScreen.cs.'
     - 'Primary acceptance rule: after migration, AgentPoolScreen must contain no endpoint invocations and no direct domain mutation logic.'
     - 'SSOT rule: all tab data (agent rows, queue rows, selection, status, pending state) must be owned by ViewModel properties/collections in DI, not screen-local lists.'
     depends-on:
@@ -2386,7 +2386,7 @@ Director:
       done: false
     - task: 'P0-08: Freeze required file touch list to reduce architecture drift during implementation.'
       done: false
-    - task: 'P1-01: Add src/McpServer.UI.Core/Services/IAgentPoolApiClient.cs with full runtime + queue method contract.'
+    - task: 'P1-01: Add src/QBrainAi.UI.Core/Services/IAgentPoolApiClient.cs with full runtime + queue method contract.'
       done: false
     - task: 'P1-02: Include ListAgentsAsync and ListQueueAsync methods in IAgentPoolApiClient.'
       done: false
@@ -2396,7 +2396,7 @@ Director:
       done: false
     - task: 'P1-05: Include ResolvePromptAsync and EnqueueOneShotAsync methods in IAgentPoolApiClient.'
       done: false
-    - task: 'P1-06: Add src/McpServer.UI.Core/Messages/AgentPoolMessages.cs with typed query/command records.'
+    - task: 'P1-06: Add src/QBrainAi.UI.Core/Messages/AgentPoolMessages.cs with typed query/command records.'
       done: false
     - task: 'P1-07: Define ListAgentPoolAgentsQuery -> AgentPoolAgentsResult in AgentPoolMessages.'
       done: false
@@ -2410,35 +2410,35 @@ Director:
       done: false
     - task: 'P1-12: Add XML docs for all new message and service contract types to satisfy workspace documentation standards.'
       done: false
-    - task: 'P2-01: Add src/McpServer.UI.Core/Handlers/ListAgentPoolAgentsQueryHandler.cs.'
+    - task: 'P2-01: Add src/QBrainAi.UI.Core/Handlers/ListAgentPoolAgentsQueryHandler.cs.'
       done: false
-    - task: 'P2-02: Add src/McpServer.UI.Core/Handlers/ListAgentPoolQueueQueryHandler.cs.'
+    - task: 'P2-02: Add src/QBrainAi.UI.Core/Handlers/ListAgentPoolQueueQueryHandler.cs.'
       done: false
-    - task: 'P2-03: Add src/McpServer.UI.Core/Handlers/StartAgentPoolAgentCommandHandler.cs.'
+    - task: 'P2-03: Add src/QBrainAi.UI.Core/Handlers/StartAgentPoolAgentCommandHandler.cs.'
       done: false
-    - task: 'P2-04: Add src/McpServer.UI.Core/Handlers/StopAgentPoolAgentCommandHandler.cs.'
+    - task: 'P2-04: Add src/QBrainAi.UI.Core/Handlers/StopAgentPoolAgentCommandHandler.cs.'
       done: false
-    - task: 'P2-05: Add src/McpServer.UI.Core/Handlers/RecycleAgentPoolAgentCommandHandler.cs.'
+    - task: 'P2-05: Add src/QBrainAi.UI.Core/Handlers/RecycleAgentPoolAgentCommandHandler.cs.'
       done: false
-    - task: 'P2-06: Add src/McpServer.UI.Core/Handlers/ConnectAgentPoolAgentCommandHandler.cs.'
+    - task: 'P2-06: Add src/QBrainAi.UI.Core/Handlers/ConnectAgentPoolAgentCommandHandler.cs.'
       done: false
-    - task: 'P2-07: Add src/McpServer.UI.Core/Handlers/CancelAgentPoolJobCommandHandler.cs.'
+    - task: 'P2-07: Add src/QBrainAi.UI.Core/Handlers/CancelAgentPoolJobCommandHandler.cs.'
       done: false
-    - task: 'P2-08: Add src/McpServer.UI.Core/Handlers/RemoveAgentPoolJobCommandHandler.cs.'
+    - task: 'P2-08: Add src/QBrainAi.UI.Core/Handlers/RemoveAgentPoolJobCommandHandler.cs.'
       done: false
-    - task: 'P2-09: Add src/McpServer.UI.Core/Handlers/MoveAgentPoolJobUpCommandHandler.cs.'
+    - task: 'P2-09: Add src/QBrainAi.UI.Core/Handlers/MoveAgentPoolJobUpCommandHandler.cs.'
       done: false
-    - task: 'P2-10: Add src/McpServer.UI.Core/Handlers/MoveAgentPoolJobDownCommandHandler.cs.'
+    - task: 'P2-10: Add src/QBrainAi.UI.Core/Handlers/MoveAgentPoolJobDownCommandHandler.cs.'
       done: false
-    - task: 'P2-11: Add src/McpServer.UI.Core/Handlers/ResolveAgentPoolPromptCommandHandler.cs.'
+    - task: 'P2-11: Add src/QBrainAi.UI.Core/Handlers/ResolveAgentPoolPromptCommandHandler.cs.'
       done: false
-    - task: 'P2-12: Add src/McpServer.UI.Core/Handlers/EnqueueAgentPoolOneShotCommandHandler.cs.'
+    - task: 'P2-12: Add src/QBrainAi.UI.Core/Handlers/EnqueueAgentPoolOneShotCommandHandler.cs.'
       done: false
     - task: 'P2-13: Add action-key authorization checks in each new Agent Pool handler before API invocation.'
       done: false
     - task: 'P2-14: Standardize exception-to-Result mapping and log behavior (LogError with ex.ToString()) in all new handlers.'
       done: false
-    - task: 'P3-01: Extend src/McpServer.UI.Core/Authorization/McpActionKeys.cs with Agent Pool action keys.'
+    - task: 'P3-01: Extend src/QBrainAi.UI.Core/Authorization/McpActionKeys.cs with Agent Pool action keys.'
       done: false
     - task: 'P3-02: Add action key agentpool.agents.list.'
       done: false
@@ -2450,11 +2450,11 @@ Director:
       done: false
     - task: 'P3-06: Add action keys agentpool.prompt.resolve and agentpool.queue.enqueue.'
       done: false
-    - task: 'P3-07: Update src/McpServer.Director/Auth/DirectorAuthorizationPolicyService.cs to map new Agent Pool action keys to roles.'
+    - task: 'P3-07: Update src/QBrainAi.Director/Auth/DirectorAuthorizationPolicyService.cs to map new Agent Pool action keys to roles.'
       done: false
     - task: 'P3-08: Validate that tab-level area visibility and action-level authorization remain consistent for viewer/agent-manager/admin tiers.'
       done: false
-    - task: 'P4-01: Add src/McpServer.Director/AgentPoolApiClientAdapter.cs implementing IAgentPoolApiClient via McpServerClient.AgentPool.'
+    - task: 'P4-01: Add src/QBrainAi.Director/AgentPoolApiClientAdapter.cs implementing IAgentPoolApiClient via QBrainAiClient.AgentPool.'
       done: false
     - task: 'P4-02: Map ListAgentsAsync and ListQueueAsync adapter methods to AgentPoolClient GetAgentsAsync/GetQueueAsync.'
       done: false
@@ -2470,7 +2470,7 @@ Director:
       done: false
     - task: 'P4-08: Add XML docs and nullability guards in adapter methods.'
       done: false
-    - task: 'P5-01: Add src/McpServer.UI.Core/ViewModels/AgentPoolViewModel.cs as DI-owned SSOT state owner for Agent Pool tab.'
+    - task: 'P5-01: Add src/QBrainAi.UI.Core/ViewModels/AgentPoolViewModel.cs as DI-owned SSOT state owner for Agent Pool tab.'
       done: false
     - task: 'P5-02: Add observable collections for runtime agents and queue items in AgentPoolViewModel.'
       done: false
@@ -2506,11 +2506,11 @@ Director:
       done: false
     - task: 'P5-18: Add in-flight guard to prevent overlapping refresh operations and command reentry races.'
       done: false
-    - task: 'P5-19: Register AgentPoolViewModel in src/McpServer.UI.Core/ServiceCollectionExtensions.cs.'
+    - task: 'P5-19: Register AgentPoolViewModel in src/QBrainAi.UI.Core/ServiceCollectionExtensions.cs.'
       done: false
     - task: 'P5-20: Add optional [ViewModelCommand] alias if CLI exec support is required for Agent Pool operations.'
       done: false
-    - task: 'P6-01: Refactor src/McpServer.Director/Screens/AgentPoolScreen.cs constructor to accept AgentPoolViewModel instead of DirectorMcpContext.'
+    - task: 'P6-01: Refactor src/QBrainAi.Director/Screens/AgentPoolScreen.cs constructor to accept AgentPoolViewModel instead of DirectorMcpContext.'
       done: false
     - task: 'P6-02: Remove fields _directorContext and _agentHandler from AgentPoolScreen.'
       done: false
@@ -2540,13 +2540,13 @@ Director:
       done: false
     - task: 'P6-15: Remove direct API call methods (LoadAsync, RunMutationAsync, StartSelectedAsync, StopSelectedAsync, RecycleSelectedAsync, ConnectSelectedAsync, CancelSelectedJobAsync, RemoveSelectedJobAsync, MoveSelectedJobUpAsync, MoveSelectedJobDownAsync, EnqueueAdHocAsync) from code-behind logic path.'
       done: false
-    - task: 'P7-01: Update src/McpServer.Director/Screens/MainScreen.cs to accept AgentPoolViewModel in constructor dependency list.'
+    - task: 'P7-01: Update src/QBrainAi.Director/Screens/MainScreen.cs to accept AgentPoolViewModel in constructor dependency list.'
       done: false
     - task: 'P7-02: Update MainScreen.RebuildTabs() to instantiate AgentPoolScreen with injected AgentPoolViewModel.'
       done: false
     - task: 'P7-03: Update MainScreen.RefreshTabView() Agent Pool branch to call screen->ViewModel load path only.'
       done: false
-    - task: 'P7-04: Update src/McpServer.Director/Commands/InteractiveCommand.cs to resolve AgentPoolViewModel from DI.'
+    - task: 'P7-04: Update src/QBrainAi.Director/Commands/InteractiveCommand.cs to resolve AgentPoolViewModel from DI.'
       done: false
     - task: 'P7-05: Pass AgentPoolViewModel into MainScreen constructor call in InteractiveCommand.'
       done: false
@@ -2588,9 +2588,9 @@ Director:
       done: false
     - task: 'P8-18: Validate all new public types/members include XML docs to satisfy workspace coding standards.'
       done: false
-    - task: 'P9-01: Run dotnet build src/McpServer.UI.Core -c Debug and capture result.'
+    - task: 'P9-01: Run dotnet build src/QBrainAi.UI.Core -c Debug and capture result.'
       done: false
-    - task: 'P9-02: Run dotnet build src/McpServer.Director -c Debug and capture result.'
+    - task: 'P9-02: Run dotnet build src/QBrainAi.Director -c Debug and capture result.'
       done: false
     - task: 'P9-03: Run dotnet test for touched test projects and capture pass/fail summary.'
       done: false
@@ -2623,12 +2623,12 @@ plugins:
 mcpserver-ui:
   high-priority:
   - id: MCP-UI-CHAT-VM-ITEST-001
-    title: Create complete integration tests for interactive chat using ViewModels in McpServer.UI
+    title: Create complete integration tests for interactive chat using ViewModels in QBrainAi.UI
     estimate: 2d
     note: Implemented 2026-03-03 (tests-only scope, no production ViewModel refactor). Added integration coverage for VoiceViewModel lifecycle, dispatcher/handler routing, guard and unauthorized behavior, exception handling, busy-state synchronization, collection replacement, and full session-state reset.
     done: true
     description:
-    - Cover end-to-end interactive chat scenarios through McpServer.UI ViewModels, including message lifecycle, command handling, and UI state synchronization.
+    - Cover end-to-end interactive chat scenarios through QBrainAi.UI ViewModels, including message lifecycle, command handling, and UI state synchronization.
 Documentation:
   high-priority:
   - id: MCP-USERDOCS-001
@@ -2663,12 +2663,12 @@ Documentation:
     - task: Wire all docs into README index and docs/ folder
       done: true
   - id: DOC-MARKETING-001
-    title: "Create Marketing Docs: What McpServer is, features, why it's needed, supported UI tooling"
+    title: "Create Marketing Docs: What QBrainAi is, features, why it's needed, supported UI tooling"
     note: '"**Implementation Plan**'
     done: true
     description:
-    - Create marketing-oriented documentation for McpServer.
-    - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."
+    - Create marketing-oriented documentation for QBrainAi.
+    - "Cover: what QBrainAi is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."
 MCP:
   high-priority:
   - id: MCP-SESSION-020
@@ -2721,7 +2721,7 @@ MCP:
     - Define a deterministic sanitization strategy for sensitive substrings such as bearer tokens, API keys, secrets, connection strings, filesystem roots if necessary, and raw stack trace content.
     - Preserve structured logging with full exception details server-side while returning only sanitized detail fields to clients.
     - Verify behavior for MVC controllers, minimal/shared HTTP handlers, and any MCP-adjacent HTTP execution path that can surface 500 responses.
-    - 'Repository audit finding: McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware already exists but currently returns a generic payload and is not wired into McpServer.Support.Mcp/Program.cs.'
+    - 'Repository audit finding: QBrainAi.ServiceDefaults/GlobalExceptionHandlerMiddleware already exists but currently returns a generic payload and is not wired into QBrainAi.Support.Mcp/Program.cs.'
     - 'Repository audit finding: explicit manual 500 responses currently exist in VoiceController SubmitTurnAsync and TodoController MoveAsync and should be removed or normalized through the shared contract.'
     - 'Repository audit finding: streaming endpoints in VoiceController, TodoController, ContextController, EventStreamController, and AgentPoolController require separate pre-stream vs post-stream failure semantics because standard HTTP 500 payloads are only possible before response streaming begins.'
     - 'Repository audit finding: some controllers intentionally map failures to non-500 responses such as AuthConfigController (502 upstream/OIDC), GraphRagController (409 conflict), and validation/domain-result paths; these should be preserved while unexpected exceptions flow centrally.'
@@ -2734,9 +2734,9 @@ MCP:
       done: true
     - task: Define the standard 500 response payload contract, including fields such as status, error code/category, operation, message/detail, trace or correlation id, and timestamp or equivalent existing metadata; align with any existing API response conventions.
       done: true
-    - task: Enhance or replace GlobalExceptionHandlerMiddleware in McpServer.ServiceDefaults so it produces the standardized detailed-but-sanitized 500 contract instead of the current generic `{\"error\":\"An unexpected error occurred.\"}` body.
+    - task: Enhance or replace GlobalExceptionHandlerMiddleware in QBrainAi.ServiceDefaults so it produces the standardized detailed-but-sanitized 500 contract instead of the current generic `{\"error\":\"An unexpected error occurred.\"}` body.
       done: true
-    - task: Wire the centralized exception handler into src/McpServer.Support.Mcp/Program.cs early enough in the HTTP pipeline to wrap controllers and shared middleware, while preserving intended auth/workspace behavior.
+    - task: Wire the centralized exception handler into src/QBrainAi.Support.Mcp/Program.cs early enough in the HTTP pipeline to wrap controllers and shared middleware, while preserving intended auth/workspace behavior.
       done: true
     - task: Create an exception classification/mapping layer that distinguishes validation/business/client errors from true server errors and assigns stable error categories/messages for known infrastructure failure types.
       done: true

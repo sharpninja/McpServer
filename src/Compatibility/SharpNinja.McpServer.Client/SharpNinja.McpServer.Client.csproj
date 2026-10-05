@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>SharpNinja.McpServer.Client</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>1.x compatibility package for QBrainAI.Client. Public types moved to namespace QBrainAi.Client. Removed at 2.0.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>QBrainAi.Client</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\QBrainAi.Client\QBrainAi.Client.csproj">
+      <PrivateAssets>none</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- TR-MCP-QBRAIN-003: dependency facade. Namespace-preserving type forwards are impossible once the root token changes. -->
+</Project>

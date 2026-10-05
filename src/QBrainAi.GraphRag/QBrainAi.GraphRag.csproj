@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>QBrainAi.Support.Mcp</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" />
+    <ProjectReference Include="..\QBrainAi.Services\QBrainAi.Services.csproj" />
+    <ProjectReference Include="..\QBrainAi.Storage\QBrainAi.Storage.csproj" />
+    <ProjectReference Include="..\QBrainAi.Cqrs\QBrainAi.Cqrs.csproj" />
+    <ProjectReference Include="..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

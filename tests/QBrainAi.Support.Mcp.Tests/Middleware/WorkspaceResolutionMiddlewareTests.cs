@@ -1,0 +1,331 @@
+using QBrainAi.Support.Mcp.Middleware;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using Xunit;
+
+namespace QBrainAi.Support.Mcp.Tests.Middleware;
+
+/// <summary>Unit tests for <see cref="WorkspaceResolutionMiddleware"/>.</summary>
+public sealed class WorkspaceResolutionMiddlewareTests
+{
+    private const string WorkspaceA = @"C:\projects\alpha";
+    private const string WorkspaceB = @"C:\projects\beta";
+
+    private static WorkspaceResolutionMiddleware CreateMiddleware(RequestDelegate next)
+        => new(next, NullLogger<WorkspaceResolutionMiddleware>.Instance);
+
+    private static WorkspaceDto MakeDto(string path, bool isPrimary = false)
+        => new()
+        {
+            WorkspacePath = path,
+            Name = Path.GetFileName(path),
+            TodoPath = "docs/todo.yaml",
+            IsPrimary = isPrimary,
+            StatusPrompt = "",
+            ImplementPrompt = "",
+            PlanPrompt = "",
+        };
+
+    private static IWorkspaceService CreateWorkspaceService(params WorkspaceDto[] workspaces)
+    {
+        var svc = Substitute.For<IWorkspaceService>();
+        svc.ListAsync(Arg.Any<CancellationToken>())
+            .Returns(new WorkspaceListResult(workspaces, workspaces.Length));
+        foreach (var ws in workspaces)
+        {
+            svc.GetAsync(
+                Arg.Is<string>(p => p != null && string.Equals(
+                    Path.GetFullPath(p).TrimEnd(Path.DirectorySeparatorChar),
+                    Path.GetFullPath(ws.WorkspacePath ?? string.Empty).TrimEnd(Path.DirectorySeparatorChar),
+                    StringComparison.OrdinalIgnoreCase)),
+                Arg.Any<CancellationToken>())
+                .Returns(ws);
+        }
+        return svc;
+    }
+
+    private static DefaultHttpContext CreateContext(string path, string method = "GET", string? workspaceHeader = null, string? apiKey = null, string? bearerToken = null)
+    {
+        var ctx = new DefaultHttpContext
+        {
+            Request = { Method = method, Path = path },
+            Response = { Body = new MemoryStream() },
+        };
+        if (workspaceHeader is not null)
+            ctx.Request.Headers[WorkspaceResolutionMiddleware.WorkspacePathHeader] = workspaceHeader;
+        if (apiKey is not null)
+            ctx.Request.Headers["X-Api-Key"] = apiKey;
+        if (bearerToken is not null)
+            ctx.Request.Headers.Authorization = $"Bearer {bearerToken}";
+        return ctx;
+    }
+
+    [Fact]
+    public async Task XWorkspacePath_Header_ResolvesWorkspace()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo", workspaceHeader: WorkspaceA);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.True(wsContext.IsResolved);
+        Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Regression: when middleware resolves a workspace after <see cref="McpDbContext"/>
+    /// has already been constructed in the request scope, it must synchronize the
+    /// DbContext workspace discriminator used by global query filters.
+    /// </summary>
+    [Fact]
+    public async Task XWorkspacePath_Header_OverridesDbContextWorkspaceId()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"WorkspaceResolution_{Guid.NewGuid():N}")
+            .Options;
+        using var dbContext = new McpDbContext(options);
+        var mw = CreateMiddleware(_ => Task.CompletedTask);
+
+        var ctx = CreateContext("/qbrainai/sessionlog", workspaceHeader: WorkspaceA);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService, dbContext);
+
+        Assert.Equal(WorkspaceA, dbContext.CurrentWorkspaceId);
+    }
+
+    [Fact]
+    public async Task XWorkspacePath_Header_InvalidPath_Returns400()
+    {
+        var workspaceService = CreateWorkspaceService(); // no workspaces registered
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo", workspaceHeader: @"C:\nonexistent");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.False(nextCalled);
+        Assert.Equal(400, ctx.Response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ApiKey_ResolvesWorkspace_WhenNoHeader()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var token = tokenService.GenerateToken(WorkspaceA);
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo", apiKey: token);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.True(wsContext.IsResolved);
+        Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task NoHeaderNoKey_PassesThroughWithoutResolution()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.False(wsContext.IsResolved);
+    }
+
+    [Fact]
+    public async Task ApiKey_UnknownToken_PassesThroughWithoutResolution()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo", apiKey: "unknown-token-abc");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.False(wsContext.IsResolved);
+    }
+
+    [Fact]
+    public async Task HeaderTakesPriority_OverApiKey()
+    {
+        var wsDtoA = MakeDto(WorkspaceA);
+        var wsDtoB = MakeDto(WorkspaceB);
+        var workspaceService = CreateWorkspaceService(wsDtoA, wsDtoB);
+        var tokenService = new WorkspaceTokenService();
+        var tokenB = tokenService.GenerateToken(WorkspaceB);
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        // Header says workspace A, but API key is for workspace B → header wins
+        var ctx = CreateContext("/qbrainai/todo", workspaceHeader: WorkspaceA, apiKey: tokenB);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task NonMcpRoute_SkipsResolution()
+    {
+        var workspaceService = Substitute.For<IWorkspaceService>();
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/health");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.False(wsContext.IsResolved);
+        await workspaceService.DidNotReceive().ListAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task McpTransport_GetsResolution()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/mcp-transport", workspaceHeader: WorkspaceA);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.True(wsContext.IsResolved);
+    }
+
+    [Fact]
+    public async Task EmptyHeader_SkipsToApiKeyFallback()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var token = tokenService.GenerateToken(WorkspaceA);
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/todo", workspaceHeader: "", apiKey: token);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.True(wsContext.IsResolved);
+        Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task DefaultToken_SetsIsDefaultKey()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var defToken = tokenService.GenerateDefaultToken(WorkspaceA);
+        var wsContext = new WorkspaceContext();
+        var mw = CreateMiddleware(_ => Task.CompletedTask);
+
+        var ctx = CreateContext("/qbrainai/todo", apiKey: defToken);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(wsContext.IsResolved);
+        Assert.True(wsContext.IsDefaultKey);
+    }
+
+    [Fact]
+    public async Task BearerToken_WithoutWorkspaceHeader_RejectsTenantRoute()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/sessionlog/query", bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.False(nextCalled);
+        Assert.Equal(404, ctx.Response.StatusCode);
+        Assert.False(wsContext.IsResolved);
+    }
+
+    /// <summary>
+    /// FR-MCP-MEMORY-001: Bearer callers without X-Workspace-Path may POST the exact Global-create
+    /// routes. List, get, update, remove, and other memory subpaths stay workspace-required.
+    /// </summary>
+    [Theory]
+    [InlineData("POST", "/qbrainai/memory", true)]
+    [InlineData("POST", "/qbrainai/memory/remember", true)]
+    [InlineData("GET", "/qbrainai/memory", false)]
+    [InlineData("GET", "/qbrainai/memory/MEMORY-FACT-001", false)]
+    [InlineData("PUT", "/qbrainai/memory/MEMORY-FACT-001", false)]
+    [InlineData("DELETE", "/qbrainai/memory/MEMORY-FACT-001", false)]
+    [InlineData("POST", "/qbrainai/memory/recall", false)]
+    public async Task BearerToken_WithoutWorkspaceHeader_MemoryRoutes(string method, string path, bool allowed)
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext(path, method: method, bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.Equal(allowed, nextCalled);
+        Assert.Equal(allowed ? 200 : 404, ctx.Response.StatusCode);
+        Assert.False(wsContext.IsResolved);
+    }
+
+    [Fact]
+    public async Task BearerToken_WithoutWorkspaceHeader_AllowsWorkspaceRegistryRoute()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/qbrainai/workspace", bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.False(wsContext.IsResolved);
+    }
+}

@@ -1,23 +1,23 @@
 services:
-  mcp-server:
+  qbrain-ai:
     build:
       context: .
       dockerfile: Dockerfile
-    image: mcp-server:latest
-    container_name: mcp-server
+    image: qbrain-ai:latest
+    container_name: qbrain-ai
     ports:
       - "7147:7147"
     volumes:
       - ${MCP_WORKSPACE:-.}:/workspace:ro
-      - mcp-data:/data
+      - qbrain-ai-data:/data
     env_file:
       - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - Mcp__Port=7147
-      - Mcp__RepoRoot=/workspace
-      - Mcp__DataSource=mcp.db
-      - Mcp__DataDirectory=/data
+      - QBrainAi__Port=7147
+      - QBrainAi__RepoRoot=/workspace
+      - QBrainAi__DataSource=mcp.db
+      - QBrainAi__DataDirectory=/data
       - VectorIndex__IndexPath=/data/vector.idx
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7147/health"]
@@ -27,12 +27,12 @@ services:
       retries: 3
     restart: unless-stopped
     networks:
-      - mcp-network
+      - qbrain-ai-network
 
 volumes:
-  mcp-data:
+  qbrain-ai-data:
     driver: local
 
 networks:
-  mcp-network:
+  qbrain-ai-network:
     driver: bridge

@@ -1,6 +1,6 @@
 {
     "description": [
-      "Create a Claude Code plugin at .claude/plugins/mcpserver/ that automates MCP server session bootstrapping and provides skills for common workflows.",
+      "Create a Claude Code plugin at .claude/plugins/qbrainai/ that automates MCP server session bootstrapping and provides skills for common workflows.",
       "Connects Claude Code to 45 MCP tools via Streamable HTTP at /mcp-transport (no API key needed).",
       "Provides bootstrap hook for automatic health verification and context injection.",
       "User-invoked skills: /mcpserver:status, /mcpserver:todo, /mcpserver:deploy, /mcpserver:tunnel.",

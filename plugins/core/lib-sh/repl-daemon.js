@@ -3,7 +3,7 @@
 /**
  * FR-MCP-PLUGINCORE-003: persistent REPL daemon.
  *
- * Replaces spawn-per-call: one long-lived `mcpserver-repl --agent-stdio`
+ * Replaces spawn-per-call: one long-lived `qbrain-ai-repl --agent-stdio`
  * child serves many requests over the NDJSON framing (FR-MCP-REPL-005).
  * A tiny localhost TCP server brokers requests from short-lived hook
  * processes to the child; responses are byte streams terminated by a lone
@@ -15,7 +15,7 @@
  *             daemon (auto-starting it), print the response, exit
  *
  * Environment:
- *   MCPSERVER_REPL_BIN          repl binary (default: mcpserver-repl)
+ *   MCPSERVER_REPL_BIN          repl binary (default: qbrain-ai-repl)
  *   MCPSERVER_REPL_DAEMON_DIR   state dir for daemon.json (default: $TMPDIR)
  *   MCPSERVER_REPL_IDLE_SECONDS daemon exits after idle (default: 300)
  *   MCPSERVER_WORKSPACE_PATH    forwarded to the repl child
@@ -27,9 +27,9 @@ const path = require("path");
 const os = require("os");
 const { spawn } = require("child_process");
 
-const REPL_BIN = process.env.MCPSERVER_REPL_BIN || "mcpserver-repl";
+const REPL_BIN = process.env.MCPSERVER_REPL_BIN || "qbrain-ai-repl";
 const STATE_DIR = process.env.MCPSERVER_REPL_DAEMON_DIR || os.tmpdir();
-const STATE_FILE = path.join(STATE_DIR, "mcpserver-repl-daemon.json");
+const STATE_FILE = path.join(STATE_DIR, "qbrain-ai-repl-daemon.json");
 const IDLE_SECONDS = parseInt(process.env.MCPSERVER_REPL_IDLE_SECONDS || "300", 10);
 const TERMINATOR = "---";
 

@@ -12,7 +12,7 @@
     },
     "DEC-001": {
       "without_memory": "I do not have a remembered local database decision, so I will not guess Docker versus Postgres.",
-      "with_memory": "We decided on native Postgres for local McpServer rather than running Postgres in Docker."
+      "with_memory": "We decided on native Postgres for local QBrainAi rather than running Postgres in Docker."
     },
     "FACT-001": {
       "without_memory": "I do not have a remembered branch fact for that workstream.",

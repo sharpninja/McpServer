@@ -1,6 +1,6 @@
 {
   "name": "agent_help_create_session",
-  "description": "Create an Agent Help session when stuck on MCP Server surfaces (marker trust, plugins, session log, TODO, triage, etc.).",
+  "description": "Create an Agent Help session when stuck on QBrain.AI surfaces (marker trust, plugins, session log, TODO, triage, etc.).",
   "inputSchema": {
     "type": "object",
     "properties": {

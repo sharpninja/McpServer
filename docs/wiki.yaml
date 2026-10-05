@@ -93,8 +93,8 @@ documents:
     platforms:
       - github
       - azure
-  - id: mcp-server-guide
-    title: MCP Server Operations Guide
+  - id: qbrain-ai-guide
+    title: QBrain.AI Operations Guide
     source: docs/MCP-SERVER.md
     target: MCP-Server-Operations.md
     platforms:
@@ -355,7 +355,7 @@ navigation:
   - title: Architecture
     path: Architecture
     children:
-      - document: mcp-server-guide
+      - document: qbrain-ai-guide
       - document: quadbrain
       - document: qbagent
       - document: agent-plugin-availability

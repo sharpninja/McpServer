@@ -29,7 +29,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$projectPath = Join-Path $repoRoot 'src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj'
+$projectPath = Join-Path $repoRoot 'src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj'
 
 $arguments = [System.Collections.Generic.List[string]]::new()
 $arguments.Add('run')

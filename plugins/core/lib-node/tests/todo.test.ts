@@ -202,7 +202,7 @@ describe('handleTodoTool failsafe cache', () => {
       expect(result.result).toEqual({ items: [], totalCount: 0 });
       const call = (globalThis.fetch as jest.Mock).mock.calls[0];
       expect(String(call[0])).toBe(
-        'http://127.0.0.1:8765/mcpserver/todo?id=MCP-TODO-001&done=false',
+        'http://127.0.0.1:8765/qbrainai/todo?id=MCP-TODO-001&done=false',
       );
       expect(call[1]).toEqual({
         headers: {
@@ -257,7 +257,7 @@ describe('handleTodoTool failsafe cache', () => {
       expect(fake.calls).toHaveLength(0);
       expect(fs.readdirSync(failsafeDir).filter((file) => file.endsWith('.yaml'))).toHaveLength(0);
       const call = (globalThis.fetch as jest.Mock).mock.calls[0];
-      expect(String(call[0])).toBe('http://127.0.0.1:8765/mcpserver/todo');
+      expect(String(call[0])).toBe('http://127.0.0.1:8765/qbrainai/todo');
       expect(JSON.parse(call[1].body)).toEqual({
         id: 'MCP-CLINE-001',
         title: 'Create through Cline fallback',

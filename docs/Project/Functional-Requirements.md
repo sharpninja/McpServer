@@ -1,63 +1,63 @@
-# Functional Requirements (MCP Server)
+# Functional Requirements (QBrain.AI)
 
 ## FR-HANDOFF-001 Ingest workspace-scoped handoff documents
 
 Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Supports Markdown, text, JSON, and YAML inputs. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Maximum decoded input is 8 MiB. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Supports Markdown, text, JSON, and YAML inputs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Maximum decoded input is 8 MiB. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-002 Extract structured MCP TODO drafts via one-shot agents
 
 Use the existing one-shot agent system to extract a structured MCP TODO draft.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Extraction uses a versioned prompt and strict JSON contract. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Malformed output produces diagnostics and never creates a TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Unknown or missing source information is not silently discarded. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Extraction uses a versioned prompt and strict JSON contract. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Malformed output produces diagnostics and never creates a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Unknown or missing source information is not silently discarded. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-003 Validate and normalize generated TODO drafts
 
 Validate and normalize generated TODO drafts.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Invalid or conflicting values produce field-specific diagnostics. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invalid or conflicting values produce field-specific diagnostics. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-004 Support DraftOnly, RequireReview, and CreateWhenConfident modes
 
 Support DraftOnly, RequireReview, and CreateWhenConfident modes.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] DraftOnly is the default and never mutates TODO state. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] RequireReview persists an approvable run without creating a TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] DraftOnly is the default and never mutates TODO state. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] RequireReview persists an approvable run without creating a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-005 Persist approved TODOs exclusively through the TODO service
 
 Persist approved TODOs exclusively through the existing TODO service.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Successful creation produces exactly one TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] ID collisions require review and are never silently renamed. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Successful creation produces exactly one TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] ID collisions require review and are never silently renamed. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-006 Preserve auditable provenance and diagnostics
 
 Preserve auditable provenance and diagnostics for every run.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Raw credentials or source content are not copied into logs. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Raw credentials or source content are not copied into logs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-007 Provide equivalent public handoff surfaces
 
 Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-LOC-001 Localization Support
 
@@ -110,7 +110,7 @@ Scope: layer-1+
 
 The server shall support HTTP and STDIO MCP transports.
 
-**Covered by:** `Program.cs`, `McpServerMcpTools`, `McpStdioHost`
+**Covered by:** `Program.cs`, `QBrainAiMcpTools`, `McpStdioHost`
 Scope: layer-1+
 
 ## FR-MCP-008 Containerized deployment
@@ -143,7 +143,7 @@ Scope: layer-1+
 
 ## FR-MCP-013 Per-Workspace Auth Tokens
 
-The server shall protect all `/mcpserver/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
+The server shall protect all `/qbrainai/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
 
 **Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService`, `WorkspaceResolutionMiddleware`, `MarkerFileService`
 Scope: layer-1+
@@ -253,11 +253,11 @@ Scope: layer-1+
 
 ## FR-MCP-029 CQRS Framework
 
-A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query dispatch with a Result monad, decimal correlation IDs (`baseId.counter`), pipeline behaviors, and an `ILoggerProvider` implementation that auto-enriches structured logs with decomposed correlation context. The Dispatcher shall automatically log Result outcomes (success at Debug, errors at Error/Warning).
+A standalone CQRS framework (`QBrainAi.Cqrs`) shall provide async command/query dispatch with a Result monad, decimal correlation IDs (`baseId.counter`), pipeline behaviors, and an `ILoggerProvider` implementation that auto-enriches structured logs with decomposed correlation context. The Dispatcher shall automatically log Result outcomes (success at Debug, errors at Error/Warning).
 
 **Status:** ✅ Complete
 
-**Covered by:** `McpServer.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `McpServer.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions). Workspace and policy view-models moved to the separate `McpServerManager` repository (former `McpServer.UI.Core` / `WorkspaceListViewModel` / `WorkspacePolicyViewModel` / `AddUiCore` DI extension).
+**Covered by:** `QBrainAi.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `QBrainAi.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions). Workspace and policy view-models moved to the separate `McpServerManager` repository (former `QBrainAi.UI.Core` / `WorkspaceListViewModel` / `WorkspacePolicyViewModel` / `AddUiCore` DI extension).
 
 **Implementation:** 37 unit tests passing. Provides `ICommand<T>`/`IQuery<T>` message types, `ICommandHandler<,>`/`IQueryHandler<,>` handlers, `Dispatcher` with pipeline behavior chain, `CallContext` with `CorrelationId` for structured logging, and `Result<T>` monad with success/error paths. MVVM layer adds `IViewModelRegistry` for CLI exec command support.
 Scope: layer-1+
@@ -267,7 +267,7 @@ Scope: layer-1+
 *Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-030-director-cli)*
 Scope: layer-1+
 
-## FR-MCP-031 McpServer Management Web UI
+## FR-MCP-031 QBrainAi Management Web UI
 
 *Moved to [Requirements-WebUI.md](Requirements-WebUI.md#fr-mcp-031-mcpserver-management-web-ui)*
 Scope: layer-1+
@@ -281,7 +281,7 @@ Scope: layer-1+
 
 A Copilot-integrated prompt tool that accepts natural language policy directives (e.g. "Ban chinese sources from all workspaces") and translates them into workspace configuration changes across all or targeted workspaces. Each policy change is session-logged per affected workspace with action type `policy_change`.
 
-**Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
+**Covered by:** `WorkspaceController` (`POST /qbrainai/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `QBrainAiMcpTools.workspace_policy_apply`
 Scope: layer-1+
 
 ## FR-MCP-034 Workspace Compliance Configuration
@@ -319,7 +319,7 @@ Scope: layer-1+
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
-Repo-local source files from McpServer.Cqrs and McpServer.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. McpServer.UI.Core and McpServer.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
+Repo-local source files from QBrainAi.Cqrs and QBrainAi.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. QBrainAi.UI.Core and QBrainAi.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
 Scope: layer-1+
 
 ## FR-MCP-040 Requirements Document CRUD Management
@@ -335,7 +335,7 @@ The server shall expose a requirements document generation endpoint that renders
 
 **Status:** ✅ Complete
 
-**Covered by:** `RequirementsController` (`POST /mcpserver/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+**Covered by:** `RequirementsController` (`POST /qbrainai/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
 Scope: layer-1+
 
 ## FR-MCP-042 Requirements Management MCP Tools
@@ -361,7 +361,7 @@ Scope: layer-1+
 
 ## FR-MCP-045 Cross-Workspace TODO Move
 
-The server shall support moving a TODO item from one workspace to another via REST (`POST /mcpserver/todo/{id}/move`) and STDIO (`todo_move` MCP tool), preserving all item fields including implementation tasks, requirements, and metadata. The move is implemented as create-in-target then delete-from-source.
+The server shall support moving a TODO item from one workspace to another via REST (`POST /qbrainai/todo/{id}/move`) and STDIO (`todo_move` MCP tool), preserving all item fields including implementation tasks, requirements, and metadata. The move is implemented as create-in-target then delete-from-source.
 
 **Covered by:** `TodoController.MoveAsync`, `FwhMcpTools.TodoMove`, `TodoMoveRequest`, `TodoServiceResolver`
 Scope: layer-1+
@@ -389,7 +389,7 @@ Scope: layer-1+
 
 ## FR-MCP-049 Prompt Template Registry
 
-The server shall provide a global prompt template registry with REST API endpoints (`/mcpserver/templates`) and MCP tools for CRUD operations (list, get, create, update, delete) and test/render operations. Templates are stored as YAML files, support Handlebars rendering with declared variables, and are filterable by category, tag, and keyword. A Director TUI tab shall enable template browsing and preview.
+The server shall provide a global prompt template registry with REST API endpoints (`/qbrainai/templates`) and MCP tools for CRUD operations (list, get, create, update, delete) and test/render operations. Templates are stored as YAML files, support Handlebars rendering with declared variables, and are filterable by category, tag, and keyword. A Director TUI tab shall enable template browsing and preview.
 
 **Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`. The Director template-browsing TUI surface (`TemplatesScreen`) moved to the separate `McpServerManager` repository.
 Scope: layer-1+
@@ -475,7 +475,7 @@ Scope: layer-1+
 
 ## FR-MCP-059 DI-Centered Single Source of Truth State Flow
 
-The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
+The system SHALL enforce a DI-centered Single Source of Truth architecture across `QBrainAi.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
 
 **Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Mapping](./TR-per-FR-Mapping.md)
 Scope: layer-1+
@@ -501,7 +501,7 @@ Scope: layer-1+
 
 ## FR-MCP-062 Workspace Change Notifications
 
-The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /mcpserver/events`, with optional category filtering.
+The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /qbrainai/events`, with optional category filtering.
 
 **Covered by:** `IChangeEventBus`, `ChannelChangeEventBus`, `EventStreamController`, `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `WorkspaceController`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `GitHubController`, `WorkspaceProcessManager`
 Scope: layer-1+
@@ -525,7 +525,7 @@ Scope: layer-1+
 
 ## FR-MCP-064 Marketing and Adoption Documentation
 
-The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
+The system SHALL provide marketing-oriented documentation that clearly explains what QBrainAi is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
 
 **Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Mapping](./TR-per-FR-Mapping.md)
 Scope: layer-1+
@@ -534,20 +534,20 @@ Scope: layer-1+
 
 The server shall ingest remote website content directly from one URL (with optional bounded same-host crawling) into the context store and GraphRAG pipeline without pre-downloading files into `docs/external`.
 
-**Covered by:** `ContextController` (`POST /mcpserver/context/ingest-website`), `WebsiteIngestor`, `IngestionCoordinator`, `FwhMcpTools` (`context_ingest_website`), `ContextClient.IngestWebsiteAsync`
+**Covered by:** `ContextController` (`POST /qbrainai/context/ingest-website`), `WebsiteIngestor`, `IngestionCoordinator`, `FwhMcpTools` (`context_ingest_website`), `ContextClient.IngestWebsiteAsync`
 Scope: layer-1+
 
 ## FR-MCP-066 Hosted Microsoft Agent Framework Library
 
 The system SHALL provide a .NET 9 class library that packages an MCP-aware agent for hosting inside external .NET applications built on Microsoft Agent Framework.
 
-The hosted agent SHALL include a built-in workflow that treats MCP Server session logging, TODO management, repository file access, local desktop process launch, and stateful in-process PowerShell sessions as first-class primitives, allowing host applications to bootstrap/continue session logs, create and update turns, inspect and mutate TODO items, browse repository files, launch local programs, run PowerShell commands inside persistent local runspaces, drive those runspaces directly through the host-facing agent contract when needed, and execute plan/status/implementation task flows without reimplementing those integrations.
+The hosted agent SHALL include a built-in workflow that treats QBrain.AI session logging, TODO management, repository file access, local desktop process launch, and stateful in-process PowerShell sessions as first-class primitives, allowing host applications to bootstrap/continue session logs, create and update turns, inspect and mutate TODO items, browse repository files, launch local programs, run PowerShell commands inside persistent local runspaces, drive those runspaces directly through the host-facing agent contract when needed, and execute plan/status/implementation task flows without reimplementing those integrations.
 
 **Status:** ✅ Complete
 
 **Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
+**Covered by:** `QBrainAi.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `QBrainAi.Client` (`QBrainAiClient`, `RepoClient`, `DesktopClient`), `QBrainAi.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
 Scope: layer-1+
 
 ## FR-MCP-067 Detailed Internal Server Error Responses
@@ -611,7 +611,7 @@ The server shall preserve TODO document metadata such as `notes`, `completed`, a
 
 **Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
+**Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `QBrainAiMcpTools`, `TodoServiceFactory`
 Scope: layer-1+
 
 ## FR-MCP-073 Parseable Log Event Field Cap
@@ -655,12 +655,12 @@ When trust validation fails, the bootstrap flow shall stop using MCP services an
 
 **Technical Implementation:** [TR-MCP-SEC-003](./Technical-Requirements.md#tr-mcp-sec-003) | [TR-MCP-AGENT-014](./Technical-Requirements.md#tr-mcp-agent-014) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
+**Covered by:** `src/QBrainAi.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/QBrainAi.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 Scope: layer-1+
 
 ## FR-MCP-077 Server Federation and Request Proxying
 
-The server shall support an opt-in federation mode that proxies incoming requests to a configured remote MCP server instance. Routing shall support a global default target and per-workspace overrides. The feature shall include anti-loop protection (via `X-Mcp-Federation-Hop` header with a configurable maximum hop count), transparent SSE/streaming forwarding for `/mcp-transport`, a runtime management REST API at `/mcpserver/federation`, and auto-discovery of federation targets from running tunnel providers.
+The server shall support an opt-in federation mode that proxies incoming requests to a configured remote MCP server instance. Routing shall support a global default target and per-workspace overrides. The feature shall include anti-loop protection (via `X-Mcp-Federation-Hop` header with a configurable maximum hop count), transparent SSE/streaming forwarding for `/mcp-transport`, a runtime management REST API at `/qbrainai/federation`, and auto-discovery of federation targets from running tunnel providers.
 
 **Status:** ✅ Complete
 
@@ -675,7 +675,7 @@ The server shall accept raw text or markdown content via a REST endpoint and MCP
 
 **Status:** ✅ Complete
 
-**Covered by:** `GraphRagController` (`POST /mcpserver/graphrag/documents/ingest`), `McpServer.GraphRag` (`GraphRagService` ad-hoc ingestion path), `FwhMcpTools` (graphrag ingest tool)
+**Covered by:** `GraphRagController` (`POST /qbrainai/graphrag/documents/ingest`), `QBrainAi.GraphRag` (`GraphRagService` ad-hoc ingestion path), `FwhMcpTools` (graphrag ingest tool)
 Scope: layer-1+
 
 ## FR-MCP-079 GraphRAG Entity and Relationship CRUD
@@ -684,7 +684,7 @@ The server shall provide full CRUD operations for explicit graph entity nodes an
 
 **Status:** ✅ Complete
 
-**Covered by:** `GraphRagController` (entity + relationship endpoints), `McpServer.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `McpServer.Repl.Core` (graphrag command shapes)
+**Covered by:** `GraphRagController` (entity + relationship endpoints), `QBrainAi.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `QBrainAi.Repl.Core` (graphrag command shapes)
 Scope: layer-1+
 
 ## FR-MCP-080 GraphRAG Document Management
@@ -693,7 +693,7 @@ The server shall provide endpoints to list indexed documents with chunk counts a
 
 **Status:** ✅ Complete
 
-**Covered by:** `GraphRagController` (document list/get/delete endpoints), `McpServer.GraphRag` (`GraphRagService` document management), `ContextDocumentEntity`, `ContextChunkEntity`, `FwhMcpTools` (graphrag document tools)
+**Covered by:** `GraphRagController` (document list/get/delete endpoints), `QBrainAi.GraphRag` (`GraphRagService` document management), `ContextDocumentEntity`, `ContextChunkEntity`, `FwhMcpTools` (graphrag document tools)
 Scope: layer-1+
 
 ## FR-MCP-081 Byrd Iteration Phase and TODO Execution Persistence
@@ -702,7 +702,7 @@ The server shall persist Byrd iteration phases, decomposed execution TODOs, and 
 
 **Status:** ✅ Complete
 
-**Covered by:** `TodoExecutionController` (`/mcpserver/todo-execution/*`), `TodoExecutionService`, Byrd phase + checkpoint entities, `McpDbContext`
+**Covered by:** `TodoExecutionController` (`/qbrainai/todo-execution/*`), `TodoExecutionService`, Byrd phase + checkpoint entities, `McpDbContext`
 Scope: layer-1+
 
 ## FR-MCP-082 Bounded Byrd Execution Context Hydration
@@ -720,7 +720,7 @@ The server shall expose a structured `adb_step` surface for safe Android validat
 
 **Status:** ✅ Complete
 
-**Covered by:** `TodoExecutionController` (`POST /mcpserver/todo-execution/adb/step`), `TodoExecutionService.AdbStepAsync`, `AdbStepAction` / `AdbStepRequest` models, `FwhMcpTools` (`adb_step` tool)
+**Covered by:** `TodoExecutionController` (`POST /qbrainai/todo-execution/adb/step`), `TodoExecutionService.AdbStepAsync`, `AdbStepAction` / `AdbStepRequest` models, `FwhMcpTools` (`adb_step` tool)
 Scope: layer-1+
 
 ## FR-MCP-084 Requirements Wiki Workspace Export/Import
@@ -729,7 +729,7 @@ The server, REPL, and agent plugins shall support requirements export and import
 
 **Status:** ✅ Complete
 
-**Covered by:** `RequirementsController` (wiki export + ingest endpoints), `RequirementsDocumentService` (wiki renderer + parser), `McpServer.Repl.Core` (requirements wiki workflow commands)
+**Covered by:** `RequirementsController` (wiki export + ingest endpoints), `RequirementsDocumentService` (wiki renderer + parser), `QBrainAi.Repl.Core` (requirements wiki workflow commands)
 Scope: layer-1+
 
 ## FR-MCP-085 QA Workspace Question CRUD
@@ -764,7 +764,7 @@ Scope: layer-1+
 
 ## FR-MCP-091 QA FAQ Projection
 
-`GET /mcpserver/qa/faq` returns questions that have an accepted answer, projected as `{ questionId, title, tags[], voteCount, acceptedAnswer: { body, author, voteCount }, deeplink }` where `deeplink = "/mcpserver/qa/questions/{id}"`. Default sort: accepted-answer voteCount desc, then question voteCount desc.
+`GET /qbrainai/qa/faq` returns questions that have an accepted answer, projected as `{ questionId, title, tags[], voteCount, acceptedAnswer: { body, author, voteCount }, deeplink }` where `deeplink = "/qbrainai/qa/questions/{id}"`. Default sort: accepted-answer voteCount desc, then question voteCount desc.
 Scope: layer-1+
 
 ## FR-MCP-092 QA Author Resolution
@@ -799,12 +799,12 @@ Scope: layer-1+
 
 ## FR-MCP-098 QA Append Only Audit
 
-Full audit tracking: every Q&A mutation (question create/update/delete, answer create/update/delete, accept/un-accept, vote +1/-1, comment add/delete) writes an append-only audit row capturing actor, action, version, full pre-mutation snapshot, and timestamp. Audit history is queryable per entity (`GET /mcpserver/qa/questions/{id}/audit`, `/answers/{id}/audit`, `/comments/{id}/audit`) and at workspace scope (`GET /mcpserver/qa/audit`) with paging, matching the TODO audit endpoint contract.
+Full audit tracking: every Q&A mutation (question create/update/delete, answer create/update/delete, accept/un-accept, vote +1/-1, comment add/delete) writes an append-only audit row capturing actor, action, version, full pre-mutation snapshot, and timestamp. Audit history is queryable per entity (`GET /qbrainai/qa/questions/{id}/audit`, `/answers/{id}/audit`, `/comments/{id}/audit`) and at workspace scope (`GET /qbrainai/qa/audit`) with paging, matching the TODO audit endpoint contract.
 Scope: layer-1+
 
 ## FR-MCP-099 QA Web Research Capture
 
-Mandatory web-research-to-Q&A capture: whenever a plugin/agent performs an internet search (web fetch, web search, MCP web tool, browser MCP, or any external HTTP retrieval) in order to answer a workspace-scoped question, the agent MUST post a new Question to `/mcpserver/qa/questions` containing the original prompt, then post an Answer containing the synthesized response with every source URL cited inline (markdown links) and as a `sources[]` array in the answer body's JSON sidecar. If the agent verified the synthesized answer, it MUST also call accept-answer. This is enforced by the `qa/SKILL.md` in every sibling plugin repo (mandatory rule at top of body) and surfaced in `AGENTS.md` / `CLAUDE.md` so agents cannot opt out. Captured `web_reference` actions in the session log point at the resulting Q&A entry's deeplink.
+Mandatory web-research-to-Q&A capture: whenever a plugin/agent performs an internet search (web fetch, web search, MCP web tool, browser MCP, or any external HTTP retrieval) in order to answer a workspace-scoped question, the agent MUST post a new Question to `/qbrainai/qa/questions` containing the original prompt, then post an Answer containing the synthesized response with every source URL cited inline (markdown links) and as a `sources[]` array in the answer body's JSON sidecar. If the agent verified the synthesized answer, it MUST also call accept-answer. This is enforced by the `qa/SKILL.md` in every sibling plugin repo (mandatory rule at top of body) and surfaced in `AGENTS.md` / `CLAUDE.md` so agents cannot opt out. Captured `web_reference` actions in the session log point at the resulting Q&A entry's deeplink.
 Scope: layer-1+
 
 ## FR-MCP-100 QA Close and Duplicate Flags
@@ -819,7 +819,7 @@ Scope: layer-1+
 
 ## FR-MCP-102 QA Generated FAQ Wiki Page
 
-FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Project/wiki/azure/` and GitHub wiki under `docs/Project/wiki/github/`) includes a generated `FAQ.md` page rendered from the live `/mcpserver/qa/faq` endpoint of a configured workspace at build time. The page lists every accepted Q&A with the question title (linked to its detail endpoint), tags, vote counts, the rendered HTML body of the accepted answer, and the `sources[]` array as a sources section. The wiki Home / Sidebar / .order files reference the new FAQ page. The page is regenerated by the Nuke build during the wiki publication target.
+FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Project/wiki/azure/` and GitHub wiki under `docs/Project/wiki/github/`) includes a generated `FAQ.md` page rendered from the live `/qbrainai/qa/faq` endpoint of a configured workspace at build time. The page lists every accepted Q&A with the question title (linked to its detail endpoint), tags, vote counts, the rendered HTML body of the accepted answer, and the `sources[]` array as a sources section. The wiki Home / Sidebar / .order files reference the new FAQ page. The page is regenerated by the Nuke build during the wiki publication target.
 Scope: layer-1+
 
 ## FR-MCP-103 Hub-and-Spoke Federation
@@ -828,7 +828,7 @@ The server shall support hub-and-spoke federation where a Hub instance is author
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Adapter diagnostics enumerate every required mutable state domain and distinguish covered, local-only, and apply-supported domains.
-- [ ] LocalProxy live forwarding continues to route /mcpserver/* requests, including /mcpserver/memory, through existing proxy middleware when the hub is reachable.
+- [ ] LocalProxy live forwarding continues to route /qbrainai/* requests, including /qbrainai/memory, through existing proxy middleware when the hub is reachable.
 - [ ] Mutating LocalProxy requests that are eligible for replay are queued durably during hub outages with operation id, domain, resource id, workspace id, headers, body, and base version.
 - [ ] Queued operations replay through signed envelopes when signing is configured.
 - [ ] Stale base-version operations create federation conflicts and do not overwrite authoritative hub state.
@@ -840,7 +840,7 @@ Scope: layer-1+
 
 ## FR-MCP-105 Database integrity and durable audit enforcement
 
-The MCP Server must preserve database integrity across all supported providers by enforcing workspace, TODO, requirement, federation, soft-delete, and audit relationships as durable relational contracts.
+The QBrain.AI must preserve database integrity across all supported providers by enforcing workspace, TODO, requirement, federation, soft-delete, and audit relationships as durable relational contracts.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Every workspace-scoped memory index row references a canonical Workspaces row; global memory and index rows retain null WorkspaceId.
@@ -854,7 +854,7 @@ Scope: layer-1+
 
 ## FR-MCP-107 Outstanding session work consolidation
 
-MCP Server must support an audited consolidation plan that inventories outstanding work from a long session, separates validated changes from unresolved dirty work, and sequences completion through Byrd gates before deploy or publish.
+QBrain.AI must support an audited consolidation plan that inventories outstanding work from a long session, separates validated changes from unresolved dirty work, and sequences completion through Byrd gates before deploy or publish.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each cumulative validation run uses an explicit unique run ID and deterministic TestResults/<runId> outputs; reports from another run or an earlier candidate cannot satisfy the current gate.
@@ -870,7 +870,7 @@ Scope: layer-1+
 
 ## FR-MCP-109 Batch requirements mutation
 
-The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
+The QBrain.AI shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
 Scope: layer-1+
 
 ## FR-MCP-110 Deterministic Nuke PowerShell execution
@@ -878,9 +878,9 @@ Scope: layer-1+
 Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
 Scope: layer-1+
 
-## FR-MCP-111 Package workflow closeout skills across McpServer plugins
+## FR-MCP-111 Package workflow closeout skills across QBrainAi plugins
 
-All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
+All QBrainAi plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
 Scope: layer-1+
 
 ## FR-MCP-112 Requirements export description and AC formatting
@@ -927,7 +927,7 @@ Scope: layer-1+
 
 ## FR-MCP-118 Keyserver trust service
 
-McpServer SHALL provide keyserver trust services that register trusted parties, manage public key metadata, sign transaction manifests, verify signed manifests, reject invalid or replayed manifests, preserve historical signing descriptors for verification, and persist audit evidence without exposing private key material.
+QBrainAi SHALL provide keyserver trust services that register trusted parties, manage public key metadata, sign transaction manifests, verify signed manifests, reject invalid or replayed manifests, preserve historical signing descriptors for verification, and persist audit evidence without exposing private key material.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Publisher, subscriber, arbiter, and future model parties can be provisioned with party ID, role, active signing key ID, active encryption key ID, status, created/updated UTC, and audit metadata.
@@ -938,7 +938,7 @@ Scope: layer-1+
 
 ## FR-MCP-119 Subscriber diffgram commit service
 
-McpServer SHALL provide subscriber services that verify keyserver-signed manifests, decrypt intended diffgrams, validate encrypted and plaintext hashes, durably commit accepted diffgrams, expose abort/status flows, and reject invalid or conflicting commits.
+QBrainAi SHALL provide subscriber services that verify keyserver-signed manifests, decrypt intended diffgrams, validate encrypted and plaintext hashes, durably commit accepted diffgrams, expose abort/status flows, and reject invalid or conflicting commits.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Subscriber accepts a commit only when manifest verification succeeds against keyserver trust and the protected payload is addressed to the subscriber party/key ID.
@@ -948,9 +948,9 @@ Scope: layer-1+
 - [x] Abort records aborted status, refuses later commit, and status exposes pending, committed, rejected, aborted, and reason details without exposing secrets.
 - [x] Subscriber encryption private key rings decrypt old and rotated protected envelopes and bind separate-host configuration to the configured subscriber key material.
 
-## FR-MCP-120 MCP Server transaction gating
+## FR-MCP-120 QBrain.AI transaction gating
 
-McpServer SHALL gate QuadBrain/brain-slot mutating paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available. FR-MCP-173 carves out every non-QuadBrain first-party mutation (TODO, requirements, session-log for every source type including QBAgent, memory, repo, tools, GitHub, GraphRAG, voice, agent pool, REPL TODO workflow, requirements ingest, context rebuild, and federation apply/control): those persist without keyserver/coordinator even when turn transactions are enabled. QuadBrain brain-slot.invoke and brain-slot.weight-update remain in this gate.
+QBrainAi SHALL gate QuadBrain/brain-slot mutating paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available. FR-MCP-173 carves out every non-QuadBrain first-party mutation (TODO, requirements, session-log for every source type including QBAgent, memory, repo, tools, GitHub, GraphRAG, voice, agent pool, REPL TODO workflow, requirements ingest, context rebuild, and federation apply/control): those persist without keyserver/coordinator even when turn transactions are enabled. QuadBrain brain-slot.invoke and brain-slot.weight-update remain in this gate.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] QuadBrain brain-slot.invoke and brain-slot.weight-update either route through compensation-capable coordinator gates or fail closed while required transactions are active. All other first-party mutations (federation apply, memory, TODO, repository write, prompt templates, TODO execution, requirements repository/export/ingest, session-log for every source type including QBAgent, tool registry, voice, agent-pool, GraphRAG, GitHub, context rebuild/website/sync, and federation control-plane) are governed by FR-MCP-173 and SHALL persist without coordinator/keyserver even when Mcp:TurnTransactions:Enabled=true.
@@ -962,7 +962,7 @@ Scope: layer-1+
 
 ## FR-MCP-121 Degraded mode and rollback
 
-McpServer SHALL enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads or explicitly fail-closed operations, and preserve audit records through rollback.
+QBrainAi SHALL enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads or explicitly fail-closed operations, and preserve audit records through rollback.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Coordinator status exposes enabled/degraded state, last reason, message, and transaction dependency health.
@@ -1014,7 +1014,7 @@ Scope: layer-1+
 The transaction plan SHALL include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before closeout.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] `tests/McpServer.PlanReview.Tests` validates aiUnit plan-review run-log evidence for PLAN-TURNTRANSACTIONS-001.
+- [x] `tests/QBrainAi.PlanReview.Tests` validates aiUnit plan-review run-log evidence for PLAN-TURNTRANSACTIONS-001.
 - [x] The gate fails when run-log findings contain critical or high severity findings.
 - [x] The run-log artifact records prompt scope, provider/model metadata, findings status, and reviewed scope.
 - [x] Explicit future-disabled work is treated as non-blocking only when it does not hide a safety, correctness, or validation gap.
@@ -1073,25 +1073,25 @@ Scope: layer-1+
 - [x] Full automatic quad orchestration is authorized only when the workspace is quad-ready and all role outputs commit successfully.
 - [x] Individual brain-slot invocation authorization still does not authorize non-Curiosity GraphRAG/cache mutation or implicit fallback model behavior.
 
-## FR-MCP-132 Accurate HTTP semantics for /mcpserver/* credential failures
+## FR-MCP-132 Accurate HTTP semantics for /qbrainai/* credential failures
 
-All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API keys. 503 Service Unavailable is returned only when the per-workspace auth-token subsystem has not yet been initialized, and per-workspace tokens rotating on restart must surface as 401, never as a blanket 503.
+All /qbrainai/* endpoints return 401 Unauthorized for unknown, stale, or missing API keys. 503 Service Unavailable is returned only when the per-workspace auth-token subsystem has not yet been initialized, and per-workspace tokens rotating on restart must surface as 401, never as a blanket 503.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
+- [x] All /qbrainai/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
 - [x] 503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized
 - [x] Every 503 includes Retry-After header and JSON body
 - [x] Rotated/stale API key surfaces as 401, never as blanket 503
 
 ## FR-MCP-133 Readiness reflects the workspace/token subsystem
 
-The readiness endpoint /ready reports Unhealthy when no enabled workspace is registered, primary workspace has no seeded auth token, or auth-token subsystem is uninitialized. Readiness never reports Healthy while /mcpserver/* would be rejected with 503.
+The readiness endpoint /ready reports Unhealthy when no enabled workspace is registered, primary workspace has no seeded auth token, or auth-token subsystem is uninitialized. Readiness never reports Healthy while /qbrainai/* would be rejected with 503.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] /ready endpoint checks workspace/token subsystem readiness
 - [x] /ready reports Unhealthy when no enabled workspace registered
 - [x] /ready reports Unhealthy when primary workspace has no seeded auth token
-- [x] /ready never reports Healthy while /mcpserver/* would return 503
+- [x] /ready never reports Healthy while /qbrainai/* would return 503
 
 ## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
 
@@ -1125,11 +1125,11 @@ Scope: layer-1+
 
 ## FR-MCP-137 Quad Brain coding agent execution
 
-RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified a hosted coding agent that reached QuadBrain orchestration through the mcp_quadbrain_coding_execute tool in the shared McpServer.McpAgent catalog. That tool is removed, because it advertised a QuadBrain capability to every hosted-agent host rather than to QBAgent alone, and it was already non-functional for QBAgent: QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Retired alongside TR-MCP-AGENT-016 and TEST-MCP-187. Replacement coverage is the absence suite under TEST-MCP-193. QuadBrain coding work continues server-side through POST /v1/chat/completions, the OpenAI-compatible endpoint QBAgent binds to with model id QuadBrain; that path is unchanged and separately covered. Corrected 2026-07-20 after an audit found this FR still describing removed behavior when its TR and TEST had already been retired.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified a hosted coding agent that reached QuadBrain orchestration through the mcp_quadbrain_coding_execute tool in the shared QBrainAi.McpAgent catalog. That tool is removed, because it advertised a QuadBrain capability to every hosted-agent host rather than to QBAgent alone, and it was already non-functional for QBAgent: QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Retired alongside TR-MCP-AGENT-016 and TEST-MCP-187. Replacement coverage is the absence suite under TEST-MCP-193. QuadBrain coding work continues server-side through POST /v1/chat/completions, the OpenAI-compatible endpoint QBAgent binds to with model id QuadBrain; that path is unchanged and separately covered. Corrected 2026-07-20 after an audit found this FR still describing removed behavior when its TR and TEST had already been retired.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
-- [x] Tool calls McpServerClient.BrainSlots.OrchestrateAsync with coding metadata
+- [x] Tool calls QBrainAiClient.BrainSlots.OrchestrateAsync with coding metadata
 - [x] Tool never bypasses Quad Brain transaction/admission contract
 - [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
 - [x] Host code can execute same coding-agent path through typed runtime method
@@ -1151,7 +1151,7 @@ Scope: layer-1+
 
 ## FR-MCP-139 Warning suppression governance
 
-The MCP Server workspace must maintain durable governance for warning suppression decisions, approved exceptions, required code fixes, validation evidence, and traceability across TODO and requirements artifacts.
+The QBrain.AI workspace must maintain durable governance for warning suppression decisions, approved exceptions, required code fixes, validation evidence, and traceability across TODO and requirements artifacts.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Approved warning suppressions are recorded with diagnostic code, justification, owner, permanence, and review condition. (evidence: config/warning-suppression-approvals.json records current approved CA1416, CA1819, and CA2227 suppressions with owner, permanence, and review condition.)
@@ -1182,7 +1182,7 @@ Scope: layer-1+
 
 ## FR-MCP-170 Incremental session-log dialog persist
 
-Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.
+Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.
 
 Acceptance Criteria:
 - After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.
@@ -1217,10 +1217,10 @@ Acceptance Criteria:
 - Next drain in-process replays after a stubbed success.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] stderr has no Failsafe queue drain failed for that class. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] ReplFailsafeDrainCompleted stays false on abort. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Next drain in-process replays after a stubbed success. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] getFr EXIT 0 with the FR body when a queued session_submit times out or returns 503. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] stderr has no Failsafe queue drain failed for that class. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] ReplFailsafeDrainCompleted stays false on abort. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Next drain in-process replays after a stubbed success. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-173 Keyserver signs QuadBrain transactions only
 
@@ -1267,7 +1267,7 @@ Scope: layer-1+
 
 ## FR-MCP-CLEARSESSION-001 Shared clear-session reset skill for all agent plugins
 
-All MCP Server agent plugins SHALL provide a shared `clear-session` skill that resets the agent to a ready state in five ordered steps: (1) end the current MCP session, (2) clear agent context (best-effort programmatic, else instruct the per-host manual clear command and pause), (3) reload the agent instruction file selected by host (CLAUDE.md for Claude hosts, AGENTS.md otherwise), (4) execute the add-profile skill, and (5) report ready.
+All QBrain.AI agent plugins SHALL provide a shared `clear-session` skill that resets the agent to a ready state in five ordered steps: (1) end the current MCP session, (2) clear agent context (best-effort programmatic, else instruct the per-host manual clear command and pause), (3) reload the agent instruction file selected by host (CLAUDE.md for Claude hosts, AGENTS.md otherwise), (4) execute the add-profile skill, and (5) report ready.
 Scope: layer-1+
 
 ## FR-MCP-DOCFXWIKI-001 Optional DocFX content in requirements wiki exports
@@ -1305,7 +1305,7 @@ Scope: layer-1+
 
 ## FR-MCP-HELP-001 Agent Help conversation API
 
-Agents stuck on MCP Server surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
+Agents stuck on QBrain.AI surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
 Scope: layer-1+
 
 ## FR-MCP-HELP-002 Inbound guardrails
@@ -1335,12 +1335,12 @@ Scope: layer-1+
 
 ## FR-MCP-HELP-007 Typed client library
 
-SharpNinja.McpServer.Client exposes AgentHelpClient on McpServerClient for session create, turn submit, status, and transcript retrieval.
+QBrainAI.Client exposes AgentHelpClient on QBrainAiClient for session create, turn submit, status, and transcript retrieval.
 Scope: layer-1+
 
 ## FR-MCP-HELP-008 Marker prompt guidance
 
-Generated markers instruct agents when and how to invoke Agent Help for MCP Server issues.
+Generated markers instruct agents when and how to invoke Agent Help for QBrain.AI issues.
 Scope: layer-1+
 
 ## FR-MCP-HELP-009 REPL workflow parity
@@ -1363,113 +1363,113 @@ Scope: layer-1+
 An authenticated agent can enqueue a bounded hostile review request scoped to the active workspace. The request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, and optional acceptance criteria. Oversized payloads are rejected with no queue row. Foreign workspace is 403.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, optional AC list. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Serialized request JSON greater than 1048576 bytes is rejected with no queue row. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Authenticated workspace scope: foreign workspace is 403 and no queue row. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Valid request creates a QueueItem with stable id and status queued. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Request includes target type, mode, scope statement, artifact links, requester identity, workspace identity, optional AC list. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Serialized request JSON greater than 1048576 bytes is rejected with no queue row. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Authenticated workspace scope: foreign workspace is 403 and no queue row. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Valid request creates a QueueItem with stable id and status queued. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HOSTILEREVIEW-002 Artifact links resolve through MCP APIs
 
 Artifact links resolve only through supported MCP APIs (TODO, FR/TR/TEST, session log, triage, plans, files, commits, generated docs). Missing, unauthorized, stale, or ambiguous links produce diagnostics, not silent omission.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Missing link produces a diagnostic, not silent omit. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Successful resolve stores the resolved artifact identity and hash when available. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Authorize each artifact at submit and reauthorize it at every dispatch. Resolve only through supported workspace-scoped services. Store only normalized identity, type, version/hash, and sanitized diagnostic metadata. Permit no raw artifact or assembled prompt in queue rows, notifications, logs, receipts, or result metadata. Reject more than 64 links, an artifact over 1 MiB decoded, aggregate resolved input over 8 MiB, or unsupported/binary content that cannot be inspected safely. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Missing link produces a diagnostic, not silent omit. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Successful resolve stores the resolved artifact identity and hash when available. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Authorize each artifact at submit and reauthorize it at every dispatch. Resolve only through supported workspace-scoped services. Store only normalized identity, type, version/hash, and sanitized diagnostic metadata. Permit no raw artifact or assembled prompt in queue rows, notifications, logs, receipts, or result metadata. Reject more than 64 links, an artifact over 1 MiB decoded, aggregate resolved input over 8 MiB, or unsupported/binary content that cannot be inspected safely. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HOSTILEREVIEW-003 Reviewer run records model effort identity
 
 Each reviewer execution records model, effort, agent identity, plugin/source, prompt template/version, run id, timestamps, and token/runtime metadata when available. Missing metadata is omitted with a diagnostic, never fabricated.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Execution row records model string, effort level, agent identity, plugin/source surface. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Execution row records prompt template id and version, run id, start/end UTC. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Token/runtime metadata stored when provided; omitted with diagnostic when not provided, not fabricated. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] A server-owned worker uses the existing agent infrastructure with effective model gpt-6-astra and effort xhigh. Queue state is durable. Request, attempt, pool-job, model-execution, and accepted-terminal-result identities are distinct. Model execution is bounded at-least-once across process loss. Lease loss, repeated model execution, or duplicate completion cannot produce more than one accepted terminal result. Cancellation is internal to host/workspace lifecycle handling and existing authorized AgentPool cancellation, never a public hostile-review mutation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Execution row records model string, effort level, agent identity, plugin/source surface. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Execution row records prompt template id and version, run id, start/end UTC. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Token/runtime metadata stored when provided; omitted with diagnostic when not provided, not fabricated. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] A server-owned worker uses the existing agent infrastructure with effective model gpt-6-astra and effort xhigh. Queue state is durable. Request, attempt, pool-job, model-execution, and accepted-terminal-result identities are distinct. Model execution is bounded at-least-once across process loss. Lease loss, repeated model execution, or duplicate completion cannot produce more than one accepted terminal result. Cancellation is internal to host/workspace lifecycle handling and existing authorized AgentPool cancellation, never a public hostile-review mutation. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HOSTILEREVIEW-004 Normalized findings and request quality
 
 Normalized findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, and uncertainty. Verdicts are AGREE, DISAGREE, or UNKNOWN. Request-quality scores disclosure, scope clarity, objective clarity, confidence, and enough-context.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, uncertainty. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Verdicts are AGREE, DISAGREE, or UNKNOWN only. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Request-quality scores disclosure, scope clarity, objective clarity, confidence, enough-context as explicit fields. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Findings distinguish defects, risks, missing tests, unclear requirements, insufficient disclosure, out-of-scope, uncertainty. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Verdicts are AGREE, DISAGREE, or UNKNOWN only. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Request-quality scores disclosure, scope clarity, objective clarity, confidence, enough-context as explicit fields. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HOSTILEREVIEW-005 Query failure modes by dimensions
 
 Query reports filter by workspace, model, effort, requesting agent, reviewer agent, target type, artifact type, severity, and category. Combined filters AND. Empty match is empty list.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Query with each dimension returns only matching runs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Combined filters AND. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Empty match is empty list, not error. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Query with each dimension returns only matching runs. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Combined filters AND. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Empty match is empty list, not error. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HOSTILEREVIEW-006 Default queue-and-record no auto mutation
 
 Default behavior is queue-and-record. Completing a review does not edit product files, requirements, or TODOs. Surfaces expose submit/status/get/query only.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Completing a review does not edit product files, requirements, or TODOs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] REST, REPL, Director, plugin skill expose submit/status/get/query only. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] No hidden repair/apply endpoint is registered in this TODO. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] status, get, and query are read-only. submit is the only public mutation. No cancel, repair, apply, file edit, TODO edit, or requirement edit behavior is hidden in any read operation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Completing a review does not edit product files, requirements, or TODOs. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] REST, REPL, Director, plugin skill expose submit/status/get/query only. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] No hidden repair/apply endpoint is registered in this TODO. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] status, get, and query are read-only. submit is the only public mutation. No cancel, repair, apply, file edit, TODO edit, or requirement edit behavior is hidden in any read operation. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ## FR-MCP-HYGIENE-001 Read-only workspace validation service
 
 A read-only workspace validation service uses a versioned rule registry and a shared result contract with rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, and summary counts.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Result contract has rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, summary counts. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Clean workspace produces zero findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Registry is versioned; unknown rule code is not silently skipped. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Result contract has rule code/version, severity, entity kind, workspace identity, record IDs, evidence, remediation, run timestamp, duration, summary counts. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Clean workspace produces zero findings. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Registry is versioned; unknown rule code is not silently skipped. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## FR-MCP-HYGIENE-002 Traceability and missing-AC rules
 
 Rules identify FR/TR/TEST with no AC rows, TR with no FR, FR lacking TR/TEST, TEST with no FR, and broken or duplicate mappings.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] FR/TR (and TEST unless excluded by a documented rule) with no AC rows is a finding with record id and evidence. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] TR mapped to no FR is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] FR lacking required TR or TEST coverage is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] TEST mapped to no FR is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Broken or duplicate mappings are findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] FR/TR (and TEST unless excluded by a documented rule) with no AC rows is a finding with record id and evidence. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] TR mapped to no FR is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] FR lacking required TR or TEST coverage is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] TEST mapped to no FR is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Broken or duplicate mappings are findings. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## FR-MCP-HYGIENE-003 TODO consistency rules
 
 Rules identify done=true with incomplete tasks, done=false with all tasks complete, completion without doneSummary, remaining vs completion contradiction, missing dependency targets, and missing referenced requirement IDs.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] done=true with any incomplete implementation task is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] done=false with all implementation tasks complete is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] done=true without doneSummary is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] remaining text that contradicts completion is a finding. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] missing dependency target ids are findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] missing referenced requirement IDs are findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] done=true with any incomplete implementation task is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] done=false with all implementation tasks complete is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] done=true without doneSummary is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] remaining text that contradicts completion is a finding. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] missing dependency target ids are findings. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] missing referenced requirement IDs are findings. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## FR-MCP-HYGIENE-004 Stale turns and non-terminal triage
 
 Turns in_progress more than 48h after authoritative timestamp (injectable UTC clock) are findings. Triage reports in live non-terminal states are findings. Override threshold is positive, at most 168h, authenticated, recorded.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Turns in_progress more than 48h after the authoritative timestamp (injectable UTC clock) are findings. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Triage reports in live non-terminal states from the domain model are findings; processing failure is distinct from pending. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Threshold override must be positive, at most 168h, authenticated, and recorded on the run. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Unauthenticated validate is rejected. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Cancellation is honored. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Large workspaces paginate rather than unbounded load. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Turns in_progress more than 48h after the authoritative timestamp (injectable UTC clock) are findings. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Triage reports in live non-terminal states from the domain model are findings; processing failure is distinct from pending. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Threshold override must be positive, at most 168h, authenticated, and recorded on the run. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Unauthenticated validate is rejected. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Cancellation is honored. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Large workspaces paginate rather than unbounded load. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## FR-MCP-HYGIENE-005 Surface parity and no auto-repair
 
 REST, Director, REPL, and plugin skill expose the same validation. Same rule codes, identities, severities, counts, and threshold. Never auto-repair. Director exit 1 on Error or Critical; exit 0 when empty or Warning-only.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Authenticated REST, Director command, REPL command, and plugin skill expose the same validation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Parity: same rule codes, identities, severities, counts, and threshold. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Validation never auto-repairs or deletes records. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Director exit 1 when any finding has severity Error or Critical. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
-- [x] Director exit 0 when findings are empty or Warning-only; JSON is always written. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Authenticated REST, Director command, REPL command, and plugin skill expose the same validation. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Parity: same rule codes, identities, severities, counts, and threshold. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Validation never auto-repairs or deletes records. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Director exit 1 when any finding has severity Error or Critical. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
+- [x] Director exit 0 when findings are empty or Warning-only; JSON is always written. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16 Passed 25 Failed 0 Skipped 0)
 
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
@@ -1486,18 +1486,18 @@ Scope: layer-1+
 Each QuadBrain role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) SHALL complete through a provider strategy chosen per role. The orchestration-to-strategy seam SHALL be richer than CompleteAsync(slot, input, temperature) returning string. A turn SHALL pass shared orchestration context by object reference including original input, committed role evidence, session id, turn id, and transaction id. HTTP strategies MAY flatten that context to chat messages. QuadBrain SHALL NOT merge a third-party agent or tool stack to satisfy this requirement.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Two different QuadBrain roles in one process can resolve two different provider strategies. (evidence: tests/McpServer.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes)
-- [x] A strategy implementation receives the shared turn-context object by reference (same original input, role evidence, session/turn/transaction ids). (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision Assert.Same; BrainSlotInvocationTransactionTests InvokeAsync_WhenTurnContextSupplied_PassesSameInstanceToStrategy)
+- [x] Two different QuadBrain roles in one process can resolve two different provider strategies. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes)
+- [x] A strategy implementation receives the shared turn-context object by reference (same original input, role evidence, session/turn/transaction ids). (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision Assert.Same; BrainSlotInvocationTransactionTests InvokeAsync_WhenTurnContextSupplied_PassesSameInstanceToStrategy)
 - [x] An HTTP-strategy path serializes that context into chat messages rather than dropping it, and no new third-party agent SDK is required to complete a turn. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds; Factory_CreateStrategy_ExistsWithoutNewAgentSdk)
 
 ## FR-MCP-MARKER-004 Marker removal deletes the marker and leaves no tombstone
 
-Removing the AGENTS-README-FIRST.yaml workspace marker must delete the file. It must not rename the marker to an AGENTS-README-FIRST.yaml.deleted-{timestamp} archive copy that is never reclaimed. The marker is regenerated in full on every server start and carries the per-workspace API key that rotates on each restart, so an archived copy preserves no recoverable state of value while leaving an expired credential on disk. Each graceful shutdown currently leaves one tombstone permanently: as of 2026-07-20 the McpServer workspace held 19 of them, 587,033 bytes, dated 2026-07-08 through 2026-07-16, every one containing the apiKey that was live when it was written. TR-MCP-DB-003 (soft deletes for persistent MCP data) governs persistent MCP domain rows and their relationships; it does not extend to regenerated filesystem artifacts, and applying it to the marker was an over-generalization. The same rule applies to the legacy .mcp-server.yaml and .mcp-server.json markers removed alongside it.
+Removing the AGENTS-README-FIRST.yaml workspace marker must delete the file. It must not rename the marker to an AGENTS-README-FIRST.yaml.deleted-{timestamp} archive copy that is never reclaimed. The marker is regenerated in full on every server start and carries the per-workspace API key that rotates on each restart, so an archived copy preserves no recoverable state of value while leaving an expired credential on disk. Each graceful shutdown currently leaves one tombstone permanently: as of 2026-07-20 the QBrainAi workspace held 19 of them, 587,033 bytes, dated 2026-07-08 through 2026-07-16, every one containing the apiKey that was live when it was written. TR-MCP-DB-003 (soft deletes for persistent MCP data) governs persistent MCP domain rows and their relationships; it does not extend to regenerated filesystem artifacts, and applying it to the marker was an over-generalization. The same rule applies to the legacy .mcp-server.yaml and .mcp-server.json markers removed alongside it.
 Scope: layer-1+
 
 ## FR-MCP-MEMORY-001 Global and workspace memory storage
 
-The MCP Server SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
+The QBrain.AI SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.
@@ -1508,7 +1508,7 @@ Scope: layer-1+
 
 ## FR-MCP-MEMORY-002 Memory CRUD tools
 
-The MCP Server SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.
+The QBrain.AI SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Add creates a memory and returns ID, text, scope, category, version, and timestamps.
@@ -1552,7 +1552,7 @@ Scope: layer-1+
 
 ## FR-MCP-MEMORY-006 Memory scope management and ordering
 
-The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL return Global memories before Workspace memories, with each group sorted by ID ascending.
+The QBrain.AI SHALL allow memories to be marked Global or Workspace and SHALL return Global memories before Workspace memories, with each group sorted by ID ascending.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Add supports explicit `Scope` and defaults to Workspace only when omitted.
@@ -1563,7 +1563,7 @@ Scope: layer-1+
 
 ## FR-MCP-MEMORY-007 Agent plugin memory integration
 
-Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
+Official QBrainAi agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability. (evidence: Shell plugin Bats memory tests and TypeScript memory tests.)
@@ -1574,11 +1574,11 @@ Scope: layer-1+
 
 ## FR-MCP-MEMORY-008 Federated Memory State
 
-The MCP Server SHALL federate Memory as a first-class mutable federation domain. Memory federation uses the existing /mcpserver/memory REST surface and federation operation envelope pipeline, not new public memory endpoints. Adapter diagnostics, LocalProxy outage queueing, signed replay, hub conflict detection, and fanout apply semantics SHALL include the memory domain.
+The QBrain.AI SHALL federate Memory as a first-class mutable federation domain. Memory federation uses the existing /qbrainai/memory REST surface and federation operation envelope pipeline, not new public memory endpoints. Adapter diagnostics, LocalProxy outage queueing, signed replay, hub conflict detection, and fanout apply semantics SHALL include the memory domain.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Federation adapter diagnostics list memory as covered, non-local-only, and apply-supported.
-- [ ] /mcpserver/memory maps to federation domain memory.
+- [ ] /qbrainai/memory maps to federation domain memory.
 - [ ] LocalProxy live forwarding of memory REST requests continues through existing proxy middleware.
 - [ ] Offline queued memory creates require an explicit valid MEMORY-* ID.
 - [ ] Offline memory creates without an explicit valid ID are not queued.
@@ -1607,12 +1607,12 @@ Scope: layer-1+
 
 ## FR-MCP-PLUGINCORE-004 Reliable plugin session-log dialog parsing
 
-Official McpServer plugins SHALL parse documented dialogItems and dialog payloads, preserve every item, and reject empty or unparseable appendDialog input instead of reporting a successful no-op.
+Official QBrainAi plugins SHALL parse documented dialogItems and dialog payloads, preserve every item, and reject empty or unparseable appendDialog input instead of reporting a successful no-op.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] The canonical parsing fix propagates to every official plugin distribution without checksum drift. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] The canonical parsing fix propagates to every official plugin distribution without checksum drift. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-PLUGIN-HEADER-001 Agent runtime header fields record only observed values
 
@@ -1621,20 +1621,20 @@ Scope: layer-1+
 
 ## FR-MCP-PLUGININT-001 End-to-end Session Log validation for every agent plugin
 
-The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.
+The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real QBrain.AI.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct McpServer.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct QBrainAi.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [ ] For each server-side session persistence contract changed by this remediation, all eight supported production plugin entrypoints normalize primary success, retryable degraded or queued state, and terminal failure identically. Process exit alone never proves persistence; primary success requires exact server readback.
 
-## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
+## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across QBrainAi plugins
 
-All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
+All QBrainAi plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 Scope: layer-1+
 
 ## FR-MCP-PRODUCT-001 Product CRUD
@@ -1687,7 +1687,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
 
-QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
+QBAgent SHALL communicate exclusively with the QBrain.AI QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A valid marker binds baseUrl and apiKey from the marker and applies the QBAgent profile.
@@ -1697,35 +1697,35 @@ Scope: layer-1+
 
 ## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
 
-QuadBrain SHALL execute every MCP-internal tool (every tool whose name starts with mcp_ that McpServer exposes: session, TODO including query/get/plan/status/implementation, requirements including list/get/create/update, repo including read/list/write/edit, GraphRAG, desktop, PowerShell session, client invoke, and mutating git) directly server-side during orchestration through existing in-process application/CQRS services. QuadBrain SHALL NOT emit mcp_ tools to QBAgent as OpenAI tool_calls. Successful internal execution SHALL return a normal assistant message (finish_reason stop) carrying the service result. Tools OUTSIDE McpServer (non-mcp_ names) SHALL be emitted as OpenAI tool_calls for QBAgent. Internal execution SHALL NOT call HTTP endpoints. Mutating TODO and Requirements tools SHALL still gate through the turn transaction coordinator. QuadBrain orchestration SHALL perform session logging.
+QuadBrain SHALL execute every MCP-internal tool (every tool whose name starts with mcp_ that QBrainAi exposes: session, TODO including query/get/plan/status/implementation, requirements including list/get/create/update, repo including read/list/write/edit, GraphRAG, desktop, PowerShell session, client invoke, and mutating git) directly server-side during orchestration through existing in-process application/CQRS services. QuadBrain SHALL NOT emit mcp_ tools to QBAgent as OpenAI tool_calls. Successful internal execution SHALL return a normal assistant message (finish_reason stop) carrying the service result. Tools OUTSIDE QBrainAi (non-mcp_ names) SHALL be emitted as OpenAI tool_calls for QBAgent. Internal execution SHALL NOT call HTTP endpoints. Mutating TODO and Requirements tools SHALL still gate through the turn transaction coordinator. QuadBrain orchestration SHALL perform session logging.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Tools are classified MCP-internal (mcp_ prefix) versus external. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs)
-- [x] The interceptor executes handled internal tools server-side and strips them; only non-mcp_ external calls are emitted to the agent as tool commands. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs)
-- [x] Internal tool failures and unhandled internal tools are surfaced to the agent as a note and earmarked as Session Log failures, never as tool commands. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs)
-- [x] A concrete executor routes TODO and Requirements mutations through the transaction-gated services so the AoT commit applies them server-side. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs)
-- [x] QuadBrain orchestration performs the Session Log write for the turn including internal-tool failure entries. (evidence: tests/McpServer.Support.Mcp.Tests/Services/BrainInteractionSessionLoggerTests.cs; tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs)
-- [x] Every mcp_* tool name published by McpHostedAgentToolAdapter and QBAgentDefinition (AllowedTools plus BlockedTools) is executed server-side when elected. None of those names appear in the OpenAI tool_calls array returned to QBAgent. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall; docs/receipts/hostile-validator-20260910T233311Z.md)
-- [x] When every elected tool is mcp_* and execution succeeds, the OpenAI response is finish_reason stop with assistant content equal to the in-process service result (not an empty message and not a tool_call). (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall)
-- [x] Internal tool execution dispatches in-process application/CQRS services (ITodoService, IRepoFileService, session-log, requirements, GraphRAG, desktop, PowerShell session, and so on). It does not HTTP-call /mcpserver/*, /v1/*, or /mcp-transport, and tests proving this do not depend on the Windows service. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Executor_DoesNotDependOnHttpClient)
+- [x] Tools are classified MCP-internal (mcp_ prefix) versus external. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs)
+- [x] The interceptor executes handled internal tools server-side and strips them; only non-mcp_ external calls are emitted to the agent as tool commands. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs)
+- [x] Internal tool failures and unhandled internal tools are surfaced to the agent as a note and earmarked as Session Log failures, never as tool commands. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs)
+- [x] A concrete executor routes TODO and Requirements mutations through the transaction-gated services so the AoT commit applies them server-side. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs)
+- [x] QuadBrain orchestration performs the Session Log write for the turn including internal-tool failure entries. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/BrainInteractionSessionLoggerTests.cs; tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs)
+- [x] Every mcp_* tool name published by McpHostedAgentToolAdapter and QBAgentDefinition (AllowedTools plus BlockedTools) is executed server-side when elected. None of those names appear in the OpenAI tool_calls array returned to QBAgent. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall; docs/receipts/hostile-validator-20260910T233311Z.md)
+- [x] When every elected tool is mcp_* and execution succeeds, the OpenAI response is finish_reason stop with assistant content equal to the in-process service result (not an empty message and not a tool_call). (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall)
+- [x] Internal tool execution dispatches in-process application/CQRS services (ITodoService, IRepoFileService, session-log, requirements, GraphRAG, desktop, PowerShell session, and so on). It does not HTTP-call /qbrainai/*, /v1/*, or /mcp-transport, and tests proving this do not depend on the Windows service. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Executor_DoesNotDependOnHttpClient)
 
 ## FR-MCP-QBEXEC-002 Concrete QuadBrain internal-tool executor
 
 QuadBrain SHALL provide a concrete IQuadBrainInternalToolExecutor (replacing NoopInternalToolExecutor in DI) that dispatches every mcp_* tool name QuadBrain may elect. Reads and queries SHALL call the same in-process application/CQRS services controllers use (ITodoService, IRepoFileService, session-log, requirements, GraphRAG). Mutations SHALL call the transaction-gated services (ITransactionGatedTodoMutationService, the transaction-gated requirements document service, TransactionGatedRepoFileService, mutating mcp_git) so each mutation commits through the turn transaction coordinator. Results map to InternalToolExecutionOutcome.Ok/Fail. An mcp_ name that is not in the hosted MCP tool catalog returns Unhandled and is surfaced as a note, never as a QBAgent tool command. The executor SHALL NOT invoke HTTP endpoints.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] mcp_todo_query, mcp_todo_get, mcp_todo_plan, mcp_todo_status, mcp_todo_implementation, mcp_todo_create, mcp_todo_update, and mcp_todo_delete are handled. Mutations go through ITransactionGatedTodoMutationService; reads/queries go through ITodoService. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] Every mcp_requirements_* name (list/get/create/update for FR, TR, and TEST) is handled through the requirements application/CQRS services. Mutations remain transaction-gated. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] mcp_repo_read, mcp_repo_list, mcp_repo_write, and mcp_repo_edit are handled through IRepoFileService. Writes/edits remain transaction-gated with snapshot rollback on reject. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] An mcp_ name that is not in the hosted MCP tool catalog returns InternalToolExecutionOutcome.Unhandled and is surfaced as a note, never as a tool command. The executor replaces NoopInternalToolExecutor in DI. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled; src/McpServer.Support.Mcp/Program.cs)
-- [x] mcp_session_bootstrap, mcp_session_update, mcp_session_turn_begin, mcp_session_turn_update, mcp_session_turn_complete, and mcp_session_query_history are handled through the session-log application services. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] Every mcp_graphrag_* name from McpHostedAgentToolAdapter is handled through GraphRAG application services. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] mcp_desktop_launch, mcp_powershell_session_create, mcp_powershell_session_command, mcp_powershell_session_close, mcp_client_invoke, and mutating mcp_git are handled through their existing in-process services. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs; IQuadBrainPowerShellSessions)
-- [x] No handled route uses HttpClient or REST against /mcpserver/*, /v1/*, or /mcp-transport. Unit and integration tests proving these routes use mocks or WebApplicationFactory and do not require the Windows service. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Executor_DoesNotDependOnHttpClient)
+- [x] mcp_todo_query, mcp_todo_get, mcp_todo_plan, mcp_todo_status, mcp_todo_implementation, mcp_todo_create, mcp_todo_update, and mcp_todo_delete are handled. Mutations go through ITransactionGatedTodoMutationService; reads/queries go through ITodoService. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
+- [x] Every mcp_requirements_* name (list/get/create/update for FR, TR, and TEST) is handled through the requirements application/CQRS services. Mutations remain transaction-gated. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
+- [x] mcp_repo_read, mcp_repo_list, mcp_repo_write, and mcp_repo_edit are handled through IRepoFileService. Writes/edits remain transaction-gated with snapshot rollback on reject. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
+- [x] An mcp_ name that is not in the hosted MCP tool catalog returns InternalToolExecutionOutcome.Unhandled and is surfaced as a note, never as a tool command. The executor replaces NoopInternalToolExecutor in DI. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled; src/QBrainAi.Support.Mcp/Program.cs)
+- [x] mcp_session_bootstrap, mcp_session_update, mcp_session_turn_begin, mcp_session_turn_update, mcp_session_turn_complete, and mcp_session_query_history are handled through the session-log application services. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
+- [x] Every mcp_graphrag_* name from McpHostedAgentToolAdapter is handled through GraphRAG application services. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
+- [x] mcp_desktop_launch, mcp_powershell_session_create, mcp_powershell_session_command, mcp_powershell_session_close, mcp_client_invoke, and mutating mcp_git are handled through their existing in-process services. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs; IQuadBrainPowerShellSessions)
+- [x] No handled route uses HttpClient or REST against /qbrainai/*, /v1/*, or /mcp-transport. Unit and integration tests proving these routes use mocks or WebApplicationFactory and do not require the Windows service. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Executor_DoesNotDependOnHttpClient)
 
 ## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
 
-QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the QBrain.AI.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
@@ -1859,7 +1859,7 @@ The server shall provide a YAML-envelope STDIO REPL host that accepts structured
 
 **Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)
+**Covered by:** `QBrainAi.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `QBrainAi.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)
 Scope: layer-1+
 
 ## FR-MCP-REPL-002 REPL Lifecycle Management
@@ -1870,7 +1870,7 @@ The REPL host shall support graceful startup, interactive command loop, structur
 
 **Technical Implementation:** [TR-MCP-REPL-003](./Technical-Requirements.md#tr-mcp-repl-003) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `McpServer.Repl.Core` (`SessionLogErrorEnvelope`)
+**Covered by:** `QBrainAi.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `QBrainAi.Repl.Core` (`SessionLogErrorEnvelope`)
 Scope: layer-1+
 
 ## FR-MCP-REPL-003 Command Namespace Parity
@@ -1881,7 +1881,7 @@ The REPL command surface shall provide namespace-organized commands with functio
 
 **Technical Implementation:** [TR-MCP-REPL-004](./Technical-Requirements.md#tr-mcp-repl-004) | [TR-MCP-REPL-005](./Technical-Requirements.md#tr-mcp-repl-005) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.Repl.Core` (`ITodoWorkflow`, `TodoCommandShapes`, `ISessionLogWorkflow`, `SessionLogCommandShapes`, `SessionLogModels`, `IRequirementsWorkflow`, `RequirementsCommandShapes`, `RequirementsCommandModels`, `IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`TodoWorkflow`, `RequirementsWorkflow`, `SessionLogWorkflow`, `GenericClientPassthrough`)
+**Covered by:** `QBrainAi.Repl.Core` (`ITodoWorkflow`, `TodoCommandShapes`, `ISessionLogWorkflow`, `SessionLogCommandShapes`, `SessionLogModels`, `IRequirementsWorkflow`, `RequirementsCommandShapes`, `RequirementsCommandModels`, `IGenericClientPassthrough`, `ClientCommandShapes`), `QBrainAi.Repl.Host` (`TodoWorkflow`, `RequirementsWorkflow`, `SessionLogWorkflow`, `GenericClientPassthrough`)
 Scope: layer-1+
 
 ## FR-MCP-REPL-004 Trust Bootstrap and Auth Rotation
@@ -1892,7 +1892,7 @@ The REPL host shall implement marker-file trust bootstrap with signature verific
 
 **Technical Implementation:** [TR-MCP-REPL-006](./Technical-Requirements.md#tr-mcp-repl-006) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `McpServer.Repl.Host` (`AgentStdioHandler`)
+**Covered by:** `QBrainAi.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `QBrainAi.Repl.Host` (`AgentStdioHandler`)
 Scope: layer-1+
 
 ## FR-MCP-REPL-005 Orchestration State Visibility
@@ -1903,7 +1903,7 @@ The REPL host shall expose commands for querying agent pool state, active voice 
 
 **Technical Implementation:** [TR-MCP-REPL-007](./Technical-Requirements.md#tr-mcp-repl-007) | [Mapping](./TR-per-FR-Mapping.md)
 
-**Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
+**Covered by:** `QBrainAi.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `QBrainAi.Repl.Host` (`GenericClientPassthrough`)
 
 ---
 
@@ -1911,7 +1911,7 @@ The REPL host shall expose commands for querying agent pool state, active voice 
 
 **Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
 
-All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.
+All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `QBrainAi.Repl.Core` and `QBrainAi.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.
 
 
 ---
@@ -1924,29 +1924,29 @@ Scope: layer-1+
 
 ## FR-MCP-REPL-007 REPL Credential Discovery Diagnostics
 
-`mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
+`qbrain-ai-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `QBrainAiClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 Scope: layer-1+
 
 ## FR-MCP-REPL-008 Per-agent REPL isolation
 
-Agent REPL callers must identify the invoking agent on every mcpserver-repl invocation so session, cache, and verified marker state are isolated per agent and workspace.
+Agent REPL callers must identify the invoking agent on every qbrain-ai-repl invocation so session, cache, and verified marker state are isolated per agent and workspace.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Every plugin REPL launcher passes --agent, including the default agent value. (evidence: plugins/core/lib-sh/repl-invoke.sh; plugins/core/lib-ps/repl-invoke.ps1; plugins/core/lib-sh/repl-daemon.js; plugins/core/lib-node/src/transport/repl-bridge.ts)
-- [x] Verified marker cache entries are keyed by canonical agent identity and workspace. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
-- [x] Named-agent child process invocation is covered by integration tests. (evidence: tests/McpServer.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Verified marker cache entries are keyed by canonical agent identity and workspace. (evidence: src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs; tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Named-agent child process invocation is covered by integration tests. (evidence: tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
 
 ## FR-MCP-REPL-009 Degraded session-log persistence isolation
 
 The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence. (evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence. (evidence: plugins/core test-fixtures; tests/QBrainAi.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-REPL-010 Plugin session-log title refinement surfaces
 
@@ -2001,7 +2001,7 @@ Scope: layer-1+
 
 ## FR-MCP-REQRECOVERY-001 Atomic requirements ledger recovery
 
-The MCP Server shall support dry-running and atomically applying an auditable recovery plan that can create, update, or delete FR, TR, TEST, acceptance-criteria, and mapping state without exposing a partially recovered ledger.
+The QBrain.AI shall support dry-running and atomically applying an auditable recovery plan that can create, update, or delete FR, TR, TEST, acceptance-criteria, and mapping state without exposing a partially recovered ledger.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Dry-run performs no mutation and returns a deterministic ordered plan containing every create, update, delete, mapping upsert, and mapping delete plus a normalized hash of the effective pre-state.
@@ -2198,7 +2198,7 @@ Scope: layer-1+
 Users and agents can close a TODO item with a single ID-scoped operation that marks the item complete and records the completion timestamp.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] A REST endpoint accepts a TODO ID without requiring the caller to resubmit the full TODO update payload. (evidence: TodoController.CloseAsync POST /mcpserver/todo/{id}/close covered by TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
+- [x] A REST endpoint accepts a TODO ID without requiring the caller to resubmit the full TODO update payload. (evidence: TodoController.CloseAsync POST /qbrainai/todo/{id}/close covered by TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
 - [x] Closing an open TODO sets the item status to DONE by setting done true and records a non-empty completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate asserts done true and UTC completedDate.)
 - [x] Closing a missing TODO returns the existing not-found mutation failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
 - [x] The typed client exposes the same close-by-id operation. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
@@ -2248,8 +2248,8 @@ Scope: layer-1+
 The system shall expose HTTP transcript ingestion for allowlisted server-local files/folders, multipart uploads, multi-file uploads, and ZIP uploads.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] POST /mcpserver/sessionlog/ingest/path accepts allowlisted file and folder paths and rejects unauthorized paths. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestPathAsync_WorkspaceRelativeCodexFixturePersistsAndDeletesFailsafe, IngestPathAsync_RealFixtureForEachAgentNormalizesThroughHttp, and unauthorized path tests.)
-- [x] POST /mcpserver/sessionlog/ingest/upload accepts multipart files and ZIP bundles within documented limits. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestUploadAsync_ZipClaudeFixturePersistsAndDeletesStagingRun, IngestUploadAsync_RejectsDuplicateZipPaths, and controller ZIP traversal tests.)
+- [x] POST /qbrainai/sessionlog/ingest/path accepts allowlisted file and folder paths and rejects unauthorized paths. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestPathAsync_WorkspaceRelativeCodexFixturePersistsAndDeletesFailsafe, IngestPathAsync_RealFixtureForEachAgentNormalizesThroughHttp, and unauthorized path tests.)
+- [x] POST /qbrainai/sessionlog/ingest/upload accepts multipart files and ZIP bundles within documented limits. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestUploadAsync_ZipClaudeFixturePersistsAndDeletesStagingRun, IngestUploadAsync_RejectsDuplicateZipPaths, and controller ZIP traversal tests.)
 
 ## FR-MCP-TRANSCRIPT-007 REPL and MCP ingestion parity
 
@@ -2295,21 +2295,21 @@ Scope: layer-1+
 
 ## FR-MCP-TRIAGE-002 Async triage grouping and research
 
-Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
+Related reports are grouped, QBrain.AI and QBrain.AI plugin reports are routed to the registered QBrainAi workspace when it exists, and groups are researched asynchronously and converted to TODOs.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Groups are deterministic and workspace-isolated.
 - [ ] New matching reports reset the 15-minute quiet window.
 - [ ] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.
 - [ ] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
-- [ ] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.
+- [ ] QBrain.AI core and QBrain.AI plugin bugs are grouped into the registered QBrainAi workspace when that workspace exists; otherwise they stay in the submitting workspace.
 
 ## FR-MCP-TRIAGE-003 REPL triage parity
 
 The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] client.triage.* works through generic passthrough after adding McpServerClient.Triage.
+- [ ] client.triage.* works through generic passthrough after adding QBrainAiClient.Triage.
 - [ ] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
 - [ ] YAML validation, error envelopes, and request/response shapes are covered.
 
@@ -2324,10 +2324,10 @@ Scope: layer-1+
 
 ## FR-MCP-TRIAGEERR-001 Normalized error envelope for REST, MCP, REPL, and plugins
 
-Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+Every failure on REST /qbrainai/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+- [ ] Every failure on REST /qbrainai/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
 
 ## FR-MCP-TRIAGEHELP-001 Agent Help is diagnosis or incomplete never completed echo
 
@@ -2525,7 +2525,7 @@ Scope: layer-1+
 
 ## FR-MCP-WIKIEXPORT-002 Default wiki export configuration during marker generation
 
-When MCP Server writes a workspace marker file, it must also create a default docs/wiki.yaml if the workspace does not already provide one, so wiki export has an explicit document tree for future GitHub and Azure exports.
+When QBrain.AI writes a workspace marker file, it must also create a default docs/wiki.yaml if the workspace does not already provide one, so wiki export has an explicit document tree for future GitHub and Azure exports.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Marker generation creates docs/wiki.yaml under the workspace root when that file is absent.
@@ -2539,30 +2539,30 @@ Scope: layer-1+
 Optional --include-dump on wiki export emits versioned JSON dump of MCP tables keyed by source workspace, including TODO rows and requirement links. No-flag behavior is unchanged.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Without flag, export is byte-equivalent to current wiki zip/tree behavior (no dump file). (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] With flag, dump has schemaVersion, exportedAtUtc, sourceWorkspaceKey, sourceWorkspacePath, tables[], todos[], todoRequirementLinks[], SHA-256 hashes, diagnostics. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Dump TODO rows and requirement links match store query for that workspace. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] The dump policy registry covers every live McpDbContext DbSet and fails when model and registry differ. Output excludes unrelated workspace rows and global secrets. Scalar, nested JSON, headers, encoded textual payloads, diagnostics, prompts, outputs, commands, and free text are sanitized in the outbound projection without mutating stored rows. Integrity hashes are computed over the final canonical UTF-8 bytes after redaction. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Without flag, export is byte-equivalent to current wiki zip/tree behavior (no dump file). (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] With flag, dump has schemaVersion, exportedAtUtc, sourceWorkspaceKey, sourceWorkspacePath, tables[], todos[], todoRequirementLinks[], SHA-256 hashes, diagnostics. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Dump TODO rows and requirement links match store query for that workspace. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] The dump policy registry covers every live McpDbContext DbSet and fails when model and registry differ. Output excludes unrelated workspace rows and global secrets. Scalar, nested JSON, headers, encoded textual payloads, diagnostics, prompts, outputs, commands, and free text are sanitized in the outbound projection without mutating stored rows. Integrity hashes are computed over the final canonical UTF-8 bytes after redaction. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-WIKIEXPORT-004 add-workspace dump hydration
 
-add-workspace --dump on WorkspaceClient.CreateAsync / POST /mcpserver/workspace hydrates TODOs from dump, remaps workspace identity, rejects malformed dumps with no partial write.
+add-workspace --dump on WorkspaceClient.CreateAsync / POST /qbrainai/workspace hydrates TODOs from dump, remaps workspace identity, rejects malformed dumps with no partial write.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Hydrated TODOs come from dump rows. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Old source workspace IDs and paths do not appear in destination operational ownership, authorization, routing, active-process, replay, lease, executable-owner, or operational foreign-key columns. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Malformed dump, version mismatch, missing tables, unsafe path: rejected, no partial write. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] An identical durable receipt is resolved before active-workspace duplicate rejection and before fresh-import filesystem-collision rules. Workspace registration and all hydrated database rows commit in one transaction. Cancellation or failure before commit leaves no workspace or imported domain row. Projection, workspace initialization, marker creation, process start, and change notification occur only after commit. A post-commit failure remains CommittedPendingActivation or ActivationFailed and is durably resumable. An existing nonempty repository checkout is a valid destination. Every pre-existing repository and user file is preserved. Only conflicting service-owned generated/output paths block or defer activation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Immutable non-operative import provenance may retain the original source workspace ID/path, is explicitly historical, and cannot participate in destination authorization, routing, replay, ownership, or execution. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Hydrated TODOs come from dump rows. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Old source workspace IDs and paths do not appear in destination operational ownership, authorization, routing, active-process, replay, lease, executable-owner, or operational foreign-key columns. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Malformed dump, version mismatch, missing tables, unsafe path: rejected, no partial write. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] An identical durable receipt is resolved before active-workspace duplicate rejection and before fresh-import filesystem-collision rules. Workspace registration and all hydrated database rows commit in one transaction. Cancellation or failure before commit leaves no workspace or imported domain row. Projection, workspace initialization, marker creation, process start, and change notification occur only after commit. A post-commit failure remains CommittedPendingActivation or ActivationFailed and is durably resumable. An existing nonempty repository checkout is a valid destination. Every pre-existing repository and user file is preserved. Only conflicting service-owned generated/output paths block or defer activation. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Immutable non-operative import provenance may retain the original source workspace ID/path, is explicitly historical, and cannot participate in destination authorization, routing, replay, ownership, or execution. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-WIKIEXPORT-005 todo.yaml deprecation
 
 todo.yaml is deprecated as TODO source of truth. When dump and todo.yaml both exist, dump wins and a diagnostic names both. Cleanup archives to .mcpServer/archive/todo-yaml/ with evidence. Never silent delete.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] todo.yaml is not used as TODO source when dump is present. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Cleanup archives to .mcpServer/archive/todo-yaml/ with evidence; never silent delete. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Conflict diagnostic names both paths. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] todo.yaml is not used as TODO source when dump is present. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Cleanup archives to .mcpServer/archive/todo-yaml/ with evidence; never silent delete. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Conflict diagnostic names both paths. (evidence: tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; WikiDumpG7OverlayTests.cs; DocsSyncG8OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-MCP-WORKSPACE-LAYER-001 FR-MCP-WORKSPACE-LAYER-001
 
@@ -2585,7 +2585,7 @@ Scope: layer-1+
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
 
-**Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
+**Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `QBrainAiMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
 Scope: layer-1+
 
 ## FR-SUPPORT-010A SessionLog Workspace Stamping
@@ -2604,7 +2604,7 @@ Scope: layer-1+
 
 ## FR-SUPPORT-010C SessionLog REST Surface Completion
 
-Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
+Session log REST shall expose `GET /qbrainai/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /qbrainai/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
 Scope: layer-1+
@@ -2640,11 +2640,11 @@ Scope: layer-1+
 
 ## FR-SUPPORT-013 SessionLog REST Surface Completion
 
-Session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /mcpserver/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId). Unsupported verbs return 405 Method Not Allowed with Allow header. Terminal-turn audit-evidence gate enforced only for Quad-Brain ACID hosted-agent source type (QBAgent), not standard agents.
+Session log REST shall expose GET /qbrainai/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /qbrainai/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId). Unsupported verbs return 405 Method Not Allowed with Allow header. Terminal-turn audit-evidence gate enforced only for Quad-Brain ACID hosted-agent source type (QBAgent), not standard agents.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] GET /mcpserver/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
-- [ ] POST /mcpserver/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
+- [ ] GET /qbrainai/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
+- [ ] POST /qbrainai/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
 - [ ] Unsupported verbs return 405 Method Not Allowed with Allow header
 - [ ] Terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents
 
@@ -2816,7 +2816,7 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Two agents in one workspace can show two different providers and models.
 - [ ] Changing an agent model persists and is used on the next start.
-- [ ] mcp-web does not add a billed proxy; it uses operator-configured provider credentials already known to MCP Server.
+- [ ] mcp-web does not add a billed proxy; it uses operator-configured provider credentials already known to QBrain.AI.
 
 ## FR-WEB-015 TODO to git commit linkage
 
@@ -2829,7 +2829,7 @@ Scope: layer-1+
 
 ## FR-WEB-016 mcp-web local-first privacy
 
-mcp-web SHALL NOT upload prompts, file contents, or diffs to a product analytics host. Code leaves the machine only toward AI providers the operator already configured on MCP Server.
+mcp-web SHALL NOT upload prompts, file contents, or diffs to a product analytics host. Code leaves the machine only toward AI providers the operator already configured on QBrain.AI.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Default mcp-web configuration has no third-party analytics endpoint for prompt or file payloads.
@@ -2881,7 +2881,7 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A reader of the live README title sees QBrain.AI.
 - [ ] The Windows service DisplayName is QBrain.AI where the service is installed under the new name.
-- [ ] Live product titles no longer use "MCP Server" for this product.
+- [ ] Live product titles no longer use "QBrain.AI" for this product.
 - [ ] Historical receipts are not rewritten to satisfy this requirement.
 
 ## FR-MCP-QBRAIN-002 Product identity stays distinct from the Model Context Protocol
@@ -2915,7 +2915,7 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A 1.x request to the old product HTTP prefix still succeeds for the representative route covered by tests.
 - [ ] A 1.x configuration that contains only the old config section still boots.
-- [ ] A 1.x package reference to each published SharpNinja.McpServer.* id still compiles against the moved public types via the type-forward package.
+- [ ] A 1.x package reference to each published SharpNinja.QBrainAi.* id still compiles against the moved public types via the type-forward package.
 - [ ] 2.0 is the version where those aliases are allowed to stop. They are not removed inside 1.x.
 
 ## FR-MCP-QBRAIN-005 Historical identity and host names stay

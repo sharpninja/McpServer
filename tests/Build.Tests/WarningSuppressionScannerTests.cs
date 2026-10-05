@@ -125,23 +125,23 @@ public sealed class WarningSuppressionScannerTests
     /// <c>src</c> suppressions. PLAN-PLUGINHANDOFF-001 G1 hang GREEN.
     /// </summary>
     [Fact]
-    public void Scan_RepositoryBoundaries_ExcludesMcpServerWorktreesAndDocsReceipts()
+    public void Scan_RepositoryBoundaries_ExcludesQBrainAiWorktreesAndDocsReceipts()
     {
         var root = CreateTempRoot();
         try
         {
-            WriteFile(root, "src/McpServer.Services/Models/TodoModels.cs", """
+            WriteFile(root, "src/QBrainAi.Services/Models/TodoModels.cs", """
                 #pragma warning disable CA2227
                 """);
             WriteFile(
                 root,
-                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/TodoModels.cs",
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/QBrainAi.Services/Models/TodoModels.cs",
                 """
                 #pragma warning disable CA2227
                 """);
             WriteFile(
                 root,
-                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/QBrainAi.Services/Models/UnifiedSessionLogDto.cs",
                 """
                 #pragma warning disable CA2227
                 """);
@@ -157,13 +157,13 @@ public sealed class WarningSuppressionScannerTests
 
             Assert.Contains(occurrences, occurrence =>
                 occurrence.DiagnosticId == "CA2227"
-                && occurrence.RelativePath == "src/McpServer.Services/Models/TodoModels.cs");
+                && occurrence.RelativePath == "src/QBrainAi.Services/Models/TodoModels.cs");
             Assert.DoesNotContain(
-                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/TodoModels.cs",
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/QBrainAi.Services/Models/TodoModels.cs",
                 relativePaths,
                 StringComparer.OrdinalIgnoreCase);
             Assert.DoesNotContain(
-                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/QBrainAi.Services/Models/UnifiedSessionLogDto.cs",
                 relativePaths,
                 StringComparer.OrdinalIgnoreCase);
             Assert.DoesNotContain(

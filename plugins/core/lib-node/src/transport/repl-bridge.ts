@@ -43,7 +43,7 @@ export function resolveReplWorkingDirectory(): string {
 }
 
 /**
- * Persistent bridge to mcpserver-repl --agent-stdio.
+ * Persistent bridge to qbrain-ai-repl --agent-stdio.
  * Multiplexes concurrent YAML-over-STDIO requests by requestId.
  */
 export class ReplBridge {
@@ -77,7 +77,7 @@ export class ReplBridge {
     if (this.proc && this.proc.exitCode === null && !this.proc.killed) {
       return;
     }
-    const replCommand = process.env.MCPSERVER_REPL_COMMAND || 'mcpserver-repl';
+    const replCommand = process.env.MCPSERVER_REPL_COMMAND || 'qbrain-ai-repl';
     let replArgs = process.env.MCPSERVER_REPL_ARGS
       ? process.env.MCPSERVER_REPL_ARGS.split(' ').filter(Boolean)
       : ['--agent-stdio'];
@@ -100,11 +100,11 @@ export class ReplBridge {
     rl.on('line', (line: string) => this.onLine(line));
 
     this.proc.on('exit', (code) => {
-      process.stderr.write(`[repl] mcpserver-repl exited with code ${code}\n`);
+      process.stderr.write(`[repl] qbrain-ai-repl exited with code ${code}\n`);
       // Reject all pending requests
       for (const [, req] of this.pending) {
         if (req.timer) clearTimeout(req.timer);
-        req.reject(new Error(`mcpserver-repl exited with code ${code}`));
+        req.reject(new Error(`qbrain-ai-repl exited with code ${code}`));
       }
       this.pending.clear();
       this.proc = null;
@@ -199,7 +199,7 @@ export class ReplBridge {
       const timeoutMs = Number(process.env.MCPSERVER_REPL_TIMEOUT_MS ?? '15000');
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
-        const message = `mcpserver-repl timed out after ${timeoutMs}ms for ${method}`;
+        const message = `qbrain-ai-repl timed out after ${timeoutMs}ms for ${method}`;
         this.terminateAfterTimeout(message, requestId);
         reject(new Error(message));
       }, timeoutMs);
@@ -238,7 +238,7 @@ export class ReplBridge {
       const timeoutMs = Number(process.env.MCPSERVER_REPL_TIMEOUT_MS ?? '15000');
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
-        const message = `mcpserver-repl timed out after ${timeoutMs}ms for ${method}`;
+        const message = `qbrain-ai-repl timed out after ${timeoutMs}ms for ${method}`;
         this.terminateAfterTimeout(message, requestId);
         reject(new Error(message));
       }, timeoutMs);

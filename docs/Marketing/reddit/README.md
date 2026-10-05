@@ -1,6 +1,6 @@
 # Reddit posts: Triage plugin case study, adapted
 
-Five audience-tailored adaptations of [`docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md`](https://github.com/sharpninja/McpServer/blob/main/docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md), one per subreddit. Each post opens with a short McpServer introduction, focuses on the plugin relevant to that community, links referenced repo docs, and closes by soliciting questions.
+Five audience-tailored adaptations of [`docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md`](https://github.com/sharpninja/McpServer/blob/main/docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md), one per subreddit. Each post opens with a short QBrainAi introduction, focuses on the plugin relevant to that community, links referenced repo docs, and closes by soliciting questions.
 
 ## Subreddit to file
 

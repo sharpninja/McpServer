@@ -1,13 +1,13 @@
 /**
- * @sharpninja/mcpserver-plugin-core
+ * @qbrainai/qbrain-ai-plugin-core
  *
  * Canonical shared transport, marker-trust, cache, and session-log
- * infrastructure for the McpServer Node plugins (cline v1, cline-v2,
+ * infrastructure for the QBrainAi Node plugins (cline v1, cline-v2,
  * opencode). Host plugins construct the core with their identity and keep
  * only SDK glue in their own repos (see lib-node/README.md).
  */
 export {
-  type McpServerPluginCoreConfig,
+  type QBrainAiPluginCoreConfig,
   setCoreConfig,
   getCoreConfig,
   coreAgentName,
@@ -57,9 +57,9 @@ export { usecaseTools, canHandleUseCaseTool, handleUseCaseTool } from './tools/u
 export { validateToolArguments } from './tools/schema-validation.js';
 
 import { HostContext } from './runtime/host-context.js';
-import type { McpServerPluginCoreConfig } from './runtime/core-config.js';
+import type { QBrainAiPluginCoreConfig } from './runtime/core-config.js';
 
 /** Factory: configure the core for a host plugin and return its context. */
-export function createMcpServerPluginCore(config: McpServerPluginCoreConfig = {}): HostContext {
+export function createQBrainAiPluginCore(config: QBrainAiPluginCoreConfig = {}): HostContext {
   return new HostContext(config);
 }

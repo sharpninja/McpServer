@@ -1,17 +1,17 @@
-# Requirements Matrix (MCP Server)
+# Requirements Matrix (QBrain.AI)
 
 Traceability policy: see `Requirements-Traceability-Policy.md`.
 
 | Requirement | Status | Source Files |
 | --- | --- | --- |
-| FR-SUPPORT-010 | ✅ Complete | ContextController, TodoController, RepoController, SessionLogController, McpServerMcpTools, HybridSearchService, Fts5SearchService, VectorIndexService |
+| FR-SUPPORT-010 | ✅ Complete | ContextController, TodoController, RepoController, SessionLogController, QBrainAiMcpTools, HybridSearchService, Fts5SearchService, VectorIndexService |
 | FR-MCP-001 | ✅ Complete | IngestionOptions, IOptions |
 | FR-MCP-002 | ✅ Complete | TodoController, TodoService, SqliteTodoService |
 | FR-MCP-003 | ✅ Complete | SessionLogController, SessionLogService |
 | FR-MCP-004 | ✅ Complete | HybridSearchService, Fts5SearchService, VectorIndexService |
 | FR-MCP-005 | ✅ Complete | GitHubController, GitHubCliService, IssueTodoSyncService |
 | FR-MCP-006 | ✅ Complete | IngestionCoordinator, RepoIngestor, SessionLogIngestor |
-| FR-MCP-007 | ✅ Complete | Program.cs, McpServerMcpTools, McpStdioHost |
+| FR-MCP-007 | ✅ Complete | Program.cs, QBrainAiMcpTools, McpStdioHost |
 | FR-MCP-008 | ✅ Complete | Dockerfile, docker-compose.mcp.yml |
 | FR-MCP-009 | ✅ Complete | WorkspaceController, WorkspaceService |
 | FR-MCP-011 | ✅ Complete | WorkspaceProcessManager |
@@ -51,29 +51,29 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServerManager moved Director auth surfaces |
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
 | FR-MCP-028 | 🔲 Planned | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
-| FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
+| FR-MCP-029 | ✅ Complete | QBrainAi.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
 | FR-MCP-030 | ✅ Complete | McpServerManager moved Director CLI/TUI surfaces |
 | FR-MCP-031 | 🔲 Planned | — |
 | FR-MCP-032 | 🔲 Planned | — |
-| FR-MCP-033 | ✅ Complete | WorkspaceController (POST /mcpserver/workspace/policy), WorkspacePolicyService, WorkspacePolicyDirectiveParser, McpServerMcpTools.workspace_policy_apply |
+| FR-MCP-033 | ✅ Complete | WorkspaceController (POST /qbrainai/workspace/policy), WorkspacePolicyService, WorkspacePolicyDirectiveParser, QBrainAiMcpTools.workspace_policy_apply |
 | FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
 | FR-MCP-035 | ✅ Complete | templates/prompt-templates.yaml |
 | FR-MCP-036 | ✅ Complete | AuditedCopilotClient, Program.cs (ICopilotClient decorator), McpStdioHost (ICopilotClient decorator), CopilotServiceCollectionExtensions |
-| FR-MCP-037 | ✅ Complete | McpServerManager moved Director exec/list-viewmodels surfaces, McpServer.Cqrs.Mvvm (IViewModelRegistry) |
+| FR-MCP-037 | ✅ Complete | McpServerManager moved Director exec/list-viewmodels surfaces, QBrainAi.Cqrs.Mvvm (IViewModelRegistry) |
 | FR-MCP-038 | ✅ Complete | templates/prompt-templates.yaml |
 | FR-MCP-039 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
-| FR-MCP-041 | ✅ Complete | RequirementsController (/mcpserver/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
+| FR-MCP-041 | ✅ Complete | RequirementsController (/qbrainai/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
 | FR-MCP-043 | ✅ In Progress | WorkspaceResolutionMiddleware, WorkspaceContext, WorkspaceTokenService |
 | FR-MCP-044 | ✅ In Progress | McpDbContext (global query filter), all entities (WorkspaceId) |
 | TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServerManager moved Director auth surfaces |
 | TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
-| TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
+| TR-MCP-CQRS-001–005 | ✅ Complete | QBrainAi.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
 | TR-MCP-DIR-001–003 | ✅ Complete | McpServerManager moved Director CLI/TUI surfaces |
 | TR-MCP-COMP-001–003 | ✅ Complete | IWorkspaceService, MarkerFileService |
 | TR-MCP-AUDIT-001 | ✅ Complete | AuditedCopilotClient, Program.cs decorator wiring, McpStdioHost decorator wiring |
-| TR-MCP-POL-001 | ✅ Complete | WorkspacePolicyService, WorkspacePolicyDirectiveParser, WorkspaceController policy endpoint, McpServerMcpTools.workspace_policy_apply |
+| TR-MCP-POL-001 | ✅ Complete | WorkspacePolicyService, WorkspacePolicyDirectiveParser, WorkspaceController policy endpoint, QBrainAiMcpTools.workspace_policy_apply |
 | TR-MCP-DTO-001 | ✅ Complete | UnifiedSessionLogDto |
 | TR-MCP-CTX-001 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
 | TR-MCP-MT-001 | ✅ Complete | WorkspaceContext, WorkspaceResolutionMiddleware |
@@ -101,7 +101,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-054 | ✅ Complete | AgentPoolController, AgentPoolService (notification and per-job stream fan-out) |
 | FR-MCP-055 | ✅ Complete | AgentPoolService (intent/context routing and default agent resolution), AgentPoolModels |
 | FR-MCP-056 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, AgentPoolService.ResolvePromptAsync, AgentPoolController queue/resolve |
-| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, McpServerClient.AgentPool, McpServerManager moved Agent Pool UI surfaces |
+| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, QBrainAiClient.AgentPool, McpServerManager moved Agent Pool UI surfaces |
 | FR-MCP-058 | ✅ Complete | AgentPoolController SSE endpoints, AgentPoolService stream subscriptions, VoiceConversationService agent-session reuse/one-shot guard, VoiceController |
 | TR-MCP-AGENT-004 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs options validation/DI |
 | TR-MCP-AGENT-005 | ✅ Complete | IAgentPoolService, AgentPoolService, AgentPoolController |
@@ -110,8 +110,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-TPL-006 | ✅ Complete | PromptTemplateController, PromptTemplateRenderer, AgentPoolService template/context prompt resolution |
 | TR-MCP-VOICE-004 | ✅ Complete | VoiceConversationService pooled agent reuse + one-shot guard, AgentPoolService voice-runtime dispatch integration |
 | TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, McpServerManager moved Agent Pool tab integration |
-| FR-MCP-059 | 🔲 Planned | McpServer.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
-| FR-MCP-060 | ✅ Complete | McpServerManager moved Core UI and Director surfaces, McpServer.Client adapters |
+| FR-MCP-059 | 🔲 Planned | QBrainAi.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
+| FR-MCP-060 | ✅ Complete | McpServerManager moved Core UI and Director surfaces, QBrainAi.Client adapters |
 | FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, TodoCreationService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
 | TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
 | TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |
@@ -134,7 +134,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-GH-001 | ✅ Complete | GitHubIntegrationOptions, Program.cs, McpStdioHost, GitHubController |
 | TR-MCP-GH-002 | ✅ Complete | IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore, GitHubController |
 | TR-MCP-GH-003 | ✅ Complete | IProcessRunner, ProcessRunner, GitHubCliService |
-| TR-MCP-GH-004 | ✅ Complete | IGitHubCliService, GitHubCliService, GitHubController, McpServer.Client GitHub models/client |
+| TR-MCP-GH-004 | ✅ Complete | IGitHubCliService, GitHubCliService, GitHubController, QBrainAi.Client GitHub models/client |
 | TEST-MCP-081 | ✅ Complete | GitHubControllerTests.AuthTokenEndpoints_RoundTrip |
 | TEST-MCP-082 | ✅ Complete | GitHubControllerTests.OAuthConfig_AndAuthorizeUrlBehavior |
 | TEST-MCP-083 | ✅ Complete | GitHubCliServiceTests.ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride, FileGitHubWorkspaceTokenStoreTests |
@@ -145,9 +145,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-065 | ✅ Complete | ContextController (ingest-website), IngestionCoordinator.IngestWebsiteAsync, WebsiteIngestor, FwhMcpTools.context_ingest_website, ContextClient.IngestWebsiteAsync |
 | TR-MCP-INGEST-003 | ✅ Complete | WebsiteIngestor, IngestionOptions website limits, Program/McpStdioHost HttpClient registration, IngestionCoordinator website path |
 | TEST-MCP-088 | ✅ Complete | WebsiteIngestorTests, ContextControllerTests (ingest-website), McpTransportTests (context_ingest_website), ContextClientTests.IngestWebsiteAsync_PostsTypedRequest |
-| FR-MCP-066 | ✅ Complete | `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
+| FR-MCP-066 | ✅ Complete | `QBrainAi.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `QBrainAi.Client` (`QBrainAiClient`, `RepoClient`, `DesktopClient`), `QBrainAi.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
 | TR-MCP-AGENT-006 | ✅ Complete | `ServiceCollectionExtensions`, `McpAgentOptions`, `McpAgentOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentRegistration` |
-| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
+| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `QBrainAiClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
 | TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `DesktopClientTests`, `DesktopControllerTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests`, `PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState` |
 | FR-MCP-067 | 🔲 Planned | — |
 | TR-MCP-HTTP-002 | ✅ Complete | Program.cs centralized ProblemDetails handling, SessionLogController error paths |
@@ -167,9 +167,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
 | TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
 | TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
-| FR-MCP-072 | ✅ Complete | EfTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory, TodoBootstrapImporter |
+| FR-MCP-072 | ✅ Complete | EfTodoService, TodoYamlFileSerializer, TodoController, TodoClient, QBrainAiMcpTools, TodoServiceFactory, TodoBootstrapImporter |
 | TR-MCP-TODO-005 | ✅ Complete | EfTodoService, TodoItemEntity, TodoAuditHistoryEntity, TodoDocumentMetadataEntity, McpDbContext, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
-| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, EfTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
+| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, EfTodoService, TodoController, QBrainAiMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
 | TEST-MCP-096 | ✅ Complete | EfTodoServiceTests, TodoBootstrapImporterTests, SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
 | TEST-MCP-097 | ✅ Complete | EfTodoServiceTests, SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
 | FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
@@ -181,147 +181,147 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-075 | ✅ Complete | tools/powershell/McpSession.psm1 |
 | TR-MCP-AGENT-013 | ✅ Complete | tools/powershell/McpSession.psm1 |
 | TEST-MCP-100 | ✅ Complete | tools/powershell/McpSession.Tests.ps1 |
-| FR-MCP-076 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
-| TR-MCP-SEC-003 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1 |
+| FR-MCP-076 | ✅ Complete | src/QBrainAi.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/QBrainAi.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TR-MCP-SEC-003 | ✅ Complete | src/QBrainAi.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/QBrainAi.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1 |
 | TR-MCP-AGENT-014 | ✅ Complete | tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
 | TR-MCP-AGENT-015 | ✅ Complete | QBAgentDefinition, McpAgentOptions, McpHostedAgent, McpAcidHostedAgentRuntime, McpHostedAgentAdapterTests, ServiceCollectionExtensionsTests |
 | TR-MCP-AGENT-016 | ✅ Complete | McpHostedAgentToolAdapter, McpQuadBrainCodingAgentRequest, QBAgentDefinition, McpHostedAgentAdapterTests, HostedAgentWorkflowIntegrationTests |
-| TEST-MCP-101 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/HealthEndpointTests.cs, tools/powershell/McpSession.Tests.ps1, tools/powershell/McpTodo.Tests.ps1 |
-| FR-MCP-077 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/McpDatabaseProviderKind.cs, src/McpServer.Storage/Database/McpDatabaseProviderOptions.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations, docs/USER-GUIDE.md |
-| TR-MCP-SEC-004 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
-| TR-MCP-CFG-007 | ✅ Complete | src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/appsettings.yaml, src/McpServer.Support.Mcp/appsettings.Staging.yaml |
-| TEST-MCP-102 | ✅ In Progress | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs, tests/McpServer.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
-| FR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IReplProtocol, IYamlEnvelope, IYamlSerializer, IMarkerFileReader, ITrustBootstrapService, IAuthRotationHandler, IWorkspaceSelector), McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler, ServiceCollectionExtensions) |
-| FR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
-| FR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, TodoCommandShapes, ISessionLogWorkflow, SessionLogCommandShapes, SessionLogModels, IRequirementsWorkflow, RequirementsCommandShapes, RequirementsCommandModels, IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, RequirementsWorkflow, SessionLogWorkflow, GenericClientPassthrough) |
-| FR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
-| FR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
-| TR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IYamlEnvelope, IYamlSerializer, IReplProtocol) |
-| TR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (ServiceCollectionExtensions, Program.cs), McpServer.Repl.Core workflow interfaces |
-| TR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
-| TR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
-| TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
-| TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
-| TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
-| FR-SUPPORT-011 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
-| FR-SUPPORT-012 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| TEST-MCP-101 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/QBrainAi.Support.Mcp.IntegrationTests/HealthEndpointTests.cs, tools/powershell/McpSession.Tests.ps1, tools/powershell/McpTodo.Tests.ps1 |
+| FR-MCP-077 | ✅ In Progress | src/QBrainAi.Storage/Database/McpDatabaseProviderFactory.cs, src/QBrainAi.Storage/McpDbContextFactory.cs, src/QBrainAi.Storage/Database/McpDatabaseProviderKind.cs, src/QBrainAi.Storage/Database/McpDatabaseProviderOptions.cs, src/QBrainAi.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/QBrainAi.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/QBrainAi.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/QBrainAi.Support.Mcp/Program.cs, src/QBrainAi.Support.Mcp/McpStdio/McpStdioHost.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/QBrainAi.Storage.SqliteMigrations, src/QBrainAi.Storage.PostgreSqlMigrations, src/QBrainAi.Storage.SqlServerMigrations, docs/USER-GUIDE.md |
+| TR-MCP-SEC-004 | ✅ In Progress | src/QBrainAi.Storage/Database/McpDatabaseProviderFactory.cs, src/QBrainAi.Storage/McpDbContextFactory.cs, src/QBrainAi.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/QBrainAi.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/QBrainAi.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/QBrainAi.Storage.SqliteMigrations, src/QBrainAi.Storage.PostgreSqlMigrations, src/QBrainAi.Storage.SqlServerMigrations |
+| TR-MCP-CFG-007 | ✅ Complete | src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/QBrainAi.Storage/McpDbContextFactory.cs, src/QBrainAi.Support.Mcp/Program.cs, src/QBrainAi.Support.Mcp/McpStdio/McpStdioHost.cs, src/QBrainAi.Support.Mcp/appsettings.yaml, src/QBrainAi.Support.Mcp/appsettings.Staging.yaml |
+| TEST-MCP-102 | ✅ In Progress | tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs, tests/QBrainAi.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs, tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/QBrainAi.Storage.SqliteMigrations, src/QBrainAi.Storage.PostgreSqlMigrations, src/QBrainAi.Storage.SqlServerMigrations |
+| FR-MCP-REPL-001 | ✅ Complete | QBrainAi.Repl.Core (IReplProtocol, IYamlEnvelope, IYamlSerializer, IMarkerFileReader, ITrustBootstrapService, IAuthRotationHandler, IWorkspaceSelector), QBrainAi.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler, ServiceCollectionExtensions) |
+| FR-MCP-REPL-002 | ✅ Complete | QBrainAi.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), QBrainAi.Repl.Core (SessionLogErrorEnvelope) |
+| FR-MCP-REPL-003 | ✅ Complete | QBrainAi.Repl.Core (ITodoWorkflow, TodoCommandShapes, ISessionLogWorkflow, SessionLogCommandShapes, SessionLogModels, IRequirementsWorkflow, RequirementsCommandShapes, RequirementsCommandModels, IGenericClientPassthrough, ClientCommandShapes), QBrainAi.Repl.Host (TodoWorkflow, RequirementsWorkflow, SessionLogWorkflow, GenericClientPassthrough) |
+| FR-MCP-REPL-004 | ✅ Complete | QBrainAi.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), QBrainAi.Repl.Host (AgentStdioHandler) |
+| FR-MCP-REPL-005 | ✅ Complete | QBrainAi.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), QBrainAi.Repl.Host (GenericClientPassthrough) |
+| TR-MCP-REPL-001 | ✅ Complete | QBrainAi.Repl.Core (IYamlEnvelope, IYamlSerializer, IReplProtocol) |
+| TR-MCP-REPL-002 | ✅ Complete | QBrainAi.Repl.Host (ServiceCollectionExtensions, Program.cs), QBrainAi.Repl.Core workflow interfaces |
+| TR-MCP-REPL-003 | ✅ Complete | QBrainAi.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), QBrainAi.Repl.Core (SessionLogErrorEnvelope) |
+| TR-MCP-REPL-004 | ✅ Complete | QBrainAi.Repl.Core (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough), QBrainAi.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-005 | ✅ Complete | QBrainAi.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), QBrainAi.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-006 | ✅ Complete | QBrainAi.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), QBrainAi.Repl.Host (AgentStdioHandler) |
+| TR-MCP-REPL-007 | ✅ Complete | QBrainAi.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), QBrainAi.Repl.Host (GenericClientPassthrough) |
+| FR-SUPPORT-011 | ✅ Complete | src/QBrainAi.Services/Services/SessionLogService.cs (StampWorkspaceId), src/QBrainAi.Storage/McpDbContext.cs (auto-stamp fallback) |
+| FR-SUPPORT-012 | ✅ Complete | src/QBrainAi.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
 | TR-SUPPORT-LOG-010 | ✅ Complete | Technical-Requirements.md, Program.cs, SessionLogController |
-| FR-SUPPORT-013 | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
-| FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
-| FR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/Program.cs (--agent option + forwarding), MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics + agent param, AgentOverride, GetCurrentAgent + per-agent VerifiedMarkerCacheEntry), plugins/core (repl-invoke.sh, repl-invoke.ps1, repl-bridge.ts, repl-daemon.js, repl-persistent.sh — all call sites) |
-| TR-MCP-MT-004 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
-| TR-PLANNED-CORE-014 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
-| TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
-| TR-MCP-REPL-009 | ✅ Complete | src/McpServer.Repl.Host/Program.cs, MarkerFileClientOptionsResolver.cs (agent propagation + cache keying), plugins/core/* (enforced --agent on every repl call) |
-| TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
-| TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
-| TEST-MCP-REPL-003 | ✅ Complete | tests/McpServer.Repl.Core.Tests (ProtocolHandshakeTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
-| TEST-MCP-REPL-004 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests), tests/McpServer.Repl.Core.Tests (MarkerFileTrustTests, MockTrustBootstrapServiceTests) |
-| TEST-MCP-REPL-005 | ✅ Complete | tests/McpServer.Repl.Core.Tests (AuthRotationTests, StubAuthRotationHandlerTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
-| TEST-MCP-REPL-006 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, TodoWorkflowTestExtensions), tests/McpServer.Repl.IntegrationTests (Iteration3IntegrationTests) |
-| TEST-MCP-REPL-007 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, SessionLogWorkflowIntegration2Tests, SessionLogWorkflowProductionTests), tests/McpServer.Repl.IntegrationTests (Iteration2IntegrationTests) |
-| TEST-MCP-REPL-008 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
-| TEST-MCP-REPL-009 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequirementsWorkflowTests), tests/McpServer.Repl.IntegrationTests (Iteration4IntegrationTests) |
-| TEST-MCP-REPL-010 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
-| TEST-MCP-REPL-011 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
-| TEST-MCP-REPL-012 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests streaming event tests) |
-| TEST-MCP-REPL-013 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (EndToEndFlowTests) |
-| TEST-MCP-REPL-014 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, TodoWorkflowTests error handling) |
-| TEST-MCP-REPL-015 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequestResponseCorrelationTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
-| TEST-MCP-REPL-016 | ✅ Complete | tests/McpServer.Repl.Core.Tests (McpServerClientIntegrationTests, DI registration tests) |
-| TEST-MCP-REPL-017 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
-| TEST-MCP-REPL-018 | ✅ Complete | tests/McpServer.Repl.Core.Tests (OrchestrationRulesTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
-| TEST-MCP-REPL-019 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
-| TEST-MCP-REPL-020 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
+| FR-SUPPORT-013 | ✅ Complete | src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/QBrainAi.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
+| FR-MCP-REPL-007 | ✅ Complete | src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/QBrainAi.Repl.Host/Program.cs (--workspace-path, --marker-file), src/QBrainAi.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
+| FR-MCP-REPL-008 | ✅ Complete | src/QBrainAi.Repl.Host/Program.cs (--agent option + forwarding), MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics + agent param, AgentOverride, GetCurrentAgent + per-agent VerifiedMarkerCacheEntry), plugins/core (repl-invoke.sh, repl-invoke.ps1, repl-bridge.ts, repl-daemon.js, repl-persistent.sh — all call sites) |
+| TR-MCP-MT-004 | ✅ Complete | src/QBrainAi.Services/Services/SessionLogService.cs |
+| TR-PLANNED-CORE-014 | ✅ Complete | src/QBrainAi.Support.Mcp/Program.cs |
+| TR-MCP-REPL-008 | ✅ Complete | src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs |
+| TR-MCP-REPL-009 | ✅ Complete | src/QBrainAi.Repl.Host/Program.cs, MarkerFileClientOptionsResolver.cs (agent propagation + cache keying), plugins/core/* (enforced --agent on every repl call) |
+| TEST-MCP-REPL-001 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/QBrainAi.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-002 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
+| TEST-MCP-REPL-003 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (ProtocolHandshakeTests), tests/QBrainAi.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-004 | ✅ Complete | tests/QBrainAi.Repl.IntegrationTests (TrustBootstrapFlowTests), tests/QBrainAi.Repl.Core.Tests (MarkerFileTrustTests, MockTrustBootstrapServiceTests) |
+| TEST-MCP-REPL-005 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (AuthRotationTests, StubAuthRotationHandlerTests), tests/QBrainAi.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-006 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (TodoWorkflowTests, TodoWorkflowTestExtensions), tests/QBrainAi.Repl.IntegrationTests (Iteration3IntegrationTests) |
+| TEST-MCP-REPL-007 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (SessionLogWorkflowTests, SessionLogWorkflowIntegration2Tests, SessionLogWorkflowProductionTests), tests/QBrainAi.Repl.IntegrationTests (Iteration2IntegrationTests) |
+| TEST-MCP-REPL-008 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (GenericClientPassthroughTests), tests/QBrainAi.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-009 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (RequirementsWorkflowTests), tests/QBrainAi.Repl.IntegrationTests (Iteration4IntegrationTests) |
+| TEST-MCP-REPL-010 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (WorkspaceSelectionTests), tests/QBrainAi.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-011 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (GenericClientPassthroughTests), tests/QBrainAi.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-012 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (TodoWorkflowTests streaming event tests) |
+| TEST-MCP-REPL-013 | ✅ Complete | tests/QBrainAi.Repl.IntegrationTests (EndToEndFlowTests) |
+| TEST-MCP-REPL-014 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (SessionLogWorkflowTests, TodoWorkflowTests error handling) |
+| TEST-MCP-REPL-015 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (RequestResponseCorrelationTests), tests/QBrainAi.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-016 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (QBrainAiClientIntegrationTests, DI registration tests) |
+| TEST-MCP-REPL-017 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (WorkspaceSelectionTests), tests/QBrainAi.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-018 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (OrchestrationRulesTests), tests/QBrainAi.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-019 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
+| TEST-MCP-REPL-020 | ✅ Complete | tests/QBrainAi.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
 | FR-MCP-081 | ✅ Complete | TodoExecutionService, TodoExecutionModels, TodoExecutionController |
-| FR-MCP-082 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
-| FR-MCP-083 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| FR-MCP-082 | ✅ Complete | TodoExecutionService, TodoExecutionController, QBrainAiMcpTools, TodoClient |
+| FR-MCP-083 | ✅ Complete | TodoExecutionService, TodoExecutionController, QBrainAiMcpTools, TodoClient |
 | TR-MCP-BYRD-001 | ✅ Complete | TodoExecutionModels, ITodoExecutionService, TodoExecutionService |
-| TR-MCP-BYRD-002 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-002 | ✅ Complete | TodoExecutionService, TodoExecutionController, QBrainAiMcpTools, TodoClient |
 | TR-MCP-BYRD-003 | ✅ Complete | TodoExecutionService, TodoExecutionController |
-| TR-MCP-BYRD-004 | ✅ Complete | TodoExecutionController, McpServerMcpTools, TodoClient |
-| TEST-MCP-103 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
-| TEST-MCP-104 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
-| TEST-MCP-105 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/McpServer.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/McpServer.Client.Tests/TodoClientTests.cs |
-| FR-MCP-084 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsWikiDocumentSelector, RequirementsController, RequirementsClient, RequirementsWorkflow, ReplCommandDispatcher, McpServerMcpTools, Codex/Claude/Copilot/Cline plugins |
-| TR-MCP-REQ-004 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, McpServerMcpTools |
+| TR-MCP-BYRD-004 | ✅ Complete | TodoExecutionController, QBrainAiMcpTools, TodoClient |
+| TEST-MCP-103 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-104 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-105 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/QBrainAi.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/QBrainAi.Client.Tests/TodoClientTests.cs |
+| FR-MCP-084 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsWikiDocumentSelector, RequirementsController, RequirementsClient, RequirementsWorkflow, ReplCommandDispatcher, QBrainAiMcpTools, Codex/Claude/Copilot/Cline plugins |
+| TR-MCP-REQ-004 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, QBrainAiMcpTools |
 | TR-MCP-REQ-005 | ✅ Complete | RequirementsWikiDocumentSelector, RequirementsController, RequirementsIngestRequest, RequirementsIngestResult, RequirementsClient, ReplCommandDispatcher, RequirementsWorkflow |
 | TEST-MCP-106 | ✅ Complete | RequirementsDocumentServiceTests, RequirementsControllerTests |
 | TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
 | TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
 | TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
-| FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, McpServer.GraphRag |
+| FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, QBrainAi.GraphRag |
 | FR-MCP-079 | ✅ Complete | GraphRagController, GraphRagAdHocService |
 | FR-MCP-080 | ✅ Complete | GraphRagController, GraphRagAdHocService |
-| TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
-| TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
-| TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
+| TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/QBrainAi.GraphRag, src/QBrainAi.Support.Mcp/Controllers/GraphRagController.cs |
+| TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/QBrainAi.GraphRag |
+| TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/QBrainAi.GraphRag |
 | TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, tests/Build.Tests/DocumentationGuidanceTests.cs |
-| TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
-| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Storage/McpDbContext.cs, EfTodoService, TodoBootstrapImporter, AddTodoWorkspaceScoping migrations |
-| TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
-| TEST-MCP-002 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
-| TEST-MCP-003 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests (workspace isolation), src/McpServer.Storage/McpDbContext.cs (HasQueryFilter) |
-| TEST-MCP-004 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/HybridSearchServiceTests.cs |
-| TEST-MCP-005 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/IssueTodoSyncServiceTests.cs |
-| TEST-MCP-006 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
-| TEST-MCP-007 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/WorkspaceServiceTests.cs |
-| TEST-MCP-008 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/ToolRegistryServiceTests.cs |
-| TEST-MCP-009 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs |
-| TEST-MCP-010 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/PairingServiceTests.cs |
-| TEST-MCP-011 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TunnelProviderTests.cs |
-| TEST-MCP-012 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
-| TEST-MCP-013 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs |
-| TEST-MCP-014 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/RequirementsServiceTests.cs |
-| TEST-MCP-015 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkdownSessionLogParserTests.cs |
-| TEST-MCP-026 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-027 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-028 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-029 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-030 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-031 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-032 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-033 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-034 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-035 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-036 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-037 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-038 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-039 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-040 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-041 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-042 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-043 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-044 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-045 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-046 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-047 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-048 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-049 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-050 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-051 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-052 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-053 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-054 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-055 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-056 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-057 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-058 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-059 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-060 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-061 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-062 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-063 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-064 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-065 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-066 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-067 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-068 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-069 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-070 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-071 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-072 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
-| TEST-MCP-073 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TR-MCP-TODO-007 | ✅ Complete | src/QBrainAi.Support.Mcp/Services/TodoCreationService.cs |
+| TR-MCP-TODO-008 | ✅ Complete | src/QBrainAi.Storage/McpDbContext.cs, EfTodoService, TodoBootstrapImporter, AddTodoWorkspaceScoping migrations |
+| TEST-MCP-001 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Configuration |
+| TEST-MCP-002 | ✅ Complete | tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
+| TEST-MCP-003 | ✅ Complete | tests/QBrainAi.Support.Mcp.IntegrationTests (workspace isolation), src/QBrainAi.Storage/McpDbContext.cs (HasQueryFilter) |
+| TEST-MCP-004 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/HybridSearchServiceTests.cs |
+| TEST-MCP-005 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/IssueTodoSyncServiceTests.cs |
+| TEST-MCP-006 | ✅ Complete | tests/QBrainAi.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-007 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceTests.cs |
+| TEST-MCP-008 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/ToolRegistryServiceTests.cs |
+| TEST-MCP-009 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs |
+| TEST-MCP-010 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/PairingServiceTests.cs |
+| TEST-MCP-011 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs |
+| TEST-MCP-012 | ✅ Complete | tests/QBrainAi.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-013 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs |
+| TEST-MCP-014 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsServiceTests.cs |
+| TEST-MCP-015 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests/Services/MarkdownSessionLogParserTests.cs |
+| TEST-MCP-026 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-027 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-028 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-029 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-030 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-031 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-032 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-033 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-034 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-035 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-036 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-037 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-038 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-039 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-040 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-041 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-042 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-043 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-044 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-045 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-046 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-047 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-048 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-049 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-050 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-051 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-052 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-053 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-054 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-055 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-056 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-057 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-058 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-059 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-060 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-061 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-062 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-063 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-064 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-065 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-066 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-067 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-068 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-069 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-070 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-071 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-072 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
+| TEST-MCP-073 | ✅ Complete | tests/QBrainAi.Support.Mcp.Tests |
 | FR-MCP-064 | 🔲 Planned | docs/ marketing pages (planned) |
 | TR-MCP-AGENT-008 | 🔲 Planned | Reserved for FR-MCP-028 / FR-MCP-050 |
 | TR-MCP-AGENT-009 | 🔲 Planned | Reserved for FR-MCP-050 |
@@ -554,9 +554,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
 | FR-MCP-117 | Tracked | Functional-Requirements.md |
-| FR-MCP-118 | ✅ Complete | KeyServerController, McpServer.KeyServer Program, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
-| FR-MCP-119 | ✅ Complete | InMemorySubscriberCommitService, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
-| FR-MCP-120 | ✅ Complete | TransactionSecurityModels, TurnTransactionCoordinator, TransactionPubSubServices, TurnTransactionFederationOperationApplyService, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests |
+| FR-MCP-118 | ✅ Complete | KeyServerController, QBrainAi.KeyServer Program, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-119 | ✅ Complete | InMemorySubscriberCommitService, SubscriberController, SubscriberClient, QBrainAi.Subscriber Program, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-120 | ✅ Complete | TransactionSecurityModels, TurnTransactionCoordinator, TransactionPubSubServices, TurnTransactionFederationOperationApplyService, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, QBrainAiMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests |
 | FR-MCP-121 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionsController, TransactionPubSubReplayWorker, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TurnTransactionsControllerTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests, Functional-Requirements.md |
 | FR-MCP-122 | ✅ Complete | Functional-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests |
 | FR-MCP-123 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Architecture-Round1.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
@@ -576,10 +576,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-137 | ✅ Complete | Functional-Requirements.md, McpHostedAgentToolAdapter, McpHostedAgent, QBAgentDefinition, McpHostedAgentAdapterTests, HostedAgentWorkflowIntegrationTests |
 | TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
-| TR-MCP-KEYSERVER-001 | ✅ Complete | McpServer.KeyServer Program, KeyServerController, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-KEYSERVER-001 | ✅ Complete | QBrainAi.KeyServer Program, KeyServerController, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
 | TR-MCP-CRYPTO-001 | ✅ Complete | Technical-Requirements.md, TransactionSecurityModels, TransactionSecurityServices, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
-| TR-MCP-SUBSCRIBER-001 | ✅ Complete | TransactionSecurityServices, TransactionSecurityStateStores, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DiffgramEncryptionIntegrationTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
-| TR-MCP-TXN-001 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionFederationOperationApplyService, TransactionPubSubReplayWorker, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, TurnTransactionsController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, TurnTransactionsControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-SUBSCRIBER-001 | ✅ Complete | TransactionSecurityServices, TransactionSecurityStateStores, SubscriberController, SubscriberClient, QBrainAi.Subscriber Program, TransactionSecurityControllerTests, DiffgramEncryptionIntegrationTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-TXN-001 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionFederationOperationApplyService, TransactionPubSubReplayWorker, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, TurnTransactionsController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, QBrainAiMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, TurnTransactionsControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests |
 | TR-MCP-TXNAUDIT-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests |
 | TR-MCP-TXNCOMPAT-001 | ✅ Complete | Technical-Requirements.md |
 | TR-MCP-TXNBYRD-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
@@ -1358,7 +1358,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-QBRAIN-002 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-003 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-004 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
-| TEST-MCP-QBRAIN-005 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs; tests/McpServer.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs |
+| TEST-MCP-QBRAIN-005 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs; tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs |
 | TEST-MCP-QBRAIN-006 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-007 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-008 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |

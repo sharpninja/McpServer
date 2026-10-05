@@ -1,7 +1,7 @@
 {
-  "name": "@sharpninja/mcpserver-agent-core",
+  "name": "@qbrainai/qbrain-ai-agent-core",
   "version": "0.1.0-marker-phase2",
-  "description": "Shared TS core for McpServer agent plugin operational parity (marker trust first slice per PLAN-AGENTPARITY-001 / TR-MCP-AGENT-PARITY-012)",
+  "description": "Shared TS core for QBrainAi agent plugin operational parity (marker trust first slice per PLAN-AGENTPARITY-001 / TR-MCP-AGENT-PARITY-012)",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,8 +1,8 @@
-# Grok Handoff: Paused MCP Server Completion Program
+# Grok Handoff: Paused QBrain.AI Completion Program
 
 Prepared by Codex on 2026-09-09 UTC for Payton Byrd.
 Updated on 2026-09-09 at 13:36 UTC after verified session-log reconciliation.
-Workspace: `F:\GitHub\McpServer`.
+Workspace: `F:\GitHub\QBrainAi`.
 Original request: `Prepare handoff to grok`. Latest request: `then update the grok handoff to reflect this state.`
 
 ## 1. Authorization Boundary
@@ -19,11 +19,11 @@ Keep `MCP-WORKSPACEHYGIENE-002` open under the explicit owner hold, and conseque
 
 Read these authoritative files in full; this handoff does not replace, abbreviate, or supersede their instructions:
 
-- `F:\GitHub\McpServer\AGENTS.md`
-- `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml`
-- `F:\GitHub\McpServer\.github\copilot-instructions.md`
-- `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`
-- `F:\GitHub\McpServer\docs\Project\Requirements-Matrix.md`
+- `F:\GitHub\QBrainAi\AGENTS.md`
+- `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml`
+- `F:\GitHub\QBrainAi\.github\copilot-instructions.md`
+- `F:\GitHub\QBrainAi\docs\Development-Process-draft-v4.md`
+- `F:\GitHub\QBrainAi\docs\Project\Requirements-Matrix.md`
 - Your installed Grok plugin instructions and the full operator profile-loading skill.
 
 The marker contains rotating credentials. Read it locally; never copy its API key into this document, another prompt, a receipt, or a commit.
@@ -91,19 +91,19 @@ The Reddit TODO retains `https://www.reddit.com/r/LLMDevs/s/Se16TllJDv` for futu
 
 Read both plans completely before any authorized execution:
 
-1. Latest completion draft and execution annex: `F:\GitHub\McpServer\docs\plans\PLAN-PLUGINHANDOFF-001-completion-20260906.md`.
+1. Latest completion draft and execution annex: `F:\GitHub\QBrainAi\docs\plans\PLAN-PLUGINHANDOFF-001-completion-20260906.md`.
    SHA-256, reverified September 9: `5241F3B97B0BEE1453880FECFA622EFEEEAF425361C4F82D0E07CFE1629229CC`.
-2. Incorporated normative named-test catalog: `F:\GitHub\McpServer\docs\plans\PLAN-PLUGINHANDOFF-001.md`.
+2. Incorporated normative named-test catalog: `F:\GitHub\QBrainAi\docs\plans\PLAN-PLUGINHANDOFF-001.md`.
    SHA-256, reverified September 9: `7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E`.
 
 The full revised draft has NOT replaced the server TODO description. Its current 773-line description, joined with LF without an added final newline, hashes to `5DDBA69E4FA227277F134A075573058D76944E924DF436E811D973D6042740C8`. Do not mistake a checkpoint note for persisted-plan fidelity.
 
 Pre-integration preservation manifest:
-`C:\Users\kingd\AppData\Local\Temp\McpServer-completion-preservation\20260906T184847592Z\preservation-manifest.json`.
+`C:\Users\kingd\AppData\Local\Temp\QBrainAi-completion-preservation\20260906T184847592Z\preservation-manifest.json`.
 SHA-256, reverified September 9: `5E3AE9DDBE95DF7D2174BB239BE22206362D574D165D2E7C0DCD7E8A2382102A`.
 The September 6 receipt records 11 repositories, 3,989 dirty paths, 3,987 archived files, and verified archive/entry hashes. This is historical recovery coverage, not a backup of later changes. Preserve newer changes separately before integration. The backup may contain private artifacts; keep it local.
 
-Preservation receipt: `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\baseline-preservation-20260906T184847592Z.md`.
+Preservation receipt: `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\baseline-preservation-20260906T184847592Z.md`.
 
 Do not delete untracked artifacts, reset worktrees, overwrite sibling plugin changes, regenerate approved migrations, or force-push shared history. Establish ownership and exact integration scope first.
 
@@ -113,8 +113,8 @@ P0-A is not approved. The last independent rereview returned DISAGREE against th
 
 Read these receipts:
 
-- `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\p0a-hostile-20260906T185500Z-01a07803.md`.
-- `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\p0a-rereview-Codex-20260906T184446Z-plugin-session-req-20260906T194057Z-prompt-5986.md`.
+- `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\p0a-hostile-20260906T185500Z-01a07803.md`.
+- `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\p0a-rereview-Codex-20260906T184446Z-plugin-session-req-20260906T194057Z-prompt-5986.md`.
 
 The last rereview's three residuals were:
 
@@ -135,16 +135,16 @@ The plan's statement that the 3,404-test machine-readable evidence was still bei
 - Candidate tree: `5091b64a8d9dade0bfb0b2b0295b93d464e60e1c`.
 - Candidate contains 47 commits after base and a historically recorded 533-path diff; recheck before integration.
 - C: validation checkout, SHA/tree/cleanliness reverified September 9:
-  `C:\Users\kingd\AppData\Local\Temp\McpServer-validation\808ec049d56daf214c391beccd6b9d69bb9867c6-20260906T185957Z-319842a9`.
-- Original review worktree: `F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review`.
+  `C:\Users\kingd\AppData\Local\Temp\QBrainAi-validation\808ec049d56daf214c391beccd6b9d69bb9867c6-20260906T185957Z-319842a9`.
+- Original review worktree: `F:\GitHub\QBrainAi\.mcpServer\worktrees\bug-triage-139-review`.
 - Raw evidence root:
-  `C:\Users\kingd\AppData\Local\Temp\McpServer-validation-evidence\808ec049d56daf214c391beccd6b9d69bb9867c6-20260906T191653Z`.
+  `C:\Users\kingd\AppData\Local\Temp\QBrainAi-validation-evidence\808ec049d56daf214c391beccd6b9d69bb9867c6-20260906T191653Z`.
 
 All test results in this section are September 6 executions. No tests were rerun September 9.
 
 ### Proven Windows Scope
 
-Receipt: `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\candidate-windows-evidence-completion-20260906T194212Z.md`.
+Receipt: `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\candidate-windows-evidence-completion-20260906T194212Z.md`.
 SHA-256 reverified: `412801E4714B0DA1F15FBA650179F7D356A3324BEDB3AE5DBAFDEE1C93CA4A02`.
 
 Full Release solution build with warnings-as-errors: exit 0, zero warnings/errors. Command and binlog hash are in the receipt.
@@ -164,19 +164,19 @@ G1.W18 specifies an opt-in Nuke normalizer, read-only validation, six new RED-fi
 
 ### Provider Gate: Two Different Scopes
 
-Receipt: `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\candidate-provider-validation-20260906T194737Z.md`.
+Receipt: `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\candidate-provider-validation-20260906T194737Z.md`.
 The immutable candidate's integration `ProviderDatabaseIntegrationTests` contains exactly two cases, SQLite and private SQL LocalDB: both passed. PostgreSQL Handoff migration and three downgrade/reupgrade cases belong to later preserved dirty-develop work, not this candidate. Stage-bound C9-G4/G8 must execute those when present; do not backport tests merely to change G1 inventory.
 
 Recovered provider manifest: 107 test identities across 27 classes, historical SHA-256 `E00969C662678107F45E2C0EC2683A7D284BE1055D895952F89674E4BCD168C3`. It defines a scope, not current success and not an invented Nuke target.
 
 Current-candidate replay receipt:
-`F:\GitHub\McpServer\docs\receipts\completion-program-20260906\candidate-provider-manifest-replay-20260906T195530Z.md`.
+`F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\candidate-provider-manifest-replay-20260906T195530Z.md`.
 SHA-256 reverified: `AF789AEB196FCB0FAD02835816B635B6A22313833DF469AFAE88F93A6DFFE2E2`.
 
 Discovery matched all 107 identities exactly. Execution returned exit 1 with 105 results: 87 passed, 18 failed, zero reported skipped/notExecuted. TWO discovered identities produced no TRX result:
 
-- `McpServer.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError`
-- `McpServer.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp`
+- `QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError`
+- `QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp`
 
 All 18 failures arose from `EphemeralPostgresFixture` construction: `initdb.exe` exited 1. The fixture did not retain native stdout/stderr. A separate same-binary/same-temp-root diagnostic with PostgreSQL 17.10 succeeded; therefore a generally broken installation or that tested path length is not an established cause. Concurrent fixture startup is a hypothesis, not a diagnosis. No migration failure is established by fixture-startup errors.
 
@@ -184,7 +184,7 @@ The bounded follow-up diagnosis was interrupted by the user pause. No completed 
 
 ### Native Linux Gate Still Unproven
 
-Receipt: `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\linux-preflight-20260906T185128Z.md`.
+Receipt: `F:\GitHub\QBrainAi\docs\receipts\completion-program-20260906\linux-preflight-20260906T185128Z.md`.
 September 6 probes: WslService/vmcompute were running, but WSL enumeration/status hung; remote SSH timed out. No usable executor was proven. No WSL restart, distro install, host repair, or VHD operation occurred. `Restart-Service WslService -Force` was explicitly left awaiting approval because it disrupts WSL2/Docker workloads.
 
 C10 requires an exact native-ext4 candidate, .NET 10, FUSE tooling, non-root execution, and separately authorized mount-capable execution. Four native classes are excluded on Windows. The full plan freezes their discovery and partitions ten mount-capable IDs from the non-root set. Windows success or `/mnt/<drive>` execution cannot clear that gate. Recheck current prerequisites only after resume, and obtain approval for disruptive repair.

@@ -168,10 +168,10 @@ public sealed class SessionLifeUnitGateValidatorTests
     /// Exclusions stay repository-relative. Validates FR-MCP-107-AC004 and TR-MCP-PLAN-001-AC004.
     /// </summary>
     [Fact]
-    public void Validate_NestedMcpServerAncestor_AcceptsValidUnitArtifacts()
+    public void Validate_NestedQBrainAiAncestor_AcceptsValidUnitArtifacts()
     {
-        using var fixture = SessionLifeGateFixture.CreateUnderMcpServerAncestor(SessionLifeUnitGateScope.Unit);
-        fixture.AssertNestedMcpServerAncestor();
+        using var fixture = SessionLifeGateFixture.CreateUnderQBrainAiAncestor(SessionLifeUnitGateScope.Unit);
+        fixture.AssertNestedQBrainAiAncestor();
         fixture.AssertRepositoryRelativeExclusions();
 
         var exception = Record.Exception(() => fixture.Validator.Validate(fixture.Request));
@@ -184,10 +184,10 @@ public sealed class SessionLifeUnitGateValidatorTests
     /// The extra file stays under the repository-relative TestResults exclusion. Validates TEST-MCP-143-AC003.
     /// </summary>
     [Fact]
-    public void Validate_NestedMcpServerAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift()
+    public void Validate_NestedQBrainAiAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift()
     {
-        using var fixture = SessionLifeGateFixture.CreateUnderMcpServerAncestor(SessionLifeUnitGateScope.Unit);
-        fixture.AssertNestedMcpServerAncestor();
+        using var fixture = SessionLifeGateFixture.CreateUnderQBrainAiAncestor(SessionLifeUnitGateScope.Unit);
+        fixture.AssertNestedQBrainAiAncestor();
         fixture.AssertRepositoryRelativeExclusions();
         var reportPath = fixture.WriteReportOnlyArtifact();
         Assert.StartsWith(fixture.RepositoryRoot, reportPath, StringComparison.Ordinal);
@@ -207,11 +207,11 @@ public sealed class SessionLifeUnitGateValidatorTests
     [InlineData(SessionLifeInvalidFixture.EditedIncludedSource)]
     [InlineData(SessionLifeInvalidFixture.AddedIncludedSource)]
     [InlineData(SessionLifeInvalidFixture.DeletedIncludedSource)]
-    public void Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(
+    public void Validate_NestedQBrainAiAncestor_IncludedSourceDrift_IsRejected(
         SessionLifeInvalidFixture invalidFixture)
     {
-        using var fixture = SessionLifeGateFixture.CreateUnderMcpServerAncestor(SessionLifeUnitGateScope.Unit);
-        fixture.AssertNestedMcpServerAncestor();
+        using var fixture = SessionLifeGateFixture.CreateUnderQBrainAiAncestor(SessionLifeUnitGateScope.Unit);
+        fixture.AssertNestedQBrainAiAncestor();
         fixture.AssertRepositoryRelativeExclusions();
         AssertImplementedRejection(fixture, invalidFixture);
     }
@@ -370,7 +370,7 @@ public sealed class SessionLifeUnitGateValidatorTests
         private readonly string[] _sourceRelativePaths =
         {
             "build/Build.Test.cs",
-            "src/McpServer.Services/SessionLogService.cs",
+            "src/QBrainAi.Services/SessionLogService.cs",
             "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
             "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
         };
@@ -400,22 +400,22 @@ public sealed class SessionLifeUnitGateValidatorTests
         /// Initializes a complete valid fixture for one independent validation lane.
         /// </summary>
         /// <param name="scope">The lane to materialize.</param>
-        /// <param name="nestRepositoryUnderMcpServerAncestor">
+        /// <param name="nestRepositoryUnderQBrainAiAncestor">
         /// When true, places the repository under a GUID-owned <c>.mcpServer</c> ancestor.
         /// </param>
-        private SessionLifeGateFixture(SessionLifeUnitGateScope scope, bool nestRepositoryUnderMcpServerAncestor)
+        private SessionLifeGateFixture(SessionLifeUnitGateScope scope, bool nestRepositoryUnderQBrainAiAncestor)
         {
             Scope = scope;
-            OwnedRoot = Path.Combine(ResolveCleanFixtureTempRoot(), "McpServer-SessionLifeUnitGate", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
-            RepositoryRoot = nestRepositoryUnderMcpServerAncestor
+            OwnedRoot = Path.Combine(ResolveCleanFixtureTempRoot(), "QBrainAi-SessionLifeUnitGate", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+            RepositoryRoot = nestRepositoryUnderQBrainAiAncestor
                 ? Path.Combine(OwnedRoot, ".mcpServer", "worktrees", "candidate")
                 : Path.Combine(OwnedRoot, "repository");
             ToolRoot = Path.Combine(OwnedRoot, "tools");
             ResultsRoot = Path.Combine(RepositoryRoot, "TestResults", RunId);
             SourceManifestPath = Path.Combine(ResultsRoot, "source-manifest.json");
             _projects = scope == SessionLifeUnitGateScope.Unit
-                ? new[] { "McpServer.Client.Tests", "McpServer.Services.Tests" }
-                : new[] { "McpServer.Support.Mcp.Tests", "Build.Tests" };
+                ? new[] { "QBrainAi.Client.Tests", "QBrainAi.Services.Tests" }
+                : new[] { "QBrainAi.Support.Mcp.Tests", "Build.Tests" };
 
             var laneName = GetLaneName(scope);
             _inventoryPath = Path.Combine(ResultsRoot, laneName, "selected-projects.json");
@@ -489,7 +489,7 @@ public sealed class SessionLifeUnitGateValidatorTests
         /// <param name="scope">The independent lane to create.</param>
         /// <returns>A disposable real-artifact fixture.</returns>
         internal static SessionLifeGateFixture Create(SessionLifeUnitGateScope scope) =>
-            new(scope, nestRepositoryUnderMcpServerAncestor: false);
+            new(scope, nestRepositoryUnderQBrainAiAncestor: false);
 
         /// <summary>Creates a valid fixture whose repository has a <c>.mcpServer</c> ancestor.</summary>
         /// <param name="scope">The independent lane to create.</param>
@@ -516,14 +516,14 @@ public sealed class SessionLifeUnitGateValidatorTests
                         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
                 }
 
-                temp = Path.Combine(root!, "McpServerGateTemp");
+                temp = Path.Combine(root!, "QBrainAiGateTemp");
                 Directory.CreateDirectory(temp);
             }
 
             return temp;
         }
-        internal static SessionLifeGateFixture CreateUnderMcpServerAncestor(SessionLifeUnitGateScope scope) =>
-            new(scope, nestRepositoryUnderMcpServerAncestor: true);
+        internal static SessionLifeGateFixture CreateUnderQBrainAiAncestor(SessionLifeUnitGateScope scope) =>
+            new(scope, nestRepositoryUnderQBrainAiAncestor: true);
 
         /// <summary>Applies one invalid mutation to the valid baseline.</summary>
         /// <param name="invalidFixture">The mutation to apply.</param>
@@ -866,7 +866,7 @@ public sealed class SessionLifeUnitGateValidatorTests
         }
 
         /// <summary>Proves the repository has an ancestor directory named exactly <c>.mcpServer</c>.</summary>
-        internal void AssertNestedMcpServerAncestor()
+        internal void AssertNestedQBrainAiAncestor()
         {
             var found = false;
             for (var directory = new DirectoryInfo(RepositoryRoot).Parent; directory is not null; directory = directory.Parent)

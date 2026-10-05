@@ -101,7 +101,7 @@ fi
 
 session_file="$CACHE_DIR/session-state.yaml"
 turn_file="$CACHE_DIR/current-turn.yaml"
-repl_path="$(command -v mcpserver-repl 2>/dev/null || true)"
+repl_path="$(command -v qbrain-ai-repl 2>/dev/null || true)"
 wrapper_path="${MCP_PS_WRAPPER_PATH:-./lib-ps/${MCP_PS_WRAPPER_NAME}}"
 
 printf '%s:\n' "$MCP_STATUS_LABEL"

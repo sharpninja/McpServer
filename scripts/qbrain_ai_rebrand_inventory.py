@@ -189,15 +189,18 @@ def _is_requirement_id_context(line: str, start: int, match_text: str) -> bool:
 
 
 def _is_repo_path_segment(line: str, start: int, end: int) -> bool:
-    if start == 0 or line[start - 1] not in "/\\":
+    """True when McpServer is a GitHub repo path segment, not a project folder.
+
+    Windows paths use backslash and are product install paths (C:\\ProgramData\\McpServer).
+    Only a forward slash marks a repository URL or POSIX repo path that Phase 3 owns.
+    """
+    if start == 0 or line[start - 1] != "/":
         return False
     after = line[end : end + 4]
     if after.startswith(".git"):
         return True
     if after.startswith("."):
-        # Project folders are McpServer.<Segment>. A bare repo segment is McpServer or McpServer.git.
-        rest = line[end + 1 : end + 2]
-        return rest == "" or not rest.isalpha() or rest.islower() and after.startswith(".git")
+        return False
     return True
 
 

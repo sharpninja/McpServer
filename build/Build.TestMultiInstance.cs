@@ -22,8 +22,8 @@ partial class Build
         .DependsOn(Compile)
         .Executes(async () =>
         {
-            var project = SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj";
-            var dllPath = SourceDirectory / "McpServer.Support.Mcp" / "bin" / Configuration / "net9.0" / "McpServer.Support.Mcp.dll";
+            var project = SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj";
+            var dllPath = SourceDirectory / "QBrainAi.Support.Mcp" / "bin" / Configuration / "net9.0" / "QBrainAi.Support.Mcp.dll";
 
             if (!File.Exists(dllPath))
             {
@@ -33,7 +33,7 @@ partial class Build
             }
 
             // Read ports from settings file
-            var settingsPath = SourceDirectory / "McpServer.Support.Mcp" / $"appsettings.{Configuration}.json";
+            var settingsPath = SourceDirectory / "QBrainAi.Support.Mcp" / $"appsettings.{Configuration}.json";
             if (!File.Exists(settingsPath))
                 throw new InvalidOperationException($"Settings file not found: {settingsPath}");
 

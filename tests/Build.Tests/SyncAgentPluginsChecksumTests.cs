@@ -68,7 +68,7 @@ public sealed class SyncAgentPluginsChecksumTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -76,6 +76,6 @@ public sealed class SyncAgentPluginsChecksumTests
             directory = directory.Parent;
         }
 
-        throw new InvalidOperationException("McpServer.sln not found.");
+        throw new InvalidOperationException("QBrainAi.sln not found.");
     }
 }

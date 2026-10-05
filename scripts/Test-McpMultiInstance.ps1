@@ -63,9 +63,9 @@ function Wait-Healthy {
 }
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$projectPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj"
-$dllPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\bin\$Configuration\net9.0\McpServer.Support.Mcp.dll"
-$settingsPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\appsettings.$Configuration.json"
+$projectPath = Join-Path $repoRoot "src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj"
+$dllPath = Join-Path $repoRoot "src\QBrainAi.Support.Mcp\bin\$Configuration\net9.0\QBrainAi.Support.Mcp.dll"
+$settingsPath = Join-Path $repoRoot "src\QBrainAi.Support.Mcp\appsettings.$Configuration.json"
 
 if (-not (Test-Path $settingsPath)) {
     throw "Settings file '$settingsPath' does not exist."
@@ -120,8 +120,8 @@ try {
     Wait-Healthy -BaseUrl $firstUrl -Process $firstProcess -ErrorLogPath $firstErrLog -TimeoutSeconds $TimeoutSeconds
     Wait-Healthy -BaseUrl $secondUrl -Process $secondProcess -ErrorLogPath $secondErrLog -TimeoutSeconds $TimeoutSeconds
 
-    $firstTodo = Invoke-RestMethod -Uri "$firstUrl/mcpserver/todo" -Method Get
-    $secondTodo = Invoke-RestMethod -Uri "$secondUrl/mcpserver/todo" -Method Get
+    $firstTodo = Invoke-RestMethod -Uri "$firstUrl/qbrainai/todo" -Method Get
+    $secondTodo = Invoke-RestMethod -Uri "$secondUrl/qbrainai/todo" -Method Get
 
     $firstCount = [int]$firstTodo.totalCount
     $secondCount = [int]$secondTodo.totalCount

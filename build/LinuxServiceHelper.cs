@@ -19,7 +19,7 @@ internal sealed record ServiceEnvironmentFile(string Path, bool Optional);
 /// <summary>TR-MCP-SERVICEUPDATE-001: updates an existing systemd unit with retained live-state recovery.</summary>
 internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, ServiceCommandResult> run)
 {
-    private const string AppHost = "McpServer.Support.Mcp";
+    private const string AppHost = "QBrainAi.Support.Mcp";
     private const UnixFileMode PrivateDirectory = UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute;
     private const UnixFileMode PrivateFile = UnixFileMode.UserRead | UnixFileMode.UserWrite;
     private const string UnitProperties = "LoadState,Type,FragmentPath,DropInPaths,EnvironmentFiles,Environment,PassEnvironment,WorkingDirectory,ExecStart,MainPID,ActiveState,RootDirectory,RootImage,BindPaths,BindReadOnlyPaths,TemporaryFileSystem,PrivateTmp,MountImages,ExtensionImages,ExtensionDirectories";

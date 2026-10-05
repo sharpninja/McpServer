@@ -12,7 +12,7 @@ partial class Build
     /// <summary>nuget.org v3 package source used by the publish target.</summary>
     public const string NuGetOrgSource = "https://api.nuget.org/v3/index.json";
 
-    /// <summary>Publish packed public McpServer NuGet packages to nuget.org.</summary>
+    /// <summary>Publish packed public QBrainAi NuGet packages to nuget.org.</summary>
     public Target PublishNuGet => _ => _
         .DependsOn(PackNuGet)
         .Executes(() =>

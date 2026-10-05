@@ -1,7 +1,7 @@
 # Continuity handoff: QuadBrain mcp_* executor and Grok compact knobs
 
 Prepared by GrokCode (Grok Build TUI, grok-4.6) on 2026-09-10 UTC.
-Implementation workspace: `F:\GitHub\McpServer`.
+Implementation workspace: `F:\GitHub\QBrainAi`.
 Operator TUI workspace for this thread: `F:\GitHub\McpServerManager`.
 
 This file is a continuity handoff. It is not a Handoff ingest source.
@@ -12,7 +12,7 @@ Read it. Resume from Section 8.
 
 Do not ingest this file through `workflow.handoff.ingest`, `handoff_ingest`, DraftOnly, RequireReview, or CreateWhenConfident. Ingest would mutate TODO state. The HANDOFF skill is for TODO extraction from a bounded sample such as `docs/handoffs/example.md`, not for this continuity record.
 
-Do not copy live API keys, marker HMAC values, or ProgramData secrets into receipts, commits, or further handoffs. Re-read `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml` after every service restart.
+Do not copy live API keys, marker HMAC values, or ProgramData secrets into receipts, commits, or further handoffs. Re-read `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml` after every service restart.
 
 Do not overclaim. If you did not measure it, say you did not measure it. If a wrapper line is unverified, label it unverified. Operator Payton named overclaiming as lying and said trust is broken because of it.
 
@@ -67,7 +67,7 @@ A new Grok session is the honest test of those knobs. Do not tell the operator t
 
 ## 4. What you are authorized to do
 
-- Finish server-side `mcp_*` execution in `F:\GitHub\McpServer` via in-process CQRS services, not HTTP.
+- Finish server-side `mcp_*` execution in `F:\GitHub\QBrainAi` via in-process CQRS services, not HTTP.
 - Write mocked unit tests first (no Windows service). Exhaustive catalog theory over `QuadBrainMcpToolCatalog.All`.
 - Keep internals off `RemainingToolCalls`. All-internal success is `finish_reason=stop` with service-result content.
 - Compile and run the Support.Mcp unit tests locally.
@@ -82,7 +82,7 @@ You are not authorized to:
 - Claim the executor is done, green, or compiled unless you have command output.
 - Forward unhandled `mcp_*` internals to QBAgent as OpenAI `tool_calls`.
 
-## 5. Requirements already in the MCP store (McpServer workspace)
+## 5. Requirements already in the MCP store (QBrainAi workspace)
 
 Live store updates were made in an earlier turn (not re-fetched in the turn that wrote this file). Treat the store as source of truth; re-query before marking ACs.
 
@@ -100,11 +100,11 @@ No `dotnet` compile was run in the turn that wrote this file. Claims below are f
 
 ### Catalog
 
-`src/McpServer.Support.Mcp/Services/QuadBrainMcpToolCatalog.cs` exists. `All` lists session, todo (query/get/update/create/delete/plan/status/implementation), repo (read/list/write/edit), desktop, PowerShell session create/command/close, requirements list/get/create/update for FR/TR/TEST, client invoke, GraphRAG CRUD, and `mcp_git`.
+`src/QBrainAi.Support.Mcp/Services/QuadBrainMcpToolCatalog.cs` exists. `All` lists session, todo (query/get/update/create/delete/plan/status/implementation), repo (read/list/write/edit), desktop, PowerShell session create/command/close, requirements list/get/create/update for FR/TR/TEST, client invoke, GraphRAG CRUD, and `mcp_git`.
 
 ### Executor
 
-`src/McpServer.Support.Mcp/Services/QuadBrainInternalToolExecutor.cs`
+`src/QBrainAi.Support.Mcp/Services/QuadBrainInternalToolExecutor.cs`
 
 - Constructor takes 10 dependencies: `ITransactionGatedTodoMutationService`, `ITodoService`, `ITodoPromptService`, `IRepoFileService`, `IRequirementsDocumentService`, `ISessionLogService`, `IGraphRagService`, `IDesktopLaunchService`, `IProcessRunner`, `WorkspaceContext`.
 - `TryExecuteAsync` switch includes every name in `QuadBrainMcpToolCatalog.All` (by inspection of the switch arms). Unknown names return `Unhandled`.
@@ -127,7 +127,7 @@ No `dotnet` compile was run in the turn that wrote this file. Claims below are f
 
 ## 7. Tests that will not compile or will assert the wrong contract
 
-`tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs`
+`tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs`
 
 - `CreateSut()` is still `new(_todo, _todoQueries, _repo, _requirements)` (4 args). Production constructor has 10 args.
 - `Execute_McpRequirementsListFr_ReturnsUnhandled` still expects Unhandled. Production switch handles `mcp_requirements_list_fr`. That test is the old contract. Replace it. Do not "fix" production to match Unhandled.
@@ -142,13 +142,13 @@ Byrd order for the next slice:
 3. Invert or delete `Execute_McpRequirementsListFr_ReturnsUnhandled`.
 4. Add helpers `OkJson`, `CollectLinesAsync`, `GetInt` so the executor compiles.
 5. Fix DTO/property mismatches if the compiler names them (session query fields, GraphRAG request types, `ProcessRunRequest`).
-6. Run `McpServer.Support.Mcp.Tests` only. No live Windows service.
+6. Run `QBrainAi.Support.Mcp.Tests` only. No live Windows service.
 7. Only then consider interceptor/OpenAI surface tests for catalog names never becoming `RemainingToolCalls`.
 
 ## 8. Resume here
 
-1. Re-read `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml`, health nonce, then MCP session/TODO via plugin tools. Use the McpServer workspace key for McpServer requirements. Manager key 401s on McpServer store rows.
-2. Query FR/TR/TEST-MCP-QBEXEC-* from the McpServer store. Do not edit requirements markdown by hand.
+1. Re-read `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml`, health nonce, then MCP session/TODO via plugin tools. Use the QBrainAi workspace key for QBrainAi requirements. Manager key 401s on QBrainAi store rows.
+2. Query FR/TR/TEST-MCP-QBEXEC-* from the QBrainAi store. Do not edit requirements markdown by hand.
 3. Start with the failing tests in Section 7. Do not add more production routes until `CreateSut` and the catalog theory exist.
 4. Implement missing helpers and any compile breaks the compiler prints. Do not invent "fixed" from this handoff.
 5. Keep `PLAN-LLMSTRATEGY-001` open.

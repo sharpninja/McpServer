@@ -23,17 +23,17 @@ BeforeAll {
                 swagger = '/swagger/v1/swagger.json'
                 swaggerUi = '/swagger'
                 mcpTransport = '/mcp-transport'
-                sessionLog = '/mcpserver/sessionlog'
-                sessionLogDialog = '/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
-                contextSearch = '/mcpserver/context/search'
-                contextPack = '/mcpserver/context/pack'
-                contextSources = '/mcpserver/context/sources'
-                todo = '/mcpserver/todo'
-                repo = '/mcpserver/repo'
-                desktop = '/mcpserver/desktop'
-                gitHub = '/mcpserver/gh'
-                tools = '/mcpserver/tools'
-                workspace = '/mcpserver/workspace'
+                sessionLog = '/qbrainai/sessionlog'
+                sessionLogDialog = '/qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
+                contextSearch = '/qbrainai/context/search'
+                contextPack = '/qbrainai/context/pack'
+                contextSources = '/qbrainai/context/sources'
+                todo = '/qbrainai/todo'
+                repo = '/qbrainai/repo'
+                desktop = '/qbrainai/desktop'
+                gitHub = '/qbrainai/gh'
+                tools = '/qbrainai/tools'
+                workspace = '/qbrainai/workspace'
                 serverStartupUtc = '/server-startup-utc'
                 markerFileTimestamp = '/marker-file-timestamp?repoPath={workspacePath}'
             }
@@ -65,17 +65,17 @@ endpoints:
   swagger: /swagger/v1/swagger.json
   swaggerUi: /swagger
   mcpTransport: /mcp-transport
-  sessionLog: /mcpserver/sessionlog
-  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
-  contextSearch: /mcpserver/context/search
-  contextPack: /mcpserver/context/pack
-  contextSources: /mcpserver/context/sources
-  todo: /mcpserver/todo
-  repo: /mcpserver/repo
-  desktop: /mcpserver/desktop
-  gitHub: /mcpserver/gh
-  tools: /mcpserver/tools
-  workspace: /mcpserver/workspace
+  sessionLog: /qbrainai/sessionlog
+  sessionLogDialog: /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /qbrainai/context/search
+  contextPack: /qbrainai/context/pack
+  contextSources: /qbrainai/context/sources
+  todo: /qbrainai/todo
+  repo: /qbrainai/repo
+  desktop: /qbrainai/desktop
+  gitHub: /qbrainai/gh
+  tools: /qbrainai/tools
+  workspace: /qbrainai/workspace
   serverStartupUtc: /server-startup-utc
   markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
 workspace: demo
@@ -217,17 +217,17 @@ endpoints:
   swagger: "/swagger/v1/swagger.json"
   swaggerUi: "/swagger"
   mcpTransport: "/mcp-transport"
-  sessionLog: "/mcpserver/sessionlog"
-  sessionLogDialog: "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
-  contextSearch: "/mcpserver/context/search"
-  contextPack: "/mcpserver/context/pack"
-  contextSources: "/mcpserver/context/sources"
-  todo: "/mcpserver/todo"
-  repo: "/mcpserver/repo"
-  desktop: "/mcpserver/desktop"
-  gitHub: "/mcpserver/gh"
-  tools: "/mcpserver/tools"
-  workspace: "/mcpserver/workspace"
+  sessionLog: "/qbrainai/sessionlog"
+  sessionLogDialog: "/qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+  contextSearch: "/qbrainai/context/search"
+  contextPack: "/qbrainai/context/pack"
+  contextSources: "/qbrainai/context/sources"
+  todo: "/qbrainai/todo"
+  repo: "/qbrainai/repo"
+  desktop: "/qbrainai/desktop"
+  gitHub: "/qbrainai/gh"
+  tools: "/qbrainai/tools"
+  workspace: "/qbrainai/workspace"
   serverStartupUtc: "/server-startup-utc"
   markerFileTimestamp: "/marker-file-timestamp?repoPath={workspacePath}"
 workspace: "TruckMate"
@@ -284,22 +284,22 @@ prompt: |
             Mock Invoke-RestMethod { @{ items = @(
                 @{ id = 'a'; title = 'Alpha' },
                 @{ id = 'b'; title = 'Beta' }
-            ) } } -ModuleName McpTodo -ParameterFilter { $Uri -like '*/mcpserver/todo' -and $Uri -notlike '*/mcpserver/todo/*' }
+            ) } } -ModuleName McpTodo -ParameterFilter { $Uri -like '*/qbrainai/todo' -and $Uri -notlike '*/qbrainai/todo/*' }
 
             $result = Get-McpTodo
             $result.Count | Should -Be 2
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/todo'
+                $Uri -eq 'http://test:9999/qbrainai/todo'
             }
         }
 
         It 'gets specific todo by Id' {
-            Mock Invoke-RestMethod { @{ id = 'fix-auth'; title = 'Fix auth' } } -ModuleName McpTodo -ParameterFilter { $Uri -like '*/mcpserver/todo/fix-auth' }
+            Mock Invoke-RestMethod { @{ id = 'fix-auth'; title = 'Fix auth' } } -ModuleName McpTodo -ParameterFilter { $Uri -like '*/qbrainai/todo/fix-auth' }
 
             $result = Get-McpTodo -Id 'fix-auth'
             $result.id | Should -Be 'fix-auth'
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/todo/fix-auth'
+                $Uri -eq 'http://test:9999/qbrainai/todo/fix-auth'
             }
         }
     }
@@ -314,21 +314,21 @@ prompt: |
         It 'calls correct URL for implement prompt' {
             Get-McpTodoPrompt -Id 'fix-auth' -Type implement
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/todo/fix-auth/prompt/implement'
+                $Uri -eq 'http://test:9999/qbrainai/todo/fix-auth/prompt/implement'
             }
         }
 
         It 'calls correct URL for plan prompt' {
             Get-McpTodoPrompt -Id 'add-cache' -Type plan
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/todo/add-cache/prompt/plan'
+                $Uri -eq 'http://test:9999/qbrainai/todo/add-cache/prompt/plan'
             }
         }
 
         It 'calls correct URL for status prompt' {
             Get-McpTodoPrompt -Id 'deploy' -Type status
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/todo/deploy/prompt/status'
+                $Uri -eq 'http://test:9999/qbrainai/todo/deploy/prompt/status'
             }
         }
     }
@@ -344,7 +344,7 @@ prompt: |
             New-McpTodo -Id 'test-todo' -Title 'Test Todo' -Section 'Backend' -Priority high
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
                 $Method -eq 'Post' -and
-                $Uri -eq 'http://test:9999/mcpserver/todo' -and
+                $Uri -eq 'http://test:9999/qbrainai/todo' -and
                 $Body -like '*"id":*"test-todo"*' -and
                 $Body -like '*"title":*"Test Todo"*' -and
                 $Body -like '*"section":*"Backend"*' -and
@@ -391,7 +391,7 @@ prompt: |
         It 'sends PUT to the correct endpoint' {
             Update-McpTodo -Id 'fix-auth' -Title 'Updated'
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Method -eq 'Put' -and $Uri -eq 'http://test:9999/mcpserver/todo/fix-auth'
+                $Method -eq 'Put' -and $Uri -eq 'http://test:9999/qbrainai/todo/fix-auth'
             }
         }
 
@@ -432,7 +432,7 @@ prompt: |
             Complete-McpTodo -Id 'fix-auth' -DoneSummary 'Auth fixed with JWT'
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
                 $Method -eq 'Put' -and
-                $Uri -eq 'http://test:9999/mcpserver/todo/fix-auth' -and
+                $Uri -eq 'http://test:9999/qbrainai/todo/fix-auth' -and
                 $Body -like '*"done":*true*' -and
                 $Body -like '*"doneSummary":*"Auth fixed with JWT"*' -and
                 $Body -like '*"completedDate"*'
@@ -457,7 +457,7 @@ prompt: |
         It 'sends DELETE to the correct endpoint' {
             Remove-McpTodo -Id 'old-todo'
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Method -eq 'Delete' -and $Uri -eq 'http://test:9999/mcpserver/todo/old-todo'
+                $Method -eq 'Delete' -and $Uri -eq 'http://test:9999/qbrainai/todo/old-todo'
             }
         }
     }
@@ -473,7 +473,7 @@ prompt: |
             Add-McpTodoRequirements -Id 'api' -FunctionalRequirements @('FR-001', 'FR-002')
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
                 $Method -eq 'Post' -and
-                $Uri -eq 'http://test:9999/mcpserver/todo/api/requirements' -and
+                $Uri -eq 'http://test:9999/qbrainai/todo/api/requirements' -and
                 $Body -like '*FR-001*'
             }
         }

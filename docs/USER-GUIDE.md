@@ -1,6 +1,6 @@
-# MCP Server User Documentation
+# QBrain.AI User Documentation
 
-This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
+This guide is for operators and AI-agent users running `QBrainAi.Support.Mcp`.
 
 ## 1) Installation and prerequisites
 
@@ -31,20 +31,20 @@ Invoke-RestMethod http://localhost:7147/health
 
 ```powershell
 ./build.ps1 StartServer --instance default
-# or: dotnet run --project src\McpServer.Support.Mcp -- --instance default
+# or: dotnet run --project src\QBrainAi.Support.Mcp -- --instance default
 ```
 
 #### STDIO transport
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance default
+dotnet run --project src\QBrainAi.Support.Mcp -- --transport stdio --instance default
 ```
 
 #### Windows service deployment
 
 ```powershell
 gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
-Get-Service McpServer
+Get-Service QBrainAi
 ```
 
 The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
@@ -91,7 +91,7 @@ The Linux updater requires a direct apphost service with matching working direct
 - `Mcp:Instances:{name}:*`
 - `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
 - `VoiceConversation:ModelApiKeyEnvironmentVariableName`
-- `GET|PATCH /mcpserver/configuration` (PATCH requires admin role)
+- `GET|PATCH /qbrainai/configuration` (PATCH requires admin role)
 
 Legacy flat keys such as `Mcp:DatabaseProvider`, `Mcp:PostgresConnectionString`,
 `Mcp:SqlServerConnectionString`, and `Mcp:DatabaseMigrationsAssembly` remain supported as
@@ -127,7 +127,7 @@ Example use:
 ```powershell
 $marker = Get-Content .\AGENTS-README-FIRST.yaml -Raw
 $apiKey = ([regex]::Match($marker, 'apiKey:\s*(\S+)')).Groups[1].Value
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/todo" -Headers @{ "X-Api-Key" = $apiKey }
+Invoke-RestMethod -Uri "http://localhost:7147/qbrainai/todo" -Headers @{ "X-Api-Key" = $apiKey }
 ```
 
 ### Database provider configuration
@@ -205,8 +205,8 @@ Mcp:
         KeyProvider: ""
         PrincipalKey: ""
       SqlServer:
-        CertificateName: "McpServerTdeCert"
-        DatabaseEncryptionKeyName: "McpServerTdeKey"
+        CertificateName: "QBrainAiTdeCert"
+        DatabaseEncryptionKeyName: "QBrainAiTdeKey"
 ```
 
 Supported environment-variable overrides:
@@ -242,7 +242,7 @@ pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEn
 
 Execution notes:
 
-- The PowerShell wrapper calls the built-in `--database-encryption-transition` command in `McpServer.Support.Mcp`.
+- The PowerShell wrapper calls the built-in `--database-encryption-transition` command in `QBrainAi.Support.Mcp`.
 - The default mode is dry-run planning only. Add `-Execute` to mutate the database.
 - PostgreSQL and SQL Server execute mode require `-BackupPath` so rollback material exists before encryption state changes.
 - SQL Server `-BackupPath` is evaluated by SQL Server on the database host, not by the local client process.
@@ -307,8 +307,8 @@ $marker = Get-Content .\AGENTS-README-FIRST.yaml -Raw
 $apiKey = ([regex]::Match($marker, 'apiKey:\s*(\S+)')).Groups[1].Value
 $headers = @{ "X-Api-Key" = $apiKey }
 
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=mcp-session-module" -Headers $headers
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=mcp-todo-module" -Headers $headers
+Invoke-RestMethod -Uri "http://localhost:7147/qbrainai/tools/search?keyword=mcp-session-module" -Headers $headers
+Invoke-RestMethod -Uri "http://localhost:7147/qbrainai/tools/search?keyword=mcp-todo-module" -Headers $headers
 
 Import-Module .\tools\powershell\McpSession.psm1
 Import-Module .\tools\powershell\McpTodo.psm1
@@ -338,7 +338,7 @@ Public function contract reference for `McpSession.psm1`:
 
 - `Initialize-McpSession` configures module-scoped connection state, verifies the marker signature when a marker file is used, performs the `/health` nonce handshake, and returns only a `System.String` session slug. It does not create a session-log record and it does not return a session object.
 - `New-McpSessionLogSlug` returns only a formatted session ID string. It does not write local files and it does not call the server.
-- `New-McpSessionLog` creates the actual session object, posts it immediately to `/mcpserver/sessionlog`, persists it locally, and returns that session object.
+- `New-McpSessionLog` creates the actual session object, posts it immediately to `/qbrainai/sessionlog`, persists it locally, and returns that session object.
 - `Update-McpSessionLog` pushes the full current session payload to the server. If `-Session` is omitted, it resolves the current persisted session from local state. It does not return a value.
 - `Get-McpSessionLog` performs a read-only query for recent session-log records and returns the deserialized API response, including paging metadata and the `items` collection.
 - `Add-McpSessionTurn` appends one new turn object to a session and returns that new turn object. If `-NoPush` is not supplied, it also persists the updated session immediately.
@@ -364,7 +364,7 @@ Base URL: `http://<host>:7147`
 
 Authentication:
 
-- include `X-Api-Key` for `/mcpserver/*`
+- include `X-Api-Key` for `/qbrainai/*`
 - include `X-Workspace-Path` for explicit workspace targeting
 - OpenAPI: `GET /swagger/v1/swagger.json`
 
@@ -376,45 +376,45 @@ Authentication:
 - `GET /auth/ui/{path}`
 - `POST /auth/ui/{path}`
 
-### AgentPool controller (`/mcpserver/agent-pool/*`)
+### AgentPool controller (`/qbrainai/agent-pool/*`)
 
-- `GET /mcpserver/agent-pool/agents`
-- `POST /mcpserver/agent-pool/agents/{agentName}/start|stop|connect|recycle`
-- `POST /mcpserver/agent-pool/connect`
-- `GET /mcpserver/agent-pool/queue`
-- `POST /mcpserver/agent-pool/queue/one-shot`
-- `POST /mcpserver/agent-pool/queue/resolve`
-- `POST /mcpserver/agent-pool/queue/{jobId}/cancel|move-up|move-down`
-- `DELETE /mcpserver/agent-pool/queue/{jobId}`
-- `GET /mcpserver/agent-pool/notifications`
-- `GET /mcpserver/agent-pool/jobs/{jobId}/stream`
+- `GET /qbrainai/agent-pool/agents`
+- `POST /qbrainai/agent-pool/agents/{agentName}/start|stop|connect|recycle`
+- `POST /qbrainai/agent-pool/connect`
+- `GET /qbrainai/agent-pool/queue`
+- `POST /qbrainai/agent-pool/queue/one-shot`
+- `POST /qbrainai/agent-pool/queue/resolve`
+- `POST /qbrainai/agent-pool/queue/{jobId}/cancel|move-up|move-down`
+- `DELETE /qbrainai/agent-pool/queue/{jobId}`
+- `GET /qbrainai/agent-pool/notifications`
+- `GET /qbrainai/agent-pool/jobs/{jobId}/stream`
 
-### Agent controller (`/mcpserver/agents*`)
+### Agent controller (`/qbrainai/agents*`)
 
-- `GET /mcpserver/agents`
-- `GET|POST|DELETE /mcpserver/agents/{agentId}`
-- `POST /mcpserver/agents/{agentId}/ban|unban|launch|stop`
-- `GET|POST /mcpserver/agents/{agentId}/events`
-- `GET /mcpserver/agents/{agentId}/process-status`
-- `GET /mcpserver/agents/running`
-- `GET|POST /mcpserver/agents/definitions`
-- `GET|DELETE /mcpserver/agents/definitions/{agentType}`
-- `POST /mcpserver/agents/definitions/seed`
-- `GET /mcpserver/agents/validate`
+- `GET /qbrainai/agents`
+- `GET|POST|DELETE /qbrainai/agents/{agentId}`
+- `POST /qbrainai/agents/{agentId}/ban|unban|launch|stop`
+- `GET|POST /qbrainai/agents/{agentId}/events`
+- `GET /qbrainai/agents/{agentId}/process-status`
+- `GET /qbrainai/agents/running`
+- `GET|POST /qbrainai/agents/definitions`
+- `GET|DELETE /qbrainai/agents/definitions/{agentType}`
+- `POST /qbrainai/agents/definitions/seed`
+- `GET /qbrainai/agents/validate`
 
-### Configuration controller (`/mcpserver/configuration`)
+### Configuration controller (`/qbrainai/configuration`)
 
-- `GET /mcpserver/configuration`
-- `PATCH /mcpserver/configuration`
+- `GET /qbrainai/configuration`
+- `PATCH /qbrainai/configuration`
 
-### Context controller (`/mcpserver/context/*`)
+### Context controller (`/qbrainai/context/*`)
 
-- `POST /mcpserver/context/search`
-- `POST /mcpserver/context/pack`
-- `GET /mcpserver/context/sources`
-- `POST /mcpserver/context/rebuild-index`
-- `POST /mcpserver/context/ingest-website`
-- `POST /mcpserver/context/ingest-website/stream`
+- `POST /qbrainai/context/search`
+- `POST /qbrainai/context/pack`
+- `GET /qbrainai/context/sources`
+- `POST /qbrainai/context/rebuild-index`
+- `POST /qbrainai/context/ingest-website`
+- `POST /qbrainai/context/ingest-website/stream`
 
 Search request example:
 
@@ -440,114 +440,114 @@ Response example:
 }
 ```
 
-### Desktop controller (`/mcpserver/desktop/*`)
+### Desktop controller (`/qbrainai/desktop/*`)
 
-- `POST /mcpserver/desktop/launch` — requires normal workspace authentication plus the
+- `POST /qbrainai/desktop/launch` — requires normal workspace authentication plus the
   privileged `X-Desktop-Launch-Token` header, and the target executable must match
   `Mcp:DesktopLaunch:AllowedExecutables` while `Mcp:DesktopLaunch:Enabled` is `true`.
 
-### Diagnostic controller (`/mcpserver/diagnostic/*`)
+### Diagnostic controller (`/qbrainai/diagnostic/*`)
 
-- `GET /mcpserver/diagnostic/execution-path`
-- `GET /mcpserver/diagnostic/appsettings-path`
+- `GET /qbrainai/diagnostic/execution-path`
+- `GET /qbrainai/diagnostic/appsettings-path`
 
-### EventStream controller (`/mcpserver/events`)
+### EventStream controller (`/qbrainai/events`)
 
-- `GET /mcpserver/events`
+- `GET /qbrainai/events`
 
-### GitHub controller (`/mcpserver/gh/*`)
+### GitHub controller (`/qbrainai/gh/*`)
 
-- `GET|POST /mcpserver/gh/issues`
-- `GET|PUT /mcpserver/gh/issues/{number}`
-- `POST /mcpserver/gh/issues/{number}/close|reopen|sync`
-- `POST /mcpserver/gh/issues/{id}/comments`
-- `POST /mcpserver/gh/issues/sync/from-github`
-- `POST /mcpserver/gh/issues/sync/to-github`
-- `GET /mcpserver/gh/labels`
-- `GET /mcpserver/gh/pulls`
-- `POST /mcpserver/gh/pulls/{id}/comments`
-- `GET /mcpserver/gh/auth/status`
-- `PUT|DELETE /mcpserver/gh/auth/token`
-- `GET /mcpserver/gh/oauth/config`
-- `GET /mcpserver/gh/oauth/authorize-url`
-- `GET /mcpserver/gh/actions/runs`
-- `GET /mcpserver/gh/actions/runs/{runId}`
-- `POST /mcpserver/gh/actions/runs/{runId}/rerun|cancel`
+- `GET|POST /qbrainai/gh/issues`
+- `GET|PUT /qbrainai/gh/issues/{number}`
+- `POST /qbrainai/gh/issues/{number}/close|reopen|sync`
+- `POST /qbrainai/gh/issues/{id}/comments`
+- `POST /qbrainai/gh/issues/sync/from-github`
+- `POST /qbrainai/gh/issues/sync/to-github`
+- `GET /qbrainai/gh/labels`
+- `GET /qbrainai/gh/pulls`
+- `POST /qbrainai/gh/pulls/{id}/comments`
+- `GET /qbrainai/gh/auth/status`
+- `PUT|DELETE /qbrainai/gh/auth/token`
+- `GET /qbrainai/gh/oauth/config`
+- `GET /qbrainai/gh/oauth/authorize-url`
+- `GET /qbrainai/gh/actions/runs`
+- `GET /qbrainai/gh/actions/runs/{runId}`
+- `POST /qbrainai/gh/actions/runs/{runId}/rerun|cancel`
 
-### GraphRag controller (`/mcpserver/graphrag/*`)
+### GraphRag controller (`/qbrainai/graphrag/*`)
 
-- `GET /mcpserver/graphrag/status`
-- `POST /mcpserver/graphrag/index`
-- `POST /mcpserver/graphrag/query`
+- `GET /qbrainai/graphrag/status`
+- `POST /qbrainai/graphrag/index`
+- `POST /qbrainai/graphrag/query`
 
-### Memory controller (`/mcpserver/memory*`)
+### Memory controller (`/qbrainai/memory*`)
 
 Compat CRUD (workspace Effective visibility; `X-Api-Key` required; optional `X-Workspace-Path`):
 
-- `GET /mcpserver/memory` — list (`scope` = `Effective` default, `Global`, or `Workspace`; optional `category`, `keyword`)
-- `GET /mcpserver/memory/{id}`
-- `POST /mcpserver/memory` — add (`text`, `category`, optional `id`, `scope`, `updatedBy`)
-- `PUT /mcpserver/memory/{id}` — update provided fields only
-- `DELETE /mcpserver/memory/{id}`
+- `GET /qbrainai/memory` — list (`scope` = `Effective` default, `Global`, or `Workspace`; optional `category`, `keyword`)
+- `GET /qbrainai/memory/{id}`
+- `POST /qbrainai/memory` — add (`text`, `category`, optional `id`, `scope`, `updatedBy`)
+- `PUT /qbrainai/memory/{id}` — update provided fields only
+- `DELETE /qbrainai/memory/{id}`
 
 Additive CQRS verbs (MCP-MEMORY-002):
 
-- `POST /mcpserver/memory/remember` — persist a multi-layer memory (`content` required; optional title/summary/type/tags/confidence/source/scope)
-- `POST /mcpserver/memory/recall` — ranked recall by meaning or keyword (`query`; optional `minScore`, `topN`, `tags`, `type`, `scope`)
-- `POST /mcpserver/memory/explore` — neighborhood from `seedId` or query seed (Hebbian off by default)
-- `POST /mcpserver/memory/consolidate` — dry-run merge plan by default; set `dryRun: false` to apply
-- `POST /mcpserver/memory/promote` — promote a `sessionlog` or `context` source into memory (operator-explicit)
-- `GET /mcpserver/memory/{id}/versions`
-- `POST /mcpserver/memory/{id}/revert` — restore snapshot `versionNumber` (appends history)
+- `POST /qbrainai/memory/remember` — persist a multi-layer memory (`content` required; optional title/summary/type/tags/confidence/source/scope)
+- `POST /qbrainai/memory/recall` — ranked recall by meaning or keyword (`query`; optional `minScore`, `topN`, `tags`, `type`, `scope`)
+- `POST /qbrainai/memory/explore` — neighborhood from `seedId` or query seed (Hebbian off by default)
+- `POST /qbrainai/memory/consolidate` — dry-run merge plan by default; set `dryRun: false` to apply
+- `POST /qbrainai/memory/promote` — promote a `sessionlog` or `context` source into memory (operator-explicit)
+- `GET /qbrainai/memory/{id}/versions`
+- `POST /qbrainai/memory/{id}/revert` — restore snapshot `versionNumber` (appends history)
 
 `Idempotency-Key` is not supported. A duplicate remember creates a second row. Foreign or soft-deleted ids fail closed. See `docs/context/memory.md`.
 
-### PromptTemplate controller (`/mcpserver/templates*`)
+### PromptTemplate controller (`/qbrainai/templates*`)
 
-- `GET|POST /mcpserver/templates`
-- `GET|PUT|DELETE /mcpserver/templates/{id}`
-- `POST /mcpserver/templates/{id}/resolve`
-- `POST /mcpserver/templates/{id}/test`
-- `POST /mcpserver/templates/test`
+- `GET|POST /qbrainai/templates`
+- `GET|PUT|DELETE /qbrainai/templates/{id}`
+- `POST /qbrainai/templates/{id}/resolve`
+- `POST /qbrainai/templates/{id}/test`
+- `POST /qbrainai/templates/test`
 
-### Repo controller (`/mcpserver/repo/*`)
+### Repo controller (`/qbrainai/repo/*`)
 
-- `GET /mcpserver/repo/file`
-- `POST /mcpserver/repo/file`
-- `GET /mcpserver/repo/list`
+- `GET /qbrainai/repo/file`
+- `POST /qbrainai/repo/file`
+- `GET /qbrainai/repo/list`
 
-### Requirements controller (`/mcpserver/requirements/*`)
+### Requirements controller (`/qbrainai/requirements/*`)
 
-- `GET /mcpserver/requirements/generate`
-- `GET|POST /mcpserver/requirements/fr`
-- `GET|PUT|DELETE /mcpserver/requirements/fr/{id}`
-- `GET|POST /mcpserver/requirements/tr`
-- `GET|PUT|DELETE /mcpserver/requirements/tr/{id}`
-- `GET|POST /mcpserver/requirements/test`
-- `GET|PUT|DELETE /mcpserver/requirements/test/{id}`
-- `GET /mcpserver/requirements/mapping`
-- `GET|PUT|DELETE /mcpserver/requirements/mapping/{frId}`
-- `POST /mcpserver/requirements/ingest`
+- `GET /qbrainai/requirements/generate`
+- `GET|POST /qbrainai/requirements/fr`
+- `GET|PUT|DELETE /qbrainai/requirements/fr/{id}`
+- `GET|POST /qbrainai/requirements/tr`
+- `GET|PUT|DELETE /qbrainai/requirements/tr/{id}`
+- `GET|POST /qbrainai/requirements/test`
+- `GET|PUT|DELETE /qbrainai/requirements/test/{id}`
+- `GET /qbrainai/requirements/mapping`
+- `GET|PUT|DELETE /qbrainai/requirements/mapping/{frId}`
+- `POST /qbrainai/requirements/ingest`
 
-### SessionLog controller (`/mcpserver/sessionlog*`)
+### SessionLog controller (`/qbrainai/sessionlog*`)
 
-- `GET /mcpserver/sessionlog` (optional `planFile` and `todoId` filters)
-- `POST /mcpserver/sessionlog`
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` (requires `planFile` and `todoId`; use `None` when none)
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (incremental dialog; does not require a full-session upsert)
+- `GET /qbrainai/sessionlog` (optional `planFile` and `todoId` filters)
+- `POST /qbrainai/sessionlog`
+- `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/begin` (requires `planFile` and `todoId`; use `None` when none)
+- `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (incremental dialog; does not require a full-session upsert)
 
 Query and GET responses are sanitized outbound (`Mcp:SessionLogSanitization`). Stored rows stay raw.
 
-### Todo controller (`/mcpserver/todo*`)
+### Todo controller (`/qbrainai/todo*`)
 
-- `GET|POST /mcpserver/todo`
-- `GET|PUT|DELETE /mcpserver/todo/{id}`
-- `POST /mcpserver/todo/{id}/move`
-- `POST /mcpserver/todo/{id}/requirements`
-- `GET /mcpserver/todo/{id}/prompt/implement|plan|status`
-- `POST /mcpserver/todo/{id}/prompt/implement/queue`
-- `POST /mcpserver/todo/{id}/prompt/plan/queue`
-- `POST /mcpserver/todo/{id}/prompt/status/queue`
+- `GET|POST /qbrainai/todo`
+- `GET|PUT|DELETE /qbrainai/todo/{id}`
+- `POST /qbrainai/todo/{id}/move`
+- `POST /qbrainai/todo/{id}/requirements`
+- `GET /qbrainai/todo/{id}/prompt/implement|plan|status`
+- `POST /qbrainai/todo/{id}/prompt/implement/queue`
+- `POST /qbrainai/todo/{id}/prompt/plan/queue`
+- `POST /qbrainai/todo/{id}/prompt/status/queue`
 
 Update request example:
 
@@ -560,41 +560,41 @@ Update request example:
 }
 ```
 
-### ToolRegistry controller (`/mcpserver/tools*`)
+### ToolRegistry controller (`/qbrainai/tools*`)
 
-- `GET|POST /mcpserver/tools`
-- `GET|PUT|DELETE /mcpserver/tools/{id}`
-- `GET /mcpserver/tools/search`
-- `GET|POST /mcpserver/tools/buckets`
-- `DELETE /mcpserver/tools/buckets/{name}`
-- `GET /mcpserver/tools/buckets/{name}/browse`
-- `POST /mcpserver/tools/buckets/{name}/install`
-- `POST /mcpserver/tools/buckets/{name}/sync`
+- `GET|POST /qbrainai/tools`
+- `GET|PUT|DELETE /qbrainai/tools/{id}`
+- `GET /qbrainai/tools/search`
+- `GET|POST /qbrainai/tools/buckets`
+- `DELETE /qbrainai/tools/buckets/{name}`
+- `GET /qbrainai/tools/buckets/{name}/browse`
+- `POST /qbrainai/tools/buckets/{name}/install`
+- `POST /qbrainai/tools/buckets/{name}/sync`
 
-### Tunnel controller (`/mcpserver/tunnel/*`)
+### Tunnel controller (`/qbrainai/tunnel/*`)
 
-- `GET /mcpserver/tunnel/list`
-- `GET /mcpserver/tunnel/{name}/status`
-- `POST /mcpserver/tunnel/{name}/start|stop|restart|enable|disable`
+- `GET /qbrainai/tunnel/list`
+- `GET /qbrainai/tunnel/{name}/status`
+- `POST /qbrainai/tunnel/{name}/start|stop|restart|enable|disable`
 
-### Voice controller (`/mcpserver/voice/*`)
+### Voice controller (`/qbrainai/voice/*`)
 
-- `GET|POST /mcpserver/voice/session`
-- `GET|DELETE /mcpserver/voice/session/{sessionId}`
-- `POST /mcpserver/voice/session/{sessionId}/turn`
-- `POST /mcpserver/voice/session/{sessionId}/turn/stream`
-- `POST /mcpserver/voice/session/{sessionId}/interrupt`
-- `POST /mcpserver/voice/session/{sessionId}/escape`
-- `GET /mcpserver/voice/session/{sessionId}/transcript`
+- `GET|POST /qbrainai/voice/session`
+- `GET|DELETE /qbrainai/voice/session/{sessionId}`
+- `POST /qbrainai/voice/session/{sessionId}/turn`
+- `POST /qbrainai/voice/session/{sessionId}/turn/stream`
+- `POST /qbrainai/voice/session/{sessionId}/interrupt`
+- `POST /qbrainai/voice/session/{sessionId}/escape`
+- `GET /qbrainai/voice/session/{sessionId}/transcript`
 
-### Workspace controller (`/mcpserver/workspace*`)
+### Workspace controller (`/qbrainai/workspace*`)
 
-- `GET|POST /mcpserver/workspace`
-- `GET|PUT|DELETE /mcpserver/workspace/{key}`
-- `POST /mcpserver/workspace/{key}/init|start|stop`
-- `GET /mcpserver/workspace/{key}/status`
-- `GET|PUT /mcpserver/workspace/prompt`
-- `POST /mcpserver/workspace/policy`
+- `GET|POST /qbrainai/workspace`
+- `GET|PUT|DELETE /qbrainai/workspace/{key}`
+- `POST /qbrainai/workspace/{key}/init|start|stop`
+- `GET /qbrainai/workspace/{key}/status`
+- `GET|PUT /qbrainai/workspace/prompt`
+- `POST /qbrainai/workspace/policy`
 
 ### Runtime utility endpoints (non-controller)
 
@@ -611,168 +611,168 @@ POST /auth/device
 POST /auth/token
 GET /auth/ui/{path}
 POST /auth/ui/{path}
-GET /mcpserver/agent-pool/agents
-POST /mcpserver/agent-pool/agents/{agentName}/connect
-POST /mcpserver/agent-pool/agents/{agentName}/recycle
-POST /mcpserver/agent-pool/agents/{agentName}/start
-POST /mcpserver/agent-pool/agents/{agentName}/stop
-POST /mcpserver/agent-pool/connect
-GET /mcpserver/agent-pool/jobs/{jobId}/stream
-GET /mcpserver/agent-pool/notifications
-GET /mcpserver/agent-pool/queue
-DELETE /mcpserver/agent-pool/queue/{jobId}
-POST /mcpserver/agent-pool/queue/{jobId}/cancel
-POST /mcpserver/agent-pool/queue/{jobId}/move-down
-POST /mcpserver/agent-pool/queue/{jobId}/move-up
-POST /mcpserver/agent-pool/queue/one-shot
-POST /mcpserver/agent-pool/queue/resolve
-GET /mcpserver/agents
-DELETE /mcpserver/agents/{agentId}
-GET /mcpserver/agents/{agentId}
-POST /mcpserver/agents/{agentId}
-POST /mcpserver/agents/{agentId}/ban
-GET /mcpserver/agents/{agentId}/events
-POST /mcpserver/agents/{agentId}/events
-POST /mcpserver/agents/{agentId}/launch
-GET /mcpserver/agents/{agentId}/process-status
-POST /mcpserver/agents/{agentId}/stop
-POST /mcpserver/agents/{agentId}/unban
-GET /mcpserver/agents/definitions
-POST /mcpserver/agents/definitions
-DELETE /mcpserver/agents/definitions/{agentType}
-GET /mcpserver/agents/definitions/{agentType}
-POST /mcpserver/agents/definitions/seed
-GET /mcpserver/agents/running
-GET /mcpserver/agents/validate
-GET /mcpserver/configuration
-PATCH /mcpserver/configuration
-POST /mcpserver/context/ingest-website
-POST /mcpserver/context/ingest-website/stream
-POST /mcpserver/context/pack
-POST /mcpserver/context/rebuild-index
-POST /mcpserver/context/search
-GET /mcpserver/context/sources
-POST /mcpserver/desktop/launch  # also requires X-Desktop-Launch-Token when enabled
-GET /mcpserver/events
-GET /mcpserver/gh/actions/runs
-GET /mcpserver/gh/actions/runs/{runId}
-POST /mcpserver/gh/actions/runs/{runId}/cancel
-POST /mcpserver/gh/actions/runs/{runId}/rerun
-GET /mcpserver/gh/auth/status
-DELETE /mcpserver/gh/auth/token
-PUT /mcpserver/gh/auth/token
-GET /mcpserver/gh/issues
-POST /mcpserver/gh/issues
-POST /mcpserver/gh/issues/{id}/comments
-GET /mcpserver/gh/issues/{number}
-PUT /mcpserver/gh/issues/{number}
-POST /mcpserver/gh/issues/{number}/close
-POST /mcpserver/gh/issues/{number}/reopen
-POST /mcpserver/gh/issues/{number}/sync
-POST /mcpserver/gh/issues/sync/from-github
-POST /mcpserver/gh/issues/sync/to-github
-GET /mcpserver/gh/labels
-GET /mcpserver/gh/oauth/authorize-url
-GET /mcpserver/gh/oauth/config
-GET /mcpserver/gh/pulls
-POST /mcpserver/gh/pulls/{id}/comments
-POST /mcpserver/graphrag/index
-POST /mcpserver/graphrag/query
-GET /mcpserver/graphrag/status
-GET /mcpserver/repo/file
-POST /mcpserver/repo/file
-GET /mcpserver/repo/list
-GET /mcpserver/requirements/fr
-POST /mcpserver/requirements/fr
-DELETE /mcpserver/requirements/fr/{id}
-GET /mcpserver/requirements/fr/{id}
-PUT /mcpserver/requirements/fr/{id}
-GET /mcpserver/requirements/generate
-POST /mcpserver/requirements/ingest
-GET /mcpserver/requirements/mapping
-DELETE /mcpserver/requirements/mapping/{frId}
-GET /mcpserver/requirements/mapping/{frId}
-PUT /mcpserver/requirements/mapping/{frId}
-GET /mcpserver/requirements/test
-POST /mcpserver/requirements/test
-DELETE /mcpserver/requirements/test/{id}
-GET /mcpserver/requirements/test/{id}
-PUT /mcpserver/requirements/test/{id}
-GET /mcpserver/requirements/tr
-POST /mcpserver/requirements/tr
-DELETE /mcpserver/requirements/tr/{id}
-GET /mcpserver/requirements/tr/{id}
-PUT /mcpserver/requirements/tr/{id}
-GET /mcpserver/sessionlog
-POST /mcpserver/sessionlog
-POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
-GET /mcpserver/templates
-POST /mcpserver/templates
-DELETE /mcpserver/templates/{id}
-GET /mcpserver/templates/{id}
-PUT /mcpserver/templates/{id}
-POST /mcpserver/templates/{id}/resolve
-POST /mcpserver/templates/{id}/test
-POST /mcpserver/templates/test
-GET /mcpserver/todo
-POST /mcpserver/todo
-DELETE /mcpserver/todo/{id}
-GET /mcpserver/todo/{id}
-PUT /mcpserver/todo/{id}
-POST /mcpserver/todo/{id}/move
-GET /mcpserver/todo/{id}/prompt/implement
-POST /mcpserver/todo/{id}/prompt/implement/queue
-GET /mcpserver/todo/{id}/prompt/plan
-POST /mcpserver/todo/{id}/prompt/plan/queue
-GET /mcpserver/todo/{id}/prompt/status
-POST /mcpserver/todo/{id}/prompt/status/queue
-POST /mcpserver/todo/{id}/requirements
-GET /mcpserver/tools
-POST /mcpserver/tools
-DELETE /mcpserver/tools/{id}
-GET /mcpserver/tools/{id}
-PUT /mcpserver/tools/{id}
-GET /mcpserver/tools/buckets
-POST /mcpserver/tools/buckets
-DELETE /mcpserver/tools/buckets/{name}
-GET /mcpserver/tools/buckets/{name}/browse
-POST /mcpserver/tools/buckets/{name}/install
-POST /mcpserver/tools/buckets/{name}/sync
-GET /mcpserver/tools/search
-POST /mcpserver/tunnel/{name}/disable
-POST /mcpserver/tunnel/{name}/enable
-POST /mcpserver/tunnel/{name}/restart
-POST /mcpserver/tunnel/{name}/start
-GET /mcpserver/tunnel/{name}/status
-POST /mcpserver/tunnel/{name}/stop
-GET /mcpserver/tunnel/list
-GET /mcpserver/voice/session
-POST /mcpserver/voice/session
-DELETE /mcpserver/voice/session/{sessionId}
-GET /mcpserver/voice/session/{sessionId}
-POST /mcpserver/voice/session/{sessionId}/escape
-POST /mcpserver/voice/session/{sessionId}/interrupt
-GET /mcpserver/voice/session/{sessionId}/transcript
-POST /mcpserver/voice/session/{sessionId}/turn
-POST /mcpserver/voice/session/{sessionId}/turn/stream
-GET /mcpserver/workspace
-POST /mcpserver/workspace
-DELETE /mcpserver/workspace/{key}
-GET /mcpserver/workspace/{key}
-PUT /mcpserver/workspace/{key}
-POST /mcpserver/workspace/{key}/init
-POST /mcpserver/workspace/{key}/start
-GET /mcpserver/workspace/{key}/status
-POST /mcpserver/workspace/{key}/stop
-POST /mcpserver/workspace/policy
-GET /mcpserver/workspace/prompt
-PUT /mcpserver/workspace/prompt
+GET /qbrainai/agent-pool/agents
+POST /qbrainai/agent-pool/agents/{agentName}/connect
+POST /qbrainai/agent-pool/agents/{agentName}/recycle
+POST /qbrainai/agent-pool/agents/{agentName}/start
+POST /qbrainai/agent-pool/agents/{agentName}/stop
+POST /qbrainai/agent-pool/connect
+GET /qbrainai/agent-pool/jobs/{jobId}/stream
+GET /qbrainai/agent-pool/notifications
+GET /qbrainai/agent-pool/queue
+DELETE /qbrainai/agent-pool/queue/{jobId}
+POST /qbrainai/agent-pool/queue/{jobId}/cancel
+POST /qbrainai/agent-pool/queue/{jobId}/move-down
+POST /qbrainai/agent-pool/queue/{jobId}/move-up
+POST /qbrainai/agent-pool/queue/one-shot
+POST /qbrainai/agent-pool/queue/resolve
+GET /qbrainai/agents
+DELETE /qbrainai/agents/{agentId}
+GET /qbrainai/agents/{agentId}
+POST /qbrainai/agents/{agentId}
+POST /qbrainai/agents/{agentId}/ban
+GET /qbrainai/agents/{agentId}/events
+POST /qbrainai/agents/{agentId}/events
+POST /qbrainai/agents/{agentId}/launch
+GET /qbrainai/agents/{agentId}/process-status
+POST /qbrainai/agents/{agentId}/stop
+POST /qbrainai/agents/{agentId}/unban
+GET /qbrainai/agents/definitions
+POST /qbrainai/agents/definitions
+DELETE /qbrainai/agents/definitions/{agentType}
+GET /qbrainai/agents/definitions/{agentType}
+POST /qbrainai/agents/definitions/seed
+GET /qbrainai/agents/running
+GET /qbrainai/agents/validate
+GET /qbrainai/configuration
+PATCH /qbrainai/configuration
+POST /qbrainai/context/ingest-website
+POST /qbrainai/context/ingest-website/stream
+POST /qbrainai/context/pack
+POST /qbrainai/context/rebuild-index
+POST /qbrainai/context/search
+GET /qbrainai/context/sources
+POST /qbrainai/desktop/launch  # also requires X-Desktop-Launch-Token when enabled
+GET /qbrainai/events
+GET /qbrainai/gh/actions/runs
+GET /qbrainai/gh/actions/runs/{runId}
+POST /qbrainai/gh/actions/runs/{runId}/cancel
+POST /qbrainai/gh/actions/runs/{runId}/rerun
+GET /qbrainai/gh/auth/status
+DELETE /qbrainai/gh/auth/token
+PUT /qbrainai/gh/auth/token
+GET /qbrainai/gh/issues
+POST /qbrainai/gh/issues
+POST /qbrainai/gh/issues/{id}/comments
+GET /qbrainai/gh/issues/{number}
+PUT /qbrainai/gh/issues/{number}
+POST /qbrainai/gh/issues/{number}/close
+POST /qbrainai/gh/issues/{number}/reopen
+POST /qbrainai/gh/issues/{number}/sync
+POST /qbrainai/gh/issues/sync/from-github
+POST /qbrainai/gh/issues/sync/to-github
+GET /qbrainai/gh/labels
+GET /qbrainai/gh/oauth/authorize-url
+GET /qbrainai/gh/oauth/config
+GET /qbrainai/gh/pulls
+POST /qbrainai/gh/pulls/{id}/comments
+POST /qbrainai/graphrag/index
+POST /qbrainai/graphrag/query
+GET /qbrainai/graphrag/status
+GET /qbrainai/repo/file
+POST /qbrainai/repo/file
+GET /qbrainai/repo/list
+GET /qbrainai/requirements/fr
+POST /qbrainai/requirements/fr
+DELETE /qbrainai/requirements/fr/{id}
+GET /qbrainai/requirements/fr/{id}
+PUT /qbrainai/requirements/fr/{id}
+GET /qbrainai/requirements/generate
+POST /qbrainai/requirements/ingest
+GET /qbrainai/requirements/mapping
+DELETE /qbrainai/requirements/mapping/{frId}
+GET /qbrainai/requirements/mapping/{frId}
+PUT /qbrainai/requirements/mapping/{frId}
+GET /qbrainai/requirements/test
+POST /qbrainai/requirements/test
+DELETE /qbrainai/requirements/test/{id}
+GET /qbrainai/requirements/test/{id}
+PUT /qbrainai/requirements/test/{id}
+GET /qbrainai/requirements/tr
+POST /qbrainai/requirements/tr
+DELETE /qbrainai/requirements/tr/{id}
+GET /qbrainai/requirements/tr/{id}
+PUT /qbrainai/requirements/tr/{id}
+GET /qbrainai/sessionlog
+POST /qbrainai/sessionlog
+POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+GET /qbrainai/templates
+POST /qbrainai/templates
+DELETE /qbrainai/templates/{id}
+GET /qbrainai/templates/{id}
+PUT /qbrainai/templates/{id}
+POST /qbrainai/templates/{id}/resolve
+POST /qbrainai/templates/{id}/test
+POST /qbrainai/templates/test
+GET /qbrainai/todo
+POST /qbrainai/todo
+DELETE /qbrainai/todo/{id}
+GET /qbrainai/todo/{id}
+PUT /qbrainai/todo/{id}
+POST /qbrainai/todo/{id}/move
+GET /qbrainai/todo/{id}/prompt/implement
+POST /qbrainai/todo/{id}/prompt/implement/queue
+GET /qbrainai/todo/{id}/prompt/plan
+POST /qbrainai/todo/{id}/prompt/plan/queue
+GET /qbrainai/todo/{id}/prompt/status
+POST /qbrainai/todo/{id}/prompt/status/queue
+POST /qbrainai/todo/{id}/requirements
+GET /qbrainai/tools
+POST /qbrainai/tools
+DELETE /qbrainai/tools/{id}
+GET /qbrainai/tools/{id}
+PUT /qbrainai/tools/{id}
+GET /qbrainai/tools/buckets
+POST /qbrainai/tools/buckets
+DELETE /qbrainai/tools/buckets/{name}
+GET /qbrainai/tools/buckets/{name}/browse
+POST /qbrainai/tools/buckets/{name}/install
+POST /qbrainai/tools/buckets/{name}/sync
+GET /qbrainai/tools/search
+POST /qbrainai/tunnel/{name}/disable
+POST /qbrainai/tunnel/{name}/enable
+POST /qbrainai/tunnel/{name}/restart
+POST /qbrainai/tunnel/{name}/start
+GET /qbrainai/tunnel/{name}/status
+POST /qbrainai/tunnel/{name}/stop
+GET /qbrainai/tunnel/list
+GET /qbrainai/voice/session
+POST /qbrainai/voice/session
+DELETE /qbrainai/voice/session/{sessionId}
+GET /qbrainai/voice/session/{sessionId}
+POST /qbrainai/voice/session/{sessionId}/escape
+POST /qbrainai/voice/session/{sessionId}/interrupt
+GET /qbrainai/voice/session/{sessionId}/transcript
+POST /qbrainai/voice/session/{sessionId}/turn
+POST /qbrainai/voice/session/{sessionId}/turn/stream
+GET /qbrainai/workspace
+POST /qbrainai/workspace
+DELETE /qbrainai/workspace/{key}
+GET /qbrainai/workspace/{key}
+PUT /qbrainai/workspace/{key}
+POST /qbrainai/workspace/{key}/init
+POST /qbrainai/workspace/{key}/start
+GET /qbrainai/workspace/{key}/status
+POST /qbrainai/workspace/{key}/stop
+POST /qbrainai/workspace/policy
+GET /qbrainai/workspace/prompt
+PUT /qbrainai/workspace/prompt
 
 ```
 
 ## 4) MCP tool catalog (STDIO tools)
 
-Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`
+Source: `src/QBrainAi.Support.Mcp/McpStdio/McpServerMcpTools.cs`
 
 Current surface area: STDIO tools in `docs/stdio-tool-contract.json` (includes the memory surface below).
 
@@ -847,9 +847,9 @@ Mcp:
 ### Index workflow
 
 1. Start server.
-2. `POST /mcpserver/graphrag/index` (or MCP tool `graphrag_index`).
-3. Monitor with `GET /mcpserver/graphrag/status`.
-4. Query with `POST /mcpserver/graphrag/query`.
+2. `POST /qbrainai/graphrag/index` (or MCP tool `graphrag_index`).
+3. Monitor with `GET /qbrainai/graphrag/status`.
+4. Query with `POST /qbrainai/graphrag/query`.
 
 ### Rollout checklist
 
@@ -865,10 +865,10 @@ Mcp:
 
 ### Agent Pool setup
 
-- inspect workers via `/mcpserver/agent-pool/agents`
-- queue ad-hoc jobs via `/mcpserver/agent-pool/queue/one-shot`
-- resolve queued orchestrations via `/mcpserver/agent-pool/queue/resolve`
-- stream progress via `/mcpserver/agent-pool/jobs/{jobId}/stream`
+- inspect workers via `/qbrainai/agent-pool/agents`
+- queue ad-hoc jobs via `/qbrainai/agent-pool/queue/one-shot`
+- resolve queued orchestrations via `/qbrainai/agent-pool/queue/resolve`
+- stream progress via `/qbrainai/agent-pool/jobs/{jobId}/stream`
 
 Queue one-shot example:
 
@@ -891,7 +891,7 @@ Queue one-shot example:
 
 ## 7) Troubleshooting and FAQ
 
-### 401 Unauthorized on `/mcpserver/*`
+### 401 Unauthorized on `/qbrainai/*`
 
 - refresh `apiKey` from `AGENTS-README-FIRST.yaml`
 - verify `X-Workspace-Path` targets a registered workspace
@@ -900,7 +900,7 @@ Queue one-shot example:
 ### Workspace not found or wrong data set
 
 - send explicit `X-Workspace-Path`
-- check registrations via `GET /mcpserver/workspace`
+- check registrations via `GET /qbrainai/workspace`
 
 ### MCP transport handshake issues
 
@@ -917,13 +917,13 @@ Queue one-shot example:
 
 - run `gh auth status`
 - validate `Mcp:ToolRegistry` settings
-- verify token status at `GET /mcpserver/gh/auth/status`
+- verify token status at `GET /qbrainai/gh/auth/status`
 
 ### Windows service deployment concerns
 
 - always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
-- do not manually overwrite `C:\ProgramData\McpServer`
+- do not manually overwrite `C:\ProgramData\QBrainAi`
 - Linux updates also use `UpdateService`; see the existing-systemd requirements and recovery limits above
 
 ### Keyserver errors on TODO, session-log, or requirements writes
@@ -939,14 +939,14 @@ Use cases are workspace-scoped domain records with actors, flows, steps, FR link
 
 ### REST
 
-- Base: `GET/POST /mcpserver/usecases` (requires `X-Api-Key`, optional `X-Workspace-Path`)
-- Aggregate: `GET/PUT/DELETE /mcpserver/usecases/{id}`
+- Base: `GET/POST /qbrainai/usecases` (requires `X-Api-Key`, optional `X-Workspace-Path`)
+- Aggregate: `GET/PUT/DELETE /qbrainai/usecases/{id}`
 - Structure: `POST .../flows`, `POST .../flows/{flowId}/steps`, `POST .../actors`, `POST/DELETE .../links`
 - Diagrams:
   - Sequence (from flows/steps): `GET .../diagram?kind=sequence&format=mermaid|plantuml`
   - UML use-case graph export: `GET .../diagram?kind=usecase&format=mermaid|plantuml`
   - Canvas graph: `GET/PUT .../diagram-graph` (JSON schema v1; see `docs/context/usecase-diagram-mermaid-schema-v1.md`)
-- Coverage: `GET /mcpserver/usecases/coverage`
+- Coverage: `GET /qbrainai/usecases/coverage`
 - Approval / product: `POST .../approval`, `POST .../product`, `GET .../by-product/{productKey}`
 
 ### First-party UI
@@ -974,11 +974,11 @@ A Product groups workspaces on the same host so members can read each other's FR
 
 ### REST
 
-- `POST /mcpserver/products` body `{ "key": "PROD-MCPSERVER", "name": "McpServer" }` (caller becomes owner)
-- `GET /mcpserver/products` and `GET /mcpserver/products/{key}`
-- `PATCH /mcpserver/products/{key}` (owner) and `DELETE /mcpserver/products/{key}` (owner soft-delete)
-- Members: `GET/PUT/DELETE /mcpserver/products/{key}/members/{workspaceId}`
-- Effective requirements: `GET /mcpserver/requirements/effective?productScope=product|local` (default `product`)
+- `POST /qbrainai/products` body `{ "key": "PROD-MCPSERVER", "name": "QBrainAi" }` (caller becomes owner)
+- `GET /qbrainai/products` and `GET /qbrainai/products/{key}`
+- `PATCH /qbrainai/products/{key}` (owner) and `DELETE /qbrainai/products/{key}` (owner soft-delete)
+- Members: `GET/PUT/DELETE /qbrainai/products/{key}/members/{workspaceId}`
+- Effective requirements: `GET /qbrainai/requirements/effective?productScope=product|local` (default `product`)
 
 All routes require `X-Api-Key`. Invalid keys are 400; duplicate keys 409; non-owner mutate 403; outsider get 404.
 
@@ -995,15 +995,15 @@ MCP memories are the shared, workspace-scoped store for durable operator guidanc
 
 ### Verbs
 
-- `memory_remember` / `POST /mcpserver/memory/remember` — persist a fact, decision, preference, procedure, or entity. `content` is the raw text that later injection uses.
-- `memory_recall` / `POST /mcpserver/memory/recall` — ranked guidance by meaning or keyword. Results stay in the caller Effective set.
-- `memory_promote` / `POST /mcpserver/memory/promote` — copy an operator-selected session-log or context source into memory (`sourceKind` + `sourceRef`).
-- `memory_consolidate` / `POST /mcpserver/memory/consolidate` — sleep/merge near-duplicates. Default is dry-run; apply only when `dryRun` is false.
-- `memory_explore` / `POST /mcpserver/memory/explore` — neighborhood walk from a seed id or the top recall hit. Hebbian co-retrieved edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
-- `memory_revert` / `POST /mcpserver/memory/{id}/revert` — restore snapshot N and append history.
+- `memory_remember` / `POST /qbrainai/memory/remember` — persist a fact, decision, preference, procedure, or entity. `content` is the raw text that later injection uses.
+- `memory_recall` / `POST /qbrainai/memory/recall` — ranked guidance by meaning or keyword. Results stay in the caller Effective set.
+- `memory_promote` / `POST /qbrainai/memory/promote` — copy an operator-selected session-log or context source into memory (`sourceKind` + `sourceRef`).
+- `memory_consolidate` / `POST /qbrainai/memory/consolidate` — sleep/merge near-duplicates. Default is dry-run; apply only when `dryRun` is false.
+- `memory_explore` / `POST /qbrainai/memory/explore` — neighborhood walk from a seed id or the top recall hit. Hebbian co-retrieved edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
+- `memory_revert` / `POST /qbrainai/memory/{id}/revert` — restore snapshot N and append history.
 - Compat CRUD remains: `memory_add`, `memory_list`, `memory_update`, `memory_remove`.
 
-REPL: `workflow.memory.remember|recall|explore|consolidate|promote|revert` plus the same compat names. Typed client: `McpServerClient.Memory`.
+REPL: `workflow.memory.remember|recall|explore|consolidate|promote|revert` plus the same compat names. Typed client: `QBrainAiClient.Memory`.
 
 ### REQUIRED MEMORIES injection
 
@@ -1029,11 +1029,11 @@ Do not summarize or rewrite injected text.
 
 REST used by the UI:
 
-- List: `GET /mcpserver/memory?scope=Effective` (requires `X-Api-Key`, optional `X-Workspace-Path`)
-- Get / update: `GET/PUT /mcpserver/memory/{id}`
-- Remember: `POST /mcpserver/memory/remember`
-- Recall: `POST /mcpserver/memory/recall`
-- Versions / revert: `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`
+- List: `GET /qbrainai/memory?scope=Effective` (requires `X-Api-Key`, optional `X-Workspace-Path`)
+- Get / update: `GET/PUT /qbrainai/memory/{id}`
+- Remember: `POST /qbrainai/memory/remember`
+- Recall: `POST /qbrainai/memory/recall`
+- Versions / revert: `GET /qbrainai/memory/{id}/versions`, `POST /qbrainai/memory/{id}/revert`
 
 The UI calls only those public REST routes. Foreign or unknown ids fail closed (403/404). Soft-deleted rows stay hidden because the default list omits them.
 

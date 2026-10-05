@@ -4,13 +4,13 @@
 **Agent**: Grok 4.3 (executing under Byrd v4 + wrap-up skill via mcpserver-codex-plugin)  
 **Primary MCP TODO**: PLAN-AGENTPARITY-001 (Agent Plugin Operational Parity v1.0)  
 **Session/Turn**: Codex-20260527T171419Z-mcpserver-session / req-20260529T004953Z-begin-handoff-parity (in_progress at handoff creation; see session log for full dialog/actions)  
-**Workspace**: F:\GitHub\McpServer (trust verified via codex plugin: signature_verified + healthNonce)
+**Workspace**: F:\GitHub\QBrainAi (trust verified via codex plugin: signature_verified + healthNonce)
 
 ## v4 Development Process Rollout — COMPLETE
 - **Artifact**: `docs/Development-Process-draft-v4.md` (header + Version History documenting Fowler alignment; Implementation section now explicitly cites Martin Fowler canonical TDD: "write a test for the next small piece of desired behavior, make it pass, then refactor").
 - **Byrd augmentations preserved**: Mocks/stubs validation gate + entire relevant suite must be green (0 fails, 0 skips) before exiting any phase or writing real implementation code. Explicit "Refactor as part of the cycle".
 - **Marker/Template/Refs updated**: `templates/prompt-templates.yaml:381` ("Use the Byrd Development Process V4"), AGENTS-README-FIRST.yaml, docs/Project/Technical-Requirements.md, Testing-Requirements.md, AGENTS.md, wiki copies.
-- **Drift cleanup**: Grep across McpServer tree (md/yaml/ps1/cs) shows zero active references to Development-Process-draft-v3 as the current process document. Historical mentions (xUnit v3, NuGet v3, VM sizes) only.
+- **Drift cleanup**: Grep across QBrainAi tree (md/yaml/ps1/cs) shows zero active references to Development-Process-draft-v3 as the current process document. Historical mentions (xUnit v3, NuGet v3, VM sizes) only.
 - **GraphRAG**: v4 ingested (adhoc-text + TriggerReindex) by prior background agents; v3 removed where present. Live server health + nonce verified.
 - **Evidence**: Prior subagent runs (GraphRAG 83 calls/592s, marker scan 87/909s, etc.) + direct verification in this session (health/nonce via REST + codex status).
 
@@ -40,7 +40,7 @@ See: `docs/Development-Process-draft-v4.md`, `docs/plans/Proposed-TDD-Wording-Ch
 - **Validation (executed in this session)**:
   - `dotnet build tests/AgentPluginCore/AgentPluginCore.Tests.csproj` — succeeded (clean).
   - `dotnet test tests/AgentPluginCore/AgentPluginCore.Tests.csproj --no-build --filter "FullyQualifiedName~V4|MarkerTrust|EnforcementStateMachine|CacheFailsafe|ReplBridge"` — **24 passed, 0 failed, 0 skipped, 216 ms**.
-- **Gate satisfied**: Per Byrd v4 + plan "Detailed TDD Test Plan" + Fowler (small focused tests first, mocks validated green, then minimal real, refactor). No production `@sharpninja/mcpserver-agent-core` or per-plugin shims written.
+- **Gate satisfied**: Per Byrd v4 + plan "Detailed TDD Test Plan" + Fowler (small focused tests first, mocks validated green, then minimal real, refactor). No production `@qbrainai/qbrain-ai-agent-core` or per-plugin shims written.
 
 **MCP TODO Update** (via proper interfaces): PLAN-AGENTPARITY-001 remaining/note/phase fields updated (initial via REST with X-Api-Key; confirmed via codex status). Records 24-green proof and "Phase 2 ready (post green gate)".
 
@@ -52,7 +52,7 @@ See: `docs/Development-Process-draft-v4.md`, `docs/plans/Proposed-TDD-Wording-Ch
 
 ## Next Steps (per plan + Byrd gates)
 1. Human review/sign-off on Phase 1 artifacts (24 green tests + contracts as the canonical v4 core spec).
-2. Phase 2 small increment (Fowler "next small piece"): minimal production shared core skeleton (likely TS package `@sharpninja/mcpserver-agent-core` exporting the interfaces + thin reference impl or pure types; or first language shim). Write the *next* slice of tests first if gaps found, re-validate green on mocks, then minimal code.
+2. Phase 2 small increment (Fowler "next small piece"): minimal production shared core skeleton (likely TS package `@qbrainai/qbrain-ai-agent-core` exporting the interfaces + thin reference impl or pure types; or first language shim). Write the *next* slice of tests first if gaps found, re-validate green on mocks, then minimal code.
 3. Per-plugin adoption (020-027 work items): each plugin adopts the core (thin shims or hooks calling it), adds required artifacts (ENFORCEMENT.md, subagent support, device guidance, etc.), passes updated parity harness.
 4. Full end-to-end harness (Phase 11, golden 100-turn workload, strict assertions on logs/TODO/cache/build gates).
 5. Human validation (≥4 agents), v1.x releases.
@@ -64,7 +64,7 @@ See: `docs/Development-Process-draft-v4.md`, `docs/plans/Proposed-TDD-Wording-Ch
 - Tests + contracts: `tests/AgentPluginCore/` (full) + `tests/AgentPluginParity/`
 - Old handoff (historical): `docs/plans/handoff-agent-parity-plan-2026-05-28.yaml`
 - This handoff: `docs/plans/handoff-parity-v4-phase1-complete-2026-05-29.md`
-- Session log (authoritative): query via `workflow.sessionlog.queryHistory` (Codex agent) or REST `/mcpserver/sessionlogDialog/...` for the turn `req-20260529T004953Z-begin-handoff-parity`
+- Session log (authoritative): query via `workflow.sessionlog.queryHistory` (Codex agent) or REST `/qbrainai/sessionlogDialog/...` for the turn `req-20260529T004953Z-begin-handoff-parity`
 - TODO: `workflow.todo.get PLAN-AGENTPARITY-001`
 
 **Blockers**: None for the completed gates. Old in_progress turns in the active session (e.g. PLAN-BUGFIXES-001, DB-FK-001 fragments) should be reconciled by their owners or future wrap-ups.

@@ -15,7 +15,7 @@ partial class Build
             Log.Information("Running AiWarningSuppressionReview test via dotnet test so the aiUnit project review attribute triggers the governance review.");
 
             DotNetTest(s => s
-                .SetProjectFile(TestsDirectory / "McpServer.Review.Tests" / "McpServer.Review.Tests.csproj")
+                .SetProjectFile(TestsDirectory / "QBrainAi.Review.Tests" / "QBrainAi.Review.Tests.csproj")
                 .SetConfiguration(Configuration)
                 .SetFilter("FullyQualifiedName~AiReviewTests.WarningSuppressionGovernanceReview")
                 .SetNoBuild(true)

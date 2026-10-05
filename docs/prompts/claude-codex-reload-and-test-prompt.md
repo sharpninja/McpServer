@@ -1,16 +1,16 @@
-# Prompt: Reload McpServer Plugin and Run Server-Truth Validation Test (Claude Desktop / Codex Desktop)
+# Prompt: Reload QBrainAi Plugin and Run Server-Truth Validation Test (Claude Desktop / Codex Desktop)
 
 **Instructions for the user running this:**
 - Copy the entire block below (starting from "You are now running in...") and paste it as a new message into Claude Desktop or Codex Desktop.
 - Run this in a fresh session in the target workspace (recommended: F:\GitHub\vice-sharp).
-- This prompt assumes the McpServer plugin core has been updated and synced (latest shims use proper object construction + JSON serialization for envelopes, fixing previous "Malformed YAML envelope" / invalid_envelope issues for rich sessionlog data like actions + multiline responses).
+- This prompt assumes the QBrainAi plugin core has been updated and synced (latest shims use proper object construction + JSON serialization for envelopes, fixing previous "Malformed YAML envelope" / invalid_envelope issues for rich sessionlog data like actions + multiline responses).
 - After reload, the agent must use the **plugin shims** (workflow.sessionlog.* or equivalent) for mutations, and verify via server-truth GET (not just local "ok: true").
 
 ---
 
-You are now running in **Claude Desktop** (or **Codex Desktop**) with the McpServer plugin.
+You are now running in **Claude Desktop** (or **Codex Desktop**) with the QBrainAi plugin.
 
-## Step 1: Reload / Refresh the McpServer Plugin
+## Step 1: Reload / Refresh the QBrainAi Plugin
 
 The plugin core has been updated with critical fixes for session logging shims (replacing fragile manual YAML text construction with object-first + reliable JSON serialization for envelopes). This fixes BUG-6 issues where appendActions + completeTurn with non-filePath actions (e.g. design_decision whose description mentions "filePath") + multiline responses containing colons/lists were producing "invalid_envelope" / "Malformed YAML envelope" errors. Data was landing only in failsafes instead of the server.
 
@@ -26,19 +26,19 @@ The plugin core has been updated with critical fixes for session logging shims (
   - Fully restart Codex Desktop.
   - Trigger plugin reload if available (via Codex settings, session restart, or hook).
   - Ensure loading from latest: `F:\GitHub\mcpserver-codex-plugin`.
-  - Confirm via plugin status or by noting the core version in any manifest (synced from McpServer core 58b68e2+).
+  - Confirm via plugin status or by noting the core version in any manifest (synced from QBrainAi core 58b68e2+).
   - Clear Codex plugin cache if stale (e.g., under C:\Users\you\.codex\plugins\cache).
 
 After reload/restart, confirm the plugin is active and using the updated shims (you should no longer hit the old YAML envelope bugs on rich payloads).
 
 ## Step 2: Run Server-Truth Validation Test in Your Workspace
 
-Use the workspace at `F:\GitHub\vice-sharp` (or confirm the current one has the McpServer marker and is registered).
+Use the workspace at `F:\GitHub\vice-sharp` (or confirm the current one has the QBrainAi marker and is registered).
 
 **Goal:** Prove the shim fixes work end-to-end for complex sessionlog data:
 - appendActions with mixed structured actions (including non-filePath like design_decision/verify/commit whose text may contain the word "filePath", plus a real filePath edit).
 - completeTurn with a rich multiline response (containing lists and colons).
-- Verify **server truth** via GET to /mcpserver/sessionlog (not local return codes).
+- Verify **server truth** via GET to /qbrainai/sessionlog (not local return codes).
 - Append your results to the shared file: `F:\GitHub\vice-sharp\docs\mcpserver-bug6-server-truth-results.md` (use your file tools / repo_write / shell append to add a new section without overwriting).
 
 **Preconditions (run these):**
@@ -87,7 +87,7 @@ response: |
    - Use your normal query tool (sessionlog.queryHistory / getHistory / equivalent).
    - Also construct and run (or output the exact curl/command for) an authenticated GET:
      ```
-     GET {baseUrl}/mcpserver/sessionlog?agent={your-sourceType}&sessionId={sessionId}&limit=5
+     GET {baseUrl}/qbrainai/sessionlog?agent={your-sourceType}&sessionId={sessionId}&limit=5
      Headers:
        X-Api-Key: {apiKey}
        X-Workspace-Path: {workspacePath}

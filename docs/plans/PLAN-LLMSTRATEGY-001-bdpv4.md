@@ -1,6 +1,6 @@
 # BDPv4 plan: PLAN-LLMSTRATEGY-001 per-role LLM completion strategy
 
-Workspace: `F:\GitHub\McpServer`
+Workspace: `F:\GitHub\QBrainAi`
 Requirements: FR-MCP-LLMSTRATEGY-001, TR-MCP-LLMSTRATEGY-001, TEST-MCP-LLMSTRATEGY-001
 TODO: PLAN-LLMSTRATEGY-001 (leave `Done: false` until Codex READY, tests Failed 0/Skipped 0, and hostile AGREE)
 
@@ -24,7 +24,7 @@ Each QuadBrain role completes through a per-slot provider strategy. Orchestratio
 
 ### BrainSlotTurnContext (class)
 
-File: `src/McpServer.Support.Mcp/Services/BrainSlotTurnContext.cs`
+File: `src/QBrainAi.Support.Mcp/Services/BrainSlotTurnContext.cs`
 
 Init properties: `OriginalInput` (required string), `SessionId`, `TurnId`, `TransactionId` (nullable strings; this `TransactionId` is the **upstream turn** id, not per-invocation `brain-slot-{guid}`).
 
@@ -108,17 +108,17 @@ New/extended tests in `BrainSlotLlmStrategyTests.cs` plus extensions to `QuadBra
 7. Existing commit-failure behaviors still pass through the new seam.
 8. New strategy-backed invocation tests: provider timeout (`OperationCanceledException` from the strategy while the caller token is not canceled) returns `ProviderFailed` and does not admit/commit GraphRAG; caller cancellation (`canceled` token) propagates `OperationCanceledException` and does not reach transaction commit or admission.
 
-Implement `CreateStrategy` on the four concrete test factories; compile `McpServer.Support.Mcp.Tests` and `McpServer.Support.Mcp.IntegrationTests`.
+Implement `CreateStrategy` on the four concrete test factories; compile `QBrainAi.Support.Mcp.Tests` and `QBrainAi.Support.Mcp.IntegrationTests`.
 
 Do not mock `BrainSlotChatClientFactory` or `BuildOpenAiCompatibleRequestJson` for flatten tests. Fake only provider I/O or recording strategy boundary.
 
-D-01: tests compare `McpServer.Support.Mcp.csproj` **two separate lists** (not a mixed bag):
+D-01: tests compare `QBrainAi.Support.Mcp.csproj` **two separate lists** (not a mixed bag):
 
 PackageReference.Include (current snapshot):
 Microsoft.EntityFrameworkCore; Microsoft.AspNetCore.Authentication.JwtBearer; Microsoft.Extensions.AI.OpenAI; OpenAI; Microsoft.AspNetCore.Identity.EntityFrameworkCore; Duende.IdentityServer; Duende.IdentityServer.AspNetIdentity; Duende.IdentityServer.EntityFramework; Microsoft.Extensions.Hosting.WindowsServices; Microsoft.EntityFrameworkCore.Sqlite; Microsoft.EntityFrameworkCore.SqlServer; Npgsql.EntityFrameworkCore.PostgreSQL; Microsoft.EntityFrameworkCore.InMemory; Microsoft.EntityFrameworkCore.Design; Microsoft.EntityFrameworkCore.Analyzers; Microsoft.CodeAnalysis.Common; Microsoft.CodeAnalysis.CSharp; Microsoft.CodeAnalysis.CSharp.Workspaces; Microsoft.CodeAnalysis.Workspaces.Common; Microsoft.CodeAnalysis.Workspaces.MSBuild; Microsoft.Build.Framework; ModelContextProtocol; ModelContextProtocol.AspNetCore; Serilog.AspNetCore; Serilog.Sinks.Console; Serilog.Sinks.File; Serilog.Sinks.Http; Swashbuckle.AspNetCore; YamlDotNet; NetEscapades.Configuration.Yaml; Microsoft.ML.OnnxRuntime; HNSWIndex; Handlebars.Net; QRCoder
 
 ProjectReference.Include (current snapshot):
-..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj; ..\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj; ..\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj; ..\McpServer.Storage\McpServer.Storage.csproj; ..\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj; ..\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj; ..\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj; ..\McpServer.Services\McpServer.Services.csproj; ..\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj; ..\McpServer.GraphRag\McpServer.GraphRag.csproj
+..\QBrainAi.ServiceDefaults\QBrainAi.ServiceDefaults.csproj; ..\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj; ..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj; ..\QBrainAi.Storage\QBrainAi.Storage.csproj; ..\QBrainAi.Storage.SqliteMigrations\QBrainAi.Storage.SqliteMigrations.csproj; ..\QBrainAi.Storage.PostgreSqlMigrations\QBrainAi.Storage.PostgreSqlMigrations.csproj; ..\QBrainAi.Storage.SqlServerMigrations\QBrainAi.Storage.SqlServerMigrations.csproj; ..\QBrainAi.Services\QBrainAi.Services.csproj; ..\QBrainAi.SessionLog.Transcripts\QBrainAi.SessionLog.Transcripts.csproj; ..\QBrainAi.GraphRag\QBrainAi.GraphRag.csproj
 
 No new PackageReference names and no new ProjectReference names vs that snapshot. Reflection `CreateStrategy` is only an API-existence check.
 
@@ -131,7 +131,7 @@ Intermediate: focused BrainSlot tests Failed 0 Skipped 0.
 Before hostile + TODO done (BG-06):
 
 - Focused filter Failed 0 Skipped 0: `FullyQualifiedName~BrainSlotLlmStrategyTests|FullyQualifiedName~BrainSlotInvocationTransactionTests|FullyQualifiedName~BrainSlotChatClientFactoryTests|FullyQualifiedName~QuadBrainLiveOrchestrationTests`
-- `dotnet build tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj -c Debug`
+- `dotnet build tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj -c Debug`
 
 Do not require `./build.ps1 Test` or `FullyQualifiedName~BrainSlot` for this TODO. That substring includes `QuadBrainSlotConfigurationTests`, which currently fails Expected OpenAICompatible Actual Cli on `config/brain-slots/quad-brain-slot-assignments.yaml`. That yaml/runtimeCompatibility check is outside FR/TR/TEST-MCP-LLMSTRATEGY-001.
 

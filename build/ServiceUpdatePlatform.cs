@@ -14,9 +14,9 @@ internal sealed record ServiceUpdatePlatform(bool IsWindows, string DefaultServi
     public static ServiceUpdatePlatform Resolve(bool windows, bool linux, Architecture architecture)
     {
         if (windows && !linux && architecture is Architecture.X64 or Architecture.Arm64)
-            return new(true, "McpServer", @"C:\ProgramData\McpServer", "McpServer.Support.Mcp.exe", "win-x64");
+            return new(true, "QBrainAi", @"C:\ProgramData\QBrainAi", "QBrainAi.Support.Mcp.exe", "win-x64");
         if (linux && !windows && architecture is Architecture.X64 or Architecture.Arm64)
-            return new(false, "mcpserver.service", "/opt/mcpserver/app", "McpServer.Support.Mcp",
+            return new(false, "mcpserver.service", "/opt/mcpserver/app", "QBrainAi.Support.Mcp",
                 architecture == Architecture.X64 ? "linux-x64" : "linux-arm64");
         throw new PlatformNotSupportedException("UpdateService supports Windows or Linux x64/arm64.");
     }

@@ -1,6 +1,6 @@
 version: 1
 generatedAtUtc: 2026-09-10T17:49:10.1638737Z
-workspacePath: F:\GitHub\McpServer
+workspacePath: F:\GitHub\QBrainAi
 runtimeCompatibility:
   acceptedProviderKind: Cli
   reason: QuadBrain Cli slots use persistent Grok Build CLI and Codex CLI strategies (resume/session id), not HTTP OpenAI-compatible adapters.
@@ -14,7 +14,7 @@ appSettingsPatch:
       DefaultTimeoutSeconds: 180
       MaxTimeoutSeconds: 300
       CliRunAs: kingd
-      CliWorkingDirectory: F:\GitHub\McpServer
+      CliWorkingDirectory: F:\GitHub\QBrainAi
       Slots:
         - SlotId: brain-slot-arbiter-of-truth-grok-build
           Role: ArbiterOfTruth

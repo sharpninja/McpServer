@@ -64,7 +64,7 @@ class McpPluginInvocationOptions {
 }
 
 class McpPluginReplRequest {
-    # Envelope type sent to mcpserver-repl.
+    # Envelope type sent to qbrain-ai-repl.
     [string]$Type = 'request'
 
     # Correlation ID generated for the request envelope.
@@ -103,7 +103,7 @@ class McpPluginReplResult {
     # True when the REPL process completed successfully and did not return an error envelope.
     [bool]$Success
 
-    # Raw YAML output emitted by mcpserver-repl.
+    # Raw YAML output emitted by qbrain-ai-repl.
     [string]$Output
 
     # Process exit code when one is available; null for pre-process failures.
@@ -226,7 +226,7 @@ function New-McpPluginInvocationOptions {
         CacheRoot - Optional cache directory override.
         TimeoutSeconds - Child process timeout in seconds.
     .EXAMPLE
-        New-McpPluginInvocationOptions -Command Invoke -Method workflow.todo.query -Params 'done: false' -WorkspacePath F:\GitHub\McpServer -PluginRoot $env:MCP_PLUGIN_ROOT -TimeoutSeconds 90
+        New-McpPluginInvocationOptions -Command Invoke -Method workflow.todo.query -Params 'done: false' -WorkspacePath F:\GitHub\QBrainAi -PluginRoot $env:MCP_PLUGIN_ROOT -TimeoutSeconds 90
     #>
     [CmdletBinding()]
     param(
@@ -264,7 +264,7 @@ function New-McpPluginReplRequest {
         Creates a typed REPL request envelope DTO.
     .DESCRIPTION
         Returns McpPluginReplRequest for the single-line JSON envelope sent to
-        mcpserver-repl.
+        qbrain-ai-repl.
 
         Members:
         Type - Envelope type, always request.
@@ -295,7 +295,7 @@ function New-McpPluginReplResult {
 
         Members:
         Success - Boolean success flag after process and envelope checks.
-        Output - Raw YAML output emitted by mcpserver-repl.
+        Output - Raw YAML output emitted by qbrain-ai-repl.
         ExitCode - Child process exit code when known.
         Error - Error text for pre-process or catch-path failures.
     .EXAMPLE

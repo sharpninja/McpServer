@@ -1,4 +1,4 @@
-# Copilot Instructions — McpServer
+# Copilot Instructions — QBrainAi
 
 **Agent Identity:** When posting to the MCP session log, use the agent's actual identity in Pascal-Case for `sourceType` and the session ID prefix. Do not use inaccurate aliases, lowercase names, or legacy placeholders. Example: `Codex`.
 For specific operational instructions (session bootstrap, turn logging lifecycle, helper command order), follow `AGENTS-README-FIRST.yaml`.
@@ -25,23 +25,23 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 ```powershell
 # Build (via Nuke)
 ./build.ps1 Compile
-# or: dotnet build src\McpServer.Support.Mcp -c Debug
+# or: dotnet build src\QBrainAi.Support.Mcp -c Debug
 
 # Run all unit tests (via Nuke)
 ./build.ps1 Test
 # or individual projects:
-# dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
-# dotnet test tests\McpServer.Client.Tests -c Debug
+# dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug
+# dotnet test tests\QBrainAi.Client.Tests -c Debug
 # dotnet test tests\Build.Tests -c Debug
 
 # Run integration tests (uses CustomWebApplicationFactory, in-memory EF)
-dotnet test tests\McpServer.Support.Mcp.IntegrationTests -c Debug
+dotnet test tests\QBrainAi.Support.Mcp.IntegrationTests -c Debug
 
 # Run a single test by fully-qualified name
-dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
+dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
 
 # Run tests in a single class
-dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
+dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
 
 # Validate appsettings config (via Nuke)
 ./build.ps1 ValidateConfig
@@ -56,9 +56,9 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 
 ## Architecture
 
-**McpServer** is a standalone ASP.NET Core 9 server providing context retrieval, TODO management, session logging, repository operations, and GitHub issue sync for AI agents. It exposes functionality via two transports:
+**QBrainAi** is a standalone ASP.NET Core 9 server providing context retrieval, TODO management, session logging, repository operations, and GitHub issue sync for AI agents. It exposes functionality via two transports:
 
-- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcpserver/*`).
+- **HTTP REST API** — Controllers under `src/QBrainAi.Support.Mcp/Controllers/` (routes at `/qbrainai/*`).
 - **MCP Streamable HTTP** — `app.MapMcp("/mcp-transport")` using ModelContextProtocol.AspNetCore.
 - **MCP STDIO** — `--transport stdio` flag; same tools as HTTP via `McpStdio/FwhMcpTools.cs`.
 

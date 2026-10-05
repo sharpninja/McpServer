@@ -9,7 +9,7 @@
 
 .EXAMPLE
     . .\Bump-GitVersionPatch.ps1
-    $result = Bump-GitVersionPatch -RepoRoot 'E:\github\McpServer'
+    $result = Bump-GitVersionPatch -RepoRoot 'E:\github\QBrainAi'
     # $result.OldVersion = '0.2.0', $result.NewVersion = '0.2.1'
 #>
 

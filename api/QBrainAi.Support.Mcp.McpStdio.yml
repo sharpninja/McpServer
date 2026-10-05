@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.McpStdio
+  commentId: N:QBrainAi.Support.Mcp.McpStdio
+  id: QBrainAi.Support.Mcp.McpStdio
+  children:
+  - QBrainAi.Support.Mcp.McpStdio.FwhMcpTools
+  - QBrainAi.Support.Mcp.McpStdio.McpStdioHost
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.McpStdio
+  nameWithType: QBrainAi.Support.Mcp.McpStdio
+  fullName: QBrainAi.Support.Mcp.McpStdio
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.McpStdio.FwhMcpTools
+  commentId: T:QBrainAi.Support.Mcp.McpStdio.FwhMcpTools
+  href: QBrainAi.Support.Mcp.McpStdio.FwhMcpTools.html
+  name: FwhMcpTools
+  nameWithType: FwhMcpTools
+  fullName: QBrainAi.Support.Mcp.McpStdio.FwhMcpTools
+- uid: QBrainAi.Support.Mcp.McpStdio.McpStdioHost
+  commentId: T:QBrainAi.Support.Mcp.McpStdio.McpStdioHost
+  href: QBrainAi.Support.Mcp.McpStdio.McpStdioHost.html
+  name: McpStdioHost
+  nameWithType: McpStdioHost
+  fullName: QBrainAi.Support.Mcp.McpStdio.McpStdioHost

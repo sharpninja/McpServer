@@ -9,7 +9,7 @@ The Azure pipeline covers the core repository workflow only:
 - Windows self-hosted build, config validation, test, version calculation, and publish artifact generation
 - DocFX documentation build and docs artifact publication
 - Windows MSIX packaging as a non-blocking job
-- `McpServer.Client` package packing and branch-conditional package publication
+- `QBrainAi.Client` package packing and branch-conditional package publication
 
 It intentionally does **not** attempt to migrate or manage any separate Copilot coding agent pipeline.
 
@@ -18,9 +18,9 @@ It intentionally does **not** attempt to migrate or manage any separate Copilot 
 Optional Azure DevOps variables control the release-oriented steps:
 
 - `NuGetApiKey`
-  Used on `main` to push `McpServer.Client` packages to `nuget.org`.
+  Used on `main` to push `QBrainAi.Client` packages to `nuget.org`.
 - `AzureArtifactsFeedUrl`
-  Used on non-`main` branches to push `McpServer.Client` packages to an Azure Artifacts NuGet feed.
+  Used on non-`main` branches to push `QBrainAi.Client` packages to an Azure Artifacts NuGet feed.
 - `DocsAzureServiceConnection`
   Azure service connection name for optional static website deployment of the generated docs artifact. Currently inert: the `docs_deploy` job that consumed this variable is commented out in `azure-pipelines.yml` (disabled to keep the pipeline YAML valid), so setting it triggers no deployment until the job is restored.
 - `DocsStorageAccount`
@@ -28,7 +28,7 @@ Optional Azure DevOps variables control the release-oriented steps:
 - `OCTOPUS_URL`
   Optional. Defaults to `http://PAYTON-LEGION2:8066` when omitted in the pipeline step. Points at the lab Octopus Deploy server (containerized on LEGION2).
 - `OCTOPUS_API_KEY`
-  Optional secret. When set, the pipeline creates an Octopus release for project `McpServer` and attempts deploy to `Development`. When unset, the Octopus step no-ops successfully.
+  Optional secret. When set, the pipeline creates an Octopus release for project `QBrainAi` and attempts deploy to `Development`. When unset, the Octopus step no-ops successfully.
 - `OCTOPUS_SPACE`
   Optional. Defaults to `Default`.
 - `SkipOctopus`
@@ -40,7 +40,7 @@ If any optional variable is absent, the corresponding publish or deploy step is 
 
 After the main build/publish job steps, `azure-pipelines.yml` includes an **Octopus LEGION2 release** step. It uses the Octopus CLI (`C:\Program Files\Octopus CLI\octopus.exe`) on the self-hosted `Default` pool agent.
 
-- Octopus project name: `McpServer`
+- Octopus project name: `QBrainAi`
 - Default target on that server: deployment target **PAYTON-DESKTOP** (polling tentacle, role `app-server`)
 - The step is additive to Azure Pipelines CI; it does not replace build/test/pack.
 

@@ -1,10 +1,10 @@
-# McpServer — Marketing Documentation
+# QBrainAi — Marketing Documentation
 
-Content for the McpServer Canva website and presentation.
+Content for the QBrainAi Canva website and presentation.
 
 ## Documents
 
-- [overview.md](overview.md) — What McpServer is: one-liner, elevator pitch, value proposition
+- [overview.md](overview.md) — What QBrainAi is: one-liner, elevator pitch, value proposition
 - [features.md](features.md) — 10 key features with descriptions and benefit statements
 - [why-needed.md](why-needed.md) — Problem/solution narrative for 5 core pain points
 - [ui-tooling.md](ui-tooling.md) — 6 UI surfaces with install commands and links
@@ -19,8 +19,8 @@ Content for the McpServer Canva website and presentation.
 | Resource | URL |
 |---|---|
 | GitHub Repository | https://github.com/sharpninja/McpServer |
-| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md |
+| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md |
 | Director docs | https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md |
 | Local Swagger UI | http://localhost:7147/swagger |
-| MCP Transport | POST /mcp-transport on your local McpServer base URL |
+| MCP Transport | POST /mcp-transport on your local QBrainAi base URL |
 | MCP Spec | https://modelcontextprotocol.io |

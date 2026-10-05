@@ -4,11 +4,11 @@ Status: Phase 0 implementable design artifact, updated after the durable-storage
 
 Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNDESIGN-001
 
-Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, keyserver signing-key rotation that preserves prior public descriptors for historic manifest verification while old private signing material remains verify-only, signed manifest trace persistence with keyserver/controller/client lookup and filtered report coverage, subscriber encryption private key rings that decrypt old and rotated protected envelopes, separate-host subscriber key-ring configuration binding coverage, separate-host startup provisioning for file-backed publisher signing and subscriber encryption key material, subscriber transaction status lifecycle reporting for pending/committed/rejected/aborted states, a broker-neutral transaction pub-sub seam with direct, HTTP external subscriber, and external process/topic broker adapters for commit/abort handoff, configured multi-subscriber fan-out, durable local broker-backed pub-sub outbox/replay for commit and abort handoffs through in-memory or SQLite state, durable topic/subscriber status identity, stale in-progress durable pub-sub replay lease recovery, Support.Mcp pub-sub status/replay/retention endpoints, a background replay/retention worker, deterministic high-volume/high-contention durable pub-sub stress coverage, concurrent durable replay backlog coverage, concurrent coordinator timeout stress coverage, durable timeout rollback cancellation coverage, optional mutation rollback compensation for post-mutation subscriber/degraded failures with additive audit evidence, cancellation of durable pending commit handoffs after successful rollback compensation, global federation mutation-adapter apply gating through the turn transaction coordinator, first native Support.Mcp memory add/update/delete mutation gating for REST, typed REPL-over-HTTP, and in-process MCP stdio paths, typed REPL TODO create/update/updateSelected/delete/deleteSelected transaction gating through `TransactionalTodoWorkflow`, server-side TODO create/update/delete/move transaction gating for compensation-capable providers, generic REPL protected namespace blocking for unsafe federation/keyserver/subscriber calls, federation control-plane fail-closed gating, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. Surfaces without a compensation contract either fail closed while required mutation transactions are active or remain explicitly deferred as future scope.
+Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/QBrainAi.TransactionSecurity`, Support.Mcp compatibility controllers under `src/QBrainAi.Support.Mcp`, public DTO/client contracts under `src/QBrainAi.Client`, separate hosts under `src/QBrainAi.KeyServer` and `src/QBrainAi.Subscriber`, real separate-host integration coverage under `tests/QBrainAi.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, keyserver signing-key rotation that preserves prior public descriptors for historic manifest verification while old private signing material remains verify-only, signed manifest trace persistence with keyserver/controller/client lookup and filtered report coverage, subscriber encryption private key rings that decrypt old and rotated protected envelopes, separate-host subscriber key-ring configuration binding coverage, separate-host startup provisioning for file-backed publisher signing and subscriber encryption key material, subscriber transaction status lifecycle reporting for pending/committed/rejected/aborted states, a broker-neutral transaction pub-sub seam with direct, HTTP external subscriber, and external process/topic broker adapters for commit/abort handoff, configured multi-subscriber fan-out, durable local broker-backed pub-sub outbox/replay for commit and abort handoffs through in-memory or SQLite state, durable topic/subscriber status identity, stale in-progress durable pub-sub replay lease recovery, Support.Mcp pub-sub status/replay/retention endpoints, a background replay/retention worker, deterministic high-volume/high-contention durable pub-sub stress coverage, concurrent durable replay backlog coverage, concurrent coordinator timeout stress coverage, durable timeout rollback cancellation coverage, optional mutation rollback compensation for post-mutation subscriber/degraded failures with additive audit evidence, cancellation of durable pending commit handoffs after successful rollback compensation, global federation mutation-adapter apply gating through the turn transaction coordinator, first native Support.Mcp memory add/update/delete mutation gating for REST, typed REPL-over-HTTP, and in-process MCP stdio paths, typed REPL TODO create/update/updateSelected/delete/deleteSelected transaction gating through `TransactionalTodoWorkflow`, server-side TODO create/update/delete/move transaction gating for compensation-capable providers, generic REPL protected namespace blocking for unsafe federation/keyserver/subscriber calls, federation control-plane fail-closed gating, and a test-only aiUnit plan-review gate under `tests/QBrainAi.PlanReview.Tests`. Surfaces without a compensation contract either fail closed while required mutation transactions are active or remain explicitly deferred as future scope.
 
 ## Public DTOs
 
-Add transaction security models under `McpServer.Client.Models`:
+Add transaction security models under `QBrainAi.Client.Models`:
 
 - `PartyRegistrationRequest`
 - `PartyRegistrationResponse`
@@ -50,7 +50,7 @@ Subscriber:
 - `ISubscriberReplayGuard`
 - `ISubscriberAuditSink`
 
-MCP Server:
+QBrain.AI:
 
 - `ITurnTransactionCoordinator`
 - `IDiffgramBuilder`
@@ -122,19 +122,19 @@ Initial `TransactionFailureReason` values:
 
 Keyserver endpoints:
 
-- `POST /mcpserver/keyserver/parties`
-- `POST /mcpserver/keyserver/manifests/sign`
-- `POST /mcpserver/keyserver/manifests/verify`
-- `GET /mcpserver/keyserver/manifests/{transactionId}`
-- `GET /mcpserver/keyserver/manifests/report`
-- `GET /mcpserver/keyserver/parties/{partyId}/keys/{keyId}`
+- `POST /qbrainai/keyserver/parties`
+- `POST /qbrainai/keyserver/manifests/sign`
+- `POST /qbrainai/keyserver/manifests/verify`
+- `GET /qbrainai/keyserver/manifests/{transactionId}`
+- `GET /qbrainai/keyserver/manifests/report`
+- `GET /qbrainai/keyserver/parties/{partyId}/keys/{keyId}`
 - `GET /health`
 
 Subscriber endpoints:
 
-- `POST /mcpserver/subscriber/diffgrams/commit`
-- `GET /mcpserver/subscriber/transactions/{transactionId}/status`
-- `POST /mcpserver/subscriber/transactions/{transactionId}/abort`
+- `POST /qbrainai/subscriber/diffgrams/commit`
+- `GET /qbrainai/subscriber/transactions/{transactionId}/status`
+- `POST /qbrainai/subscriber/transactions/{transactionId}/abort`
 - `GET /health`
 
 `TransactionStatusResponse.Status` reports `pending` while the subscriber has accepted a transaction ID for validation but has not reached a terminal result; normal completion transitions the durable row to `committed`, `rejected`, or `aborted`.
@@ -164,7 +164,7 @@ Subscriber options:
 - `CommitTimeoutSeconds`
 - `AuditEnabled`
 
-MCP Server:
+QBrain.AI:
 
 - Section: `Mcp:TurnTransactions`
 - `Enabled=false`
@@ -200,4 +200,4 @@ The Support.Mcp compatibility host keeps in-process wiring for existing endpoint
 - Each public model and service surface has an XMLDoc obligation.
 - Each acceptance criterion has a corresponding test record, validation artifact, or explicit deferred state.
 - Config defaults are safe: transaction execution is disabled by default and no secret material is logged.
-- aiUnit remains test-only through `tests/McpServer.PlanReview.Tests`; no production project references `SharpNinja.aiUnit`.
+- aiUnit remains test-only through `tests/QBrainAi.PlanReview.Tests`; no production project references `SharpNinja.aiUnit`.

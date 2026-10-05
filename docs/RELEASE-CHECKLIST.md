@@ -1,4 +1,4 @@
-# MCP Server Release Checklist
+# QBrain.AI Release Checklist
 
 ## Pre-Release Verification
 
@@ -8,7 +8,7 @@
 - [ ] `./build.ps1 Test` — all tests pass (target: 236+)
 - [ ] `./build.ps1 ValidateConfig` — config validation passes
 - [ ] `./build.ps1 ValidateTraceability` — requirements coverage passes
-- [ ] Docker build succeeds: `docker build -t mcp-server:latest .`
+- [ ] Docker build succeeds: `docker build -t qbrain-ai:latest .`
 - [ ] Container health check passes: `curl http://localhost:7147/health`
 
 ### Compatibility
@@ -25,7 +25,7 @@
 ### Configuration
 
 - [ ] `appsettings.yaml` has all required keys with sensible defaults
-- [ ] `C:\ProgramData\McpServer\appsettings.yaml` is the canonical Windows service config (a legacy `appsettings.json` in the install directory is rejected at startup by `WindowsServiceDeploymentGuard` and removed on redeploy by `scripts\Update-McpService.ps1`; no `appsettings.{Environment}.yaml` override)
+- [ ] `C:\ProgramData\QBrainAi\appsettings.yaml` is the canonical Windows service config (a legacy `appsettings.json` in the install directory is rejected at startup by `WindowsServiceDeploymentGuard` and removed on redeploy by `scripts\Update-McpService.ps1`; no `appsettings.{Environment}.yaml` override)
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
 - [ ] TODO storage uses the single `database` provider (Provider=database; legacy `sqlite` accepted as an alias, `yaml` rejected) routed through Mcp:Database:Provider, and TODO.yaml is a read-only projection
@@ -42,9 +42,9 @@
 
 1. **Version bump**: `./build.ps1 BumpVersion` (updates `GitVersion.yml` next-version). Plugin packaging may also use a root `.version` file where applicable; do not treat a stale alpha `.version` as the product line if `GitVersion.yml` is ahead.
 2. **Final test run**: `./build.ps1 Test`
-3. **Docker build**: `docker build -t mcp-server:$(cat .version) -t mcp-server:latest .`
+3. **Docker build**: `docker build -t qbrain-ai:$(cat .version) -t qbrain-ai:latest .`
 4. **Tag release**: `git tag v$(cat .version) && git push origin v$(cat .version)`
-5. **CI publish**: Azure DevOps `publish-packages` job publishes `McpServer.Client` on `main` when `NuGetApiKey` is configured
+5. **CI publish**: Azure DevOps `publish-packages` job publishes `QBrainAi.Client` on `main` when `NuGetApiKey` is configured
 6. **MSIX package**: Azure DevOps `windows-msix` job publishes the installer artifact
 
 ## Post-Release Verification
@@ -62,7 +62,7 @@ If issues are discovered after release:
 
 1. **Revert tag**: `git tag -d v<version> && git push origin :refs/tags/v<version>`
 2. **Revert to previous image**: Docker users pull previous tag
-3. **Windows service**: `sc.exe stop McpServer.Support.Mcp`, replace binaries, restart
+3. **Windows service**: `sc.exe stop QBrainAi.Support.Mcp`, replace binaries, restart
 4. **MSIX**: Uninstall current, install previous version
 
 ## Monitoring Gates

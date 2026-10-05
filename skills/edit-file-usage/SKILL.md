@@ -8,9 +8,9 @@ license: MIT
 
 The QBAgent `edit_file` tool performs a surgical, in-place change to a single file by
 replacing an exact `oldString` with a `newString`. Edits are not raw filesystem writes:
-they route through the MCP Server `RepoFileService` (interface `IRepoFileService`,
-`src/McpServer.Services/Services/RepoFileService.cs`) and are wrapped by
-`TransactionGatedRepoFileService` (`src/McpServer.Support.Mcp/Services/TransactionGatedRepoFileService.cs`),
+they route through the QBrain.AI `RepoFileService` (interface `IRepoFileService`,
+`src/QBrainAi.Services/Services/RepoFileService.cs`) and are wrapped by
+`TransactionGatedRepoFileService` (`src/QBrainAi.Support.Mcp/Services/TransactionGatedRepoFileService.cs`),
 which enforces the path allowlist (FR-SUPPORT-010, TR-PLANNED-CORE-013) and transactional
 rollback compensation via `IRepoFileCompensation` (TR-MCP-TXN-001).
 

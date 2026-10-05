@@ -1,20 +1,20 @@
 ---
 name: mcp-session-logging
-description: Use this skill whenever an agent does meaningful work in an McpServer workspace and must record a session-log turn (begin a turn before work, append dialog, actions, and design decisions, then complete or fail the turn) through the mcpserver plugin workflow.sessionlog.* methods, never by editing session-log files directly.
+description: Use this skill whenever an agent does meaningful work in an QBrainAi workspace and must record a session-log turn (begin a turn before work, append dialog, actions, and design decisions, then complete or fail the turn) through the mcpserver plugin workflow.sessionlog.* methods, never by editing session-log files directly.
 license: MIT
 ---
 
 # MCP Session Logging
 
-Record every meaningful unit of work as an McpServer session-log turn using the
+Record every meaningful unit of work as an QBrainAi session-log turn using the
 `mcpserver` plugin `workflow.sessionlog.*` methods. A turn is begun before work
 starts, enriched with dialog, actions, and design decisions while work proceeds,
 and then completed (success) or failed (error). All session state is owned by the
-McpServer; you interact with it only through the plugin API.
+QBrainAi; you interact with it only through the plugin API.
 
 ## When to Use
 
-- You are about to start work on a user message or task inside an McpServer workspace.
+- You are about to start work on a user message or task inside an QBrainAi workspace.
 - You finished a meaningful change (edit, commit, decision, requirement, blocker) and need to persist it.
 - You need to record reasoning, tool output, or a design decision for audit.
 - You are wrapping up or aborting work and must close the active turn.

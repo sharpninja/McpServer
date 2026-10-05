@@ -18,12 +18,12 @@ independently verified backup.
 
 For design-time migration using an administrator connection, set
 `MCP_EF_PROVIDER=sqlserver`,
-`MCP_EF_MIGRATIONS_ASSEMBLY=McpServer.Storage.SqlServerMigrations`, and
+`MCP_EF_MIGRATIONS_ASSEMBLY=QBrainAi.Storage.SqlServerMigrations`, and
 `MCP_EF_CONNECTION_STRING` in the administrator's process environment, then
 run:
 
 ```powershell
-dotnet ef database update 20260929140000_VersionedAuditPayloads --project src/McpServer.Storage.SqlServerMigrations --startup-project src/McpServer.Support.Mcp --context McpDbContext
+dotnet ef database update 20260929140000_VersionedAuditPayloads --project src/QBrainAi.Storage.SqlServerMigrations --startup-project src/QBrainAi.Support.Mcp --context McpDbContext
 ```
 
 Do not put the administrator credential in source control or shell history.

@@ -1,6 +1,6 @@
-# MCP Server Documentation
+# QBrain.AI Documentation
 
-Welcome to the MCP Server documentation. MCP Server is a .NET 10/ASP.NET Core application providing workspace management, tool registry, API key authentication, pluggable tunnel providers, MCP Streamable HTTP transport, and Windows service support.
+Welcome to the QBrain.AI documentation. QBrain.AI is a .NET 10/ASP.NET Core application providing workspace management, tool registry, API key authentication, pluggable tunnel providers, MCP Streamable HTTP transport, and Windows service support.
 
 ## Quick Links
 
@@ -22,8 +22,8 @@ Welcome to the MCP Server documentation. MCP Server is a .NET 10/ASP.NET Core ap
 
 ## Getting Started
 
-1. **Build**: `./build.ps1 Compile` (or `dotnet build McpServer.sln`)
-2. **Run**: `./build.ps1 StartServer` (or `dotnet run --project src\McpServer.Support.Mcp`)
+1. **Build**: `./build.ps1 Compile` (or `dotnet build QBrainAi.sln`)
+2. **Run**: `./build.ps1 StartServer` (or `dotnet run --project src\QBrainAi.Support.Mcp`)
 3. **Install as service**: `.\scripts\Manage-McpService.ps1 -Action Install`
 
 See the [FAQ](docs/FAQ.md) for detailed setup instructions.

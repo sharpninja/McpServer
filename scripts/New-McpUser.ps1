@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Creates a user in the McpServer Keycloak realm.
+    Creates a user in the QBrainAi Keycloak realm.
 
 .DESCRIPTION
     Creates a new user in the 'mcpserver' Keycloak realm, sets their password,
@@ -125,7 +125,7 @@ function Invoke-KeycloakApi {
 # ── Main ──────────────────────────────────────────────────────────────────
 
 Write-Host ""
-Write-Host "👤 Create McpServer User" -ForegroundColor Magenta
+Write-Host "👤 Create QBrainAi User" -ForegroundColor Magenta
 Write-Host "   Keycloak: $KeycloakUrl" -ForegroundColor Gray
 Write-Host "   Realm:    $RealmName" -ForegroundColor Gray
 Write-Host "   Username: $Username" -ForegroundColor Gray

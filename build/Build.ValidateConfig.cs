@@ -9,9 +9,9 @@ partial class Build
         {
             string[] candidatePaths =
             [
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.yaml",
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.yml",
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.json",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.yaml",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.yml",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.json",
             ];
 
             var configPath = candidatePaths.FirstOrDefault(File.Exists)

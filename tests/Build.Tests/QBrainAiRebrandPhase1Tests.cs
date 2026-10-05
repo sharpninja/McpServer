@@ -112,7 +112,7 @@ public sealed class QBrainAiRebrandPhase1Tests
         foreach (var packageId in new[] { "Client", "Cqrs", "Cqrs.Mvvm", "McpAgent", "Repl.Core", "Repl", "QBAgent" })
         {
             var facadeDir = Path.Combine(root, "src", "Compatibility", LegacyPackagePrefix + packageId);
-            // Folder name is SharpNinja.McpServer.<Component>, which still contains the legacy token.
+            // Folder name is SharpNinja.QBrainAi.<Component>, which still contains the legacy token.
             var facade = Directory.GetFiles(Path.Combine(root, "src", "Compatibility"), "*.csproj", SearchOption.AllDirectories)
                 .Select(File.ReadAllText)
                 .FirstOrDefault(text => text.Contains($"<PackageId>{LegacyPackagePrefix}{packageId}</PackageId>", StringComparison.Ordinal));
@@ -150,6 +150,14 @@ public sealed class QBrainAiRebrandPhase1Tests
             .Select(File.ReadAllText)
             .Any(text => text.Contains("MapMcp(\"/mcp-transport\")", StringComparison.Ordinal));
         Assert.True(mapped);
+
+        var protocolTool = "Mcp" + "ServerTool";
+        var tools = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "McpStdio", "QBrainAiMcpTools.cs"));
+        Assert.Contains("[" + protocolTool + "Type]", tools, StringComparison.Ordinal);
+        Assert.DoesNotContain("[" + "QBrainAi" + "Tool", tools, StringComparison.Ordinal);
+        var program = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "Program.cs"));
+        Assert.Contains(".Add" + LegacyRoot + "()", program, StringComparison.Ordinal);
+        Assert.Contains("https://docs." + LegacyRoute.Replace("/todo", "/errors/invalid-body"), program, StringComparison.Ordinal);
     }
 
     /// <summary>

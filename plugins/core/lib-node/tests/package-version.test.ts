@@ -1,5 +1,5 @@
 /**
- * Package-surface honesty coverage for @sharpninja/mcpserver-plugin-core.
+ * Package-surface honesty coverage for @qbrainai/qbrain-ai-plugin-core.
  *
  * Ruling: the QuadBrain removal deleted three public exports from the package
  * index (brainSlotTools, canHandleBrainSlotTool, handleBrainSlotTool). That is
@@ -49,9 +49,9 @@ const readme = readFileSync(join(packageRoot, 'README.md'), 'utf8');
 /** The public exports deleted from src/index.ts by the QuadBrain removal. */
 const removedExports = ['brainSlotTools', 'canHandleBrainSlotTool', 'handleBrainSlotTool'];
 
-describe('@sharpninja/mcpserver-plugin-core package surface honesty', () => {
+describe('@qbrainai/qbrain-ai-plugin-core package surface honesty', () => {
   test('the manifest is the expected package', () => {
-    expect(manifest.name).toBe('@sharpninja/mcpserver-plugin-core');
+    expect(manifest.name).toBe('@qbrainai/qbrain-ai-plugin-core');
   });
 
   test('the version has moved past the pre-removal 0.1.0', () => {

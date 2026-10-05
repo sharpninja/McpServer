@@ -1,7 +1,7 @@
 {
-  "name": "@sharpninja/mcp-repl",
+  "name": "@qbrainai/qbrain-ai-repl",
   "version": "0.2.0",
-  "description": "Shared TypeScript surface for McpServer REPL protocol: typed messages, envelope serialization, and stdio client. Used by Cline, Cline V2, OpenCode, and other TS agent plugins.",
+  "description": "Shared TypeScript surface for QBrainAi REPL protocol: typed messages, envelope serialization, and stdio client. Used by Cline, Cline V2, OpenCode, and other TS agent plugins.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

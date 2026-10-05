@@ -80,7 +80,7 @@ public sealed class HandoffD3D5OverlayTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -88,6 +88,6 @@ public sealed class HandoffD3D5OverlayTests
             directory = directory.Parent;
         }
 
-        throw new InvalidOperationException("McpServer.sln not found.");
+        throw new InvalidOperationException("QBrainAi.sln not found.");
     }
 }

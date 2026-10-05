@@ -8,7 +8,7 @@ run `CreateWhenConfident` against it on a live workspace.
 
 - Id: EXAMPLE-HANDOFF-001
 - Title: Sample handoff ingest for operator documentation
-- Section: MCP Server
+- Section: QBrain.AI
 - Priority: low
 - Estimate: 1h
 
@@ -22,7 +22,7 @@ run `CreateWhenConfident` against it on a live workspace.
 - Source kind: Path
 - Path: docs/handoffs/example.md
 - Mode: DraftOnly
-- Public surfaces: REST `/mcpserver/handoff/*`, typed `McpServerClient.Handoff`,
+- Public surfaces: REST `/qbrainai/handoff/*`, typed `QBrainAiClient.Handoff`,
   REPL `workflow.handoff.*`, Director `handoff-*`, MCP tools `handoff_*`, plugin
   skill `plugins/core/skills/handoff/SKILL.md` plus sibling `invoke.ps1`.
 

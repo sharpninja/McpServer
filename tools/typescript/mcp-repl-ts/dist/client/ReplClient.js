@@ -38,7 +38,7 @@ exports.invokeMcpMethod = invokeMcpMethod;
 const child_process_1 = require("child_process");
 const yaml = __importStar(require("js-yaml"));
 /**
- * Shared ReplClient for talking to mcpserver-repl --agent-stdio.
+ * Shared ReplClient for talking to qbrain-ai-repl --agent-stdio.
  * Provides typed request/response and automatic envelope (de)serialization.
  * This is the core of the shared TS surface.
  */
@@ -53,7 +53,7 @@ class ReplClient {
     async connect() {
         if (this.proc)
             return;
-        this.proc = (0, child_process_1.spawn)('mcpserver-repl', ['--agent-stdio'], {
+        this.proc = (0, child_process_1.spawn)('qbrain-ai-repl', ['--agent-stdio'], {
             cwd: this.workspacePath,
             stdio: ['pipe', 'pipe', 'pipe'],
             env: { ...process.env, MCP_WORKSPACE_PATH: this.workspacePath },

@@ -1,0 +1,33 @@
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace QBrainAi.Support.Mcp.Storage.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddSessionLogContentHash : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ContentHash",
+                table: "SessionLogs",
+                type: "TEXT",
+                maxLength: 64,
+                nullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
+            migrationBuilder.DropColumn(
+                name: "ContentHash",
+                table: "SessionLogs");
+        }
+    }
+}

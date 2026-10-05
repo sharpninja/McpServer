@@ -1,0 +1,129 @@
+using System.Text.Json;
+using QBrainAi.Support.Mcp.Controllers;
+using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Requirements;
+using QBrainAi.Support.Mcp.Requirements.Models;
+using QBrainAi.Support.Mcp.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using Xunit;
+using MsOptions = Microsoft.Extensions.Options;
+
+namespace QBrainAi.Support.Mcp.Tests.Controllers;
+
+/// <summary>
+/// TEST-MCP-BUGTRIAGE-025: Requirements wiki generation returns structured errors.
+/// </summary>
+public sealed class RequirementsControllerGenerateTests
+{
+    /// <summary>Invalid wiki configuration returns a structured 400 instead of an opaque 500.</summary>
+    [Fact]
+    public async Task GenerateAsync_WikiConfigFailure_ReturnsStructuredBadRequest()
+    {
+        var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<RequirementsDocumentExportResult>(new InvalidOperationException("invalid docs/wiki.yaml")));
+        var controller = CreateController(requirements);
+
+        var result = await controller.GenerateAsync("all", "wiki", CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+        var json = JsonSerializer.Serialize(badRequest.Value);
+        Assert.Contains("invalid docs/wiki.yaml", json, StringComparison.Ordinal);
+        Assert.Contains("\"stage\":\"config load\"", json, StringComparison.Ordinal);
+    }
+
+    /// <summary>Transaction-gated export conflicts return a structured 409.</summary>
+    [Fact]
+    public async Task GenerateAsync_WikiConflictFailure_ReturnsStructuredConflict()
+    {
+        var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<RequirementsDocumentExportResult>(new RequirementsConflictException("transaction coordinator degraded")));
+        var controller = CreateController(requirements);
+
+        var result = await controller.GenerateAsync("all", "wiki", CancellationToken.None).ConfigureAwait(true);
+
+        var conflict = Assert.IsType<ConflictObjectResult>(result);
+        var json = JsonSerializer.Serialize(conflict.Value);
+        Assert.Contains("transaction coordinator degraded", json, StringComparison.Ordinal);
+        Assert.Contains("\"stage\":\"transaction\"", json, StringComparison.Ordinal);
+    }
+
+    /// <summary>ZIP assembly failures identify the ZIP stage instead of escaping as opaque 500s.</summary>
+    [Fact]
+    public async Task GenerateAsync_WikiZipAssemblyFailure_ReturnsStructuredConflict()
+    {
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-wiki-generate-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(tempRoot);
+        try
+        {
+            var missingFile = Path.Combine(tempRoot, "missing.md");
+            var requirements = Substitute.For<IRequirementsDocumentService>();
+            requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(new RequirementsDocumentExportResult
+                {
+                    Success = true,
+                    Format = "wiki",
+                    DocType = "all",
+                    GeneratedAtUtc = DateTimeOffset.UtcNow,
+                    OutputRoot = tempRoot,
+                    Files =
+                    [
+                        new RequirementsDocumentExportFile
+                        {
+                            RelativePath = "missing.md",
+                            FullPath = missingFile,
+                            ContentType = "text/markdown",
+                            LastModifiedUtc = DateTimeOffset.UtcNow
+                        }
+                    ]
+                }));
+            var controller = CreateController(requirements);
+
+            var result = await controller.GenerateAsync("all", "wiki", CancellationToken.None).ConfigureAwait(true);
+
+            var conflict = Assert.IsType<ConflictObjectResult>(result);
+            var json = JsonSerializer.Serialize(conflict.Value);
+            Assert.Contains("Generated wiki file was not found", json, StringComparison.Ordinal);
+            Assert.Contains("\"stage\":\"zip assembly\"", json, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-REQEXPORT-002 / TEST-MCP-REQEXPORT-002 (BUG-TRIAGE-073): an exception type outside the
+    /// pre-existing catch list (here KeyNotFoundException) is surfaced as a structured 500 naming the
+    /// exceptionType, never an opaque internal_server_error from the global middleware.
+    /// </summary>
+    [Fact]
+    public async Task GenerateAsync_WikiUnlistedException_ReturnsStructuredErrorNamingExceptionType()
+    {
+        var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<RequirementsDocumentExportResult>(new KeyNotFoundException("generated:functional source missing")));
+        var controller = CreateController(requirements);
+
+        var result = await controller.GenerateAsync("all", "wiki", CancellationToken.None).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        Assert.Contains("generated:functional source missing", json, StringComparison.Ordinal);
+        Assert.Contains("KeyNotFoundException", json, StringComparison.Ordinal);
+    }
+
+    private static RequirementsController CreateController(IRequirementsDocumentService requirements)
+        => new(
+            requirements,
+            MsOptions.Options.Create(new RequirementsOptions()),
+            new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\QBrainAi" },
+            Substitute.For<ITodoExecutionService>(),
+            NullLogger<RequirementsController>.Instance,
+            transactionCoordinator: null,
+            transactionOptions: null);
+}

@@ -1,0 +1,507 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Services.ITodoService
+  commentId: T:QBrainAi.Support.Mcp.Services.ITodoService
+  id: ITodoService
+  parent: QBrainAi.Support.Mcp.Services
+  children:
+  - QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync(QBrainAi.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync(QBrainAi.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,QBrainAi.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: ITodoService
+  nameWithType: ITodoService
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService
+  type: Interface
+  source:
+    id: ITodoService
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 6
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-CORE-013: Service for querying and managing TODO items from the YAML file.
+
+    Provides CRUD operations and search by keyword, priority, or id.
+  example: []
+  syntax:
+    content: public interface ITodoService
+    content.vb: Public Interface ITodoService
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync(QBrainAi.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync(QBrainAi.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  id: QueryAsync(QBrainAi.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: QueryAsync(TodoQueryRequest, CancellationToken)
+  nameWithType: ITodoService.QueryAsync(TodoQueryRequest, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync(QBrainAi.Support.Mcp.Services.TodoQueryRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: QueryAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 9
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Query TODO items by optional keyword, priority, and/or id.
+  example: []
+  syntax:
+    content: Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: QBrainAi.Support.Mcp.Services.TodoQueryRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoQueryResult}
+    content.vb: Function QueryAsync(request As TodoQueryRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoQueryResult)
+  overload: QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync*
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  id: GetByIdAsync(System.String,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: GetByIdAsync(string, CancellationToken)
+  nameWithType: ITodoService.GetByIdAsync(string, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GetByIdAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 12
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Get a single TODO item by its id.
+  example: []
+  syntax:
+    content: Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoFlatItem}
+    content.vb: Function GetByIdAsync(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of TodoFlatItem)
+  overload: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync*
+  nameWithType.vb: ITodoService.GetByIdAsync(String, CancellationToken)
+  fullName.vb: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByIdAsync(String, CancellationToken)
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync(QBrainAi.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync(QBrainAi.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  id: CreateAsync(QBrainAi.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: CreateAsync(TodoCreateRequest, CancellationToken)
+  nameWithType: ITodoService.CreateAsync(TodoCreateRequest, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync(QBrainAi.Support.Mcp.Services.TodoCreateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CreateAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 15
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Create a new TODO item in the specified section and priority.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: QBrainAi.Support.Mcp.Services.TodoCreateRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function CreateAsync(request As TodoCreateRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync*
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,QBrainAi.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,QBrainAi.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  id: UpdateAsync(System.String,QBrainAi.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: UpdateAsync(string, TodoUpdateRequest, CancellationToken)
+  nameWithType: ITodoService.UpdateAsync(string, TodoUpdateRequest, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync(string, QBrainAi.Support.Mcp.Services.TodoUpdateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: UpdateAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 18
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Update an existing TODO item by id.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: request
+      type: QBrainAi.Support.Mcp.Services.TodoUpdateRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function UpdateAsync(id As String, request As TodoUpdateRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync*
+  nameWithType.vb: ITodoService.UpdateAsync(String, TodoUpdateRequest, CancellationToken)
+  fullName.vb: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync(String, QBrainAi.Support.Mcp.Services.TodoUpdateRequest, System.Threading.CancellationToken)
+  name.vb: UpdateAsync(String, TodoUpdateRequest, CancellationToken)
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  id: DeleteAsync(System.String,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: DeleteAsync(string, CancellationToken)
+  nameWithType: ITodoService.DeleteAsync(string, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: DeleteAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\ITodoService.cs
+    startLine: 21
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Delete a TODO item by id.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function DeleteAsync(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync*
+  nameWithType.vb: ITodoService.DeleteAsync(String, CancellationToken)
+  fullName.vb: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync(String, System.Threading.CancellationToken)
+  name.vb: DeleteAsync(String, CancellationToken)
+references:
+- uid: QBrainAi.Support.Mcp.Services
+  commentId: N:QBrainAi.Support.Mcp.Services
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Services
+  nameWithType: QBrainAi.Support.Mcp.Services
+  fullName: QBrainAi.Support.Mcp.Services
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync
+  href: QBrainAi.Support.Mcp.Services.ITodoService.html#QBrainAi_Support_Mcp_Services_ITodoService_QueryAsync_QBrainAi_Support_Mcp_Services_TodoQueryRequest_System_Threading_CancellationToken_
+  name: QueryAsync
+  nameWithType: ITodoService.QueryAsync
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.QueryAsync
+- uid: QBrainAi.Support.Mcp.Services.TodoQueryRequest
+  commentId: T:QBrainAi.Support.Mcp.Services.TodoQueryRequest
+  parent: QBrainAi.Support.Mcp.Services
+  href: QBrainAi.Support.Mcp.Services.TodoQueryRequest.html
+  name: TodoQueryRequest
+  nameWithType: TodoQueryRequest
+  fullName: QBrainAi.Support.Mcp.Services.TodoQueryRequest
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoQueryResult}
+  commentId: T:System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoQueryResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoQueryResult>
+  nameWithType: Task<TodoQueryResult>
+  fullName: System.Threading.Tasks.Task<QBrainAi.Support.Mcp.Services.TodoQueryResult>
+  nameWithType.vb: Task(Of TodoQueryResult)
+  fullName.vb: System.Threading.Tasks.Task(Of QBrainAi.Support.Mcp.Services.TodoQueryResult)
+  name.vb: Task(Of TodoQueryResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Services.TodoQueryResult
+    name: TodoQueryResult
+    href: QBrainAi.Support.Mcp.Services.TodoQueryResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Services.TodoQueryResult
+    name: TodoQueryResult
+    href: QBrainAi.Support.Mcp.Services.TodoQueryResult.html
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync
+  href: QBrainAi.Support.Mcp.Services.ITodoService.html#QBrainAi_Support_Mcp_Services_ITodoService_GetByIdAsync_System_String_System_Threading_CancellationToken_
+  name: GetByIdAsync
+  nameWithType: ITodoService.GetByIdAsync
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.GetByIdAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoFlatItem}
+  commentId: T:System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoFlatItem}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoFlatItem>
+  nameWithType: Task<TodoFlatItem>
+  fullName: System.Threading.Tasks.Task<QBrainAi.Support.Mcp.Services.TodoFlatItem>
+  nameWithType.vb: Task(Of TodoFlatItem)
+  fullName.vb: System.Threading.Tasks.Task(Of QBrainAi.Support.Mcp.Services.TodoFlatItem)
+  name.vb: Task(Of TodoFlatItem)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Services.TodoFlatItem
+    name: TodoFlatItem
+    href: QBrainAi.Support.Mcp.Services.TodoFlatItem.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Services.TodoFlatItem
+    name: TodoFlatItem
+    href: QBrainAi.Support.Mcp.Services.TodoFlatItem.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync
+  href: QBrainAi.Support.Mcp.Services.ITodoService.html#QBrainAi_Support_Mcp_Services_ITodoService_CreateAsync_QBrainAi_Support_Mcp_Services_TodoCreateRequest_System_Threading_CancellationToken_
+  name: CreateAsync
+  nameWithType: ITodoService.CreateAsync
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.CreateAsync
+- uid: QBrainAi.Support.Mcp.Services.TodoCreateRequest
+  commentId: T:QBrainAi.Support.Mcp.Services.TodoCreateRequest
+  parent: QBrainAi.Support.Mcp.Services
+  href: QBrainAi.Support.Mcp.Services.TodoCreateRequest.html
+  name: TodoCreateRequest
+  nameWithType: TodoCreateRequest
+  fullName: QBrainAi.Support.Mcp.Services.TodoCreateRequest
+- uid: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoMutationResult}
+  commentId: T:System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.TodoMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoMutationResult>
+  nameWithType: Task<TodoMutationResult>
+  fullName: System.Threading.Tasks.Task<QBrainAi.Support.Mcp.Services.TodoMutationResult>
+  nameWithType.vb: Task(Of TodoMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of QBrainAi.Support.Mcp.Services.TodoMutationResult)
+  name.vb: Task(Of TodoMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: QBrainAi.Support.Mcp.Services.TodoMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: QBrainAi.Support.Mcp.Services.TodoMutationResult.html
+  - name: )
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync
+  href: QBrainAi.Support.Mcp.Services.ITodoService.html#QBrainAi_Support_Mcp_Services_ITodoService_UpdateAsync_System_String_QBrainAi_Support_Mcp_Services_TodoUpdateRequest_System_Threading_CancellationToken_
+  name: UpdateAsync
+  nameWithType: ITodoService.UpdateAsync
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.UpdateAsync
+- uid: QBrainAi.Support.Mcp.Services.TodoUpdateRequest
+  commentId: T:QBrainAi.Support.Mcp.Services.TodoUpdateRequest
+  parent: QBrainAi.Support.Mcp.Services
+  href: QBrainAi.Support.Mcp.Services.TodoUpdateRequest.html
+  name: TodoUpdateRequest
+  nameWithType: TodoUpdateRequest
+  fullName: QBrainAi.Support.Mcp.Services.TodoUpdateRequest
+- uid: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync
+  href: QBrainAi.Support.Mcp.Services.ITodoService.html#QBrainAi_Support_Mcp_Services_ITodoService_DeleteAsync_System_String_System_Threading_CancellationToken_
+  name: DeleteAsync
+  nameWithType: ITodoService.DeleteAsync
+  fullName: QBrainAi.Support.Mcp.Services.ITodoService.DeleteAsync

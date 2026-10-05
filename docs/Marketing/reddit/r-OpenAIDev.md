@@ -10,7 +10,7 @@ PASTE BELOW THIS LINE
 
 ---
 
-[McpServer](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI coding agents a shared, persistent backend over the Model Context Protocol: local semantic search, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. One local process, HTTP REST (Swagger) or MCP STDIO.
+[QBrainAi](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI coding agents a shared, persistent backend over the Model Context Protocol: local semantic search, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. One local process, HTTP REST (Swagger) or MCP STDIO.
 
 There is a Codex plugin for the OpenAI Codex CLI. Beyond the shared workflow surface (session, TODO, requirements, workspace), it gives the model a first-class way to write audited session-log turns directly, so the agent's own work history becomes queryable context rather than something that scrolls away.
 

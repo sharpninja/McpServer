@@ -1,0 +1,2081 @@
+using System.Linq;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Notifications;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging.Abstractions;
+using QBrainAi.Support.Mcp.Storage.Entities;
+using NSubstitute;
+using Xunit;
+
+namespace QBrainAi.Support.Mcp.Tests.Services;
+
+/// <summary>TR-PLANNED-CORE-013: Unit tests for SessionLogService submit and query (MVP-SUPPORT-011).</summary>
+public sealed class SessionLogServiceTests : IDisposable
+{
+    private const string WorkspacePath = @"E:\tests\sessionlog-service";
+
+    private readonly McpDbContext _db;
+    private readonly IChangeEventBus _eventBus;
+    private readonly SessionLogService _sut;
+
+    public SessionLogServiceTests()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_{Guid.NewGuid()}")
+            .Options;
+        _db = new McpDbContext(options);
+        _db.Database.EnsureCreated();
+        _db.OverrideWorkspaceId(WorkspacePath);
+        _eventBus = Substitute.For<IChangeEventBus>();
+        // TR-MCP-MT-004: default fixture mirrors the production wiring with a
+        // WorkspaceContext so SubmitAsync stamps WorkspaceId on every row; the
+        // global query filter on read then matches and existing tests keep working.
+        _sut = new SessionLogService(
+            _db,
+            NullLogger<SessionLogService>.Instance,
+            _eventBus,
+            new WorkspaceContext { WorkspacePath = WorkspacePath });
+    }
+
+    public void Dispose() => _db.Dispose();
+
+    [Fact]
+    public async Task WhenSubmittingNewSessionThenSessionIsCreated()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-1"));
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(id > 0);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Cursor", stored.SourceType);
+        Assert.Equal(BuildSessionId("Cursor", "session-1"), stored.SessionId);
+        Assert.Equal("Test Session", stored.Title);
+        Assert.Single(stored.Turns);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Created
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-1")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingSameSessionTwiceThenSessionIsUpdated()
+    {
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Original");
+        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Updated");
+        dto2.Turns!.First().QueryText = "Updated query";
+        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Updated", stored.Title);
+        Assert.Single(stored.Turns);
+        Assert.Equal("Updated query", stored.Turns.First().QueryText);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Updated
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-dup")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-RESTORE-001: Whole-session submit on a relational provider
+    /// upserts turns by request id instead of attempting duplicate inserts.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_ExistingRelationalSession_UpsertsTurnsByRequestIdWithoutDuplicateInsert()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var sessionId = BuildSessionId("ClaudeCode", "relational-upsert-turns");
+            var initial = CreateTestDto("ClaudeCode", sessionId, title: "Original");
+            initial.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "initial bootstrap", "bootstrap"),
+                CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "initial plan", "plan")
+            ];
+            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
+            restored.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "restored bootstrap", "restore"),
+                CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "restored plan", "restore")
+            ];
+
+            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var stored = await db.SessionLogs
+                .IgnoreQueryFilters()
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Tags)
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Actions)
+                .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.Equal("Restored", stored.Title);
+            Assert.Equal(2, stored.Turns.Count);
+            Assert.Equal(
+                2,
+                await db.SessionLogTurns
+                    .IgnoreQueryFilters()
+                    .CountAsync(t => t.SessionLogId == stored.Id, cancellationToken: TestContext.Current.CancellationToken)
+                    .ConfigureAwait(true));
+            Assert.All(stored.Turns, turn => Assert.Contains(turn.Tags, tag => tag.Tag == "restore"));
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003: Whole-session submit preserves durable turns that are absent
+    /// from the incoming document instead of hard-deleting them or their child rows.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_ExistingRelationalSession_PreservesAbsentDurableTurnsAndChildren()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var sessionId = BuildSessionId("ClaudeCode", "relational-remove-stale-tagged-turn");
+            var initial = CreateTestDto("ClaudeCode", sessionId, title: "Original");
+            initial.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "kept turn", "keep"),
+                CreateRelationalTurn("req-20260610T151236Z-stale-bbcrawler-workspace", "stale turn", "stale")
+            ];
+            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
+            restored.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "restored kept turn", "restore")
+            ];
+
+            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var stored = await db.SessionLogs
+                .IgnoreQueryFilters()
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Tags)
+                .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.Equal(2, stored.Turns.Count);
+            var kept = Assert.Single(stored.Turns, turn => turn.RequestId == "req-20260610T151235Z-bootstrap-bbcrawler-workspace");
+            Assert.Equal("restored kept turn", kept.Response);
+            var preserved = Assert.Single(stored.Turns, turn => turn.RequestId == "req-20260610T151236Z-stale-bbcrawler-workspace");
+            Assert.Equal("stale turn", preserved.Response);
+            Assert.Contains(preserved.Tags, tag => tag.Tag == "stale");
+            Assert.Contains(preserved.Actions, action => action.Description == "stale turn action");
+        }
+    }
+
+    /// <summary>
+    /// Session header agent runtime fields are persisted and returned by read models.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WithAgentRuntimeHeaderFields_PersistsAndReturnsThem()
+    {
+        var sessionId = BuildSessionId("Codex", "agent-runtime-header");
+        var dto = CreateTestDto("Codex", sessionId);
+        dto.AgentSessionId = "Codex-20260722T213000Z-agent";
+        dto.AgentSessionTranscriptFile = @"Q:\__mcp_unit_test__\QBrainAi\.mcpServer\codex\transcripts\session.jsonl";
+        dto.AgentExecutablePath = @"C:\Users\kingd\AppData\Roaming\npm\codex.cmd";
+        dto.AgentExecutableVersion = "1.2.3";
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(dto.AgentSessionId, stored.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, stored.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, stored.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, stored.AgentExecutableVersion);
+
+        var fromGet = await _sut.GetAsync("Codex", sessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(fromGet);
+        Assert.Equal(dto.AgentSessionId, fromGet!.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, fromGet.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, fromGet.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, fromGet.AgentExecutableVersion);
+
+        var query = await _sut.QueryAsync(new SessionLogQueryRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var fromQuery = Assert.Single(query.Items, item => item.SessionId == sessionId);
+        Assert.Equal(dto.AgentSessionId, fromQuery.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, fromQuery.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, fromQuery.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, fromQuery.AgentExecutableVersion);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithCopilotStatisticsThenStatisticsArePersisted()
+    {
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "stats-session"));
+        dto.CopilotStatistics = new CopilotStatisticsDto
+        {
+            AverageSuccessScore = 0.85,
+            TotalNetTokens = 5000,
+            TotalNetPremiumRequests = 3,
+            CompletedCount = 10,
+            InProgressCount = 2
+        };
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(0.85, stored.CopilotAvgSuccessScore);
+        Assert.Equal(5000, stored.CopilotTotalNetTokens);
+        Assert.Equal(3, stored.CopilotTotalNetPremiumRequests);
+        Assert.Equal(10, stored.CopilotCompletedCount);
+        Assert.Equal(2, stored.CopilotInProgressCount);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithWorkspaceThenWorkspaceIsPersisted()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-session"));
+        dto.Workspace = new WorkspaceInfoDto
+        {
+            Project = "FunWasHad",
+            TargetFramework = ".NET 9",
+            Repository = "sharpninja/FunWasHad",
+            Branch = "develop"
+        };
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("FunWasHad", stored.Project);
+        Assert.Equal(".NET 9", stored.TargetFramework);
+        Assert.Equal("sharpninja/FunWasHad", stored.Repository);
+        Assert.Equal("develop", stored.Branch);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithTagsAndContextThenMultiValuedEntitiesArePersisted()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "multi-valued"));
+        dto.Turns!.First().Tags = ["csharp", "ef-core"];
+        dto.Turns!.First().ContextList = ["src/Program.cs", "docs/README.md"];
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var entry = await _db.SessionLogTurns
+            .Include(e => e.Tags)
+            .Include(e => e.ContextItems)
+            .FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(2, entry.Tags.Count);
+        Assert.Contains(entry.Tags, t => t.Tag == "csharp");
+        Assert.Equal(2, entry.ContextItems.Count);
+    }
+
+    [Fact]
+    public async Task WhenQueryingWithNoFiltersThenAllSessionsAreReturned()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(2, result.TotalCount);
+        Assert.Equal(2, result.Items.Count);
+    }
+
+    [Fact]
+    public async Task QueryAsync_WhenSummaryFieldsAreMissing_DerivesStartedAndTurnCountFromTurns()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "summary-derived");
+        var dto = CreateTestDto("ClaudeCode", sessionId);
+        dto.Started = null;
+        dto.TurnCount = 0;
+        dto.Turns!.First().Timestamp = "2026-06-10T15:40:39Z";
+
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(1, item.TurnCount);
+        Assert.StartsWith("2026-06-10T15:40:39", item.Started, StringComparison.Ordinal);
+        Assert.Single(item.Turns!);
+    }
+
+    [Fact]
+    public async Task WhenQueryingByAgentThenOnlyMatchingSessionsAreReturned()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(1, result.TotalCount);
+        Assert.All(result.Items, item => Assert.Equal("Cursor", item.SourceType));
+    }
+
+    /// <summary>
+    /// Regression: a missing agent filter must not restrict history to marker-defined
+    /// source types; mixed Codex, Cursor, Cline, and McpAgent sessions are all in scope.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WithoutAgent_ReturnsMixedSourceSessionsForWorkspace()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(4, result.TotalCount);
+        Assert.Contains(result.Items, item => item.SourceType == "Codex");
+        Assert.Contains(result.Items, item => item.SourceType == "Cursor");
+        Assert.Contains(result.Items, item => item.SourceType == "Cline");
+        Assert.Contains(result.Items, item => item.SourceType == "McpAgent");
+    }
+
+    /// <summary>
+    /// Regression: an explicit agent filter remains active after enabling unfiltered
+    /// mixed-source history queries.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WithAgent_ReturnsOnlyMatchingSourceType()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "McpAgent" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("McpAgent", item.SourceType);
+    }
+
+    /// <summary>
+    /// Regression: workspace query filters must prevent session history from
+    /// leaking rows that belong to another registered workspace.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_DoesNotReturnSessionsFromOtherWorkspaces()
+    {
+        var primary = BuildSutWithWorkspaceContext(WorkspacePath);
+        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
+        var other = BuildSutWithWorkspaceContext(otherWorkspacePath);
+        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var querySut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var result = await querySut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("Codex", item.SourceType);
+        Assert.DoesNotContain(result.Items, session => session.SessionId == BuildSessionId("Cursor", "other-workspace"));
+    }
+
+    /// <summary>
+    /// Regression: recent history should be ordered by last update time, not only
+    /// by when the session was originally started.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_OrdersByLastUpdatedForRecentActivity()
+    {
+        var olderStartedRecent = CreateTestDto("Cursor", BuildSessionId("Cursor", "older-start-recent-update"));
+        olderStartedRecent.Started = "2026-03-01T00:00:00Z";
+        olderStartedRecent.LastUpdated = "2026-05-24T23:16:08Z";
+        await _sut.SubmitAsync(olderStartedRecent, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var newerStartedStale = CreateTestDto("Codex", BuildSessionId("Codex", "newer-start-stale-update"));
+        newerStartedStale.Started = "2026-05-01T00:00:00Z";
+        newerStartedStale.LastUpdated = "2026-05-01T00:10:00Z";
+        await _sut.SubmitAsync(newerStartedStale, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "older-start-recent-update"), item.SessionId);
+    }
+
+    [Fact]
+    public async Task WhenQueryingByDateRangeThenOnlyMatchingSessionsAreReturned()
+    {
+        var early = CreateTestDto("Cursor", BuildSessionId("Cursor", "early"));
+        early.Started = "2026-01-01T00:00:00Z";
+        early.LastUpdated = "2026-01-01T12:00:00Z";
+        await _sut.SubmitAsync(early, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var late = CreateTestDto("Cursor", BuildSessionId("Cursor", "late"));
+        late.Started = "2026-02-01T00:00:00Z";
+        late.LastUpdated = "2026-02-01T12:00:00Z";
+        await _sut.SubmitAsync(late, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest
+        {
+            From = new DateTimeOffset(2026, 1, 15, 0, 0, 0, TimeSpan.Zero)
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(1, result.TotalCount);
+        Assert.Equal(BuildSessionId("Cursor", "late"), result.Items[0].SessionId);
+    }
+
+    [Fact]
+    public async Task WhenQueryingWithLimitAndOffsetThenPaginationIsApplied()
+    {
+        for (var i = 0; i < 5; i++)
+        {
+            var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", $"page-{i}"));
+            dto.Started = $"2026-01-{(i + 1):D2}T00:00:00Z";
+            await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 2, Offset = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(5, result.TotalCount);
+        Assert.Equal(2, result.Items.Count);
+        Assert.Equal(2, result.Limit);
+        Assert.Equal(1, result.Offset);
+    }
+
+    [Fact]
+    public async Task WhenQueryingWithLimitExceedingMaxThenLimitIsClamped()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 9999 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(1000, result.Limit);
+    }
+
+    [Fact]
+    public async Task WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields()
+    {
+        var match = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-match"));
+        match.Turns!.First().QueryTitle = "Alpha kickoff";
+        match.Turns!.First().Response = "Completed beta rollout";
+        await _sut.SubmitAsync(match, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var miss = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-miss"));
+        miss.Turns!.First().QueryTitle = "Alpha kickoff";
+        miss.Turns!.First().Response = "Completed gamma rollout";
+        await _sut.SubmitAsync(miss, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest
+        {
+            Text = "alpha && beta",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "bool-match"), item.SessionId);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-002 / TEST-MCP-SESSIONLOG-002 (BUG-TRIAGE-070): a text query whose term
+    /// exists only inside a processing-dialog item returns the session (dialog content was previously
+    /// unsearchable because BuildSearchText joined only the four turn scalar fields).
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_TextMatchesProcessingDialogContent()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-search"));
+        var turn = dto.Turns!.First();
+        turn.QueryText = "generic query";
+        turn.QueryTitle = "generic title";
+        turn.Response = "generic response";
+        turn.Interpretation = null;
+        turn.ProcessingDialog =
+        [
+            new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "zircondialogtoken reasoning step", Category = "reasoning" }
+        ];
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Text = "zircondialogtoken" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "dialog-search"), item.SessionId);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-002 / TEST-MCP-SESSIONLOG-002: a text query whose term exists only inside an
+    /// action description returns the session.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_TextMatchesActionDescription()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "action-search"));
+        var turn = dto.Turns!.First();
+        turn.QueryText = "plain query";
+        turn.QueryTitle = "plain title";
+        turn.Response = "plain response";
+        turn.Interpretation = null;
+        turn.Actions =
+        [
+            new UnifiedActionDto { Order = 0, Description = "quartzactiontoken edited a file", Type = "edit", Status = "completed", FilePath = "src/Foo.cs" }
+        ];
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Text = "quartzactiontoken" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "action-search"), item.SessionId);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-003 / TEST-MCP-SESSIONLOG-003 (BUG-TRIAGE-082/083 scope clarity): the terminal-turn
+    /// decision/action/commit compliance gate applies ONLY to the QBAgent ACID source type. A completed
+    /// ClaudeCode turn with no decisions/actions/commits is accepted; the same for QBAgent is rejected.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent()
+    {
+        var claudeSession = BuildSessionId("ClaudeCode", "gate-standard");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", claudeSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var claudeTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113901Z-gate-standard",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+        };
+        var turnId = await _sut.UpsertTurnAsync("ClaudeCode", claudeSession, claudeTurn, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(turnId > 0);
+
+        var qbSession = BuildSessionId("QBAgent", "gate-acid");
+        await _sut.SubmitAsync(CreateTestDto("QBAgent", qbSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var qbTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113901Z-gate-acid",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+        };
+        await Assert.ThrowsAsync<ArgumentException>(
+            () => _sut.UpsertTurnAsync("QBAgent", qbSession, qbTurn, TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithMissingSourceTypeThenArgumentExceptionIsThrown()
+    {
+        var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = "test" };
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithMissingSessionIdThenArgumentExceptionIsThrown()
+    {
+        var dto = new UnifiedSessionLogDto { SourceType = "Cursor", SessionId = null };
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithNonCanonicalSessionIdThenArgumentExceptionIsThrown()
+    {
+        var dto = CreateTestDto("Cursor", "cursor-invalid");
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithInvalidRequestIdFormatThenArgumentExceptionIsThrown()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
+        dto.Turns!.First().RequestId = "bad";
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenQueryResultMappedThenDtoIncludesWorkspaceAndStatistics()
+    {
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "round-trip"));
+        dto.Workspace = new WorkspaceInfoDto { Project = "TestProject", Branch = "main" };
+        dto.CopilotStatistics = new CopilotStatisticsDto { CompletedCount = 5 };
+        dto.TotalTokens = 1234;
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.NotNull(item.Workspace);
+        Assert.Equal("TestProject", item.Workspace!.Project);
+        Assert.NotNull(item.CopilotStatistics);
+        Assert.Equal(5, item.CopilotStatistics!.CompletedCount);
+        Assert.Equal(1234, item.TotalTokens);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingOffsetTimestampsThenRoundTripUpdateSucceeds()
+    {
+        var sessionId = BuildSessionId("Cursor", "offset-roundtrip");
+        var dto = CreateTestDto("Cursor", sessionId);
+        dto.Started = "2026-03-03T12:49:58.717102-06:00";
+        dto.LastUpdated = "2026-03-03T12:50:58.717102-06:00";
+        dto.Turns!.First().Timestamp = "2026-03-03T12:50:12.717102-06:00";
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var session = queried.Items.Single(i => i.SessionId == sessionId);
+
+        // Regression coverage: previously, pushing a queried session containing
+        // offset timestamps could fail with a server-side 500.
+        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+        Assert.Null(ex);
+
+        var stored = await _db.SessionLogs
+            .Include(s => s.Turns)
+            .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(TimeSpan.Zero, stored.Started?.Offset);
+        Assert.Equal(TimeSpan.Zero, stored.LastUpdated?.Offset);
+        Assert.Equal(TimeSpan.Zero, stored.Turns.Single().Timestamp?.Offset);
+    }
+
+    [Fact]
+    public async Task WhenUpsertingWithNewEntryThenEntryIsAddedWithoutRemovingExisting()
+    {
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
+        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        // Submit again with original entry plus a new one
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
+        dto2.Turns!.Add(new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100200Z-entry-002",
+            QueryText = "New entry",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
+        });
+        dto2.TurnCount = 2;
+        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(2, stored.Turns.Count);
+    }
+
+    [Fact]
+    public async Task WhenUpsertingExistingEntryThenEntryIsUpdatedInPlace()
+    {
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
+        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var originalEntryId = (await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).Id;
+
+        // Submit with same RequestId but different content
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
+        dto2.Turns!.First().QueryText = "Updated query text";
+        dto2.Turns!.First().Response = "Updated response";
+        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var updatedEntry = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(originalEntryId, updatedEntry.Id); // Same row, updated in place
+        Assert.Equal("Updated query text", updatedEntry.QueryText);
+        Assert.Equal("Updated response", updatedEntry.Response);
+    }
+
+    [Fact]
+    public async Task WhenUpsertingWithRemovedEntryThenAbsentDurableEntryIsPreserved()
+    {
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
+        dto1.Turns!.Add(new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100200Z-entry-002",
+            QueryText = "Will be removed",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
+        });
+        dto1.TurnCount = 2;
+        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+
+        // TR-MCP-DB-003: Submit with only the first entry must not hard-delete
+        // the absent durable turn.
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
+        dto2.TurnCount = 1;
+        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.Contains(
+            await _db.SessionLogTurns.Where(e => e.SessionLogId == id).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true),
+            turn => turn.RequestId == "req-20260211T100200Z-entry-002");
+    }
+
+    [Fact]
+    public async Task WhenAppendingDialogItemsThenItemsAreAdded()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-append"));
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var items = new List<ProcessingDialogItemDto>
+        {
+            new() { Timestamp = "2026-02-12T10:00:00Z", Role = "model", Content = "Analyzing request", Category = "reasoning" },
+            new() { Timestamp = "2026-02-12T10:00:01Z", Role = "tool", Content = "get_file(Program.cs)", Category = "tool_call" }
+        };
+
+        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-append"), "req-20260211T100100Z-entry-001", items, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(2, count);
+        var entry = await _db.SessionLogTurns
+            .Include(e => e.ProcessingDialog)
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(2, entry.ProcessingDialog.Count);
+        var first = entry.ProcessingDialog.OrderBy(p => p.Ordinal).First();
+        Assert.Equal("model", first.Role);
+        Assert.Equal("Analyzing request", first.Content);
+        Assert.Equal("reasoning", first.Category);
+        await _eventBus.Received().PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Updated
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "dialog-append")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenAppendingDialogMultipleTimesThenOrdinalsAreContinuous()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-multi"));
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
+            [new ProcessingDialogItemDto { Role = "model", Content = "First batch" }], cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
+            [new ProcessingDialogItemDto { Role = "model", Content = "Second batch" }], cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(2, count);
+        var entry = await _db.SessionLogTurns
+            .Include(e => e.ProcessingDialog)
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        var ordinals = entry.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => p.Ordinal).ToList();
+        Assert.Equal([0, 1], ordinals);
+    }
+
+    [Fact]
+    public async Task WhenAppendingDialogToNonexistentEntryThenThrowsInvalidOperation()
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "nonexistent"), "req-20260211T100100Z-entry-001",
+                [new ProcessingDialogItemDto { Role = "model", Content = "test" }], cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenQueryingSessionWithDialogThenDialogIsIncludedInDto()
+    {
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "dialog-query"));
+        dto.Turns!.First().ProcessingDialog =
+        [
+            new ProcessingDialogItemDto { Timestamp = "2026-02-12T10:00:00Z", Role = "model", Content = "Thinking...", Category = "reasoning" }
+        ];
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var entry = result.Items.First(i => i.SessionId == BuildSessionId("Copilot", "dialog-query")).Turns!.First();
+        Assert.NotNull(entry.ProcessingDialog);
+        Assert.Single(entry.ProcessingDialog!);
+        Assert.Equal("model", entry.ProcessingDialog!.First().Role);
+        Assert.Equal("Thinking...", entry.ProcessingDialog!.First().Content);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-004: SubmitAsync must stamp the resolved workspace context onto the
+    /// persisted SessionLogEntity so subsequent reads under the same workspace context
+    /// are not hidden by the global query filter.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_StampsWorkspaceIdOnSessionEntity()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-stamp"));
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs
+            .IgnoreQueryFilters()
+            .FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, stored.WorkspaceId);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-004: Child entities (turns, actions, tags, context items, dialog,
+    /// commits, string-list items) must also carry the parent's WorkspaceId so they
+    /// pass the per-entity query filters at <see cref="McpDbContext.OnModelCreating"/>.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_StampsWorkspaceIdOnEveryChildEntity()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-children"));
+        dto.Turns!.First().Actions =
+        [
+            new UnifiedActionDto { Order = 0, Description = "Edit Program.cs", Type = "edit", Status = "completed", FilePath = "Program.cs" }
+        ];
+        dto.Turns!.First().Tags = ["csharp", "ef-core"];
+        dto.Turns!.First().ContextList = ["docs/README.md"];
+        dto.Turns!.First().ProcessingDialog =
+        [
+            new ProcessingDialogItemDto { Role = "model", Content = "thinking", Category = "reasoning" }
+        ];
+        dto.Turns!.First().Commits =
+        [
+            new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "commit msg", Author = "x", FilesChanged = ["a.cs"] }
+        ];
+        dto.Turns!.First().FilesModified = ["a.cs"];
+
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns.IgnoreQueryFilters().FirstAsync(t => t.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, turn.WorkspaceId);
+
+        var action = await _db.SessionLogActions.IgnoreQueryFilters().FirstAsync(a => a.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, action.WorkspaceId);
+
+        var tag = await _db.SessionLogTurnTags.IgnoreQueryFilters().FirstAsync(t => t.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, tag.WorkspaceId);
+
+        var context = await _db.SessionLogTurnContexts.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, context.WorkspaceId);
+
+        var dialog = await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().FirstAsync(d => d.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, dialog.WorkspaceId);
+
+        var commit = await _db.SessionLogCommits.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, commit.WorkspaceId);
+
+        var stringList = await _db.SessionLogTurnStringLists.IgnoreQueryFilters().FirstAsync(s => s.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, stringList.WorkspaceId);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-004: When no workspace context is injected (ingestion / batch import
+    /// path) and the DbContext has no workspace override either, WorkspaceId must
+    /// default to empty string and not crash. Uses a dedicated DbContext so the
+    /// fixture-level <see cref="McpDbContext.OverrideWorkspaceId"/> does not auto-fill
+    /// the field via <see cref="McpDbContext.SaveChangesAsync"/>'s built-in stamping.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_NullCtx_{Guid.NewGuid()}")
+            .Options;
+        using var db = new McpDbContext(options);
+        db.Database.EnsureCreated();
+
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext: null);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "no-ws"));
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await db.SessionLogs
+            .IgnoreQueryFilters()
+            .FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(string.Empty, stored.WorkspaceId);
+    }
+
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: Session-log reads must honor the request workspace
+    /// even when <see cref="McpDbContext"/> was constructed before the scoped
+    /// <see cref="WorkspaceContext"/> was populated by middleware or stdio wiring.
+    /// </summary>
+    [Fact]
+    public async Task QueryGetAndHashCheckAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Reads_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var sessionId = BuildSessionId("Codex", "stale-query");
+        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var query = await sut.QueryAsync(new SessionLogQueryRequest { Agent = "Codex" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(query.Items);
+        Assert.Equal(sessionId, item.SessionId);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var fetched = await sut.GetAsync("Codex", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        Assert.Equal(sessionId, fetched!.SessionId);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var unchanged = await sut.IsUnchangedAsync("Codex", sessionId, "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(unchanged);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+    }
+
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: Incremental turn and dialog mutation paths must
+    /// re-synchronize the DbContext discriminator before locating existing rows.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAndAppendDialogAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Mutations_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var sessionId = BuildSessionId("Cursor", "stale-turn");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260527T014000Z-stale-turn",
+            Timestamp = "2026-05-27T01:40:00Z",
+            QueryText = "append through stale db context",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "Recorded stale context turn append regression",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+                }
+            ]
+        };
+
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(turnId > 0);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var dialogCount = await sut.AppendProcessingDialogAsync(
+            "Cursor",
+            sessionId,
+            "req-20260527T014000Z-stale-turn",
+            [new ProcessingDialogItemDto { Role = "model", Content = "visible after workspace sync", Category = "reasoning" }], cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal(1, dialogCount);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+    }
+
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: A long-lived service instance must return records
+    /// for the current workspace after the scoped workspace context changes, and
+    /// must not leak records from a different workspace.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WhenWorkspaceContextChanges_ReturnsOnlyCurrentWorkspaceRows()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_TwoWorkspace_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        var primarySessionId = BuildSessionId("Codex", "primary-visible");
+        workspaceContext.WorkspacePath = WorkspacePath;
+        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
+        var otherSessionId = BuildSessionId("Cursor", "other-visible");
+        workspaceContext.WorkspacePath = otherWorkspacePath;
+        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var primaryResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var primaryItem = Assert.Single(primaryResult.Items);
+        Assert.Equal(primarySessionId, primaryItem.SessionId);
+        Assert.DoesNotContain(primaryResult.Items, item => item.SessionId == otherSessionId);
+
+        workspaceContext.WorkspacePath = otherWorkspacePath;
+        var otherResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var otherItem = Assert.Single(otherResult.Items);
+        Assert.Equal(otherSessionId, otherItem.SessionId);
+        Assert.DoesNotContain(otherResult.Items, item => item.SessionId == primarySessionId);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> creates a new turn on an existing
+    /// session without deleting any sibling turns. Guards the per-turn helper
+    /// against the delete-stale behavior of the full-session upsert.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-append");
+        var initial = CreateTestDto("Cursor", sessionId);
+        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var newTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-second",
+            Timestamp = "2026-05-16T12:00:00Z",
+            QueryText = "second turn",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "Recorded service turn append",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+                }
+            ]
+        };
+
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, newTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(turnId > 0);
+        var turns = await _db.SessionLogTurns
+            .IgnoreQueryFilters()
+            .Where(t => t.SessionLog!.SessionId == sessionId)
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(2, turns.Count);
+        Assert.Contains(turns, t => t.RequestId == "req-20260211T100100Z-entry-001");
+        Assert.Contains(turns, t => t.RequestId == "req-20260516T120000Z-second");
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> persists structured turn fields so
+    /// agents do not have to fold audit data into the response text.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurn_PersistsStructuredFields()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("ClaudeCode", "structured-turn-append");
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var newTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260610T154039Z-structured-turn",
+            Timestamp = "2026-06-10T15:40:39Z",
+            QueryTitle = "Repro turn",
+            QueryText = "Structured fields repro",
+            Response = "testing structured fields",
+            Interpretation = "structured DTO sub-field repro",
+            Status = "in_progress",
+            TokenCount = 123,
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+            Tags = ["repro"],
+            ContextList = ["src/QBrainAi.Repl.Core/GenericClientPassthrough.cs"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Order = 1,
+                    Description = "repro action",
+                    Type = "edit",
+                    Status = "completed",
+                    FilePath = "src/test.cs"
+                }
+            ]
+        };
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, newTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        var appended = Assert.Single(fetched!.Turns!, turn => turn.RequestId == "req-20260610T154039Z-structured-turn");
+        Assert.Equal("structured DTO sub-field repro", appended.Interpretation);
+        Assert.Equal(123, appended.TokenCount);
+        Assert.Equal("repro", Assert.Single(appended.Tags!));
+        Assert.Equal("src/QBrainAi.Repl.Core/GenericClientPassthrough.cs", Assert.Single(appended.ContextList!));
+        var action = Assert.Single(appended.Actions!);
+        Assert.Equal(1, action.Order);
+        Assert.Equal("repro action", action.Description);
+        Assert.Equal("src/test.cs", action.FilePath);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> on an existing requestId updates the
+    /// row in place rather than inserting a duplicate.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_ExistingTurn_UpdatesInPlace()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-update");
+        var initial = CreateTestDto("Cursor", sessionId);
+        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var updatedTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Timestamp = "2026-02-11T10:01:00Z",
+            QueryText = "updated query",
+            Response = "updated response",
+            Status = "completed",
+            DesignDecisions =
+            [
+                "Keep UpsertTurnAsync focused on updating the addressed turn in place."
+            ]
+        };
+
+        await sut.UpsertTurnAsync("Cursor", sessionId, updatedTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns
+            .IgnoreQueryFilters()
+            .SingleAsync(t => t.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal("updated query", turn.QueryText);
+        Assert.Equal("updated response", turn.Response);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: Incremental per-turn updates preserve existing structured
+    /// child rows when the later DTO omits those collections.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_ExistingTurn_PreservesStructuredCollectionsWhenOmitted()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("ClaudeCode", "turn-merge-structured");
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Timestamp = "2026-02-11T10:01:00Z",
+            QueryText = "initial structured query",
+            Response = "initial response",
+            Status = "in_progress",
+            Tags = ["repro"],
+            ContextList = ["src/QBrainAi.Services/Services/SessionLogService.cs"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Order = 1,
+                    Description = "preserve action",
+                    Type = "edit",
+                    Status = "completed",
+                    FilePath = "src/file.cs"
+                }
+            ],
+            FilesModified = ["src/file.cs"],
+            Blockers = ["initial blocker"]
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Response = "final response",
+            Status = "completed",
+            DesignDecisions = ["Per-turn updates are merged so omitted structured collections are preserved."]
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        var turn = Assert.Single(fetched!.Turns!, item => item.RequestId == "req-20260211T100100Z-entry-001");
+        Assert.Equal("final response", turn.Response);
+        Assert.Equal("repro", Assert.Single(turn.Tags!));
+        Assert.Equal("src/QBrainAi.Services/Services/SessionLogService.cs", Assert.Single(turn.ContextList!));
+        Assert.Equal("preserve action", Assert.Single(turn.Actions!).Description);
+        Assert.Equal("src/file.cs", Assert.Single(turn.FilesModified!));
+        Assert.Equal("initial blocker", Assert.Single(turn.Blockers!));
+        Assert.Equal(
+            "Per-turn updates are merged so omitted structured collections are preserved.",
+            Assert.Single(turn.DesignDecisions!));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> rejects terminal turn states without
+    /// decision, action, or commit evidence ONLY for Quad-Brain ACID agent sessions
+    /// (SourceType <c>QBAgent</c> = <c>McpHostedAgentDefaults.QBAgentSourceType</c>).
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_AcidAgentClosingTurnWithoutEvidence_ThrowsArgumentException()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        const string qbAgentSourceType = "QBAgent";
+        var sessionId = BuildSessionId(qbAgentSourceType, "turn-close-validation");
+        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120100Z-no-evidence",
+            Timestamp = "2026-05-16T12:01:00Z",
+            QueryText = "terminal turn without audit evidence",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(
+            () => sut.UpsertTurnAsync(qbAgentSourceType, sessionId, turn, cancellationToken: TestContext.Current.CancellationToken))
+            .ConfigureAwait(true);
+
+        Assert.Contains("no decision, action, or commit items", ex.Message, StringComparison.Ordinal);
+        Assert.Contains("Compliance with Session Logging Requirements is not optional.", ex.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> allows a standard (non-Quad-Brain) agent
+    /// session to close a terminal turn without decision, action, or commit evidence.
+    /// The ACID compliance gate must not leak into the standard session-log endpoints.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_StandardAgentClosingTurnWithoutEvidence_Succeeds()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-close-standard");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120200Z-no-evidence-ok",
+            Timestamp = "2026-05-16T12:02:00Z",
+            QueryText = "standard terminal turn without audit evidence",
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
+        };
+
+        var id = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(id > 0);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> throws when the parent session does
+    /// not exist so the controller can map to 404.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_SessionMissing_ThrowsInvalidOperationException()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-x",
+            QueryText = "x",
+            Status = "completed"
+        };
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => sut.UpsertTurnAsync("Cursor", BuildSessionId("Cursor", "missing"), turn, cancellationToken: TestContext.Current.CancellationToken))
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-011: After submit, <c>GetAsync</c> by (sourceType, sessionId)
+    /// returns the same record under the same workspace context.
+    /// </summary>
+    [Fact]
+    public async Task GetAsync_AfterSubmit_ReturnsRecord()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "get-by-id");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("Cursor", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        Assert.Equal(sessionId, fetched!.SessionId);
+        Assert.Equal("Cursor", fetched.SourceType);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-011: <c>GetAsync</c> returns null for a session that does not
+    /// exist (controller maps to 404).
+    /// </summary>
+    [Fact]
+    public async Task GetAsync_Missing_ReturnsNull()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var fetched = await sut.GetAsync("Cursor", BuildSessionId("Cursor", "absent"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Null(fetched);
+    }
+
+    #region Phase 0 - workspace stamping and child-filter bugs (BUG-SESSIONLOG-WS-001..004, repro 2026-06-12)
+
+    private const string DriftedWorkspacePath = @"E:\tests\sessionlog-service-DRIFTED";
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-001 (Bug A): a turn row whose WorkspaceId drifted away from
+    /// its parent session must still be matched by request id on upsert. Today the
+    /// workspace query filter hides the row, the service INSERTs a duplicate, and the
+    /// unique index (SessionLogId, RequestId) throws (HTTP 500 in production).
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_DriftedTurnStamp_UpdatesExistingTurnInsteadOfDuplicateInsert()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-drift-upsert");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var update = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T100100Z-entry-001",
+                Timestamp = "2026-02-11T10:05:00Z",
+                QueryText = "How do I configure EF Core?",
+                Response = "Updated response after drift",
+                Status = "in_progress"
+            };
+
+            var turnId = await sut2.UpsertTurnAsync("ClaudeCode", sessionId, update, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.True(turnId > 0);
+            Assert.Equal(1, CountTurnRows(connection, "req-20260211T100100Z-entry-001"));
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-002 (Bug A invariant): every child row written by submit or
+    /// turn upsert carries the parent session's WorkspaceId, for both the explicit
+    /// workspace-context path and the ambient auto-stamp path.
+    /// </summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task SubmitAndUpsert_ChildRowsAlwaysMatchParentSessionWorkspace(bool useServiceWorkspaceContext)
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-stamp-invariant");
+
+        var (sut, db) = BuildSqliteSut(connection, useServiceWorkspaceContext);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.First().Actions = [new UnifiedActionDto { Order = 1, Description = "edit", Type = "edit", Status = "completed", FilePath = "src/a.cs" }];
+            dto.Turns!.First().Tags = ["phase0"];
+            dto.Turns!.First().Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m" }];
+            dto.Turns!.First().DesignDecisions = ["Decision: stamp children from parent."];
+            await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var richTurn = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T110000Z-entry-002",
+                Timestamp = "2026-02-11T11:00:00Z",
+                QueryText = "second turn",
+                Status = "completed",
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                DesignDecisions = ["Decision: second turn keeps invariant."],
+                Commits = [new SessionLogCommitDto { Sha = "def456", Branch = "main", Message = "m2" }]
+            };
+            await sut.UpsertTurnAsync("ClaudeCode", sessionId, richTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = await db.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Actions)
+                .Include(s => s.Turns).ThenInclude(t => t.Tags)
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.False(string.IsNullOrEmpty(session.WorkspaceId));
+            foreach (var turn in session.Turns)
+            {
+                Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
+                foreach (var a in turn.Actions) Assert.Equal(session.WorkspaceId, a.WorkspaceId);
+                foreach (var t in turn.Tags) Assert.Equal(session.WorkspaceId, t.WorkspaceId);
+                foreach (var c in turn.Commits) Assert.Equal(session.WorkspaceId, c.WorkspaceId);
+                foreach (var s in turn.StringListItems) Assert.Equal(session.WorkspaceId, s.WorkspaceId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-003 (Bug B): a bare status-only submit (no turns) on a session
+    /// whose turn carries commits must not sever the required Turn-Commit association
+    /// and must not corrupt the persisted turn count - including when the child rows'
+    /// stamps drifted (the 2026-06-12 production close failure).
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SubmitAsync_BareStatusUpdate_PreservesTurnsAndCommits(bool driftChildStamps)
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-bare-close");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var turnWithCommit = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T120000Z-entry-002",
+                Timestamp = "2026-02-11T12:00:00Z",
+                QueryText = "work",
+                Status = "completed",
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                DesignDecisions = ["Decision: ship it."],
+                Commits = [new SessionLogCommitDto { Sha = "554ab3d", Branch = "main", Message = "fix(plugin): drop .mcp.json" }]
+            };
+            await sut1.UpsertTurnAsync("ClaudeCode", sessionId, turnWithCommit, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        if (driftChildStamps)
+            DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var bareClose = new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Title = "Before close",
+                Status = "completed"
+            };
+
+            await sut2.SubmitAsync(bareClose, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var (_, verifyDb) = BuildSqliteSut(connection);
+        using (verifyDb)
+        {
+            var session = await verifyDb.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal("completed", session.Status);
+            Assert.Equal(2, session.Turns.Count);
+            Assert.Equal(2, session.TurnCount);
+            Assert.Single(session.Turns.SelectMany(t => t.Commits));
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-004 (Bug C): query-history and per-id get report the real turn
+    /// count even when child stamps drifted. Today the filtered Turns collection yields
+    /// turnCount 0 while the rows still exist.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_DriftedTurnStamps_ReportsRealTurnCount()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-drift-count");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var page = await sut2.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode", Limit = 50 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var listed = Assert.Single(page.Items, s => s.SessionId == sessionId);
+            Assert.Equal(1, listed.TurnCount);
+
+            var fetched = await sut2.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.NotNull(fetched);
+            Assert.Single(fetched!.Turns!);
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-016 isolation guard: with child query filters removed, dialog append
+    /// keyed by (sourceType, sessionId, requestId) must still resolve the turn through
+    /// the workspace-filtered parent session and never touch another workspace's turn
+    /// that shares the same identifiers.
+    /// </summary>
+    [Fact]
+    public async Task AppendProcessingDialogAsync_SameIdsInTwoWorkspaces_OnlyTouchesCurrentWorkspace()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-isolation-dialog");
+
+        var (sutW1, dbW1) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
+        using (dbW1)
+        {
+            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var (sutW2, dbW2) = BuildSqliteSut(connection, workspacePath: DriftedWorkspacePath);
+        using (dbW2)
+        {
+            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var (sutW1b, dbW1b) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
+        using (dbW1b)
+        {
+            var added = await sutW1b.AppendProcessingDialogAsync(
+                "ClaudeCode",
+                sessionId,
+                "req-20260211T100100Z-entry-001",
+                [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "w1 only", Category = "reasoning" }], cancellationToken: TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            Assert.Equal(1, added);
+        }
+
+        var (_, verifyDb) = BuildSqliteSut(connection);
+        using (verifyDb)
+        {
+            var dialogOwners = await verifyDb.SessionLogProcessingDialogs.IgnoreQueryFilters()
+                .Where(d => d.Content == "w1 only")
+                .Select(d => d.SessionLogTurn!.SessionLog!.WorkspaceId)
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var owner = Assert.Single(dialogOwners);
+            Assert.Equal(WorkspacePath, owner);
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-005: the data-repair routine re-stamps drifted child rows to
+    /// their parent session's WorkspaceId and is idempotent.
+    /// </summary>
+    [Fact]
+    public async Task RepairWorkspaceStampsAsync_RestampsDriftedChildrenToParent_Idempotent()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-repair");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.First().Commits = [new SessionLogCommitDto { Sha = "abc", Branch = "main", Message = "m" }];
+            dto.Turns!.First().DesignDecisions = ["Decision: repair."];
+            await sut1.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId, driftGrandchildren: true);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var dryRunCount = await sut2.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.True(dryRunCount > 0);
+            var dryRunRepeat = await sut2.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal(dryRunCount, dryRunRepeat);
+
+            var firstPass = await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal(dryRunCount, firstPass);
+            var secondPass = await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal(0, secondPass);
+
+            var session = await db2.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            foreach (var turn in session.Turns)
+            {
+                Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
+                foreach (var c in turn.Commits) Assert.Equal(session.WorkspaceId, c.WorkspaceId);
+                foreach (var s in turn.StringListItems) Assert.Equal(session.WorkspaceId, s.WorkspaceId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-015: whole-session submit is ADDITIVE. Omitted session scalars
+    /// (title, model) survive a partial submit; supplied scalars update.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_PartialSessionPayload_PreservesOmittedSessionScalars()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "additive-session");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var full = CreateTestDto("ClaudeCode", sessionId, title: "Original title");
+            full.Model = "claude-fable-5";
+            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            await sut2.SubmitAsync(new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Status = "completed"
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var stored = await db2.SessionLogs.IgnoreQueryFilters()
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal("completed", stored.Status);
+            Assert.Equal("Original title", stored.Title);
+            Assert.Equal("claude-fable-5", stored.Model);
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-015: re-submitting an existing turn through whole-session submit
+    /// merges instead of clobbering - omitted turn scalars (response, queryText)
+    /// survive; previously appended collections survive.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_SparseTurnInSessionPayload_PreservesOmittedTurnFields()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "additive-turn");
+        const string requestId = "req-20260211T100100Z-entry-001";
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var full = CreateTestDto("ClaudeCode", sessionId);
+            full.Turns!.First().Response = "Original response";
+            full.Turns!.First().Interpretation = "Original interpretation";
+            full.Turns!.First().DesignDecisions = ["Decision: keep data."];
+            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            await sut2.SubmitAsync(new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Turns =
+                [
+                    new UnifiedRequestEntryDto
+                    {
+                        RequestId = requestId,
+                        Status = "completed",
+                        Tags = ["wrap-up"]
+                    }
+                ]
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var turn = await db2.SessionLogTurns.IgnoreQueryFilters()
+                .Include(t => t.Tags)
+                .Include(t => t.StringListItems)
+                .FirstAsync(t => t.RequestId == requestId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal("completed", turn.Status);
+            Assert.Equal("Original response", turn.Response);
+            Assert.Equal("Original interpretation", turn.Interpretation);
+            Assert.Equal("How do I configure EF Core?", turn.QueryText);
+            Assert.Contains(turn.StringListItems, s => s.ListType == "DesignDecision" && s.Value == "Decision: keep data.");
+            Assert.Contains(turn.Tags, t => t.Tag == "wrap-up");
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetSessionTitleAsync sets
+    /// the title on an existing session. Fixture: in-memory EF session created via
+    /// SubmitAsync with an original title, then explicitly retitled.
+    /// </summary>
+    [Fact]
+    public async Task SetSessionTitleAsync_ExistingSession_UpdatesTitle()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-session-title");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Original session title"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sut.SetSessionTitleAsync("ClaudeCode", sessionId, "Renamed session title", TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.IgnoreQueryFilters()
+            .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Renamed session title", stored.Title);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetTurnTitleAsync sets the
+    /// QueryTitle on an existing turn. Fixture: in-memory EF session with the
+    /// default CreateTestDto turn (req-...-entry-001), then explicitly retitled.
+    /// </summary>
+    [Fact]
+    public async Task SetTurnTitleAsync_ExistingTurn_UpdatesQueryTitle()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-turn-title");
+        const string requestId = "req-20260211T100100Z-entry-001";
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sut.SetTurnTitleAsync("ClaudeCode", sessionId, requestId, "Refined turn title", TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns.IgnoreQueryFilters()
+            .FirstAsync(t => t.RequestId == requestId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Refined turn title", turn.QueryTitle);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetSessionTitleAsync throws
+    /// InvalidOperationException when the target session does not exist.
+    /// </summary>
+    [Fact]
+    public async Task SetSessionTitleAsync_MissingSession_Throws()
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _sut.SetSessionTitleAsync("ClaudeCode", BuildSessionId("ClaudeCode", "missing-session"), "x", TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetTurnTitleAsync throws
+    /// InvalidOperationException when the session exists but the turn does not.
+    /// </summary>
+    [Fact]
+    public async Task SetTurnTitleAsync_MissingTurn_Throws()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-turn-title-missing");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _sut.SetTurnTitleAsync("ClaudeCode", sessionId, "req-20260211T100100Z-entry-999", "x", TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    private static void DriftTurnRows(SqliteConnection connection, string sessionId, bool driftGrandchildren = false)
+    {
+        EnsureWorkspaceRow(connection, DriftedWorkspacePath);
+        ExecuteSql(connection,
+            $"UPDATE SessionLogTurns SET WorkspaceId = @ws WHERE SessionLogId IN (SELECT Id FROM SessionLogs WHERE SessionId = @sid)",
+            ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+        if (driftGrandchildren)
+        {
+            foreach (var table in new[] { "SessionLogCommits", "SessionLogTurnStringLists", "SessionLogActions", "SessionLogTurnTags" })
+            {
+                ExecuteSql(connection,
+                    $"UPDATE {table} SET WorkspaceId = @ws WHERE SessionLogTurnId IN (SELECT t.Id FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid)",
+                    ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+            }
+        }
+    }
+
+    private static void EnsureWorkspaceRow(SqliteConnection connection, string workspaceId)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
+        using var db = new McpDbContext(options);
+        if (db.Workspaces.Any(w => w.WorkspaceId == workspaceId))
+            return;
+        db.Workspaces.Add(new QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity
+        {
+            WorkspaceId = workspaceId,
+            WorkspacePath = workspaceId,
+            Name = "drift-workspace"
+        });
+        db.SaveChanges();
+    }
+
+    private static int CountTurnRows(SqliteConnection connection, string requestId)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = "SELECT COUNT(*) FROM SessionLogTurns WHERE RequestId = @rid";
+        cmd.Parameters.AddWithValue("@rid", requestId);
+        return Convert.ToInt32(cmd.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private static void ExecuteSql(SqliteConnection connection, string sql, params (string Name, object Value)[] args)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        foreach (var (name, value) in args)
+            cmd.Parameters.AddWithValue(name, value);
+        cmd.ExecuteNonQuery();
+    }
+
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
+        SqliteConnection connection,
+        bool useServiceWorkspaceContext)
+        => BuildSqliteSut(connection, WorkspacePath, useServiceWorkspaceContext);
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLIFE-005: a unique SessionLogTurns race on the first insert
+    /// retries once and updates the row that won, leaving a single request id.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates()
+    {
+        var databasePath = Path.Combine(Path.GetTempPath(), "sessionlog-unique-" + Guid.NewGuid().ToString("N") + ".db");
+        var connectionString = new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString();
+        var sessionId = BuildSessionId("GrokCode", "unique-race");
+        try
+        {
+            using (var seedConnection = new SqliteConnection(connectionString))
+            {
+                seedConnection.Open();
+                var (seed, seedDb) = BuildSqliteSut(seedConnection);
+                using (seedDb)
+                {
+                    await seed.SubmitAsync(
+                        CreateTestDto("GrokCode", sessionId),
+                        cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                }
+            }
+
+            var interceptor = new RivalTurnInsertInterceptor();
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var (sut, db) = BuildSqliteSut(connection, WorkspacePath, interceptor: interceptor);
+            using (db)
+            {
+                var turn = new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260923T205606Z-001-race",
+                    Timestamp = "2026-09-23T20:56:06Z",
+                    QueryText = "winner text",
+                    Status = "in_progress",
+                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                };
+
+                var turnId = await sut.UpsertTurnAsync(
+                    "GrokCode",
+                    sessionId,
+                    turn,
+                    TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+                Assert.True(turnId > 0);
+                Assert.Equal(1, interceptor.Inserts);
+                var rows = await db.SessionLogTurns
+                    .IgnoreQueryFilters()
+                    .Where(item => item.RequestId == turn.RequestId)
+                    .ToListAsync(TestContext.Current.CancellationToken)
+                    .ConfigureAwait(true);
+                var stored = Assert.Single(rows);
+                Assert.Equal("winner text", stored.QueryText);
+            }
+        }
+        finally
+        {
+            TryDelete(databasePath);
+        }
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+        catch (IOException)
+        {
+        }
+    }
+
+    /// <summary>Inserts the racing turn on a second connection before the first save.</summary>
+    private sealed class RivalTurnInsertInterceptor : SaveChangesInterceptor
+    {
+        /// <summary>How many rival rows this interceptor inserted.</summary>
+        public int Inserts { get; private set; }
+
+        /// <inheritdoc />
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        {
+            InsertRival(eventData);
+            return result;
+        }
+
+        /// <inheritdoc />
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            InsertRival(eventData);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
+
+        private void InsertRival(DbContextEventData eventData)
+        {
+            if (Inserts > 0 || eventData.Context is null)
+                return;
+
+            var added = eventData.Context.ChangeTracker
+                .Entries<SessionLogTurnEntity>()
+                .FirstOrDefault(entry => entry.State == EntityState.Added);
+            if (added is null)
+                return;
+
+            var connectionString = eventData.Context.Database.GetConnectionString();
+            if (string.IsNullOrWhiteSpace(connectionString))
+                return;
+
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = """
+                INSERT INTO SessionLogTurns (WorkspaceId, SessionLogId, RequestId, PlanFile, TodoId, QueryText)
+                VALUES ($ws, $sid, $rid, 'None', 'None', 'rival')
+                """;
+            command.Parameters.AddWithValue("$ws", added.Entity.WorkspaceId ?? string.Empty);
+            command.Parameters.AddWithValue("$sid", added.Entity.SessionLogId);
+            command.Parameters.AddWithValue("$rid", added.Entity.RequestId ?? string.Empty);
+            command.ExecuteNonQuery();
+            Inserts++;
+        }
+    }
+
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
+        SqliteConnection connection,
+        string workspacePath,
+        bool useServiceWorkspaceContext = true,
+        SaveChangesInterceptor? interceptor = null)
+    {
+        var builder = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(connection);
+        if (interceptor is not null)
+            builder.AddInterceptors(interceptor);
+        var options = builder.Options;
+        var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath };
+        var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(
+            db,
+            NullLogger<SessionLogService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            useServiceWorkspaceContext ? workspaceContext : null);
+        return (sut, db);
+    }
+
+    #endregion
+
+    private SessionLogService BuildSutWithWorkspaceContext(string workspacePath)
+    {
+        _db.OverrideWorkspaceId(workspacePath);
+        var ctx = new WorkspaceContext { WorkspacePath = workspacePath };
+        return new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus, ctx);
+    }
+
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(SqliteConnection connection)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(connection)
+            .Options;
+        var workspaceContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
+        var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(
+            db,
+            NullLogger<SessionLogService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            workspaceContext);
+        return (sut, db);
+    }
+
+    private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId, string title = "Test Session")
+    {
+        return new UnifiedSessionLogDto
+        {
+            SourceType = sourceType,
+            SessionId = sessionId,
+            Title = title,
+            Model = "gpt-4",
+            Started = "2026-02-11T10:00:00Z",
+            LastUpdated = "2026-02-11T12:00:00Z",
+            Status = "completed",
+            TurnCount = 1,
+            Turns =
+            [
+                new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260211T100100Z-entry-001",
+                    Timestamp = "2026-02-11T10:01:00Z",
+                    QueryText = "How do I configure EF Core?",
+                    QueryTitle = "EF Core Config",
+                    Response = "Use AddDbContext in Program.cs",
+                    Status = "completed",
+                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                    TodoId = SessionLogTurnContextValidator.NoneSentinel
+                }
+            ]
+        };
+    }
+
+    private static UnifiedRequestEntryDto CreateRelationalTurn(string requestId, string response, string tag)
+    {
+        return new UnifiedRequestEntryDto
+        {
+            RequestId = requestId,
+            Timestamp = "2026-06-10T15:12:35Z",
+            QueryTitle = response,
+            QueryText = response,
+            Response = response,
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
+            Tags = [tag],
+            ContextList = [$"docs/{tag}.md"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = $"{response} action",
+                    Type = "test",
+                    Status = "completed",
+                    FilePath = $"src/{tag}.cs"
+                }
+            ],
+            DesignDecisions = [$"{response} decision"],
+            FilesModified = [$"src/{tag}.cs"],
+            Blockers = [$"{response} blocker"]
+        };
+    }
+
+    private static string BuildSessionId(string agent, string suffix)
+    {
+        var normalized = new string((suffix ?? string.Empty)
+            .ToLowerInvariant()
+            .Select(c => char.IsLetterOrDigit(c) ? c : '-')
+            .ToArray())
+            .Trim('-');
+        if (string.IsNullOrWhiteSpace(normalized))
+            normalized = "session";
+        return $"{agent}-20260304T113901Z-{normalized}";
+    }
+}
+

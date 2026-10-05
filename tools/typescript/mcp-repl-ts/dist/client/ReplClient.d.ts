@@ -1,6 +1,6 @@
 import { McpResult, McpError, ReplResponse } from '../types';
 /**
- * Shared ReplClient for talking to mcpserver-repl --agent-stdio.
+ * Shared ReplClient for talking to qbrain-ai-repl --agent-stdio.
  * Provides typed request/response and automatic envelope (de)serialization.
  * This is the core of the shared TS surface.
  */

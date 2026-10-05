@@ -39,7 +39,7 @@ function feedLine(bridge: ReplBridge, line: string): void {
   (bridge as unknown as { onLine: (line: string) => void }).onLine(line);
 }
 
-/** Frame a YAML envelope the way mcpserver-repl emits it: doc + `---` line. */
+/** Frame a YAML envelope the way qbrain-ai-repl emits it: doc + `---` line. */
 function feedEnvelope(bridge: ReplBridge, envelope: Record<string, unknown>): void {
   const text = yaml.dump(envelope, { lineWidth: -1 });
   for (const line of text.split('\n')) {
@@ -89,7 +89,7 @@ describe('ReplBridge process launch', () => {
     process.chdir(originalCwd);
   });
 
-  test('TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl with the MCP workspace cwd instead of the Node process cwd', async () => {
+  test('TEST-MCP-PLUGIN-PSONLY-001 starts qbrain-ai-repl with the MCP workspace cwd instead of the Node process cwd', async () => {
     const workspace = originalCwd;
     const wrongCurrentDirectory = dirname(originalCwd);
     process.chdir(wrongCurrentDirectory);
@@ -101,7 +101,7 @@ describe('ReplBridge process launch', () => {
     await bridge.ensure();
 
     expect(spawnMock).toHaveBeenCalledWith(
-      'mcpserver-repl',
+      'qbrain-ai-repl',
       ['--agent-stdio', '--agent', 'Cline'],
       expect.objectContaining({
         cwd: workspace,
@@ -335,11 +335,11 @@ describe('ReplBridge timeout handling', () => {
       bridge as unknown as {
         terminateAfterTimeout: (message: string, exceptRequestId?: string) => void;
       }
-    ).terminateAfterTimeout('mcpserver-repl timed out');
+    ).terminateAfterTimeout('qbrain-ai-repl timed out');
 
     expect(kill).toHaveBeenCalledWith('SIGTERM');
     expect((bridge as unknown as { proc: unknown }).proc).toBeNull();
-    expect(rejected[0].message).toBe('mcpserver-repl timed out');
+    expect(rejected[0].message).toBe('qbrain-ai-repl timed out');
     expect(pendingOf(bridge).size).toBe(0);
 
     jest.advanceTimersByTime(2000);

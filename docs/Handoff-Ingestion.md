@@ -26,8 +26,8 @@ Replay of the same workspace, content hash, and effective prompt identity return
 
 ## Surfaces
 
-- REST: `POST /mcpserver/handoff/ingest`, `GET /mcpserver/handoff/runs/{runId}`, `POST /mcpserver/handoff/runs/{runId}/approve`
-- Client: `McpServerClient.Handoff` methods `IngestHandoffAsync`, `GetHandoffRunAsync`, `ApproveHandoffAsync`
+- REST: `POST /qbrainai/handoff/ingest`, `GET /qbrainai/handoff/runs/{runId}`, `POST /qbrainai/handoff/runs/{runId}/approve`
+- Client: `QBrainAiClient.Handoff` methods `IngestHandoffAsync`, `GetHandoffRunAsync`, `ApproveHandoffAsync`
 - REPL: `workflow.handoff.ingest`, `workflow.handoff.get`, `workflow.handoff.approve`
 - Director: `handoff-ingest`, `handoff-get`, `handoff-approve`
 - MCP tools: `handoff_ingest`, `handoff_get`, `handoff_approve`
@@ -87,17 +87,17 @@ var approved = await client.Handoff.ApproveHandoffAsync(
 ### REST
 
 ```http
-POST /mcpserver/handoff/ingest
+POST /qbrainai/handoff/ingest
 Content-Type: application/json
 X-Api-Key: <token>
-X-Workspace-Path: F:\GitHub\McpServer
+X-Workspace-Path: F:\GitHub\QBrainAi
 
 {"sourceKind":"Path","path":"docs/handoffs/example.md","mode":"DraftOnly"}
 ```
 
 ```http
-GET /mcpserver/handoff/runs/{runId}
-POST /mcpserver/handoff/runs/{runId}/approve
+GET /qbrainai/handoff/runs/{runId}
+POST /qbrainai/handoff/runs/{runId}/approve
 ```
 
 ## Durability and provenance

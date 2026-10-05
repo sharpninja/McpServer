@@ -12,12 +12,12 @@ partial class Build
     [Parameter("Uninstall the global tool")]
     readonly bool UninstallTool = false;
 
-    /// <summary>Install, update, or uninstall the mcpserver-repl global tool.</summary>
+    /// <summary>Install, update, or uninstall the qbrain-ai-repl global tool.</summary>
     public Target InstallReplTool => _ => _
         .DependsOn(PackReplTool)
         .Executes(() =>
         {
-            const string packageId = "SharpNinja.McpServer.Repl";
+            const string packageId = "QBrainAI.Repl";
             var packageVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
 
             if (UninstallTool)
@@ -77,7 +77,7 @@ partial class Build
 
             // Verify installation
             Log.Information("Verifying installation...");
-            ProcessTasks.StartProcess("mcpserver-repl", "--version").AssertZeroExitCode();
+            ProcessTasks.StartProcess("qbrain-ai-repl", "--version").AssertZeroExitCode();
         });
 
     internal static string? GetInstalledGlobalToolVersion(string toolListOutput, string packageId)

@@ -8,16 +8,16 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    const string DefaultServiceName = "McpServer";
-    const string DefaultInstallPath = @"C:\ProgramData\McpServer";
+    const string DefaultServiceName = "QBrainAi";
+    const string DefaultInstallPath = @"C:\ProgramData\QBrainAi";
     const int DefaultPort = 7147;
-    const string MainExeName = "McpServer.Support.Mcp.exe";
-    const string LauncherExeName = "McpServer.Launcher.exe";
+    const string MainExeName = "QBrainAi.Support.Mcp.exe";
+    const string LauncherExeName = "QBrainAi.Launcher.exe";
 
-    [Parameter("Service name (Windows: McpServer; Linux: mcpserver.service)")]
+    [Parameter("Service name (Windows: QBrainAi; Linux: mcpserver.service)")]
     readonly string ServiceName = ServiceUpdatePlatform.ParameterDefaults(OperatingSystem.IsLinux()).DefaultServiceName;
 
-    [Parameter("Service installation directory (Windows: C:\\ProgramData\\McpServer; Linux: /opt/mcpserver/app)")]
+    [Parameter("Service installation directory (Windows: C:\\ProgramData\\QBrainAi; Linux: /opt/mcpserver/app)")]
     readonly string InstallPath = ServiceUpdatePlatform.ParameterDefaults(OperatingSystem.IsLinux()).DefaultInstallPath;
 
     [Parameter("Linux retained configuration/data archive directory (default: /var/backups/mcpserver)")]
@@ -50,11 +50,11 @@ partial class Build
                 return;
             }
             var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmssfff");
-            var backupDir = Path.Combine(Path.GetTempPath(), $"McpServer-update-backup-{timestamp}");
+            var backupDir = Path.Combine(Path.GetTempPath(), $"QBrainAi-update-backup-{timestamp}");
             var archiveDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "McpServer-Backups");
-            var archivePath = Path.Combine(archiveDir, $"McpServer-backup-{timestamp}.zip");
+                "QBrainAi-Backups");
+            var archivePath = Path.Combine(archiveDir, $"QBrainAi-backup-{timestamp}.zip");
             var serviceProcessName = MainExeName.Replace(".exe", "");
 
             // Step 0: Assert elevated
@@ -99,12 +99,12 @@ partial class Build
             }
             else
             {
-                stageDir = Path.Combine(Path.GetTempPath(), "McpServer-publish-stage");
+                stageDir = Path.Combine(Path.GetTempPath(), "QBrainAi-publish-stage");
                 if (Directory.Exists(stageDir))
                     Directory.Delete(stageDir, true);
 
                 // Publish main server
-                var project = SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj";
+                var project = SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj";
                 DotNetPublish(_ => _
                     .SetProject(project)
                     .SetConfiguration("Release")
@@ -118,10 +118,10 @@ partial class Build
                     .SetOutput(stageDir));
 
                 // Publish launcher sidecar
-                var launcherProject = SourceDirectory / "McpServer.Launcher" / "McpServer.Launcher.csproj";
+                var launcherProject = SourceDirectory / "QBrainAi.Launcher" / "QBrainAi.Launcher.csproj";
                 if (File.Exists(launcherProject))
                 {
-                    var launcherStage = Path.Combine(Path.GetTempPath(), "McpServer-launcher-stage");
+                    var launcherStage = Path.Combine(Path.GetTempPath(), "QBrainAi-launcher-stage");
                     if (Directory.Exists(launcherStage))
                         Directory.Delete(launcherStage, true);
 
@@ -235,10 +235,10 @@ partial class Build
                 File.WriteAllText(versionPath, new YamlDotNet.Serialization.SerializerBuilder().Build().Serialize(document));
                 ProcessTasks.StartProcess("git", $"-C \"{RootDirectory}\" add GitVersion.yml").AssertZeroExitCode();
             }
-            stage = Path.Combine(Path.GetTempPath(), "McpServer-linux-publish-" + Guid.NewGuid().ToString("N"));
+            stage = Path.Combine(Path.GetTempPath(), "QBrainAi-linux-publish-" + Guid.NewGuid().ToString("N"));
             var version = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
             DotNetPublish(settings => settings
-                .SetProject(SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj")
+                .SetProject(SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj")
                 .SetConfiguration("Release")
                 .EnableSelfContained()
                 .SetRuntime(platform.RuntimeIdentifier)

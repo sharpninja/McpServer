@@ -51,23 +51,23 @@ function Invoke-PesterStep {
     }
 }
 $buildProjects = @(
-    'src\\McpServer.Support.Mcp\\McpServer.Support.Mcp.csproj',
-    'src\\McpServer.Client\\McpServer.Client.csproj'
+    'src\\QBrainAi.Support.Mcp\\QBrainAi.Support.Mcp.csproj',
+    'src\\QBrainAi.Client\\QBrainAi.Client.csproj'
 )
 $testProjects = @(
-    'tests\\McpServer.Client.Tests\\McpServer.Client.Tests.csproj',
-    'tests\\McpServer.Context.Validation\\McpServer.Context.Validation.csproj',
-    'tests\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.csproj',
-    'tests\\McpServer.GitHub.Validation\\McpServer.GitHub.Validation.csproj',
-    'tests\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.csproj',
-    'tests\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.csproj',
-    'tests\\McpServer.Repo.Validation\\McpServer.Repo.Validation.csproj',
-    'tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj',
-    'tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj',
-    'tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj',
-    'tests\\McpServer.Todo.Validation\\McpServer.Todo.Validation.csproj',
-    'tests\\McpServer.ToolRegistry.Validation\\McpServer.ToolRegistry.Validation.csproj',
-    'tests\\McpServer.Workspace.Validation\\McpServer.Workspace.Validation.csproj'
+    'tests\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.csproj',
+    'tests\\QBrainAi.Context.Validation\\QBrainAi.Context.Validation.csproj',
+    'tests\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.csproj',
+    'tests\\QBrainAi.GitHub.Validation\\QBrainAi.GitHub.Validation.csproj',
+    'tests\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.csproj',
+    'tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj',
+    'tests\\QBrainAi.Repo.Validation\\QBrainAi.Repo.Validation.csproj',
+    'tests\\QBrainAi.SessionLog.Validation\\QBrainAi.SessionLog.Validation.csproj',
+    'tests\\QBrainAi.Support.Mcp.IntegrationTests\\QBrainAi.Support.Mcp.IntegrationTests.csproj',
+    'tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj',
+    'tests\\QBrainAi.Todo.Validation\\QBrainAi.Todo.Validation.csproj',
+    'tests\\QBrainAi.ToolRegistry.Validation\\QBrainAi.ToolRegistry.Validation.csproj',
+    'tests\\QBrainAi.Workspace.Validation\\QBrainAi.Workspace.Validation.csproj'
 )
 $pesterTests = @(
     'tools\\powershell\\McpSession.Tests.ps1',

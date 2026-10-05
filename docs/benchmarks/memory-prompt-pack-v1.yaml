@@ -46,7 +46,7 @@
     {
       "id": "DEC-001",
       "class": "decision",
-      "user_text": "Did we decide to use Docker or native Postgres for local McpServer?",
+      "user_text": "Did we decide to use Docker or native Postgres for local QBrainAi?",
       "scoring": "contains",
       "gold_answer_rubric": "Must state native Postgres (not Docker) for local.",
       "forbidden_claims": [

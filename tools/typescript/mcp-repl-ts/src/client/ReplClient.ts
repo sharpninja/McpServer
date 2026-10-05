@@ -3,7 +3,7 @@ import * as yaml from 'js-yaml';
 import { McpRequest, McpResult, McpError, McpEvent, ReplResponse } from '../types';
 
 /**
- * Shared ReplClient for talking to mcpserver-repl --agent-stdio.
+ * Shared ReplClient for talking to qbrain-ai-repl --agent-stdio.
  * Provides typed request/response and automatic envelope (de)serialization.
  * This is the core of the shared TS surface.
  */
@@ -18,7 +18,7 @@ export class ReplClient {
   async connect(): Promise<void> {
     if (this.proc) return;
 
-    this.proc = spawn('mcpserver-repl', ['--agent-stdio'], {
+    this.proc = spawn('qbrain-ai-repl', ['--agent-stdio'], {
       cwd: this.workspacePath,
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env, MCP_WORKSPACE_PATH: this.workspacePath },

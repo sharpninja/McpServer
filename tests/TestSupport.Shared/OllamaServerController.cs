@@ -1,4 +1,4 @@
-namespace McpServer.TestSupport.Ollama;
+namespace QBrainAi.TestSupport.Ollama;
 
 /// <summary>
 /// TR-MCP-QBOLLAMA-002: Handle to a launched Ollama server process, abstracted so controller behavior

@@ -1,14 +1,14 @@
 ---
 name: mcp-todo
-description: Use this skill whenever an agent must list, search, read, create, update, complete, or delete MCP Server TODO items, so it routes every operation through the plugin workflow.todo.* methods, honors the canonical TODO id format, and never edits TODO.yaml or any storage file directly.
+description: Use this skill whenever an agent must list, search, read, create, update, complete, or delete QBrain.AI TODO items, so it routes every operation through the plugin workflow.todo.* methods, honors the canonical TODO id format, and never edits TODO.yaml or any storage file directly.
 license: MIT
 ---
 
-# MCP Server TODO Management
+# QBrain.AI TODO Management
 
-This skill teaches an agent to query and mutate MCP Server TODO items through the
+This skill teaches an agent to query and mutate QBrain.AI TODO items through the
 plugin (`workflow.todo.*`) instead of touching storage files. In this workspace,
-"TODO" always means an MCP Server TODO item: not Claude Code's in-session task
+"TODO" always means an QBrain.AI TODO item: not Claude Code's in-session task
 list, not a markdown checklist, and not a GitHub issue list.
 
 ## When to Use
@@ -106,7 +106,7 @@ payload:
 ```
 
 The equivalent REST surface (for read-only diagnosis only, never to bypass the
-plugin) is `GET/POST/PUT/DELETE /mcpserver/todo[/{id}]` with the workspace
+plugin) is `GET/POST/PUT/DELETE /qbrainai/todo[/{id}]` with the workspace
 `X-Api-Key` and `X-Workspace-Path` headers from `AGENTS-README-FIRST.yaml`.
 
 ## Validation Checklist

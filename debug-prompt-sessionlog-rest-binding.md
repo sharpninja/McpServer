@@ -1,4 +1,4 @@
-# Debug prompt: `/mcpserver/sessionlog` REST endpoint binding + retrieval bugs
+# Debug prompt: `/qbrainai/sessionlog` REST endpoint binding + retrieval bugs
 
 ## Symptom
 
@@ -11,7 +11,7 @@ Every shape produced a different error; only one worked, and the working shape i
 #### Attempt A: top-level fields, no `dto` wrapper, `workspace` as string
 
 ```bash
-curl -X POST 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog' \
+curl -X POST 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog' \
   -H 'Content-Type: application/json' \
   -H 'X-Api-Key: <key>' \
   -d '{
@@ -28,7 +28,7 @@ Response (HTTP 400):
 {
   "errors": {
     "dto": ["The dto field is required."],
-    "$.workspace": ["The JSON value could not be converted to McpServer.Support.Mcp.Models.WorkspaceInfoDto."]
+    "$.workspace": ["The JSON value could not be converted to QBrainAi.Support.Mcp.Models.WorkspaceInfoDto."]
   }
 }
 ```
@@ -56,7 +56,7 @@ Tried with `sourceType` as the integer enum value `1` — same result.
 #### Attempt D: minimal payload, top-level fields only, no `workspace` at all
 
 ```bash
-curl -X POST 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog' \
+curl -X POST 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog' \
   -H 'Content-Type: application/json' \
   -H 'X-Api-Key: <key>' \
   -d '{"sourceType":"ClaudeCode","sessionId":"ClaudeCode-20260516T154337Z-release-v1-audit-001","agent":"ClaudeCode","title":"RELEASE-V1-AUDIT-001 end-to-end remediation"}'
@@ -75,19 +75,19 @@ The model binder appears to silently fall through different paths depending on w
 After the successful Attempt D returns `{"id":278,"sourceType":"ClaudeCode","sessionId":"ClaudeCode-20260516T154337Z-release-v1-audit-001"}`:
 
 ```bash
-curl 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog/ClaudeCode-20260516T154337Z-release-v1-audit-001'
+curl 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog/ClaudeCode-20260516T154337Z-release-v1-audit-001'
 # HTTP 404, empty body
 ```
 
 Same for `/278` (integer id form):
 ```bash
-curl 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog/278'
+curl 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog/278'
 # HTTP 404, empty body
 ```
 
 And the list endpoint does not return it either, even filtered by sourceType:
 ```bash
-curl 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog?limit=50&sourceType=ClaudeCode'
+curl 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog?limit=50&sourceType=ClaudeCode'
 # returns 10 records, none of which is the one just POSTed
 ```
 
@@ -101,14 +101,14 @@ So the POST either:
 Tried both pluralizations and a PUT variant — all 404. Either the endpoint paths differ from convention or they are not exposed via REST at all (only via the REPL workflow methods).
 
 ```bash
-curl -X POST 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog/<sessionId>/turn' ...   # 404
-curl -X POST 'http://PAYTON-LEGION2:7147/mcpserver/sessionlog/turn' ...                # 404
-curl -X PUT  'http://PAYTON-LEGION2:7147/mcpserver/sessionlog/<sessionId>' ...         # 404
+curl -X POST 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog/<sessionId>/turn' ...   # 404
+curl -X POST 'http://PAYTON-LEGION2:7147/qbrainai/sessionlog/turn' ...                # 404
+curl -X PUT  'http://PAYTON-LEGION2:7147/qbrainai/sessionlog/<sessionId>' ...         # 404
 ```
 
 ### Bug 4 (secondary): REPL auth refuses marker-file pickup
 
-`mcpserver-repl --agent-stdio` (installed as a dotnet tool at `C:\Users\kingd\.dotnet\tools\mcpserver-repl`) was launched from the workspace root containing a valid `AGENTS-README-FIRST.yaml` with a live API key. The REPL bootstrapped successfully, but every subsequent `workflow.sessionlog.*` call returned:
+`qbrain-ai-repl --agent-stdio` (installed as a dotnet tool at `C:\Users\kingd\.dotnet\tools\qbrain-ai-repl`) was launched from the workspace root containing a valid `AGENTS-README-FIRST.yaml` with a live API key. The REPL bootstrapped successfully, but every subsequent `workflow.sessionlog.*` call returned:
 
 ```yaml
 type: error
@@ -126,7 +126,7 @@ Either the marker-file discovery is silently failing, or there is an undocumente
 
 ## Repro environment
 
-- Server: `http://PAYTON-LEGION2:7147` (the same Kestrel host as the working `/mcpserver/todo` REST endpoints — which DO accept the same `X-Api-Key`)
+- Server: `http://PAYTON-LEGION2:7147` (the same Kestrel host as the working `/qbrainai/todo` REST endpoints — which DO accept the same `X-Api-Key`)
 - Agent workspace: `F:\GitHub\FeatureFlags` (has `AGENTS-README-FIRST.yaml`, marker signature verified, `/health` nonce verified)
 - Caller: PowerShell 7 / Git Bash on Windows
 - Existing record sourceTypes observed via GET: `ClaudeCode`, `ClaudeCowork`, `Codex`
@@ -134,20 +134,20 @@ Either the marker-file discovery is silently failing, or there is an undocumente
 
 ## What "good" looks like
 
-1. POST `/mcpserver/sessionlog` either documents the accepted shape in its `400` error responses, or accepts a single canonical shape. Recommended: top-level fields, no `dto` wrapper. If a wrapper is needed, the rejection message must say so unambiguously and stop firing when the wrapper is absent OR when an unrelated field is malformed.
-2. After a successful POST returning `{"id": N, "sessionId": "X"}`, both `GET /mcpserver/sessionlog/X` and `GET /mcpserver/sessionlog?sourceType=…` must return that record.
-3. REST endpoints for appending a turn, dialog, and actions either exist and are documented (e.g. `POST /mcpserver/sessionlog/{sessionId}/turn`), or `405 Method Not Allowed` is returned with an `Allow` header naming the supported verbs and an explanation that the REPL workflow methods are the only write path.
-4. `mcpserver-repl --agent-stdio` picks up the API key from `AGENTS-README-FIRST.yaml` in CWD (or an env var); if neither resolves, the failure message must say which paths it searched.
+1. POST `/qbrainai/sessionlog` either documents the accepted shape in its `400` error responses, or accepts a single canonical shape. Recommended: top-level fields, no `dto` wrapper. If a wrapper is needed, the rejection message must say so unambiguously and stop firing when the wrapper is absent OR when an unrelated field is malformed.
+2. After a successful POST returning `{"id": N, "sessionId": "X"}`, both `GET /qbrainai/sessionlog/X` and `GET /qbrainai/sessionlog?sourceType=…` must return that record.
+3. REST endpoints for appending a turn, dialog, and actions either exist and are documented (e.g. `POST /qbrainai/sessionlog/{sessionId}/turn`), or `405 Method Not Allowed` is returned with an `Allow` header naming the supported verbs and an explanation that the REPL workflow methods are the only write path.
+4. `qbrain-ai-repl --agent-stdio` picks up the API key from `AGENTS-README-FIRST.yaml` in CWD (or an env var); if neither resolves, the failure message must say which paths it searched.
 
 ## Suggested investigation order
 
-1. **Locate the POST handler.** Grep for the action method behind `POST /mcpserver/sessionlog` in `src/McpServer.Web/Controllers/` (or wherever Kestrel routing lives). Look for a `[FromBody]` parameter binding to either a `dto` property or the request body directly.
+1. **Locate the POST handler.** Grep for the action method behind `POST /qbrainai/sessionlog` in `src/QBrainAi.Web/Controllers/` (or wherever Kestrel routing lives). Look for a `[FromBody]` parameter binding to either a `dto` property or the request body directly.
 2. **Trace why Attempt D succeeds.** With only `sourceType`, `sessionId`, `agent`, `title` at the top level, the action method must be using a different binder (perhaps a custom `IModelBinder` or a fallback) than the one that fires the `errors.dto` complaint. The two code paths need to converge or the rejected paths need to produce coherent diagnostics.
 3. **Trace why id 278 is not retrievable.** Inspect the storage write in the success path of the POST handler. If it goes through a different repository than `GET`, find the asymmetry. Likely candidates:
    - workspace-scoped row-level filtering on read (POST omitted `workspace`)
    - the integer id is auto-generated but a separate `sessionId` index lookup is unindexed
    - the POST writes into a staging table that requires a follow-up commit call
-4. **Inspect REPL credential resolution.** Grep `mcpserver-repl` source for `AGENTS-README-FIRST` / marker resolution; check if it requires the workspace root to be passed as a CLI arg or env var rather than discovered from CWD.
+4. **Inspect REPL credential resolution.** Grep `qbrain-ai-repl` source for `AGENTS-README-FIRST` / marker resolution; check if it requires the workspace root to be passed as a CLI arg or env var rather than discovered from CWD.
 
 ## Acceptance
 

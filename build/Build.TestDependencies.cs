@@ -27,12 +27,13 @@ partial class Build
     /// ambiguous and fail the content assertions.
     /// </summary>
     static string RequiredOllamaModel =>
-        Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL") is { Length: > 0 } configured
+        (Environment.GetEnvironmentVariable("QBRAINAI_QUADBRAIN_OLLAMA_MODEL")
+            ?? Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL")) is { Length: > 0 } configured
             ? configured.Trim()
             : "gemma4:e4b";
 
     static AbsolutePath TestToolsDirectory =>
-        (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "McpServer" / "test-tools";
+        (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
     /// Idempotent installer for the provider integration-test dependencies:
@@ -68,7 +69,7 @@ partial class Build
             // makes the test runner fail the target.
             var projectsWithIntegrationTests = new[]
             {
-                TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj",
+                TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
 

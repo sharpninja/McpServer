@@ -8,23 +8,23 @@ Use this file when an automated agent needs to ingest content and query MCP cont
 - Audience: AI agents and automation scripts
 - Goal: deterministic initialization and repeatable context workflows
 
-## Obtain Module From MCP Server
+## Obtain Module From QBrain.AI
 
 Preferred source:
 
-- `$env:UserProfile\McpServer\tools\powershell\McpContext.psm1`
+- `$env:UserProfile\QBrainAi\tools\powershell\McpContext.psm1`
 
 Import using absolute path when operating against service-hosted installs:
 
 ```powershell
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 ```
 
 If unavailable in user profile tools path, use repo source and copy it:
 
 ```powershell
 $sourcePath = "<path-to-McpContext.psm1>"
-Copy-Item $sourcePath (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Copy-Item $sourcePath (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 ```
 
 If endpoint reads return `path not allowed or not found`, verify `Mcp.RepoAllowlist` contains matcher-compatible prefixes:
@@ -36,13 +36,13 @@ If `Initialize-McpContext` is not recognized after import, restore the module fr
 
 ```powershell
 $sourcePath = "<path-to-McpContext.psm1>"
-Copy-Item $sourcePath (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Copy-Item $sourcePath (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Remove-Module McpContext -ErrorAction SilentlyContinue
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Initialize-McpContext -MarkerPath "<workspace-path>\AGENTS-README-FIRST.yaml"
 ```
 
-If you need to bootstrap from the MCP Server endpoint, use the marker file for workspace-correct auth:
+If you need to bootstrap from the QBrain.AI endpoint, use the marker file for workspace-correct auth:
 
 ```powershell
 # Paste and run this entire block at once.
@@ -69,7 +69,7 @@ if (-not $markerPath) {
 }
 
 $workspacePath = Split-Path $markerPath -Parent
-$destination = Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1"
+$destination = Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1"
 New-Item -ItemType Directory -Path (Split-Path $destination -Parent) -Force | Out-Null
 
 # Read baseUrl + apiKey from the target workspace marker file.
@@ -116,7 +116,7 @@ $headers = @{
 }
 
 $path = [System.Uri]::EscapeDataString("tools/powershell/McpContext.psm1")
-$uri = "$baseUrl/mcpserver/repo/file?path=$path"
+$uri = "$baseUrl/qbrainai/repo/file?path=$path"
 
 # Use Invoke-WebRequest so non-2xx responses still return parseable body text.
 $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Get -SkipHttpErrorCheck
@@ -235,7 +235,7 @@ Invoke-McpGraphRagIndex
 ## Safety and Reliability Notes
 
 - Do not hardcode API keys; rely on marker file parsing.
-- Do not assume REST `/mcpserver/sync/*` routes exist; this module uses MCP transport tools for sync.
+- Do not assume REST `/qbrainai/sync/*` routes exist; this module uses MCP transport tools for sync.
 - Treat sync failures as actionable status; inspect returned `error` and continue with targeted ingestion/query when possible.
 - Keep folder ingestion bounded by using `-Include` when staging large trees.
 - Keep URL ingestion bounded using `-MaxPages`, `-MaxDepth`, and `-MaxBytesPerPage`.

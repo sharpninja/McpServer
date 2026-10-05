@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Storage
+  commentId: N:QBrainAi.Support.Mcp.Storage
+  id: QBrainAi.Support.Mcp.Storage
+  children:
+  - QBrainAi.Support.Mcp.Storage.McpDbContext
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Storage
+  nameWithType: QBrainAi.Support.Mcp.Storage
+  fullName: QBrainAi.Support.Mcp.Storage
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Storage.McpDbContext
+  commentId: T:QBrainAi.Support.Mcp.Storage.McpDbContext
+  parent: QBrainAi.Support.Mcp.Storage
+  href: QBrainAi.Support.Mcp.Storage.McpDbContext.html
+  name: McpDbContext
+  nameWithType: McpDbContext
+  fullName: QBrainAi.Support.Mcp.Storage.McpDbContext
+- uid: QBrainAi.Support.Mcp.Storage
+  commentId: N:QBrainAi.Support.Mcp.Storage
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Storage
+  nameWithType: QBrainAi.Support.Mcp.Storage
+  fullName: QBrainAi.Support.Mcp.Storage
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage
+    name: Storage
+    href: QBrainAi.Support.Mcp.Storage.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage
+    name: Storage
+    href: QBrainAi.Support.Mcp.Storage.html

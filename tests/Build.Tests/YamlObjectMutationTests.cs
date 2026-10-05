@@ -150,7 +150,7 @@ public sealed class YamlObjectMutationTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -158,6 +158,6 @@ public sealed class YamlObjectMutationTests
             directory = directory.Parent;
         }
 
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 }

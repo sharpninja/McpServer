@@ -1,6 +1,6 @@
 # Migrating from Direct API to REPL Host Workflows
 
-This guide tells agents how to replace direct `McpServerClient` HTTP calls for session logging and TODO management with the REPL-backed workflow tools now available in `McpAgent`.
+This guide tells agents how to replace direct `QBrainAiClient` HTTP calls for session logging and TODO management with the REPL-backed workflow tools now available in `McpAgent`.
 
 ## Why Migrate
 
@@ -15,7 +15,7 @@ Using these tools instead of raw API calls ensures consistent identifier validat
 
 ## Agent Plugin Boundary
 
-In workspaces whose marker declares `agent_plugins.policy: required`, hosted tools and direct `mcpserver-repl --agent-stdio` are not substitutes for the required per-agent plugin. Codex, Claude Code, GitHub Copilot, and Cline must use their matching plugin wrapper for normal session log, TODO, requirements, import/export, and traceability operations. Direct REPL use remains appropriate for plugin implementation and fallback diagnostics.
+In workspaces whose marker declares `agent_plugins.policy: required`, hosted tools and direct `qbrain-ai-repl --agent-stdio` are not substitutes for the required per-agent plugin. Codex, Claude Code, GitHub Copilot, and Cline must use their matching plugin wrapper for normal session log, TODO, requirements, import/export, and traceability operations. Direct REPL use remains appropriate for plugin implementation and fallback diagnostics.
 
 When direct `--agent-stdio` is used, send one YAML envelope per document and separate multiple documents with `---`. Do not send `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
@@ -25,25 +25,25 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 
 | Tool | Replaces | Description |
 |------|----------|-------------|
-| `mcp_session_bootstrap` | `POST /mcpserver/sessionlog` | Bootstrap a new session log |
-| `mcp_session_update` | `POST /mcpserver/sessionlog` | Update session-level metadata |
-| `mcp_session_turn_begin` | `POST /mcpserver/sessionlog` | Create a new turn |
-| `mcp_session_turn_update` | `POST /mcpserver/sessionlog` | Update an existing turn |
-| `mcp_session_turn_complete` | `POST /mcpserver/sessionlog` | Complete a turn |
-| `mcp_session_query_history` | `GET /mcpserver/sessionlog` | **NEW** - Query session history |
+| `mcp_session_bootstrap` | `POST /qbrainai/sessionlog` | Bootstrap a new session log |
+| `mcp_session_update` | `POST /qbrainai/sessionlog` | Update session-level metadata |
+| `mcp_session_turn_begin` | `POST /qbrainai/sessionlog` | Create a new turn |
+| `mcp_session_turn_update` | `POST /qbrainai/sessionlog` | Update an existing turn |
+| `mcp_session_turn_complete` | `POST /qbrainai/sessionlog` | Complete a turn |
+| `mcp_session_query_history` | `GET /qbrainai/sessionlog` | **NEW** - Query session history |
 
 ### TODO (8 tools)
 
 | Tool | Replaces | Description |
 |------|----------|-------------|
-| `mcp_todo_query` | `GET /mcpserver/todo` | Query TODO items with filters |
-| `mcp_todo_get` | `GET /mcpserver/todo/{id}` | Get a single TODO by ID |
-| `mcp_todo_update` | `PUT /mcpserver/todo/{id}` | Update a TODO item |
-| `mcp_todo_create` | `POST /mcpserver/todo` | **NEW** - Create a TODO item |
-| `mcp_todo_delete` | `DELETE /mcpserver/todo/{id}` | **NEW** - Delete a TODO item |
-| `mcp_todo_plan` | `GET /mcpserver/todo/{id}/plan` | Get buffered plan text |
-| `mcp_todo_status` | `GET /mcpserver/todo/{id}/status` | Get buffered status report |
-| `mcp_todo_implementation` | `GET /mcpserver/todo/{id}/implementation` | Get implementation guide |
+| `mcp_todo_query` | `GET /qbrainai/todo` | Query TODO items with filters |
+| `mcp_todo_get` | `GET /qbrainai/todo/{id}` | Get a single TODO by ID |
+| `mcp_todo_update` | `PUT /qbrainai/todo/{id}` | Update a TODO item |
+| `mcp_todo_create` | `POST /qbrainai/todo` | **NEW** - Create a TODO item |
+| `mcp_todo_delete` | `DELETE /qbrainai/todo/{id}` | **NEW** - Delete a TODO item |
+| `mcp_todo_plan` | `GET /qbrainai/todo/{id}/plan` | Get buffered plan text |
+| `mcp_todo_status` | `GET /qbrainai/todo/{id}/status` | Get buffered status report |
+| `mcp_todo_implementation` | `GET /qbrainai/todo/{id}/implementation` | Get implementation guide |
 
 ### Requirements (6 tools, all NEW)
 
@@ -77,7 +77,7 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 
 | Tool | Description |
 |------|-------------|
-| `mcp_client_invoke` | Dynamically invoke any McpServerClient sub-client method |
+| `mcp_client_invoke` | Dynamically invoke any QBrainAiClient sub-client method |
 
 Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). Official plugins also inject `REQUIRED MEMORIES` at host request boundaries. See `docs/context/memory.md`.
 
@@ -87,14 +87,14 @@ First-party REPL/plugin mutations (TODO, session-log, requirements, memory) bypa
 
 | Surface | Replaces | Description |
 |---------|----------|-------------|
-| `workflow.memory.remember` / `memory_remember` | `POST /mcpserver/memory/remember` | Persist a multi-layer memory |
-| `workflow.memory.recall` / `memory_recall` | `POST /mcpserver/memory/recall` | Ranked recall |
-| `workflow.memory.explore` / `memory_explore` | `POST /mcpserver/memory/explore` | Neighborhood walk |
-| `workflow.memory.consolidate` / `memory_consolidate` | `POST /mcpserver/memory/consolidate` | Dry-run or apply merge |
-| `workflow.memory.promote` / `memory_promote` | `POST /mcpserver/memory/promote` | Promote session-log or context |
-| `workflow.memory.revert` / `memory_revert` | `POST /mcpserver/memory/{id}/revert` | Restore snapshot N |
-| `workflow.memory.list` / `memory_list` | `GET /mcpserver/memory` | Compat Effective list |
-| `mcp_client_invoke` (`client.Memory.*`) | any `/mcpserver/memory` verb | Typed client passthrough |
+| `workflow.memory.remember` / `memory_remember` | `POST /qbrainai/memory/remember` | Persist a multi-layer memory |
+| `workflow.memory.recall` / `memory_recall` | `POST /qbrainai/memory/recall` | Ranked recall |
+| `workflow.memory.explore` / `memory_explore` | `POST /qbrainai/memory/explore` | Neighborhood walk |
+| `workflow.memory.consolidate` / `memory_consolidate` | `POST /qbrainai/memory/consolidate` | Dry-run or apply merge |
+| `workflow.memory.promote` / `memory_promote` | `POST /qbrainai/memory/promote` | Promote session-log or context |
+| `workflow.memory.revert` / `memory_revert` | `POST /qbrainai/memory/{id}/revert` | Restore snapshot N |
+| `workflow.memory.list` / `memory_list` | `GET /qbrainai/memory` | Compat Effective list |
+| `mcp_client_invoke` (`client.Memory.*`) | any `/qbrainai/memory` verb | Typed client passthrough |
 
 ### Quad Brain (0 tools)
 
@@ -129,7 +129,7 @@ OpenAI-compatible model at `POST /v1/chat/completions`.
 
 ```
 # Old pattern - raw HTTP via PowerShell or curl
-POST /mcpserver/sessionlog
+POST /qbrainai/sessionlog
 {
   "sourceType": "Copilot",
   "sessionId": "Copilot-20260402T...",
@@ -172,9 +172,9 @@ mcp_session_query_history({
 
 ```
 # Old pattern
-GET /mcpserver/todo?keyword=auth&priority=high
-POST /mcpserver/todo  { id: "PLAN-AUTH-001", ... }
-DELETE /mcpserver/todo/PLAN-AUTH-001
+GET /qbrainai/todo?keyword=auth&priority=high
+POST /qbrainai/todo  { id: "PLAN-AUTH-001", ... }
+DELETE /qbrainai/todo/PLAN-AUTH-001
 ```
 
 ### After: Use TODO Tools
@@ -200,8 +200,8 @@ mcp_todo_delete({ id: "PLAN-AUTH-001" })
 
 ```
 # Old pattern
-GET /mcpserver/requirements/fr
-GET /mcpserver/requirements/tr/TR-MCP-ARCH-001
+GET /qbrainai/requirements/fr
+GET /qbrainai/requirements/tr/TR-MCP-ARCH-001
 ```
 
 ### After: Use Requirements Tools
@@ -219,7 +219,7 @@ mcp_requirements_list_test({})
 
 ### Generic Passthrough for Uncovered Operations
 
-For any McpServerClient sub-client method not covered by a dedicated tool:
+For any QBrainAiClient sub-client method not covered by a dedicated tool:
 
 ```
 # Search workspace context
@@ -259,7 +259,7 @@ When `sessionId` or `requestId` is passed as `null`, the tool auto-generates a c
 
 ## Summary of Changes for Agent Authors
 
-1. **Stop making raw HTTP calls** to `/mcpserver/sessionlog`, `/mcpserver/todo`, and `/mcpserver/requirements`. Use the named tools instead.
+1. **Stop making raw HTTP calls** to `/qbrainai/sessionlog`, `/qbrainai/todo`, and `/qbrainai/requirements`. Use the named tools instead.
 2. **Use `mcp_todo_create` and `mcp_todo_delete`** for full TODO lifecycle instead of raw POST/DELETE.
 3. **Use `mcp_requirements_list_*` and `mcp_requirements_get_*`** for requirements queries instead of raw GET.
 4. **Use `mcp_session_query_history`** to review past sessions instead of raw query endpoints.

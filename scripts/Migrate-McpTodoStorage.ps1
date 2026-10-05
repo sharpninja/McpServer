@@ -32,8 +32,8 @@ function Invoke-McpJson {
 $sourceUrl = $SourceBaseUrl.TrimEnd('/')
 $targetUrl = $TargetBaseUrl.TrimEnd('/')
 
-Write-Host "Fetching source TODO items from $sourceUrl/mcpserver/todo ..."
-$source = Invoke-McpJson -Method Get -Url "$sourceUrl/mcpserver/todo" -Body $null
+Write-Host "Fetching source TODO items from $sourceUrl/qbrainai/todo ..."
+$source = Invoke-McpJson -Method Get -Url "$sourceUrl/qbrainai/todo" -Body $null
 $items = @($source.items)
 Write-Host "Found $($items.Count) TODO items."
 
@@ -80,7 +80,7 @@ foreach ($item in $items) {
     }
 
     try {
-        $createResult = Invoke-McpJson -Method Post -Url "$targetUrl/mcpserver/todo" -Body $createBody
+        $createResult = Invoke-McpJson -Method Post -Url "$targetUrl/qbrainai/todo" -Body $createBody
         if ($createResult.success -eq $true) {
             $created++
             continue
@@ -91,7 +91,7 @@ foreach ($item in $items) {
     }
 
     try {
-        $updateResult = Invoke-McpJson -Method Put -Url "$targetUrl/mcpserver/todo/$($item.id)" -Body $updateBody
+        $updateResult = Invoke-McpJson -Method Put -Url "$targetUrl/qbrainai/todo/$($item.id)" -Body $updateBody
         if ($updateResult.success -eq $true) {
             $updated++
         }

@@ -1095,14 +1095,14 @@
     },
     {
       "id": "AC-FR-MCP-MEMORY-016-12",
-      "stmt": "UI calls only /mcpserver/memory* REST (no direct DB, no undocumented admin routes).",
+      "stmt": "UI calls only /qbrainai/memory* REST (no direct DB, no undocumented admin routes).",
       "test": "TEST-MCP-MEMORY-017",
       "method": "MemoryUiTests.CallsOnlyPublicRest",
       "slice": "S6"
     },
     {
       "id": "AC-FR-MCP-MEMORY-017-01",
-      "stmt": "New memory verbs appear in /mcpserver/tools search.",
+      "stmt": "New memory verbs appear in /qbrainai/tools search.",
       "test": "TEST-MCP-MEMORY-016",
       "method": "MemoryToolsDiscoveryTests.NewVerbs_AppearInToolsSearch",
       "slice": "S5"
@@ -1417,7 +1417,7 @@
     },
     {
       "id": "AC-TR-MCP-MEMORY-API-002-04",
-      "stmt": "OpenAPI/swagger lists new routes under /mcpserver/memory.",
+      "stmt": "OpenAPI/swagger lists new routes under /qbrainai/memory.",
       "test": "TEST-MCP-MEMORY-016",
       "method": "MemoryOpenApiTests.NewRoutes_Listed",
       "slice": "S5"
