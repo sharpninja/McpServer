@@ -34,7 +34,7 @@ In-scope repositories for the overall effort:
 ### Non-goals
 
 - Renaming the Model Context Protocol, the `/mcp-transport` endpoint, or MCP JSON-RPC wording.
-- Renaming the QuadBrain feature or the QBAgent tool (`qbagent`, `McpServer.QBAgent` segment, `SharpNinja.McpServer.QBAgent` feature token `QBAgent`).
+- Renaming the QuadBrain feature or the QBAgent tool (`qbagent`, and the `QBAgent` segment).
 - Renaming requirement IDs (`FR-MCP-*`, `TR-MCP-*`, `TEST-MCP-*`).
 - Rewriting historical receipts, chat logs, or session-log archives.
 - Renaming the machine `PAYTON-LEGION2` or the lab name `LAB-OMARCHY`.
@@ -139,7 +139,7 @@ People can still read historical receipts, existing requirement IDs, and the hos
 
 #### TR-MCP-QBRAIN-001 Locked identifier tokens
 
-Use one token per surface class. Display text uses `QBrain.AI`. PascalCase identifiers use `QBrainAi`. The lowercase single token that replaces `mcpserver` is `qbrainai`. Already-hyphenated slugs use `qbrain-ai`. NuGet ids use `SharpNinja.QBrainAi.<Component>`. Do not mix these forms. Do not replace the `QBAgent` segment or the `qbagent` command.
+Use one token per surface class. Display text uses `QBrain.AI`. C# namespaces and assemblies use `QBrainAi`. NuGet package ids use `QBrainAI.<Component>` with no `SharpNinja` prefix. The lowercase single token that replaces `mcpserver` is `qbrainai`. Already-hyphenated slugs use `qbrain-ai`. npm scopes use `@qbrainai` and drop `@sharpninja`. Do not mix these forms. Do not replace the `QBAgent` segment or the `qbagent` command.
 
 **Status:** Draft pending approval
 
@@ -147,7 +147,7 @@ Use one token per surface class. Display text uses `QBrain.AI`. PascalCase ident
 
 **Acceptance criteria:**
 
-- [ ] A review of the rename diff finds no `QBrainAI`, no `QBrain.AI` inside a C# namespace, and no `QBrain` product root that dropped `Ai`.
+- [ ] A review of the rename diff finds no `QBrainAI` and no `QBrain.AI` inside a C# namespace or assembly name, and no `QBrain` product root that dropped `Ai`. `QBrainAI` is allowed only as the NuGet package-id prefix.
 - [ ] Plugin repository names and the container image use `qbrain-ai`.
 - [ ] The HTTP product prefix, systemd unit, Linux account, and `/opt` path use `qbrainai` when those surfaces are renamed.
 - [ ] `QBAgent` and `qbagent` are unchanged apart from a leading `McpServer` root becoming `QBrainAi`.
@@ -169,7 +169,7 @@ Replace the root token `McpServer` with `QBrainAi` in namespaces, assembly names
 
 #### TR-MCP-QBRAIN-003 Package and tool migration
 
-Move published package ids from `SharpNinja.McpServer.<Component>` to `SharpNinja.QBrainAi.<Component>` for Client, Cqrs, Cqrs.Mvvm, McpAgent, Repl.Core, Repl, and QBAgent. Ship type-forward facades under the old ids through 1.x. Rename `ToolCommandName` `mcpserver-repl` to `qbrain-ai-repl` and keep the old command available from the deprecated package. Rename `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core`, and `@sharpninja/mcp-repl` to the `qbrain-ai` npm names, with a deprecated old name through 1.x. Do not push the new ids to nuget.org before Phase 4.
+Move published package ids from `SharpNinja.McpServer.<Component>` to `QBrainAI.<Component>` for Client, Cqrs, Cqrs.Mvvm, McpAgent, Repl.Core, Repl, and QBAgent. The new ids do not include a `SharpNinja` prefix. `QBrainAI.QBAgent` is the QBAgent package id. Ship type-forward facades under the old `SharpNinja.McpServer.*` ids through 1.x. Rename `ToolCommandName` `mcpserver-repl` to `qbrain-ai-repl` and keep the old command available from the deprecated package. Rename `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core`, and `@sharpninja/mcp-repl` to `@qbrainai/qbrain-ai-agent-core`, `@qbrainai/qbrain-ai-plugin-core`, and `@qbrainai/qbrain-ai-repl`, and keep a deprecated release on the old `@sharpninja` names through 1.x. Do not push the new ids to nuget.org before Phase 4.
 
 **Status:** Draft pending approval
 
@@ -180,7 +180,7 @@ Move published package ids from `SharpNinja.McpServer.<Component>` to `SharpNinj
 - [ ] Each new package id packs.
 - [ ] Each old package id packs as a type-forward facade that depends on the new package.
 - [ ] `qbrain-ai-repl` is the new tool command and `mcpserver-repl` still installs from the deprecated package through 1.x.
-- [ ] Phase 1 CI does not push `SharpNinja.QBrainAi.*` to nuget.org.
+- [ ] Phase 1 CI does not push `QBrainAI.*` to nuget.org. New package ids do not start with `SharpNinja`.
 
 #### TR-MCP-QBRAIN-004 Repository rename sequence
 
@@ -269,18 +269,21 @@ An implementation slice starts only after this plan is approved and only for the
 
 ## 3. Locked naming convention
 
-Verified pattern in this repo: the product root is the PascalCase token `McpServer` (namespaces, project folders, solution, Windows service name, `C:\ProgramData\McpServer`). The same word in lowercase concatenation is `mcpserver` (HTTP prefix, systemd unit, Linux account, `/opt/mcpserver`). Docker already uses a hyphen (`mcp-server`). Plugin repositories already use `{lowercase-token}-{role}` (`mcpserver-grok-plugin`). NuGet IDs keep the vendor prefix `SharpNinja.` plus the product root (`SharpNinja.McpServer.Client`).
+Verified pattern in this repo today: the product root is the PascalCase token `McpServer` (namespaces, project folders, solution, Windows service name, `C:\ProgramData\McpServer`). The same word in lowercase concatenation is `mcpserver` (HTTP prefix, systemd unit, Linux account, `/opt/mcpserver`). Docker already uses a hyphen (`mcp-server`). Plugin repositories already use `{lowercase-token}-{role}` (`mcpserver-grok-plugin`). Current NuGet IDs are `SharpNinja.McpServer.<Component>`, including `SharpNinja.McpServer.Client`. That vendor prefix is removed from new package ids.
 
-`QBrainAi` is the C# / assembly / NuGet token. It matches `McpServer` better than `QBrainAI` (this repo writes `Mcp` and `QBAgent`, not `MCP` or `QBAGENT`) and better than `QBrain.AI` (a dot is not a namespace segment). `QBrain` alone collides with the existing QuadBrain feature and the `QBAgent` / `qbagent` tool. Those feature names stay.
+C# namespaces and assemblies stay `QBrainAi`. That token matches `McpServer` better than `QBrainAI` (this repo writes `Mcp` and `QBAgent`, not `MCP` or `QBAGENT`) and better than `QBrain.AI` (a dot is not a namespace segment). `QBrain` alone collides with the existing QuadBrain feature and the `QBAgent` / `qbagent` tool. Those feature names stay.
+
+Package ids are a separate token. The operator set the NuGet brand token to `QBrainAI`, with no `SharpNinja` prefix. `QBrainAI.QBAgent` is the package id. `QBrainAi.QBAgent` is the namespace. Do not collapse those two spellings.
 
 Use the forms below everywhere in later phases. Do not mix them.
 
 - Display, doc titles, Windows service DisplayName: `QBrain.AI`
 - PascalCase identifier (namespaces, assemblies, project folders, solution, product GitHub repos, Windows service name, `C:\ProgramData` folder): `QBrainAi`
+- NuGet package id: `QBrainAI.<Component>`
+- npm scope: `@qbrainai` (lowercase registry form of the package brand). Package names stay kebab `qbrain-ai-*`
 - Lowercase single token where the current string is `mcpserver` with no hyphen (HTTP product prefix, systemd unit, Linux account, `/opt`, `/var/lib`, `/etc`, `/var/log`): `qbrainai`
-- Kebab slug where the current string is already hyphenated (`mcp-server` image, plugin repos, dotnet tool command, npm package names): `qbrain-ai`
-- NuGet: `SharpNinja.QBrainAi.<Component>`
-- Vendor and publisher strings `SharpNinja` and MSIX publisher `CN=FunWasHad` stay
+- Kebab slug where the current string is already hyphenated (`mcp-server` image, plugin repos, dotnet tool command): `qbrain-ai`
+- GitHub owner `SharpNinja` and MSIX publisher `CN=FunWasHad` stay. They are not package-id prefixes.
 
 Filesystem checkout folders follow the GitHub repo name (`F:\GitHub\McpServer` becomes `F:\GitHub\QBrainAi`; `F:\github\mcpserver-grok-plugin` becomes `F:\github\qbrain-ai-grok-plugin`). Updating local clones is an operator step after Phase 3.
 
@@ -298,7 +301,7 @@ The map is a lookup, not a second requirements list. Display and title rows are 
 | C# root namespace | `McpServer` | `QBrainAi` |
 | Solution | `McpServer.sln` | `QBrainAi.sln` |
 | Assembly / project folder | `McpServer.<Rest>` | `QBrainAi.<Rest>` |
-| NuGet ID | `SharpNinja.McpServer.<Component>` | `SharpNinja.QBrainAi.<Component>` |
+| NuGet ID | `SharpNinja.McpServer.<Component>` | `QBrainAI.<Component>` |
 | Product GitHub repo | `sharpninja/McpServer` | `sharpninja/QBrainAi` |
 | Manager repo | `sharpninja/McpServerManager` | `sharpninja/QBrainAiManager` |
 | Tools bucket repo | `sharpninja/McpServerTools` | `sharpninja/QBrainAiTools` |
@@ -326,8 +329,8 @@ The map is a lookup, not a second requirements list. Display and title rows are 
 | Docs titles | "MCP Server" when it means this product | "QBrain.AI" |
 | README H1 | `# MCP Server` | `# QBrain.AI` |
 | dotnet tool command | `mcpserver-repl` | `qbrain-ai-repl` |
-| npm | `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core` | `@sharpninja/qbrain-ai-agent-core`, `@sharpninja/qbrain-ai-plugin-core` |
-| npm REPL package | `@sharpninja/mcp-repl` | `@sharpninja/qbrain-ai-repl` |
+| npm | `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core` | `@qbrainai/qbrain-ai-agent-core`, `@qbrainai/qbrain-ai-plugin-core` |
+| npm REPL package | `@sharpninja/mcp-repl` | `@qbrainai/qbrain-ai-repl` |
 | MSIX identity | `McpServer.Support.Mcp` | `QBrainAi.Support.Mcp` |
 | MSIX application id | `McpServer` | `QBrainAi` |
 | Keycloak API client id | `mcp-server-api` | `qbrain-ai-api` |
@@ -361,7 +364,7 @@ Examples:
 - `McpServer.Support.Mcp` becomes `QBrainAi.Support.Mcp`
 - `McpServer.McpAgent` becomes `QBrainAi.McpAgent`
 - `McpServer.QBAgent` becomes `QBrainAi.QBAgent`
-- `SharpNinja.McpServer.QBAgent` becomes `SharpNinja.QBrainAi.QBAgent`
+- `SharpNinja.McpServer.QBAgent` becomes `QBrainAI.QBAgent`
 - Tool command `qbagent` stays `qbagent`
 
 Projects in `McpServer.sln` that follow that rule include `McpServer.Common.AgentCli`, `McpServer.ServiceDefaults`, `McpServer.Support.Mcp`, `McpServer.Client`, `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.Launcher`, `McpServer.Storage`, `McpServer.Services`, `McpServer.GraphRag`, `McpServer.McpAgent`, `McpServer.McpAgent.SampleHost`, `McpServer.Storage.SqliteMigrations`, `McpServer.Storage.PostgreSqlMigrations`, `McpServer.Storage.SqlServerMigrations`, `McpServer.Repl.Core`, `McpServer.Repl.Host`, `McpServer.TransactionSecurity`, `McpServer.KeyServer`, `McpServer.Subscriber`, `McpServer.QBAgent`, `McpServer.QBAgent.Tools`, `McpServer.QBAgent.Skills`, `McpServer.SessionLog.Transcripts`, and the matching test and validation projects (`McpServer.Support.Mcp.Tests`, `McpServer.Support.Mcp.IntegrationTests`, `McpServer.Client.Tests`, `McpServer.Cqrs.Tests`, `McpServer.Launcher.Tests`, `McpServer.Context.Validation`, `McpServer.GitHub.Validation`, `McpServer.Repo.Validation`, `McpServer.SessionLog.Validation`, `McpServer.Todo.Validation`, `McpServer.ToolRegistry.Validation`, `McpServer.Workspace.Validation`, `McpServer.McpAgent.Tests`, `McpServer.Repl.Core.Tests`, `McpServer.Repl.IntegrationTests`, `McpServer.PlanReview.Tests`, `McpServer.TransactionSecurity.IntegrationTests`, `McpServer.Acid.IntegrationTests`, `McpServer.QBAgent.Tests`, `McpServer.Review.Tests`, `McpServer.PluginIntegration.Tests`, `McpServer.ProcessTree.TestHelper`).
@@ -381,13 +384,13 @@ RootNamespace does not always equal the folder name. Phase 1 replaces `McpServer
 
 | Project | Current PackageId | New PackageId |
 | --- | --- | --- |
-| `McpServer.Client` | `SharpNinja.McpServer.Client` | `SharpNinja.QBrainAi.Client` |
-| `McpServer.Cqrs` | `SharpNinja.McpServer.Cqrs` | `SharpNinja.QBrainAi.Cqrs` |
-| `McpServer.Cqrs.Mvvm` | `SharpNinja.McpServer.Cqrs.Mvvm` | `SharpNinja.QBrainAi.Cqrs.Mvvm` |
-| `McpServer.McpAgent` | `SharpNinja.McpServer.McpAgent` | `SharpNinja.QBrainAi.McpAgent` |
-| `McpServer.Repl.Core` | `SharpNinja.McpServer.Repl.Core` | `SharpNinja.QBrainAi.Repl.Core` |
-| `McpServer.Repl.Host` | `SharpNinja.McpServer.Repl` | `SharpNinja.QBrainAi.Repl` |
-| `McpServer.QBAgent` | `SharpNinja.McpServer.QBAgent` | `SharpNinja.QBrainAi.QBAgent` |
+| `McpServer.Client` | `SharpNinja.McpServer.Client` | `QBrainAI.Client` |
+| `McpServer.Cqrs` | `SharpNinja.McpServer.Cqrs` | `QBrainAI.Cqrs` |
+| `McpServer.Cqrs.Mvvm` | `SharpNinja.McpServer.Cqrs.Mvvm` | `QBrainAI.Cqrs.Mvvm` |
+| `McpServer.McpAgent` | `SharpNinja.McpServer.McpAgent` | `QBrainAI.McpAgent` |
+| `McpServer.Repl.Core` | `SharpNinja.McpServer.Repl.Core` | `QBrainAI.Repl.Core` |
+| `McpServer.Repl.Host` | `SharpNinja.McpServer.Repl` | `QBrainAI.Repl` |
+| `McpServer.QBAgent` | `SharpNinja.McpServer.QBAgent` | `QBrainAI.QBAgent` |
 
 `McpServer.Repl.Host` also sets `ToolCommandName` to `mcpserver-repl`. `McpServer.QBAgent` sets `ToolCommandName` to `qbagent` (unchanged).
 
@@ -475,7 +478,7 @@ The classifier is a dry run. Its TSV is the Phase 1 review artifact. A second pe
 - **`Mcp:` config versus MCP protocol.** `Mcp:` is the product settings root. It is not the protocol name. Alias policy applies. Nested key names stay.
 - **`MCP_*` environment variables.** The keys listed above are product process settings. `MCP_UNTRUSTED` is a sentinel string, not an environment variable to rename.
 - **`McpServer.Support.Mcp` and `McpServer.McpAgent`.** The trailing `.Mcp` and `.McpAgent` segments stay. Only the root token changes. Treating `.Mcp` as protocol text would produce inconsistent project names.
-- **`@sharpninja/mcp-repl`.** This is the product REPL package in `tools/typescript/mcp-repl-ts/package.json`, not the protocol specification. It follows the tool-command rename to `@sharpninja/qbrain-ai-repl`.
+- **`@sharpninja/mcp-repl`.** This is the product REPL package in `tools/typescript/mcp-repl-ts/package.json`, not the protocol specification. It moves to `@qbrainai/qbrain-ai-repl`. The old `@sharpninja` name stays as a deprecated 1.x release.
 - **`mcp-server-api` Keycloak client.** This is an identity-provider client id in `scripts/Setup-McpKeycloak.ps1`. Creating a new client is an operator IdP change. Phase 1 does not switch the server to the new audience unless the old client still validates. Default: leave the Keycloak client id until Phase 4, and do not apply it on a live realm in the cloud waves.
 - **`McpServer_Omarchy` / `mcpserver.service` / `/opt/mcpserver`.** These are LAB-OMARCHY install identities in `docs/setup/install-local-service.ps1`. Editing the script so a later run creates different database and unit names is Phase 4-L, not a cloud rename of the lab.
 - **Octopus step label "Octopus LEGION2 release".** The project string inside that step is `McpServer`. The URL host is `PAYTON-LEGION2`. Rename the project string only in the operator Octopus phase. Do not rename the host. Do not let rebrand CI call `octopus release deploy`.
@@ -545,13 +548,13 @@ Acceptance:
 - `rg` over the inventory TSV shows zero `product-brand` rows still marked open.
 - `git diff` against Phase 0 does not modify `docs/receipts/` except the new inventory TSV.
 - `PAYTON-LEGION2` and `McpServer_Omarchy` still occur where they are host and database identities.
-- NuGet push log for this phase, if CI runs, shows the push step skipped or `--skip-duplicate` on unchanged old IDs only. No `SharpNinja.QBrainAi.*` package is on nuget.org yet.
+- NuGet push log for this phase, if CI runs, shows the push step skipped or `--skip-duplicate` on unchanged old IDs only. No `QBrainAI.*` package is on nuget.org yet.
 - New receipts under `docs/receipts/hv/` for this phase do not rewrite older receipt bodies.
 
 #### Hostile validation checkpoint (required before Phase 1 is done)
 
 - Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
-- Claims the reviewer scores against the merged Phase 1 tree: root namespaces are `QBrainAi` with `.Mcp`, `.McpAgent`, and `.QBAgent` segments kept; `/mcp-transport` is unchanged; `/mcpserver/*` still answers; `QBrainAi:` wins when both config sections exist; `mcp.db`, `.mcpServer`, and `McpDbContext` are unchanged; unit scope is zero failures and zero skips; nuget.org has no `SharpNinja.QBrainAi.*` package from this phase; `PAYTON-LEGION2` was not deployed.
+- Claims the reviewer scores against the merged Phase 1 tree: root namespaces are `QBrainAi` with `.Mcp`, `.McpAgent`, and `.QBAgent` segments kept; `/mcp-transport` is unchanged; `/mcpserver/*` still answers; `QBrainAi:` wins when both config sections exist; `mcp.db`, `.mcpServer`, and `McpDbContext` are unchanged; unit scope is zero failures and zero skips; nuget.org has no `QBrainAI.*` package from this phase; `PAYTON-LEGION2` was not deployed.
 - Done rule: Phase 1 is not done until that receipt says OverallVerdict AGREE. This draft does not start Phase 1.
 
 ### Phase 2 — one cloud PR per sibling repo
@@ -618,7 +621,7 @@ Not approved. This phase implements the publish half of TR-MCP-QBRAIN-003 and th
 
 Work:
 
-- Publish `SharpNinja.QBrainAi.*` and the deprecated `SharpNinja.McpServer.*` type-forward packages to nuget.org from the intended `main` version. Push is the first time the Phase 1 publish gate is opened.
+- Publish `QBrainAI.*` and the deprecated `SharpNinja.McpServer.*` type-forward packages to nuget.org from the intended `main` version. Push is the first time the Phase 1 publish gate is opened. New package ids do not use a `SharpNinja` prefix.
 - Publish the renamed npm packages. Keep the old npm names as deprecated wrappers that depend on the new packages through 1.x, if the package layout can express that. If a wrapper is not practical, publish a deprecated metadata release on the old name whose readme points at the new name, and record that limitation in the Phase 4 receipt.
 - Update `azure-pipelines.yml` project string from `McpServer` to `QBrainAi` only after the Octopus project exists under the new name. Until that operator action, the pipeline must not call `octopus release create`.
 - Update default parameters in `scripts/Manage-McpService.ps1`, `scripts/Update-McpService.ps1`, and `scripts/Package-McpServerMsix.ps1` to the new service name, display name, install path, and MSIX identity. Leave a documented parameter override that can still target `McpServer` and `C:\ProgramData\McpServer` for rollback.
@@ -630,14 +633,14 @@ Rollback: stop publishing new versions; leave already pushed NuGet and npm versi
 Acceptance:
 
 - nuget.org shows the new package IDs at the Phase 4 version and the old IDs at a type-forward build whose nuspec dependencies point at the new IDs.
-- `dotnet tool install -g SharpNinja.QBrainAi.Repl` yields command `qbrain-ai-repl`. The deprecated tool package still yields `mcpserver-repl`.
+- `dotnet tool install -g QBrainAI.Repl` yields command `qbrain-ai-repl`. The deprecated `SharpNinja.McpServer.Repl` package still yields `mcpserver-repl`.
 - The Octopus deploy step's log for the merge that updates scripts shows it did not run, or Payton has already completed the project rename and the log shows project `QBrainAi` and host `PAYTON-LEGION2` unchanged.
 - No Phase 4 PR diff changes the hostname `PAYTON-LEGION2`.
 
 #### Hostile validation checkpoint (required before Phase 4 is done)
 
 - Model lock: `gpt-6-astra`, reasoning effort `xhigh` (`astra-6-xhigh`).
-- Claims the reviewer scores: nuget.org has `SharpNinja.QBrainAi.*` and type-forward builds of the old ids; `qbrain-ai-repl` and `mcpserver-repl` both install; script defaults in git use the new service name and path and still accept the old parameters; no Phase 4 command deployed to PAYTON-LEGION2 or LAB-OMARCHY; `McpServer_Omarchy` is unchanged.
+- Claims the reviewer scores: nuget.org has `QBrainAI.*` and type-forward builds of the old `SharpNinja.McpServer.*` ids; `qbrain-ai-repl` and `mcpserver-repl` both install; script defaults in git use the new service name and path and still accept the old parameters; no Phase 4 command deployed to PAYTON-LEGION2 or LAB-OMARCHY; `McpServer_Omarchy` is unchanged.
 - Done rule: Phase 4 is not done until that receipt says OverallVerdict AGREE. Package publish without this receipt is not phase completion.
 
 ### Phase 4-L — later operator step (not in the first waves)
@@ -675,7 +678,7 @@ Checks:
   - `POST /mcp-transport` is still the MCP endpoint and is not redirected to a QBrain path.
   - Config file that contains only `Mcp:` still boots.
   - `MCP_API_KEY` still authenticates when `QBRAINAI_API_KEY` is unset. When both are set, `QBRAINAI_API_KEY` wins.
-  - A project that references `SharpNinja.McpServer.Client` at the type-forward version compiles against a public type that now lives in `SharpNinja.QBrainAi.Client`.
+  - A project that references `SharpNinja.McpServer.Client` at the type-forward version compiles against a public type that now lives in `QBrainAI.Client`.
   - `docs/receipts/` at a pinned pre-rebrand SHA matches the current tree for those files (no historical receipt edits).
   - `QuadBrain` and `qbagent` still exist as feature names.
   - `FR-MCP-` IDs in `docs/Project/Functional-Requirements.md` are unchanged.

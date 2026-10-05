@@ -22,7 +22,7 @@ Score each claim PASS, FAIL, or UNKNOWN. UNKNOWN is not a pass. A FAIL forces Ov
 - C3. A phase acceptance list is not enough to mark the phase done. Done requires OverallVerdict AGREE on a receipt from that model and effort.
 - C4. Branding and product identity are FR-MCP-QBRAIN-001 through FR-MCP-QBRAIN-005. Those records do not themselves rename a namespace, package, or repository.
 - C5. Renames and migration mechanics are TR-MCP-QBRAIN-001 through TR-MCP-QBRAIN-008. The trace map names which TRs implement which FRs.
-- C6. The locked tokens remain: display `QBrain.AI`, PascalCase `QBrainAi`, lowercase single token `qbrainai`, kebab `qbrain-ai`, NuGet prefix `SharpNinja.QBrainAi.`.
+- C6. The locked tokens remain: display `QBrain.AI`, C# namespace and assembly token `QBrainAi`, NuGet package ids `QBrainAI.<Component>` with no `SharpNinja` prefix, lowercase single token `qbrainai`, kebab `qbrain-ai`, npm scope `@qbrainai`. `QBrainAI.QBAgent` is the package id and `QBrainAi.QBAgent` is the namespace.
 - C7. The plan leaves `/mcp-transport`, Model Context Protocol wording, QuadBrain, the `qbagent` command, the `QBAgent` segment, existing requirement IDs, `mcp.db`, `.mcpServer`, `McpDbContext`, `PAYTON-LEGION2`, and `LAB-OMARCHY` in place for the reasons the plan states.
 - C8. Aliases for routes, config, environment variables, and old package ids last through 1.x and stop at 2.0.
 - C9. The cloud receipt `docs/receipts/hv/20261005T154611Z-qbrain-ai-rebrand-plan.receipt.md` is a NOT RUN blocker. It is not an AGREE. Do not treat it as this review.
