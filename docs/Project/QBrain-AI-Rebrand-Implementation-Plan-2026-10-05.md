@@ -2,11 +2,11 @@
 
 - Date: 2026-10-05
 - Author context: cloud plan for operator Payton
-- Status: Draft pending approval
-- Process: this file is the Byrd Development Process v4 Planning artifact (`docs/Development-Process-draft-v4.md`). It is not an implementation slice. Phase 1 is not approved.
-- Requirements in this draft: branding and product identity are functional requirements `FR-MCP-QBRAIN-001` through `FR-MCP-QBRAIN-005`. Namespace, repository, package, path, and string renames, and the migration mechanics, are technical requirements `TR-MCP-QBRAIN-001` through `TR-MCP-QBRAIN-008`. These IDs are assigned here and are not yet copied into `docs/Project/Functional-Requirements.md`, `docs/Project/Technical-Requirements.md`, the traceability matrix, or the requirements store.
+- Status: Phase 1 opened by the operator on 2026-10-05 after merge of plan PR #76. The operator told the cloud agent to begin Phase 1 on this repository. Hostile-validation OverallVerdict AGREE from gpt-6-astra at effort xhigh is not recorded for Phase 0 or Phase 1. This status line does not mark either phase done.
+- Process: this file is the Byrd Development Process v4 Planning artifact (`docs/Development-Process-draft-v4.md`). Phase 1 execution is a later pull request. This file remains the name map.
+- Requirements in this draft: branding and product identity are functional requirements `FR-MCP-QBRAIN-001` through `FR-MCP-QBRAIN-005`. Namespace, repository, package, path, and string renames, and the migration mechanics, are technical requirements `TR-MCP-QBRAIN-001` through `TR-MCP-QBRAIN-008`. Phase 1 copies these ids into `docs/Project/Functional-Requirements.md`, `docs/Project/Technical-Requirements.md`, `docs/Project/Testing-Requirements.md`, `docs/Project/TR-per-FR-Mapping.md`, and `docs/Project/Requirements-Matrix.md`. The MCP requirements database was not reachable in this cloud session (`AGENTS-README-FIRST.yaml` is absent and the mcpserver tool namespace failed discovery), so the markdown projections are the stored copy.
 - Source checkout for the name map: `sharpninja/McpServer` at the `main` commit this plan was written from. Sibling repositories were not cloned in this run.
-- This pull request: revise this plan only. It does not rename namespaces, packages, assemblies, routes, or GitHub repositories, and it does not approve or start Phase 1.
+- The plan pull request revised this file only. Phase 1 is a separate pull request opened after the operator said to begin work. Phase 1 does not rename the GitHub repository.
 
 ## 1. Goal and non-goals
 

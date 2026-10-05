@@ -1692,3 +1692,47 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] Exceeded hourly cap fails enqueue in API test, not only UI.
   - [ ] Clearing cap allows enqueue.
+- TEST-MCP-QBRAIN-001: Locked tokens. Namespaces and assemblies use QBrainAi. Package ids use the QBrainAI prefix. QBAgent and qbagent stay.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] No C# namespace declaration uses QBrainAI or QBrain.AI.
+  - [ ] QBrainAi.QBAgent is present and qbagent remains the QBAgent tool command.
+- TEST-MCP-QBRAIN-002: Solution, project folders, and RootNamespace use QBrainAi. NukeBuild.Tests and _build stay.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] QBrainAi.sln exists and McpServer.sln does not.
+  - [ ] tests/Build.Tests keeps RootNamespace NukeBuild.Tests.
+  - [ ] build/_build.csproj is still _build.
+- TEST-MCP-QBRAIN-003: New package ids and 1.x SharpNinja.McpServer.* facades. qbrain-ai-repl is canonical and mcpserver-repl remains on the facade. NuGet push of QBrainAI.* stays gated.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] The seven published projects use QBrainAI package ids.
+  - [ ] Seven facade projects keep the old SharpNinja.McpServer package ids.
+  - [ ] The workflow skips pushing QBrainAI packages unless the Phase 4 gate is set.
+- TEST-MCP-QBRAIN-004: Phase 1 does not rename the GitHub repository. RepositoryUrl still points at the live repo.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Packed project RepositoryUrl values still contain SharpNinja/McpServer or sharpninja/McpServer.
+- TEST-MCP-QBRAIN-005: /qbrainai and /mcpserver both declared for a representative controller. /mcp-transport unchanged. QBrainAi config wins over Mcp. QBRAINAI_* env wins over MCP_*. MCP_UNTRUSTED stays.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Todo route templates include qbrainai/todo and mcpserver/todo.
+  - [ ] MapMcp still uses /mcp-transport.
+  - [ ] GetEffectiveMcpValue prefers QBrainAi and falls back to Mcp.
+  - [ ] GetRequestedInstanceName prefers QBRAINAI_INSTANCE and falls back to MCP_INSTANCE.
+- TEST-MCP-QBRAIN-006: Docker names use qbrain-ai. Service script defaults use QBrainAi, QBrain.AI, and C:\ProgramData\QBrainAi. Octopus deploy stays off. McpServer_Omarchy and PAYTON-LEGION2 remain.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] docker-compose.mcp.yml uses image qbrain-ai:latest.
+  - [ ] Manage-McpService.ps1 defaults match the new service name, display name, and install path.
+  - [ ] azure-pipelines.yml does not deploy unless AllowLegionDeploy is true.
+- TEST-MCP-QBRAIN-007: Inventory TSV classifies every hit. Persisted names mcp.db, .mcpServer, and McpDbContext remain. No new EF table-rename migration is added for the rebrand.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] docs/receipts/qbrain-ai-rebrand-phase1-inventory.tsv has a class and a closed action on every row.
+  - [ ] Source still contains mcp.db, .mcpServer, and class McpDbContext.
+- TEST-MCP-QBRAIN-008: Requirements ids are stored before the rename, and Phase 1 is not claimed done without the astra hostile-validation receipt.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] The five FR and eight TR headings exist in the requirements documents.
+  - [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.

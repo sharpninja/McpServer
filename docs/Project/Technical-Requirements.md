@@ -4006,3 +4006,93 @@ Scope: layer-1+
 - [ ] Dashboard components reference Primer CSS or the current mcp-web design system, not a Prompter Hawk theme clone.
 - [ ] Layout tests execute at 1280px and 390px widths.
 
+## TR-MCP-QBRAIN-001 Locked identifier tokens
+
+Use one token per surface class. Display text uses QBrain.AI. C# namespaces and assemblies use QBrainAi. NuGet package ids use QBrainAI.Component with no SharpNinja prefix. The lowercase single token that replaces mcpserver is qbrainai. Already-hyphenated slugs use qbrain-ai. npm scopes use @qbrainai. Do not replace the QBAgent segment or the qbagent command.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-003; TEST: TEST-MCP-QBRAIN-001
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A review of the rename diff finds no QBrainAI and no QBrain.AI inside a C# namespace or assembly name. QBrainAI is allowed only as the NuGet package-id prefix.
+- [ ] QBAgent and qbagent are unchanged apart from a leading McpServer root becoming QBrainAi.
+
+## TR-MCP-QBRAIN-002 Namespace, assembly, project, and solution rename
+
+Replace the root token McpServer with QBrainAi in namespaces, assembly names, project folders, InternalsVisibleTo, and the solution file. Keep every segment after the root, including .Mcp, .McpAgent, and .QBAgent. Storage, Services, and GraphRag stay under QBrainAi.Support.Mcp. tests/Build.Tests stays NukeBuild.Tests. _build stays _build.
+**Covered by:** FR: FR-MCP-QBRAIN-003; TEST: TEST-MCP-QBRAIN-002
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The solution file and project paths use QBrainAi as the root token.
+- [ ] No public namespace still starts with McpServer.
+- [ ] QBrainAi.QBAgent exists and QBrainAi.QBrainAi does not.
+- [ ] NukeBuild.Tests and _build are not renamed into QBrainAi.
+
+## TR-MCP-QBRAIN-003 Package and tool migration
+
+Move published package ids from SharpNinja.McpServer.Component to QBrainAI.Component for Client, Cqrs, Cqrs.Mvvm, McpAgent, Repl.Core, Repl, and QBAgent. Ship dependency facades under the old SharpNinja.McpServer.* ids through 1.x. Rename ToolCommandName mcpserver-repl to qbrain-ai-repl and keep the old command on the deprecated package. Rename the npm packages in this repo to the @qbrainai scope. Do not push the new ids to nuget.org in Phase 1.
+**Covered by:** FR: FR-MCP-QBRAIN-004; TEST: TEST-MCP-QBRAIN-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each new package id is set on its project.
+- [ ] Each old package id has a facade project that depends on the new package.
+- [ ] qbrain-ai-repl is the new tool command and mcpserver-repl remains on the deprecated package.
+- [ ] Phase 1 CI does not push QBrainAI.* to nuget.org.
+
+## TR-MCP-QBRAIN-004 Repository rename sequence
+
+Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3. Phase 1 does not rename a GitHub repository. RepositoryUrl keeps the live repo name until that rename.
+**Covered by:** FR: FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-004
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] No cloud phase renames a GitHub repository.
+- [ ] Package RepositoryUrl values still point at sharpninja/McpServer.
+
+## TR-MCP-QBRAIN-005 Route, config, and environment migration
+
+Add product HTTP prefix /qbrainai/* and keep /mcpserver/* through 1.x. Leave /mcp-transport unchanged. Configuration root becomes QBrainAi:. If only Mcp: is present, bind it. If both are present, QBrainAi: wins per key and startup logs one warning. Product MCP_* variables are read when the matching QBRAINAI_* variable is unset. When both are set, QBRAINAI_* wins. Do not rename the sentinel MCP_UNTRUSTED through 1.x.
+**Covered by:** FR: FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-004; TEST: TEST-MCP-QBRAIN-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] One representative product route is declared on both /qbrainai/... and /mcpserver/....
+- [ ] /mcp-transport is still mapped and is not an alias of the product prefix.
+- [ ] Config and environment alias precedence matches the two rules above.
+- [ ] MCP_UNTRUSTED remains the literal sentinel.
+
+## TR-MCP-QBRAIN-006 Install path, service, container, and feed migration
+
+Docker image, container, network, and volume use qbrain-ai. Windows service name becomes QBrainAi, DisplayName becomes QBrain.AI, and the default install path becomes C:\ProgramData\QBrainAi, with parameters that can still target the old service and path. The pipeline must not call octopus release deploy during cloud phases. Linux paths, the qbrainai account, and qbrainai.service stay Phase 4-L text. Do not rename database McpServer_Omarchy or host PAYTON-LEGION2.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-006
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Compose and Dockerfile names in git match the qbrain-ai forms.
+- [ ] Service script defaults in git match QBrainAi and C:\ProgramData\QBrainAi, and the old names remain available as parameters.
+- [ ] The Octopus deploy step is skipped unless an explicit later gate enables it.
+- [ ] McpServer_Omarchy and PAYTON-LEGION2 remain where they identify that database and that host.
+
+## TR-MCP-QBRAIN-007 Inventory before edit, and persisted state that stays
+
+Before any replace, write a classification TSV for the patterns in the rebrand plan section 5. Do not rewrite existing files under docs/receipts/**. Do not hand-edit docs/Project/wiki/**. Do not rename mcp.db, .mcpServer, the class McpDbContext, or EF table names.
+**Covered by:** FR: FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-007
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The TSV exists before the first rename commit, and every hit has a class and a closed action.
+- [ ] mcp.db, .mcpServer, and McpDbContext remain the persisted-state names.
+- [ ] The slice does not add an EF migration whose only effect is a table rename.
+
+## TR-MCP-QBRAIN-008 BDPv4 slice gate
+
+An implementation slice starts only after this plan is approved and only for the phase the operator has opened. The slice registers the FR and TR ids it cites before product code changes. Failing tests for that slice's acceptance criteria come next. Production edits come after those tests fail for the intended reason. The slice is not done until its unit scope reports zero failures and zero skips and until the hostile-validation checkpoint returns OverallVerdict AGREE from gpt-6-astra at effort xhigh. SessionLife tests are out of scope.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-003, FR-MCP-QBRAIN-004, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-008
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Requirements ids are stored before product renames.
+- [ ] The slice shows a red test run before the green run.
+- [ ] Phase 1 is not marked done without the astra-6-xhigh receipt.
+

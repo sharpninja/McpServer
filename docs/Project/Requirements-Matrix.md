@@ -1341,3 +1341,24 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TEST-MCP-TRIM-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBRAIN-001 | In progress | docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md |
+| FR-MCP-QBRAIN-002 | In progress | docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md |
+| FR-MCP-QBRAIN-003 | In progress | docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md |
+| FR-MCP-QBRAIN-004 | In progress | docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md |
+| FR-MCP-QBRAIN-005 | In progress | docs/Project/QBrain-AI-Rebrand-Implementation-Plan-2026-10-05.md |
+| TR-MCP-QBRAIN-001 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-002 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-003 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-004 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-005 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-006 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-007 | In progress | docs/Project/Technical-Requirements.md |
+| TR-MCP-QBRAIN-008 | In progress | docs/Project/Technical-Requirements.md |
+| TEST-MCP-QBRAIN-001 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-002 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-003 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-004 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-005 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs; tests/McpServer.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs |
+| TEST-MCP-QBRAIN-006 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-007 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| TEST-MCP-QBRAIN-008 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
